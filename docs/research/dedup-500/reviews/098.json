@@ -2,11 +2,11 @@
   "index": 98,
   "repository": "sonalgoyal/hiho",
   "commit": "77dd5af9b4b19167f062112945433dd588d10640",
-  "review_scope": "20/170 whole pinned files: complete20file dedup main/test Java package;23originalJUnitmethods pass realHadoop0.20.2/Java21;11nativeboundarychecks; other150files/fullHadoopintegration unreviewed",
+  "review_scope": "26/170 whole pinned files including dedup package, root README/LICENSE and4merge files;26originalJUnitmethods pass;14author native checks; other144files/fullHadoopintegration incomplete",
   "decision": "reject-domain",
   "finding": "Hadoop database/key MapReduce integration; not image/file equality.",
   "license_metadata": "Apache-2.0",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Full retained root LICENSE read: Apache2 plus Hadoop bloom subcomponent BSD-style terms. Nested bundled/dependency licenses remain unreviewed; no production code adopted.",
   "tests_detected": 48,
   "upstream_tests_run": true,
   "available_source_evidence": [
@@ -92,7 +92,11 @@
     {
       "audit": "docs/research/dedup-500/hiho098-source-review-v4-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/hiho098-source-review-v5-20261024.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "23originalJUnitmethods in4files passed; not full Hadoop/HDFS suite;11author controls separate"
+  "upstream_tests_scope": "26originalJUnitmethods in5files passed; no full Hadoop/HDFS suite;14author checks separate"
 }

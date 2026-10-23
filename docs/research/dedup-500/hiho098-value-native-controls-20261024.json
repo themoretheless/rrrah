@@ -1,0 +1,43 @@
+{
+  "scope": "3new original JUnit tests plus3author controls, unchanged HihoValue and real Hadoop0.20.2; native local Java; no cluster/full merge runtime",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HihoValue.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestHihoValue.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/ValueBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HihoValue.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "org.junit.runner.JUnitCore",
+        "co.nubetech.hiho.merge.TestHihoValue"
+      ],
+      "returncode": 0,
+      "stdout": "JUnit version 4.5\n...\nTime: 0.049\n\nOK (3 tests)\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "ValueBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS valid serialization roundtrip\nPASS unknown serialized class silently accepted using stale prior value\nOBSERVED fresh unknown-class read gives NullPointerException\nchecks=3\n",
+      "stderr": "java.lang.ClassNotFoundException: owned.nonexistent.ValueClass\n\tat java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)\n\tat java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)\n\tat java.base/java.lang.Class.forName0(Native Method)\n\tat java.base/java.lang.Class.forName(Class.java:423)\n\tat java.base/java.lang.Class.forName(Class.java:414)\n\tat co.nubetech.hiho.merge.HihoValue.readFields(HihoValue.java:93)\n\tat ValueBoundaryControl.main(ValueBoundaryControl.java:16)\njava.lang.ClassNotFoundException: owned.nonexistent.ValueClass\n\tat java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:641)\n\tat java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:188)\n\tat java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:526)\n\tat java.base/java.lang.Class.forName0(Native Method)\n\tat java.base/java.lang.Class.forName(Class.java:423)\n\tat java.base/java.lang.Class.forName(Class.java:414)\n\tat co.nubetech.hiho.merge.HihoValue.readFields(HihoValue.java:93)\n\tat ValueBoundaryControl.main(ValueBoundaryControl.java:18)\n"
+    }
+  ]
+}

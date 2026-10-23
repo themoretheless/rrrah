@@ -1,0 +1,81 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "d3bf74c574d56b4371e747247701d60146d4d68bb3187e82730ca2eac68e4d8c",
+      "git_blob": "cc6786096aafc7e8a7a6891df7eeb72594c95a18",
+      "whole_text_read": true,
+      "lines": 386
+    },
+    {
+      "path": "LICENSE.txt",
+      "local": "01-LICENSE.txt",
+      "sha256": "3bae71f91d7722edbc093481acf8b9ce24ea665e425e40e3b0995a61104dea58",
+      "git_blob": "59bcdbc9783d75ce4dfb348f33afc584b90c0230",
+      "whole_text_read": true,
+      "lines": 244
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/HihoValue.java",
+      "local": "22-HihoValue.java",
+      "sha256": "bb10d33a38766acf55622645bc24b3ee326b53959d8e2ca12cfe33529c85eb5f",
+      "git_blob": "b75931475cafaa6c4831b94a3f2803a87955d60b",
+      "whole_text_read": true,
+      "lines": 107
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/MergeKeyReducer.java",
+      "local": "23-MergeKeyReducer.java",
+      "sha256": "f594dd0d1220d7ee598bd2192709dfca70284bcfdd90dd8a3bb2e58c338e512e",
+      "git_blob": "d4a026dfd70764fe6769e4d4d8060f9ab970b7a9",
+      "whole_text_read": true,
+      "lines": 52
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/merge/MergeValueReducer.java",
+      "local": "24-MergeValueReducer.java",
+      "sha256": "4732be044762dfccd651e80c9cbcf94823644cf757c55184e6277cb0e445eeb8",
+      "git_blob": "263dfcedb3bfb7e6f064eb311f073c89b1a19f56",
+      "whole_text_read": true,
+      "lines": 52
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/merge/TestHihoValue.java",
+      "local": "25-TestHihoValue.java",
+      "sha256": "014499094db949cdbdbec8705bd222bb2a3230dc96758531baa9bc7b6ed7712d",
+      "git_blob": "59f6d3fb92c5183f6b6335df378771f5c5400ac4",
+      "whole_text_read": true,
+      "lines": 45
+    }
+  ],
+  "whole_files_read_total": 26,
+  "remaining_without_whole_review": 144,
+  "original_tests": {
+    "new": 3,
+    "new_passed": 3,
+    "cumulative_distinct": 26,
+    "cumulative_passed": 26,
+    "scope": "5JUnitfiles selected; unchanged original sources with native Java21/Hadoop0.20.2; not full suite"
+  },
+  "native_controls": {
+    "new": 3,
+    "cumulative": 14,
+    "report": "docs/research/dedup-500/hiho098-value-native-controls-20261024.json",
+    "confirmed": "HihoValue unknown valClass with prior Text silently reuses it and returns after mutation; fresh instance throws NullPointerException after printing ClassNotFoundException; valid serialization roundtrip passes",
+    "scope": "Owned serialized streams, no external classes/database/HDFS"
+  },
+  "source_only_findings": [
+    "Both merge reducers obtain iterator before checking iterable null; intended null handling cannot run.",
+    "Both reducers choose last new value or last old value when no new value exists; no tie-break based on version/time. Hadoop iteration order and object-reuse behavior need full reducer execution before claiming actual merge corruption.",
+    "README dedup examples use -delimeter spelling while DedupJob accepts -delimiter."
+  ],
+  "license_scope": "Full retained root LICENSE read: Apache2 plus Hadoop bloom subcomponent BSD-style terms. Nested bundled/dependency licenses remain unreviewed; no production code adopted.",
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
