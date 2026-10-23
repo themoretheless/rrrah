@@ -1,0 +1,39 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/rest/RestService.java",
+      "sha256": "4aa5bfd2f3882c85355bb54f550d58d36b3ccd304f8541faefb5e124c8902b1f",
+      "lines": 62,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/rest/RestServiceImpl.java",
+      "sha256": "d38c7168e6afe2375f1f00422bcca2e5de29f45021bc9227ad1aa9a4060fc815",
+      "lines": 282,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "serialization_run": false,
+    "network_requests": false
+  },
+  "findings": [
+    "RestService interface/implementation whole-read/Gitblobverified. No networking or TLS behavior exercised; review restricted to data/lifecycle contracts.",
+    "postAsXML returnsnull on JAXBException, while getNodeByHost/downloadNodeStatus dereference response without null check. Serialization failure can become later NullPointerException instead of declared TargetNodeUnreachableException; source-only.",
+    "Some other methods check response but not body, so emptybody can fail on casts/dereference; null body validation inconsistent.",
+    "Client requestfactory has no explicit connect/read/connection-pool timeout or response-size cap here. Actual defaults/dependency behavior unverified; no claim of measured unbounded wait.",
+    "Host parsing splits oncolon and interprets secondtoken integerport; malformed port and IPv6 forms not handled by local URISyntaxException catch. No network requests crafted or sent.",
+    "JAXBContext created per request with Message.class only. Earlier missingXmlSeeAlso concern remains specific to payload runtime types; response classes supplied separately. No JAXB execution, so no asserted serialization failure for particular collection.",
+    "Collection download returns deserialized Collection directly, without explicit ID/version/recipe/cardinality validation in transport. Later persistence validation still requires common NetworkService review.",
+    "Every operation uses POST and XML; HTTP4xx/5xx and resource-access errors map TargetNodeUnreachableException, conflating multiple failure categories. No retry/idempotency logic in this layer."
+  ],
+  "remaining": [
+    "75 other tracked blobs/assets",
+    "CommonNetworkService, remaining models/web/templates/assets/native binaries and runtime qualification"
+  ],
+  "full_review_count": 249
+}
