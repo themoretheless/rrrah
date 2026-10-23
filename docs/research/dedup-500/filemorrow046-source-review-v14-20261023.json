@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/AIClassifier.swift",
+      "sha256": "e7240491a078b5ad026d3a45236cbad719385924819e21fb8135f428832876e0",
+      "lines": 120,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Sources/FileMorrow/IntelligenceAvailability.swift",
+      "sha256": "e922c4c29fce635f17a0d769dc63a75d17cf37048055833d7f5e7ee799591c39",
+      "lines": 65,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "AI classifier truncates category list to first 51 to match generated index range 0...50, then validates returned index against usable categories. Categories beyond that limit are unavailable without an explicit diagnostic.",
+    "Generation constrains confidence to 0...100 but reason length, filename, excerpt and category guide lengths are not bounded here. Caller extraction limits remain to be reviewed.",
+    "Availability reports distinguish disabled, ineligible, model-not-ready, old system and unknown states. classify checks platform/module availability but does not require availability.isReady before making the model request; errors propagate to caller.",
+    "A fresh local content-tagging model session is constructed per request. No explicit timeout, concurrency budget or Task cancellation policy is visible in these functions. No model inference was executed.",
+    "Model output is a classification suggestion, not duplicate evidence or content equality. Confidence is generated rather than empirically calibrated in this source."
+  ],
+  "whole_files_read_total": 24,
+  "remaining_tracked_blobs": 34,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
