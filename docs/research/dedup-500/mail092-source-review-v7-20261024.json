@@ -1,0 +1,55 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v6-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_strategy.py",
+      "local": "15-tests--test_strategy.py",
+      "sha256": "a352f4fec583881a77adfa7b0915a4f22dab23ac17d7cb27fa25f42bc1a2fc15",
+      "whole_text_read": true,
+      "lines": 683
+    }
+  ],
+  "whole_text_files_read_total": 16,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 64,
+  "native_original_tests_added": {
+    "target": "tests/test_strategy.py",
+    "passed": 76,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 1.23
+  },
+  "native_original_tests_cumulative": {
+    "passed": 189,
+    "failed": 0,
+    "scope": "30 cache,83 mail,76 strategy focused tests only"
+  },
+  "public_size_graph_control": {
+    "scope": "Original imported DuplicateSet.check_differences; synthetic size-only mails, content check disabled",
+    "cases": 5148,
+    "coherence_violations": 0,
+    "sets_rejected_without_two_member_core": 28,
+    "suboptimal_examples": [],
+    "limits": [
+      "Synthetic size-only matrix, not content-diff or full CLI qualification.",
+      "No maximum-cardinality guarantee inferred beyond enumerated cases."
+    ]
+  },
+  "findings": [
+    "Original strategy tests76pass cover24 dry-run strategy names, actual owned temporary Maildir operations, tied timestamps, cascade fallback, missing-date fallback, required regex, outlier rejection, uniqueness preservation and size/content threshold flags.",
+    "Exhaustive finite size-only matrix enumerates1716 multisets of six values0..7 at thresholds0..2:5148 cases. Every returned core satisfies pairwise threshold;28 cases correctly reject when no two-member core exists; no suboptimal core found in this bounded matrix.",
+    "Finite matrix does not establish optimality for arbitrary size distributions or body-diff graphs; exact-file byte equality remains a separate contract.",
+    "Time/size strategy tests operate through delete-selected; fixture result comments describe survivors after deleting selected, not strategy selection direction.",
+    "No source modifications or borrowed production implementation."
+  ],
+  "transfer_decision": "Preserve nontransitivity boundaries for visual/heuristic matching and unique-item safety. Do not promote these mail-domain thresholds into exact file equality.",
+  "limits": [
+    "16 whole text files of80;64 remain.",
+    "189 focused original tests, not full suite or release/platform qualification.",
+    "All mailbox mutations limited to test-owned temporary fixtures.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
