@@ -1,0 +1,48 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/FileHasherTests.swift",
+      "git_blob": "138e81e12a4b4bd538985a9816744a3a333bcbd4",
+      "sha256": "0f4b8b14224042036883861138829063ba775d184d21a4c8401ef08be96cf8ee",
+      "bytes": 12297,
+      "lines": 301,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 4,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 117,
+  "control": "targie061-hash-test-interfaces-20261023.swift",
+  "package_manifest": "// swift-tools-version: 5.9\nimport PackageDescription\nlet package = Package(name: \"HashProbe\", platforms: [.macOS(.v14)], targets: [.target(name: \"SimilarVideoFinder\"), .testTarget(name: \"SimilarVideoFinderTests\", dependencies: [\"SimilarVideoFinder\"])])\n",
+  "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/hash-tests --filter FileHasherTests",
+  "compiler": "Apple Swift6.3.2 (swiftlang-6.3.2.1.108), arm64-apple-macosx26.0",
+  "runtime_scope": "Entire unchanged original FileHasherTests.swift class and FileHasher.swift compiled with XCTest; authored minimal interfaces plus single-record InMemoryHashCache adapter. Real original HashLookupProbe/HashReadGate fixtures unchanged. Not original full app/cache/database dependency environment.",
+  "passed_original_tests": [
+    "testAlreadyCancelledCacheAwareHashDoesNotQueryCache",
+    "testAlreadyCancelledHashDoesNotStartDetachedWork",
+    "testCacheAwareHashIsStoredForStableFile",
+    "testCacheAwareHashRefreshesAttributesOfReusedURL",
+    "testCacheLookupChangeRejectsBothHitsAndMisses",
+    "testCancellationDuringChunkReadDoesNotCacheDigest",
+    "testCancellationWhileCacheLookupIsPendingDoesNotReturnDigest",
+    "testChangedAttributesDuringHashingAreNotCached",
+    "testChangeDuringChunkReadRejectsDigestWithAndWithoutCache",
+    "testIdenticalFilesHaveSameDigestAndChangedBytesDiffer"
+  ],
+  "passed": 10,
+  "failed": 0,
+  "raw_log": ".dedup-work/targie061-20261023/hash-tests-xcode.log",
+  "raw_log_sha256": "6ed9824d84b5b178e0c994f65de6669483aa8f9c32619fe758f86f15fef444a7",
+  "findings": [
+    "All10original methods pass, covering same/different bytes, stable-cache insertion, reusedURL refresh, pending cache lookup/chunk mutation/cancellation, no stale writes and fullmtimeprecision.",
+    "These tests do not cover matching-size/mtime path replacement proven in v2; passing them does not dismiss that reproduction.",
+    "Initial CLT6.4 build failed before tests due missingXCTest. Preserved hash-tests.log; Xcodebeta6.3.2 selected per-command only, no global developer settings changed.",
+    "Both original source/test bytes verified unchanged after successful build. XCTest reports10executed; trailing SwiftTesting0tests is a separate runner, not additional passing coverage.",
+    "Real InMemoryHashCache/HashCache/GRDB not used; test adapter boundary explicit. Full source/application/image/video/quality/platform review remains incomplete."
+  ],
+  "full_review_count": 249,
+  "upstream_tests_run": true
+}
