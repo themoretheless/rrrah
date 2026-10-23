@@ -1,0 +1,35 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Selected adaptive ECC metadata-repair function207-249, caller validation430-475 and completion770-end read. Other batched output truncated; whole module remains incomplete. Static review, no new execution.",
+  "findings": [
+    {
+      "id": "positive-caller-validation",
+      "detail": "Caller rejects rates<=0, block sizes outside2..255 and header sizes<1. This narrows v14 unvalidated-compute-parameter finding for ordinary CLI use; direct helper API still has no such guard. No finite upper bound/nonfinite rate rejection here."
+    },
+    {
+      "id": "metadata-track-length",
+      "detail": "ecc_correct_intra_stream creates ECC end position len(field), though ECC BytesIO length is len(ecc). These lengths need not match. It initializes fcorrected true and does not independently verify all source field bytes were emitted; needs exact multi-block qualification."
+    },
+    {
+      "id": "empty-corpus-estimate",
+      "detail": "Generation precomputation divides sizeecc*100 by sizetotal without zero guard. Empty/all-zero-byte/all-filtered corpus can give zero denominator. Source-level finding, no ECC integration run."
+    },
+    {
+      "id": "error-path-basename",
+      "detail": "errors_file option drops directory via basename(fullpath(...)). A requested report outside cwd is not preserved as the path supplied."
+    },
+    {
+      "id": "repair-accounting-positive",
+      "detail": "Caller separately counts complete, partial and unrepaired files, and returns failure unless zero corrupted files or complete count equals corrupted count. This is stronger than unconditional success, but completeness still depends on parser/track checks and skipped-file accounting."
+    },
+    {
+      "id": "output-commit-boundary",
+      "detail": "After repair, copied source timestamps are read by path; output with no repaired blocks is removed, partial repaired output remains. No atomic publication/final trusted whole-file digest check shown in reviewed completion path."
+    }
+  ],
+  "upstream_tests_run_this_review": false,
+  "whole_text_reviewed_count_unchanged": 61,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
