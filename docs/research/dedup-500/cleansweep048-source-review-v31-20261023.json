@@ -1,0 +1,37 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/session/SessionSetupViewModel.kt",
+      "sha256": "9684381836a854ea32b8fa4cd40cf6a79ccc25c8d633fb7238d2babdbf35e871",
+      "lines": 745,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "processFolderDetails always excludes favorites from system/user categories, but adds their own category only when showFavorites is true. Disabling that setting therefore hides favorite folders entirely from category-based selectAll.",
+    "Recursive select, deselect, unselect and permanent-sort expansion use raw startsWith without a path-component boundary, including sibling names such as /Photos-old under /Photos.",
+    "initializeSelection launches asynchronously after the observer receives folders and marks initialization complete immediately; subsequent completion can overwrite user selection. Favorites are always unioned into selection even in NONE mode.",
+    "Initial loading has no catch/finally around repository and preference calls; failure can leave initial-load/scanning state. The ongoing processing catch updates an error and then completes the collector without restart.",
+    "Rename updates repository and preferences after filesystem success without a shared transaction or catch, and does not rewrite current selected/context/recursive path sets. Partial completion is possible.",
+    "Move dialog excludes only exact source path, leaving descendant destinations available. Confirmation performs no further descendant check before invoking the previously reviewed helper. No filesystem move was executed.",
+    "Permanent-sort preference entries are written one at a time before cache removal; interruption can persist a partial set. Recursively selected roots are not cleaned when hidden paths are removed from selection."
+  ],
+  "controls": {
+    "kind": "independent Python transcription of filtering predicates; not Kotlin execution",
+    "favorites_hidden_when_separate_category_disabled": true,
+    "recursive_selection_includes_sibling_prefix": true,
+    "recursive_selected_paths": [
+      "/Photos",
+      "/Photos-old",
+      "/Photos/Trip"
+    ],
+    "assertions_passed": 2
+  },
+  "whole_files_read_total": 70,
+  "remaining_tracked_blobs": 60,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
