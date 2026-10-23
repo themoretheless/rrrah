@@ -1,0 +1,58 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v11-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/context/intensity.rs",
+      "local": "60-src--context--intensity.rs",
+      "sha256": "f39d712b3832af9be3dc90e39a52f9dc587c9908eaad2bdb8ed92d2cb3e5557d",
+      "whole_text_read": true,
+      "lines": 419
+    },
+    {
+      "path": "tests/test_intensity.rs",
+      "local": "61-tests--test_intensity.rs",
+      "sha256": "e4b78d435dee377a8973cc8488062d80c547ba870f8fe8838af5af97bd16a08b",
+      "whole_text_read": true,
+      "lines": 87
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 60,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 61,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 266,
+  "native_original_tests_added": {
+    "passed": 28,
+    "failed": 0,
+    "ignored": 0,
+    "groups": {
+      "intensity_lib": 17,
+      "test_intensity": 11
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 339,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "requested_max_lines": 1,
+    "scaled_max_lines": 20,
+    "scaled_dedup_min": 2,
+    "extreme_budget_half_usage": "Ultra"
+  },
+  "findings": [
+    "Full/Ultra enforce floors that can increase configured limits: max_lines1 becomes20 and dedup_min0 becomes2. Explicit upstream behavior, not a hard-cap contract.",
+    "At synthetic u64::MAX configured budget, half usage selects Ultra below configured65 percent because both saturating products reach u64::MAX. Extreme arithmetic boundary only; no normal-window failure demonstrated.",
+    "budget_for explicit window overrides detected window; unknown fallback floors at200000 except zero compact threshold sentinel. Amplification uses estimated longevity and remaining headroom, not measured future rereads."
+  ],
+  "transfer_decision": "Preserve explicit hard limits and use widened arithmetic for ratio comparisons. No foreign production code adopted.",
+  "limits": [
+    "266 original tracked files remain without whole review.",
+    "No all-repository or performance qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
