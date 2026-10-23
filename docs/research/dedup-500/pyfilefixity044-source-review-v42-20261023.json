@@ -1,0 +1,35 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Two vendored memory-view modules read whole and pinned. Syntax parsing only; no sys.setprofile, GC scan, GUI or target command executed.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/mprofile.py",
+      "sha256": "86966772f711b6f69bffee05a8e7ae5179c6d4d39b6a2fc6550b2ede153c45e9",
+      "python3_syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/runsnakerun/meliaeadapter.py",
+      "sha256": "3bcebcd66b66515d577e1703a7f33b49deceebde00f411607487b39d16ff19dd",
+      "python3_syntax": {
+        "result": "SyntaxError",
+        "line": 169,
+        "message": "Missing parentheses in call to 'print'. Did you mean print(...)?"
+      }
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 90,
+    "remaining_not_whole_reviewed": 54
+  },
+  "findings": [
+    "MProfiler stores min/max total tracked Python object size at selected events, not allocation attributable to that function and not process RSS. Record count includes profile events rather than exclusively function calls.",
+    "MProfiler.run clears sys.setprofile in finally but does not restore a preexisting hook. Scanning all objects at selected events adds instrumentation allocation/cost to observed process.",
+    "MeliaeAdapter uses Python2 except/print syntax and cannot parse under Python3. Size contribution divides total size by parent count and caches int-rounded estimate, not independently measured exclusive memory.",
+    "best_parent sorts using self.value(node,parent), but value ignores parent and returns same cached node contribution. Selection among parents can therefore depend on input order rather than different measured ownership.",
+    "Metadata tooltips include truncated string representations; displayed object labels are not stable object/content identity."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
