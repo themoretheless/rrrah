@@ -1,0 +1,116 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Independent MD5 field validation for available pinned text/ZIP fixtures against two header-result databases; all input blobs verified. No ECC backend or original integration suite.",
+  "control": "docs/research/dedup-500/pyfilefixity044-header-db-hash-control-20261023.py",
+  "control_result": {
+    "scope": "Independent hashlib MD5 versus original pinned database chunks, header defaults1024/message159/hash32/ecc96 derived from reviewed source; no ECC decoding or original integration suite",
+    "records": [
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/testaa.txt",
+        "verified_md5_chunks": 1,
+        "mutated_chunks_detected": 1
+      },
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+        "verified_md5_chunks": 1,
+        "mutated_chunks_detected": 1
+      },
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+        "verified_md5_chunks": 7,
+        "mutated_chunks_detected": 7
+      },
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+        "verified_md5_chunks": 2,
+        "mutated_chunks_detected": 2
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/testaa.txt",
+        "verified_md5_chunks": 1,
+        "mutated_chunks_detected": 1
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+        "verified_md5_chunks": 1,
+        "mutated_chunks_detected": 1
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/sub/Snark.zip",
+        "verified_md5_chunks": 7,
+        "mutated_chunks_detected": 7
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/sub/testsub.txt",
+        "verified_md5_chunks": 2,
+        "mutated_chunks_detected": 2
+      }
+    ],
+    "total_verified_md5_chunks": 22,
+    "skipped_missing_local_fixtures": [
+      {
+        "database": "test_header_ecc_test_algo.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/alice.pdf"
+      },
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/tux.jpg"
+      },
+      {
+        "database": "test_header_ecc_test_dir.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_header_ecc_test_one_file.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_header_ecc_test_one_file_tamper.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/alice.pdf"
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/tux.jpg"
+      },
+      {
+        "database": "test_repair_ecc_check.db",
+        "fixture": "pyFileFixity/tests/files/tuxsmall.jpg"
+      }
+    ]
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 128,
+    "remaining_without_full_text_binary_or_visual_review": 16
+  },
+  "findings": [
+    "Source defaults header1024/maxblock255/rate0.3/hashMD5 imply message159,ecc96,hash32 and128 bytes per track block. Stored field lengths match available fixture block count.",
+    "22 stored digest comparisons passed for8 records:4 available fixtures repeated in2 identical databases. There are11 unique content blocks, not22 independent scenarios.",
+    "One authored single-byte change per chunk produced distinct digest in all22 comparisons. This is finite detection evidence only, not proof MD5 collision resistance or exact content identity.",
+    "Missing local JPEG/PDF fixtures skipped explicitly, not silently counted. Prior browser visual review does not provide byte content for this control.",
+    "ECC bytes neither decoded nor algebraically verified; corrected-output equality and integration success remain unproven. No database or repository completion promotion."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
