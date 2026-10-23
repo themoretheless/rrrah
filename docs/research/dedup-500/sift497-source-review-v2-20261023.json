@@ -1,0 +1,77 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/hash/hash.hpp",
+      "sha256": "252d31a1f9ee7325bd4280d4fca2a0c59a86e891ba265758e3a3a141ffd21bcf",
+      "lines": 41,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/core/parallel.hpp",
+      "sha256": "b0bdab46add80fddccf03f8d6b84e0d9858e3421619b68663faeab3e134c6348",
+      "lines": 51,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/core/threadpool.hpp",
+      "sha256": "ca94f0789eb7ea90b23fee629f198c1d3e3c78a3d22f0126cba2a52d49cc9b4f",
+      "lines": 61,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/cluster/cluster.hpp",
+      "sha256": "3b071d6c61837be564dbcae7eca3d12644fefe83483165cfaed437351cf8c083",
+      "lines": 105,
+      "git_blob_verified": true
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "cc9c572b154d0170b12627124a55d87b94b47f1cd2d0ee6a57cd2e56ad1d7c4f",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/hash/image.cpp",
+      "sha256": "024c583f739e2c6be48c4f58314334be13806accd66b20b82dbcb286398cfa73",
+      "lines": 64,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/hash/dHash.cpp",
+      "sha256": "74ad0560da8c112c294f3004eb1ae3c8dc7ad633926940d762c4cb54042ac700",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/hash/pHash.cpp",
+      "sha256": "c1f076d89836e2db19ca9df2f19e292b9b8a1eb21925017d22c8d60a07355cf8",
+      "lines": 102,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/sift497-hamming-control-20261023.cpp"
+  ],
+  "runtime": {
+    "exit_code": 0,
+    "scope": "Original hamming function extracted unchanged, actual hash.hpp used; no stb decode or full package build",
+    "different_length_distance": 0,
+    "padding_bit_distance": 1
+  },
+  "findings": [
+    "Hamming computes min(byte lengths), no size equality check; actual control differing sizes2/4 and bytes[0]/[0,255] returns0, trailing byte ignored. Preconditions documented mustsame-size but not enforced.",
+    "9-bit hashes differing only in unused padding bit compare distance1. API exposes mutable bits; internally generated hashes zero padding, so this is malformed/public-input behavior rather than demonstrated internal decode mismatch.",
+    "Loader uses channels==1 else indexesR/G/B. Gray+alpha2-channel input falls intoRGB branch readingthirdchannel; source-only issue, not executed. Alpha ignored forRGBA; no explicit color management here.",
+    "dHash strictleft>right; pHash uses max(4*size,32), unnormalized DCT, median excludingDC butpacksDC. size bounds absent in these functions; size0/1 medians and signedproducts need caller validation review.",
+    "parallel_for documents concurrent callbacks; task exceptions propagate throughfutures; ThreadPool zero workers gives inlineparallel_for but standalone submit would queueunexecuted. No deadlock/concurrency failure injected.",
+    "CMake buildsC++17 executableO2 withpthread/m, no test target listed. Full source dependency/runtime qualification absent."
+  ],
+  "remaining": [
+    "Other89 tracked blobs/assets",
+    "Actual callers/inputvalidation, stb dependencies, fullruntime/tests"
+  ],
+  "full_review_count": 248
+}
