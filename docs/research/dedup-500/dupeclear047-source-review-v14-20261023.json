@@ -1,0 +1,24 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/Views/MessageBoxWindow.axaml",
+      "sha256": "c2f781bcae1dc9395d1386370e5f7195ffaff29f7ea548b1e281d1ea4423c7f3",
+      "lines": 301,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "XAML explicitly makes the primary button default when DefaultButton is OK or Yes, resolving v13 uncertainty: default OK maps to primary Yes for YesNo dialogs. Existing delete-all-group warning overrides to No. Native keyboard behavior not executed.",
+    "Primary button IsCancel applies only to OK-only dialogs, No IsCancel applies to YesNo, and Cancel is always IsCancel but visible only for OKCancel/YesNoCancel. Hidden-button handling remains Avalonia runtime qualification.",
+    "Two Icon visibility Binding ConverterParameter strings include the literal suffix , Mode=OneWay} outside the x:Static markup extension, unlike other correct parameters. These look malformed; compiler/runtime acceptance remains untested, so no build failure claimed.",
+    "Outer Grid declares two rows but button Border specifies Grid.Row=2. Layout clamping behavior and rendered placement remain unqualified.",
+    "Secondary-message scrolling has explicit 160/272 height limits; wrapping controls horizontal scrollbar and padding. This is layout-source review, not rendered visual QA."
+  ],
+  "whole_files_read_total": 62,
+  "remaining_tracked_blobs": 30,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
