@@ -1,0 +1,44 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/Models/Finder/FinderOption.cs",
+      "sha256": "6abfb562a8cfa19c2f3256d3e3625f51dbbd0ed8680379bf1d3c5df723700059",
+      "lines": 27,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Finder/FinderProgress.cs",
+      "sha256": "4219f76c0ee39a82935e55df9de001e5737e5dbdc9a2ccbcda3b1af7d4d5f2c7",
+      "lines": 35,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Finder/FinderResult.cs",
+      "sha256": "c52f28a8f69cc33f3780ed48867cad6c6c30b845138b65696ee13b11cc8053a5",
+      "lines": 16,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/Finder/FinderService.cs",
+      "sha256": "f03f8cd60ab3f2ea7decefebbe85a6f03a27c9109dae681a6e52a19169920c24",
+      "lines": 526,
+      "git_blob_verified": true
+    }
+  ],
+  "upstream_runtime_run": false,
+  "findings": [
+    "FinderService compares MD5 hashes without final byte confirmation. JPEGs are transformed through JpegPatcher before hashing; that implementation remains unread, so this is not established as encoded-byte equality.",
+    "Empty files are always skipped even when minLength is zero. DateModifiedTo removes files older than the upper bound, using < instead of >; source-only finding.",
+    "Date constraints restrict sourceFiles but not targetFiles, so outside-range files can still appear as matching targets. Whether this is intended anchor-filter semantics requires UI/documentation review.",
+    "Directory recursion has no physical-identity visited set or depth/entry limit in this source. Hidden/system directory filtering returns before descendants but each immediate directory was already added by its parent, so its own files can still be scanned.",
+    "Case-insensitive excluded-directory comparisons contrast with case-sensitive DistinctBy directory deduplication. No inode/hardlink alias separation is visible in FinderService; DuplicateFile implementation remains unread.",
+    "Cancellation throws during enumeration but breaks matching loops and returns a partial FinderResult with no cancelled field. Hashing is synchronous without cancellation checkpoints or a stream disposal finally.",
+    "DeleteFilesAsync uses path existence and MoveToRecycleBin without revalidating discovered content or physical identity. A missing path is still counted as actioned. No deletion or recycle-bin operation executed."
+  ],
+  "remaining_tracked_blobs": 88,
+  "full_review_count": 249,
+  "adoption": "No upstream code adopted. Own exact-file regression suite separately passed 36/36 and already distinguishes physical aliases from byte-confirmed copies."
+}
