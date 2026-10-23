@@ -1,0 +1,39 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/network/NetworkService.java",
+      "sha256": "1f52585491a366ba5aea168cca52665dc4c0b36985b24a96a98f71a95af9b93a",
+      "lines": 112,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/network/NetworkServiceImpl.java",
+      "sha256": "ab1d2ad9c9be88bdc35f6f2b85c2e48946004965be19adc48dacbb63695e4d27",
+      "lines": 398,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "jpa_run": false,
+    "network_requests": false
+  },
+  "findings": [
+    "NetworkService interface/implementation whole-read/Gitblobverified. All common service source modules now read; no network calls or persistence executed.",
+    "requestCollectionRepertoireFromArchive saves metadata-only collectionList with hashCollectionRepository.saveAll, then savesnode. Same IDs as downloaded fullcollections can mergeemptyimageList/defaultversion into existing entities. Actual JPA merge/cascade semantics and data retention require runtime test; source-level risk, not observed deletion.",
+    "downloadCollection repairs image.collection backrefs then saves directly; no requestedID/returnedID equality, version rollback, fingerprint width/recipe or cardinality check. Nullcollection/imageList causes immediate unchecked dereference.",
+    "getKnownNodeById performs remote status request and persists flags as sideeffect; getAllKnownNodes polls every node before returning. Query-like APIs can trigger O(nodes)sequential network work; no latency benchmark.",
+    "getAllArchives/getAllIntegrators attempt refresh then fall back cachednode list on failure, but returned list has no stale/partial status. Individualaddress failures swallowed while remaining nodes fetched.",
+    "saveNetworkConfiguration(null) logs and refuses update, so facade clearNetworkConfiguration calling save(null) does not clear stored config by this source path. Event published before repository save; no explicit transaction boundary here.",
+    "No subscriptions initialization in common NetworkService. Prior fresh-node null list concern remains through reviewed service/factory paths.",
+    "removeCertificate is UnsupportedOperationException despite facade method path. Unimplemented interfaces not counted as qualified behavior."
+  ],
+  "remaining": [
+    "73 other tracked blobs/assets",
+    "Remaining models/web/templates/assets/native binaries, JPA merge and runtime qualification"
+  ],
+  "full_review_count": 249
+}
