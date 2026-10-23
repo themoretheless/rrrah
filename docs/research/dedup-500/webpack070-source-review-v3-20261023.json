@@ -1,0 +1,129 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".atlassian/OWNER",
+      "git_blob": "2016ef81c391af1d0dcc043c56151fc401deb6f6",
+      "sha256": "94b6b89b2ec8368dd479f00a6437d2de472db57c5653cad2a1fb7561de66a94c",
+      "bytes": 12,
+      "whole_text_read": true
+    },
+    {
+      "path": ".babelrc",
+      "git_blob": "374b18a30ef9fcfbef695fd5ba63eac095474611",
+      "sha256": "e6863770677a963226b85f1416a1acb6263941c4248319de2268777c853a8325",
+      "bytes": 123,
+      "whole_text_read": true
+    },
+    {
+      "path": ".eslintrc.js",
+      "git_blob": "6a9df06ab080d07516e985c86d95257ef212592f",
+      "sha256": "48c80b1c942089f2df0b1959d8ff1ebb2920421e0599f39bf0fef649598e69c1",
+      "bytes": 846,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/nodejs.yml",
+      "git_blob": "70920f966c31ee26baef47dadd3dcf4e4b41a7cb",
+      "sha256": "a31aaea44d4b90f39588a39fe345f5b6f152a62dc53a751f468ed8d0d6c2f58e",
+      "bytes": 874,
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "06c9b99396d918778529bb5da132b02f73eecdec",
+      "sha256": "6cde6a74050151abf973bdd26e4bb15fc56a425597adff34ee3b8a1a5505c46c",
+      "bytes": 209,
+      "whole_text_read": true
+    },
+    {
+      "path": ".npmignore",
+      "git_blob": "ab043ddc2f704ee159835f2f745b1214c93e0226",
+      "sha256": "b0c9e0f76e9b42b2775d0d64d276c29aae4058f0e5d9dd25ba771e3524767ef1",
+      "bytes": 189,
+      "whole_text_read": true
+    },
+    {
+      "path": ".nvmrc",
+      "git_blob": "2d3beb1d021479546ffcf6054cbe0743d672c4a6",
+      "sha256": "0dd8106c5d29a141fe8b0168348953da2c9d219133621c4424fdeebdaa1fec3e",
+      "bytes": 9,
+      "whole_text_read": true
+    },
+    {
+      "path": ".prettierrc.js",
+      "git_blob": "01f5ba9af29a3d5477a4185857116ef07c5b0cab",
+      "sha256": "f7aacd2bd9e58e15260abb6b5a6e4b10ec753d2a09b95aa6d0d4e6d0868cb568",
+      "bytes": 123,
+      "whole_text_read": true
+    },
+    {
+      "path": "CHANGELOG.md",
+      "git_blob": "afc6e215828b48145a339e003b248bfee1ed6971",
+      "sha256": "0e6ac25bb2f0dfc08584dd96ce2454c534e332976d517c572acd8abcb0d893e3",
+      "bytes": 588,
+      "whole_text_read": true
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "git_blob": "1c8292dab0fccecd9df8eac9165df36fedf7faef",
+      "sha256": "2490b418554546e190404e47bcc7d439f55d8f13496d22b6063ec4e99e583466",
+      "bytes": 2479,
+      "whole_text_read": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "git_blob": "7cde7c2f110f3b9fd10eb7ee998e78aae4afc1be",
+      "sha256": "731fd5f54a508958755cfbd5a0a343805c6725f44a217330e360c4fedd87fc4f",
+      "bytes": 1258,
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "7284c38da8724d2f7438d95eef9d5ef187827964",
+      "sha256": "c2be406f0a56fc95ff5add65df3431f4393c9dd55209424a4ca559a1a2ac4696",
+      "bytes": 11357,
+      "whole_text_read": true
+    },
+    {
+      "path": "tsconfig.build.json",
+      "git_blob": "f30c7c47e0d4c5a0d19948771ec12aaf8ac72bfb",
+      "sha256": "cc7e4b49d7d581525a98552a90e031f22972c71ab042559819647a976162169d",
+      "bytes": 98,
+      "whole_text_read": true
+    },
+    {
+      "path": "tsconfig.json",
+      "git_blob": "01f5e92815982c0dcb46c25f0f6764b52c718dc2",
+      "sha256": "fe984276ae9f60d5ab9da7c403a426c8edc7bacc89d3c279482327e49450b0a2",
+      "bytes": 1059,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 22,
+  "tracked_blobs": 24,
+  "remaining_without_whole_review": [
+    "package-lock.json",
+    "yarn.lock"
+  ],
+  "findings": [
+    "Pinned CI requests Node12, yarn installation then tests, lint, type-check and build. Configuration was read; no CI result or current runtime qualification inferred.",
+    "ESLint config defines env twice. Node VM evaluation confirms effective env is node:true and jest/globals:true; browser/es6 flags from first property are overwritten. ecmaVersion separately remains 2018.",
+    "TypeScript config enables allowJs and strict, but not checkJs. The type-check script alone cannot be treated as full JavaScript semantic checking. Build config excludes tests from declarations; Babel excludes tests from emitted package JS.",
+    "npmignore does not exclude source/test directories; package manifest has no files allowlist. Actual published tarball contents require npm pack qualification and were not inspected.",
+    "Complete Apache2 license including appendix read; its template copyright retains yyyy placeholders. No legal status beyond observed source text asserted.",
+    "Contribution file requests CLA and discussion before larger upstream changes. No upstream action taken.",
+    "Historical changelog explicitly calls 0.0.6 broken; source package identifies0.0.8. Neither changelog nor config demonstrates measured current performance."
+  ],
+  "runtime_control": {
+    "node": "v22.23.4",
+    "effective_eslint_env": {
+      "node": true,
+      "jest/globals": true
+    }
+  },
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
