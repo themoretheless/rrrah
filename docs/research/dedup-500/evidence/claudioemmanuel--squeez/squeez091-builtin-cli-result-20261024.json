@@ -1,0 +1,86 @@
+{
+  "scope": "Unmodified actual squeez binary with pinned built-in rule pack, owned cwd/state. Standalone filter uses synthetic fixtures; wrapper uses owned failing stand-in producer. No real package tool, network or installation invoked.",
+  "binary_sha256": "a694c6b0e805aff937f629f9fa8da2ca313869174a1ce36aaf291586737873ac",
+  "standalone_filter": [
+    {
+      "hint": "uv sync",
+      "synthetic_input": "error: No solution found when resolving dependencies:\n",
+      "exit_code": 0,
+      "stdout": "uv sync: environment already up to date\n",
+      "stderr": ""
+    },
+    {
+      "hint": "mypy missing.py",
+      "synthetic_input": "mypy: can't read file 'missing.py': No such file or directory\n",
+      "exit_code": 0,
+      "stdout": "mypy: no issues found\n",
+      "stderr": ""
+    },
+    {
+      "hint": "rsync src dst",
+      "synthetic_input": "rsync error: connection unexpectedly closed\n",
+      "exit_code": 0,
+      "stdout": "rsync: transfer complete\n",
+      "stderr": ""
+    }
+  ],
+  "wrapper_failure_controls": [
+    {
+      "case": "forced_small",
+      "producer": "Owned stand-in uv writes invocation marker, prints synthetic fixture and exits7; real uv not invoked.",
+      "net_win_min_tokens_overridden": true,
+      "input_lines": 1,
+      "exit_code": 7,
+      "stdout": "# squeez [uv] 15\u219211 tokens (-27%) 233ms [adaptive: Full]\nuv sync: environment already up to date\n",
+      "stderr": "",
+      "contains_failure_diagnostic": false,
+      "contains_success_claim": true,
+      "owned_producer_marker_verified": true,
+      "blob_files": 0,
+      "failure_text_recoverable_in_blob": false
+    },
+    {
+      "case": "default_small",
+      "producer": "Owned stand-in uv writes invocation marker, prints synthetic fixture and exits7; real uv not invoked.",
+      "net_win_min_tokens_overridden": false,
+      "input_lines": 1,
+      "exit_code": 7,
+      "stdout": "error: No solution found when resolving dependencies:\n",
+      "stderr": "",
+      "contains_failure_diagnostic": true,
+      "contains_success_claim": false,
+      "owned_producer_marker_verified": true,
+      "blob_files": 0,
+      "failure_text_recoverable_in_blob": false
+    },
+    {
+      "case": "default_below_stash_threshold",
+      "producer": "Owned stand-in uv writes invocation marker, prints synthetic fixture and exits7; real uv not invoked.",
+      "net_win_min_tokens_overridden": false,
+      "input_lines": 16,
+      "exit_code": 7,
+      "stdout": "# squeez [uv] 85\u219211 tokens (-88%) 289ms [adaptive: Full]\nuv sync: environment already up to date\n",
+      "stderr": "",
+      "contains_failure_diagnostic": false,
+      "contains_success_claim": true,
+      "owned_producer_marker_verified": true,
+      "blob_files": 0,
+      "failure_text_recoverable_in_blob": false
+    },
+    {
+      "case": "default_verbose",
+      "producer": "Owned stand-in uv writes invocation marker, prints synthetic fixture and exits7; real uv not invoked.",
+      "net_win_min_tokens_overridden": false,
+      "input_lines": 201,
+      "exit_code": 7,
+      "stdout": "# squeez [uv] 1012\u2192194 tokens (-81%) 222ms [adaptive: Full]\n[squeez: full 201-line output stored \u2014 call squeez_retrieve with key=\"f52fd15b2514df8f\" to expand, or squeez_stash_search to find it later]\nsqueez:summary cmd=uv sync\ntotal_lines=201\nunique_files=0\ntop_errors:\n  - error: No solution found when resolving dependencies:\nvocab: resolver trace\ntail_preserved=20\nresolver trace 181\nresolver trace 182\nresolver trace 183\nresolver trace 184\nresolver trace 185\nresolver trace 186\nresolver trace 187\nresolver trace 188\nresolver trace 189\nresolver trace 190\nresolver trace 191\nresolver trace 192\nresolver trace 193\nresolver trace 194\nresolver trace 195\nresolver trace 196\nresolver trace 197\nresolver trace 198\nresolver trace 199\nerror: No solution found when resolving dependencies:\n",
+      "stderr": "",
+      "contains_failure_diagnostic": true,
+      "contains_success_claim": false,
+      "owned_producer_marker_verified": true,
+      "blob_files": 1,
+      "failure_text_recoverable_in_blob": true
+    }
+  ],
+  "owned_root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-builtin-cli-oqt9q1bm"
+}
