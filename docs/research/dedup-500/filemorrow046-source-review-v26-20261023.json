@@ -1,0 +1,46 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "f6993bad1fb60abf638f048fc8947f03d212c26eb1ceabdea8b52a135c8ba274",
+      "lines": 107,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/AppConfigurationTests.swift",
+      "sha256": "27e6a8bd62214b8bbc5985397ab51a2669cf81c851dfae8f4c52d3522cacc7e0",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/SyntheticAccuracyTests.swift",
+      "sha256": "29933475867d64df6da8e4178d14871e93b89c247896372537b1e80a54e8e358",
+      "lines": 141,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suite": "SyntheticAccuracyTests",
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "build_seconds": 1.28,
+    "test_seconds": 0.128,
+    "original_source_and_tests_unchanged": true,
+    "model_inference_run": false,
+    "AppConfigurationTests_run": false
+  },
+  "findings": [
+    "Synthetic suite passes three authored subject examples through generated PDF/PPTX/XLSX extraction and local evidence scoring, plus one ambiguous generated PDF and compatibility-state text checks. Total distinct original tests passed across focused runs is 82.",
+    "Compatibility test checks string/readiness properties, not actual FoundationModels availability or inference. Synthetic three-category success is not a general accuracy estimate.",
+    "AppConfigurationTests was fully read but not executed in the isolated package because DockVisibility lives in the application entrypoint. It checks pure policy mapping and temporary legacy storage/marker fixtures, not application launch.",
+    "Changelog claims stall protection and preservation during in-flight work; earlier source review identified blocking-read timeout gaps and separate teach-index/plan-snapshot concerns. Release notes are not runtime verification."
+  ],
+  "whole_files_read_total": 51,
+  "remaining_tracked_blobs": 7,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
