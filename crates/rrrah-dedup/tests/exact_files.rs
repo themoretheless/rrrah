@@ -1648,3 +1648,41 @@ fn shared_filename_suffixes_and_extensionless_names_preserve_content_partitions(
         }
     }
 }
+
+#[test]
+fn text_normalization_does_not_replace_encoded_byte_equality() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let paths = ["words-a", "copy-a", "words-b", "copy-b", "lf", "crlf"]
+        .map(|name| root.path().join(name));
+    let contents: [&[u8]; 6] = [b"ab c", b"ab c", b"a bc", b"a bc", b"a\nb\n", b"a\r\nb\r\n"];
+    for (path, content) in paths.iter().zip(contents) {
+        fs::write(path, content).unwrap();
+    }
+    let expected = BTreeSet::from([
+        BTreeSet::from([paths[0].clone(), paths[1].clone()]),
+        BTreeSet::from([paths[2].clone(), paths[3].clone()]),
+    ]);
+    for reverse in [false, true] {
+        let mut roots = paths.to_vec();
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, paths.len());
+            let actual: BTreeSet<BTreeSet<_>> = report
+                .groups
+                .into_iter()
+                .map(|group| group.paths.into_iter().collect())
+                .collect();
+            assert_eq!(actual, expected);
+        }
+    }
+}

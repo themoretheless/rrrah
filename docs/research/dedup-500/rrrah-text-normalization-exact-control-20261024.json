@@ -1,0 +1,23 @@
+{
+  "test": "text_normalization_does_not_replace_encoded_byte_equality",
+  "source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "scope": "Six owned files: two copies of ab c,two of a bc,LF andCRLF variants; forward/reverse input orders in scan and scan_verified",
+  "assertions": [
+    "All six files observed; no issues or aliases",
+    "Exactly two expected byte-copy partitions; whitespace and newline variants not merged"
+  ],
+  "result": {
+    "target": "exact_files",
+    "passed": 42,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "toolchain": "1.98.1",
+    "platform": "macOS"
+  },
+  "limits": [
+    "Finite matrix, not universal byte/filesystem coverage.",
+    "Production implementation unchanged.",
+    "Native pHash.org/ASAN skipped."
+  ]
+}
