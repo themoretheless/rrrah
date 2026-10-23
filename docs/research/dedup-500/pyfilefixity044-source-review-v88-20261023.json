@@ -1,0 +1,56 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "All eight rendered pages of saved errors-and-erasures decoding discussion visually read. No embedded code executed or linked references counted reviewed.",
+  "new_full_pdf_review": {
+    "path": "pyFileFixity/lib/docs/python - Errata (erasures+errors) Berlekamp-Massey for Reed-Solomon decoding - Stack Overflow.pdf",
+    "sha256": "5a16e93e12952ebc1fc143e4c39c1106081765abc8c617fbfefb7d2f5540b673",
+    "bytes": 474307,
+    "pages": 8,
+    "encrypted": false,
+    "metadata": {},
+    "text_characters_by_page": [
+      3460,
+      4630,
+      3690,
+      474,
+      5257,
+      5499,
+      5592,
+      2486
+    ]
+  },
+  "rendering": {
+    "tool": "Poppler pdftoppm",
+    "dpi": 110,
+    "pages_visually_reviewed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "pdf_fully_reviewed": 4,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 132,
+    "remaining_without_full_text_binary_visual_or_pdf_review": 12
+  },
+  "findings": [
+    "Saved source itself horizontally clips example output on page 3; full page review does not recover missing original web content.",
+    "Discussion identifies erasure-locator initialization, skipping the first erasure_count iterations, syndrome offset and Chien-search endpoint conventions as distinct correctness hazards. These are author claims, not validated decoder changes here.",
+    "Answer revisions disagree on L update with erasures_count under different parameter choices. Source explicitly recommends testing the actual implementation; no universally qualified formula inferred.",
+    "Simultaneous omega computation is admitted incomplete: answer proposes truncation or recomputation from syndrome and locator. Do not treat included code as complete reference decoder.",
+    "Retaining every intermediate polynomial is unnecessary according to source; constant-state implementation is a candidate only after independent correctness and measured performance qualification."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
