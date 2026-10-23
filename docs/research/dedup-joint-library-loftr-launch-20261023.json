@@ -1,0 +1,62 @@
+{
+  "status": "loader_repaired_allfeatures_tests_running",
+  "prepared_build_attempt": {
+    "exit": {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--all-features",
+        "--lib",
+        "--tests"
+      ],
+      "exit_code": 101,
+      "runtime": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010"
+    },
+    "raw_log": "docs/research/dedup-joint-library-suite-20261023/all-features-prepared-runtime.log",
+    "raw_log_sha256": "e3ba5872f999648e13d9046838457593bb633a0c9e464e34fff4ab3ab395ad40",
+    "scope": "Compiled successfully17m11s, but firsttestprocess aborted in macOSloader before tests because libtorch_cpu.dylib was not found. Not a library test assertion failure."
+  },
+  "loader_probe": {
+    "command": "/usr/bin/env DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib .dedup-work/local-sequence-target-20261021/debug/deps/rrrah_dedup-6380373eec1150a5 --list",
+    "exit_code": 0,
+    "listed_tests": 138,
+    "raw_log": "docs/research/dedup-joint-library-suite-20261023/all-features-loader-list.log",
+    "raw_log_sha256": "e5d74d00e7e371990f27729979f2deca1be7e4a2a8cf593e86e619906a0e1992"
+  },
+  "fixed_run_at_observation": {
+    "command": [
+      "cargo",
+      "+1.98.1",
+      "test",
+      "-p",
+      "rrrah-dedup",
+      "--all-features",
+      "--lib",
+      "--tests"
+    ],
+    "status": "running",
+    "runner": "/usr/bin/env DYLD_LIBRARY_PATH=/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/lib/python3.12/site-packages/torch/lib",
+    "started_at_unix": 1792780653.4788969,
+    "cargo_pid": 15846
+  },
+  "runner_environment_note": "Cargo rewrites loader search environment for spawned tests. Target runner executes env with explicit Torch dylib path after Cargo environment preparation. No global loader config, source code or installed packages changed.",
+  "complete_library_unit_result": {
+    "passed": 133,
+    "failed": 0,
+    "ignored": 5,
+    "native_loftr_adoption_tests": [
+      "model_loftr::tests::adoption_retains_credit_until_last_owner",
+      "model_loftr::tests::every_adoption_checkpoint_cancels_without_publication",
+      "model_loftr::tests::malformed_results_are_errors_and_release_credit",
+      "model_loftr::tests::double_results_preserve_qualified_float32_conversion"
+    ],
+    "raw_log_prefix": "docs/research/dedup-joint-library-suite-20261023/all-features-runner-unit-prefix.log",
+    "raw_log_sha256": "dd5bedf8b74728f4865f8d2b284d34b6ca1fcb57e10b8d0078e624dabfef4b50",
+    "scope": "Actual native Torch result adoption/budget/cancel/float conversion controls only; not full learned feature inference/model corpus parity."
+  },
+  "current_inputs_checked_unchanged": 457,
+  "remaining_scope": "Integrationtests still running; fullallfeaturesexit/results pending. Previousdecode1068plus161PNGcorpus/15pairs qualified separately. Source review500/runtimequality/performance/platform objective not complete."
+}

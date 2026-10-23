@@ -1,0 +1,77 @@
+   Compiling torch-sys v0.23.0
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling tch v0.23.0
+   Compiling loftr v0.1.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/loftr)
+warning: variable does not need to be mutable
+   --> vendor/loftr/src/coarse_matching.rs:169:9
+    |
+169 |     let mut column = sim.f_softmax(1, Kind::Float)?;
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:274:12
+    |
+221 | impl ResNetFpn8_2 {
+    | ----------------- method in this implementation
+...
+274 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `forward_t` is never used
+   --> vendor/loftr/src/backbone.rs:329:12
+    |
+328 | impl Backbone {
+    | ------------- method in this implementation
+329 |     pub fn forward_t(&self, x: &Tensor, train: bool) -> Result<(Tensor, Tensor), LoftrError> {
+    |            ^^^^^^^^^
+
+warning: method `forward` is never used
+  --> vendor/loftr/src/coarse_matching.rs:48:12
+   |
+39 | impl CoarseMatching {
+   | ------------------- method in this implementation
+...
+48 |     pub fn forward(
+   |            ^^^^^^^
+
+warning: method `forward` is never used
+   --> vendor/loftr/src/transformer.rs:166:12
+    |
+147 | impl LocalFeatureTransformer {
+    | ---------------------------- method in this implementation
+...
+166 |     pub fn forward(
+    |            ^^^^^^^
+
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: `loftr` (lib) generated 5 warnings (run `cargo fix --lib -p loftr` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 17m 11s
+     Running unittests src/lib.rs (.dedup-work/local-sequence-target-20261021/debug/deps/rrrah_dedup-6380373eec1150a5)
+dyld[14926]: Library not loaded: @rpath/libtorch_cpu.dylib
+  Referenced from: <3DCAF79D-08E2-32CD-B401-993150645B12> /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/deps/rrrah_dedup-6380373eec1150a5
+  Reason: tried: '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/astcenc-sys-43a9c48c52dc0fb7/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/basis-universal-sys-1cc7dcb8e6fba8a2/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/blake3-2890bc462595d454/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/charls-sys-fda5e0c3ef77ab58/out/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/jpegxr-4cf9b2da68cf5e7e/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/link-cplusplus-4c684ff1aa09df4b/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/openjpeg-sys-033094ee7433cc69/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/torch-sys-3543685d7509294c/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/zstd-sys-8305ac6d20161fef/out/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/deps/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.rustup/toolchains/1.98.1-aarch64-apple-darwin/lib/rustlib/aarch64-apple-darwin/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/.rustup/toolchains/1.98.1-aarch64-apple-darwin/lib/libtorch_cpu.dylib' (no such file), '/Users/themoretheless/lib/libtorch_cpu.dylib' (no such file), '/usr/local/lib/libtorch_cpu.dylib' (no such file), '/usr/lib/libtorch_cpu.dylib' (no such file, not in dyld cache)
+error: test failed, to rerun pass `-p rrrah-dedup --lib`
+
+Caused by:
+  process didn't exit successfully: `/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/deps/rrrah_dedup-6380373eec1150a5` (signal: 6, SIGABRT: process abort signal)

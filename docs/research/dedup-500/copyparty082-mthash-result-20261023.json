@@ -1,0 +1,120 @@
+{
+  "source_sha256": {
+    "copyparty/util.py": "32fb788282770971411a15949f55ef36819ce58892eb90ead181c073541a3bfb",
+    "copyparty/up2k.py": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89"
+  },
+  "rows": [
+    {
+      "workers": 2,
+      "bytes": 0,
+      "chunks": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workers": 2,
+      "bytes": 1,
+      "chunks": 1,
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+    },
+    {
+      "workers": 2,
+      "bytes": 524287,
+      "chunks": 1,
+      "sha256": "99a007b8beb5603b0e24f432da089a49f49cd31aab5763fa6374c4ebf7acdbf6"
+    },
+    {
+      "workers": 2,
+      "bytes": 524288,
+      "chunks": 1,
+      "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5"
+    },
+    {
+      "workers": 2,
+      "bytes": 1048576,
+      "chunks": 1,
+      "sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83"
+    },
+    {
+      "workers": 2,
+      "bytes": 1048579,
+      "chunks": 2,
+      "sha256": "7bd9eef8bb7f99e63ea0266fd5e9e82c994c0292e0889d0af96ec099ee46e6b7"
+    },
+    {
+      "workers": 2,
+      "bytes": 2097169,
+      "chunks": 3,
+      "sha256": "6f8b1421035dcde6d517143914932e7996c17ae9a6c30042b1142b1b8b5f0557"
+    },
+    {
+      "workers": 2,
+      "worker_EOF_propagated": true,
+      "queues_drained_after_error": true,
+      "file_reference_retained_until_retry": true,
+      "retry_restores_hash_and_clears_state": true,
+      "prelatched_stop_returns_nonempty_blank_hashes": [
+        ""
+      ],
+      "stop_reset_retry_valid": true
+    },
+    {
+      "workers": 4,
+      "bytes": 0,
+      "chunks": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "workers": 4,
+      "bytes": 1,
+      "chunks": 1,
+      "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+    },
+    {
+      "workers": 4,
+      "bytes": 524287,
+      "chunks": 1,
+      "sha256": "99a007b8beb5603b0e24f432da089a49f49cd31aab5763fa6374c4ebf7acdbf6"
+    },
+    {
+      "workers": 4,
+      "bytes": 524288,
+      "chunks": 1,
+      "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5"
+    },
+    {
+      "workers": 4,
+      "bytes": 1048576,
+      "chunks": 1,
+      "sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83"
+    },
+    {
+      "workers": 4,
+      "bytes": 1048579,
+      "chunks": 2,
+      "sha256": "7bd9eef8bb7f99e63ea0266fd5e9e82c994c0292e0889d0af96ec099ee46e6b7"
+    },
+    {
+      "workers": 4,
+      "bytes": 2097169,
+      "chunks": 3,
+      "sha256": "6f8b1421035dcde6d517143914932e7996c17ae9a6c30042b1142b1b8b5f0557"
+    },
+    {
+      "workers": 4,
+      "worker_EOF_propagated": true,
+      "queues_drained_after_error": true,
+      "file_reference_retained_until_retry": true,
+      "retry_restores_hash_and_clears_state": true,
+      "prelatched_stop_returns_nonempty_blank_hashes": [
+        ""
+      ],
+      "stop_reset_retry_valid": true
+    }
+  ],
+  "normal_size_cases": 14,
+  "worker_pools": [
+    2,
+    4
+  ],
+  "scope": "Complete original MTHash and actual Up2k._hashlist_from_file, constructor-free single-thread Up2k config with original worker threads. Bounded <=2MiB+17 files. Not live server, high-level cancellation publication, all scheduler races, performance or process-lifetime thread cleanup qualification."
+}

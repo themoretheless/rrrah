@@ -1,0 +1,208 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "copyparty/web/w.hash.js",
+      "local": "14-web-w.hash.js",
+      "git_blob": "24f5be141ca5677d7f5cafcbfdd48a462557f0ab",
+      "sha256": "5abe7caaa72a4ab2d4ff47fafabf67b921e4ef66862e50b5bf54fa8f14679a6f",
+      "bytes": 3317,
+      "whole_text_read": true
+    }
+  ],
+  "partial_source_files_read": [
+    {
+      "path": "copyparty/util.py",
+      "local": "15-util.py",
+      "git_blob": "b14dbdd1932a052c9c255aad28d18a6356516ba3",
+      "sha256": "32fb788282770971411a15949f55ef36819ce58892eb90ead181c073541a3bfb",
+      "bytes": 131990,
+      "whole_text_read": false,
+      "classes_whole_read": {
+        "Daemon": [
+          869,
+          890
+        ],
+        "MTHash": [
+          1350,
+          1444
+        ]
+      },
+      "ranges_read": [
+        "869-891",
+        "1350-1525"
+      ]
+    },
+    {
+      "path": "copyparty/up2k.py",
+      "local": "08-up2k.py",
+      "whole_text_read": false,
+      "additional_ranges_read": [
+        "1-130",
+        "225-242"
+      ]
+    }
+  ],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 475,
+  "native_control": {
+    "harness": "docs/research/dedup-500/copyparty082-mthash-control-20261023.py",
+    "harness_sha256": "27072415922555537fb4b085badc41a04ea54dabeb36021bc8978bdbfb569f6d",
+    "artifact": "docs/research/dedup-500/copyparty082-mthash-result-20261023.json",
+    "artifact_sha256": "edbcba56e11edc8947a24f03be4b5b39336c694ce2b158c5e2c59e03942aee86",
+    "result": {
+      "source_sha256": {
+        "copyparty/util.py": "32fb788282770971411a15949f55ef36819ce58892eb90ead181c073541a3bfb",
+        "copyparty/up2k.py": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89"
+      },
+      "rows": [
+        {
+          "workers": 2,
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "workers": 2,
+          "bytes": 1,
+          "chunks": 1,
+          "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+        },
+        {
+          "workers": 2,
+          "bytes": 524287,
+          "chunks": 1,
+          "sha256": "99a007b8beb5603b0e24f432da089a49f49cd31aab5763fa6374c4ebf7acdbf6"
+        },
+        {
+          "workers": 2,
+          "bytes": 524288,
+          "chunks": 1,
+          "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5"
+        },
+        {
+          "workers": 2,
+          "bytes": 1048576,
+          "chunks": 1,
+          "sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83"
+        },
+        {
+          "workers": 2,
+          "bytes": 1048579,
+          "chunks": 2,
+          "sha256": "7bd9eef8bb7f99e63ea0266fd5e9e82c994c0292e0889d0af96ec099ee46e6b7"
+        },
+        {
+          "workers": 2,
+          "bytes": 2097169,
+          "chunks": 3,
+          "sha256": "6f8b1421035dcde6d517143914932e7996c17ae9a6c30042b1142b1b8b5f0557"
+        },
+        {
+          "workers": 2,
+          "worker_EOF_propagated": true,
+          "queues_drained_after_error": true,
+          "file_reference_retained_until_retry": true,
+          "retry_restores_hash_and_clears_state": true,
+          "prelatched_stop_returns_nonempty_blank_hashes": [
+            ""
+          ],
+          "stop_reset_retry_valid": true
+        },
+        {
+          "workers": 4,
+          "bytes": 0,
+          "chunks": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "workers": 4,
+          "bytes": 1,
+          "chunks": 1,
+          "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+        },
+        {
+          "workers": 4,
+          "bytes": 524287,
+          "chunks": 1,
+          "sha256": "99a007b8beb5603b0e24f432da089a49f49cd31aab5763fa6374c4ebf7acdbf6"
+        },
+        {
+          "workers": 4,
+          "bytes": 524288,
+          "chunks": 1,
+          "sha256": "33bc8aab40703678c3ebe94d2dd8f2afff285dd901f9234e841e4679f8204fd5"
+        },
+        {
+          "workers": 4,
+          "bytes": 1048576,
+          "chunks": 1,
+          "sha256": "fbbab289f7f94b25736c58be46a994c441fd02552cc6022352e3d86d2fab7c83"
+        },
+        {
+          "workers": 4,
+          "bytes": 1048579,
+          "chunks": 2,
+          "sha256": "7bd9eef8bb7f99e63ea0266fd5e9e82c994c0292e0889d0af96ec099ee46e6b7"
+        },
+        {
+          "workers": 4,
+          "bytes": 2097169,
+          "chunks": 3,
+          "sha256": "6f8b1421035dcde6d517143914932e7996c17ae9a6c30042b1142b1b8b5f0557"
+        },
+        {
+          "workers": 4,
+          "worker_EOF_propagated": true,
+          "queues_drained_after_error": true,
+          "file_reference_retained_until_retry": true,
+          "retry_restores_hash_and_clears_state": true,
+          "prelatched_stop_returns_nonempty_blank_hashes": [
+            ""
+          ],
+          "stop_reset_retry_valid": true
+        }
+      ],
+      "normal_size_cases": 14,
+      "worker_pools": [
+        2,
+        4
+      ],
+      "scope": "Complete original MTHash and actual Up2k._hashlist_from_file, constructor-free single-thread Up2k config with original worker threads. Bounded <=2MiB+17 files. Not live server, high-level cancellation publication, all scheduler races, performance or process-lifetime thread cleanup qualification."
+    },
+    "command": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/bin/python docs/research/dedup-500/copyparty082-mthash-control-20261023.py .dedup-work/copyparty082-20261023 .dedup-work/copyparty082-mthash-20261023",
+    "exit_code": 0
+  },
+  "rrrah_native_counterpart": {
+    "harness": "docs/research/dedup-500/rrrah-growth-snapshot-control-20261023.rs",
+    "harness_sha256": "28ede09b0ca28a82b766278ae0d481d54668f444aba915daa1afb66a5d2708a7",
+    "previous_version_commit": "7f4b0464",
+    "result": {
+      "baseline_checkpoints": 7,
+      "growth_refusals": 6,
+      "fresh_retries_verified": 6,
+      "scan_mutation_checkpoints": 47,
+      "verified_scan_mutation_checkpoints": 71,
+      "scan_mutation_cases": 94,
+      "verified_scan_mutation_cases": 142,
+      "prelatched_snapshot_cancelled": true,
+      "prelatched_scan_cancellations": 2
+    },
+    "compile_exit_code": 0,
+    "run_exit_code": 0,
+    "library": ".dedup-work/local-sequence-target-20261021/debug/deps/librrrah_dedup-2b35dfcefd220434.rlib",
+    "scope": "Actual public decode-library ContentSnapshot and both scan APIs. Added3prelatchedcancel assertions; previous236growthcases and6snapshotrefusals/retries stillpass. Not additionalCargo testcount or all worker/pool qualification."
+  },
+  "findings": [
+    "Whole original w.hash.js read; FileReader/WebCrypto/fallbackworker body not executed here. Source sends read/done/errors and truncatesSHA512 to33bytes. No browser compatibility or memory/runtime parity claim.",
+    "Whole Daemon/MTHash classes read in large util.py, not whole module. Original2/4daemonworker pools and actualUp2k filehash method pass14boundedsizecases across0,1,512KiBthreshold,1MiBboundary and2MiB+17 usingindependent hashlibexpectedchunkdigests. No benchmark/hardRSS claim.",
+    "Deliberatelydeclaredoversizedread triggersEOF propagated afterbothworkerresults collected; queuesempty. OriginalMTHash retains f/sz/csz onexception becauseclearingfollowsraise; successfulretry matchesdigest andclearsstate. Reference retention observed, not leakedopenfiledescriptor claim.",
+    "Prelatched pool.stop/Up2k.stop in multithread path returnsnonemptylist[emptystring] for1MiBfile. Resetstop retriescorrect. Thisdiffersfromsinglethread emptylistfromv2; no highlevelshutdown/indexpublicationfailure claimed.",
+    "Current public rrrah snapshot pretrue returnsCancelled; both public scan methods returncancelledreport/nogroups. All236growthmutationcases andfreshretriesstillpass onactualcompiledlibrary.",
+    "Originalfixturehash_mt1 frompreviousrunsdidnotexercisethis2/4workerpath. Currenttestsconstructor-freeUp2kfields,singlejobsubmitter,actualworkers; nofullserver/multiplejobsubmitters/cancellationlatency/platformproof.",
+    "Whole review11/486,475remain; no fullsourceincrement or productioncodeadoption. FullLoFTRtest gate separate:loaderenvironmentfixedandrerunstarted,butpendingcompletion."
+  ]
+}

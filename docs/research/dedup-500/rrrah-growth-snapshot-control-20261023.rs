@@ -12,6 +12,7 @@ fn main() {
         false
     }).unwrap();
     assert_eq!(baseline.byte_count(), 3);
+    assert!(matches!(ContentSnapshot::read(&path, 1024, || true), Err(SnapshotError::Cancelled)));
     let checkpoints = calls.get();
     assert!(checkpoints > 2);
     for stop in 2..=checkpoints {
@@ -47,6 +48,8 @@ fn main() {
         let positive = run(&|| { observed.set(observed.get() + 1); false });
         assert!(positive.complete());
         assert_eq!(positive.groups.len(), 1);
+        let cancelled = run(&|| true);
+        assert!(cancelled.cancelled && cancelled.groups.is_empty());
         let total = observed.get();
         for victim in &paths {
         for stop in 1..=total {
@@ -75,5 +78,5 @@ fn main() {
     fs::remove_file(&path).unwrap();
     fs::remove_file(&other).unwrap();
     fs::remove_dir(&directory).unwrap();
-    println!("{{\"baseline_checkpoints\":{checkpoints},\"growth_refusals\":{},\"fresh_retries_verified\":{},\"scan_mutation_checkpoints\":{},\"verified_scan_mutation_checkpoints\":{},\"scan_mutation_cases\":{},\"verified_scan_mutation_cases\":{}}}", checkpoints - 1, checkpoints - 1, api_checks[0], api_checks[1], api_checks[0] * 2, api_checks[1] * 2);
+    println!("{{\"baseline_checkpoints\":{checkpoints},\"growth_refusals\":{},\"fresh_retries_verified\":{},\"scan_mutation_checkpoints\":{},\"verified_scan_mutation_checkpoints\":{},\"scan_mutation_cases\":{},\"verified_scan_mutation_cases\":{},\"prelatched_snapshot_cancelled\":true,\"prelatched_scan_cancellations\":2}}", checkpoints - 1, checkpoints - 1, api_checks[0], api_checks[1], api_checks[0] * 2, api_checks[1] * 2);
 }
