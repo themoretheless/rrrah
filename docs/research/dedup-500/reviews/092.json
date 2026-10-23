@@ -2,7 +2,7 @@
   "index": 92,
   "repository": "kdeldycke/mail-deduplicate",
   "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
-  "review_scope": "19 complete pinned text files of80;258 original focused tests and original imported comparison control; partial repository review",
+  "review_scope": "20 complete pinned text files of80;272 original focused tests and worker-failure controls; partial repository review",
   "decision": "reject-domain",
   "finding": "Mailbox header/body/actions equivalence; mail-specific domain and GPL, not image processing.",
   "license_metadata": "GPL-2.0",
@@ -141,7 +141,11 @@
     {
       "audit": "docs/research/dedup-500/mail092-source-review-v9-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mail092-source-review-v10-20261024.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "258 distinct original focused tests passed:30 cache,83 mail,76 strategy,40 mail_box,29 action; isolated resolved dependencies, not full suite/frozen uv.lock"
+  "upstream_tests_scope": "272 distinct original focused tests passed, including14 performance target tests; isolated resolved dependencies, not full suite/frozen uv.lock"
 }

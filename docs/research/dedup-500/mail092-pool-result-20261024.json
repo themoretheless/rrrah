@@ -1,0 +1,11 @@
+{
+  "scope": "Normally imported original worker_pool and fan_out; synthetic executor constructor/map errors, no processes spawned",
+  "constructor_refusal_falls_back": true,
+  "delayed_map_refusal_propagates": true,
+  "executor_shutdown_on_delayed_failure": true,
+  "first_result_consumes_two_task_window": true,
+  "limits": [
+    "Synthetic executor errors, not measured OS startup failure.",
+    "No throughput, RSS or universal worker recovery qualification."
+  ]
+}

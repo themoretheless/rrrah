@@ -1,0 +1,55 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v9-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_performance.py",
+      "local": "19-tests--test_performance.py",
+      "sha256": "22177a3e90be75485fea7c28c7fb4227c6b4b54e25c3efa99810b517e2018793",
+      "whole_text_read": true,
+      "lines": 341
+    }
+  ],
+  "whole_text_files_read_total": 20,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 60,
+  "native_original_tests_added": {
+    "target": "tests/test_performance.py",
+    "passed": 14,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 0.61
+  },
+  "native_original_tests_cumulative": {
+    "passed": 272,
+    "failed": 0,
+    "scope": "Focused original test targets, not entire package"
+  },
+  "public_pool_control": {
+    "scope": "Normally imported original worker_pool and fan_out; synthetic executor constructor/map errors, no processes spawned",
+    "constructor_refusal_falls_back": true,
+    "delayed_map_refusal_propagates": true,
+    "executor_shutdown_on_delayed_failure": true,
+    "first_result_consumes_two_task_window": true,
+    "limits": [
+      "Synthetic executor errors, not measured OS startup failure.",
+      "No throughput, RSS or universal worker recovery qualification."
+    ]
+  },
+  "findings": [
+    "Original performance target tests quantify read counts and retained Python object graphs; these are not wall-time/RSS/peak-process-memory measurements. Shared box/config references explicitly excluded from per-mail measurement.",
+    "Original constructor-refusal tests monkeypatch ProcessPoolExecutor itself to raise; they do not cover delayed startup errors from map. Authored original worker_pool/fan_out control confirms constructor refusal fallback but delayed map OSError propagates; shutdown still runs.",
+    "Bounded stream control: first result at window2 consumes exactly two tasks from five; remainder preserves submission order. One finite sequential control, not universal process scheduling proof.",
+    "Large duplicate-set test uses40 identical bodies and verifies zero calls to diff. It does not establish subquadratic complexity for all-different bodies, where source explicitly enumerates combinations.",
+    "Retained-memory tests use20/60 messages and20 bodies of50000characters, with2000bytes-per-mail ceiling; no large-corpus memory claim derived."
+  ],
+  "transfer_decision": "Preserve explicit resource accounting and failure coverage at actual task submission boundary. No foreign production implementation copied.",
+  "limits": [
+    "20 whole text files of80;60 remain.",
+    "Focused tests, not full suite or platform/release qualification.",
+    "No performance speedup claimed.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
