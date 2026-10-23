@@ -1,0 +1,30 @@
+{
+  "scope": "Decoder/cache integration after interrupted I/O fixes",
+  "toolchain": "Rust1.98.1",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test cache_reload --test cache_interpretation --test cache_rla_interpretation",
+  "result": {
+    "passed": 4,
+    "failed": 0,
+    "compilation_seconds": 46.27
+  },
+  "covered": [
+    "PFM opposite storage order separates cache entries",
+    "caller interpretation options separate repeatable entries",
+    "corruption/removal cannot reuse warm fingerprint; repaired file retries",
+    "RLA warm result cannot bypass missing alpha/color interpretation"
+  ],
+  "post_run_source_sha256": {
+    "crates/rrrah-dedup/src/cache.rs": "aa9e54f0dfe6a6f62ec7374f391f0d1c6516c5da430d257592ecffb222ecf601",
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-decode/src/raster.rs": "09ad611c684df8cca89e805abd0cd80b95f6591c73d1fa56a912c97be58b8ef0",
+    "crates/rrrah-develop/src/raster.rs": "0410a2db1b4250eda1c53b3e1ee4448e9699afcf6cef50b93dbef43bd2e6a4d5",
+    "crates/rrrah-dedup/tests/cache_reload.rs": "707f697492c29ed317bef542458619297474afc0335e2c01099144b5ae3d77ad",
+    "crates/rrrah-dedup/tests/cache_interpretation.rs": "36c8e97a168d183d780eeee628cc1102727fd0f53807c9e1056235b54b1bbfa9",
+    "crates/rrrah-dedup/tests/cache_rla_interpretation.rs": "2c52aa1ee1634d98262d1aa9090834bc73eed4fd92677ae43cb87a8bd36327f7"
+  },
+  "limits": [
+    "Current working tree contains uncommitted rrrah-decode/src/raster.rs and rrrah-develop/src/raster.rs changes. This is current-tree verification, not an isolated clean-commit qualification.",
+    "Post-run hashes recorded; no frozen before/after source audit claimed.",
+    "Only four named decoder/cache tests; all-case objective remains unproven."
+  ]
+}
