@@ -1,0 +1,48 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "refgraph.py whole read; pin verified; extracted original classes tested without sizing or rendering backend",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/refgraph.py",
+    "sha256": "4c6fee73f32bd3f5166947c7b9cfb24a2693b000216858052be5c8a3fe8e0db3"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 96,
+    "remaining_not_whole_reviewed": 48
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-graph-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "5d7205209980850e14b78b4646aeb0565f6858ed",
+    "source_sha256": "4c6fee73f32bd3f5166947c7b9cfb24a2693b000216858052be5c8a3fe8e0db3",
+    "scope": "Exact AST classes; synthetic edges and actual in-memory gc referents, no original imports or Graph constructor/Asizer/Graphviz",
+    "edge_hash_collision": {
+      "distinct_endpoints": true,
+      "reported_equal": true,
+      "note": "Synthetic integer IDs demonstrate equality contract; no claim of observed live object-id collision"
+    },
+    "cycle_reduction": {
+      "actual_cycle_nodes": 1,
+      "retained_nodes": 2,
+      "predecessor_incorrectly_retained": true
+    },
+    "connected_component": {
+      "undirected_connected": true,
+      "reported_groups": [
+        0,
+        1,
+        0,
+        0
+      ]
+    }
+  },
+  "findings": [
+    "Edge equality compares hash values instead of endpoint/label tuples. Synthetic integer collision reproduced; not a measured live object ID collision.",
+    "Leaf elimination retains nodes leading into cycles, not just nodes participating in cycles. One predecessor plus one self-cycle retained as two cycle nodes.",
+    "One-pass group propagation splits a connected four-node graph into two labels, dependent on object ordering.",
+    "Graph traversal and rendering lack explicit node/edge/time budgets; subprocess communicate has no timeout. No renderer launched.",
+    "Object id is identity for object references, not file-content equality. No production deduplication code copied."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
