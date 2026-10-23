@@ -1,0 +1,36 @@
+{
+  "original_source_sha256": "93af674d9b836cca5157cb68d5054199b67101db9cbbde377ff0c4174ea96a1a",
+  "controls": 3,
+  "passed": 3,
+  "rows": [
+    {
+      "name": "one.mka",
+      "sha256": "d2b3beae5c64f207944903d2a0205fffcb05e911556bd7ba4e6803aab99ec7b0",
+      "exit_code": 0,
+      "stdout": "{\n    \"ahash\": \"yKdt6O8WB9C8opex\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "three.mka",
+      "sha256": "44e77a49a09b57ce4667b9fdeafb55d825ce2f92eb33a80274ce13e6bfac25bb",
+      "exit_code": 0,
+      "stdout": "{\n    \"ahash\": \"yKdt6O8WB9C8opex\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "name": "invalid.mka",
+      "sha256": "06b87294202125f31fd9a1dcd7a6af431f3a4119fb16fd6052728afbf2037b77",
+      "exit_code": 0,
+      "stdout": "{}\n",
+      "stderr": "Error opening input files: Invalid data found when processing input\n"
+    }
+  ],
+  "three_input_default_output_media_headers": [
+    "#media_type 0: audio"
+  ],
+  "rejected_initial_hypotheses": [
+    "Expected3audioinputstreams to reach hashers[2], but actualFFmpeg default output selects1audio; no3streamIndexError reproduced.",
+    "Expectedinvalidinput empty stdout; actualstdout isJSON{} with exit0. Initial assertions failed and were corrected to observed behavior."
+  ],
+  "scope": "Original complete media-hash.py CLI, actual FFmpeg on owned bounded PCM/MKA files. Not up2k/exact-file/server qualification."
+}

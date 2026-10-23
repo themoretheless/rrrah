@@ -1,0 +1,127 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "45837e7661289f8778aea63188aad11e84841491",
+      "sha256": "80eaf8877de90ac04483db88cbd01899beea96870be15f6ddae3c94b9c2596bd",
+      "bytes": 1072,
+      "whole_text_read": true
+    },
+    {
+      "path": "bin/mtag/media-hash.py",
+      "local": "03-media-hash.py",
+      "git_blob": "e9b88f47f5082b3a4df98ab1ad2af7e091672502",
+      "sha256": "93af674d9b836cca5157cb68d5054199b67101db9cbbde377ff0c4174ea96a1a",
+      "bytes": 1306,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_dedup.py",
+      "local": "05-test_dedup.py",
+      "git_blob": "f82dface79d30bb1c587e9c507054015b021956b",
+      "sha256": "1109fefdf44e7573bbcf990bd2c5f8d2eeede56737f6e9defe20b2bd3da6d736",
+      "bytes": 8161,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/util.py",
+      "local": "06-tests-util.py",
+      "git_blob": "434cc91a3603de11be5e0da326126c1449314d5b",
+      "sha256": "d451bb6195bb040db9d5432d42238ac790d95ac3266bbc53a6aa046ab90cbb0b",
+      "bytes": 11936,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "07-tests-init.py",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 5,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 481,
+  "checkout_integrity": {
+    "tracked_files_checked": 486,
+    "byte_exact_git_objects_in_checkout": 485,
+    "expected_newline_differences": [
+      {
+        "path": "contrib/explorer-nothumbs-nofoldertypes.reg",
+        "reason": "LF-to-CRLF checkout conversion",
+        "raw_git_blob": "c1869510a50831a123dd148b5e5ad0f5e2694311"
+      }
+    ],
+    "unexpected_differences": 0,
+    "scope": "Symlink blobs checked as link text, not target content. Raw Git registry blob also verified. Initial overly strict checkout assertions corrected; native test inputs byte-exact."
+  },
+  "native_dedup": {
+    "result": {
+      "tests_run": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "method_calls": {
+        "do_tc": 174,
+        "handshake": 531,
+        "put_chunk": 327,
+        "curl": 1009
+      },
+      "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+      "scope": "Original whole TestDedup methods and actual filesystem/SQLite/up2k with original in-memory HTTP test fixtures. Owned tempfile allocator replaces global RAM-disk helper; counting wrappers delegate unchanged bodies. Not real socket server, production deployment or full suite qualification."
+    },
+    "harness": "docs/research/dedup-500/copyparty082-dedup-control-20261023.py",
+    "harness_sha256": "1501edc8b42d4046e68b518d24dc486234aafa8987d31dd41d68d51c98a66489",
+    "command": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/bin/python docs/research/dedup-500/copyparty082-dedup-control-20261023.py .dedup-work/copyparty082-20261023 .dedup-work/copyparty082-native-20261023",
+    "exit_code": 0
+  },
+  "native_media_hash": {
+    "original_source_sha256": "93af674d9b836cca5157cb68d5054199b67101db9cbbde377ff0c4174ea96a1a",
+    "controls": 3,
+    "passed": 3,
+    "rows": [
+      {
+        "name": "one.mka",
+        "sha256": "d2b3beae5c64f207944903d2a0205fffcb05e911556bd7ba4e6803aab99ec7b0",
+        "exit_code": 0,
+        "stdout": "{\n    \"ahash\": \"yKdt6O8WB9C8opex\"\n}\n",
+        "stderr": ""
+      },
+      {
+        "name": "three.mka",
+        "sha256": "44e77a49a09b57ce4667b9fdeafb55d825ce2f92eb33a80274ce13e6bfac25bb",
+        "exit_code": 0,
+        "stdout": "{\n    \"ahash\": \"yKdt6O8WB9C8opex\"\n}\n",
+        "stderr": ""
+      },
+      {
+        "name": "invalid.mka",
+        "sha256": "06b87294202125f31fd9a1dcd7a6af431f3a4119fb16fd6052728afbf2037b77",
+        "exit_code": 0,
+        "stdout": "{}\n",
+        "stderr": "Error opening input files: Invalid data found when processing input\n"
+      }
+    ],
+    "three_input_default_output_media_headers": [
+      "#media_type 0: audio"
+    ],
+    "rejected_initial_hypotheses": [
+      "Expected3audioinputstreams to reach hashers[2], but actualFFmpeg default output selects1audio; no3streamIndexError reproduced.",
+      "Expectedinvalidinput empty stdout; actualstdout isJSON{} with exit0. Initial assertions failed and were corrected to observed behavior."
+    ],
+    "scope": "Original complete media-hash.py CLI, actual FFmpeg on owned bounded PCM/MKA files. Not up2k/exact-file/server qualification."
+  },
+  "findings": [
+    "Root MIT license whole-read; nested thirdparty/assets licenses pending. Password hashing source outside file identity review, not read/reused.",
+    "Both original TestDedup methods pass with original real filesystem/SQLite/up2k and original virtualHTTP fixtures.174scenarios/531handshakes/327chunks/1009curl calls counted through delegating wrappers. No real network server/fullsuite/platform qualification.",
+    "Owned tempfile allocator replaces only shared RAM-disk helper, which otherwise sweeps other cptd-*dirs and cancreate/erase macOSRAMvolume. XDG_CONFIG_HOME isolated before imports. No original production body or test assertions changed.",
+    "Original mediahashCLI produces decoded-media identity via FFmpeg framemd5/truncatedSHA512, not encoded file identity. Native1audio/3audio-input/default1audio-output controls and malformed JSON{} exit0 observed.",
+    "Initial3streamIndexError andemptyinvalidstdout hypotheses disproved; actualoutputs and rejectedexpectations retained in media result. No missingfailure invented.",
+    "Relevant up2khash/chunk/safe_dedup methods located; whole203KBup2k/file scan lifecycle stillpending. Fivewholefiles only,481remaining."
+  ]
+}
