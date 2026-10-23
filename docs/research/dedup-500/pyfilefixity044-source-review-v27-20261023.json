@@ -1,0 +1,36 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "structural_adaptive_ecc.py now read whole across v23-v27, including rereads of previously truncated argument definitions294-414 and correction700-end. Whole-source review is not ECC runtime qualification.",
+  "new_whole_read": {
+    "path": "pyFileFixity/structural_adaptive_ecc.py",
+    "bytes": 69265,
+    "sha256": "c02bf6f420582373272f33773ec3c6375d556e5e83dd00df0f3703de7ca3199e"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 62,
+    "remaining_not_whole_reviewed": 82
+  },
+  "findings": [
+    {
+      "id": "hash-only-fast-path",
+      "detail": "Default fast_check admits a block on hash alone; ECC syndrome is skipped unless no_fast_check. Short hash modes have reproduced12/24-bit key limits from v1. This path therefore cannot serve as exact duplicate equality proof."
+    },
+    {
+      "id": "post-repair-or",
+      "detail": "Repair accepts repaired block when hash_ok OR ecc_ok and increments completely repaired file count unless a block explicitly failed. A codeword-consistent result with mismatched original hash is labelled probably repaired in text but can contribute to complete success. Independent content verification remains necessary."
+    },
+    {
+      "id": "track-exhaustion-status",
+      "detail": "stream_entry_assemble can stop after warning about incomplete source coverage. Caller does not compare consumed source bytes/output length against expected size after iteration. Therefore successful per-block checks do not alone establish full-file coverage."
+    },
+    {
+      "id": "remaining-evidence-boundary",
+      "detail": "Original codec dependencies and full module integrations remain unexecuted. Parser boundary controls used exact function extraction only. No repair success/failure beyond those explicit controls claimed."
+    }
+  ],
+  "syntax_parse": "PASS",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
