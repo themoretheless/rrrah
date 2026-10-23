@@ -1,0 +1,32 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/session/SessionSetupScreen.kt",
+      "sha256": "1301a803bfa36e19c087ae9e1568f26eedfb30c881af992d357ec578d23a474e",
+      "lines": 898,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Both session-start callbacks guard only nonempty selectedBuckets, not isSearching, isRefreshing or isInitialLoad. Previous selection can be submitted during a debounced search or refresh. Saved selection launches asynchronously before navigation.",
+    "The screen deliberately renders old folder categories while a query is debouncing. Select-all and contextual actions remain active against that old list, so their scope can differ from the newly visible query text.",
+    "uiState.error is not rendered or consumed anywhere in this screen; ViewModel refresh/processing errors therefore have no explicit visible branch here.",
+    "When search has no results, isSelectAllMode remains true even if hidden folders are selected. Its action selects an empty visible set, so the select-all button cannot clear that hidden selection from this state.",
+    "formatFileSize indexes five units B through TB using an unclamped logarithmic index. At exactly 1024^5 bytes index 5 is outside the array. Large folder aggregates can reach this branch; no Kotlin execution or Android reproduction was performed.",
+    "Mark-as-sorted multi-folder confirmation reports explicit folder count without enumerating expanded descendants. Rename and move actions remain available for system folder rows; actual permission/failure behavior is delegated to reviewed helpers.",
+    "Folder list uses LazyColumn with path keys, unlike the eager FolderSearchDialog. This is a useful bounded composition pattern, with no measured performance claim."
+  ],
+  "controls": {
+    "kind": "independent arithmetic boundary check, not Kotlin execution",
+    "bytes": 1125899906842624,
+    "unit_index": 5,
+    "available_units": 5
+  },
+  "whole_files_read_total": 71,
+  "remaining_tracked_blobs": 59,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
