@@ -1,0 +1,54 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/bus/FileModificationEventBus.kt",
+      "sha256": "9f42225f90dae5c2f0f3352f33a5660fb8daed81776068c1268517791a252d1f",
+      "lines": 50,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/bus/FolderUpdateEventBus.kt",
+      "sha256": "f4978fd9ba4a3e13cac6d456d47bbc5b66192809239b8aa9ce2eb8bc46320bb6",
+      "lines": 73,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/bus/AppLifeCycleEventBus.kt",
+      "sha256": "4f3f475479b4ddf7e64dbf85be9d8c5b3b2e61221d778a483ee172b548b14f3e",
+      "lines": 39,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/util/ProactiveIndexer.kt",
+      "sha256": "04d76143d9c9177524f5b98ccb96c33d06a31e9858ac858821e64cb00e40fe47",
+      "lines": 77,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/work/ProactiveIndexingWorker.kt",
+      "sha256": "56f1a10e50fbb34aa66b606af72a36bde279429c126df4e857605da67410b34e",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/domain/model/IndexingStatus.kt",
+      "sha256": "2f9baf3d1d47fcb3583c3e50ca156bf39c117e2be660700063d699725b7a4f62",
+      "lines": 23,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Event buses are ephemeral SharedFlows with default replay zero; file modification currently has only FilesDeleted. They are not a persisted invalidation log and cannot by themselves observe external same-path rewrites. Subscriber reconciliation remains unread.",
+    "App resume uses tryEmit and ignores its boolean result. Folder updates have extraBufferCapacity one but no replay; actual event loss/backpressure depends on subscribers and has not been tested.",
+    "ProactiveIndexer enqueues unique one-time work with KEEP and storage-not-low constraint. It does not configure charging/idle constraints or a true scheduler priority despite low-priority wording. No device work scheduled.",
+    "Exponential backoff is configured, but worker catches Exception and returns Result.failure rather than retry. Transient failures therefore do not request the configured backoff retry through this path.",
+    "Worker reports success after thumbnailPrewarmer.prewarm returns. Completion meaning depends on prewarmer implementation, not yet read. Broad catch also includes coroutine cancellation; WorkManager cancellation semantics unqualified."
+  ],
+  "whole_files_read_total": 29,
+  "remaining_tracked_blobs": 101,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
