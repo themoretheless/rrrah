@@ -1,0 +1,47 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Two vendored profiler files read whole and pin verified; syntax parsed only. No program execution, signals, Django server or profile output generation.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/__main__.py",
+      "sha256": "f5361cb408fd4e4b789f2f05643ee3dcb8fbda6f3815f5231999301586475d57",
+      "syntax_parse": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/middleware.py",
+      "sha256": "efbf80c50e18e7b56ab599e534f5df2cf2215cd083f525dfcb6df2247d10ceac",
+      "syntax_parse": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 72,
+    "remaining_not_whole_reviewed": 72
+  },
+  "findings": [
+    {
+      "id": "profiled-exit-loss",
+      "detail": "Profiler CLI catches all SystemExit and KeyboardInterrupt then continues report generation without preserving exit status. A profiled command failure can appear as profiler process success."
+    },
+    {
+      "id": "profiler-finalization",
+      "detail": "Unexpected profiled exception propagates before profiler.stop; no enclosing finally restores instrumentation in that path. CLI mutates sys.argv/sys.path and closes stdout when used as report stream."
+    },
+    {
+      "id": "vendored-import-layout",
+      "detail": "Files import top-level pyinstrument rather than explicit vendored-relative package. Depending on environment this can resolve an external installation or fail; vendored presence is not runtime provenance."
+    },
+    {
+      "id": "middleware-scope",
+      "detail": "Django middleware profiles when query argument is present or profile directory configured. No independent permission check in this file; applicability depends on hosting app and Django settings, not duplicate library behavior."
+    },
+    {
+      "id": "metrics-boundary",
+      "detail": "Signal fallback changes instrumentation mechanism. Comparisons need profiler mode/backend recorded; passing syntax does not establish accurate or comparable timings."
+    }
+  ],
+  "relation_to_goal": "Tracked vendored tooling review only; no duplicate algorithm selected or production code copied.",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
