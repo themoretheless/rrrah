@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/AppState.swift",
+      "sha256": "e64060f308e064ee950b2a375237c19b1d3dee0025a8bccb0093699a4c5cd031",
+      "lines": 873,
+      "git_blob_verified": true,
+      "cumulative_prior_reviews": [
+        22
+      ]
+    }
+  ],
+  "findings": [
+    "Scan/cleanup handlers guard isWorking and retain scan Task handles; cancelled scans do not publish returned groups and explicitly show stopped status. This caller distinguishes cancellation even though raw scanner array API does not.",
+    "Archive/installer cleanup adds already-missing items to resolved and reports resolved.count as moved-to-Trash count, overcounting actual moves. Reclaimed bytes increment only when trash returns true.",
+    "Successful cleanup/organization/undo status is immediately overwritten by await scan status. Failed duplicate cleanup does not rescan after potentially successful earlier extra deletions, retaining stale group state.",
+    "Organization proposal records counts/bytes/categories but not frozen file IDs or content snapshots. organizeApproved recomputes approvedReadyFiles when confirmed, so an intervening rescan/profile change can alter actual plan scope.",
+    "AI Needs Review output can be promoted back to known-format category with confidence at least minimumConfidence, allowing automatic organization despite weak subject evidence. This is an explicit fallback policy, not model certainty.",
+    "Analysis stop is cooperative after current file. Pending decision save suppresses errors while status says decisions saved. Model failure restores an earlier captured record by path without verifying source identity.",
+    "teach captures a file array index, awaits profile persistence then indexes files again to save a decision; concurrent rescan can reorder/replace that index. Profile save failure also leaves in-memory edits.",
+    "Automatic routine unconditionally writes precomputed organized count after organizeApproved handles its own errors, confirming possible success text after failure/partial execution. No AppState runtime or user preferences were touched."
+  ],
+  "whole_files_read_total": 37,
+  "remaining_tracked_blobs": 21,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
