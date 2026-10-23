@@ -1,0 +1,95 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v14-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".github/dependabot.yml",
+      "local": "81-.github--dependabot.yml",
+      "sha256": "bdbee109225a13790044f446331935fb267a13d1de089b3de6fa24289f344e7c",
+      "lines": 19,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/scripts/asv_markdown.py",
+      "local": "82-.github--scripts--asv_markdown.py",
+      "sha256": "4c92d246a80ac0e5ef3900d26c26210a6a34f96298a11341f626f6209a91daa9",
+      "lines": 64,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/benchmark-bot.yml",
+      "local": "83-.github--workflows--benchmark-bot.yml",
+      "sha256": "79890da7e47203d6556437a388f23be6f9411fee8ae8a9037d30e974099e5c7f",
+      "lines": 96,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/codeql-analysis.yml",
+      "local": "84-.github--workflows--codeql-analysis.yml",
+      "sha256": "c52ce36a8c3abba6be53e377b3667a7a8fa2bdff0c85f510a886f17feb5d08d2",
+      "lines": 70,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/lock.yml",
+      "local": "85-.github--workflows--lock.yml",
+      "sha256": "5c65c09a4b342bc1912406759131d24576057fa4f7d19651ad73ce471f803134",
+      "lines": 22,
+      "whole_text_read": true
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "local": "86-CODE_OF_CONDUCT.md",
+      "sha256": "ac773151423ec5eb717e3c1c9c50f995a71390602bb88dcd89bf8a3cf93e8ea8",
+      "lines": 46,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/Variable-definition.rst",
+      "local": "87-docs--Variable-definition.rst",
+      "sha256": "dc7b0510a84381d9fb4e9bba99560088ced494f1de95218b0584bf73a3cd6d56",
+      "lines": 426,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 88,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 16,
+  "native_gazetteer_runs": {
+    "training_and_static_exit_codes": [
+      0,
+      0
+    ],
+    "true_pairs": 112,
+    "found_pairs": 112,
+    "true_positives": 110,
+    "false_positives": 2,
+    "missed_pairs": 2,
+    "raw_logs": [
+      {
+        "path": "docs/research/dedup-500/dedupe083-gazetteer-training-20261024.log",
+        "sha256": "ab2ce87a83fdc779c74dee7b9446cb183ecb02d0b5d768e85b63d44df35d3e18",
+        "exit_code": 0
+      },
+      {
+        "path": "docs/research/dedup-500/dedupe083-gazetteer-static-20261024.log",
+        "sha256": "36e207d839674d628c806711a6a4a225340f9fcade5ea47a63a34a6eab4d6d1e",
+        "exit_code": 0
+      }
+    ],
+    "lifecycle": "Original script indexes, unindexes, indexes again then searches; both invocations complete."
+  },
+  "findings": [
+    "Training/static aggregate metrics agree; full outputs not persisted for partition equivalence.",
+    "Documentation ShortString says no index rules, but source adds Levenshtein and TF-IDF ngram rules.",
+    "Documentation Price says nonpositive values raise, but source returns NaN. Source/runtime behavior takes precedence.",
+    "CI metadata and contributor policy read only; no workflow, publication or external comment action invoked."
+  ],
+  "limits": [
+    "No full repository completion:16 unreviewed files.",
+    "Original package runtime integration now includes dedupe, record-link, gazetteer finite fixtures; not all-case proof.",
+    "No production code adopted or speedup claimed."
+  ]
+}
