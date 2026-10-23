@@ -1,0 +1,85 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v15-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "CHANGELOG.md",
+      "local": "88-CHANGELOG.md",
+      "sha256": "86bdf7857dd5374ae0e7af678e74ce4b1afc55778b3da5c50e7bfdf776420d46",
+      "lines": 211,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/conf.py",
+      "local": "89-docs--conf.py",
+      "sha256": "fc27898ce36a067c943efb176309b5a323bdac61f38f2701f25ef30f933c3f1d",
+      "lines": 284,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/_templates/layout.html",
+      "local": "90-docs--_templates--layout.html",
+      "sha256": "db3b70071f9bba44ed4546b72760fdd64dad2085cdaff3bc30e83e2930b1274f",
+      "lines": 45,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/index.rst",
+      "local": "91-docs--index.rst",
+      "sha256": "ba3b0abe20a12ab9c40267cd0f2b6720f46a778b76063973b991e7d5c3bb7884",
+      "lines": 99,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/Makefile",
+      "local": "92-docs--Makefile",
+      "sha256": "79e3c757bdc05ffbf4ecee44e2e2aa1dae43fbdeeac16d4881dadd55f9609fca",
+      "lines": 177,
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/_static/css/custom.css",
+      "local": "93-docs--_static--css--custom.css",
+      "sha256": "2371841561e7575e8ff39782bc2257ba74499f2d756b0a74897f28f188fd4bb3",
+      "lines": 233,
+      "whole_text_read": true
+    },
+    {
+      "path": "benchmarks/asv.conf.json",
+      "local": "94-benchmarks--asv.conf.json",
+      "sha256": "83e1a8f5b23b64c667dafa3172f34f04beab290e87f121965c0bb6a7599ea068",
+      "lines": 168,
+      "whole_text_read": true
+    }
+  ],
+  "visual_images_reviewed": [
+    {
+      "path": "docs/_static/images/dedupeio-logo.png",
+      "sha256": "12abd916c85c398f8548572af8236fb88f5992a5514e08d5c8b2771bbaca3fdc",
+      "method": "original local PNG opened and visually inspected",
+      "observation": "Normal dark-blue/green DEDUPE.IO wordmark plus colored squares; reversed image has colored squares and low-contrast pale wordmark against displayed white background."
+    },
+    {
+      "path": "docs/_static/images/dedupeio-logo-reversed.png",
+      "sha256": "fba708eaf4a65c859bf47d31d6e3129c3c7ffb40e99a86178b6981c9e75bfe97",
+      "method": "original local PNG opened and visually inspected",
+      "observation": "Normal dark-blue/green DEDUPE.IO wordmark plus colored squares; reversed image has colored squares and low-contrast pale wordmark against displayed white background."
+    }
+  ],
+  "whole_text_files_read_total": 95,
+  "visual_files_reviewed_total": 2,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 7,
+  "findings": [
+    "Documentation release3.0.2 and citation2.0.11 differ from package3.0.3; file roles and versions recorded, not treated as runtime version.",
+    "ASV configuration describes separate environments/build caching; no ASV continuous A/B campaign executed.",
+    "Static layout loads bundled jQuery/Bootstrap plus remote font stylesheets; no browser rendering or network page execution performed."
+  ],
+  "limits": [
+    "Remaining4 CSV datafiles and3 bundled vendor assets not whole-reviewed.",
+    "No source/runtime completion flag for repository yet.",
+    "No production changes or adoption."
+  ]
+}
