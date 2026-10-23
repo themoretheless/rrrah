@@ -1,0 +1,45 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/ImagePerceptualHasher.swift",
+      "git_blob": "a9e24f7203b7b1d0efa79cfaf4b8cc4f17cda8fa",
+      "sha256": "9da03b210c7c50fea19f17db83f2b74030ceadf991135e57462fd42a6a8ffa8f",
+      "bytes": 2666,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Services/PerceptualHasher.swift",
+      "git_blob": "6f53f106d73f20e879cc2c8f818fa4098ff75006",
+      "sha256": "0766c5e924d8736226de7522bff15fe82caae3cf04e0aa40f7a53209b7da20e6",
+      "bytes": 13935,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 110,
+  "control": "targie061-image-hash-control-20261023.swift",
+  "runtime_scope": "Two complete unchanged original Swift modules with native CoreGraphics/AVFoundation. Authored grayscale CGImage fixtures. Explicit fatalError adapter for unused video decoder; video extraction and URL decoding not executed.",
+  "results": {
+    "small_white_input": "1x1",
+    "downsample_size": "32x32",
+    "nonzero_output_pixels": 1,
+    "total_output_pixels": 1024,
+    "black_white_similarity": 0.53125,
+    "unequal_length_similarity": -1.0,
+    "reverse_similarity": 0.0,
+    "self_similarity_and_constant_dct": "PASS"
+  },
+  "findings": [
+    "Area binning produces empty cells when input dimensions are smaller than requested output; white 1x1 becomes 1023 zero cells and one white cell. Image URL thumbnail creation does not explicitly request upscaling; actual tiny-file URL path remains untested.",
+    "Image hash similarity lacks equal-length guard and clamping present in video hash similarity. Authored malformed lengths produce asymmetric negative result. Normal hash(image:) always generates eight bytes; malformed production input not demonstrated.",
+    "Image hash removes DC only from median threshold calculation, but includes DC in output bits. Uniform black/white hash similarity was 0.53125 in this control; no visual corpus recall or threshold quality claim.",
+    "Video normalization replaces missing sample slots with nearest decoded sample when at least two exist. This policy was read, not executed here.",
+    "No upstream source adopted; GPL notices preserved in cached original modules. No performance improvement claimed."
+  ],
+  "binary_sha256": "6d73aa9c8fff83800211d9058535386008527cee4bd7ca33a07a2c469d1170b2",
+  "full_review_count": 249
+}
