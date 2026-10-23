@@ -1,0 +1,56 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/web/rest/CertificateRestController.java",
+      "sha256": "98795bc32e7200a79e86f65a4004892e616c5bd479a0cee7a5e5c4ba58853829",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/web/rest/CertificateRestController.java",
+      "sha256": "644cc0e600efab0c7552daa21d31596c467b323168151e78f635c98e62d3ed8b",
+      "lines": 69,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/web/rest/AddressListRestController.java",
+      "sha256": "270e4c4b8ce2e2347b98b8414bad871cf3c8f2c766c3e735b9d5367b1db65525",
+      "lines": 77,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/web/rest/CertificateRestController.java",
+      "sha256": "3ec8f11cf11160f33910afb5b1f6a463d443cfbe00537bcdbf12bbdb7cc50113",
+      "lines": 109,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/web/rest/NetworkRestController.java",
+      "sha256": "a9fddf7a923c900c4ffca12e875e2dd6b3186710424e4f073dbd4b794ab5f843",
+      "lines": 87,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "http_requests": false,
+    "state_mutations": false
+  },
+  "findings": [
+    "Five remaining RESTcontroller files whole-read/Gitblobverified:archive/integrator processedrequest,operator addresslist/certificate/network. CommonNetworkRestController reread but not countedagain. AlltrackedRESTcontrollers nowsource-reviewed.",
+    "Endpoints cast Message.content to expectedtypes directly and assume localnode exists before activechecks. No malformedpayload/schema/errorhandler runtime qualification.",
+    "Archive/integrator processedrequest performs two separate saves, certificate thenrequest; no explicittransactionannotation at controller level. Atomicity still requires actual service/JPA test.",
+    "Networkconfig response may returnnullbody withHTTP200 if configuration missing; IDresolution distinguishes missingnode with404 but canperform statusrefresh through facade aspreviouslyreviewed.",
+    "Addresslist responses delegate role-filtered host lists, with no responseversion or observationtimestamp. No fingerprintrecipe compatibility mechanism added by these controllers.",
+    "Response wrappers differ: config/address lists returnedplainmodels, verification/IDresolution returnedMessage. Client response types must match perendpoint; no end-to-endJAXB run.",
+    "Review restrictedsource/data contracts; no credential operation, live admin action or endpoint probing performed."
+  ],
+  "remaining": [
+    "33 other tracked blobs/assets",
+    "Three large GUIcontrollers, remaining templates/demos/media/license/IDE/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
