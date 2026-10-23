@@ -1,0 +1,38 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "classtracker_stats.py whole read and pinned blob verified; original report class methods controlled with authored data, no file/pickle/chart/GUI activity",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/classtracker_stats.py",
+    "sha256": "953877520c5d3feabf1815a3c0567a0df79f107c30d970d87c9897bf7c77ea47"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 114,
+    "remaining_not_whole_reviewed": 30
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-stats-peak-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "507c0408e61be8bd6098b29bec1204f7b99c1092",
+    "source_sha256": "953877520c5d3feabf1815a3c0567a0df79f107c30d970d87c9897bf7c77ea47",
+    "scope": "Exact AST classes and authored snapshots, no sizing, pickle, output or charts",
+    "expected_peak_timestamp": 1,
+    "actual_peak_timestamp": 2,
+    "expected_peak_object_size": 100,
+    "actual_peak_object_size": 20,
+    "sibling_prefix_relative_path": "-other/a",
+    "unrelated_path_raises_unboundlocalerror": true
+  },
+  "findings": [
+    "Stats._init_sort never updates maxsize after choosing a timestamp. For snapshots100 then20, last positive timestamp2 chosen rather than peak1, and object tsize becomes20. Exact class control reproduced.",
+    "HtmlStats.relative_path uses raw prefix and leaves rel unset for unrelated path. Sibling prefix renders -other/a and unrelated path raises UnboundLocalError. Reproduced.",
+    "Stats holds live tracker index/snapshot references and caches sorted objects and snapshot.classes annotations without invalidation; subsequent live updates may not appear in existing reports. Static finding.",
+    "_merge_asized keys referents by name prefix before colon; distinct labels can coalesce. Newly appended refs are not added to local refs map, so repeated new keys in other.refs can remain separate. Static finding.",
+    "ConsoleStats.print_stats default limit1.0 slices one object; fractional limits use entire sorted length rather than class-filtered length. Documentation describes total tracked data percentage while implementation counts objects. Static finding.",
+    "Summary percent denominator is Snapshot.total, which can mean virtual process size, total measurable Python objects, or tracked subset. Pie Other subtracts class sums from asizeof_total even when that optional total is zero. No chart execution.",
+    "HTML chart plots object-size totals under Virtual Memory label; these are not interchangeable with process VSZ/RSS. Source snapshot prose does distinguish domains.",
+    "dump_stats stops periodic sampling, serializes two pickle objects directly, no atomic replacement; load_stats does not close a file it opens. No serialized input loaded, no output written."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
