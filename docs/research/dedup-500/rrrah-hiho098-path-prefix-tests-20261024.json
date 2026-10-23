@@ -1,0 +1,8 @@
+{
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files prefix",
+  "passed": 3,
+  "failed": 0,
+  "stdout": "    Finished `test` profile [optimized + debuginfo] target(s) in 0.16s\n     Running tests/exact_files.rs (.dedup-work/local-sequence-target-20261021/debug/deps/exact_files-f8ac1290d9e1b399)\n\nrunning 3 tests\ntest selecting_one_directory_does_not_admit_sibling_prefix_matches ... ok\ntest sibling_roots_with_a_shared_name_prefix_keep_both_file_sets ... ok\ntest matching_video_prefix_and_size_do_not_establish_exact_equality ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 41 filtered out; finished in 0.02s\n\n",
+  "source_sha256": "12cb18223d7acea350a0fb396da1a44c0e4840dea8d47a0bdf70b5c44695d9b6",
+  "scope": "2component-aware directory prefix regressions plus1video byte-prefix regression; existing tests rerun, no new test methods; not full library suite"
+}

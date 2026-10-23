@@ -1,0 +1,34 @@
+{
+  "scope": "8author checks run unchanged original mappers with actual Hadoop0.20.2 Mapper.Context/FileSplit; owned reader/writer/counter adapters; paths are labels only, no file access/cluster",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DedupKeyMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DedupRecordCounter.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/MergeKeyMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/MergeValueMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HIHOConf.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/MapperPathControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/MapperPathControl.java uses unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "MapperPathControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS old/new positive controls; OBSERVED new prefix and unrelated sibling labelled old; valueMode=false\nPASS old/new positive controls; OBSERVED new prefix and unrelated sibling labelled old; valueMode=true\nmapper path checks=8;realMapper.Context;no filesystem reads\n",
+      "stderr": ""
+    }
+  ]
+}

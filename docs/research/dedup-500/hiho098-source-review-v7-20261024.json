@@ -1,0 +1,35 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v6-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/common/HIHOConf.java",
+      "local": "29-HIHOConf.java",
+      "sha256": "877c2f3610f7b901913091821ccb1acf201aae9bff341fd70a79a5aa491d6128",
+      "git_blob": "83520cb62df8cec726b0142bf717a46350422ba8",
+      "whole_text_read": true,
+      "lines": 80
+    }
+  ],
+  "whole_files_read_total": 30,
+  "remaining_without_whole_review": 140,
+  "original_tests_cumulative": {
+    "total": 26,
+    "passed": 26,
+    "new_original_tests": 0
+  },
+  "native_controls": {
+    "new_checks": 8,
+    "cumulative_author_checks": 28,
+    "report": "docs/research/dedup-500/hiho098-mapper-path-controls-20261024.json",
+    "scope": "Actual unchanged MergeKeyMapper/MergeValueMapper, real Mapper.Context and FileSplit, authored owned reader/writer/status adapters; labels only, no filesystem accesses or cluster",
+    "confirmed": "Both mappers mark /owned/data-new/item old when old=/owned/data,new=/owned/data-new; both also mark sibling /owned/data-other/item old with old=/owned/data,new=/owned/fresh. Separate normal old/new controls pass."
+  },
+  "own_library_report": "docs/research/dedup-500/rrrah-hiho098-path-prefix-tests-20261024.json",
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}
