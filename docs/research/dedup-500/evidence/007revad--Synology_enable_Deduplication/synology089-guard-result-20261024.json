@@ -1,0 +1,18 @@
+{
+  "platform_guard": {
+    "command": [
+      "/bin/bash",
+      ".dedup-work/synology089-20261024/syno_enable_dedupe.sh",
+      "--version"
+    ],
+    "exit_code": 1,
+    "stdout": "This script is NOT running on a Synology NAS!\nCopy the script to a folder on the Synology\nand run it from there.\n",
+    "stderr": "",
+    "scope": "Actual macOS early platform refusal before getopt, network, root checks or configuration operations. Not a NAS runtime test."
+  },
+  "embedded_python": {
+    "lines": 142,
+    "syntax_compile": "passed",
+    "execution": false
+  }
+}

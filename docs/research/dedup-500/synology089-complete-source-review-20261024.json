@@ -1,0 +1,289 @@
+{
+  "repository": "007revad/Synology_enable_Deduplication",
+  "commit": "1932176c421bd1743125c2adf3ce04607b83ac52",
+  "previous_audit": "docs/research/dedup-500/synology089-source-review-v1-20261024.json",
+  "tracked_blobs": 27,
+  "whole_repo_complete": true,
+  "completion_scope": "Complete manual source/document reading and original PNG visual inspection only; NAS execution unverified.",
+  "whole_text_files_read": [
+    {
+      "path": ".gitattributes",
+      "git_blob": "86a3b8806e3c45d1bf4d8d3f6649595113862b81",
+      "sha256": "65922959613856c0da9cbf69238afb19adcba725efeef39c789841220d6fba73",
+      "bytes": 2175,
+      "local": "03-.gitattributes",
+      "whole_text_read": true,
+      "lines": 108
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "git_blob": "f6598121851f6bbc14c3db6b1d41db7fb6aca7e7",
+      "sha256": "3a9e2ddafe02fb8f00a0edce5e92b94402b3129ed8375d71da1eccfacaeda149",
+      "bytes": 86,
+      "local": "04-.github--FUNDING.yml",
+      "whole_text_read": true,
+      "lines": 3
+    },
+    {
+      "path": "CHANGES.txt",
+      "git_blob": "f17ca085271cc4e2c384b8d9b0ad511b0658b103",
+      "sha256": "991b58add4ce53a4a65b6af5b027697a01bc07c669827ba4fb43ddb57e9b476f",
+      "bytes": 4072,
+      "local": "05-CHANGES.txt",
+      "whole_text_read": true,
+      "lines": 110
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "9c3fcdd90ec2e707065a3f084ed1b2ef5ebb0a41",
+      "sha256": "9491ca7d8ff110e034d2007f9a189cac5d6552db701421ef225ccc2c0a08d453",
+      "bytes": 1065,
+      "local": "01-LICENSE",
+      "whole_text_read": true,
+      "lines": 21
+    },
+    {
+      "path": "README.md",
+      "git_blob": "823781ce228ee65d43448faf085cdc37e861cf8f",
+      "sha256": "6fcdf462119fef947ae3b4ad9099eb743356eb85c4f4879d653ed5352c70e32e",
+      "bytes": 14982,
+      "local": "00-README.md",
+      "whole_text_read": true,
+      "lines": 234
+    },
+    {
+      "path": "how_to_schedule.md",
+      "git_blob": "5213eed47be9ce5a820c55c44831fbb4fbb65a3f",
+      "sha256": "77055b980ab4dd364a9cf40e2cc80b7a671ad03b6daf9d724ebb582dc8d07322",
+      "bytes": 1266,
+      "local": "08-how_to_schedule.md",
+      "whole_text_read": true,
+      "lines": 25
+    },
+    {
+      "path": "my-other-scripts.md",
+      "git_blob": "a95a6909bfbfe2d1b3f6ce5f425b5af281a682e0",
+      "sha256": "e19fc0fc2e288a1a7d4a1061359af5e5a48ab16f6bf4b6f608356c96115638fc",
+      "bytes": 15759,
+      "local": "09-my-other-scripts.md",
+      "whole_text_read": true,
+      "lines": 282
+    },
+    {
+      "path": "syno_enable_dedupe.sh",
+      "git_blob": "fe08293c58af451fe7335a253d6b1329a33f7f67",
+      "sha256": "0881f47b7c9261ba010abf971d05b73897f68240aeac76a14166ad31a5e9ffd3",
+      "bytes": 44503,
+      "local": "02-syno_enable_dedupe.sh",
+      "whole_text_read": true,
+      "lines": 1252
+    }
+  ],
+  "whole_text_files_read_total": 8,
+  "script_full_lines_read": 1252,
+  "images_visual_reviewed": [
+    {
+      "path": "images/0_ds1821+.png",
+      "git_blob": "1a8d9f179047468da2bd835617889c4b1e83dc06",
+      "sha256": "c66f6ff0dc5afb03a968d76322b530c56198efacfcf1e4ccf0cc562280963915",
+      "bytes": 19632,
+      "visual_reviewed_original": true,
+      "observation": "DS1821+ system information, DSM 7.2-64216, 32 GB RAM."
+    },
+    {
+      "path": "images/1_ds1821+_dedupe_nvmes.png",
+      "git_blob": "7c5a259777ef5f0ef34efbcd7de5d855803e8279",
+      "sha256": "4947603e2515336f5e3505be2c09ce1208e410c688c09d8534c2dff284fae6a5",
+      "bytes": 29386,
+      "visual_reviewed_original": true,
+      "observation": "Two non-Synology WD_BLACK NVMe drives shown healthy."
+    },
+    {
+      "path": "images/3_ds1821+_dedupe_option_enabled.png",
+      "git_blob": "f0a16746aa4ca86234e5b107c3a90a1e55d36eb4",
+      "sha256": "66e4164b080ee1fdbb80a3b745c82843ec9b2900e60fb61cb7ae05b3770dcdfc",
+      "bytes": 25054,
+      "visual_reviewed_original": true,
+      "observation": "Volume menu exposes Configure Data Deduplication."
+    },
+    {
+      "path": "images/4_ds1821+_dedupe_configure.png",
+      "git_blob": "831fe8be961a22627e99d9f5788087a1b94e2696",
+      "sha256": "77b55cc73dbf606ec5d4aa9f1b7e6b5aa792dda821bc767de424dd2348b3d179",
+      "bytes": 23780,
+      "visual_reviewed_original": true,
+      "observation": "Configuration dialog, automatic checkbox and Run Now, no completed run shown."
+    },
+    {
+      "path": "images/5_ds1821+_dedupe_notification.png",
+      "git_blob": "2b22426b93af6c97b28275da83b2e9e251cdf96e",
+      "sha256": "cf12f26953d99509dd8a70f005430aaba9d6b963fd0c80bec04df80703409406",
+      "bytes": 24566,
+      "visual_reviewed_original": true,
+      "observation": "Finished-or-stopped notification reports savings 0.00 Bytes."
+    },
+    {
+      "path": "images/5b_ds1821+_dedupe_notification.png",
+      "git_blob": "72d1c031bbc77da0b30c3274961ec35018b90bfc",
+      "sha256": "bf62f1516221254c13f3c2bb8842b028c116ec3d1f95608c497002316b1f4aa2",
+      "bytes": 29501,
+      "visual_reviewed_original": true,
+      "observation": "Finished-or-stopped notification reports savings 355.80 MB."
+    },
+    {
+      "path": "images/6_ds1821+_dedupe_works.png",
+      "git_blob": "7c1f97e7de3fcbd0c32419e7076460b25625c022",
+      "sha256": "27885489bc5509e3bcf636911b78e73ab45023509dd474eb2f28275c968425c3",
+      "bytes": 22862,
+      "visual_reviewed_original": true,
+      "observation": "Configuration page reports last savings 0 Bytes."
+    },
+    {
+      "path": "images/6b_ds1821+_dedupe_works.png",
+      "git_blob": "dd334d509d2d740c8cd057b426056bd60dc39d2f",
+      "sha256": "04a1c00777f894fc7c883cac3bd91cababed6b865b5fe6edc03b84b827dcdc0b",
+      "bytes": 23372,
+      "visual_reviewed_original": true,
+      "observation": "Configuration page reports last savings 355.8 MB."
+    },
+    {
+      "path": "images/7_before_running_syno_hdd_db.png",
+      "git_blob": "8afa21e763807517823279ad1af1b2b378a1e958",
+      "sha256": "a7bbfaaebd2b35822ecebff2be873170a944d842beb5c0f875ec3c084826b3d7",
+      "bytes": 63474,
+      "visual_reviewed_original": true,
+      "observation": "Drive firmware unrecognized warning in Storage Manager."
+    },
+    {
+      "path": "images/8_after_running_syno_hdd_db.png",
+      "git_blob": "03761333e78ed060b58fa691e03479b83d267da6",
+      "sha256": "e72ff09799295f92eb5a935ca27e62fc428f880483e74e166876f5fe6c99e408",
+      "bytes": 61201,
+      "visual_reviewed_original": true,
+      "observation": "Comparable drive panel without unrecognized-firmware warning."
+    },
+    {
+      "path": "images/9_notification.png",
+      "git_blob": "09afbf1588a41f8f45a6cc1b5c3940b0683d5727",
+      "sha256": "7ce8c19a4a5f48afc81371576570d632a82ac47827c01bdb30cca6eb437965c4",
+      "bytes": 34402,
+      "visual_reviewed_original": true,
+      "observation": "Drive database outdated notification."
+    },
+    {
+      "path": "images/before_running_syno_hdd_db.png",
+      "git_blob": "8afa21e763807517823279ad1af1b2b378a1e958",
+      "sha256": "a7bbfaaebd2b35822ecebff2be873170a944d842beb5c0f875ec3c084826b3d7",
+      "bytes": 63474,
+      "visual_reviewed_original": true,
+      "observation": "Unrecognized firmware warning, duplicated screenshot path."
+    },
+    {
+      "path": "images/hdd_dedupe.png",
+      "git_blob": "973125158dea4e052088dea34da6db67b4e0e005",
+      "sha256": "3674fe4bc24152fa2148d33d59d2692c694f8a61ddec21814803b7cf9e540a4c",
+      "bytes": 23311,
+      "visual_reviewed_original": true,
+      "observation": "Configure Data Deduplication menu beside HDD storage pool."
+    },
+    {
+      "path": "images/how_to_download_generic.png",
+      "git_blob": "9cb01f10846f4755c8ae718fda9d57ac23a8266d",
+      "sha256": "6201cc37c5d180118f34e44550fcfda805b232422da0090c4f4f0dc2d096fa14",
+      "bytes": 74741,
+      "visual_reviewed_original": true,
+      "observation": "Annotated GitHub release/source ZIP download instructions."
+    },
+    {
+      "path": "images/notification.png",
+      "git_blob": "09afbf1588a41f8f45a6cc1b5c3940b0683d5727",
+      "sha256": "7ce8c19a4a5f48afc81371576570d632a82ac47827c01bdb30cca6eb437965c4",
+      "bytes": 34402,
+      "visual_reviewed_original": true,
+      "observation": "Drive database outdated notification, duplicated screenshot path."
+    },
+    {
+      "path": "images/schedule1.png",
+      "git_blob": "e133044cf4ab0d44bca055e3f7ca74ad90e4c825",
+      "sha256": "0d0efed97ce1e6f73c93fe9421f6eb05c4e22f4256b77ebe8ecb41fc3dbb15bd",
+      "bytes": 60535,
+      "visual_reviewed_original": true,
+      "observation": "Task Scheduler Create Triggered Task User-defined script menu."
+    },
+    {
+      "path": "images/schedule2.png",
+      "git_blob": "8d73140a8755d20a99bd5bce9baaef207577fa69",
+      "sha256": "578d940e95f171c4b5ea77cdad2fa34af4615c04defbfdc3ad473cbeb1a25c35",
+      "bytes": 13048,
+      "visual_reviewed_original": true,
+      "observation": "Create task General settings: root user, Shutdown event, enabled."
+    },
+    {
+      "path": "images/schedule2b.png",
+      "git_blob": "8d73140a8755d20a99bd5bce9baaef207577fa69",
+      "sha256": "578d940e95f171c4b5ea77cdad2fa34af4615c04defbfdc3ad473cbeb1a25c35",
+      "bytes": 13048,
+      "visual_reviewed_original": true,
+      "observation": "Create task General settings counterpart: root, Shutdown, enabled."
+    },
+    {
+      "path": "images/schedule3.png",
+      "git_blob": "6153c901a6f7064b0ef5b18689949cfaacda08b8",
+      "sha256": "3c4147a80974b88101efa8274b7b6b845403ba813660f6cc0aa82921f9e810ea",
+      "bytes": 18681,
+      "visual_reviewed_original": true,
+      "observation": "Task Settings shows two script command paths and optional email fields."
+    }
+  ],
+  "images_visual_reviewed_total": 19,
+  "remaining_without_review": 0,
+  "all_checkout_git_blobs_verified": true,
+  "exact_duplicate_image_groups": [
+    [
+      "images/7_before_running_syno_hdd_db.png",
+      "images/before_running_syno_hdd_db.png"
+    ],
+    [
+      "images/9_notification.png",
+      "images/notification.png"
+    ],
+    [
+      "images/schedule2.png",
+      "images/schedule2b.png"
+    ]
+  ],
+  "controls": {
+    "platform_guard": {
+      "command": [
+        "/bin/bash",
+        ".dedup-work/synology089-20261024/syno_enable_dedupe.sh",
+        "--version"
+      ],
+      "exit_code": 1,
+      "stdout": "This script is NOT running on a Synology NAS!\nCopy the script to a folder on the Synology\nand run it from there.\n",
+      "stderr": "",
+      "scope": "Actual macOS early platform refusal before getopt, network, root checks or configuration operations. Not a NAS runtime test."
+    },
+    "embedded_python": {
+      "lines": 142,
+      "syntax_compile": "passed",
+      "execution": false
+    }
+  },
+  "findings": [
+    "All tracked contents reviewed: eight complete text files and nineteen original screenshots.",
+    "No duplicate-file detection algorithm: script enables Synology Btrfs capability, edits configuration/UI/native component and supports backup/restore/update flows.",
+    "The only MD5 comparison is backup-versus-current digest comparison in restoration, not a collision-confirmed file search engine.",
+    "Screenshots show UI capability and historical reported savings, including both zero and 355.8 MB examples; they do not independently establish NAS integrity, recall, throughput or current compatibility.",
+    "Source contains binary patching of hardware support checks. It was read and embedded Python syntax-compiled, without executing patch functions or generating a patch.",
+    "Raw screenshots include duplicate byte-identical paths; each original was still opened visually."
+  ],
+  "decision": "reject-domain",
+  "transfer": "No code adopted into rrrah; complete source review establishes domain mismatch, not hardware qualification.",
+  "limits": [
+    "No NAS runtime, firmware modification, configuration change, update, reboot or scheduling action performed.",
+    "Original script tests absent in tracked tree; platform refusal and syntax checks are not a substitute for DSM operation.",
+    "pHash.org/ASAN remains skipped."
+  ],
+  "whitespace_note": "Upstream files copied byte-exact, including original trailing spaces; preservation takes precedence over normalizing evidence."
+}
