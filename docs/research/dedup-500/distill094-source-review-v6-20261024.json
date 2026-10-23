@@ -1,0 +1,112 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "previous_audit": "docs/research/dedup-500/distill094-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pkg/cache/prefix.go",
+      "local": "18-pkg--cache--prefix.go",
+      "sha256": "eeb4f044a8294e85fdcade91f557d2342ea2f4470a4953530acfebfab8bfe9a6",
+      "whole_text_read": true,
+      "lines": 128
+    },
+    {
+      "path": "pkg/cache/prefix_test.go",
+      "local": "19-pkg--cache--prefix_test.go",
+      "sha256": "346d0b80d0a47e56d5040cb3583499f025e6c6cc43258199abd355978a9fa26e",
+      "whole_text_read": true,
+      "lines": 130
+    },
+    {
+      "path": "pkg/cache/stability.go",
+      "local": "20-pkg--cache--stability.go",
+      "sha256": "5d4967086297ee4d171ac4de5c249b6b611756fcfcbac2b3f7c5571133feb022",
+      "whole_text_read": true,
+      "lines": 282
+    },
+    {
+      "path": "pkg/cache/stability_test.go",
+      "local": "21-pkg--cache--stability_test.go",
+      "sha256": "6bcf8d5e561689e126a857dbfbaee863478e76af8d5cb66d9642280aab9daded",
+      "whole_text_read": true,
+      "lines": 154
+    },
+    {
+      "path": "pkg/cache/ttl.go",
+      "local": "22-pkg--cache--ttl.go",
+      "sha256": "e715b0bbe945a43ed8386742bb912efdcb84966ab3d20bea5d36878d53034c68",
+      "whole_text_read": true,
+      "lines": 187
+    },
+    {
+      "path": "pkg/cache/ttl_test.go",
+      "local": "23-pkg--cache--ttl_test.go",
+      "sha256": "144c747ba3bf589daed3b12820869316e62fe116693b515b209406617af5c6e4",
+      "whole_text_read": true,
+      "lines": 122
+    }
+  ],
+  "whole_text_files_read_total": 21,
+  "tracked_blobs": 455,
+  "remaining_without_whole_review": 434,
+  "original_tests": {
+    "names": [
+      "TestPartitionForCacheAwareDedup_NoMarkers",
+      "TestPartitionForCacheAwareDedup_SingleMarker",
+      "TestPartitionForCacheAwareDedup_MultipleMarkers",
+      "TestPartitionForCacheAwareDedup_MarkerAtEnd",
+      "TestPartitionForCacheAwareDedup_HashStability",
+      "TestPartitionForCacheAwareDedup_HashChangesOnTextChange",
+      "TestStabilityValidator_StablePrefix",
+      "TestStabilityValidator_UnstablePrefix",
+      "TestStabilityValidator_WarmupPeriod",
+      "TestStabilityValidator_NoMarkers",
+      "TestStabilityValidator_ValidateText_DynamicPatterns",
+      "TestStabilityValidator_Reset",
+      "TestStabilityValidator_AllStats",
+      "TestTTLTracker_FirstTouch_ColdStart",
+      "TestTTLTracker_SecondTouch_WarmHit",
+      "TestTTLTracker_ExpiredEntry",
+      "TestTTLTracker_TimeUntilExpiry",
+      "TestTTLTracker_TimeUntilExpiry_Unknown",
+      "TestTTLTracker_ScheduleDeadline",
+      "TestTTLTracker_ExpiredEntries",
+      "TestTTLTracker_Evict",
+      "TestTTLTracker_Stats"
+    ],
+    "passed": 22,
+    "failed": 0,
+    "exit_code": 0,
+    "scope": "Three exact original test files and original prefix/stability/TTL modules plus original types/chunk.go in isolated minimal Go module; not full upstream package or dependency suite"
+  },
+  "authored_native_control": {
+    "result": {
+      "different_chunk_counts": true,
+      "different_prefix_touch_warm": true,
+      "entry_snapshot_isolated": true,
+      "first_touch_warm": false,
+      "hash_hex_length": 16,
+      "left_hash": "8fb20ef63ced4145",
+      "right_hash": "8fb20ef63ced4145",
+      "same_hash": true,
+      "stability_issues": 0,
+      "stability_rate": 1
+    },
+    "exit_code": 0
+  },
+  "findings": [
+    "Prefix serialization appends NUL after each text without escaping or length framing. One marked text a\\0b and two marked texts a,b serialize to identical bytes before SHA256; observed identical 8fb20ef63ced4145. This is framing ambiguity, not a cryptographic collision.",
+    "StabilityValidator sees changed chunk partition as perfectly stable (rate1,zero issues); TTLTracker treats second distinct prefix as warm. These are exact original public APIs on owned data, not an external provider cache test.",
+    "PrefixHash is truncated to16hex characters (64bits), despite comment naming SHA256 without mentioning truncation. No birthday-collision experiment performed.",
+    "TTL Entry snapshot mutation is isolated in native positive control.",
+    "Source-only: Touch marks Expired=true after cold restart but never clears it on later refresh; current liveness is separately computed from ExpiresAt. No additional timed control performed."
+  ],
+  "transfer_decision": "Use unambiguous length framing for compound identity and retain exact byte confirmation for exact duplicates. No foreign production code adopted.",
+  "limits": [
+    "21of455whole files;434remain.",
+    "22new original tests plus8prior selected bodies;8prior benchmark smoke runs are not accuracy tests.",
+    "No throughput improvement or full upstream-suite claim.",
+    "Native pHash.org/ASAN remains explicitly skipped."
+  ]
+}

@@ -2,7 +2,7 @@
   "index": 94,
   "repository": "Siddhant-K-code/distill",
   "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
-  "review_scope": "15whole pinned text files of455;8selected original cache tests,8benchmark smoke bodies and authored native controls;partial review",
+  "review_scope": "21whole pinned text files of455;30original unit tests in isolated source compositions,8benchmark smoke bodies and authored controls;partial review",
   "decision": "reference",
   "finding": "Vector cosine/kmeans semantic dedup; may merge meaning-level neighbors, unacceptable as exact image identity proof.",
   "license_metadata": "MIT",
@@ -105,7 +105,11 @@
     {
       "audit": "docs/research/dedup-500/distill094-source-review-v5-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/distill094-source-review-v6-20261024.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "8selected unchanged original cache unit bodies passed;8original contextlab benchmarks once each;isolated minimal source composition,not full upstream suite"
+  "upstream_tests_scope": "30original unit tests:8selected cache bodies plus22whole-file prefix/stability/TTL tests passed in isolated minimal source compositions;8original contextlab benchmarks once each;not full upstream suite"
 }

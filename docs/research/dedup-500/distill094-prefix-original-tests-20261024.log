@@ -1,0 +1,46 @@
+=== RUN   TestPartitionForCacheAwareDedup_NoMarkers
+--- PASS: TestPartitionForCacheAwareDedup_NoMarkers (0.00s)
+=== RUN   TestPartitionForCacheAwareDedup_SingleMarker
+--- PASS: TestPartitionForCacheAwareDedup_SingleMarker (0.00s)
+=== RUN   TestPartitionForCacheAwareDedup_MultipleMarkers
+--- PASS: TestPartitionForCacheAwareDedup_MultipleMarkers (0.00s)
+=== RUN   TestPartitionForCacheAwareDedup_MarkerAtEnd
+--- PASS: TestPartitionForCacheAwareDedup_MarkerAtEnd (0.00s)
+=== RUN   TestPartitionForCacheAwareDedup_HashStability
+--- PASS: TestPartitionForCacheAwareDedup_HashStability (0.00s)
+=== RUN   TestPartitionForCacheAwareDedup_HashChangesOnTextChange
+--- PASS: TestPartitionForCacheAwareDedup_HashChangesOnTextChange (0.00s)
+=== RUN   TestStabilityValidator_StablePrefix
+--- PASS: TestStabilityValidator_StablePrefix (0.00s)
+=== RUN   TestStabilityValidator_UnstablePrefix
+--- PASS: TestStabilityValidator_UnstablePrefix (0.00s)
+=== RUN   TestStabilityValidator_WarmupPeriod
+--- PASS: TestStabilityValidator_WarmupPeriod (0.00s)
+=== RUN   TestStabilityValidator_NoMarkers
+--- PASS: TestStabilityValidator_NoMarkers (0.00s)
+=== RUN   TestStabilityValidator_ValidateText_DynamicPatterns
+--- PASS: TestStabilityValidator_ValidateText_DynamicPatterns (0.00s)
+=== RUN   TestStabilityValidator_Reset
+--- PASS: TestStabilityValidator_Reset (0.00s)
+=== RUN   TestStabilityValidator_AllStats
+--- PASS: TestStabilityValidator_AllStats (0.00s)
+=== RUN   TestTTLTracker_FirstTouch_ColdStart
+--- PASS: TestTTLTracker_FirstTouch_ColdStart (0.00s)
+=== RUN   TestTTLTracker_SecondTouch_WarmHit
+--- PASS: TestTTLTracker_SecondTouch_WarmHit (0.00s)
+=== RUN   TestTTLTracker_ExpiredEntry
+--- PASS: TestTTLTracker_ExpiredEntry (0.01s)
+=== RUN   TestTTLTracker_TimeUntilExpiry
+--- PASS: TestTTLTracker_TimeUntilExpiry (0.00s)
+=== RUN   TestTTLTracker_TimeUntilExpiry_Unknown
+--- PASS: TestTTLTracker_TimeUntilExpiry_Unknown (0.00s)
+=== RUN   TestTTLTracker_ScheduleDeadline
+--- PASS: TestTTLTracker_ScheduleDeadline (0.00s)
+=== RUN   TestTTLTracker_ExpiredEntries
+--- PASS: TestTTLTracker_ExpiredEntries (0.01s)
+=== RUN   TestTTLTracker_Evict
+--- PASS: TestTTLTracker_Evict (0.00s)
+=== RUN   TestTTLTracker_Stats
+--- PASS: TestTTLTracker_Stats (0.00s)
+PASS
+ok  	github.com/Siddhant-K-code/distill/pkg/cache	0.498s
