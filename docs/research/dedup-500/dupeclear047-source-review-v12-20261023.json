@@ -1,0 +1,49 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/App.axaml.cs",
+      "sha256": "bd17f53414a3e63e0949431b1af0adfe6b07221dcde8eb6a4cebf51d9ef5c433",
+      "lines": 81,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Desktop/Program.cs",
+      "sha256": "0b2282823c670c191f4b7f7f2543efc0e38224870f4d569cb477852640809f2a",
+      "lines": 25,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Views/MainWindow.axaml.cs",
+      "sha256": "660c07d4fea237c34357bfd33d823f9e96070d62528f2cadff8566ab02557669",
+      "lines": 13,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Views/MainView.axaml.cs",
+      "sha256": "3739b69d1a0418e01960e1fde25b71d8aa17f94cdef8bba2a346a02b2332a321",
+      "lines": 406,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/ViewModels/ViewModelBase.cs",
+      "sha256": "0c5b01c82abab7ab7f03ac1909dfa745b836062228522b3eb0c1a93b2d0e5164",
+      "lines": 9,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "App registers Windows native services on Windows, Linux file service on Linux, and no native file service on macOS. Parameterless constructors permit service-free construction; this review environment does not qualify Windows/Linux application runtime.",
+    "A first command-line argument is imported in Task.Run. ImportAsync previously reviewed marshals result insertion but sets busy state from that task; thread-affinity behavior remains unqualified.",
+    "MainView window-closing handler cancels the native close and executes CloseCommand until Closed fires, then queues another window close. This supplies the missing connection from MainViewModel CloseAsync to actual window closure, but still adds no await of the cancelled search worker.",
+    "MainView DataContextChanged detaches events only when the new context is another MainViewModel; setting a different/null context does not detach prior model or clear its delegates. Loaded subscribes parent-window events without an unload cleanup in this file.",
+    "Drag/drop handlers directly invoke public add-directory methods without checking IsBusy. Whether the view disables drop targets while busy requires XAML review; no concurrent UI interaction executed.",
+    "Folder/file pickers convert selected items to Path.LocalPath. Storage-provider nonlocal items and cancellation behavior were not exercised. Message-box presentation is marshalled through Dispatcher.UIThread."
+  ],
+  "whole_files_read_total": 55,
+  "remaining_tracked_blobs": 37,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
