@@ -1,0 +1,76 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/BrowseViewModelTests.swift",
+      "git_blob": "b8d5d61117fc803ba28baeed9347d71c91609453",
+      "sha256": "110e29e66f6fd978b1fa042eef7ecd1d89e27f70c1d636b9611f958e51bfc48b",
+      "bytes": 23665,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/BrowseView.swift",
+      "git_blob": "261d37651150d2a584ffb369f2b23a0f230a7e74",
+      "sha256": "067259c06c202e94d10dff580e7f398b278a674b9eaf00e29dddc8e26e58b9c6",
+      "bytes": 7472,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 96,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 25,
+  "full_review_count": 249,
+  "test_inventory": [
+    "testResolutionWidthSortAscendingOrdersByWidth",
+    "testResolutionHeightSortDescendingOrdersByHeight",
+    "testToggleSortFlipsDirectionOnSameField",
+    "testClearResolutionSortResetsToNameAscending",
+    "testResolutionFieldFlag",
+    "testSelectingResolutionPresetReplacesManualInputWithOneRecompute",
+    "testEditingManualWidthReplacesPresetWithOneRecompute",
+    "testEditingManualHeightReplacesPresetWithOneRecompute",
+    "testSwitchingResolutionPresetsAppliesLatestThresholdWithOneRecompute",
+    "testClearingManualResolutionFilterRecomputesOnce",
+    "testClearingResolutionPresetRestoresAllItems",
+    "testSingleValidManualDimensionStillFiltersWithInvalidOtherDimension",
+    "testInvalidManualEditRemovesPresetWithoutApplyingResolutionFilter",
+    "testSearchTextFiltersDisplayedItemsByFilenameAndPath",
+    "testLargeInitialBrowseComputesDefaultSortSynchronously",
+    "testProgressUpdateDoesNotRecomputeDisplayedItems",
+    "testThresholdUpdateDoesNotRecomputeDisplayedItems",
+    "testItemRevisionRecomputesDisplayedItemsOnce",
+    "testExcludeSubfoldersRecomputesBrowseItemsWithoutStartingScan",
+    "testEqualSortKeysUseDeterministicPathOrderInBothDirections",
+    "testUnchangedOrderedIDsDoNotRepublishDisplayedItems",
+    "testSetSortUpdatesFieldAndDirectionWithOneRecompute",
+    "testDeletingSelectedItemSelectsNextDisplayedItem",
+    "testArrowDownMovesSelectionOneRow",
+    "testSelectAllIsLimitedToDisplayedSearchResults",
+    "testPlainClickAfterSelectAllReplacesBatchWithOneFile",
+    "testArrowUpMovesSelectionOneRow",
+    "testArrowDownFromNoSelectionSelectsFirstRow",
+    "testArrowUpFromNoSelectionSelectsLastRow",
+    "testArrowClampsAtBounds",
+    "testShiftArrowDownExtendsSelection",
+    "testShiftArrowUpShrinksExtensionBackTowardAnchor"
+  ],
+  "prior_runtime_evidence": {
+    "audit": "targie061-source-review-v34-20261023.json",
+    "upstream_tests": 32,
+    "passed": 32,
+    "rerun_this_step": false,
+    "reason": "No code/test changes since successful full-class execution; current pinned test bytes verified. This step completes manual reading, not another test run.",
+    "log_sha256": "f9430c7c52a1755b89d2cccc7277d992f8ed8c3c9c69598c21b2ebda09eb3ee6"
+  },
+  "findings": [
+    "Whole32test class read now. Filters cover preset/manual switching and invalid dimensions, search names/paths; sorting covers width/height and deterministic equalkey ordering; batching checked by recompute counts. These are authored model fixtures, not discovered real-media corpus.",
+    "Progress and displaythreshold changes deliberately avoid rebuilding full browse list; itemsRevision triggers rebuild.600initialitems test checks order only, no measured timing/memory bound or frame responsiveness.",
+    "Selection tests exercise ordinary arrows, endpointclamps, shift range expansion/contraction, selecteditem removal fallback and selectall limited to displayedsearchresults. removeItem test updates model, not actual filesystem deletion.",
+    "UnchangedOrderedIDs publication test changes onlysortfield on same values. It does not establish valuefreshness and remains compatible with v34 reproduced stale-metadata issue.",
+    "BrowseView persists splitfraction, binds search/filter and batchselection controls, adjusts drag via BrowseSplitLayout. Source cursorpush/pop accounting has no onDisappear cleanup; lifecycle exitwhilehover/drag not executed or claimed defective in normal use.",
+    "BrowseView source definition does not by itself qualify tableclicks, keyboard routing, viewportgeometry, dragcursor lifecycle or visual correctness. No window interaction or filesystem operations this step.",
+    "Two files actually whole-read and pinned verified, count96/121. No source adoption, speedup or qualitygain claimed."
+  ]
+}
