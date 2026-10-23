@@ -1,0 +1,446 @@
+use crate::commands::Handler;
+use crate::config::Config;
+use crate::strategies::{smart_filter, truncation};
+
+pub struct FsHandler;
+
+const NOISY_ENV_PREFIXES: &[&str] = &[
+    "PATH=",
+    "LS_COLORS=",
+    "TERM=",
+    "PS1=",
+    "PROMPT=",
+    "MANPATH=",
+];
+
+// Viewer commands that may display code files.
+const VIEWER_CMDS: &[&str] = &["cat", "head", "tail", "less", "more", "bat"];
+
+/// Returns the target file path if `cmd` is a viewer command targeting a `.md` file.
+fn extract_md_viewer_target(cmd: &str) -> Option<String> {
+    let mut parts = cmd.split_whitespace();
+    let first = parts.next()?;
+    let base = first.rsplit('/').next().unwrap_or(first);
+    if !VIEWER_CMDS.contains(&base) {
+        return None;
+    }
+    let mut path: Option<String> = None;
+    let mut skip_next = false;
+    for tok in parts {
+        if skip_next {
+            skip_next = false;
+            continue;
+        }
+        if tok == "-n" || tok == "-c" {
+            skip_next = true;
+            continue;
+        }
+        if tok.starts_with('-') {
+            continue;
+        }
+        path = Some(tok.to_string());
+        break;
+    }
+    let path = path?;
+    let ext = std::path::Path::new(&path)
+        .extension()
+        .and_then(|e| e.to_str())?
+        .to_ascii_lowercase();
+    if ext == "md" {
+        Some(path)
+    } else {
+        None
+    }
+}
+
+/// Returns (file_path, language_tag) if `cmd` is a viewer command targeting a code file.
+fn extract_path_and_ext(cmd: &str) -> Option<(String, &'static str)> {
+    let mut parts = cmd.split_whitespace();
+    let first = parts.next()?;
+    let base = first.rsplit('/').next().unwrap_or(first);
+    if !VIEWER_CMDS.contains(&base) {
+        return None;
+    }
+
+    // Collect remaining tokens, skipping numeric flags like -n 50.
+    let mut path: Option<String> = None;
+    let mut skip_next = false;
+    for tok in parts {
+        if skip_next {
+            skip_next = false;
+            continue;
+        }
+        if tok == "-n" || tok == "-c" {
+            skip_next = true;
+            continue;
+        }
+        // Skip flag-only tokens (e.g. -f, --follow, -q, --plain).
+        if tok.starts_with('-') {
+            // But if the flag embeds a value like -n50, nothing to skip.
+            continue;
+        }
+        path = Some(tok.to_string());
+        break;
+    }
+
+    let path = path?;
+    let ext = std::path::Path::new(&path)
+        .extension()
+        .and_then(|e| e.to_str())?;
+
+    let lang: &'static str = match ext {
+        "rs" => "rust",
+        "py" | "pyw" => "python",
+        "ts" | "tsx" | "js" | "jsx" | "mjs" | "cjs" => "ts",
+        "go" => "go",
+        "java" => "java",
+        "rb" => "ruby",
+        "kt" | "kts" => "kotlin",
+        "swift" => "swift",
+        "c" | "cc" | "cpp" | "cxx" | "h" | "hpp" | "hxx" => "c",
+        _ => return None,
+    };
+
+    Some((path, lang))
+}
+
+/// Returns true if the line is a *single-line attribute or decorator* that
+/// belongs to the next declaration: `#[derive(...)]`, `@staticmethod`, etc.
+///
+/// We deliberately do **not** match comment-style doc lines (`///`, `/** */`,
+/// `# …`) here. On dense-signature files those amplify output past the
+/// pipeline's truncation budget, erasing sig-mode's reason to exist
+/// (saving tokens). Attributes are typically one line and carry semantically-
+/// loaded context (derives, async hints, decorators), so they stay worth
+/// the bytes. Only the *immediately-preceding* attribute is kept (single-slot
+/// buffer in `compress_signatures`).
+fn is_pending_context_line(line: &str, lang: &str) -> bool {
+    let trimmed = line.trim_start();
+    if trimmed.is_empty() {
+        return false;
+    }
+    match lang {
+        "rust" => trimmed.starts_with("#[") || trimmed.starts_with("#!["),
+        "python" => trimmed.starts_with("@"),
+        "ts" | "java" | "kotlin" | "c" => trimmed.starts_with("@"),
+        _ => false,
+    }
+}
+
+/// Returns true if the line looks like a signature for the given language.
+fn is_signature(line: &str, lang: &str) -> bool {
+    match lang {
+        "rust" => {
+            let prefixes: &[&str] = &[
+                "pub fn ",
+                "fn ",
+                "async fn ",
+                "pub async fn ",
+                "unsafe fn ",
+                "pub unsafe fn ",
+                "impl ",
+                "trait ",
+                "struct ",
+                "enum ",
+                "pub mod ",
+                "pub use ",
+                "pub struct ",
+                "pub enum ",
+                "pub trait ",
+                "pub type ",
+                "pub const ",
+                "pub impl ",
+                "pub trait ",
+            ];
+            prefixes.iter().any(|p| line.starts_with(p))
+        }
+        "python" => {
+            let prefixes: &[&str] = &["def ", "async def ", "class "];
+            prefixes.iter().any(|p| line.starts_with(p))
+        }
+        "ts" => {
+            let prefixes: &[&str] = &[
+                "export function ",
+                "export default function ",
+                "export async function ",
+                "function ",
+                "async function ",
+                "export class ",
+                "export default class ",
+                "class ",
+                "export const ",
+                "export let ",
+                "export var ",
+                "export type ",
+                "export interface ",
+                "export enum ",
+                "export default ",
+                "const ",
+                "interface ",
+                "type ",
+            ];
+            prefixes.iter().any(|p| line.starts_with(p))
+        }
+        "go" => {
+            let prefixes: &[&str] = &["func ", "type ", "package "];
+            prefixes.iter().any(|p| line.starts_with(p))
+        }
+        "java" | "kotlin" => {
+            let prefixes: &[&str] = &[
+                "public class ",
+                "private class ",
+                "protected class ",
+                "public interface ",
+                "private interface ",
+                "protected interface ",
+                "class ",
+                "interface ",
+                "public static ",
+                "fun ",
+                "public fun ",
+                "private fun ",
+                "protected fun ",
+                "public enum ",
+                "private enum ",
+                "enum ",
+            ];
+            prefixes.iter().any(|p| line.starts_with(p))
+        }
+        "ruby" | "swift" => {
+            let prefixes: &[&str] = &["def ", "class ", "module ", "func ", "struct ", "enum "];
+            prefixes.iter().any(|p| line.starts_with(p))
+        }
+        "c" => {
+            // Heuristic: non-whitespace-leading line containing '(' ending with ')' or ') {'
+            if line.starts_with(|c: char| c.is_whitespace()) {
+                return false;
+            }
+            let trimmed = line.trim_end();
+            (trimmed.ends_with(')') || trimmed.ends_with(") {") || trimmed.ends_with("){"))
+                && line.contains('(')
+                && line
+                    .chars()
+                    .next()
+                    .map_or(false, |c| c.is_ascii_alphabetic() || c == '_')
+        }
+        _ => false,
+    }
+}
+
+/// Returns true if `line` starts with whitespace and after trimming looks like
+/// a signature — i.e., a method/function inside an impl block or class.
+/// Only called when `sig_mode_include_indented` is enabled.
+///
+/// TypeScript extra rules: positively match class-member access modifiers
+/// (`public`/`private`/…); veto `const`/`let`/`var`/`type`/`interface`/`enum`
+/// when indented so they are not mistaken for method signatures.
+fn is_indented_signature(line: &str, lang: &str) -> bool {
+    if !line.starts_with(|c: char| c.is_whitespace()) {
+        return false;
+    }
+    let trimmed = line.trim_start();
+    if trimmed.is_empty() {
+        return false;
+    }
+    match lang {
+        "ts" => {
+            const BODY_VETOES: &[&str] = &[
+                "const ", "let ", "var ", "type ", "interface ", "enum ",
+            ];
+            if BODY_VETOES.iter().any(|v| trimmed.starts_with(v)) {
+                return false;
+            }
+            const CLASS_MODIFIERS: &[&str] = &[
+                "public ", "private ", "protected ", "static ", "async ",
+                "get ", "set ", "readonly ", "abstract ", "override ",
+            ];
+            if CLASS_MODIFIERS.iter().any(|m| trimmed.starts_with(m)) {
+                return true;
+            }
+            is_signature(trimmed, lang)
+        }
+        _ => is_signature(trimmed, lang),
+    }
+}
+
+/// Compress to signature lines, preserving first-3 and last-3 verbatim,
+/// plus (optionally) indented method signatures inside `impl`/`class` blocks,
+/// plus any **single** attribute / decorator line that immediately precedes a
+/// kept signature.
+///
+/// Why single-slot instead of a full doc-block buffer: dense-signature files
+/// (10 structs × 5 methods × 1 doc each) would double the kept-line count
+/// and push sig-mode past the pipeline's truncation budget — sig-mode would
+/// then *cost* tokens instead of saving them. Attributes (`#[inline]`,
+/// `@staticmethod`) carry the highest-density semantic information per byte,
+/// so they're the cell we keep.
+///
+/// Indented-sig cap: total middle lines are capped at `max_total_middle` to
+/// keep sig-mode output under the pipeline's `find_max_results` budget.
+fn compress_signatures(
+    lines: Vec<String>,
+    lang: &str,
+    include_indented: bool,
+    max_total_middle: usize,
+) -> Vec<String> {
+    let total = lines.len();
+    let anchor_count = 3.min(total / 2); // don't overlap on tiny files
+
+    let first_lines: Vec<String> = lines[..anchor_count].to_vec();
+    let last_lines: Vec<String> = lines[total.saturating_sub(anchor_count)..].to_vec();
+
+    let head_end = anchor_count;
+    let tail_start = total.saturating_sub(anchor_count);
+
+    let mut middle: Vec<String> = Vec::new();
+    let mut pending: Option<String> = None;
+    let mut indented_count: usize = 0;
+    for (i, line) in lines.iter().enumerate() {
+        if i < head_end || i >= tail_start {
+            pending = None;
+            continue;
+        }
+        let s = line.as_str();
+        if is_pending_context_line(s, lang) {
+            pending = Some(line.clone());
+            continue;
+        }
+        let is_top_level = is_signature(s, lang);
+        let is_indented = !is_top_level
+            && include_indented
+            && indented_count < max_total_middle
+            && is_indented_signature(s, lang);
+        if is_top_level || is_indented {
+            if is_indented {
+                indented_count += 1;
+            }
+            if let Some(ctx) = pending.take() {
+                middle.push(ctx);
+            }
+            middle.push(line.clone());
+            continue;
+        }
+        // Any non-context, non-signature line drops the buffered attribute.
+        pending = None;
+    }
+
+    let mut out = Vec::with_capacity(anchor_count * 2 + middle.len());
+    out.extend(first_lines);
+    out.extend(middle);
+    out.extend(last_lines);
+    out
+}
+
+impl Handler for FsHandler {
+    fn compress(&self, cmd: &str, lines: Vec<String>, config: &Config) -> Vec<String> {
+        // ── Signature-mode ────────────────────────────────────────────────
+        // Check on raw lines so the reported K reflects actual file size,
+        // not post-filter count.
+        if config.sig_mode_enabled {
+            if let Some((file_path, lang)) = extract_path_and_ext(cmd) {
+                let k = lines.len();
+                if k >= config.sig_mode_threshold_lines {
+                    let filtered = smart_filter::apply(lines);
+                    let max_middle = config.find_max_results.saturating_sub(6);
+                    let compressed = compress_signatures(
+                        filtered,
+                        lang,
+                        config.sig_mode_include_indented,
+                        max_middle,
+                    );
+                    let n_sigs = compressed.len();
+                    let marker = format!(
+                        "[squeez: sig-mode {} signatures from {} lines — use `sed -n A,Bp {}` for a range]",
+                        n_sigs, k, file_path
+                    );
+                    let mut out = Vec::with_capacity(n_sigs + 1);
+                    out.push(marker);
+                    out.extend(compressed);
+                    return out;
+                }
+            }
+        }
+
+        // ── Markdown viewer path ──────────────────────────────────────────
+        if config.auto_compress_md {
+            if let Some(md_path) = extract_md_viewer_target(cmd) {
+                let orig_chars: usize = lines.iter().map(|l| l.len() + 1).sum();
+                let text = lines.join("\n");
+                let locale = crate::commands::compress_md::Locale::from_code(&config.lang);
+                let result = crate::commands::compress_md::compress_text_with_locale(
+                    &text,
+                    crate::commands::compress_md::Mode::Full,
+                    locale,
+                );
+                let compressed_text = if result.safe { result.output } else { text };
+                let new_chars: usize = compressed_text.len();
+                let orig_tokens = orig_chars / 4;
+                let new_tokens = new_chars / 4;
+                let marker = format!(
+                    "[squeez: md-mode — compressed {}→{} tokens from {}]",
+                    orig_tokens, new_tokens, md_path
+                );
+                let mut out: Vec<String> = std::iter::once(marker)
+                    .chain(compressed_text.lines().map(|l| l.to_string()))
+                    .collect();
+                // remove trailing empty line that split may introduce
+                if out.last().map(|l| l.is_empty()).unwrap_or(false) {
+                    out.pop();
+                }
+                return out;
+            }
+        }
+
+        let lines = smart_filter::apply(lines);
+
+        // ── Existing env/find/ls path ─────────────────────────────────────
+        if cmd.trim_start().starts_with("env") || cmd.contains("printenv") {
+            let filtered: Vec<String> = lines
+                .into_iter()
+                .filter(|l| !NOISY_ENV_PREFIXES.iter().any(|p| l.starts_with(p)))
+                .collect();
+            return truncation::apply(filtered, 80, truncation::Keep::Head);
+        }
+
+        // Do NOT collapse listings to a per-dir count. For `ls`/`find`/`du`
+        // (and viewer content) the lines ARE the payload — they are exactly
+        // what the caller asked for. `group_files_by_dir` was designed for
+        // git-status output, where the path list is incidental context; using
+        // it here discards every name and mislabels a plain listing as a
+        // change-set ("N modified"). Bound size with truncation instead, which
+        // keeps the names visible (head) + a `[... N truncated]` marker. See #148.
+        let keep = if should_keep_tail(cmd) {
+            truncation::Keep::Tail
+        } else {
+            truncation::Keep::Head
+        };
+        truncation::apply(lines, config.find_max_results, keep)
+    }
+}
+
+fn base_cmd(cmd: &str) -> Option<&str> {
+    let first = cmd.split_whitespace().next()?;
+    Some(first.rsplit('/').next().unwrap_or(first))
+}
+
+/// `tail` is always tail-oriented. `cat`/`less`/`more`/`bat` on a log-ish
+/// path (.log/.out/.err) also benefit from tail — recent lines matter most.
+fn should_keep_tail(cmd: &str) -> bool {
+    let Some(base) = base_cmd(cmd) else { return false };
+    if base == "tail" {
+        return true;
+    }
+    if !matches!(base, "cat" | "less" | "more" | "bat") {
+        return false;
+    }
+    for tok in cmd.split_whitespace().skip(1) {
+        if tok.starts_with('-') {
+            continue;
+        }
+        let lower = tok.to_lowercase();
+        if lower.ends_with(".log") || lower.ends_with(".out") || lower.ends_with(".err") {
+            return true;
+        }
+    }
+    false
+}

@@ -1,0 +1,35 @@
+{
+  "upstream_audit": "docs/research/dedup-500/squeez091-source-review-v10-20261024.json",
+  "test": {
+    "path": "crates/rrrah-dedup/tests/exact_files.rs",
+    "name": "path_delimiters_preserve_distinct_files_and_copy_partitions",
+    "sha256": "6cbeb9dd4239affc19763d5a81ed30a98ebe580239d1ffb132bdd4ccf37f5dfe",
+    "physical_files": 8,
+    "copy_families": 2,
+    "same_size_unique_files": 4,
+    "bytes_per_file": 12,
+    "cases": [
+      "semicolon",
+      "embedded newline",
+      "embedded tab",
+      "colon",
+      "space with percent-suffixed name"
+    ],
+    "variants": "Forward/reverse explicit roots plus overlapping parent; scan and scan_verified",
+    "platform": "macOS cfg(unix); Windows not qualified"
+  },
+  "validation": {
+    "passed": 40,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "target": "rrrah-dedup exact_files integration target",
+    "toolchain": "1.98.1",
+    "raw_log": "docs/research/dedup-500/rrrah-path-punctuation-exact-tests-20261024.log"
+  },
+  "implementation": "Existing regression expanded from six to eight physical files; production unchanged.",
+  "limits": [
+    "Finite path fixtures, not all filesystem names or all-feature coverage.",
+    "Other workspace changes preserved. pHash.org/ASAN remains skipped."
+  ]
+}

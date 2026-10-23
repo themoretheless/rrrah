@@ -1,0 +1,18 @@
+/target
+/bin/
+*.DS_Store
+.omc/
+docs/
+.worktrees/
+
+# Bench reports (regenerated on every run)
+bench/report.md
+bench/report_context.md
+
+# Generated docs    
+docs/
+# fablize skill progress files (session-local harness state)
+.fablize/
+
+# compress-md backups (generated when squeez compresses a markdown file)
+*.original.md

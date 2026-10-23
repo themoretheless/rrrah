@@ -1531,7 +1531,10 @@ fn paths_sharing_more_than_256_characters_preserve_copy_partitions() {
 fn path_delimiters_preserve_distinct_files_and_copy_partitions() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
-    let paths = ["a;b", "copy;one", "a", "a\nb", "b", "a\tb"].map(|name| root.path().join(name));
+    let paths = [
+        "a;b", "copy;one", "a", "a\nb", "b", "a\tb", "a:1.rs", "report 0%",
+    ]
+    .map(|name| root.path().join(name));
     for (path, content) in paths.iter().zip([
         b"first family",
         b"first family",
@@ -1539,6 +1542,8 @@ fn path_delimiters_preserve_distinct_files_and_copy_partitions() {
         b"other family",
         b"third family",
         b"final family",
+        b"fifth family",
+        b"sixth family",
     ]) {
         fs::write(path, content).unwrap();
     }
@@ -1561,7 +1566,7 @@ fn path_delimiters_preserve_distinct_files_and_copy_partitions() {
             assert!(report.complete(), "{report:?}");
             assert!(report.issues.is_empty(), "{report:?}");
             assert!(report.aliases.is_empty(), "{report:?}");
-            assert_eq!(report.files_observed, 6);
+            assert_eq!(report.files_observed, 8);
             let actual: BTreeSet<BTreeSet<_>> = report
                 .groups
                 .into_iter()

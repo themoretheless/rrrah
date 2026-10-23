@@ -1,0 +1,112 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v9-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/commands/fs.rs",
+      "local": "50-src--commands--fs.rs",
+      "sha256": "13c925cd97b3fe2a00da17ed660f1d8c833a8209acb1861d0d01aaabff6bc80d",
+      "whole_text_read": true,
+      "lines": 446
+    },
+    {
+      "path": "src/commands/text_proc.rs",
+      "local": "51-src--commands--text_proc.rs",
+      "sha256": "52167c5a02c03179ee4d809600e0956f0914f4add3879264652bb48df850494f",
+      "whole_text_read": true,
+      "lines": 118
+    },
+    {
+      "path": "tests/test_fs.rs",
+      "local": "52-tests--test_fs.rs",
+      "sha256": "97040b2eb3475b34bc3e8e0e08c1cda87e286b9c45b6ea8d636da753d78ec6d7",
+      "whole_text_read": true,
+      "lines": 124
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "0ad859ba49ea50268b7cc3f2e9e670fd9b724a6df1b949c263d6f35a173ba087",
+      "whole_text_read": true,
+      "lines": 201
+    },
+    {
+      "path": ".gitattributes",
+      "local": "54-.gitattributes",
+      "sha256": "163033eb8015bf75923cf9cd6310a7c0e989759adb0fc6c436f80da6bad05e30",
+      "whole_text_read": true,
+      "lines": 3
+    },
+    {
+      "path": ".gitignore",
+      "local": "55-.gitignore",
+      "sha256": "bffc8ec2b57e71be2d7e22018d04d85bc5818ecca6c86e68a6875d6e6022270d",
+      "whole_text_read": true,
+      "lines": 18
+    },
+    {
+      "path": "src/commands/mod.rs",
+      "local": "56-src--commands--mod.rs",
+      "sha256": "b7fbbf0fa32faf236c57d99a17c5cdb941e253158230c80c5f1fd93ad9b84e60",
+      "whole_text_read": true,
+      "lines": 46
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 55,
+  "new_original_image_review": {
+    "path": "assets/banner.png",
+    "sha256": "3da3a4d3d483f45d95cbd85137558ac99c59091b4e458ca07c2f95f0fb1e74a4",
+    "visual_reviewed_original": true,
+    "observation": "Marketing banner with squeez wordmark/lightning and End-to-End Token Optimizer for Code Assistants subtitle; no algorithm/runtime evidence."
+  },
+  "cumulative_visual_images_reviewed_total": 1,
+  "tracked_blobs": 327,
+  "cumulative_whole_reviewed_files": 56,
+  "remaining_without_whole_review": 271,
+  "native_original_tests_added": {
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "commands::text_proc::tests": 2,
+      "test_fs": 8
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 295,
+    "failed": 0,
+    "scope": "Focused original groups only, full upstream suite not run."
+  },
+  "public_filename_controls": {
+    "scope": "Unmodified public handler APIs, synthetic listing and grep-result strings; filenames valid on POSIX, no real rg/ls invocation",
+    "listing_input": [
+      "/owned/a:0.rs",
+      "/owned/report0%",
+      "/owned/space name.rs"
+    ],
+    "listing_output": [
+      "/owned/a:0.rs",
+      "/owned/space name.rs"
+    ],
+    "five_distinct_colon_paths_grouped_as": [
+      "/owned/a: 5 matches [squeez: collapsed]"
+    ],
+    "ordinary_distinct_path_control_passed": true
+  },
+  "findings": [
+    "Default FsHandler applies smart_filter to listing entries: /owned/report0% is removed as progress-like, while colon and space names in the same short listing survive. This is original handler execution with synthetic listing strings, not actual ls execution.",
+    "TextProcHandler parses at the first colon. Five distinct POSIX paths /owned/a:0.rs through /owned/a:4.rs are grouped under /owned/a and reduced to one five-matches marker. Ordinary distinct file paths remain separate in the control.",
+    "Viewer target extraction splits command text on whitespace and skips arguments after -n/-c uniformly; quoting/command-specific flag semantics are heuristic. Source observation only; no new viewer-shell control.",
+    "Apache2.0 LICENSE and NOTICE now both completely read; this is provenance inspection, not blanket clearance of all nested assets. No foreign production code copied."
+  ],
+  "transfer_decision": "Keep filesystem identity in typed paths; do not infer file partitions from filtered listings or colon-delimited match text. Expanded rrrah physical-file regression instead.",
+  "limits": [
+    "55 text files and one original image reviewed;271 tracked files remain.",
+    "295 original tests and finite synthetic handler controls do not qualify every filesystem name or real command output format.",
+    "Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Original Cargo logs retain trailing blank lines; upstream gitignore trailing spaces preserved exactly."
+}
