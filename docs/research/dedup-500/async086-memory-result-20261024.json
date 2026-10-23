@@ -1,0 +1,83 @@
+{
+  "reference_update_cases": 147,
+  "reference_update_mismatches": 10,
+  "first_counterexamples": [
+    {
+      "old": [
+        "a"
+      ],
+      "current": [
+        "a",
+        "b"
+      ],
+      "ref": "a",
+      "actual": "new",
+      "expected": null
+    },
+    {
+      "old": [
+        "a"
+      ],
+      "current": [
+        "a",
+        "c"
+      ],
+      "ref": "a",
+      "actual": "new",
+      "expected": null
+    },
+    {
+      "old": [
+        "a"
+      ],
+      "current": [
+        "a",
+        "b",
+        "c"
+      ],
+      "ref": "a",
+      "actual": "new",
+      "expected": null
+    },
+    {
+      "old": [
+        "b"
+      ],
+      "current": [
+        "a",
+        "b"
+      ],
+      "ref": "b",
+      "actual": "new",
+      "expected": null
+    },
+    {
+      "old": [
+        "b"
+      ],
+      "current": [
+        "b",
+        "c"
+      ],
+      "ref": "b",
+      "actual": "new",
+      "expected": null
+    },
+    {
+      "old": [
+        "b"
+      ],
+      "current": [
+        "a",
+        "b",
+        "c"
+      ],
+      "ref": "b",
+      "actual": "new",
+      "expected": null
+    }
+  ],
+  "concurrent_calls_shared_one_promise": true,
+  "clear_during_work_allows_completed_value_to_repopulate": true,
+  "scope": "Whole original package and memory storage with actual dependencies, owned in-process fixtures. No Redis connection, browser runtime, cancellation guarantee or performance proof."
+}

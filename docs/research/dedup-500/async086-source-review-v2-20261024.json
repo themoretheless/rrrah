@@ -1,0 +1,154 @@
+{
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "previous_audit": "docs/research/dedup-500/async086-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "package.json",
+      "local": "06-package.json",
+      "sha256": "856833494d541fa889021af46b3e08f1bed8d877cd314cdd6d15b35b04b4ac18",
+      "whole_text_read": true
+    },
+    {
+      "path": "index.js",
+      "local": "07-index.js",
+      "sha256": "10a519370b596779a3ed6b3f9245e45722a2603eb8b4a00a212db6d268095924",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/storage/index.js",
+      "local": "08-src--storage--index.js",
+      "sha256": "289313543193fd570a0148e44c550c49846c1ec91bc36f940c95676ab377e2c5",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/storage/memory.js",
+      "local": "09-src--storage--memory.js",
+      "sha256": "de97d477400cc9333dc4e240463a4558ffdcdf9dc4690edbf09486537f6e9fc1",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/storage/interface.js",
+      "local": "10-src--storage--interface.js",
+      "sha256": "1d1ebdb61d02bd534451121fcf65162a2bdb47cc8aa38918d0f88e04b3a5dc99",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 9,
+  "tracked_blobs": 50,
+  "remaining_without_whole_review": 41,
+  "partial_source_files": [
+    {
+      "path": "src/storage/redis.js",
+      "ranges_read": [
+        [
+          1,
+          38
+        ]
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "native_controls": {
+    "reference_update_cases": 147,
+    "reference_update_mismatches": 10,
+    "first_counterexamples": [
+      {
+        "old": [
+          "a"
+        ],
+        "current": [
+          "a",
+          "b"
+        ],
+        "ref": "a",
+        "actual": "new",
+        "expected": null
+      },
+      {
+        "old": [
+          "a"
+        ],
+        "current": [
+          "a",
+          "c"
+        ],
+        "ref": "a",
+        "actual": "new",
+        "expected": null
+      },
+      {
+        "old": [
+          "a"
+        ],
+        "current": [
+          "a",
+          "b",
+          "c"
+        ],
+        "ref": "a",
+        "actual": "new",
+        "expected": null
+      },
+      {
+        "old": [
+          "b"
+        ],
+        "current": [
+          "a",
+          "b"
+        ],
+        "ref": "b",
+        "actual": "new",
+        "expected": null
+      },
+      {
+        "old": [
+          "b"
+        ],
+        "current": [
+          "b",
+          "c"
+        ],
+        "ref": "b",
+        "actual": "new",
+        "expected": null
+      },
+      {
+        "old": [
+          "b"
+        ],
+        "current": [
+          "a",
+          "b",
+          "c"
+        ],
+        "ref": "b",
+        "actual": "new",
+        "expected": null
+      }
+    ],
+    "concurrent_calls_shared_one_promise": true,
+    "clear_during_work_allows_completed_value_to_repopulate": true,
+    "scope": "Whole original package and memory storage with actual dependencies, owned in-process fixtures. No Redis connection, browser runtime, cancellation guarantee or performance proof."
+  },
+  "findings": [
+    "findNotMatching is called by both memory and Redis reference update paths; only memory runtime qualified here.",
+    "Actual memory update/invalidation disagrees with current-reference oracle in10/147 three-reference cases.",
+    "Whole package concurrent same-key calls share one promise; clear during pending work allows old result publication afterwards. No documented cancellation guarantee inferred."
+  ],
+  "runtime": {
+    "install_exit_code": 0,
+    "dependencies": {
+      "mnemonist": "0.40.6",
+      "safe-stable-stringify": "2.5.0"
+    },
+    "upstream_test_suite_run": false
+  },
+  "limits": [
+    "Native controls are owned research tests, not upstream test suite passes.",
+    "No Redis/server/browser invoked.",
+    "No production adoption or change."
+  ]
+}
