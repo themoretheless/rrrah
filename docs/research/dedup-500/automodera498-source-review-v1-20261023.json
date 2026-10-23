@@ -1,0 +1,73 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.MD",
+      "sha256": "d5713b1707c3e2edf0e0e2f8c4a2a03a30aaf86b738881972ae9ad461bf0c2da",
+      "lines": 18,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/hashing/HashService.java",
+      "sha256": "0f9024125498e5eb33cbe4b7cef8ccec1d8a696ca2d96423dc311d4eeb791e0f",
+      "lines": 35,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/hashing/HashServiceImpl.java",
+      "sha256": "dc70e170f33403f308247332baecf2c714b69709a4ce495d367093e4021e687a",
+      "lines": 82,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/hashing/RustPHash.java",
+      "sha256": "ded0f2f8abba95ef536bd277e96127fc018e837b3ec609aa747ec2787cf6de29",
+      "lines": 36,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/service/hashing/uk_ac_uws_danielszabo_automodera_common_service_hashing_RustPHash.h",
+      "sha256": "78d5eff5616aa4ef50ba39c076ae8988c39bb48f3b766308ca52e1c1f76bebbf",
+      "lines": 37,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/test/java/uk/ac/uws/danielszabo/automodera/common/service/hashing/HashServiceJavaImplTest.java",
+      "sha256": "20b5c81d6d98271af5e418610b372d6a76405459fa884a97dd33a24541b9ab71",
+      "lines": 101,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "upstream_java_run": false,
+    "reason": "java -version reports Unable to locate a Java Runtime",
+    "native_library_run": false
+  },
+  "source_reasoning_control": {
+    "method": "Python transcription of index permutation only; not original Java execution",
+    "input": "012345678",
+    "four_iterations": [
+      "036147258",
+      "012345678",
+      "036147258",
+      "012345678"
+    ]
+  },
+  "findings": [
+    "All6captured fetched files whole-read and GitblobSHA1 verified. README describes publish-subscribe perceptual hash network, not general file duplicate engine.",
+    "HashServiceJavaImplTest has all setup and both test methods commented out: this module contributes zero active hashing test methods despite filename/test inventory. No original tests executed.",
+    "simScore iteration reads hash1[j*side+l] with outer l, inner j: matrix transpose, not90degree rotation. Four iterations alternate transpose/original, yielding two orientations at most. Explicit3x3 index-permutation reasoning control confirms; Java/native score not executed.",
+    "sideLen=floor(sqrt(stringlength)) truncates nonsquare fingerprints to sideLen squared characters; no equal-length/recipe validation here. Source-only.",
+    "maxValue initialized Double.MIN_VALUE (smallest positive nonzero), so all native scores0 would return positive minimum instead of0. Source-only conditional behavior, no native oracle.",
+    "getSimilarityToFileWithHash converts hex BigInteger to binary text without fixed-width zero padding. This drops leading zero bits; native expected width not available in these files.",
+    "pHash catches com.sun.jdi.NativeMethodException only; native RustPHash loads phash library by name and does not supply implementation in pinned Rust source tree (no.rs/Cargo.toml entries). Missing native library errors not converted to declared IOException here.",
+    "Generated JNI header matches declared three native signatures. Native compatibility, packaging and network behavior unqualified."
+  ],
+  "remaining": [
+    "158 other tracked blobs/assets",
+    "Native implementation provenance, full Java dependency/build tests and whole repository review"
+  ],
+  "full_review_count": 249
+}
