@@ -1,0 +1,59 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/hash/video_hash.cpp",
+      "sha256": "6f9b4f234fe0feb5a208daedc15ec5a73f5d49402c10d62d2a5aca9398fd43a5",
+      "lines": 71,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/hash/video_hash.hpp",
+      "sha256": "f0d22d8e04b410e90506172d4216fc511acc2237bee1c4390461088b40490243",
+      "lines": 25,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/hash/wHash.cpp",
+      "sha256": "7d769004314b000623d52af9b4e8836f195507a71c202ef7b56e54fe1ae76af3",
+      "lines": 116,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/io/frame_source.cpp",
+      "sha256": "6242f8fe2002448c2d489eab0c0f159e5b4702f0d27eb21cfd07c8475ea4d34d",
+      "lines": 82,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/io/frame_source.hpp",
+      "sha256": "f9fa2e505980e67c6cfcfc8e2bee8b92bab86d4fce692b3dfbbf0297b82e4916",
+      "lines": 70,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-video-control-20261023.cpp",
+  "runtime": {
+    "exit_code": 0,
+    "independent_vote_oracle_cases": 128,
+    "reversed_sequence_parity_cases": 128,
+    "tie_bits_zero": true,
+    "exception_temporary_directory_retained": true
+  },
+  "findings": [
+    "Original hash_video compiled unchanged; controlled FrameSource and frame-hash callback replace decoding deliberately. No ffmpeg or real video decoding validated.",
+    "Majority aggregation ignores failed empty frame hashes; every bit uses strict majority of valid frames, even ties become zero. Independent counts match 128 cases.",
+    "Frame order is discarded: all 128 reversed sequences produce identical aggregate hashes. Aggregate fingerprint cannot establish temporal equivalence.",
+    "Cleanup lambda is called explicitly, not by destructor: callback exception leaves temporary directory, confirmed with controlled failure. Only the test-owned directory was removed afterwards. Extraction exception also bypasses cleanup by source inspection.",
+    "Temporary directory identity uses basename plus process ID; concurrent same-basename inputs share directory and frame names. Source-only concurrency concern, no race experiment executed.",
+    "FrameSource probes duration and samples midpoint timestamps through one ffmpeg invocation per frame. Process statuses, finite duration and actual output freshness are not comprehensively validated; factory silently maps unknown strategies to evenly_spaced.",
+    "wHash applies separable full Haar transforms at a power-of-two image size at least twice requested grid and at least eight, extracts top-left coefficients, median excludes DC while output includes DC. This recipe must not be equated with other wHash implementations without oracle comparison."
+  ],
+  "remaining": [
+    "74 other tracked blobs/assets and dependencies",
+    "Real video decoding, wavelet independent oracle, projection and full CLI qualification"
+  ],
+  "full_review_count": 248
+}
