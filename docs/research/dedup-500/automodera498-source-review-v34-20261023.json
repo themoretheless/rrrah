@@ -1,0 +1,37 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/publish.html",
+      "sha256": "33df1d704192658fc8960df43aff3d295d48bc9a6d83d5e116aa1c6647adba74",
+      "lines": 288,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/resources/templates/netinit.html",
+      "sha256": "ebe552e13c297ae5b210b114b331947173291b57c586cd3bb2d9c14d02f5b3a9",
+      "lines": 83,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "thymeleaf_or_js_run": false,
+    "browser_actions": false
+  },
+  "findings": [
+    "Publish/netinit templateswhole-read/Gitblobverified. No formsubmission or configurationchange.",
+    "Publish directoryradio disabledwhenalreadylinked, so normalGUIdiscourages repeatedcollectioncreation; narrows priorv27 repeatedpublish reachability to resubmission/othercallers ratherthan normal radiochoice. Servermethod itselfstillforceRecalc=true.",
+    "Publishfiledisplay splits synthetic filename;size string onsemicolon. Filenames containingsemicolon misparse displayedname/size; rawpath remainsradio value. No actualfilename/UIcontrolrun.",
+    "DisplayedIDdisabledinput notsubmitted; serverrecomputes nodeID+path. Nestedpaths and inlineJSstringinterpolation remain formatcontracts requiring independentrenderqualification.",
+    "Topicstextarea includesinitialwhitespace and onlyrequiredattribute, while serversplitscomma withouttrim. Blank/space-onlytopic behavior notvalidated.",
+    "No busy/progress/cancel or recoverablejobidentity in publishform; synchronouscontrollerhashesbefore redirect. No latency/errorrecoverymeasurement.",
+    "Netinit option label0.3 submitsvalue3, storednetworkversionString3 differs buildrevision0.3. Compatibility checks basedonthisfield notestablished."
+  ],
+  "remaining": [
+    "8 other tracked blobs/assets",
+    "Fourremainingtemplatepaths, license, coverimage and2nativebinaries; runtime qualification incomplete"
+  ],
+  "full_review_count": 249
+}
