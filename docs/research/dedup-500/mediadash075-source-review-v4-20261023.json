@@ -1,0 +1,47 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Directory.Build.props",
+      "local": "10-Directory.Build.props",
+      "git_blob": "0e098601e2560fbff2b495cdc95d3311aab9e1c1",
+      "sha256": "541d613baf828508a48fde20eee48a758268f85a9959d53b330cb06b428ef0a2",
+      "bytes": 861,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Scanners/DuplicateSignals.cs",
+      "local": "11-DuplicateSignals.cs",
+      "git_blob": "cf23a9af47a673065cd70990888e7b47e2feb123",
+      "sha256": "cd9a0a0ee6016753f24a83825543f6abb2ea2c88e16fa31c90327aed67243a6f",
+      "bytes": 8142,
+      "whole_text_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.MediaDash.Tests/DuplicateSignalsTests.cs",
+      "local": "12-DuplicateSignalsTests.cs",
+      "git_blob": "60a4728b9703a00caa090059d82f661fbf86dc02",
+      "sha256": "24c1528441a2884c17aba2ca0893d719d2bc1fe821a4804fcaf167758827e7b5",
+      "bytes": 5799,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 12,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 571,
+  "upstream_tests_run": false,
+  "checkout_integrity": {
+    "tracked_blobs_checked": 583,
+    "git_blob_mismatches": 0,
+    "scope": "All original tracked bytes matched pinned tree; inventory integrity only, not whole-file reading."
+  },
+  "findings": [
+    "DuplicateSignals whole body uses ASCII a-z0-9 token runs, noise/year stripping and set Jaccard. Empty token side yields NaN; scanner explicitly skips title veto for NaN. Non-Latin-only titles can become unavailable title signal; source observation only.",
+    "Original DuplicateSignalsTests whole read: 9 Fact methods plus 2 Theory methods with 10 InlineData cases, 19 authored cases in this file; not executed in this review.",
+    "Release-group test asserts same-title pair score 1/3. Its adjacent comment claims these pairs remain above 0.40, contradicted by explicit numerical assertion. Scanner with threshold 0.40 would veto this pair unless hash branch overrides. Default configuration threshold not yet reviewed here.",
+    "Directory.Build.props whole read sets fallback developer version and assembly/file versions; no custom task execution in that file.",
+    "Pinned original project checkout is clean and all583blobs match. Original 3 FileHasherTests execution launched, still restoring dependencies at last observation. No test pass claimed."
+  ]
+}

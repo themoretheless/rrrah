@@ -2,7 +2,7 @@
   "index": 75,
   "repository": "crackruckles/MediaDash",
   "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
-  "review_scope": "9/583 pinned blobs whole text through v3, including README, complete duplicate scanner/hasher, 8 authored tests and both project manifests. Four finite net10 native hasher controls use cache/logger adapters; original net9/xUnit/SQLite/Jellyfin unqualified.",
+  "review_scope": "12/583 pinned blobs whole text through v4, including complete duplicate scanner/signals/hasher, 27 authored test cases and build manifests. Four adapter-based hasher controls passed; original FileHasher tests still restoring dependencies at review time.",
   "decision": "reference",
   "finding": "Metadata-gated duplicate scanner; full original hasher under a keyed cache adapter reproduces restored-metadata stale digest and cancelled cache-hit behavior. Not an exhaustive arbitrary-file exact comparer.",
   "license_metadata": "GPL-3.0",
@@ -96,6 +96,10 @@
     },
     {
       "audit": "docs/research/dedup-500/mediadash075-source-review-v3-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediadash075-source-review-v4-20261023.json",
       "whole_repo_complete": false
     }
   ]
