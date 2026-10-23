@@ -1,0 +1,36 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "asizeof.py lines1241-1815 read, cumulative1-1815. Static review of dynamic typedefs and recursive sizing; full import remains unavailable, no new execution claimed",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+    "lines": [
+      1241,
+      1815
+    ],
+    "cumulative_lines": [
+      1,
+      1815
+    ],
+    "sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "remaining_without_full_text_or_binary_review": 24
+  },
+  "findings": [
+    "Dynamic typedef fallback exists for previously unregistered types, narrowing prior bytes registration finding: false static guard does not prove bytes wholly unsized. Dynamic fallback must be independently qualified after import issues.",
+    "Recursive _sizer uses id-keyed seen state; shared referents are counted once and caller roots are excluded as nested references. This is graph identity accounting, not content equality.",
+    "_sizer catches RuntimeError from the entire sizing/referent traversal and increments missed while returning accumulated size; not limited to actual recursion errors. Numeric output can be partial and must be read with missed/depth/exclusion settings.",
+    "ValueError/TypeError and arbitrary descriptor exceptions are not covered by that RuntimeError handler. Prior helper failures may propagate rather than appear as missed. Static source conclusion, full traversal not executed.",
+    "Default recursion limit100 and code=False, nested module exclusion, inferred/derived types options limit the traversed graph. Not a process-wide allocation proof.",
+    "_Prof.update keeps largest observed object strongly when weakref unsupported. Profiling metadata can alter object lifetimes; observer retention not benchmarked.",
+    "print_stats cutoff expression int(s-int(s))*100 removes fractional component before multiplying. Intended fractional cutoff is lost. Static finding.",
+    "Global typedef cache and stateful seen/profile accumulators do not provide thread-safe snapshot isolation. Original import failure and all untested runtime boundaries preserved."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
