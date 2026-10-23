@@ -1,0 +1,30 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/duplicates/DuplicatesScreen.kt",
+      "sha256": "59b2d611c8518c3546e40105d9c7a6d259ff4ba3983661810830fd9153fffc17",
+      "lines": 1891,
+      "git_blob_verified": true,
+      "cumulative_prior_reviews": [
+        42,
+        43
+      ]
+    }
+  ],
+  "findings": [
+    "List-mode duplicate/similar group cards eagerly compose every member with forEach inside a lazy outer group list. Large single groups therefore do not benefit from per-member lazy composition; performance remains unmeasured.",
+    "GridGroupCard assumes group.items is nonempty and repeatedly calls first(). Upstream group validation is the required invariant; no empty-group fallback exists in this component.",
+    "MediaItemRow pointerInput(Unit) captures callbacks without a changing key; refreshed/reordered group members can leave gesture closures associated with an earlier item. Checkbox callbacks recompose separately. Actual Compose closure behavior was not executed.",
+    "DetailImageCard remembers File(item.id) and compactPath without item keys. Stable lazy item keys reduce ordinary reuse, but direct reuse for a different item can retain an old label.",
+    "BottomActionBar prevents repeated bottom-button actions while isDeleting, but selection rows/group actions receive no deleting flag. Button mode is inferred by comparison with localized delete text rather than an explicit action type.",
+    "Preview decode requests are explicitly bounded at 128, 256 and 512 pixels in these cards. ContentScale.Crop means the displayed preview is not an equality witness and may omit differing image regions.",
+    "Group select-all explicitly permits every member to be selected; keeper retention is only offered as optional oldest/newest actions. No full-byte confirmation is added by these controls."
+  ],
+  "whole_files_read_total": 98,
+  "remaining_tracked_blobs": 32,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
