@@ -1,0 +1,45 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Both ECC facade and original tests read whole; pinned Git blob verified. Static review only; ECC dependencies not installed or executed.",
+  "evidence": [
+    {
+      "path": "pyFileFixity/lib/eccman.py",
+      "sha256": "58acb043e5b57e564eaf70667d4ba6e0f22673a8d940e7c3314daadca086d3e5"
+    },
+    {
+      "path": "pyFileFixity/tests/test_eccman.py",
+      "sha256": "34b6a6976bb93921d264199a44491071f48674e18ebb1be4213b43811fdd22d1"
+    }
+  ],
+  "findings": [
+    {
+      "id": "shared-field-state",
+      "detail": "Algorithms 3 and 4 call module-global reedsolo.init_tables with different field polynomials. Instances retain generator polynomials but do not restore field tables before encode/decode/check. Interleaved differently configured instances therefore require qualification. Source-level hazard, not executed corruption proof."
+    },
+    {
+      "id": "reimport-not-isolation",
+      "detail": "Parameter detector imports reedsolo under another local name with a comment expecting isolated tables. Ordinary imports share the same module object; aliasing does not isolate global field state. If ECC facade uses pure Python reedsolo, detector table reinitialization shares it."
+    },
+    {
+      "id": "parameter-search-forwarding",
+      "detail": "Detector searches gen_nb and c_exp but calls init_tables(prim) without forwarding generator/c_exp and rs_encode_msg without forwarding gen_nb. Its reported search parameters need direct round-trip verification."
+    },
+    {
+      "id": "no-parameter-bounds",
+      "detail": "compute_ecc_params accepts negative/nonfinite rate and arbitrary max_block_size without explicit bounds; rate=-0.5 divides by zero. ECCMan relies partly on backend validation. No work/cancellation budget for exhaustive parameter search."
+    },
+    {
+      "id": "syndrome-not-identity",
+      "detail": "ECCMan.check checks codeword consistency against selected codec, not equality to an independently trusted original. Valid codeword or successful correction is not proof of file identity."
+    },
+    {
+      "id": "test-strength",
+      "detail": "Six original methods cover parameter search, nominal size/rate vectors, four codec variants, padding and decoding. Codec tests instantiate/use each variant sequentially, not interleave active instances. Last two decode tests assert tuple truthiness rather than exact recovered bytes; incorrect nonempty tuples could pass."
+    }
+  ],
+  "upstream_tests_run_this_review": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
