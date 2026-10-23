@@ -1,0 +1,87 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/application-dev.properties",
+      "sha256": "b3320c8a80a843e732a5546374ce1bf53e421cbf15277db152b61689f9de9fb7",
+      "lines": 36,
+      "git_blob_verified": true
+    },
+    {
+      "path": "archive/src/main/resources/application-prod.properties",
+      "sha256": "c75d7a26c3b2a580514d8f63b5a0306cc53b23fb0da9257f62cc53354720d739",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/constants/Topic.java",
+      "sha256": "d4ccf71917b1703dd9ee2c77d1fdc300848545f0ed3392b6acce52392c27595d",
+      "lines": 91,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/constants/WebPaths.java",
+      "sha256": "0d26d854bd9266425f5bada069a300ce72b4aa93b389d2450404c82a27d40175",
+      "lines": 51,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/util/HttpRequestLogger.java",
+      "sha256": "9d529b5fbdbc4e5f34e6a2c33a64c906bd99fe3951856da2cc048ab421c676c9",
+      "lines": 43,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/util/SQLiteDialect.java",
+      "sha256": "e99db479a69a3bcf7b3700a243c6cf9ad2f5bf09dcf7149503bf0d04557da30b",
+      "lines": 166,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/application-dev.properties",
+      "sha256": "b3320c8a80a843e732a5546374ce1bf53e421cbf15277db152b61689f9de9fb7",
+      "lines": 36,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/application-prod.properties",
+      "sha256": "8738b50f98bad0f2f7b3eb53dca7ecf2cc51066dd57378190730f622caacb156",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/resources/application-dev.properties",
+      "sha256": "b3320c8a80a843e732a5546374ce1bf53e421cbf15277db152b61689f9de9fb7",
+      "lines": 36,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/resources/application-prod.properties",
+      "sha256": "4d2ca07560ffbe93e5e3466a883196c4a4585c325604767c2a002206da0b1bb6",
+      "lines": 38,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "sqlite_version": "3.54.1",
+    "in_memory_sql_pagination_checks": 12,
+    "all_pass": true,
+    "java_or_hibernate_run": false
+  },
+  "findings": [
+    "Tennewfileswhole-read:6dev/prodprofileoverlays,Topic,WebPaths,HttpRequestLogger,SQLiteDialect. No production configuration changes or live services.",
+    "SQLiteDialect limit generation appends limit?offset?; actual SQL select ordered20rows tested with limits0,1,4,30 andoffsets0,3,21 against independent list slices:12pass. This checks SQL shape only, not Hibernate bind ordering or full dialect compatibility.",
+    "Dialect maps numeric/date/binary types, exposes last_insert_rowid, and has no for-update clause. Foreign-key/primary-key alteration functions throwUnsupportedOperationException and supportsCascadeDeletefalse. Migration/transaction semantics unqualified.",
+    "All6profile overlays inspected. Development changes template lookup/logging; production uses node-specific external keystore and packaged templates. No decoder/hash recipe or cache invalidation controls in these overlays.",
+    "Topic enum supplies lowercased display-layer IDs and explicitly says not for persistence/transfer. Custom topics remain strings; no content taxonomy quality established.",
+    "WebPaths confirms /restbase and collection publish/download routes; API interceptor match interpretation still requires framework test.",
+    "HttpRequestLogger builds query/payload loggingfilter with10000characterpayloadcap. No request logging executed or user content transmitted."
+  ],
+  "remaining": [
+    "114 other tracked blobs/assets",
+    "Remaining service/CLI/web/models/assets, native binaries and full runtime qualification"
+  ],
+  "full_review_count": 249
+}
