@@ -1,0 +1,76 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v25-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/avro/DBMapper.java",
+      "local": "139-DBMapper.java",
+      "sha256": "26e0a60981264daf075442231f1140e805d4d03e3fb8262fc76182fb7ca467c8",
+      "git_blob": "5964f4370ca8e49eb95a87a92c59fab3af7ad37f",
+      "lines": 161,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/DBInputAvroMapper.java",
+      "local": "140-DBInputAvroMapper.java",
+      "sha256": "487e2116bfc4a5a6cbd6e1c26b5914dc7a4a71df6ca5e6c81bdaf4467362dc91",
+      "git_blob": "40665c3ea76906f759cd627eb8ff34c7969e79a3",
+      "lines": 113,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/avro/TestDBMapper.java",
+      "local": "141-TestDBMapper.java",
+      "sha256": "b324f81f4a597840526518d13127fafded6d9e9de50dd290dff0ce0ee12beb4c",
+      "git_blob": "a13a1f06f7c401f4c02bd2bbfb0988ad96a61475",
+      "lines": 187,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/TestDBInputAvroMapper.java",
+      "local": "142-TestDBInputAvroMapper.java",
+      "sha256": "044bee568e7d43da47b5bdb05e3572800b14ac47d8c819201f480e4b21f19a73",
+      "git_blob": "76f725be4f3f77831fd4bee3c95499c8020af304",
+      "lines": 249,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 136,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 143,
+  "remaining_without_whole_review": 27,
+  "original_tests": {
+    "new": 6,
+    "new_passed": 5,
+    "new_failed": 1,
+    "cumulative_distinct": 87,
+    "cumulative_passed": 84,
+    "cumulative_failed": 3,
+    "report": "docs/research/dedup-500/hiho098-avro-mappers-native-controls-20261024.json",
+    "scope": "6unchangedoriginalJUnitmethods in2files;26testfiles cumulatively,3partial; failure testMapperValidValues preserved, not replaced by authored diagnostic"
+  },
+  "author_controls": {
+    "new": 6,
+    "cumulative": 113,
+    "mapper_report": "docs/research/dedup-500/hiho098-avro-mappers-native-controls-20261024.json",
+    "identity_report": "docs/research/dedup-500/hiho098-avro-schema-identity-controls-20261024.json",
+    "confirmed": [
+      "Nonnull VARCHAR and Double produce valid actualAvro1.4.1 encoded records.",
+      "Null VARCHAR throws NullPointerException in toString conversion.",
+      "Production DBMapper ARRAYschema creation throws AvroRuntimeException.",
+      "SQL FLOAT gets DOUBLEschema but retains JavaFloat; GenericData.validate rejects and actual GenericDatumWriter encoding throwsClassCastException.",
+      "Captured originalmapper key/value and structural schema equal independently reconstructed values, but schema reference differs and realAvro1.4.1 Pair.equals returnsfalse. This explains a comparator requirement in failed upstreamtest; original failure remains recorded."
+    ],
+    "scope": "5boundarychecks+1schemaidentity diagnostic, realAvro1.4.1/Jackson1.4.0/Hadoop classes, memorybuffers/mockcollector. No DB/network/cluster or actual persisted files."
+  },
+  "source_findings": [
+    "Original mapper tests do not exercise nullable string values or actual Avro encoding; collecting a GenericRecord alone is weaker than serialization proof.",
+    "DBMapper maps DECIMAL/NUMERIC to DOUBLE; numeric precision/driver-value compatibility not newly qualified for those types.",
+    "Mapper caches first pairSchema for subsequentrecords; mixed schema behavior not tested or claimed here."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

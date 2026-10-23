@@ -1,0 +1,47 @@
+{
+  "scope": "6unchangedoriginalJUnitmethods plus5authorcontrols; actualAvro1.4.1/Jackson1.4.0/Hadoop, owned memory encoding; no database/network/cluster; original failures preserved if any",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBInputAvroMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/AvroMapperBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:86: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tvalues.add(new Integer(12));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:89: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\tvalues.add(new Long(26564l));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:92: warning: [removal] Float(float) in Float has been deprecated and marked for removal\n\t\tvalues.add(new Float(1.0f));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:160: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tvalues.add(new Integer(12));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:163: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\tvalues.add(new Long(26564l));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:216: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tvalues.add(new Integer(12));\n\t\t           ^\n/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/TestDBInputAvroMapper.java:219: warning: [removal] Long(long) in Long has been deprecated and marked for removal\n\t\tvalues.add(new Long(26564l));\n\t\t           ^\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DBInputAvroMapper.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n7 warnings\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "org.junit.runner.JUnitCore",
+        "co.nubetech.hiho.avro.TestDBMapper",
+        "co.nubetech.hiho.mapreduce.TestDBInputAvroMapper"
+      ],
+      "returncode": 1,
+      "stdout": "JUnit version 4.5\n....E..\nTime: 0.127\nThere was 1 failure:\n1) testMapperValidValues(co.nubetech.hiho.mapreduce.TestDBInputAvroMapper)\nArgument(s) are different! Wanted:\noutputCollector.collect(\n    org.apache.avro.mapred.AvroValue@3f,\n    (null)\n);\n-> at co.nubetech.hiho.mapreduce.TestDBInputAvroMapper.testMapperValidValues(TestDBInputAvroMapper.java:123)\nActual invocation has different arguments:\noutputCollector.collect(\n    org.apache.avro.mapred.AvroValue@3f,\n    (null)\n);\n-> at co.nubetech.hiho.mapreduce.DBInputAvroMapper.map(DBInputAvroMapper.java:88)\n\n\tat java.base/jdk.internal.reflect.DirectConstructorHandleAccessor.newInstance(DirectConstructorHandleAccessor.java:62)\n\tat java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)\n\tat java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)\n\tat co.nubetech.hiho.mapreduce.TestDBInputAvroMapper.testMapperValidValues(TestDBInputAvroMapper.java:123)\n\tat java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:580)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)\n\tat org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)\n\tat org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:73)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:46)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:180)\n\tat org.junit.runners.ParentRunner.access$000(ParentRunner.java:41)\n\tat org.junit.runners.ParentRunner$1.evaluate(ParentRunner.java:173)\n\tat org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)\n\tat org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:220)\n\tat org.junit.runners.Suite.runChild(Suite.java:115)\n\tat org.junit.runners.Suite.runChild(Suite.java:23)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:180)\n\tat org.junit.runners.ParentRunner.access$000(ParentRunner.java:41)\n\tat org.junit.runners.ParentRunner$1.evaluate(ParentRunner.java:173)\n\tat org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:28)\n\tat org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:31)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:220)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:137)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:116)\n\tat org.junit.runner.JUnitCore.run(JUnitCore.java:107)\n\tat org.junit.runner.JUnitCore.runMain(JUnitCore.java:88)\n\tat org.junit.runner.JUnitCore.runMainAndExit(JUnitCore.java:54)\n\tat org.junit.runner.JUnitCore.main(JUnitCore.java:46)\n\nFAILURES!!!\nTests run: 6,  Failures: 1\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "AvroMapperBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS nonnull string converted and encoded\nOBSERVED null VARCHAR throws during toString conversion\nOBSERVED production ARRAY schema rejected\nPASS Double schema value validated and encoded\nOBSERVED SQL FLOAT retained as JavaFloat under DOUBLEschema, fails actualAvroencoding\nAvro mapper checks=5\n",
+      "stderr": ""
+    }
+  ]
+}
