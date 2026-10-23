@@ -1,0 +1,32 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "app/src/main/java/com/cleansweep/data/repository/DirectMediaRepositoryImpl.kt",
+      "sha256": "d8b9bc0fc202b1faead4d850a8f9121c9c10e8a82bcffc16a02948da3ce36c74",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1,
+          340
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "On-resume change detection compares sets of aggregate FolderDetailsCache records, not per-file content stamps. Same-size content edits or within-folder replacements preserving count/bytes need not produce an app-resume event; actual scan helper remains unread.",
+    "invalidateCaches launches database clear asynchronously in application scope without awaiting it. A caller can proceed to read/repopulate before that clear runs; concrete coroutine race not exercised.",
+    "FolderBatchUpdate performs read-modify-write updates and deletes/upserts in separate DAO calls, without a transaction across the batch. Serialized event collection helps within this listener but concurrent full refresh can interleave.",
+    "getMediaFromBuckets emits disjoint batches of five then twenty items, not cumulative snapshots; downstream collectors must append. Caller behavior remains unread.",
+    "Media discovery combines file-system and MediaStore paths, removes duplicate path strings and tests exists. Physical file identity is not checked in this portion.",
+    "cleanupGhostFolders is explicitly a no-op, narrowing earlier startup cleanup description: initialization invokes it but it currently performs no cleanup."
+  ],
+  "whole_files_read_total": 42,
+  "remaining_tracked_blobs": 88,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
