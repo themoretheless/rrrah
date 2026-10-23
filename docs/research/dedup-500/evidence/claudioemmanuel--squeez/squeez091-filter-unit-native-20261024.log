@@ -1,0 +1,27 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 20 tests
+test commands::reporters::git_status::tests::unrecognized_output_falls_through_to_the_raw_filter ... ok
+test filter_dsl::tests::max_lines_caps_and_annotates ... ok
+test filter_dsl::tests::match_line_unless_guard_prevents_swallowing_errors ... ok
+test filter_dsl::tests::inline_tests_pass_and_fail_reported ... ok
+test filter_dsl::tests::filters_with_no_tests_excluded_from_reports ... ok
+test filter::tests::pipeline_keeps_the_producer_when_the_tail_is_not_safe ... ok
+test filter::tests::wrapper_with_own_flags_is_left_alone ... ok
+test filter::tests::pipeline_dispatches_on_a_safe_final_stage ... ok
+test filter_dsl::tests::find_for_command_prefers_longest_match ... ok
+test filter_dsl::tests::parses_replace_and_match_line_with_unless ... ok
+test filter::tests::wrappers_peel_until_stable ... ok
+test filter_dsl::tests::on_empty_substitutes_when_pipeline_empties_input ... ok
+test filter::tests::env_prefixed_terraform_reaches_the_terraform_branch ... ok
+test filter_dsl::tests::glob_match_modes ... ok
+test filter_dsl::tests::find_for_command_none_when_no_match ... ok
+test filter_dsl::tests::ignores_directives_before_any_section ... ok
+test filter_dsl::tests::parses_section_header_and_stages ... ok
+test filter_dsl::tests::pipeline_strips_ansi_then_filters_then_heads ... ok
+test filter_dsl::tests::truncate_line_at_drops_marker_and_tail ... ok
+test filter_dsl::tests::unknown_directive_skipped_not_fatal ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 534 filtered out; finished in 0.00s
+

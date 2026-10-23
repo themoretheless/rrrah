@@ -1,0 +1,43 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.37s
+     Running tests/test_filter_dispatch.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_filter_dispatch-4d9212129beb61b2)
+
+running 10 tests
+test unknown_command_still_returns_output ... ok
+test monitor_routes_without_panic ... ok
+test long_find_listing_is_truncated_not_grouped ... ok
+test bfs_output_is_handled_like_find ... ok
+test bfs_routes_without_panic ... ok
+test ugrep_routes_without_panic ... ok
+test generic_output_is_not_collapsed_to_modified_count ... ok
+test next_lint_routes_to_typescript_handler ... ok
+test ugrep_output_handled_like_grep ... ok
+test ls_listing_is_not_collapsed_to_modified_count ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/test_filter_dsl_integration.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_filter_dsl_integration-661bdfc83e40d8ce)
+
+running 4 tests
+test filter_test_cmd_all_pass_exits_zero ... ok
+test filter_test_cmd_reports_pass_and_fail ... ok
+test filter_dsl_wired_into_wrap_for_matching_command ... ok
+test filter_dsl_layering_project_overrides_user ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.33s
+
+     Running tests/test_generic.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_generic-25b4f95dd7475e88)
+
+running 2 tests
+test deduplicates ... ok
+test truncates_to_max_lines ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_runtime.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_runtime-518211a691688182)
+
+running 1 test
+test node_stacktrace_drops_node_modules_frames ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

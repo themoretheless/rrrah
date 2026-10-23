@@ -1,0 +1,37 @@
+{
+  "scope": "Unmodified actual binary, fixed synthetic diagnostics; filter stdin versus wrap executing only printf in isolated cwd/state; not all wrapper branches.",
+  "binary_sha256": "a694c6b0e805aff937f629f9fa8da2ca313869174a1ce36aaf291586737873ac",
+  "owned_root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-filter-cli-0rfzzx4n",
+  "cases": [
+    {
+      "mode": "filter",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-target-20261024/debug/squeez",
+        "filter",
+        "owned-unknown-command"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "contains_first_diagnostic": false,
+      "contains_second_diagnostic": false,
+      "original_recoverable_in_blob_store": false,
+      "blob_files": 0
+    },
+    {
+      "mode": "wrap",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-target-20261024/debug/squeez",
+        "wrap",
+        "printf '%s\\n' 'ERROR: unsuccessful tests 0%' '[assert] x => error'"
+      ],
+      "exit_code": 0,
+      "stdout": "ERROR: unsuccessful tests 0%\n[assert] x => error\n",
+      "stderr": "",
+      "contains_first_diagnostic": true,
+      "contains_second_diagnostic": true,
+      "original_recoverable_in_blob_store": false,
+      "blob_files": 0
+    }
+  ]
+}

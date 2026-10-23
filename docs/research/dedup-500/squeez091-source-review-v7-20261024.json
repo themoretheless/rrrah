@@ -1,0 +1,153 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v6-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/filter.rs",
+      "local": "34-src--filter.rs",
+      "sha256": "76ff545c88856e958ca43bd67196ccda7a27ebec7594c6927165ea4c0671307a",
+      "whole_text_read": true,
+      "lines": 213
+    },
+    {
+      "path": "tests/test_filter_dispatch.rs",
+      "local": "35-tests--test_filter_dispatch.rs",
+      "sha256": "4c9c7021d9f034eacc98f859ed91413effd8b32ac70651ac386986651dd2b549",
+      "whole_text_read": true,
+      "lines": 152
+    },
+    {
+      "path": "src/commands/generic.rs",
+      "local": "36-src--commands--generic.rs",
+      "sha256": "07bd2556a89221f4c94054462cb8f3853ac16d30c56a96be3c878a7882e5af94",
+      "whole_text_read": true,
+      "lines": 27
+    },
+    {
+      "path": "src/commands/runtime.rs",
+      "local": "37-src--commands--runtime.rs",
+      "sha256": "c7b39b29662aa15b992b8b4e4be6227643007fc100f2d6d672d9ec13229ec7a0",
+      "whole_text_read": true,
+      "lines": 19
+    },
+    {
+      "path": "src/commands/filter_stdin.rs",
+      "local": "38-src--commands--filter_stdin.rs",
+      "sha256": "ceb32cb7620c7147b31d527b9a2a24d7441716bbd123cdbf70bba5d93ccc28ad",
+      "whole_text_read": true,
+      "lines": 18
+    },
+    {
+      "path": "tests/test_generic.rs",
+      "local": "39-tests--test_generic.rs",
+      "sha256": "e53034b6c69715ee41f5c9a285cc7245ed501bdb3a85c30f3535d61f42bcb22a",
+      "whole_text_read": true,
+      "lines": 20
+    },
+    {
+      "path": "tests/test_runtime.rs",
+      "local": "40-tests--test_runtime.rs",
+      "sha256": "0d2bc81c2744f2a71c700f349fa1f1fa25f722d36d7a26e02b4714b302a0d3c8",
+      "whole_text_read": true,
+      "lines": 18
+    },
+    {
+      "path": "src/filter_dsl.rs",
+      "local": "41-src--filter_dsl.rs",
+      "sha256": "b44d4f4d85b3b4702ec6d937d2262512dd841f18e8271e0edd6d60844b0a7308",
+      "whole_text_read": true,
+      "lines": 635
+    },
+    {
+      "path": "tests/test_filter_dsl_integration.rs",
+      "local": "42-tests--test_filter_dsl_integration.rs",
+      "sha256": "823eaa28cbcc83f37549c99a69b2774b9ca3ba8effa336d875d3ee396ea56103",
+      "whole_text_read": true,
+      "lines": 151
+    },
+    {
+      "path": "src/main.rs",
+      "local": "43-src--main.rs",
+      "sha256": "461e537ac39152ba05fedbd7a847c6119f878e7bc9317b1e14a09294aa3474f2",
+      "whole_text_read": true,
+      "lines": 162
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 42,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 285,
+  "native_original_tests_added": {
+    "passed": 37,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "lib substring filter": 20,
+      "test_filter_dispatch": 10,
+      "test_filter_dsl_integration": 4,
+      "test_generic": 2,
+      "test_runtime": 1
+    },
+    "selection_note": "Substring filter also selected one original git_status reporter unit test, beyond5 dispatcher and14 DSL unit tests. That reporter source receives no whole-file reading credit."
+  },
+  "native_original_tests_cumulative": {
+    "passed": 233,
+    "failed": 0,
+    "scope": "Focused tests only; full package suite not run."
+  },
+  "actual_cli_control": {
+    "scope": "Unmodified actual binary, fixed synthetic diagnostics; filter stdin versus wrap executing only printf in isolated cwd/state; not all wrapper branches.",
+    "binary_sha256": "a694c6b0e805aff937f629f9fa8da2ca313869174a1ce36aaf291586737873ac",
+    "owned_root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-filter-cli-0rfzzx4n",
+    "cases": [
+      {
+        "mode": "filter",
+        "command": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-target-20261024/debug/squeez",
+          "filter",
+          "owned-unknown-command"
+        ],
+        "exit_code": 0,
+        "stdout": "",
+        "stderr": "",
+        "contains_first_diagnostic": false,
+        "contains_second_diagnostic": false,
+        "original_recoverable_in_blob_store": false,
+        "blob_files": 0
+      },
+      {
+        "mode": "wrap",
+        "command": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-target-20261024/debug/squeez",
+          "wrap",
+          "printf '%s\\n' 'ERROR: unsuccessful tests 0%' '[assert] x => error'"
+        ],
+        "exit_code": 0,
+        "stdout": "ERROR: unsuccessful tests 0%\n[assert] x => error\n",
+        "stderr": "",
+        "contains_first_diagnostic": true,
+        "contains_second_diagnostic": true,
+        "original_recoverable_in_blob_store": false,
+        "blob_files": 0
+      }
+    ]
+  },
+  "findings": [
+    "GenericHandler runs smart_filter before duplicate/template/relevance stages. RuntimeHandler also starts with smart_filter. Standalone filter stdin command does not stash its original input.",
+    "Actual binary filter command with two progress-shaped error diagnostics exits0 with empty stdout/stderr and no original blob. This qualifies the earlier direct-filter finding at this entry point.",
+    "Actual binary wrap running only fixed printf with the same diagnostics returns both original lines and exits0. The direct-filter data loss therefore does not establish full-wrapper data loss in this tested configuration.",
+    "CLI comparison uses isolated cwd/state and explicit builtin_filters=false, net_win_min_tokens=0. It qualifies one branch/configuration, not all wrapper behavior.",
+    "DSL layering gives project rules precedence over user rules and built-ins at equal name length; commands match literal prefixes. Tests exercise this through the real binary and owned project/state directories.",
+    "Filter DSL can intentionally drop/replace/truncate arbitrary text. It is presentation policy, not exact file comparison or lossless persistence."
+  ],
+  "transfer_decision": "No implementation copied into rrrah. Candidate/presentation stages need their own stated guarantees and must not stand in for verified byte/pixel equality.",
+  "limits": [
+    "42/327 whole-file reviews;285 remain.",
+    "233 original focused tests and finite controls do not establish all filtering configurations, built-in rule correctness, wrapper integrity or all host integration.",
+    "wrap.rs itself is not yet read completely; actual CLI result is runtime evidence for the fixed scenario only.",
+    "No rrrah production/test changes this turn. Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Cargo raw logs retain trailing blank lines."
+}
