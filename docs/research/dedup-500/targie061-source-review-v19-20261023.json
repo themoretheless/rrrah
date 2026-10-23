@@ -1,0 +1,120 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Support/CachePaths.swift",
+      "git_blob": "37b9cb24ce0333be33d29b67b82d9a404cc76ec9",
+      "sha256": "75a7dc5cc39548a1fcd5845a3450bcbd0b72c086fd5111f237d3caefc6198463",
+      "bytes": 2050,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/CachePathsTests.swift",
+      "git_blob": "030895ab818fbc1370c5d58b715ada21ca33c60d",
+      "sha256": "da55819824430de970adcf5288d7e9b308c889dde7bbafa5dd333036fc0ad101",
+      "bytes": 1917,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 39,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 82,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter HashCacheTests|CachePathsTests",
+    "executed": 55,
+    "failed": 0,
+    "skipped": 0,
+    "hash_cache_tests": 52,
+    "cache_path_tests": 3,
+    "names": [
+      "CachePathsTests testDefaultPathsUseTargieCachesDirectory",
+      "CachePathsTests testEmptyOrRelativeOverrideFallsBackToDefaultRoot",
+      "CachePathsTests testOverridePlacesHashAndThumbnailCachesUnderSameRoot",
+      "HashCacheTests testAllPrimaryCachesRejectSameSizeFileChangedWithinOneSecond",
+      "HashCacheTests testBatchFingerprintLookupReturnsOnlyMatchingPrimaryEntries",
+      "HashCacheTests testBatchMetadataLookupReturnsOnlyMatchingPrimaryEntries",
+      "HashCacheTests testBatchPairRelationLookupReturnsOnlyMatchingIdentities",
+      "HashCacheTests testBatchPairRelationUpsertPersistsMultipleRelations",
+      "HashCacheTests testCachePersistsAcrossDatabaseConnections",
+      "HashCacheTests testCacheRecordFromVideoItem",
+      "HashCacheTests testCacheRecordRejectsMalformedVideoPerceptualHash",
+      "HashCacheTests testCacheRecordToPerceptualHash",
+      "HashCacheTests testClearAllRemovesRowsAndCompactsDatabaseFile",
+      "HashCacheTests testConvenienceVideoLookupIgnoresV1Fingerprint",
+      "HashCacheTests testDetectMoveDoesNotReportOldPathWithoutContentProof",
+      "HashCacheTests testEmptyCacheReturnsNothing",
+      "HashCacheTests testFrameFeatureCacheVersionsSeparateLegacyAndCurrentData",
+      "HashCacheTests testFrameFeatureMigrationInvalidatesUnversionedRowsAndPreservesSHA256",
+      "HashCacheTests testFrameFeatureMoveLookupRequiresMatchingAlgorithmVersion",
+      "HashCacheTests testHashCacheMoveDetectionSurvivesMetadataMoveHit",
+      "HashCacheTests testImageFeatureCacheSeparatesAlgorithmVersions",
+      "HashCacheTests testInMemoryCacheBehavesLikeSQLite",
+      "HashCacheTests testInMemoryFeatureCachesValidateFileIdentity",
+      "HashCacheTests testInMemoryMetadataUpdateInvalidatesSHA256WhenIdentityChanges",
+      "HashCacheTests testInsertAndRetrieve",
+      "HashCacheTests testInsertOverwritesExisting",
+      "HashCacheTests testLookupAcceptsModificationDatesWithinSameMillisecond",
+      "HashCacheTests testLookupFailsForDifferentMediaKindOrAlgorithmVersion",
+      "HashCacheTests testLookupFailsWhenModificationDateChanged",
+      "HashCacheTests testLookupFailsWhenSizeChanged",
+      "HashCacheTests testLookupRejectsHalfSecondModificationDateDifference",
+      "HashCacheTests testMetadataUpdateInvalidatesSHA256WhenFileIdentityChanges",
+      "HashCacheTests testMetadataUpdatePreservesSHA256ForUnchangedFileIdentity",
+      "HashCacheTests testMoveDetectionStillRejectsExistingSourceAndWrongMediaKind",
+      "HashCacheTests testMoveImageFeatureLookupDoesNotReuseFeatureWithoutContentProof",
+      "HashCacheTests testMoveLookupDoesNotReusePerceptualHashWithoutContentProof",
+      "HashCacheTests testMoveLookupRejectsChangedModificationDateEvenWhenSHA256Matches",
+      "HashCacheTests testMoveLookupReusesPerceptualHashWhenSHA256Matches",
+      "HashCacheTests testMoveMetadataLookupDoesNotReuseMetadataWhenSHA256DoesNotMatch",
+      "HashCacheTests testMoveSHA256LookupDoesNotReturnHashForDifferentContent",
+      "HashCacheTests testPairRelationCachePersistsSymmetricallyAcrossDatabaseConnections",
+      "HashCacheTests testPairRelationCacheStoresNoRelationAndInvalidatesChangedFileIdentity",
+      "HashCacheTests testPairRelationCacheToleratesSubmillisecondDateNoise",
+      "HashCacheTests testPruneStaleEmptyValidPathsRemovesAll",
+      "HashCacheTests testPruneStaleHandlesMorePathsThanSQLiteVariableLimit",
+      "HashCacheTests testPruneStaleRemovesNonValidEntries",
+      "HashCacheTests testPruneStaleRemovesPairRelationsWithInvalidMembers",
+      "HashCacheTests testPruneStaleRemovesScanRelationIndexWithInvalidRelationMembers",
+      "HashCacheTests testRealRenameWithSubmillisecondModificationDateReusesPersistedCaches",
+      "HashCacheTests testScanRelationIndexDeduplicatesRelationsBeforePersisting",
+      "HashCacheTests testScanRelationIndexPersistsPositiveRelations",
+      "HashCacheTests testSHA256UpdatePreservesMetadataOnlyForUnchangedIdentity",
+      "HashCacheTests testUpsertSHA256CreatesMetadataWithVideoKind",
+      "HashCacheTests testV1PairRelationIsNotReturnedForCurrentPipelineVersion",
+      "HashCacheTests testV1ScanRelationIndexIsNotReturnedForCurrentPipelineVersion"
+    ],
+    "log_sha256": "53162514839ab7e95be1aee019cd31f4303099779c9c148bbde05230aeadfb46",
+    "scope": "Full unchanged original Swift6 package with pinned GRDB7.11.1. HashCacheTests creates real temporary SQLite database per test; some tests intentionally exercise original InMemoryHashCache. No authored adapters. Environment root isolated to task cache; no user cache cleanup."
+  },
+  "partial_reads": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/HashCache.swift",
+      "lines": [
+        "1-47",
+        "501-532"
+      ],
+      "whole_text_read": false
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/HashCacheTests.swift",
+      "lines": [
+        "1-165",
+        "586-686",
+        "1115-1145"
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "findings": [
+    "Real database suite passes persistence/reopen, CRUD, identity fields, algorithm versioning, move proofs, batch lookup/upsert, migration and stale pruning tests. Passing run not whole manual source review; HashCache.swift and HashCacheTests.swift remain partial.",
+    "CachePaths accepts trimmed absolute path or tilde-expanded absolute override; empty/relative falls back to user Caches/Targie, temporary directory if cache directory resolution fails. It constructs paths but does not verify writability. Tests do not simulate inaccessible root.",
+    "HashCache initializer creates parent, opens DatabaseQueue and runs migrations with thrown errors; unavailable/corrupt storage behavior requires targeted runtime controls not this run. Many operation bodies use try?; no broad error-observability guarantee inferred.",
+    "FileCacheIdentity rounds modification time to milliseconds. Original same-millisecond acceptance test passes; half-second difference rejection passes. testAllPrimaryCachesRejectSameSizeFileChangedWithinOneSecond supplies changed metadata to APIs, not physical file rewrite, so no restored-mtime race guarantee.",
+    "Migration test reconstructs pre-v10 frame_features table and migration marker in temp database; current version misses old payload, explicit legacy version retrieves it, SHA string remains. This is finite seeded schema migration evidence.",
+    "In-memory ImageFeatureCache URL-only stale observation control(v12) remains valid despite SQLite backend tests. Cache layers and identities differ.",
+    "No upstream code adopted or production optimization claimed."
+  ]
+}
