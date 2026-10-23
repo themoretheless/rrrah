@@ -1,0 +1,144 @@
+{
+  "repository": "abonander/img-dup",
+  "commit": "5941416362ee20bbe51d434707b30bb6b2bf7085",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "234e38caf748bc4afe7daa4520433077d7bb7073",
+      "sha256": "55cd253a48e1c5f77310e6e942ede2178fa5c6259dfa1355757abb4a3e2e3eb3",
+      "bytes": 1714,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hash.rs",
+      "local": "02-hash.rs",
+      "git_blob": "509933dd779c007b530132748bcecd71b4528fdf",
+      "sha256": "676a5f2ddfd768b0885a35f5d7f30bdc218bd14d97df3fbde25a3f1f5a3f9fde",
+      "bytes": 3016,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/config.rs",
+      "local": "03-config.rs",
+      "git_blob": "93c419aac7b563c19128f2a4aad1fc61df447cbf",
+      "sha256": "3a6b0ad37dd6e82399d00d29bc8cef4e920ef2e0dad0697b1df80fa4694c2c9f",
+      "bytes": 7836,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/dct.rs",
+      "local": "04-dct.rs",
+      "git_blob": "7d8a43f929dc42915846d7daf282fecacfe7afb4",
+      "sha256": "a4a19d33e75f1313a55ad0eab7875e59b3097805afdeaa05934f850e3e4f6247",
+      "bytes": 2623,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/img.rs",
+      "local": "05-img.rs",
+      "git_blob": "14c81e58358a9b4fc4df7abd153442eb1706b623",
+      "sha256": "b95c05db2751ac1b0e33b65dc0bb5934cf5b18625734dc0c5b0f7b6ed41248db",
+      "bytes": 4140,
+      "whole_text_read": true
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "06-Cargo.toml",
+      "git_blob": "39ed35308e48718279f19349f17c0805a1facb24",
+      "sha256": "1f1d20fea95eb9bf75f13e37e3fffa3ca4ed571467aa111d88e1af5174941667",
+      "bytes": 611,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main.rs",
+      "local": "07-main.rs",
+      "git_blob": "b46540cb8acdd818d98b52b87ec9e28edaf4dc3c",
+      "sha256": "dd76d723a43524995449ccc16e84a5564a0f2c460503290151b4ee7fc9b2456b",
+      "bytes": 2347,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/par_queue.rs",
+      "local": "08-par_queue.rs",
+      "git_blob": "f54635d6b94d03eafb64e1bc3f940b0f12216338",
+      "sha256": "c0e7c0560f4d7bbd5c2f30c33797538ef4d4324608f48f2dc0eca4797a662891",
+      "bytes": 2132,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/processing.rs",
+      "local": "09-processing.rs",
+      "git_blob": "d910600dd1fa4f39fb9c2bf349a974a939d8df79",
+      "sha256": "d5d7b646d4282713a19a1ba58bb3415da812f472cbb0e7a9da7ebca4d68e4d43",
+      "bytes": 8895,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/output.rs",
+      "local": "10-output.rs",
+      "git_blob": "7379c86c23163a5f6b2bcd884ec779c8885f09aa",
+      "sha256": "f677041f86eee4e3687a6a2532c97620c32f591b6f4cb3b244aab41427d48128",
+      "bytes": 3115,
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "11-.gitignore",
+      "git_blob": "2bd162d5f67c992b2815e31dd6ed1badfd5de237",
+      "sha256": "9ccff9610c15db22c6ac793ccdba35de146637e919a29272be0c703f11f92929",
+      "bytes": 31,
+      "whole_text_read": true
+    },
+    {
+      "path": "JSON.md",
+      "local": "12-JSON.md",
+      "git_blob": "898cc95b325f24d91b48e43dca2685c10ceac995",
+      "sha256": "a2ce4c83c245cb9028d37a18eac7643c30762e04ec551228158057bdae40e532",
+      "bytes": 48,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 12,
+  "tracked_blobs": 34,
+  "remaining_without_whole_review": 22,
+  "checkout_integrity": {
+    "original_tracked_blobs_checked": 34,
+    "mismatches": 0,
+    "scope": "Byte integrity only, not visual/source reading credit."
+  },
+  "native_control": {
+    "harness": "docs/research/dedup-500/imgdup081-group-order-control-20261023.py",
+    "sha256": "07a5407fc9a6f543b4b2a816ff0cb1b4a6639563d35e4b6ab286e884f8d13f67",
+    "command": "python3 docs/research/dedup-500/imgdup081-group-order-control-20261023.py .dedup-work/imgdup081-20261023 .dedup-work/imgdup081-group-order-20261023",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)",
+    "exit_code": 0,
+    "result": {
+      "controls": 6,
+      "passed": 6,
+      "partitions": [
+        "[0, 1, 2] -> [[0, 1], [2]]",
+        "[0, 2, 1] -> [[0, 1], [2]]",
+        "[1, 0, 2] -> [[0, 1, 2]]",
+        "[1, 2, 0] -> [[0, 1, 2]]",
+        "[2, 0, 1] -> [[0], [1, 2]]",
+        "[2, 1, 0] -> [[0], [1, 2]]"
+      ],
+      "original_function_sha256": "d0599978118ccbeae42d9e83372d537a1bd7f734eaece9d0bf911baab28fb949",
+      "original_source_sha256": "d5d7b646d4282713a19a1ba58bb3415da812f472cbb0e7a9da7ebca4d68e4d43",
+      "scope": "Original complete manage_images function body unchanged; synthetic four-bit Hamming image/settings/group adapters. Not original external img_hash, decoder, workers, Cargo package or GUI execution."
+    }
+  },
+  "upstream_package_tests_run": false,
+  "findings": [
+    "Correct earlier screening: local src/hash.rs and src/dct.rs are not module declarations in main.rs. Active processing/img import external img_hash::ImageHash, also a git dependency. Local DCT/aHash source is historical unattached code, not proof of active runtime behavior.",
+    "Whole manage_images chooses first parent satisfying strict distance ratio<threshold. Original complete body unchanged in native probe; synthetic four-bit adapters for Image/UniqueImage/ProgramSettings exercise all6permutations: three different partitions, B-first groups A/B/C though A-C distance1.0 exceeds0.6threshold. Not external img_hash/decode/worker/native-package qualification.",
+    "Worker sends results through shared channel; receive order determines parent insertion. Thus grouping source can depend on completion order, but actual original concurrent execution not performed.",
+    "Discovery uses extension gate and collects paths eagerly; recursive traversal unwraps discovery. CLI defaults jpeg/jpg/png while help lists gif too. Numeric thread/hash-size inputs lackpositivebound checks despite help1+; no actual legacy CLI failure run.",
+    "Results.info_json processed uses unique group count and found uses successful image count; errors counted separately. This is declared implementation semantics, not total discovered/input count proof.",
+    "ParQueue contains manual unsafe move/deallocation logic with relaxed atomic index and detached workers. No copied implementation, safety assessment, sanitizer run or current Rust compatibility claim.",
+    "Original package uses obsolete Rust features/types/stdlib, current package/GUI not built. GPL metadata/license text not fully reviewed in this turn; font/license/media and remaining22blobs still pending.",
+    "No change to rrrah needed from these finite controls: existing verified all-pairs grouping regressions cover missing-edge rejection. No historical hash or grouping policy copied."
+  ]
+}
