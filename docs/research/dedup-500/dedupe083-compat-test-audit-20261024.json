@@ -1,0 +1,43 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "command": "python -m pytest -c .dedup-work/dedupe083-20261024/pyproject.toml .dedup-work/dedupe083-20261024/tests --junitxml=.dedup-work/dedupe083-compat-tests-20261024.xml",
+  "exit_code": 0,
+  "totals": {
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0
+  },
+  "compatibility_change": {
+    "BTrees": [
+      "6.5",
+      "5.2"
+    ],
+    "zope.index": [
+      "8.2",
+      "7.0"
+    ]
+  },
+  "freeze": "docs/research/dedup-500/dedupe083-compat-freeze-20261024.txt",
+  "previous_failure_audit": "docs/research/dedup-500/dedupe083-original-test-audit-20261024.json",
+  "artifacts": [
+    {
+      "path": "docs/research/dedup-500/dedupe083-compat-install-20261024.log",
+      "sha256": "b1ae1dee8fde0e4889561e02d621dd5a1eb7baf8c62a6660d3c111f2efb9ac7c"
+    },
+    {
+      "path": "docs/research/dedup-500/dedupe083-compat-tests-20261024.log",
+      "sha256": "d818b2481a9fa2813199a4e83aafb42017b2debf6cd641c9111323a0e447dbdc"
+    },
+    {
+      "path": "docs/research/dedup-500/dedupe083-compat-tests-20261024.xml",
+      "sha256": "9a3eaa840d794863d70eeb9cc9fd923e14c37b0957dd6fe2f71491f35b006691"
+    }
+  ],
+  "limits": [
+    "Dependencies changed together; this is not attribution to only one package version.",
+    "No upstream source/test modification; original tree and installed Python modules matched before run.",
+    "77 passing tests do not imply complete matching correctness; clusterEquals helper has early return.",
+    "Canonical benchmark integration, all files review and multi-platform qualification remain open."
+  ]
+}

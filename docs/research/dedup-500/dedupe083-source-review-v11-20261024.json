@@ -1,0 +1,40 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v10-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/test_cpredicates.py",
+      "local": "51-tests--test_cpredicates.py",
+      "sha256": "bfe77a5d2e1b649a1516af53433adc79e0f305ff62ec0cc042af9bbc466fa195",
+      "lines": 176,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_dedupe.py",
+      "local": "52-tests--test_dedupe.py",
+      "sha256": "9fac228c2289ba97023f8c05e91920fb78d283712d036c3da380a86f137a3180",
+      "lines": 238,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 53,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 51,
+  "findings": [
+    "ClusteringTest.clusterEquals returns True from inside the first outer cluster iteration after checking first cluster scores. Later cluster membership/scores are not compared by that helper. Other assertions still exist; green suite is not universal cluster correctness proof.",
+    "Cython helper tests exercise lengths1..12/100 on ASCII fixtures; Unicode and invalid sizes require independent qualification."
+  ],
+  "runtime": {
+    "compat_install_exit_code": 0,
+    "BTrees": "5.2",
+    "zope.index": "7.0",
+    "tests_session": 17860,
+    "status": "running_at_audit_creation"
+  },
+  "limits": [
+    "No source patch applied to upstream implementation or tests.",
+    "Previous9 failures preserved in original environment audit."
+  ]
+}

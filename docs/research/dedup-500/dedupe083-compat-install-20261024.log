@@ -1,0 +1,29 @@
+Collecting BTrees<6
+  Downloading BTrees-5.2-cp312-cp312-macosx_11_0_arm64.whl.metadata (20 kB)
+Collecting zope.index<8
+  Downloading zope.index-7.0-cp312-cp312-macosx_11_0_arm64.whl.metadata (10 kB)
+Requirement already satisfied: persistent>=4.1.0 in ./.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages (from BTrees<6) (6.8)
+Requirement already satisfied: zope.interface>=5.0.0 in ./.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages (from BTrees<6) (8.7)
+Collecting setuptools (from zope.index<8)
+  Using cached setuptools-84.2.1-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: zope.deferredimport in ./.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages (from persistent>=4.1.0->BTrees<6) (6.1.1)
+Requirement already satisfied: cffi in ./.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages (from persistent>=4.1.0->BTrees<6) (2.1.1)
+Requirement already satisfied: pycparser in ./.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages (from cffi->persistent>=4.1.0->BTrees<6) (3.12)
+Requirement already satisfied: zope.proxy in ./.dedup-work/dedupe083-runtime-20261024/lib/python3.12/site-packages (from zope.deferredimport->persistent>=4.1.0->BTrees<6) (7.3)
+Downloading BTrees-5.2-cp312-cp312-macosx_11_0_arm64.whl (978 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 978.2/978.2 kB 4.3 MB/s eta 0:00:00
+Downloading zope.index-7.0-cp312-cp312-macosx_11_0_arm64.whl (91 kB)
+Using cached setuptools-84.2.1-py3-none-any.whl (876 kB)
+Installing collected packages: setuptools, BTrees, zope.index
+  Attempting uninstall: BTrees
+    Found existing installation: BTrees 6.5
+    Uninstalling BTrees-6.5:
+      Successfully uninstalled BTrees-6.5
+  Attempting uninstall: zope.index
+    Found existing installation: zope.index 8.2
+    Uninstalling zope.index-8.2:
+      Successfully uninstalled zope.index-8.2
+Successfully installed BTrees-5.2 setuptools-84.2.1 zope.index-7.0
+
+[notice] A new release of pip is available: 25.0.1 -> 26.2.2
+[notice] To update, run: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/dedupe083-runtime-20261024/bin/python -m pip install --upgrade pip
