@@ -1,0 +1,57 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Stores/BrowseViewModel.swift",
+      "git_blob": "eab205948c604355d0e94745c25e30b6cb2e2585",
+      "sha256": "75e9d20e105c5b8cc0cface1bbc88050dec0c0c8f80a01136aa89f077d2adbfe",
+      "bytes": 19676,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 94,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 27,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter 'BrowseViewModelTests|BrowseMetadataRefreshControl'",
+    "upstream_tests": 32,
+    "authored_controls": 1,
+    "executed": 33,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "f9430c7c52a1755b89d2cccc7277d992f8ed8c3c9c69598c21b2ebda09eb3ee6",
+    "scope": "Full original Swift6 package and32 original modeltests plus one authored controlled reproduction. Original testfile not yet whole-read. Model update injected through existing replaceResultsForTesting, actual Combine/runloop delivery awaited; no real file mutation or window interactions. Authored test removed after execution."
+  },
+  "authored_control": {
+    "source": "targie061-browse-metadata-control-20261023.swift",
+    "result": "Same UUID/path/order replaced in ScanViewModel with size10->20 andwidth64->128. Browse recompute counter advances; source items reflect newvalues, displayedItems retains size10,width64.",
+    "meaning": "Passing control confirms stale display snapshot, not correct refresh."
+  },
+  "partial_reads": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/BrowseViewModelTests.swift",
+      "lines": [
+        "430-446"
+      ],
+      "whole_text_read": false
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Stores/ScanViewModel.swift",
+      "lines": [
+        "1137-1142"
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "findings": [
+    "recomputeDisplayedItems computes filtered/sorted fresh items but assigns displayedItems only if orderedUUIDs change. Runtime control reproduces stale metadata despite actual revision processing. Normal production update retaining IDs not established here; model primitive correctness gap concrete.",
+    "Original unchangedOrderedIDs test changes sortfield with unchanged itemvalues and asserts no publications. It does not cover changed itemvalues under stable IDs, so32upstream passes do not refute control.",
+    "Resolution filter uses shortedge threshold with strict</>, manualdimensions use minpositivevalue; missing/zero dimensions can pass lessthan filters. Policy/source read, not general filequality validation.",
+    "Selection intersects displayedIDs and may choose nearest surviving neighbor when selected item disappears. This is navigation policy, not authorization for deletion; actual user action/state validation separate.",
+    "Sorting ties use standardizedpath thenUUID. Recompute batching avoids repeated calculations, but no walltime/RSS gain measured and all sorting runs onMainActor.",
+    "No upstream source adopted. One wholefile manual credit94/121; large modeltests/source remain separately unfinished."
+  ]
+}
