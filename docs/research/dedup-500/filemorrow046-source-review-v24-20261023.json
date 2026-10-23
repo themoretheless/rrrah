@@ -1,0 +1,78 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".github/workflows/release.yml",
+      "sha256": "e3a3385e6295cf14597987b4daeaac36cf6b342e5ad9afd2903674c90b65355c",
+      "lines": 42,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "3f347fa55ff77c7103e6773583fd5e46cb4dd7e1146f82cea5e1eec6ec787764",
+      "lines": 7,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Info.plist",
+      "sha256": "a071a231e3f8a96fae8c9693971d2752c996a8a97b65c96edf75f45c4ff32492",
+      "lines": 34,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Scripts/clean-profile-smoke-test.sh",
+      "sha256": "a5b0c10aea3fd62de0cd5c7d29225fd588deffacf50f79bd463155acdb202b7a",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Scripts/create-demo-gif.swift",
+      "sha256": "21e60d69b1b83f1d0adef595e4e5738f37e52edfb17280736b33ef642a02d3c7",
+      "lines": 45,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Scripts/create-release.sh",
+      "sha256": "15979ca0dd8fb72b65ba03b7df339fddd005ff1b2df363148cc3ed89379ebf0a",
+      "lines": 39,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Scripts/package-app.sh",
+      "sha256": "635b33de52f38dc5b7fc701639c64f45887e20ab58b06a139313133a3cf0c569",
+      "lines": 32,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Scripts/release-downloads.sh",
+      "sha256": "208894ab613ebbda8de007d6255d497826d753df3f0a88039dbea55b35a32664",
+      "lines": 16,
+      "git_blob_verified": true
+    }
+  ],
+  "checks": {
+    "shell_syntax": {
+      "Scripts/clean-profile-smoke-test.sh": 0,
+      "Scripts/create-release.sh": 0,
+      "Scripts/package-app.sh": 0,
+      "Scripts/release-downloads.sh": 0
+    },
+    "plist_version": "1.8.0",
+    "plist_build": "20",
+    "scripts_executed": false
+  },
+  "findings": [
+    "Clean-profile smoke script checks only process survival after four seconds. It seeds sample files and ZIP but does not assert classification, UI, filesystem preservation or model states. No smoke launch was performed.",
+    "Packaging copies release executable, plist, icon and profile, then signs ad hoc unless a signing identity is provided. Signature verification is not notarization or runtime compatibility proof.",
+    "Release workflow tests tag/app-version equality, runs tests, generates archives/checksums and publishes through gh. It was read only; no release, upload or signing operation was executed.",
+    "Release-download statistics script fetches only the initial GitHub releases API response without pagination, so large release histories can be undercounted. This does not affect duplicate matching.",
+    "Demo GIF script holds all decoded frames in memory and reports read/finalize failures; it is a developer utility, not the media scan path.",
+    "All four shell scripts pass syntax-only zsh checks; this does not establish successful builds, packaging, clean-profile startup or release delivery."
+  ],
+  "whole_files_read_total": 45,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
