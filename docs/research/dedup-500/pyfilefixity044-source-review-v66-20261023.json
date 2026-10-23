@@ -1,0 +1,30 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "TODO.md lines1-105 read in bounded complete chunks, pinned blob verified. Initial1-170 output truncated and not used as proof of full range. No linked repositories/papers opened.",
+  "partial_source_read": {
+    "path": "TODO.md",
+    "lines": [
+      1,
+      105
+    ],
+    "sha256": "dce46bbf779397522c7aa0989deaec79bfa3252cba1d04b8aec1745959d323f0",
+    "total_lines": 328
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 118,
+    "remaining_not_whole_reviewed": 26
+  },
+  "findings": [
+    "Author lists robust inaccessible-path handling, SIMD/parallel encoding, alternate codecs and GUI work as TODO. These notes do not establish implementation or behavior.",
+    "Forecasts of8x/10x speedups and10MB/s are proposed expectations, not reproducible benchmark results. No performance claim transferred.",
+    "Multi-file reconstruction and metadata format extension are proposed; presence of grouping helpers does not prove integrated cross-file recovery.",
+    "Filename recovery by size alone explicitly needs ambiguity handling. File size is useful for candidate filtering, not exact identity.",
+    "Branch coverage100% and Python3 compatibility appear as unfinished goals. Historical checklist placement is not authoritative current support; prior runtime/syntax findings remain stronger evidence.",
+    "Proposed hash-locality and brute-force ECC ideas have no validated implementation or error-bound proof in this scope. Not added as production capabilities.",
+    "ZIP/movie structure checks are suggestions, and successful open alone would not prove complete content integrity. Existing finite image/header tests do not establish those formats."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
