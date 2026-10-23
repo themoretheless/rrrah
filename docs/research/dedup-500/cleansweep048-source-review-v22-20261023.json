@@ -1,0 +1,39 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/data/repository/PreferencesRepository.kt",
+      "sha256": "cf49ab8e6f977106454bcc031696304439d3febd925a19bd5501665d733d4227",
+      "git_blob_verified": true,
+      "lines": 923,
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          350
+        ],
+        [
+          351,
+          700
+        ],
+        [
+          701,
+          923
+        ]
+      ]
+    }
+  ],
+  "findings": [
+    "PreferencesRepository now whole-read, 923 lines. No backup import/export implementation exists in this file; those flows must be located in settings code later.",
+    "Scope include/exclude writers confirm unescaped comma-separated paths, completing reader/writer review for the scan-scope ambiguity.",
+    "updateFolderPath replaces exact tokens only and excludes processedMediaPaths from its key list. Descendant folder paths and processed file paths remain old after parent rename unless callers separately migrate them.",
+    "updateFolderPath treats the single default album path as a comma-separated set too; a comma-containing single path cannot match intact and ordering/duplication can change.",
+    "setDefaultVideoSpeed accepts arbitrary Float and screenshot quality accepts arbitrary String here. Conversion helper clamps parsed JPEG quality but caller parsing and playback speed validation remain unread.",
+    "Confirmation preferences default true and resetDialogConfirmations writes all six atomically. No preferences or system settings changed during this review."
+  ],
+  "whole_files_read_total": 50,
+  "remaining_tracked_blobs": 80,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
