@@ -1,0 +1,39 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "structured_files_reviewed": [
+    {
+      "path": "app/src/main/res/values/strings.xml",
+      "sha256": "e1191af740d782639cb2adfb08c53317f9beca8ef8f67cabc55f6c14a54ffb72",
+      "entries": 442,
+      "scope": "all XML entries traversed and names/common-quantity placeholder signatures compared; not full human translation review"
+    },
+    {
+      "path": "app/src/main/res/values-it/strings.xml",
+      "sha256": "f28b2d3289cc2b8ae1c1f6e11c978587501e430ba71abf6201a31f2e1a0778ac",
+      "entries": 442,
+      "scope": "all XML entries traversed and names/common-quantity placeholder signatures compared; not full human translation review"
+    }
+  ],
+  "checks": {
+    "missing_italian": [],
+    "extra_italian": [],
+    "placeholder_differences": [],
+    "duplicate_names": [
+      [],
+      []
+    ]
+  },
+  "findings": [
+    "Both language files contain 442 named entries, with identical name sets and no duplicate names. Tested printf token signatures agree for strings and shared plural quantities; Android formatting and locale fallback were not executed.",
+    "Both translations describe exact scanning as 100-percent identical files, repeating the contract mismatch with thumbnail/partial-video equality. Include-list description promises only selected folders despite the previously reviewed empty-list full-scan fallback.",
+    "Screenshot deletion setting explicitly says it queues the video for deletion; it does not specify handling failed conversion. Prior source-level failure-path finding remains unresolved.",
+    "Sensitivity labels are Low/Medium/High and Bassa/Media/Alta without clarifying increasing travel threshold in the selected entries. Complete translation quality, all printf syntax and rendered layouts are unqualified."
+  ],
+  "whole_files_read_total": 100,
+  "remaining_tracked_blobs": 30,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
