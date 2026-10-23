@@ -588,3 +588,70 @@ fn repeated_interruption_at_cache_end_remains_cancellable() {
     assert!(matches!(result, Err(rrrah_dedup::cache::CacheError::Cancelled)));
     assert_eq!(checkpoints.get(), 8);
 }
+
+#[test]
+fn cancellation_during_repeated_interruption_is_observed_at_every_cache_byte() {
+    use std::{
+        cell::Cell,
+        io::{self, Read},
+    };
+    struct InterruptedAt<'a> {
+        bytes: &'a [u8],
+        position: usize,
+        at: usize,
+        interruptions: &'a Cell<usize>,
+    }
+    impl Read for InterruptedAt<'_> {
+        fn read(&mut self, output: &mut [u8]) -> io::Result<usize> {
+            if self.position == self.at {
+                let attempts = self.interruptions.get() + 1;
+                self.interruptions.set(attempts);
+                // Bound the pre-fix reproducer instead of letting read_exact spin forever.
+                return Err(if attempts <= 3 {
+                    io::ErrorKind::Interrupted
+                } else {
+                    io::ErrorKind::Other
+                }
+                .into());
+            }
+            let count = output.len().min(self.bytes.len() - self.position).min(1);
+            output[..count].copy_from_slice(&self.bytes[self.position..self.position + count]);
+            self.position += count;
+            Ok(count)
+        }
+    }
+    let key = CacheKey {
+        content: [0; 32],
+        recipe: [1; 32],
+        frame_index: 0,
+    };
+    let mut cache = FingerprintCache::default();
+    cache
+        .insert(
+            key,
+            Fingerprint {
+                variants: [[0; 4]; 8],
+                mean_linear_rgb: [0.; 3],
+                luminance_stddev: 0.,
+            },
+            1,
+        )
+        .unwrap();
+    let mut bytes = Vec::new();
+    cache.write(&mut bytes, || false).unwrap();
+    for at in 0..=bytes.len() {
+        let interruptions = Cell::new(0);
+        let reader = InterruptedAt {
+            bytes: &bytes,
+            position: 0,
+            at,
+            interruptions: &interruptions,
+        };
+        let result = FingerprintCache::read(reader, 1, || interruptions.get() >= 2);
+        assert!(
+            matches!(result, Err(rrrah_dedup::cache::CacheError::Cancelled)),
+            "position {at}: {result:?}"
+        );
+        assert_eq!(interruptions.get(), 2, "position {at}");
+    }
+}

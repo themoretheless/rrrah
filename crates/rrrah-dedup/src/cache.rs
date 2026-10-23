@@ -196,7 +196,7 @@ impl FingerprintCache {
             return Err(CacheError::Cancelled);
         }
         let mut header = [0_u8; 16];
-        input.read_exact(&mut header)?;
+        read_exact_cancellable(&mut input, &mut header, &cancel)?;
         if &header[..8] != MAGIC {
             return Err(CacheError::Invalid);
         }
@@ -212,7 +212,7 @@ impl FingerprintCache {
                 return Err(CacheError::Cancelled);
             }
             let mut record = [0_u8; RECORD_BYTES];
-            input.read_exact(&mut record)?;
+            read_exact_cancellable(&mut input, &mut record, &cancel)?;
             hash.update(&record);
             let key = CacheKey {
                 content: record[..32].try_into().map_err(|_| CacheError::Invalid)?,
@@ -244,7 +244,7 @@ impl FingerprintCache {
             )?;
         }
         let mut checksum = [0; 32];
-        input.read_exact(&mut checksum)?;
+        read_exact_cancellable(&mut input, &mut checksum, &cancel)?;
         if hash.finalize().as_bytes() != &checksum {
             return Err(CacheError::Invalid);
         }
@@ -265,6 +265,28 @@ impl FingerprintCache {
         }
         Ok(cache)
     }
+}
+
+// read_exact retries Interrupted internally without calling the cancellation
+// callback. Check between reads so repeated interruptions and short reads remain
+// cancellable. A blocking Read call itself still requires reader-side timeouts.
+fn read_exact_cancellable(
+    input: &mut impl Read,
+    mut output: &mut [u8],
+    cancel: &impl Fn() -> bool,
+) -> Result<(), CacheError> {
+    while !output.is_empty() {
+        if cancel() {
+            return Err(CacheError::Cancelled);
+        }
+        match input.read(output) {
+            Ok(0) => return Err(CacheError::Io(std::io::ErrorKind::UnexpectedEof.into())),
+            Ok(count) => output = &mut output[count..],
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+            Err(error) => return Err(CacheError::Io(error)),
+        }
+    }
+    Ok(())
 }
 
 fn word(bytes: &[u8]) -> Result<u64, CacheError> {

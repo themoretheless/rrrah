@@ -1,0 +1,18 @@
+{
+  "scope": "Cancellation during fingerprint-cache header, record, checksum and EOF reads",
+  "before_fix": "Bounded repeated-interruption reproducer failed at byte zero with Io(Other): read_exact retried Interrupted without observing cancellation.",
+  "fix": "Internal exact-read loop checks cancellation before each short read and retry. Preserves UnexpectedEof on truncation, Io for other errors, and checksummed format.",
+  "verification": {
+    "cache_integration_tests_passed": 14,
+    "cache_unit_tests_passed": 2,
+    "cancellation_positions": 409,
+    "attempts_before_cancellation_at_each_position": 2,
+    "decode_feature_suites_executed": false
+  },
+  "limits": [
+    "Does not interrupt a Read call that itself blocks; custom readers require their own timeouts.",
+    "Finite synthetic stream control, not every filesystem/platform or universal coverage proof."
+  ],
+  "production_file": "crates/rrrah-dedup/src/cache.rs",
+  "test_file": "crates/rrrah-dedup/tests/cache.rs"
+}
