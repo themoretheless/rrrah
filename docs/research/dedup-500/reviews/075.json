@@ -2,13 +2,13 @@
   "index": 75,
   "repository": "crackruckles/MediaDash",
   "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
-  "review_scope": "12/583 pinned blobs whole text through v4, including complete duplicate scanner/signals/hasher, 27 authored test cases and build manifests. Four adapter-based hasher controls passed; original FileHasher tests still restoring dependencies at review time.",
+  "review_scope": "12/583 pinned blobs whole text through v5. 27 distinct original net9 test cases passed; 2 added real SQLite counterexample tests passed. SDK11 preview, no Jellyfin server/UI/full suite or whole-repo qualification.",
   "decision": "reference",
-  "finding": "Metadata-gated duplicate scanner; full original hasher under a keyed cache adapter reproduces restored-metadata stale digest and cancelled cache-hit behavior. Not an exhaustive arbitrary-file exact comparer.",
+  "finding": "Metadata-gated duplicate scanner. Original actual FileHasher plus SQLite reproduces restored-metadata stale digest and cancelled warm-cache return; 27 original targeted cases passed.",
   "license_metadata": "GPL-3.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "available_source_evidence": [
     {
       "path": "Jellyfin.Plugin.MediaDash/Fixers/DuplicateFixer.cs",
@@ -100,6 +100,10 @@
     },
     {
       "audit": "docs/research/dedup-500/mediadash075-source-review-v4-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediadash075-source-review-v5-20261023.json",
       "whole_repo_complete": false
     }
   ]

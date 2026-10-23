@@ -1,0 +1,233 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 12,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 571,
+  "upstream_tests_run": true,
+  "original_tests_passed": 27,
+  "original_tests_failed": 0,
+  "original_tests_skipped": 0,
+  "additional_counterexamples_passed": 2,
+  "reports": [
+    {
+      "original_authored_tests": true,
+      "report": "docs/research/dedup-500/evidence/crackruckles--MediaDash/native-filehasher-original-20261023.trx",
+      "sha256": "ef2f5dcc528d8b0d7e034d1256a7e9ed3e7f98bf1b503130f1d85a03d80e64e9",
+      "counters": {
+        "total": "3",
+        "executed": "3",
+        "passed": "3",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "tests": [
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.FileHasherTests.HashAsync_MissingFile_ReturnsNull",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.FileHasherTests.HashAsync_ChangedMtime_ReComputes",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.FileHasherTests.HashAsync_ReturnsSha256_AndCachesByPathSizeMtime",
+          "outcome": "Passed"
+        }
+      ]
+    },
+    {
+      "original_authored_tests": true,
+      "report": "docs/research/dedup-500/evidence/crackruckles--MediaDash/native-signals-artwork-original-20261023.trx",
+      "sha256": "29de52c684052f55c52b388bf758a6e9b446dce4b1385352995c14dc06870731",
+      "counters": {
+        "total": "24",
+        "executed": "24",
+        "passed": "24",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "tests": [
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.RuntimeDelta_TenPercentApart_IsTenPercent",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TitleJaccard_SameTitleDifferentQuality_IsOne",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.ArtworkScannerTests.TruncatedPng_IsFlaggedAsCorrupt",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TitleJaccard_UnrelatedTitles_IsZero",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_FallbackKeys_AreHeuristic(key: \"audio:name:artist:album:track:120:something\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_ProviderIdKeys_AreIdentified(key: \"movie:tmdb:12345\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_ProviderIdKeys_AreIdentified(key: \"movie:tvdb:9876\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_ProviderIdKeys_AreIdentified(key: \"movie:imdb:tt0133093\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_ProviderIdKeys_AreIdentified(key: \"book:isbn:9780451524935\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_ProviderIdKeys_AreIdentified(key: \"audio:musicbrainztrack:abcd\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_FallbackKeys_AreHeuristic(key: \"book:name:dune:something\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.ArtworkScannerTests.CorruptImageThatThrows_IsFlaggedNotUnhandled",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TitleJaccard_ReleaseGroupNamesAreNotStripped_AndReduceJaccard",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_FallbackKeys_AreHeuristic(key: \"episode:abcd1234:s1:e1\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.ArtworkScannerTests.ValidPng_IsNotFlagged",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_FallbackKeys_AreHeuristic(key: \"\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TitleJaccard_EitherSideEmptyAfterStrip_IsNaN",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.ArtworkScannerTests.SizeMismatch_IsFlagged",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TitleJaccard_DifferentTitlesSameYear_IsLowAndVetoes",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.ArtworkScannerTests.ZeroByteFile_IsFlaggedAsCorrupt",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.RuntimeDelta_NullOrZero_IsNull",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TitleJaccard_YearsAndNoiseAreStripped_EditionWordsAreKept",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.TierForKey_FallbackKeys_AreHeuristic(key: \"movie:name:inception:2010:something\")",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.DuplicateSignalsTests.RuntimeDelta_IdenticalRuntimes_IsZero",
+          "outcome": "Passed"
+        }
+      ]
+    },
+    {
+      "original_authored_tests": false,
+      "report": "docs/research/dedup-500/evidence/crackruckles--MediaDash/native-realdb-counterexamples-20261023.trx",
+      "sha256": "701aaa567c841c17819f2838843c68e251cf3beec8f7968c75f5e400fc6d3bb1",
+      "counters": {
+        "total": "2",
+        "executed": "2",
+        "passed": "2",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      },
+      "tests": [
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.RrrahFileHasherCounterexamples.CancelledWarmHitReturnsDigestButColdMissThrowsWithRealSqlite",
+          "outcome": "Passed"
+        },
+        {
+          "name": "Jellyfin.Plugin.MediaDash.Tests.RrrahFileHasherCounterexamples.RestoredMetadataReturnsStaleDigestWithRealSqlite",
+          "outcome": "Passed"
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "sdk": "11.0.100-preview.5.26302.115",
+    "target_framework": "net9.0",
+    "host": "macOS arm64",
+    "sdk_note": "Attempt to pin SDK9 via global.json failed before launch due relative-path error; actual default preview SDK used and logged. Target net9.0 unchanged. No original source modified."
+  },
+  "checkout_integrity_after_tests": {
+    "original_tracked_blobs_checked": 583,
+    "mismatches": [],
+    "additional_source": "Only owned RrrahFileHasherCounterexamples.cs added to isolated test project for last run."
+  },
+  "harness": {
+    "path": "docs/research/dedup-500/mediadash075-realdb-counterexamples-20261023.cs",
+    "sha256": "64d729f911920c107a4b068a4fc48e55203d8d159f3e84dfe2f2bfcd327a2a84"
+  },
+  "commands": [
+    "dotnet test Jellyfin.Plugin.MediaDash.Tests/Jellyfin.Plugin.MediaDash.Tests.csproj --filter FullyQualifiedName~FileHasherTests",
+    "dotnet test Jellyfin.Plugin.MediaDash.Tests/Jellyfin.Plugin.MediaDash.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~DuplicateSignalsTests|FullyQualifiedName~ArtworkScannerTests'",
+    "dotnet test Jellyfin.Plugin.MediaDash.Tests/Jellyfin.Plugin.MediaDash.Tests.csproj --no-restore --filter FullyQualifiedName~RrrahFileHasherCounterexamples"
+  ],
+  "findings": [
+    "27 distinct original cases passed with actual original plugin assembly, SQLite, logger and SkiaSharp dependencies. No server/UI/plugin registration or destructive fixer executed. Original source bodies unchanged, not adapter qualification.",
+    "Two owned native xUnit controls added only to isolated pinned original tests project confirm restored-size/mtime stale digest and cancelled warm cache-hit return while cold-miss cancellation throws, using original actual MediaDashDb SQLite. Counterexamples asserted, not fixes.",
+    "Original content for all583trackedblobs reverified after native execution. This is integrity only, still12whole-readfiles, not full repository review.",
+    "rrrah production source unchanged. Existing warm-hit cancellation and restored-metadata tests are relevant; latest broad rrrah decode suite remains actively compiling and is not claimed passed."
+  ]
+}
