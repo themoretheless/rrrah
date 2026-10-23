@@ -1,0 +1,39 @@
+{
+  "repository": "n24q02m/modhash",
+  "commit": "3968350080e87dec1ea04ca87ca6cf54629a6e34",
+  "whole_repo_complete": false,
+  "controls": [
+    "docs/research/dedup-500/modhash496-search-control-20261023.rs"
+  ],
+  "source_control_sha256": "e67e91338c89aaa56afb25d6b36c59e091a415e83c19540c36bc38b939782ad7",
+  "runtime": {
+    "rust": "1.98.1",
+    "exit_code": 0,
+    "query_radius_insertion_cases": 700,
+    "entries": 260,
+    "insertion_orders": 2,
+    "radii": [
+      0,
+      1,
+      2,
+      8,
+      31,
+      32,
+      63,
+      64,
+      65,
+      4294967295
+    ]
+  },
+  "findings": [
+    "Original captured BK-tree module compiled unchanged in standalone harness.700 query/radius/insertion-order cases exactly match independent linear XOR/popcount scan, including multiplicity of duplicate ids/hashes.",
+    "Both forward/reverse insertion orders tested; empty tree and260-entry len checked. Includes0 and all-ones query, exact-radius boundaries, radius64,65 and u32::MAX.",
+    "Comparison intentionally sorts oracle by actual(id,distance) ordering, leaving previously reproduced documented(distance,id) mismatch unresolved. Candidate completeness and output ordering are distinct acceptance properties.",
+    "No package integration, release, performance, huge-tree allocation, dependency or all-platform qualification. No source adopted into own library."
+  ],
+  "remaining": [
+    "Other662 tracked files and assets, current remote pin unavailable404",
+    "Broader runtime/performance and recipe semantics"
+  ],
+  "full_review_count": 247
+}
