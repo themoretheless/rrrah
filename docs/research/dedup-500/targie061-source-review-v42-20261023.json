@@ -1,0 +1,68 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/ImageSimilarityPipelineTests.swift",
+      "git_blob": "248e8bef6e4cbd9bfde030771719efc38ac6a27a",
+      "sha256": "21432b7fd120d9439f59dca5ed2754627d739f45383ec07cb3f02e9cae341285",
+      "bytes": 31887,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 110,
+  "whole_visual_files_read_total": 4,
+  "whole_tracked_blobs_reviewed_total": 114,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 7,
+  "full_review_count": 249,
+  "read_coverage": {
+    "prior_audit": "targie061-source-review-v28-20261023.json",
+    "prior_lines": [
+      "1-85",
+      "297-358"
+    ],
+    "this_step_lines": [
+      "86-296",
+      "359-EOF"
+    ],
+    "scope": "Cumulative whole original file read; no truncated output credited."
+  },
+  "test_inventory": [
+    "testImageComparisonConcurrencyDropsWhenThermalStateIsHigh",
+    "testExactDuplicateImagesFormAGroup",
+    "testCachedImageHashesAdvanceHashingProgress",
+    "testCancellingImageHashingPropagatesCancellation",
+    "testCancellingImageFeatureComparisonPropagatesCancellation",
+    "testCachedPairRelationSkipsImageFeatureExtraction",
+    "testPreviousImagePairRelationDoesNotSkipCurrentFeatureExtraction",
+    "testImageFeatureCacheCoalescesConcurrentRequestsForSameURL",
+    "testImageFeatureCacheRetriesAfterFailedTask",
+    "testCachedPairRelationUsesBatchLookupDuringComparison",
+    "testUncachedImagePairRelationsAreWrittenInBatches",
+    "testFailedRequiredImageVerificationRetriesUntilItSucceeds",
+    "testSuccessfullyVerifiedWeakImagePairRemainsCached",
+    "testCachedPairRelationsAreLookedUpOnceForWholeComparisonPhase",
+    "testUnchangedImageScanUsesScanRelationIndexAndSkipsCandidateLookup",
+    "testImageComparisonProgressReportsCandidateCacheAndUncachedPhases",
+    "testUncachedImageComparisonProgressIsThrottledForLargeCandidateSets"
+  ],
+  "prior_runtime_evidence": {
+    "audit": "targie061-source-review-v28-20261023.json",
+    "executed": 17,
+    "passed": 17,
+    "rerun_this_step": false,
+    "log_sha256": "1404a221964118257bf9475d53771534c8a358447d3ab76115551ae7864a0f03",
+    "reason": "Source/test bytes unchanged; this step finishes manual review, not new execution."
+  },
+  "findings": [
+    "Only exactduplicatePNG test creates real encodedimage fixtures in thisclass. Most policy/batching/cache tests seed pHash and pair relations for nonexistentpaths; ControllableImageFeatureExtractor returns defaultemptyVNFeaturePrintObservation and injectedscore, not nativeVision inference.",
+    "Batchwrite test checks1batchcall with1pair, not512boundary.30itemprogress case has435pairs and only notificationthrottling assertions.512/513writepartition and largecandidate residentmemory not proven by17passing tests.",
+    "Pair cache fixture lookup returns hashrecord bypath only, without size/date/kind/versionvalidation; it is an instrumentationadapter, not fullpersistentidentity contract. Separate realHashCache tests remain scoped to v19.",
+    "Cachedpair relation test seeds.92/pHashonlyevidence then confirms noVisioncall. This proves trustedcache fastpath, not correct visualevidence on realfiles. Previousalgorithm cache test and failedverificationretry tests address finite invalidation cases.",
+    "Requiredfeature nil/NaN/infinity failures remain retryable across process calls; .99recovery is cached; weak measured.1 remains negativecache. Scores are authored and cannot establish actualprecision/recall.",
+    "Cancellation cases use cooperativeTask.sleep providers, not bounded ImageIO/Vision cancellation latency. Concurrentfeaturefailurecoalescing test checks6callers share1attempt, not all scheduling possibilities.",
+    "One addedwholetextfile brings110text+4visual=114/121. No new sourceadoption, test execution, optimization gain or repositorycomplete credit."
+  ]
+}
