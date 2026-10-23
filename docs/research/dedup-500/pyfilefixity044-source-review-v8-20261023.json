@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Whole synchronization function lines 254-416 and path grouping helpers 61-116 reviewed. Original synchronize_files and original rfigc.main executed unchanged using temporary authored files.",
+  "control": "pyfilefixity044-sync-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "trusted_bytes": "GOOD",
+    "three_copy_bytes": "FAIL",
+    "output_bytes_after_failure": "FAIL",
+    "observed_exception": "UnboundLocalError: r_row referenced without assignment"
+  },
+  "findings": [
+    {
+      "id": "database-no-report-crash",
+      "detail": "On failed post-repair database verification, r_row[-3] is written unconditionally, but r_row exists only when report_file is truthy. With valid database and no report file, three identically incorrect copies yield a written incorrect output and then UnboundLocalError. Reproduced end to end."
+    },
+    {
+      "id": "optional-validation",
+      "detail": "Without a database, synchronization does not provide independent content verification. Majority tie false success from v7 remains possible; database check is optional, not an unconditional safeguard."
+    },
+    {
+      "id": "input-vs-copy-revalidation",
+      "detail": "Pre-check can select a currently valid source and then copyfile reopens it without reusing a verified stable handle. Post-check covers output against database when correctly handled, but source selection is not an atomic snapshot."
+    },
+    {
+      "id": "reported-success-vs-ambiguity",
+      "detail": "If voting reports ambiguity but final output passes database, code marks hash OK and appends an explanatory message, yet retains errcode nonzero. Consumers must distinguish recovered-valid content from clean voting."
+    },
+    {
+      "id": "publication-before-verification",
+      "detail": "Output paths are written directly and validated afterward, without staging/atomic publish or rollback on failed verification. Failed outputs remain in target directory."
+    }
+  ],
+  "first_direct_control_exit_zero_meaning": "The harness successfully reproduced and asserted the original failure; not a claim that upstream synchronization succeeded.",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false,
+  "upstream_suite_run": false
+}
