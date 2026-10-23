@@ -1,0 +1,30 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/ProfileStore.swift",
+      "sha256": "175b6a341cdf1e485eeff122051fa1aa61b6d59735eec389a4c3f7ab509b7e5e",
+      "lines": 229,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/ProfileStoreTests.swift",
+      "sha256": "09bb3d1e1bfeda37ca138cd8e10b9f3c748b5eb9512837e4b34c0fe479448360",
+      "lines": 202,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Profile import validates only nonempty categories and presence of Needs Review ID after decoding. It does not reject duplicate IDs, unsafe folderName components, unsupported schema versions or out-of-range confidence. Previous organizer/discovery append folderName without containment checks.",
+    "Import reads entire JSON without byte/category/string limits; save writes atomically but no backup/quarantine of invalid data is made.",
+    "load silently falls back to bundled/fallback profile on unreadable or malformed personal JSON and attempts saving the bundled profile, potentially replacing a corrupt personal configuration without a diagnostic.",
+    "Built-in merge preserves user display/folder/enabled choices and records namespaced removal tombstones, preventing deleted categories/extensions/keywords from being resurrected. This is a useful migration pattern independent of duplicate matching.",
+    "Seven source-read tests cover deleted categories, removed extensions, re-addition, field-scoped tombstones, new built-ins, missing Needs Review and round-trip export/import. Unsafe folder paths, duplicates, corrupt profiles and resource limits are not covered there; tests not executed in this batch."
+  ],
+  "whole_files_read_total": 12,
+  "remaining_tracked_blobs": 46,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
