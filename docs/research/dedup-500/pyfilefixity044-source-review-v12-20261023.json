@@ -1,0 +1,57 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Five pinned files read whole; pyproject parsed using standard TOML parser. No package installation/build or top-level pff import executed.",
+  "evidence": [
+    {
+      "path": "pyFileFixity/pff.py",
+      "sha256": "2983c8dafc6b47be147a0b02bd7d1b45f923a31b9504f326bb31d5a2669be447"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "3b34eb69f01095d347480eee05e8b3ad8b0aeefe378a9a35e748789396f6cde9"
+    },
+    {
+      "path": "requirements.txt",
+      "sha256": "845cf7ba80b9d155bbb49c68494d9eedfd9944f9d7fb5374a1ac93949f20989f"
+    },
+    {
+      "path": "tox.ini",
+      "sha256": "5573dddd5233cb68688e2c19e6021ced970f686b7f343218bf430245760322ef"
+    },
+    {
+      "path": "pyFileFixity/__init__.py",
+      "sha256": "e617de47d83b97a99f103fdeefc94f408c7aaabce3108c23a35bc3d842c9ba85"
+    }
+  ],
+  "findings": [
+    {
+      "id": "programmatic-dispatch",
+      "detail": "pff.main parses explicit argv but dispatches only if len(sys.argv)>=2. A valid explicit argument list can therefore return None without invoking the requested subcommand when the host process has no arguments. Static source finding."
+    },
+    {
+      "id": "eager-command-imports",
+      "detail": "pff eagerly imports every command including ECC/resiliency modules before argument parsing. Even hash-only usage/help depends on importability of unrelated command dependencies."
+    },
+    {
+      "id": "coverage-boundary",
+      "detail": "Coverage selection omits pff.py and explicitly excludes filetamper.py, ecc_speedtest.py and profiler code. A high configured coverage result cannot establish CLI facade or corruption-generator correctness."
+    },
+    {
+      "id": "tox-metadata-drift",
+      "detail": "tox default environments include py27/py32/py34 while package requires Python>=3.7. Default deps include pytest only, while pyproject requires pytest-cov plugin. Legacy environments are configuration, not proof of supported runtime tests."
+    },
+    {
+      "id": "installed-vs-checkout",
+      "detail": "tox changes cwd to a temp directory but passes the source repository path explicitly to pytest; whether tests exercise installed package depends on import resolution. Cwd isolation alone is insufficient evidence."
+    },
+    {
+      "id": "requirements-drift",
+      "detail": "requirements.txt allows reedsolo>=2.0.0a, pyproject requires >=2.0.0b1. Dependency manifests do not define the same minimum ECC library version."
+    }
+  ],
+  "toml_parse": "PASS",
+  "upstream_tests_run_this_review": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
