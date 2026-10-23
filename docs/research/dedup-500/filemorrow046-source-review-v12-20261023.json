@@ -1,0 +1,38 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/FileMorrow/RuleClassifier.swift",
+      "sha256": "1a7ecb27b90548459dd8d37fda783c070d5892b8c251cd8af631b20b1116fb0b",
+      "lines": 79,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Tests/FileMorrowTests/RuleClassifierTests.swift",
+      "sha256": "4c9bd5370bfca9a40a2eddd3f765a07de7cb332e405cbed395be4f32d610fdf1",
+      "lines": 74,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": {
+    "suite": "RuleClassifierTests",
+    "tests_passed": 7,
+    "tests_failed": 0,
+    "exit_code": 0,
+    "original_source_and_tests_unchanged": true,
+    "build_seconds": 2.3,
+    "test_seconds": 0.013
+  },
+  "findings": [
+    "Rule classifier organizes files, not duplicate detection. Smart mode prioritizes substring filename keywords before extension and UTType; phrase matches score 3 versus other keywords 2, confidence capped at 96. No word-boundary or empty-keyword rejection appears here.",
+    "Extension conflicts choose first enabled category. Semantic ties sort by score only without an explicit secondary criterion. Profile order therefore affects classification and user moves.",
+    "Format-only fallback labels unknown files Other at confidence 100: this is policy certainty, not decoded format verification. UTType image/movie/audio fallback likewise does not validate full media contents.",
+    "Seven original tests pass including 13 authored format examples. Total distinct original tests passed across focused runs is 45; this is not universal format support or duplicate-quality proof."
+  ],
+  "whole_files_read_total": 19,
+  "remaining_tracked_blobs": 39,
+  "full_review_count": 249,
+  "upstream_runtime_run": true
+}
