@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Whole test_aux_funcs.py and test_tee.py read. Three original TestAuxFuncs methods executed unchanged with unittest, no setup_module and no external fixture substitution.",
+  "source_sha256": {
+    "pyFileFixity/tests/test_aux_funcs.py": "bb231d40e970ce92f28cebc879118eea704ea3e065ee295657ee8854615600b7",
+    "pyFileFixity/tests/test_tee.py": "33671b928693bbef5e5a1f57281d73c35aecf0171687f7f2edf44fcb7fffe425"
+  },
+  "result": {
+    "tests": [
+      "test_get_next_entry",
+      "test_sizeof_fmt",
+      "test_path2unix"
+    ],
+    "run": 3,
+    "failures": 0,
+    "errors": 0,
+    "success": true
+  },
+  "findings": [
+    {
+      "id": "marker-test-scope",
+      "detail": "Original marker test covers two entries and boundary-sized blocks using ordinary BytesIO with full reads. It does not exercise short reads from a seekable reader; v6 counterexample remains untested upstream."
+    },
+    {
+      "id": "recwalk-test-assumption",
+      "detail": "test_recwalk assumes unsorted filesystem enumeration must differ from sorted order, including a general POSIX inequality assertion. Filesystems are permitted to enumerate in the sorted order; inequality is not an API invariant. Static test review, not an executed failure."
+    },
+    {
+      "id": "stdout-test-environment",
+      "detail": "test_tee_stdout requires tell, seek and read on current stdout, unlike a typical terminal stream. A dedicated capturing runner is required; this test was not run."
+    }
+  ],
+  "not_run": "Fixture-dependent path/recwalk/fullpath/version methods and both Tee tests. No claim of whole suite success.",
+  "total_distinct_original_tests_passed_so_far": 8,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
