@@ -1,0 +1,129 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "js-src/main/index.js",
+      "local": "66-index.js",
+      "git_blob": "05556cd5ae51af54b0544319c2aab57c54e99e76",
+      "sha256": "a3ea842c800a0d24c9f75045239088acf794c9cc728cdfc5426084b586605f91",
+      "bytes": 8672,
+      "whole_text_read": true
+    },
+    {
+      "path": "js-src/config.js",
+      "local": "67-config.js",
+      "git_blob": "0c05c4922fd2826d1ce7915a77020f5d3afa1c64",
+      "sha256": "b4c761a53615d4da1637385ac096ec3f1963c400ea7d5b28ad38d20205958393",
+      "bytes": 46,
+      "whole_text_read": true
+    },
+    {
+      "path": "js-src/settings/index.js",
+      "local": "68-index.js",
+      "git_blob": "52762df8374e109c3ef173e1e86f80bb8f26f2af",
+      "sha256": "d9777c54e70db95a6d770e365865b6db51909afc58521ca9aa502259e55ba425",
+      "bytes": 426,
+      "whole_text_read": true
+    },
+    {
+      "path": "js-src/settings/store.js",
+      "local": "69-store.js",
+      "git_blob": "809d32e01b88375dc2ad6d4ddfc94ef83bea53d3",
+      "sha256": "fce1e2225cc12fa9e33cec59979138a53981681242356652daff7f5e6f62dcff",
+      "bytes": 1112,
+      "whole_text_read": true
+    },
+    {
+      "path": "appinfo/routes.php",
+      "local": "70-routes.php",
+      "git_blob": "65e18dd74acae4743e8f8c2c2e3c463280b59f6c",
+      "sha256": "2260edd222d5a31609e25f22148ccad8f426ae61c1840312d12df1ccf9cd4a49",
+      "bytes": 1150,
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/index.php",
+      "local": "71-index.php",
+      "git_blob": "708f48eafc8b1379704e08056dc5c75067c341f1",
+      "sha256": "ec9380c4374330b049999c5da1fb4d0c239232bec6fdff2478ffd8fc17c95aef",
+      "bytes": 462,
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/settings-admin.php",
+      "local": "72-settings-admin.php",
+      "git_blob": "10323da4ffe15f06b99c11fdd5cc2842794843f4",
+      "sha256": "802a23e826e3155e41e2433758fec6a8246118e59dd3c94ce7783745f1e4554c",
+      "bytes": 125,
+      "whole_text_read": true
+    },
+    {
+      "path": "package.json",
+      "local": "73-package.json",
+      "git_blob": "03435c644e7c50598ffac6066c483b392e2b0c7c",
+      "sha256": "07a57db12a4c54b98968ef167c09415bcc9d2c5a23d412c6e0032a3f0142b513",
+      "bytes": 2047,
+      "whole_text_read": true
+    },
+    {
+      "path": "webpack.common.js",
+      "local": "74-webpack.common.js",
+      "git_blob": "05063c40d7c4464f30946dbd66cae48e3ffd0508",
+      "sha256": "a75ca7a611beab9acf0184c0e21cdb9e8d493bafb996e31f2c2341b9c1da87e1",
+      "bytes": 1880,
+      "whole_text_read": true
+    },
+    {
+      "path": "webpack.dev.js",
+      "local": "75-webpack.dev.js",
+      "git_blob": "b8b2d20544c9b7b91b61fcf17cd696535436b624",
+      "sha256": "aa3e904eb86ed62e835b484a97ffd51d537e41e1e5697bf32a6b8ce4ce5f1f86",
+      "bytes": 173,
+      "whole_text_read": true
+    },
+    {
+      "path": "webpack.prod.js",
+      "local": "76-webpack.prod.js",
+      "git_blob": "b70e84480a14d9cb905383780f5b2e7111155788",
+      "sha256": "999625f98e217b3f9fd989ece0fb88afc6034a45c3c50d3001a8d41668a32bdd",
+      "bytes": 172,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 76,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 89,
+  "full_review_count": 249,
+  "native_control": {
+    "command": "node docs/research/dedup-500/nextcloud068-results-control-20261023.cjs docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/66-index.js",
+    "exit_code": 0,
+    "result": {
+      "source_sha256": "a3ea842c800a0d24c9f75045239088acf794c9cc728cdfc5426084b586605f91",
+      "controls": 3,
+      "passed": 3,
+      "sort_group_ids": [
+        "grp-1",
+        "grp-2",
+        "grp-3"
+      ],
+      "page2_failure_hides_retry": true,
+      "unexpected_path_aborts_render": true,
+      "scope": "Unchanged full original results script under native Node VM with authored responses and minimal DOM/OC adapters. No real browser layout, Nextcloud server, file client or deletion."
+    },
+    "harness_sha256": "5eb83f8b31df4ec7512ba04570f9d0edcb8cc7ea354474dc8797d26fb7f93a9b"
+  },
+  "findings": [
+    "Native unchanged full results IIFE with minimal DOM/OC/fetch adapters confirms authored groups sizes10,30,20 remain input order instead of documented descending30,20,10. Comparator returns Math.abs(difference), never negative, violating comparator ordering contract. Native Node result for this fixture, not all engines/inputs.",
+    "Second-page authored fetch rejection confirms button was visible after first page, then remains display:none after rejection, alongside error message. Handler still exists but ordinary visible retry control is unavailable in the modeled DOM. No actual browser/Nextcloud runtime.",
+    "Unexpected path outside /user/files/... causes normalizeItemPath nullmatch indexing error and entire current render goes to error branch. Actual admissible Nextcloud paths and server-side validation not broadly qualified.",
+    "deleteItem invokes server fileClient.remove without fresh local byte confirmation in this script. cleanGroupItems mutates arrays duringforEach and adjusts totals based on removeditem.size. No deletion performed, no concurrency/idempotence/deletion regression claimed from source inspection.",
+    "Result totals use firstfile.size times groupcount, trusting equal size metadata and JS numeric arithmetic. No independent byte/storage-space reclaim measurement. Native rrrah exactgroups use fullbyteconfirmation and keepphysicalaliases separate; no adoption of frontend totals as library truth.",
+    "LoadFiles does not check HTTPstatus/success before reading data.entities; error/missingdata enters catch. No user-facing cancellation, active-request guard or responsegeneration check in this module. Overlapping fetch behavior not executed by this harness.",
+    "Settings state store uses persist whitelistempty and mounts original sagas under external nextcloud-react root. APIroute definitions do not establish how external API.patch transforms newConfig to controllerconfig; leave wirebinding unqualified.",
+    "Build entries correspond to actual js-src paths, while package main points src/index.js. Settings dependency nextcloud-react is git+ssh on customhostport2222, with webpack-merge/file-loader/html-loader used by configs but not direct manifest dependencies. Transitive/lock dependency availability not yet reviewed; no buildfailure claim or external fetch/install attempted.",
+    "Package scripts read only: lint --fix, webpack serve --open and Cypress open not executed. No app UI, remote settings, file deletions or publication actions.",
+    "11 new whole files,76/165. Three native controls reproduce finite upstream limitations; no local production change, speedup or complete-repository credit. COPYING, bundled files/lockfile, assets, CI and remaining test evidence still incomplete."
+  ]
+}
