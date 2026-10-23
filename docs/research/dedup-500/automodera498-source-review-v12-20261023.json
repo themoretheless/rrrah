@@ -1,0 +1,55 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".gitignore",
+      "sha256": "e458a82a0aa92e596d7fcd48c6e62f9f684c2f1d1f6d9facd058c24c8547d09a",
+      "lines": 10,
+      "git_blob_verified": true
+    },
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/ArchiveServer.java",
+      "sha256": "83159df3c778e47053b5c584679b7ad5a5c68130644fbc0724d341efcb52f2e3",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/model/network/NetworkConfiguration.java",
+      "sha256": "27a7a92f28dccb62df17b6900634366eb828673c66af5315865cee0db686c8ae",
+      "lines": 64,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/IntegratorServer.java",
+      "sha256": "a9b52dd1efe93f55bbee55076eaee59ab02c9f65abb23e47f800b02948c448dd",
+      "lines": 69,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/OperatorServer.java",
+      "sha256": "aa42e9d950a122f3352219f3e64c14611931af9e4a671cfb7a42b2545c623660",
+      "lines": 62,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_startup_run": false,
+    "native_library_run": false
+  },
+  "findings": [
+    "Fivefileswhole-read/Gitblobverified:three server entrypoints,NetworkConfiguration,.gitignore. Entry points invoke SpringApplication; constructors retain context; exit closes context then System.exit0. No application launched.",
+    "No subscription initialization in these entrypoints; v10 null-subscription concern not resolved here. Actual event listeners may live in remaining service/web configuration classes; no blanket absence claimed.",
+    "Archive EntityScan secondpackage uk.ac.uws.danielszabo.archive omits automodera segment; Operator analogous omission. Common package present; current additional entity inventory not yet fullyassessed, so practical impact unproven.",
+    "ComponentScan commonprefix covers broad projectnamespace; exact classes present per module jar still depends Maven packaging. Integrator explicitly scans own report repository/entities.",
+    "Archive imports RustPHash class in configuration; native library load required at class initialization, but timing/failure behavior not runtime verified.",
+    "NetworkConfiguration.version describes networkconfig, with no hashrecipe schema. operators list initialized unlike Node.subscriptions; config fields remain mutable and may be null under noargs construction.",
+    "Gitignore excludes target/jars/log/db/sqlite artifacts; ignoredoutputs not source review or runtime evidence."
+  ],
+  "remaining": [
+    "89 other tracked blobs/assets",
+    "Remaining module services/web/CLI/resources and native/runtime qualification"
+  ],
+  "full_review_count": 249
+}
