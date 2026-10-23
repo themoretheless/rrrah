@@ -2,11 +2,11 @@
   "index": 94,
   "repository": "Siddhant-K-code/distill",
   "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "8whole pinned text files of455;authored native four-module public API controls;partial repository review",
   "decision": "reference",
   "finding": "Vector cosine/kmeans semantic dedup; may merge meaning-level neighbors, unacceptable as exact image identity proof.",
   "license_metadata": "MIT",
-  "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
+  "license_scope": "Root MIT LICENSE fully read; nested dependency provenance not reviewed; no production adoption",
   "tests_detected": 59,
   "upstream_tests_run": false,
   "available_source_evidence": [
@@ -84,5 +84,12 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/distill094-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    }
+  ],
+  "upstream_tests_scope": "No original test suite run;authored native controls of unchanged four source modules only"
 }

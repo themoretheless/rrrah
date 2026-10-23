@@ -1,0 +1,93 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "a669ee1a7ee2fd4e1a4024d6a2579da845ad577e14b7c177778270df210b02ca",
+      "whole_text_read": true,
+      "lines": 21
+    },
+    {
+      "path": "main.go",
+      "local": "02-main.go",
+      "sha256": "5ecc661d864bbad57a4a4208ef390112fb77a3a70935712dc03717c52ac74c70",
+      "whole_text_read": true,
+      "lines": 7
+    },
+    {
+      "path": "pkg/dedup/kmeans.go",
+      "local": "03-kmeans.go",
+      "sha256": "78aaccacf1fdb30d09f616233e3339e55473cc130e5a1132c044051b5459402b",
+      "whole_text_read": true,
+      "lines": 351
+    },
+    {
+      "path": "pkg/retriever/interface.go",
+      "local": "04-interface.go",
+      "sha256": "f3f9972718a89301d4336341cbf36987a9de474838155aa812f0b1b3fa1ac370",
+      "whole_text_read": true,
+      "lines": 109
+    },
+    {
+      "path": "go.mod",
+      "local": "07-go.mod",
+      "sha256": "62062c81e3694898753f42a4ecc24e6b32c436789617a28a0f099ba54ac78bf8",
+      "whole_text_read": true,
+      "lines": 87
+    },
+    {
+      "path": "pkg/math/simd.go",
+      "local": "08-pkg--math--simd.go",
+      "sha256": "b3d574b8ea8c64588aca26f76cb87dd3226a477ea72da34aed5015bc6dc837ae",
+      "whole_text_read": true,
+      "lines": 200
+    },
+    {
+      "path": "pkg/types/vector.go",
+      "local": "09-pkg--types--vector.go",
+      "sha256": "c3dc23a8af2cec0efd3ce9e7fee28f4356856a2a038113a3a9127e30d7843a71",
+      "whole_text_read": true,
+      "lines": 90
+    },
+    {
+      "path": "pkg/types/chunk.go",
+      "local": "10-pkg--types--chunk.go",
+      "sha256": "354ad54899229510dc35fa34cfccb87511a7873423028048fad2959a31fe3bd3",
+      "whole_text_read": true,
+      "lines": 176
+    }
+  ],
+  "whole_text_files_read_total": 8,
+  "tracked_blobs": 455,
+  "remaining_without_whole_review": 447,
+  "upstream_tests_run": false,
+  "authored_native_control": {
+    "result": {
+      "different_dimensions_prefix_distance": 0,
+      "equal_pair_positive_control_kept": 1,
+      "nan_threshold_kept": 1,
+      "nested_clone_aliases_original": true,
+      "two_exact_value_classes_kept": 3
+    },
+    "exit_code": 0,
+    "scope": "Exact four original Go source modules in isolated minimal same-name module; authored public API caller; no dependencies/network/services; Go1.25local"
+  },
+  "findings": [
+    "Original CosineDistance truncates unequal dimensions: [1,0] and[1] return0. This is not equal-vector identity or a valid dimension-contract check.",
+    "Five vectors from exactly two value classes x,x,y,y,y atK1 retain3items: medoid-y prunes its own copies but bothx copies survive. Native control confirms missed exact-value repetition away from medoid.",
+    "NaN threshold retains only medoid and drops other four vectors without error; caller should reject nonfinite policies. Authored control only, no production configuration path qualified.",
+    "Vector.Clone copies outer metadata map but nested map remains shared despite deep-copy comment; mutation in clone changes original. Positive equal-pair control retains1copy as expected.",
+    "Cluster pruning accepts context parameter but does not inspect it; assignment/update loops check cancellation only per iteration. Source observation, no timing/cancellation latency claim.",
+    "All selected source pin bytes verified; MIT root read. No foreign production implementation adopted."
+  ],
+  "transfer_decision": "Do not equate embedding proximity with exact files. Preserve dimension/nonfinite validation, comprehensive candidate comparisons and owned nested data semantics.",
+  "limits": [
+    "8whole text files only;remaining repository not read.",
+    "No original upstream tests/full Go package/dependency/services run.",
+    "No speedup/RSS/platform/race qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
