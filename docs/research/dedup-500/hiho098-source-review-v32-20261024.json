@@ -1,0 +1,62 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v31-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/job/DBQueryInputJob.java",
+      "local": "166-DBQueryInputJob.java",
+      "git_blob": "721392c714c49760547903e4856ee42f5f4ff94a",
+      "sha256": "b86ddd2758f476eb49ae98a4e289b27506d97660aff1d01df5e180bcc26dad9e",
+      "lines": 713,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/TestDBQueryInputJob.java",
+      "local": "167-TestDBQueryInputJob.java",
+      "git_blob": "893ff3a80af10692527992e45df6cea59f5f6b22",
+      "sha256": "1c84647d1c506767a7182d41bb634c9f77861a075db5e153dc277091c1c74dc9",
+      "lines": 370,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/job/TestDBQueryInputJobWithCluster.java",
+      "local": "168-TestDBQueryInputJobWithCluster.java",
+      "git_blob": "6c1ee1156dc40e6d2b5bf221b118d19ba9ded49d",
+      "sha256": "b5c8bc59270684d7a21ced18a65773403e1817d5f61a93434b1174187fbdf999",
+      "lines": 463,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 162,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 169,
+  "remaining_without_whole_review": 1,
+  "original_tests_cumulative": {
+    "total": 133,
+    "passed": 130,
+    "failed": 3,
+    "new_original_tests": 25,
+    "report": "docs/research/dedup-500/hiho098-query-job-original-tests-20261024.json"
+  },
+  "author_controls": {
+    "new": 0,
+    "cumulative": 122
+  },
+  "source_only_findings": [
+    "AVRO output strategy has no active execution branch: non-AVRO block skipped and entire Avro else commented. Not a measured AVRO import.",
+    "runJobs ignores waitForCompletion boolean and catches/prints exceptions during wait and postprocessing; run returns0 after normal return. No real failed cluster job executed this increment.",
+    "generatePigScript passes literal HIHOConf.INPUT_OUTPUT_PATH key string rather than configured output path to PigUtility; source-only, metadata JDBC path not executed.",
+    "getDBWritable returns after metadata lookup without closing its JDBC statement/connection on either path; real vendor connection behavior unqualified.",
+    "Multiple-partition setup appends each jobCounter to already-mutated output path; e.g base->base0->base01. Uses mutable shared Configuration and indexes table/query count without matching validation. Source-only this pass.",
+    "Cluster integration test initializes HSQL server and Hadoop through HihoTestCase, so not run. Its AVRO method checks different prior test output directory and comments out content checks.",
+    "Cluster fixture PageComment loop increments i while j remains1, so every inserted commentCount is10; expected10 records are consistent with fixture, not evidence for varied comment counts.",
+    "initialize calls boolean verify but ignores returned result; verification compares random Access count with Pageview sum. No claim this source-only integration fixture passes.",
+    "25 original methods in TestDBQueryInputJob and TestHiveUtility actually passed; TestHiveUtility unannotated type method was not run. All original Java source files now read; remaining blob is Vim swap binary."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN"
+}

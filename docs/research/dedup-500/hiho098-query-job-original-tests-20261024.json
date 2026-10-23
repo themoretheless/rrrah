@@ -1,0 +1,13 @@
+{
+  "scope": "Original configuration-only TestDBQueryInputJob and query-string TestHiveUtility; no cluster integration class execution, JDBC/FTP/Hive service or job submission.",
+  "compile": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "Note: .dedup-work/hiho098-query-job-runtime-20261024/src/DBQueryInputJob.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: .dedup-work/hiho098-query-job-runtime-20261024/src/DBQueryInputJob.java uses unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+  },
+  "tests": {
+    "exit_code": 0,
+    "stdout": "JUnit version 4.5\n........................CREATE TABLE `employee` ( `id` int) PARTITIONED BY (name string,country string) CLUSTERED BY (name) SORTED BY (name) INTO 2 BUCKETS ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE\n.\nTime: 0.115\n\nOK (25 tests)\n\n",
+    "stderr": "26/10/24 03:58:06 ERROR job.DBQueryInputJob: Could not find the clause substitution token $CONDITIONS in the query: [select * from employee]. Parallel splits may not work correctly.\n"
+  }
+}
