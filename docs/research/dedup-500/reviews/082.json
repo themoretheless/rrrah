@@ -2,7 +2,7 @@
   "index": 82,
   "repository": "9001/copyparty",
   "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
-  "review_scope": "11/486 whole text blobs plus selected upload/hash functions throughv7. Corrupt-block retry baseline and stale-tail-after-longer-failed-write reproduced through original virtualHTTP/filesystem/SQLite; own17atomiccache-shrink/retry controls pass.475wholeblobs/fullmodules/server/platform/browser qualification pending.",
+  "review_scope": "11/486wholetextblobs plus3100/5931up2klines throughv8. Nativelegacyflagfilter andorderedmultivolumeresultcap controls; previousdedup/upload/worker testsqualifiedseparately.475wholeblobs/fullmodules/server/platform/browser pending.",
   "decision": "reference",
   "finding": "Actual file-dedup tests use original up2k+SQLite through virtual HTTP fixtures. Separate decoded-media CLI hashes are not exact file identity. Full server/runtime and whole implementation unqualified.",
   "license_metadata": "MIT",
@@ -102,6 +102,10 @@
     },
     {
       "audit": "docs/research/dedup-500/copyparty082-source-review-v7-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/copyparty082-source-review-v8-20261023.json",
       "whole_repo_complete": false
     }
   ]

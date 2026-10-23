@@ -1,0 +1,147 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 475,
+  "partial_source_files_read": [
+    {
+      "path": "copyparty/up2k.py",
+      "local": "08-up2k.py",
+      "sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "git_blob": "39da8b8ed2b9c1fa72a75253f5efff4124063449",
+      "whole_text_read": false,
+      "new_ranges_read": [
+        "131-1767"
+      ],
+      "cumulative_ranges": [
+        [
+          1,
+          1827
+        ],
+        [
+          3171,
+          3750
+        ],
+        [
+          3759,
+          4175
+        ],
+        [
+          5344,
+          5385
+        ],
+        [
+          5698,
+          5931
+        ]
+      ],
+      "cumulative_source_lines_read": 3100,
+      "total_source_lines": 5931,
+      "remaining_ranges": [
+        [
+          1828,
+          3170
+        ],
+        [
+          3751,
+          3758
+        ],
+        [
+          4176,
+          5343
+        ],
+        [
+          5386,
+          5697
+        ]
+      ],
+      "complete_Up2k_methods_by_read_coverage": [
+        "__init__",
+        "init_vols",
+        "unpp",
+        "reload",
+        "_reload_thr",
+        "_reload",
+        "deferred_init",
+        "log",
+        "_gen_fk",
+        "_block",
+        "_unblock",
+        "is_busy",
+        "get_state",
+        "_active_uploads",
+        "find_job_by_ap",
+        "get_unfinished_by_user",
+        "get_unfinished",
+        "get_volsize",
+        "get_volsizes",
+        "_get_volsize",
+        "rescan",
+        "_rescan",
+        "_sched_rescan",
+        "_check_forget_ip",
+        "_check_lifetimes",
+        "_check_shares",
+        "_check_xiu",
+        "_run_xius",
+        "_run_xiu",
+        "_vis_job_progress",
+        "_vis_reg_progress",
+        "_expr_idx_filter",
+        "init_indexes",
+        "register_vpath",
+        "_verify_db_cache",
+        "_build_file_index",
+        "_fika",
+        "handle_json",
+        "_handle_json",
+        "_symlink",
+        "handle_chunks",
+        "fast_confirm_chunks",
+        "confirm_chunks",
+        "_confirm_chunks",
+        "finish_upload",
+        "_finish_upload",
+        "regdrop",
+        "idx_wark",
+        "_hashlist_from_file",
+        "_hasher",
+        "_hash_t",
+        "hash_file",
+        "do_fx_backlog",
+        "hook_fx",
+        "shutdown"
+      ]
+    }
+  ],
+  "native_control": {
+    "harness": "docs/research/dedup-500/copyparty082-index-control-20261023.py",
+    "harness_sha256": "5958da0d15fa9ebb4568e826f0dd97a00483134f09d26832736d5aed4bfc8157",
+    "artifact": "docs/research/dedup-500/copyparty082-index-result-20261023.json",
+    "artifact_sha256": "974352b0adcaf7704da6fa10d9aa8abb76a9b2fd76fff3218515b115312a1eee",
+    "result": {
+      "source_sha256": "9914c93d246312e5ba962ae33ef01ff212548b5cfb3a789087dcddf6b682ae89",
+      "controls": 4,
+      "modern_filter_copies_flags": true,
+      "legacy_filter_reports_change_but_keeps_e2t_flags": true,
+      "legacy_returns_original_flags_object": true,
+      "single_volume_returned": 1000,
+      "two_volume_returned": 1007,
+      "scope": "Complete original helper/query bodies, constructor-free object with synthetic owned metadata and actual lock. No SQLite<3.9, background indexer, live server, filesystem files or real user/session behavior."
+    },
+    "exit_code": 0,
+    "command": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010/bin/python docs/research/dedup-500/copyparty082-index-control-20261023.py .dedup-work/copyparty082-20261023 .dedup-work/copyparty082-index-result-20261023.json"
+  },
+  "findings": [
+    "Constructor/deferredinit/reload/rescan/indexregistration prefix read sequentially; originaltesthub.is_dut skips backgroundsnapshot/hasher/rescan/taggerthreads afterindexinit. PreviousvirtualHTTPtests are not complete realserver/backgroundlifecycle proof. ActualMTH2/4worker tests separate.",
+    "Native original _expr_idx_filter:modernflag returns independentcopy. no_expr_idxTrue reportschanged while returnsoriginalflags stillcontaininge2t/e2ts; computedfiltered ret notreturned. OriginaloldSQLiteplatform notrun; only actualhelper controlledflag.",
+    "Native original get_unfinished_by_user onbounded syntheticownedmetadata:singlevolume1007jobs yields1000; orderedtwovolumes1000+7 yields1007, because ncap onlybreaksinnerloop. Not actual1007files/userpermission/serverresource qualification.",
+    "Read register_vpath snapshotrestore and DBsync/journal configuration. Snapshot restoresfinished entries byexistence; unfinished resetsbusy/poke and checks partialfilepresence. No snapshot/restart/corruptsnapshot native tests performed here.",
+    "Read _verify_db_cache signature usesnestedvolumes andindexingflags; actualpersistent DBcache invalidation runtime notexecuted. HistoricalSQLite/diskdurability speedcomments not adopted as currentperformanceevidence.",
+    "Read _build_file_index and initial _build_dir:emptyinaccessible/landmark handling, excludedvolumes, metadata-baseddirectoryhash and unchangedsize/mtime shortcuts. _build_dir notcomplete yet; no new race/indexacceptance claim.",
+    "Mainmodule sourcecoverage explicitlyrecorded withremaininglineintervals; onlycompletefile reviews counted aswholeblobs.11/486wholefiles unchanged; fullsource500andlibraryuniversalgoalremainopen."
+  ]
+}
