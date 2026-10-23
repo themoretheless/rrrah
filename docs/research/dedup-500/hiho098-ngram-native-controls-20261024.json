@@ -1,0 +1,55 @@
+{
+  "scope": "8originalJUnitmethods plus4authorboundarycontrols; unchanged selected original5Java classes; realHadoop0.20.2/Mockito1.8.1; mocked recording contexts; no full shuffle/cluster",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/NGramMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/NGramReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/ScoreMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/ScoreReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/ValuePair.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestNGramMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestNGramReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestScoreMapper.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestScoreReducer.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/NGramBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "org.junit.runner.JUnitCore",
+        "co.nubetech.hiho.similarity.ngram.TestNGramMapper",
+        "co.nubetech.hiho.similarity.ngram.TestNGramReducer",
+        "co.nubetech.hiho.similarity.ngram.TestScoreMapper",
+        "co.nubetech.hiho.similarity.ngram.TestScoreReducer"
+      ],
+      "returncode": 0,
+      "stdout": "JUnit version 4.5\n........\nTime: 0.107\n\nOK (8 tests)\n\n",
+      "stderr": "26/10/24 03:20:27 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: This is, This is a bookdelimiterBetweenKeyAndValuevalue1\n26/10/24 03:20:27 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: is a, This is a bookdelimiterBetweenKeyAndValuevalue1\n26/10/24 03:20:27 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: a book, This is a bookdelimiterBetweenKeyAndValuevalue1\n26/10/24 03:20:27 INFO ngram.NGramReducer: Key in NGram Reducer is: This is\n26/10/24 03:20:27 INFO ngram.NGramReducer: Value in NGram Reducer is: This is a bookdelimiterBetweenKeyAndValuevalue1\n26/10/24 03:20:27 INFO ngram.NGramReducer: Value in NGram Reducer is: This is not a bookdelimiterBetweenKeyAndValuevalue2\n26/10/24 03:20:27 INFO ngram.NGramReducer: Value added in list is: This is a bookdelimiterBetweenKeyAndValuevalue1\n26/10/24 03:20:27 INFO ngram.NGramReducer: Value added in list is: This is not a bookdelimiterBetweenKeyAndValuevalue2\n26/10/24 03:20:27 INFO ngram.NGramReducer: Value set in ValuePair is: This is a bookdelimiterBetweenKeyAndValuevalue1, This is not a bookdelimiterBetweenKeyAndValuevalue2\n26/10/24 03:20:27 INFO ngram.ScoreReducer: Key in ScoreReducer is: ValuePair [value1=This is a bookdelimiterBetweenKeyAndValuevalue1, value2=This is not a bookdelimiterBetweenKeyAndValuevalue2]\n26/10/24 03:20:27 INFO ngram.ScoreReducer: Value in ScoreReducer is: 1\n26/10/24 03:20:27 INFO ngram.ScoreReducer: Value in ScoreReducer is: 1\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "NGramBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS one-token input emits no candidate postings\nPASS two-token posting control\nPASS distinct key/value pairs collapse to identical sentinel-packed posting\nPASS reversed candidate order produces distinct score keys\nngram boundary checks=4\n",
+      "stderr": "26/10/24 03:20:28 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: common gram, common gramdelimiterBetweenKeyAndValueid\n26/10/24 03:20:28 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: common gram, common gram taildelimiterBetweenKeyAndValuefoodelimiterBetweenKeyAndValuebar\n26/10/24 03:20:28 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: gram tail, common gram taildelimiterBetweenKeyAndValuefoodelimiterBetweenKeyAndValuebar\n26/10/24 03:20:28 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: common gram, common gram taildelimiterBetweenKeyAndValuefoodelimiterBetweenKeyAndValuebar\n26/10/24 03:20:28 INFO ngram.NGramMapper: Key and Value in NGram Mapper is: gram taildelimiterBetweenKeyAndValuefoo, common gram taildelimiterBetweenKeyAndValuefoodelimiterBetweenKeyAndValuebar\n26/10/24 03:20:28 INFO ngram.NGramReducer: Key in NGram Reducer is: gram\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value in NGram Reducer is: A\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value in NGram Reducer is: B\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value added in list is: A\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value added in list is: B\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value set in ValuePair is: A, B\n26/10/24 03:20:28 INFO ngram.NGramReducer: Key in NGram Reducer is: gram\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value in NGram Reducer is: B\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value in NGram Reducer is: A\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value added in list is: B\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value added in list is: A\n26/10/24 03:20:28 INFO ngram.NGramReducer: Value set in ValuePair is: B, A\n"
+    }
+  ]
+}

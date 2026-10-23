@@ -1,0 +1,159 @@
+{
+  "scope": "All6tracked SequenceFiles read with real Hadoop0.20.2 Reader/builtinJava DefaultCodec; all12records (IntWritable,Text) and empty metadata printed; position196EOF each;no cluster/writes",
+  "files": [
+    {
+      "path": "testData/dedup/inputForSeqTest/input1.seq",
+      "local": "80-testData--dedup--inputForSeqTest--input1.seq",
+      "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+      "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+      "bytes": 196
+    },
+    {
+      "path": "testData/dedup/inputForSeqTest/input2.seq",
+      "local": "81-testData--dedup--inputForSeqTest--input2.seq",
+      "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+      "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+      "bytes": 196
+    },
+    {
+      "path": "testData/inputForSeqTest/input1.seq",
+      "local": "82-testData--inputForSeqTest--input1.seq",
+      "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+      "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+      "bytes": 196
+    },
+    {
+      "path": "testData/inputForSeqTest/input2.seq",
+      "local": "83-testData--inputForSeqTest--input2.seq",
+      "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+      "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+      "bytes": 196
+    },
+    {
+      "path": "testData/merge/inputNew/input1.seq",
+      "local": "84-testData--merge--inputNew--input1.seq",
+      "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+      "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+      "bytes": 196
+    },
+    {
+      "path": "testData/merge/inputOld/input2.seq",
+      "local": "85-testData--merge--inputOld--input2.seq",
+      "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+      "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+      "bytes": 196
+    }
+  ],
+  "rejected_author_assumption": "Initial harness assumed3records; first file reached196EOF with2records. Expected count corrected to2 after complete rawhex inspection; not upstream test failure.",
+  "initial_attempt": {
+    "scope": "All6tracked SequenceFiles read from owned evidence with real Hadoop0.20.2 Reader;all18Text records andmetadata printed;position==196EOF; no cluster or writes",
+    "files": [
+      {
+        "path": "testData/dedup/inputForSeqTest/input1.seq",
+        "local": "80-testData--dedup--inputForSeqTest--input1.seq",
+        "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+        "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+        "bytes": 196
+      },
+      {
+        "path": "testData/dedup/inputForSeqTest/input2.seq",
+        "local": "81-testData--dedup--inputForSeqTest--input2.seq",
+        "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+        "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+        "bytes": 196
+      },
+      {
+        "path": "testData/inputForSeqTest/input1.seq",
+        "local": "82-testData--inputForSeqTest--input1.seq",
+        "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+        "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+        "bytes": 196
+      },
+      {
+        "path": "testData/inputForSeqTest/input2.seq",
+        "local": "83-testData--inputForSeqTest--input2.seq",
+        "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+        "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+        "bytes": 196
+      },
+      {
+        "path": "testData/merge/inputNew/input1.seq",
+        "local": "84-testData--merge--inputNew--input1.seq",
+        "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+        "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+        "bytes": 196
+      },
+      {
+        "path": "testData/merge/inputOld/input2.seq",
+        "local": "85-testData--merge--inputOld--input2.seq",
+        "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+        "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+        "bytes": 196
+      }
+    ],
+    "commands": [
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "-d",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/SequenceFixtureControl.java"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "SequenceFixtureControl",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/80-testData--dedup--inputForSeqTest--input1.seq",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/81-testData--dedup--inputForSeqTest--input2.seq",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/82-testData--inputForSeqTest--input1.seq",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/83-testData--inputForSeqTest--input2.seq",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/84-testData--merge--inputNew--input1.seq",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/85-testData--merge--inputOld--input2.seq"
+        ],
+        "returncode": 1,
+        "stdout": "FILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/80-testData--dedup--inputForSeqTest--input1.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A2, B2, C2, D2, E2\n",
+        "stderr": "26/10/24 03:21:17 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n26/10/24 03:21:17 INFO compress.CodecPool: Got brand-new decompressor\nException in thread \"main\" java.lang.AssertionError: position=196 size=196 count=2\n\tat SequenceFixtureControl.main(SequenceFixtureControl.java:15)\n"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/SequenceFixtureControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "SequenceFixtureControl",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/80-testData--dedup--inputForSeqTest--input1.seq",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/81-testData--dedup--inputForSeqTest--input2.seq",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/82-testData--inputForSeqTest--input1.seq",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/83-testData--inputForSeqTest--input2.seq",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/84-testData--merge--inputNew--input1.seq",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/85-testData--merge--inputOld--input2.seq"
+      ],
+      "returncode": 0,
+      "stdout": "FILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/80-testData--dedup--inputForSeqTest--input1.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A2, B2, C2, D2, E2\nEOF 196 rows=2\nFILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/81-testData--dedup--inputForSeqTest--input2.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A1, B1, C1, D1, E1\nEOF 196 rows=2\nFILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/82-testData--inputForSeqTest--input1.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A2, B2, C2, D2, E2\nEOF 196 rows=2\nFILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/83-testData--inputForSeqTest--input2.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A1, B1, C1, D1, E1\nEOF 196 rows=2\nFILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/84-testData--merge--inputNew--input1.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A2, B2, C2, D2, E2\nEOF 196 rows=2\nFILE /Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/85-testData--merge--inputOld--input2.seq key=org.apache.hadoop.io.IntWritable value=org.apache.hadoop.io.Text compressed=true block=false metadata=size: 0\n\nROW 2=A, B, C, D, E\nROW 1=A1, B1, C1, D1, E1\nEOF 196 rows=2\n",
+      "stderr": "26/10/24 03:21:33 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable\n26/10/24 03:21:33 INFO compress.CodecPool: Got brand-new decompressor\n"
+    }
+  ]
+}

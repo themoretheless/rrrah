@@ -1,0 +1,169 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v11-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/NGramMapper.java",
+      "local": "66-NGramMapper.java",
+      "sha256": "65ddf38ac30a0ade3c434476fd5481df5e41106e08641a9d586589f92989a599",
+      "git_blob": "de2ea901369d724c5368048de5519c51a8d086eb",
+      "lines": 67,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/NGramReducer.java",
+      "local": "67-NGramReducer.java",
+      "sha256": "ee1205651e2b089c6e2dbf09f7e15af01a822aaee58264e20da93f8b05d4039a",
+      "git_blob": "f71999ad39b5249714a17482cefbbf1fbf9ef880",
+      "lines": 65,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/ScoreMapper.java",
+      "local": "69-ScoreMapper.java",
+      "sha256": "92bb4530b7435b8aeb90bc706d69da37e7153445d502f171d1c1fc8bf89a5acb",
+      "git_blob": "e2cdf051b046778359a6c68e8d62b0a7fbeccc34",
+      "lines": 36,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/ScoreReducer.java",
+      "local": "70-ScoreReducer.java",
+      "sha256": "278d88a657d0f3eb598a8e2a0e5e69fb73bc3f481e81003c52d73ff7f9d054e3",
+      "git_blob": "6e02b6d493392dfca88e7edb26c6fa605d13818d",
+      "lines": 47,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/ValuePair.java",
+      "local": "72-ValuePair.java",
+      "sha256": "269d54351f3d6906bfe52e890f591f4b5a8709d5b157e1a989471dc3175f38da",
+      "git_blob": "c562bd546bc9dd116a12f8f9fce417a8e7d3479a",
+      "lines": 110,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestNGramMapper.java",
+      "local": "74-TestNGramMapper.java",
+      "sha256": "24e017d7313d9ee5f8fcb86d20fdb4e48ca4b4222c5637df7f075615291e7060",
+      "git_blob": "14dd99d745e4372c2447b217abf352c697c0351c",
+      "lines": 45,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestNGramReducer.java",
+      "local": "75-TestNGramReducer.java",
+      "sha256": "c7fe14aff2e7592c3ff0cfe853b1b59fe1f402b5bd57ed76fc288a8a082f8a0b",
+      "git_blob": "f88b0c9bf32579d312a6a84a596178ddc5713cdb",
+      "lines": 54,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestScoreMapper.java",
+      "local": "77-TestScoreMapper.java",
+      "sha256": "7e88237dae1ea9026df4c13339011e124a0b127923bf1f39d9d54a9e5dbde48e",
+      "git_blob": "3ebac692a8440fc68c79ab7afbcd2c442591d251",
+      "lines": 46,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestScoreReducer.java",
+      "local": "78-TestScoreReducer.java",
+      "sha256": "a91263889c1b84962995740589a12102608fe84f72409bb82115ea632fd0a01b",
+      "git_blob": "f7ba8268dacd16b5eb51e74eb7f3b6560211a9ef",
+      "lines": 55,
+      "whole_text_read": true
+    },
+    {
+      "path": "testData/dedup/inputForSeqTest/input1.seq",
+      "local": "80-testData--dedup--inputForSeqTest--input1.seq",
+      "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+      "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+      "bytes": 196,
+      "whole_binary_review": true,
+      "method": "Complete raw hex inspected; SequenceFile v6 header types/codec/metadata and every IntWritable/Text record decoded by real Hadoop Reader; EOF position equals full196bytes; no embedded opaque payload remains"
+    },
+    {
+      "path": "testData/dedup/inputForSeqTest/input2.seq",
+      "local": "81-testData--dedup--inputForSeqTest--input2.seq",
+      "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+      "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+      "bytes": 196,
+      "whole_binary_review": true,
+      "method": "Complete raw hex inspected; SequenceFile v6 header types/codec/metadata and every IntWritable/Text record decoded by real Hadoop Reader; EOF position equals full196bytes; no embedded opaque payload remains"
+    },
+    {
+      "path": "testData/inputForSeqTest/input1.seq",
+      "local": "82-testData--inputForSeqTest--input1.seq",
+      "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+      "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+      "bytes": 196,
+      "whole_binary_review": true,
+      "method": "Complete raw hex inspected; SequenceFile v6 header types/codec/metadata and every IntWritable/Text record decoded by real Hadoop Reader; EOF position equals full196bytes; no embedded opaque payload remains"
+    },
+    {
+      "path": "testData/inputForSeqTest/input2.seq",
+      "local": "83-testData--inputForSeqTest--input2.seq",
+      "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+      "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+      "bytes": 196,
+      "whole_binary_review": true,
+      "method": "Complete raw hex inspected; SequenceFile v6 header types/codec/metadata and every IntWritable/Text record decoded by real Hadoop Reader; EOF position equals full196bytes; no embedded opaque payload remains"
+    },
+    {
+      "path": "testData/merge/inputNew/input1.seq",
+      "local": "84-testData--merge--inputNew--input1.seq",
+      "sha256": "c8e1d2a9509c8de300efe8de73402d3ff20193f2e09e0035f6018509af490de8",
+      "git_blob": "d0fc0bf01f94fbe155c22eae36b3926826bdb424",
+      "bytes": 196,
+      "whole_binary_review": true,
+      "method": "Complete raw hex inspected; SequenceFile v6 header types/codec/metadata and every IntWritable/Text record decoded by real Hadoop Reader; EOF position equals full196bytes; no embedded opaque payload remains"
+    },
+    {
+      "path": "testData/merge/inputOld/input2.seq",
+      "local": "85-testData--merge--inputOld--input2.seq",
+      "sha256": "4002b2b81f0b7caa493dfbd32363a50e4a5347504ae83d51400b1301734c77bd",
+      "git_blob": "bf954280926c24c71a419a39296a517ac0dc0637",
+      "bytes": 196,
+      "whole_binary_review": true,
+      "method": "Complete raw hex inspected; SequenceFile v6 header types/codec/metadata and every IntWritable/Text record decoded by real Hadoop Reader; EOF position equals full196bytes; no embedded opaque payload remains"
+    }
+  ],
+  "whole_text_files_read_total": 74,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 80,
+  "remaining_without_whole_review": 90,
+  "original_tests": {
+    "new": 8,
+    "new_passed": 8,
+    "cumulative_distinct": 62,
+    "cumulative_passed": 62,
+    "report": "docs/research/dedup-500/hiho098-ngram-native-controls-20261024.json",
+    "scope": "4additionalunchangedoriginalJUnitfiles;17files cumulatively; no whole ngram job/cluster execution"
+  },
+  "author_controls": {
+    "new": 4,
+    "cumulative": 37,
+    "confirmed": [
+      "One-token NGramMapper emits no postings; two-token positive control emits1. This limits a standalone completeness claim; no promised application policy inferred.",
+      "Two distinct key/value records sharing common bigram yield identical sentinel-packed posting strings.",
+      "Reversing NGramReducer input pair yields distinct ValuePair score keys; full shuffle-level effect remains untested."
+    ],
+    "scope": "Original methods executed with real Hadooptypes/legacyMockito recording contexts; not full pipeline"
+  },
+  "binary_fixtures": {
+    "report": "docs/research/dedup-500/hiho098-sequence-fixture-controls-20261024.json",
+    "files": 6,
+    "unique_byte_variants": 2,
+    "records": 12,
+    "format": "SequenceFilev6,IntWritable/Text,DefaultCodec zlib record compression,notblock,empty metadata",
+    "scope": "All6files complete196byte reads and all2records per file decoded/viewed; built-inJava codec fallback, no native-hadoop library or cluster; no Avro/swap review credit",
+    "author_correction": "Initial expected3records assertion failed after actual reader showed2atEOF; corrected assertion, preserved initial attempt. Not an upstream test failure."
+  },
+  "not_whole_reviewed": "6fetched ngram job/integration-test files were not read in this pass; no whole credit. Avro and editor swap remain unreviewed.",
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
