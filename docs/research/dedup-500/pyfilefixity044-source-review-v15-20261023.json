@@ -1,0 +1,63 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Seven additional pinned text/specification/config/fixture files read whole and Git blob matched. Configured shell commands treated as data, not executed.",
+  "evidence": [
+    {
+      "path": "pyFileFixity/ecc_specification.txt",
+      "bytes": 1026,
+      "sha256": "b9a2b56a9bd671ceb78c530bac1223a5aa9dcd1b4d6b5533a2fc053c3eb71f04"
+    },
+    {
+      "path": "pyFileFixity/resiliency_tester_config.txt",
+      "bytes": 1946,
+      "sha256": "01dd44a869a650772e3ac59e8caff539fde035302cd945d8837fdcbac603aaa0"
+    },
+    {
+      "path": "pyFileFixity/tests/results/resiliency_tester_config_easy.cfg",
+      "bytes": 2050,
+      "sha256": "cb445db0be5eb1b5b945b0af66f6f5246b85996ce40b5249ee8bf393334ee17f"
+    },
+    {
+      "path": "pyFileFixity/tests/results/resiliency_tester_config_hard.cfg",
+      "bytes": 1627,
+      "sha256": "1e88b086b8c752366bb90781cb170f3fb48f6496a55f7fda4bfe85429a583009"
+    },
+    {
+      "path": "pyFileFixity/tests/files/Sub2/testsub2.txt",
+      "bytes": 6,
+      "sha256": "bef57ec7f53a6d40beb640a780a639c83bc29ac8a9816f1fc6c5c6dcd93c4721"
+    },
+    {
+      "path": "pyFileFixity/tests/files/sub/testsub.txt",
+      "bytes": 253,
+      "sha256": "63fa3026c737793b5821f1ab89a10738f848f6308259e478724cbb68e4f62f77"
+    },
+    {
+      "path": "pyFileFixity/tests/files/testaa.txt",
+      "bytes": 8,
+      "sha256": "d1cb59f7968561b7bd9db5dcc6483587ec0d861471b24d48333e52dfd8bcdcd8"
+    }
+  ],
+  "findings": [
+    {
+      "id": "format-contract",
+      "detail": "ECC example specifies marker-delimited entries with relative path, size, metadata ECC and repeated per-block hash/ECC. It is illustrative and does not itself specify marker escaping, authoritative whole-file content identity, or parsing resource bounds."
+    },
+    {
+      "id": "easy-hard-scope",
+      "detail": "Easy scenario actively generates and repairs header ECC only; whole-file adaptive ECC lines are commented. Hard scenario comments out generation/repair and actively injects noise. Their names do not establish broad repair coverage."
+    },
+    {
+      "id": "randomness",
+      "detail": "Configs request probabilistic noise and bursts without explicit random seed or expected byte-change manifest. Reproducibility and measured corruption counts require runtime recording, not config presence."
+    },
+    {
+      "id": "text-fixture-boundary",
+      "detail": "Three small tracked text fixtures are available and now read; original PDF/JPEG/ZIP fixtures remain unreviewed and absent from this local cache. Reading these text files does not qualify image/container repair tests."
+    }
+  ],
+  "scenario_commands_run": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
