@@ -1,0 +1,44 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "memory_profiler.py now whole read: lines 1-340 in v50 and 341-854 here; callback executed with synthetic frames and fixed memory sample, no real trace hook",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/memory_profiler/memory_profiler.py",
+    "sha256": "a3479ed4a56f9e658e4c3a3b46551c723530db65521d0b971474785596b5cd9a"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 105,
+    "remaining_not_whole_reviewed": 39
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-line-attribution-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "4cc661e258c4876af700faa1e61f09d7bcde9b9c",
+    "source_sha256": "a3479ed4a56f9e658e4c3a3b46551c723530db65521d0b971474785596b5cd9a",
+    "scope": "Exact AST LineProfiler with synthetic event sequence and fixed memory sample, no sys.settrace or real RSS sampling",
+    "outer_expected_measured_lines": [
+      10,
+      11
+    ],
+    "outer_actual_measured_lines": [
+      10,
+      22
+    ],
+    "inner_actual_measured_lines": [
+      20,
+      21
+    ],
+    "nested_return_line_misattributed_to_outer": true
+  },
+  "findings": [
+    "LineProfiler.prevline is shared across tracked code objects. Nested callback events misattribute inner return line 22 to outer code, omitting outer line 11. Reproduced with exact class and synthetic frames.",
+    "trace_memory_usage stores maximum RSS for each previous line, while show_results subtracts adjacent displayed maxima. Increment is not a sum of allocations or a matched per-invocation delta; no peak allocation claim justified.",
+    "LineProfiler wrapper restores its tracing function in finally and counts nested enables; previous trace callback is invoked but its returned local callback is discarded, so full debugger/coverage composition remains unqualified.",
+    "magic_mprun restores an existing builtins.profile but does not remove newly inserted profile when none existed. CLI injects builtins.profile without restoring it. Static finding; no global builtins mutation executed.",
+    "magic_memit uses repeat == 1 rather than assignment when repeat is below one; repeat zero executes no target iteration. Static finding, IPython magic not run.",
+    "CLI finally prints results but output file opened in append mode is not explicitly closed; script/read/results errors may mask target failures. Static only.",
+    "TimeStamper records end sample in finally, but failures during end sampling can supersede target exceptions. Trace/GC/system sampling affect observations and need independent paired benchmarks."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
