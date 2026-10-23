@@ -1,0 +1,115 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "dedupe/index.py",
+      "local": "17-dedupe--index.py",
+      "sha256": "71dce43245d399f87ab52ecb787ec4db6bde200585237109f53c506ec59fabc5",
+      "lines": 33,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/levenshtein.py",
+      "local": "18-dedupe--levenshtein.py",
+      "sha256": "b7cc0b2d6b33e85bfa16cc4da318004e02067d9e635b9645702c9030da3a1eaa",
+      "lines": 37,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/tfidf.py",
+      "local": "19-dedupe--tfidf.py",
+      "sha256": "b12f73414b38a59caf08659353d49605d408cda3921cfaa0c8dfc849468e3346",
+      "lines": 43,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/predicates.py",
+      "local": "20-dedupe--predicates.py",
+      "sha256": "6cabc19228f15b4d45936241b78c50602839059556754e9b1d0eaadec3090f29",
+      "lines": 376,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/canopy_index.py",
+      "local": "21-dedupe--canopy_index.py",
+      "sha256": "fd4cb0ce8656db79b4778ab73b2b07ee0ce99aad5b5f55f1244961ed394ed06b",
+      "lines": 88,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/base.py",
+      "local": "22-dedupe--variables--base.py",
+      "sha256": "10f5930881cb329fd4a16a2c294ce5a170bc21de39b9f2e984afb40d61eeae86",
+      "lines": 115,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/exact.py",
+      "local": "23-dedupe--variables--exact.py",
+      "sha256": "da4c8e70003d18e62775e5f1ccd84f410cc48d8550ddb120f81d4e2714c9bec6",
+      "lines": 16,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/exists.py",
+      "local": "24-dedupe--variables--exists.py",
+      "sha256": "03c39c93d71df615382f0c885d121393d725022f634a7072f9bca658fb0b342a",
+      "lines": 38,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/interaction.py",
+      "local": "25-dedupe--variables--interaction.py",
+      "sha256": "1b848f65f197b4dbc57cbd6d37fe7a1adca8ad2774d79922ce25b00d0eb94ca7",
+      "lines": 74,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/latlong.py",
+      "local": "26-dedupe--variables--latlong.py",
+      "sha256": "e3a56ee14fd19a753db57dafee65840e4374b3d35a33d235dce23e9c48534654",
+      "lines": 18,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/price.py",
+      "local": "27-dedupe--variables--price.py",
+      "sha256": "0c88564c268a08b39560c4d6d8f056b4dfe5c067fabede53e5e636862c856b85",
+      "lines": 24,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 28,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 76,
+  "findings": [
+    {
+      "scope": "source only",
+      "finding": "SimplePredicate returns no keys for falsey field values, including numeric zero; Exact comparator itself compares zero equal. Candidate coverage and equality decisions must be qualified separately."
+    },
+    {
+      "scope": "source only",
+      "finding": "SearchPredicate cache keys include target mode and field value; index updates via Fingerprinter call bust_cache. Direct index mutation is not established as safe."
+    },
+    {
+      "scope": "source only",
+      "finding": "CanopyIndex removes words present in more than max(1000,5% of document count) postings; stop-word removal affects candidate completeness and must not be transplanted as exact identity policy."
+    },
+    {
+      "scope": "source only",
+      "finding": "TfIdf and Levenshtein indexes map document values to IDs; shared-document reference counting is absent at this layer. Record-level update/unindex behavior remains a full-package runtime question."
+    },
+    {
+      "scope": "source only",
+      "finding": "Exists treats falsey values as absent; Price maps nonpositive values to NaN; these are structured-field semantics, not file or image equality rules."
+    }
+  ],
+  "limits": [
+    "No additional native test executed in this step.",
+    "Levenshtein, BTrees/zope and learned-model dependencies not qualified.",
+    "No foreign production code copied into rrrah."
+  ]
+}
