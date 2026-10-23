@@ -1,0 +1,121 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v12-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/NGramJob.java",
+      "local": "65-NGramJob.java",
+      "sha256": "2c86485b967755060510d1c4ec6d3384a5507377e8b0f92b3dd82862b36a4632",
+      "git_blob": "c6b06c0c4e20fede201980eea5994214d8ffae4b",
+      "lines": 107,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/ScoreJob.java",
+      "local": "68-ScoreJob.java",
+      "sha256": "7babfbe70700e6e5720351b1d7919cc2a111eca2b781f615e40e34a36a318d83",
+      "git_blob": "9cb813f1fa3812b674ad39661dc0c76a00ee4505",
+      "lines": 83,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/similarity/ngram/SimilarityJob.java",
+      "local": "71-SimilarityJob.java",
+      "sha256": "814e5983e666acb9268e742ad66d46715519d2b3dde5972071f109f2802bcf9d",
+      "git_blob": "1a6328c9c1ec19ed5394bd9553f738aec339c3cf",
+      "lines": 66,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestNGramJob.java",
+      "local": "73-TestNGramJob.java",
+      "sha256": "2989f8ecbf3941dc2dc0ea25c6b30e49a029bf76b5f3c0bbdb276c8f73d7fcc5",
+      "git_blob": "795d4d8ed9a14bbfb47b621734ea22ba86ceb9af",
+      "lines": 100,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestScoreJob.java",
+      "local": "76-TestScoreJob.java",
+      "sha256": "0f040ab28bdff2672e7543ed25f6c3d31f626a84d7e4023ca35e7b17b678dc3d",
+      "git_blob": "1f6dd42fc4c5cf7ffca8a160a5e9f2fc7612f320",
+      "lines": 92,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/similarity/ngram/TestSimilarityJob.java",
+      "local": "79-TestSimilarityJob.java",
+      "sha256": "440256a980acd8cfc05225d2ccbb0db7853a25c3d61558a4593c793a9557628f",
+      "git_blob": "704af74f785f2ea78b6b4c1c1610cfeaf492f679",
+      "lines": 100,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/ColumnInfo.java",
+      "local": "86-ColumnInfo.java",
+      "git_blob": "5736611fc6f38065fab840d352fe60509945f830",
+      "sha256": "43f14f288ef117ddd67ff1bad935816dbe043f9663bac70b4f41cb0b0a763c70",
+      "lines": 68,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/GenericDBWritable.java",
+      "local": "87-GenericDBWritable.java",
+      "git_blob": "90253dc40b43689ee4ff0e59d10c40d0d1c825ae",
+      "sha256": "a1edafe095f6d7fed489187b54e47f945ef9a3bf14e4554f7180062576fc7df2",
+      "lines": 96,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/lib/db/TestColumnInfo.java",
+      "local": "88-TestColumnInfo.java",
+      "git_blob": "6f2ea748b0a7fcf0444bd7516f12c300dcc02c32",
+      "sha256": "8410a15c4a35988b4cae3903ef621050151d999130aea6d32f1765e2e4e1dc3d",
+      "lines": 74,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/lib/db/TestGenericDBWritable.java",
+      "local": "89-TestGenericDBWritable.java",
+      "git_blob": "7673ec4dea371f1b3048f3402bc28bb82f90bd19",
+      "sha256": "dbff9bd2fd8c353fc1f625da539d64e3a5ad69dbf73f11b222581b06a92445af",
+      "lines": 72,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBWritable.java",
+      "local": "90-DBWritable.java",
+      "sha256": "6f79d77b36ab2d4c8f1a3c0a2d4b609a83dbb4724f4c4845bbf0156ca16dbf30",
+      "git_blob": "7f597db999d70d4c7e9922becea9b9ad1a43f834",
+      "lines": 92,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 85,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 91,
+  "remaining_without_whole_review": 79,
+  "subsystem": "All15ngram Java files now fully reviewed; source review not full runtime qualification",
+  "original_tests": {
+    "new": 7,
+    "new_passed": 7,
+    "cumulative_distinct": 69,
+    "cumulative_passed": 69,
+    "report": "docs/research/dedup-500/hiho098-column-original-tests-20261024.json",
+    "scope": "7ColumnInfo originals;18files cumulatively; no JDBC connection or GenericDBWritable test executed"
+  },
+  "author_native_controls_cumulative": 37,
+  "source_only_findings": [
+    "SimilarityJob.run ignores both ToolRunner return codes, starts scoring unconditionally, constructs fresh Configuration for each stage. Full two-stage failure propagation not executed.",
+    "NGramJob and ScoreJob initialize return0, assign completion boolean inside try, print caught Exception and return current value; waitForCompletion throwing before assignment can leave0. Source-only; no real job submission.",
+    "NGram and scoring output paths are fixed relative names; original SimilarityJob test comment states local-versus-cluster path mismatch. Comment is upstream evidence only, not a reproduced cluster failure.",
+    "NGramJob integration test checks2output values equal1 and count, not candidate pair keys.",
+    "TestGenericDBWritable.testPopulateColumnInfo opens configured local MySQL via DriverManager, catches exceptions then uses columnInfo; deliberately not run.",
+    "GenericDBWritable implements JDBC-specific DBWritable interfaces, not Hadoop Writable; lack of DataInput/DataOutput methods is not by itself a serialization implementation bug."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
