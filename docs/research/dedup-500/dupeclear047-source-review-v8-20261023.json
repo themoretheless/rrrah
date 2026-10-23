@@ -1,0 +1,32 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/ViewModels/MainViewModel.cs",
+      "sha256": "34c43f021c1b2ea3334c49a5b0fb4770e47ceec2acc3efc029b0f5cfd7952722",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1,
+          875
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "MainViewModel MatchSameContents setter enables SameSize, and disabling SameSize disables SameContents. Constructor restores raw option flags directly from preferences instead of invoking these setters, so inconsistent saved preferences can bypass that coupling. No runtime UI claim.",
+    "Selecting a duplicate synchronously invokes the platform preview decoder after File.Exists, regardless of ShowPreview. PreviewImage replacement does not dispose the previous bitmap in either setter; external ownership remains unreviewed. Preview exceptions are silently swallowed.",
+    "Constructor reads and deserializes user.json without a local recovery catch. Invalid JSON or null saved collections can fail construction. Actual application-level handling remains unread.",
+    "Update architecture is fixed to X86_64 in DEBUG and inferred solely from pointer size in Release, so a 64-bit ARM runtime is classified X86_64. No update network request or downloaded updater binary executed.",
+    "Include/exclude recursion settings propagate to current directory objects through setters. Saved date bounds are restored but MatchDateCreated/MatchDateModified enable flags are not represented in reviewed UserData, so active-date-filter persistence is incomplete."
+  ],
+  "upstream_runtime_run": false,
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 43,
+  "full_review_count": 249,
+  "scope": "Additional contiguous lines 1-875 of MainViewModel read. Prior v7 ranges remain separately registered. File still partial; no new whole-file count."
+}
