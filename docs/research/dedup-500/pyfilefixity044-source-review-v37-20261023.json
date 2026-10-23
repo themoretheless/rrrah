@@ -1,0 +1,44 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Vendored pyinstrument profiler.py read whole and Git-object matched. Imported original file directly; deterministic record/report control only, no signals or process profiling hooks installed.",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/pyinstrument/profiler.py",
+    "sha256": "ecf3110279dc12dc96c7c644b520c8c0f8114829c5845463d348fe74b7a60745"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 73,
+    "remaining_not_whole_reviewed": 71
+  },
+  "control": {
+    "first_report_seconds": 1.0,
+    "after_more_samples_report_seconds": 1.0,
+    "raw_sample_seconds": 3.0,
+    "signals_or_global_profiling_hooks_installed": false
+  },
+  "findings": [
+    {
+      "id": "stale-report-cache",
+      "detail": "root_frame caches derived tree, Frame.time caches totals; _record adds raw samples without invalidation. Reproduced report1s then add2s: raw3s while report stays1s. Rendering midrun or reusing profiler needs explicit lifecycle qualification."
+    },
+    {
+      "id": "global-hook-ownership",
+      "detail": "start replaces SIGALRM handler/timer or sys.setprofile; stop clears/ignores rather than restoring prior owner. Nested profilers/host instrumentation can interfere. Not executed."
+    },
+    {
+      "id": "unreported-tail",
+      "detail": "stop does not record final elapsed interval since last sample. Short runs/final tails may have no samples; absence of samples is not zero runtime."
+    },
+    {
+      "id": "html-resource-availability",
+      "detail": "output_html expects style.css/profile.js/jquery-1.11.0.min.js under resources. None of those paths exist in pinned tree. No HTML generation attempted."
+    },
+    {
+      "id": "report-filtering",
+      "detail": "Text excludes children<=1 percent total; HTML excludes<=0.5 percent. Visible report is filtered sampled data, not complete cost accounting."
+    }
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
