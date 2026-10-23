@@ -1,0 +1,53 @@
+   Compiling squeez v1.48.15 (/Users/themoretheless/.codex/tmp/rrrah-squeez091-native-20261024-7hs36x0o)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.65s
+     Running tests/test_cross_agent_dedup.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_cross_agent_dedup-5abc81d7f6a12c33)
+
+running 7 tests
+test empty_paths_is_noop ... ok
+test empty_agent_id_is_noop ... ok
+test same_agent_same_file_not_dup ... ok
+test different_agents_same_file_is_dup ... ok
+test multiple_dups_reported ... ok
+test map_caps_at_16_entries ... ok
+test json_roundtrip_preserves_map ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_dedup.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_dedup-09f9ddc8f4715fdf)
+
+running 6 tests
+test collapses_repeated_lines ... ok
+test empty_input ... ok
+test exactly_at_threshold_collapses ... ok
+test keeps_lines_below_threshold ... ok
+test one_below_threshold_preserved ... ok
+test preserves_unique_order ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/test_redundancy.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_redundancy-03cebeaa640b3d29)
+
+running 6 tests
+test diff_by_one_line_misses ... ok
+test record_increments_call_n ... ok
+test second_identical_run_hits ... ok
+test tiny_output_skipped ... ok
+test two_line_output_matches ... ok
+test outside_recent_window_misses ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/test_redundancy_shingle.rs (.dedup-work/squeez091-target-20261024/debug/deps/test_redundancy_shingle-fbc83fedc0ae24b6)
+
+running 8 tests
+test exact_hit_has_no_similarity_field ... ok
+test fuzzy_disabled_for_short_outputs ... ok
+test whitespace_only_diff_matches_via_similarity ... ok
+test unrelated_outputs_dont_match_via_similarity ... ok
+test single_line_edit_in_long_output_still_matches ... ok
+test similar_hit_carries_similarity_field ... ok
+test length_ratio_guard_rejects_huge_size_difference ... ok
+test json_round_trip_preserves_shingle_match ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,141 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "tracked_blobs": 327,
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/context/hash.rs",
+      "local": "02-hash.rs",
+      "whole_text_read": true,
+      "sha256": "b7f3b2d599897cc983d01e113d0492d0a7f6efc25e9125d2c238bd08b56d67fc"
+    },
+    {
+      "path": "src/context/retrieve.rs",
+      "local": "03-retrieve.rs",
+      "whole_text_read": true,
+      "sha256": "b1500051b4f7beeaa0df2177225ffdf578e20a40739052a8957a2462eab8a2dc"
+    },
+    {
+      "path": "src/strategies/dedup.rs",
+      "local": "04-dedup.rs",
+      "whole_text_read": true,
+      "sha256": "853797e9e4cf677966face9cc4db2e1943556f62b6b9d37f221f0afa89a48de8"
+    },
+    {
+      "path": "tests/test_cross_agent_dedup.rs",
+      "local": "05-test_cross_agent_dedup.rs",
+      "whole_text_read": true,
+      "sha256": "561a6f24fbeb758d66b397f3a2c43059e242319458c27c32e225de8008b14301"
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "06-Cargo.toml",
+      "whole_text_read": true,
+      "sha256": "28d372e55be316571369c4eb8096a32d6e0c8538efc5f387e445d6f2e5910e65"
+    },
+    {
+      "path": "Cargo.lock",
+      "local": "07-Cargo.lock",
+      "whole_text_read": true,
+      "sha256": "2edd530d9e8dd79f3cef809f9f57cf3f6a1c1763d4976b98d81be603143308df"
+    },
+    {
+      "path": "NOTICE",
+      "local": "08-NOTICE",
+      "whole_text_read": true,
+      "sha256": "c4d8ac127257138ef9c3b1040c77c2c939dd01f40d60b696e7e894402affda57"
+    },
+    {
+      "path": "tests/test_dedup.rs",
+      "local": "09-tests--test_dedup.rs",
+      "whole_text_read": true,
+      "sha256": "27d3a66190225a3390b44a4dbfa8b96b397de43bec12f4061cc4b45c52c4513c"
+    },
+    {
+      "path": "src/context/redundancy.rs",
+      "local": "10-src--context--redundancy.rs",
+      "whole_text_read": true,
+      "sha256": "9f9a60238b0d9746c0b078f11872a82afb1b631a84f914c6c6859d1c9d2b5dfa"
+    },
+    {
+      "path": "tests/test_redundancy.rs",
+      "local": "11-tests--test_redundancy.rs",
+      "whole_text_read": true,
+      "sha256": "ba970ee01546ea37b9e72fe88db08393484b22f01a14812e7fffdf74e3ad6a7b"
+    },
+    {
+      "path": "tests/test_redundancy_shingle.rs",
+      "local": "12-tests--test_redundancy_shingle.rs",
+      "whole_text_read": true,
+      "sha256": "230aaeed5f5636226b4aa9c0635f9c494f270c9df16ad4d5530e519c7f4b5487"
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "13-src--lib.rs",
+      "whole_text_read": true,
+      "sha256": "26012c6afbaf385be7becc1b7f0c7f78a5af207b8b752423ed58f8e220ea4864"
+    },
+    {
+      "path": "src/context/mod.rs",
+      "local": "14-src--context--mod.rs",
+      "whole_text_read": true,
+      "sha256": "cd2eedbb8c47284192cd82354748c4f054fd0d3487b56e6d86e2934016f28c99"
+    }
+  ],
+  "whole_text_files_read_total": 13,
+  "remaining_without_whole_review": 314,
+  "partial_review_not_credited": {
+    "src/context/cache.rs": [
+      [
+        630,
+        740
+      ],
+      [
+        1025,
+        1120
+      ]
+    ]
+  },
+  "native_original_tests": {
+    "passed": 37,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "context::hash::tests": 10,
+      "test_cross_agent_dedup": 7,
+      "test_dedup": 6,
+      "test_redundancy": 6,
+      "test_redundancy_shingle": 8
+    },
+    "scope": "Five focused groups only; full package suite unrun."
+  },
+  "runtime_acquisition": {
+    "initial_attempt": "Nested checkout Cargo workspace-membership refusal, exit101, preserved log.",
+    "retry": "All327 tracked bytes copied unchanged outside rrrah workspace; pinned Cargo.lock retained.",
+    "toolchain": "rustc/cargo 1.98.1",
+    "state_directory": "Owned SQUEEZ_DIR under .dedup-work; no host hooks installed."
+  },
+  "public_api_path_control": {
+    "scope": "Unmodified pinned full-library public API; owned path strings only, no actual file or host integration",
+    "semicolon_same_path_detected": false,
+    "unseen_prefix_falsely_detected": true,
+    "same_path_miss_survives_json_roundtrip": true,
+    "ordinary_path_control_passed": true
+  },
+  "findings": [
+    "Cross-agent path map joins paths using semicolons and splits without escaping. Same /src/a;b.rs is missed across agents and unseen /src/a is falsely detected; the miss survives actual JSON roundtrip. Ordinary-path control passes.",
+    "The exact output-redundancy fast path compares FNV64 hash plus byte length; no byte confirmation is performed. Display short_hex retains32bits but is not the full comparison key.",
+    "Shingle sketch is capped96 after allocating all tokens and all trigram hashes, sorting and deduplicating. Final sketch cap is not a peak working-memory bound. No allocator measurement performed.",
+    "Fuzzy redundancy deliberately tolerates whitespace and changed lines, whereas one/two-token sketches are empty; this is output compression, not a file-identity contract.",
+    "Blob storage rewrites digest-addressed files directly using fs::write and verifies FNV on retrieval; no atomic publication or concurrent-writer qualification in this review."
+  ],
+  "transfer_decision": "No production implementation copied. Preserve typed paths and keep digest/sketch candidate matching separate from exact file-byte confirmation.",
+  "limits": [
+    "13/327 whole-file reviews; cache module only selected methods.",
+    "Original37 tests and finite owned path control do not qualify host hooks, all cache behavior, performance or universal recall.",
+    "No original host configuration, plugin install, network hook or model runtime invoked.",
+    "pHash.org/ASAN remains skipped."
+  ]
+}

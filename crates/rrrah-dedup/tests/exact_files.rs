@@ -1525,3 +1525,49 @@ fn paths_sharing_more_than_256_characters_preserve_copy_partitions() {
         }
     }
 }
+
+#[cfg(unix)]
+#[test]
+fn path_delimiters_preserve_distinct_files_and_copy_partitions() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let paths = ["a;b", "copy;one", "a", "a\nb", "b", "a\tb"].map(|name| root.path().join(name));
+    for (path, content) in paths.iter().zip([
+        b"first family",
+        b"first family",
+        b"other family",
+        b"other family",
+        b"third family",
+        b"final family",
+    ]) {
+        fs::write(path, content).unwrap();
+    }
+    let expected = BTreeSet::from([
+        BTreeSet::from([paths[0].clone(), paths[1].clone()]),
+        BTreeSet::from([paths[2].clone(), paths[3].clone()]),
+    ]);
+    for reverse in [false, true] {
+        let mut roots = paths.to_vec();
+        roots.push(root.path().to_path_buf());
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty(), "{report:?}");
+            assert!(report.aliases.is_empty(), "{report:?}");
+            assert_eq!(report.files_observed, 6);
+            let actual: BTreeSet<BTreeSet<_>> = report
+                .groups
+                .into_iter()
+                .map(|group| group.paths.into_iter().collect())
+                .collect();
+            assert_eq!(actual, expected);
+        }
+    }
+}

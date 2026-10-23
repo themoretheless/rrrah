@@ -1,0 +1,33 @@
+[package]
+name = "squeez"
+version = "1.48.15"
+edition = "2021"
+description = "Hook-based token compressor for 5 AI CLI hosts (Claude Code, Copilot CLI, OpenCode, Gemini CLI, Codex CLI). Up to 95% bash compression, signature-mode for code reads, cross-call dedup, MCP server, self-teaching protocol. Zero runtime deps."
+repository = "https://github.com/claudioemmanuel/squeez"
+license = "Apache-2.0"
+keywords = ["claude-code", "token", "compression", "llm", "cli"]
+categories = ["command-line-utilities", "development-tools"]
+readme = "README.md"
+autobenches = false
+
+[[bin]]
+name = "squeez"
+path = "src/main.rs"
+
+[[bin]]
+name = "bench_i18n"
+path = "bench/bench_i18n.rs"
+
+[lib]
+name = "squeez"
+path = "src/lib.rs"
+
+[dependencies]
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[profile.release]
+opt-level = 3
+strip = true
+lto = true

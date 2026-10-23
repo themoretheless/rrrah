@@ -1,0 +1,43 @@
+{
+  "origin": "claudioemmanuel/squeez pinned public API semicolon path counterexample",
+  "upstream_audit": "docs/research/dedup-500/squeez091-source-review-v1-20261024.json",
+  "own_regression": {
+    "path": "crates/rrrah-dedup/tests/exact_files.rs",
+    "test": "path_delimiters_preserve_distinct_files_and_copy_partitions",
+    "source_sha256": "78bc2b8e2ef60f8131c35b45f2ff04874df9ee26476c2e2a1ff45eace9c5a63d",
+    "platform": "macOS, cfg(unix); Windows not covered",
+    "physical_files": 6,
+    "same_byte_length": 12,
+    "authored_duplicate_families": 2,
+    "same_size_unique_files": 2,
+    "path_cases": [
+      "semicolon",
+      "semicolon-containing copy name",
+      "prefix component",
+      "embedded newline",
+      "other component",
+      "embedded tab"
+    ],
+    "input_variants": "Explicit file roots plus overlapping parent directory, forward/reverse order; scan and scan_verified",
+    "assertions": [
+      "complete with no issues or aliases",
+      "all six physical files retained",
+      "exact authored two-copy-family partition with no prefix, delimiter or unique-file conflation"
+    ]
+  },
+  "validation": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files",
+    "passed": 40,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "final_log": "docs/research/dedup-500/rrrah-path-delimiters-exact-tests-20261024.log",
+    "scope": "Entire exact_files integration target only, not all features or all dedup test targets"
+  },
+  "implementation": "Regression test only; existing typed-path exact matching already passes. No production change or foreign implementation copied.",
+  "limits": [
+    "Finite authored names and copy families do not establish universal filesystem coverage.",
+    "Source-wide formatter changes were removed before final successful run; unrelated workspace changes preserved.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
