@@ -1,0 +1,29 @@
+{
+  "repository": "Hao0321/claude-skill-code-cleanup",
+  "commit": "7f147ce60e40e10e2c82232861bec9f1ee6bcd93",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "code-cleanup-helper/scripts/check_context_budget.py",
+      "git_blob": "da7f96d3f061a89c97f806965bb99fdba8bed693",
+      "sha256": "e6711d825943ad2f4e87885b6be45d986776464ba05f0440e4ce3d8fbc794d5d",
+      "bytes": 26010,
+      "lines": 500,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 57,
+  "tracked_blobs": 121,
+  "remaining_without_whole_text_review": 64,
+  "control": "cleanup067-context-control-20261023.py",
+  "original_cli_self_test_passed": true,
+  "runtime_scope": "Whole original module and CLIselftest plus authored file/path/schema/mutation controls. All token counts in these tests use explicitly synthetic counters; no real tiktoken installation/encoding fetch/quality measurement.",
+  "findings": [
+    "Original seven advertised selftest families pass: green,densefile/aggregate overflow,missingduplicatepath,malformedbudget,tokenizer unavailable,quietJSON. Exact tokenizer availability remains independent.",
+    "Native helper controls reject boolbudget, symlink, ./alias, drive-qualified/traversal paths and duplicateJSON keys. Unavailable tokenizer yields blockingNOT_CHECKED exit2.",
+    "Fileidentity sampled before/after read, then cached across routes. Controlled tokenizercallback edits owned source after read; GREEN report retains old payloadhash while disk changed. This proves absence of final source revalidation in this helper, not normal tokenizer mutation or whole pipeline false promotion.",
+    "Outer invocation/revision checks may detect later drift; complete composed capture/verification chain not yet qualified.",
+    "_measure and output helpers use whole-file/wholeJSON allocations, no hardRSS/hugefile/deadline proof. No model/token performance or source-semantic quality improvement claimed."
+  ],
+  "full_review_count": 249
+}
