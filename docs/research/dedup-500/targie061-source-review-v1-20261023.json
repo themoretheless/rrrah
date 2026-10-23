@@ -1,0 +1,47 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/BKTree.swift",
+      "git_blob": "148b3dc54d20f62ae6e40b8cfef03b99d73316db",
+      "sha256": "333e3ac25185634d2927e02b5e0c99951338ee20ee19a3cc828e304c9a2eab85",
+      "bytes": 3847,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/BKTreeTests.swift",
+      "git_blob": "157edfcb5990612332feaf53ab10766a91459d78",
+      "sha256": "4fe4c618bd39d5da17784676a3cfeaa0cbf6896dd3b0bebe21026c0971339859",
+      "bytes": 6433,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 2,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 119,
+  "control": "targie061-bktree-control-20261023.swift",
+  "runtime_scope": "Whole unchanged pinned BKTree.swift compiled natively with authored Swift main and Foundation, no app/decoder/XCTest adapters. Original8XCTest functions read, not executed.",
+  "results": {
+    "query_radius_combinations": 2304,
+    "values_including_duplicates": 258,
+    "bruteforce_multiset_parity": true,
+    "identical_value_insertions": 256,
+    "distance_calls_for_identical_inserts": 32640,
+    "distance_calls_for_identical_search": 256
+  },
+  "binary": {
+    "path": ".dedup-work/targie061-20261023/bktree-probe",
+    "sha256": "0b902d4d3c0cee697a1f74dab2085375123849ea2e36056e6965f561db1f4c19"
+  },
+  "findings": [
+    "For complete8bitHamming domain, all256queries and radii0..8match independent brute-force values and multiplicity, including two additional0hashes. Finite metric primitive parity, not image/video recall or identity.",
+    "Identicalvalues form distance0chain;256inserts require n(n-1)/2=32640distancecalls, search visitsall256. Source O(nlogn)claim is not uniform guarantee. No elapsedtime speedup inferred.",
+    "Implementation recursively inserts/searches/counts and loops over every integer in distancewindow. No work/cancellation/stackbudget or radiusrange validation shown. Invalid/overflow radii not executed.",
+    "Source notices GPL3or-later attribution; rootlicense and complete app not yet read. Original source retained/compiled only for local research, no adoption into rrrah production."
+  ],
+  "full_review_count": 249,
+  "upstream_tests_run": false,
+  "compiler": "Apple Swift6.4 (swiftlang-6.4.0.34.1), arm64-apple-macosx26.0"
+}
