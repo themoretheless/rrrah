@@ -1,0 +1,32 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/duplicates/DuplicatesViewModel.kt",
+      "sha256": "183bf72e23bedda0c9e6ab434a9fae838741b8ec807d2adefa00942fc6d0b9d6",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1,
+          350
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "loadPersistedResults and stale-background restore reuse validatedCache without revalidating filesystem after initial load. ResetToIdle does not clear this cache in the reviewed range; subsequent invalidation methods remain unread.",
+    "Fresh Complete state clears selectedForDeletion and spaceToReclaim, a useful guard against carrying selections across scans. Persisted load/fallback does not clear selections in this range.",
+    "Complete-state collector clears scoped results for FULL while service separately persists results after publishing Complete. These independent coroutine operations can interleave with cache loading; exact race behavior untested.",
+    "CoilPreloader is called for flattened items in every result group, including overlapping membership. It does not deduplicate here, so repeated enqueue requests are possible; loader-level coalescing unqualified.",
+    "Unreadable summary count uses isPathExcludedFromScan while displayed list uses isUiHidden, which additionally hides hyphen-prefixed filenames. The count can exceed visible entries.",
+    "Cancelled/error state triggers persisted-result loading via a separately launched viewModelScope job, so collectLatest does not directly own/cancel that child load. Late-load publication ordering still requires remaining code/runtime review."
+  ],
+  "whole_files_read_total": 50,
+  "remaining_tracked_blobs": 80,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
