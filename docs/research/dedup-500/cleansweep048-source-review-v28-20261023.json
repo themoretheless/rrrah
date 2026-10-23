@@ -1,0 +1,42 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/AppDialog.kt",
+      "sha256": "938c8358b09cb352840657d41c5a00e2e870866f982baee082adf63398b2c4aa",
+      "lines": 133,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/AppDropdownMenu.kt",
+      "sha256": "df1800a6e5b67335d93c10e7f2a5a3b738e4324611a11a57e0fa69187cebdd06",
+      "lines": 87,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/RenameFolderDialog.kt",
+      "sha256": "8ca3eaabf3c17c687e233c758fac412fc39988d63d71601f1ea5029ac1ee7cd2",
+      "lines": 99,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/components/SheetItemCard.kt",
+      "sha256": "102e9962e3a4f9ef9e8f839aa65542d20cc5f5590ea1d56f22f49a98a75f318d",
+      "lines": 70,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "RenameFolderDialog passes its complete content through the trailing AppDialog buttons RowScope slot, nesting a full Column inside the action row rather than title/text slots. Actual layout/width behavior remains unrendered.",
+    "Rename input is remembered without currentFolderName key, so reusing the composition for a different folder can retain prior input. Confirmation rejects only blank/unchanged names; slash and filesystem checks are deferred to FileOperationsHelper.",
+    "Rename component has no error/in-progress state or disabled-during-submit guard. Whether caller closes immediately or handles failures remains unread.",
+    "AppDialog optional title/text and buttons use a non-scrolling Column; long caller content may exceed available height. Dont ask again label is hardcoded English. No rendered overflow or accessibility test claimed.",
+    "SheetItemCard uses URI image loading with crop and no filename inside this component, as documented; list labels are delegated to parent. No new duplicate-matching behavior here."
+  ],
+  "whole_files_read_total": 62,
+  "remaining_tracked_blobs": 68,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
