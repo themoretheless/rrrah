@@ -1,0 +1,73 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/DeletionService.swift",
+      "git_blob": "7387f10dda03372c11e96cc94928ef718b5a2e1e",
+      "sha256": "97dddd043c34593eefcf23b9c7991b89cc3d364cd3cfab96cde252971837f2ab",
+      "bytes": 3558,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/DeletionServiceTests.swift",
+      "git_blob": "7c319a1753894c81af58707675bcfab692130aaa",
+      "sha256": "70bb5a8c600d7c0331e0d37976c33370f4c9d51e51809576f6b2721fc325aedf",
+      "bytes": 2507,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/dco.yml",
+      "git_blob": "1831624bdbe4f1c0cbe5b21c7f2d9ad49636576b",
+      "sha256": "cd1ac7c608534f5a841ff64ce730c28dd4b12bbb83d0d2f939d93b1d0dffd57f",
+      "bytes": 2092,
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "git_blob": "4099d4ce681224af0c90ec9f5ef67c1b2f6ea0fb",
+      "sha256": "c15ac9d530429e76843280df51813b7551239820e61f95f66bc2e4d99253aba8",
+      "bytes": 4148,
+      "whole_text_read": true
+    },
+    {
+      "path": ".vscode/launch.json",
+      "git_blob": "f97f6a662c8e72a7145d3ce0cc8dde60cd55859d",
+      "sha256": "a0f64cb045400bde32d77b03975338fd1f2f6b8eecf4f7a2371a8f8e0fd9fe8f",
+      "bytes": 746,
+      "whole_text_read": true
+    },
+    {
+      "path": "script/release.sh",
+      "git_blob": "017d8e51f21420d9110b3e3750b1973a63a599d6",
+      "sha256": "e4194dcf403e05cda7f7eb0478e3246defbd290d2f9bfd8a0650b5a9df7e33f1",
+      "bytes": 4261,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 85,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 36,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter DeletionServiceTests",
+    "executed": 3,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "2dc65c3c7323731da3d165c1e928746f7033761c7d517aa769c4ddec04114535",
+    "scope": "Full unchanged original package. One test creates and removes its own fresh UUID temporary file, one tests absent UUID path, one uses injected no-filesystem operation to check off-main thread. No user files/Trash/Finder/player actions."
+  },
+  "static_checks": [
+    "bash -n on cached script/release.sh passed; syntax check only"
+  ],
+  "findings": [
+    "DeletionService checks Task cancellation before queueing, then private serial DispatchQueue executes operation without another cancellation check. Queued cancellation semantics not tested. No fresh identity comparison against previewed MediaItem in deletion service itself; caller confirmation/identity handling remains separate.",
+    "Three original tests prove temporary permanent removal, typedfileMissing and off-main injected operation. They do not qualify Trash restoration, changedfile races, partial batch success or UI confirmation safety.",
+    "Release workflow checks version, ensuresFFmpeg, invokes release packager, uploads artifacts and may create tag/release or clobber assets. Source read only; none dispatched, no credentials/config/tags/releases modified.",
+    "Release packager refuses dirty tree, runs tests, asks universalbuild, checks slices/version/signature, zips and verifies extracted signature/checksum. All source intent only; bash syntax pass not runtime packaging/signing qualification.",
+    "DCO workflow checks author-matching Signed-off-by via caseinsensitive fixedsubstring search, skipsmergecommits; it is not cryptographic signature verification. No user signoff/rebase/push performed.",
+    "VSCode launch configuration points to debug/release executable target withprelaunchbuildtasks. Read only, no debugger/application launch.",
+    "Six files whole-read and pinned verified; review remains85/121, no whole-repository or library coverage completion claim."
+  ]
+}
