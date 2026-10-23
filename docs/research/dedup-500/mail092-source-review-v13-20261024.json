@@ -1,0 +1,73 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v12-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_cli.py",
+      "local": "23-tests--test_cli.py",
+      "sha256": "b4dea62ee5e443a5ae5f7b5eb8991c6235b571b751a7fb63788219587f99d5e8",
+      "whole_text_read": true,
+      "lines": 352
+    },
+    {
+      "path": "tests/cli-test-suite.toml",
+      "local": "24-tests--cli-test-suite.toml",
+      "sha256": "1b94bedcb149d2544e912fb89b7e03f22c18fd892efbeb58285f7e010c40deff",
+      "whole_text_read": true,
+      "lines": 68
+    },
+    {
+      "path": ".gitattributes",
+      "local": "25-.gitattributes",
+      "sha256": "afacbbf64312f20a0cd2612afed177d2d6cf486feb87d8222212c4d8bce91b2b",
+      "whole_text_read": true,
+      "lines": 5
+    }
+  ],
+  "whole_text_files_read_total": 26,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 54,
+  "native_original_full_suite": {
+    "passed": 315,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 9.0,
+    "platform": "macOS",
+    "python": "3.15.0",
+    "pytest": "9.1.1",
+    "scope": "All315 collected original tests; default xdist/coverage addopts cleared; importlib import; owned basetemp; installed mdedup available in PATH"
+  },
+  "native_original_tests_distinct_total": 315,
+  "test_count_note": "294 earlier focused tests repeated within315 full suite; add21 CLI cases, do not sum609.",
+  "installed_source_integrity": {
+    "python_modules_verified": [
+      "__init__.py",
+      "__main__.py",
+      "action.py",
+      "cache.py",
+      "cli.py",
+      "deduplicate.py",
+      "mail.py",
+      "mail_box.py",
+      "strategy.py"
+    ],
+    "tracked_checkout_unchanged": true
+  },
+  "findings": [
+    "All original test modules now fully read and all315 collected tests pass in one package-wide run. This is source/test qualification on one resolved macOS runtime, not all-repository review.",
+    "CLI TOML wrapper passes its three subprocess cases:version,help,parallel hash-only fixture. Installed source wheel is not a frozen executable; binary multiprocessing bootstrap remains unqualified.",
+    "CLI memory tests use300 messages of100000characters and parent-process tracemalloc; child-process RSS and total process-tree peak are not included. Passing them is not a whole-process memory bound.",
+    "Sequential/parallel stdout parity covers four strategies on stable owned copies. It does not establish source-mutation, stale metadata or arbitrary failure parity.",
+    "gitattributes preserves fixture bytes without line-ending conversion. Fixtures/assets/dependency lock and remaining repository docs/workflows still need appropriate whole review."
+  ],
+  "transfer_decision": "Keep successful baseline tests alongside negative authored controls; no foreign production code copied.",
+  "limits": [
+    "26 whole text files of80;54 remain.",
+    "uv.lock not reproduced; binary package installed in isolated environment with exact source bytes verified.",
+    "No Windows/Linux/frozen binary/coverage95percent qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
