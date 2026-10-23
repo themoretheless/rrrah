@@ -503,3 +503,88 @@ fn unwritable_parent_refuses_before_publication_and_preserves_retry() {
         1
     );
 }
+
+#[test]
+fn interrupted_reads_at_every_wire_boundary_retry_without_accepting_trailing_bytes() {
+    use std::io::{self, Read};
+    struct InterruptOnce<'a> {
+        bytes: &'a [u8],
+        position: usize,
+        interrupt_at: usize,
+        interrupted: bool,
+    }
+    impl Read for InterruptOnce<'_> {
+        fn read(&mut self, output: &mut [u8]) -> io::Result<usize> {
+            if self.position == self.interrupt_at && !self.interrupted {
+                self.interrupted = true;
+                return Err(io::ErrorKind::Interrupted.into());
+            }
+            let count = output.len().min(self.bytes.len() - self.position).min(1);
+            output[..count].copy_from_slice(&self.bytes[self.position..self.position + count]);
+            self.position += count;
+            Ok(count)
+        }
+    }
+    let cache = process_fixture(1);
+    let mut bytes = Vec::new();
+    cache.write(&mut bytes, || false).unwrap();
+    // Cover every read position in one record plus all framing/checksum bytes.
+    let mut single = FingerprintCache::default();
+    let key = CacheKey {
+        content: [0; 32],
+        recipe: [1; 32],
+        frame_index: 0,
+    };
+    single.insert(key, cache.get(&key).unwrap().clone(), 1).unwrap();
+    bytes.clear();
+    single.write(&mut bytes, || false).unwrap();
+    for interrupt_at in 0..=bytes.len() {
+        let reader = InterruptOnce {
+            bytes: &bytes,
+            position: 0,
+            interrupt_at,
+            interrupted: false,
+        };
+        let restored = FingerprintCache::read(reader, 1, || false)
+            .unwrap_or_else(|error| panic!("interruption at {interrupt_at}: {error}"));
+        assert_eq!(restored.get(&key), single.get(&key));
+    }
+    let end = bytes.len();
+    bytes.push(1);
+    let reader = InterruptOnce {
+        bytes: &bytes,
+        position: 0,
+        interrupt_at: end,
+        interrupted: false,
+    };
+    assert!(matches!(
+        FingerprintCache::read(reader, 1, || false),
+        Err(rrrah_dedup::cache::CacheError::Invalid)
+    ));
+}
+
+#[test]
+fn repeated_interruption_at_cache_end_remains_cancellable() {
+    use std::{
+        cell::Cell,
+        io::{self, Read},
+    };
+    struct InterruptedEnd<'a>(&'a [u8]);
+    impl Read for InterruptedEnd<'_> {
+        fn read(&mut self, output: &mut [u8]) -> io::Result<usize> {
+            if self.0.is_empty() {
+                return Err(io::ErrorKind::Interrupted.into());
+            }
+            self.0.read(output)
+        }
+    }
+    let mut bytes = Vec::new();
+    FingerprintCache::default().write(&mut bytes, || false).unwrap();
+    let checkpoints = Cell::new(0);
+    let result = FingerprintCache::read(InterruptedEnd(&bytes), 0, || {
+        checkpoints.set(checkpoints.get() + 1);
+        checkpoints.get() == 8
+    });
+    assert!(matches!(result, Err(rrrah_dedup::cache::CacheError::Cancelled)));
+    assert_eq!(checkpoints.get(), 8);
+}

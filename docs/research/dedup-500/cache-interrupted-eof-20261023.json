@@ -1,0 +1,20 @@
+{
+  "scope": "rrrah-dedup fingerprint cache reader EOF interruption",
+  "reproduction_before_fix": "New regression failed at byte 408 (EOF) with Io(Interrupted); earlier positions succeeded via read_exact.",
+  "change": "Retry Interrupted during trailing-byte probe, checking cancellation before every retry; retain Invalid on trailing data and Io on other errors.",
+  "verification": {
+    "cache_integration_tests": 13,
+    "failed": 0,
+    "interruption_positions": 409,
+    "trailing_byte_after_interruption_rejected": true,
+    "persistent_eof_interruptions_cancellable": true
+  },
+  "limits": [
+    "Synthetic Read interruptions; no claim of real signal injection or all platforms.",
+    "All-case goal and 500-repository review remain incomplete."
+  ],
+  "production_files": [
+    "crates/rrrah-dedup/src/cache.rs"
+  ],
+  "regression_file": "crates/rrrah-dedup/tests/cache.rs"
+}

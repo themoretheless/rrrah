@@ -249,8 +249,16 @@ impl FingerprintCache {
             return Err(CacheError::Invalid);
         }
         let mut trailing = [0; 1];
-        if input.read(&mut trailing)? != 0 {
-            return Err(CacheError::Invalid);
+        loop {
+            if cancel() {
+                return Err(CacheError::Cancelled);
+            }
+            match input.read(&mut trailing) {
+                Ok(0) => break,
+                Ok(_) => return Err(CacheError::Invalid),
+                Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+                Err(error) => return Err(CacheError::Io(error)),
+            }
         }
         if cancel() {
             return Err(CacheError::Cancelled);
