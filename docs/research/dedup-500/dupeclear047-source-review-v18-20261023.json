@@ -1,0 +1,26 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "structured_files": [
+    {
+      "path": "DupeClear/Views/MainView.axaml",
+      "sha256": "c12758ae41a868b8fce335a172304ccee53d599f668ab77ce5ed9e3983d95107",
+      "git_blob_verified": true,
+      "elements_traversed": 608,
+      "whole_human_source_review": false,
+      "scope": "Full XML traversal into local inventory; selected filtering/drop-target attributes and ancestor chain inspected, other elements pending review."
+    }
+  ],
+  "findings": [
+    "MinSizeBox binds MinimumFileLength two-way through BytesToKilobytesConverter, with integer display N0, minimum zero and maximum Int64.MaxValue interpreted as kilobytes. ConvertBack multiplies Int64 by 1024; sufficiently large allowed input can overflow. Runtime binding error presentation remains untested.",
+    "Included/excluded directory ListBoxes allow drag/drop and have no IsBusy enabled-state binding on themselves or any ancestor. Together with reviewed unguarded drop handlers, source wiring permits directory-list mutation during a scan; no live concurrency interaction performed.",
+    "Checkboxes and most filter inputs do disable while IsBusy. Date enable checkboxes bind MatchDateCreated/MatchDateModified, with date pickers gated by checkbox and busy state.",
+    "MainUserControl explicitly disables compiled bindings, so malformed binding expressions or mismatched converter types may surface at runtime rather than all being statically checked. No full application build claim."
+  ],
+  "whole_files_read_total": 79,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
