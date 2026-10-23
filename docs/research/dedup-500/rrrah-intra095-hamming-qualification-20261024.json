@@ -1,0 +1,29 @@
+{
+  "purpose": "Qualify current rrrah Hamming lookup against reviewed upstream edge cases",
+  "head": "7680ad14531f7d5c6a0b8e4c908b9f59c4e901e4",
+  "sources": [
+    {
+      "path": "crates/rrrah-dedup/src/lib.rs",
+      "sha256": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1"
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/visual.rs",
+      "sha256": "3c7cfb2f385c52b9f690a72af3699342038443dde5dfe11c530a9a0fb02a93a8"
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/hamming_image_corpus.rs",
+      "sha256": "a941dd8ad2d3ee34c3d3806dee1577051e4d2ce8e4299397d5ddfc0e742dcbc6"
+    }
+  ],
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test visual --test hamming_image_corpus",
+  "passed": 11,
+  "failed": 0,
+  "ignored": 0,
+  "exit_code": 0,
+  "production_changes": false,
+  "limits": [
+    "Focused current tests only,not whole library or universal case proof",
+    "Foreign root removal and Cython adapter behaviors are not rrrah runtime behavior",
+    "Native pHash.org/ASAN remains skipped"
+  ]
+}

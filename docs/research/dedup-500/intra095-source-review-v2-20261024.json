@@ -1,0 +1,64 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "deduplicator/bktree.hpp",
+      "local": "04-bktree.hpp",
+      "sha256": "a95aaea33a12e7383dd64135aa1bf01685506349ffd6e8f1ea5c51654440d32b",
+      "whole_text_read": true,
+      "lines": 708
+    },
+    {
+      "path": "deduplicator/cyHamDb.pyx",
+      "local": "08-cyHamDb.pyx",
+      "sha256": "81213e33be2a984cf0392d7ed0bf1f70636ba460d45ed6f734ad15dca721ef9f",
+      "whole_text_read": true,
+      "lines": 437
+    }
+  ],
+  "whole_text_files_read_total": 8,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 146,
+  "compiler": "Apple clang version 21.0.0 (clang-2100.3.34.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Library/Developer/CommandLineTools/usr/bin",
+  "build_flags": [
+    "-std=c++17",
+    "-O2",
+    "-pthread"
+  ],
+  "build_exit_code": 0,
+  "authored_native_controls": [
+    {
+      "args": [],
+      "returncode": 0,
+      "stdout": "{\"brute_force_comparisons\":8320,\"missing_id_reported_deleted\":1,\"missing_id_changed_contents\":false,\"remaining_items\":100,\"hamming_zero_allones\":64}\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "root-remove"
+      ],
+      "returncode": -6,
+      "stdout": "",
+      "stderr": "Assertion failed: (non_null_children == 0), function remove, file bktree.hpp, line 363.\n"
+    }
+  ],
+  "original_tests_run": false,
+  "findings": [
+    "Original unchanged C++ header compiled natively, no Cython adapter or database.8320search comparisons against brute-force oracle pass:64queries times65radii0through64, before and after32nonroot removals.132initial entries include0,-1and duplicate hash1IDs;100remain.",
+    "Removing missing data999999from existing hash1returns deleted1although sorted get_all snapshot is unchanged. remove_internal returns1for matching hash even when node_data_items.count==0.",
+    "Separate child removing root(0,0)with children aborts via assertion non_null_children==0 atline363, signal6(returncode-6). Core dumps disabled;no retries or sanitizer.",
+    "Root path gathers descendant content into deque but retains child pointers before assertingnone. Assertion-disabled behavior not executed or qualified.",
+    "Cython source-only: get_all filters out exact pair(0,0); zero hashes with nonzero IDs are retained. No adapter runtime claim.",
+    "Cython source-only: nodes increments each insert including duplicate id/hash and is not decremented in remove, so diagnostic touched percentages can use stale counts.",
+    "Our HammingIndex source has no in-place removal API and explicitly requires removal/rebuild when fingerprintchanges; foreign root-removal crash does not establish an rrrah bug. Existing rrrah tests cover zero/duplicate/allbits and result-budget invariants; current focused rerun recorded separately."
+  ],
+  "transfer_decision": "Keep brute-force differential oracle,zero hashes and duplicate IDs in qualification. Do not adopt this removal implementation; no foreign production code copied.",
+  "limits": [
+    "8of154whole files;146remain.",
+    "Native authored harness is not original upstream test suite.",
+    "No Cython/PostgreSQL/concurrency/RSS/latency qualification;native pHash.org/ASAN skipped."
+  ]
+}
