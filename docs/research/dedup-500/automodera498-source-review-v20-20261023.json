@@ -1,0 +1,42 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/web/rest/CollectionRestController.java",
+      "sha256": "3551ec608bde887f048d4acc7684175d8d4864cea4af9660951f0510fe2ff155",
+      "lines": 130,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/web/rest/CommonNetworkRestController.java",
+      "sha256": "f6ccb06a6837604f6853aa6f095b4aa6746c3e83b2873d3aad43bab1e6d1ec7b",
+      "lines": 77,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/web/rest/CollectionsRestController.java",
+      "sha256": "137a0210e5cf9cc4d490cccc40787c8f4dbbf7efb5eb33b061e27b296aa816c8",
+      "lines": 72,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "http_requests": false
+  },
+  "findings": [
+    "Threecollection/commonRESTcontrollerswhole-read/Gitblobverified. No endpoints invoked. Review scoped response/data/lifecycle contracts.",
+    "Archive repertoire returns enabled metadata through facade, while download directly returns storedCollection byID without checking enabledflag in this method. Therefore discovery exclusion and direct object retrieval have different state semantics; deployment behavior untested.",
+    "Download payload cast directlyString, publish payload directlyCollectionRepertoire; no local type/null/recipe/width validation before delegation. Framework deserialization errors and exception mapping unqualified.",
+    "Integrator publish returnsHTTP200 after processCollectionRepertoire, whose percollection failures previously caught/logged. Partialdownload failure can still yield successful overall publication response by source composition; no HTTP runtime test.",
+    "Common status response computes online=true when request handled, uses local activeflag; missinglocalnode can dereference null. No separate freshness timestamp in NodeStatus model.",
+    "Controllers add no version/recipe validation to downloadedhash workflow. Former finding of metadata/fullcollection collision not resolved here."
+  ],
+  "remaining": [
+    "66 other tracked blobs/assets",
+    "Remaining web/GUI/templates/media/license/IDE/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
