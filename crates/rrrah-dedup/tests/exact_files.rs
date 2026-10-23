@@ -92,6 +92,36 @@ fn sibling_roots_with_a_shared_name_prefix_keep_both_file_sets() {
 }
 
 #[test]
+fn selecting_one_directory_does_not_admit_sibling_prefix_matches() {
+    let root = tempfile::tempdir().unwrap();
+    let selected = root.path().join("Photos");
+    let sibling = root.path().join("Photos-old");
+    fs::create_dir_all(selected.join("Trip")).unwrap();
+    fs::create_dir(&sibling).unwrap();
+    let mut expected = vec![selected.join("original"), selected.join("Trip/copy")];
+    for path in expected.iter().chain([sibling.join("outside-copy")].iter()) {
+        fs::write(path, [71; 64]).unwrap();
+    }
+    expected.sort();
+    for verified in [false, true] {
+        let roots = [selected.clone()];
+        let report = if verified {
+            rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+        } else {
+            scan(&roots, &Options::default(), || false)
+        };
+        assert!(report.complete(), "{report:?}");
+        assert!(report.issues.is_empty());
+        assert_eq!(report.files_observed, 2);
+        assert_eq!(report.groups.len(), 1);
+        let mut actual = report.groups[0].paths.clone();
+        actual.sort();
+        assert_eq!(actual, expected);
+        assert!(report.aliases.is_empty());
+    }
+}
+
+#[test]
 fn hidden_directories_and_empty_files_remain_in_exact_partitions() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
