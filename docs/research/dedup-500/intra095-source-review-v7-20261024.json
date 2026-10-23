@@ -1,0 +1,168 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v6-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_BKTree_Issue_2.py",
+      "local": "22-Tests--Test_BKTree_Issue_2.py",
+      "sha256": "cb3259adfe211db13ae98bcda93f696b39b7e9c6c269b76d094639b4a931f95f",
+      "whole_text_read": true,
+      "lines": 122
+    },
+    {
+      "path": "Tests/Test_Hamming_1.py",
+      "local": "23-Tests--Test_Hamming_1.py",
+      "sha256": "8c25cc8b89fa4322dbefc68bb82f58fe37461c79b4fcd6fa49ce3a6251b0107b",
+      "whole_text_read": true,
+      "lines": 92
+    },
+    {
+      "path": ".gitignore",
+      "local": "24-.gitignore",
+      "sha256": "395fb47f235b66f39c65ddaff9c3fa94131e69fecaa8ca2fe6bb7afcc86b5e92",
+      "whole_text_read": true,
+      "lines": 13
+    },
+    {
+      "path": ".travis.yml",
+      "local": "25-.travis.yml",
+      "sha256": "4bcd0842b152b7739a30a12fad2dc7583a834fdc3f3e879cf9ac408827c94202",
+      "whole_text_read": true,
+      "lines": 17
+    },
+    {
+      "path": "deduplicator/__init__.py",
+      "local": "26-deduplicator--__init__.py",
+      "sha256": "72ac93005e677b4e960d6b113921c1907698ce7385983866ed6dbdbce6d76159",
+      "whole_text_read": true,
+      "lines": 1
+    },
+    {
+      "path": "deduplicator/cyHamDb.pyxbld",
+      "local": "27-deduplicator--cyHamDb.pyxbld",
+      "sha256": "2c0398abe130f73ea0c978d9894894e73ae29725aa8481696c553f3ab7194663",
+      "whole_text_read": true,
+      "lines": 11
+    },
+    {
+      "path": "scanner/runState.py",
+      "local": "28-scanner--runState.py",
+      "sha256": "3aa3420889e94bf37dc95fe2aa38e20923ceff047e3dfd78d4b311b3f6be9d2a",
+      "whole_text_read": true,
+      "lines": 5
+    },
+    {
+      "path": "server/__init__.py",
+      "local": "29-server--__init__.py",
+      "sha256": "455392ed7cb1868e7614c4b2a387b789158902dc10717cc42eb88f3c5721318f",
+      "whole_text_read": true,
+      "lines": 1
+    },
+    {
+      "path": "settings.base.py",
+      "local": "30-settings.base.py",
+      "sha256": "36ced0e38aa523ac3feb936ba0e64d59555a9a7ed319bc3014d641bc47e38641",
+      "whole_text_read": true,
+      "lines": 16
+    },
+    {
+      "path": "test_settings.py",
+      "local": "31-test_settings.py",
+      "sha256": "f4daedcf35de43fbc7f7f2914f884ec7db9b5d5266859a6a683b3915635d8d98",
+      "whole_text_read": true,
+      "lines": 9
+    },
+    {
+      "path": "startServer.py",
+      "local": "32-startServer.py",
+      "sha256": "dd22a2c8b5c090a7141db2f9d0fb1473a36b38cc7a25b4c34168a2b816360cef",
+      "whole_text_read": true,
+      "lines": 6
+    },
+    {
+      "path": "run.sh",
+      "local": "33-run.sh",
+      "sha256": "8b4431b78efd80d84aa8dd1533eb572197a78424f24009fd1e4fc3ffe7fc6880",
+      "whole_text_read": true,
+      "lines": 8
+    },
+    {
+      "path": "runGrind.sh",
+      "local": "34-runGrind.sh",
+      "sha256": "8b5bd1001d6596756a7a9f8a6791844b51620f93a1c5db80d700a67e7105fac9",
+      "whole_text_read": true,
+      "lines": 27
+    },
+    {
+      "path": "runTests.sh",
+      "local": "35-runTests.sh",
+      "sha256": "de4cfeb181d35d80755c32a2265fb3c986d287e895bc83fe9de11e6b5a9fb2bf",
+      "whole_text_read": true,
+      "lines": 48
+    }
+  ],
+  "whole_text_files_read_total": 36,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 118,
+  "partial_file_review": {
+    "path": "Tests/Test_BKTree_Issue_1.py",
+    "local": "36-Tests--Test_BKTree_Issue_1.py",
+    "sha256": "13c269a639a1c413760c7d8314eb6f99fd085684598c835e4dff8c92122ee028",
+    "whole_text_read": false,
+    "scope": "869lines:combined initial read truncated;last95lines read,all793numeric tuples structurallyparsedwithast.literal_eval;not wholemanualread",
+    "rows": 793,
+    "unique_ids": 793,
+    "unique_hashes": 187,
+    "distance_histogram": {
+      "0": 253,
+      "1": 202,
+      "2": 338
+    }
+  },
+  "authored_native_control": {
+    "result": {
+      "rows": 793,
+      "brute_force_comparisons": 1690,
+      "orders": 2,
+      "original_issue1_radius2_results": 793
+    },
+    "build_exit_code": 0,
+    "run_exit_code": 0,
+    "scope": "Unchanged original C++ header plus structurally extracted original Issue1data;13queries times65radii times2orders;not original Python/Cython test invocation"
+  },
+  "shell_syntax_checks": [
+    {
+      "path": "run.sh",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "path": "runGrind.sh",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "path": "runTests.sh",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "findings": [
+    "793original Issue1rows have793distinctIDs and187distincthashes;query radius2expected allIDs.Native header agreesand1690fullscancomparisons passfor13queries/radii0to64/forwardreverseorders.",
+    "Issue2whole testread covers three signed64hashes and zero/allones queries thatmustreturnempty;not executedasoriginaltest.",
+    "Hamming1whole testread checks old/newCython distancewrappers at0,1,2,48,63,64;not executedasoriginaltest.",
+    "Cython pyxbld hardcodeslibstdc++,marchnative,mtunenative,mpopcnt. Native macOSheadercontrol bypassesit,so noCythonbuildportabilityqualification.",
+    "Travis targetsPython3.4andcoversUniversalArchiveInterfacepackage ratherthanthislibrary;configurationdoesnotprovecurrentCIpassing.",
+    "runGrind pipeintotee lacks pipefail,so upstreamValgrind/test failure maybemaskedbysuccessfultee;source-only,noValgrindrun.",
+    "run.sh respawnsserveronnonzero;runTests invokes fullTestspluscoverageerase. Reviewedandbash-ncheckedonly,notexecuted.",
+    "Configuration fixtures are not used to contact anyhost/database. No credentials reused or realserviceconnections."
+  ],
+  "transfer_decision": "Use fullscanoracles over original dense/collisioncorpora and insertionorders;preserve testprocessstatuses;no foreignproductioncodeadopted.",
+  "limits": [
+    "36of154whole files;118remainincludingpartialIssue1numericfixture.",
+    "Original upstreamtestcount unchanged17run13pass4errors;native1690comparisons are authoredcontrols.",
+    "No current whole-libraryoruniversalcoverageclaim;nativepHash.org/ASAN remains skipped."
+  ]
+}
