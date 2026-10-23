@@ -1,0 +1,50 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "whole_repo_complete": false,
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v2-20261024.json",
+  "whole_files_read": [
+    {
+      "path": "dedupe/blocking.py",
+      "local": "07-blocking.py",
+      "sha256": "9de87c1d8c8e590e126cc7ee2df28227a791f7d9eeb8ea52de8cc4c0c8ffcbb3",
+      "lines": 208,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/clustering.py",
+      "local": "08-clustering.py",
+      "sha256": "4ce419422aa800dde48b213369d34dd5801b7736773b5bffe45464896b9e0f6d",
+      "lines": 388,
+      "whole_text_read": true
+    },
+    {
+      "path": "pyproject.toml",
+      "local": "09-pyproject.toml",
+      "sha256": "d8914338ec9f49bfdee19a7547b10e970df53ca16d143739036e1e28b16a27a4",
+      "lines": 82,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 10,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 94,
+  "all_tracked_blob_hashes_verified": 104,
+  "native_controls": {
+    "whole_original_module_imported": true,
+    "predicate_namespaces_separate_same_text": true,
+    "target_flag_forwarding_baseline": true,
+    "scope": "Two synthetic non-index predicates, two records; original index predicates and learned model not qualified."
+  },
+  "findings": [
+    "Whole blocking module namespaces keys by predicate ordinal to avoid cross-predicate collisions; native synthetic predicate control confirms this.",
+    "Clustering uses connected components then centroid linkage, with re-filtering for oversized components; this can remove candidate edges and is not an exact all-pairs completeness guarantee.",
+    "Source connected_components explicitly raises StopIteration on empty input inside a generator; runtime effect not tested here.",
+    "Score memmap copying is chunked by default at 100000 records, but no RSS measurement or resource-bound qualification performed."
+  ],
+  "runtime_limit": "Existing Python runtime lacks scipy; clustering module and original test suite not run. No dependencies installed in this step.",
+  "limits": [
+    "No production code adopted; whole module reading is not original algorithm runtime qualification.",
+    "Synthetic predicates do not qualify index-backed predicate behavior."
+  ]
+}
