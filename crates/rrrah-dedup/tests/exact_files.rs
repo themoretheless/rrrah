@@ -922,6 +922,7 @@ fn repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth() {
         let b = root.path().join("b");
         fs::write(&a, b"same").unwrap();
         fs::write(&b, b"same").unwrap();
+        let modified = fs::metadata(&b).unwrap().modified().unwrap();
         let before = scan(&[a.clone(), b.clone()], &Options::default(), || false);
         assert!(before.complete());
         assert_eq!(before.groups.len(), 1);
@@ -930,11 +931,28 @@ fn repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth() {
             fs::write(&b, b"sameY").unwrap();
         } else {
             fs::write(&b, b"edit").unwrap();
+            fs::File::options()
+                .write(true)
+                .open(&b)
+                .unwrap()
+                .set_times(fs::FileTimes::new().set_modified(modified))
+                .unwrap();
+            assert_eq!(fs::metadata(&b).unwrap().modified().unwrap(), modified);
         }
         assert_ne!(fs::read(&a).unwrap(), fs::read(&b).unwrap());
-        let after = scan(&[a, b], &Options::default(), || false);
-        assert!(after.complete());
-        assert!(after.groups.is_empty(), "growth={growth}: {after:?}");
+        for verified in [false, true] {
+            let roots = [a.clone(), b.clone()];
+            let after = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(after.complete());
+            assert!(
+                after.groups.is_empty(),
+                "growth={growth}, verified={verified}: {after:?}"
+            );
+        }
     }
 }
 

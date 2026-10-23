@@ -1,0 +1,57 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "readme.md",
+      "local": "00-readme.md",
+      "sha256": "33d690095d8e9fe33ad973bdbd78d674a933aeb853e37278781d452d7b12c0e6",
+      "whole_text_read": true,
+      "lines": 98
+    },
+    {
+      "path": "mail_deduplicate/action.py",
+      "local": "07-action.py",
+      "sha256": "86d91f3cfef63bb5d1f1befb53fbbee447ede3e2fbc9d9cc460a51238855024d",
+      "whole_text_read": true,
+      "lines": 369
+    },
+    {
+      "path": "mail_deduplicate/__init__.py",
+      "local": "04-__init__.py",
+      "sha256": "27fc8d49a5ebea0fac412d556971ca6a714b7b9d517f773e6674c6df9a60557b",
+      "whole_text_read": true,
+      "lines": 31
+    },
+    {
+      "path": "mail_deduplicate/__main__.py",
+      "local": "05-__main__.py",
+      "sha256": "3c0c2fa0b91cd670a7dc2f084e74aa433b9c1ab8b14c35b9b138abc50552f8d2",
+      "whole_text_read": true,
+      "lines": 57
+    }
+  ],
+  "whole_text_files_read_total": 4,
+  "upstream_tests_run": false,
+  "control": {
+    "python": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+    "scope": "Exact upstream function AST; folder-file admission stub always true; stdlib filecmp and os real; no hardlink/replacement/deletion called",
+    "equal_control_allowed": true,
+    "different_same_metadata_allowed_with_warm_cache": true,
+    "cache_clear_restores_rejection": "the mail differs byte for byte from the copy kept, so linking it would swap its own content for that copy's (--hardlink-differing links them anyway)",
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-readonly-comparison-tr80bpj6"
+  },
+  "findings": [
+    "Exact original hardlink_blocker function AST permits initially equal owned files, then still permits different bytes after same-size rewrite with restored mtime because stdlib filecmp caches comparison by path and stat signature. Clearing cache restores rejection. Folder admission is stubbed true; original package not imported or full CLI tested.",
+    "hardlink replacement uses same-directory uniquely named temporary link and atomic os.replace; blocker and replacement are separate operations, so mutable-source race remains source observation only. No link/replacement/deletion executed.",
+    "delete-selected target calculation subtracts unique mails, while copy/move selected retain them. README explicitly defines mail equivalence from selected normalized headers, which is not exact file equality.",
+    "README performance/platform claims were read as upstream documentation, not independently validated measurements. Root GPL text not yet fully read; no code adoption."
+  ],
+  "transfer_decision": "Keep exact-file byte confirmation independent of cached size/mtime equality. Strengthen own repeated scan regression with restored mtime and both scan APIs.",
+  "limits": [
+    "Four complete cached pinned text files only; full tree and full upstream tests not reviewed.",
+    "No mailbox, message action, external service or user data accessed.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

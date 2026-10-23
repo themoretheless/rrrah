@@ -1,0 +1,20 @@
+{
+  "test": "repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth",
+  "source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "scope": "Initially equal owned files; same-size rewrite with original mtime restored, and paired growth with unequal bytes; both scan and scan_verified reject stale equality",
+  "result": {
+    "target": "exact_files",
+    "passed": 41,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "toolchain": "1.98.1",
+    "platform": "macOS"
+  },
+  "limits": [
+    "Finite mutation matrix, not atomic filesystem snapshot guarantee.",
+    "Only regression changed; production logic unchanged.",
+    "Final source formatting adjusted during compilation; no semantic change after launch.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
