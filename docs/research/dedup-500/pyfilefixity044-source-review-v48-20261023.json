@@ -1,0 +1,52 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Four whole text reads with Git blob verification; isolated web helper controls; no server, renderer or browser runtime",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/web.py",
+      "sha256": "7cdbd2f4a2e39ed28775262592ef27e0439574a733974bc10a2ee7a574333426"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/profile.js",
+      "sha256": "e23942946124a94bb566970509ed9e9d65c630b92c1e13a359352a3de9a42532"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/pyinstrument/resources/style.css",
+      "sha256": "3bdd5afb020830aeb4fba7a38213050fead7fec844652534e58bedae8ae4cc66"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/memory_profiler/README_DEV.rst",
+      "sha256": "58d4fde5e013d8a4278490f819d8ca4496fbed254631cf56ec91a347251b1c03"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 101,
+    "remaining_not_whole_reviewed": 43
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-web-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "27fe0cdb2d9ca377aaf4d0c28835c293578d047e",
+    "source_sha256": "7cdbd2f4a2e39ed28775262592ef27e0439574a733974bc10a2ee7a574333426",
+    "scope": "Exact selected AST bodies, decorators stripped; object and rendering seams only; no imports of upstream web framework, network listener, filesystem write or renderer",
+    "falsey_weak_lookup_raises_keyerror": true,
+    "strong_reference_retained_after_clear_cache": true,
+    "same_type_referents": {
+      "input_count": 2,
+      "display_count": 1
+    },
+    "render_false_reported_as_filename": "missing.png"
+  },
+  "findings": [
+    "get_obj uses weak_lookup or strong_lookup: a live falsey weak-referenceable object raises KeyError. Reproduced.",
+    "clear_cache clears garbage_graphs only, retaining strong id2obj objects captured from traceback locals or referents. Reproduced retention; no memory-growth benchmark.",
+    "Non-dictionary referents keyed by type text overwrite each other; two list referents reduce to one visible row. Reproduced with asizeof referent seam.",
+    "_get_graph ignores a False render result and caches filename as successful. Reproduced with renderer seam, no graph rendering.",
+    "No templates paths in pinned tree; web module expects DATA_PATH/templates. Installed templates/runtime usability not qualified.",
+    "profile.js toggles collapse and hover state, CSS hides child rows for collapsed frames; no timing aggregation performed by these helpers. Embedded CSS PNG data read as text but not visually reviewed.",
+    "README_DEV defines manual example-output inspection as a successful test run; that is not an assertion-based validation gate."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
