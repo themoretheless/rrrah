@@ -1,0 +1,63 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v21-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "cross_link/nameTools.py",
+      "local": "97-cross_link--nameTools.py",
+      "sha256": "e10ee3229308725d217c5f650de14055ff04914f003e3d2d23543b04da947ff7",
+      "whole_text_read": true,
+      "lines": 904
+    }
+  ],
+  "whole_text_files_read_total": 97,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 103,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 51,
+  "authored_control": {
+    "result": {
+      "empty_key_has_path": false,
+      "empty_key_membership": true,
+      "forced_missing_directory_refresh_error": "ValueError",
+      "normalization_collision": {
+        "normalized_keys": [
+          "report1"
+        ],
+        "retained_directory": "Report1",
+        "source_directories": 2
+      },
+      "scope": "Exact selected original name/proxy definitions;identity canonical-name adapter,controlled time,real owned directories and lock;no import-time DB/cache objects,watcher,rename or network",
+      "update_lock_available_after_error": false
+    },
+    "exit_code": 0
+  },
+  "rejected_hypothesis": "Initial harness expected an unbound changed variable when refresh interval was not reached. That call completed normally with lock released; assertion was wrong. Final control tests a real forced missing-directory failure instead. Initial harness failure is not an upstream test result.",
+  "rrrah_regression": {
+    "path": "crates/rrrah-dedup/tests/exact_files.rs",
+    "sha256": "12cb18223d7acea350a0fb396da1a44c0e4840dea8d47a0bdf70b5c44695d9b6",
+    "name": "normalized_parent_names_do_not_merge_distinct_physical_paths",
+    "whole_target_passed": 44,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "scope": "Different Report.1/Report1 directories with same page.bin basename and distinct contents;two real byte-copy pairs;overlapping roots,both orders,ordinary/verified scans."
+  },
+  "findings": [
+    "Whole nameTools source read in four bounded nontruncated ranges. Module initialization creates database-backed name maps and shared directory proxy; it was not imported or run as a module.",
+    "Original getDirDict with identity canonical-name adapter normalizes Report.1 and Report1 into report1, prints a collision warning and retains only Report1. Real owned directories confirm overwrite. This is fuzzy name lookup policy, not proof of content identity.",
+    "Original DirNameProxy membership on whitespace-only key returns a nonempty dictionary, which Python treats asTrue even though __getitem__ returns fqPathNone. Native selected class/function control confirms empty membership mismatch.",
+    "Forced refresh of a missing directory raisesValueError while retaining updateLock. A nonblocking probe finds the real owned lock unavailable after the exception. No watcher threads or next blocking acquire attempted.",
+    "Source-only: MtNamesMapWrapper.__contains__ indexes lutItems[key] before checking existence, and loaded is set before refresh succeeds. These paths were not additionally runtime-qualified.",
+    "Permanent rrrah regression retains distinct physical paths despite fuzzy-normalization collision;all44 current exact_files tests pass. Production scan algorithm unchanged."
+  ],
+  "transfer_decision": "Keep canonical labels separate from physical file identity;preserve collision candidates and release locks on refresh errors. Add a permanent normalized-parent path regression without adopting foreign code.",
+  "limits": [
+    "103of154 whole tracked files:97text,6visual;51remain.",
+    "Prior24 original upstream tests remain18passes,1failure,5errors;newcontrols are authored and44rrrahtests are focused evidence.",
+    "No database-backed canonical lookup,watcher,rename or full nameTools application integration.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

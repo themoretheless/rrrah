@@ -1727,3 +1727,48 @@ fn service_style_names_remain_eligible_for_exact_content_matches() {
         }
     }
 }
+
+#[test]
+fn normalized_parent_names_do_not_merge_distinct_physical_paths() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    let left = root.path().join("Report.1");
+    let right = root.path().join("Report1");
+    fs::create_dir(&left).unwrap();
+    fs::create_dir(&right).unwrap();
+    let paths = [
+        left.join("page.bin"),
+        right.join("page.bin"),
+        root.path().join("left-copy"),
+        root.path().join("right-copy"),
+    ];
+    for (path, content) in paths.iter().zip([b"AAAA", b"BBBB", b"AAAA", b"BBBB"]) {
+        fs::write(path, content).unwrap();
+    }
+    let expected = BTreeSet::from([
+        BTreeSet::from([paths[0].clone(), paths[2].clone()]),
+        BTreeSet::from([paths[1].clone(), paths[3].clone()]),
+    ]);
+    for reverse in [false, true] {
+        let mut roots = vec![left.clone(), right.clone(), root.path().to_path_buf()];
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, paths.len());
+            let actual: BTreeSet<BTreeSet<_>> = report
+                .groups
+                .into_iter()
+                .map(|group| group.paths.into_iter().collect())
+                .collect();
+            assert_eq!(actual, expected);
+        }
+    }
+}
