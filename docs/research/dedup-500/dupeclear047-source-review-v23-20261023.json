@@ -1,0 +1,43 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/Views/MainView.axaml",
+      "sha256": "c12758ae41a868b8fce335a172304ccee53d599f668ab77ce5ed9e3983d95107",
+      "git_blob_verified": true,
+      "lines": 1761,
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          430
+        ],
+        [
+          431,
+          850
+        ],
+        [
+          851,
+          1260
+        ],
+        [
+          1261,
+          1761
+        ]
+      ]
+    }
+  ],
+  "findings": [
+    "MainView markup now whole-read: all 1761 lines, complementing prior full XML traversal.",
+    "Find pane exposes a Use Regular Expressions toggle with no binding, name or event; reviewed FindWithinSearchResults implementation always uses case-insensitive string Contains. Thus the visible regex option is not connected to search semantics in these sources.",
+    "Result checkboxes respect busy/deleted state and allow locked members only when every member is locked. AreAllFilesLocked property is misleadingly named (returns Any unlocked), but XAML inverts it, yielding the intended all-locked predicate.",
+    "Context menu automatic marking passes selected items; lock/unlock visibility follows selected representative while command predicates inspect selected groups. No runtime interaction executed.",
+    "Main result text columns generally do not explicitly set IsReadOnly except Group; backing properties are read-only, so editing behavior depends on DataGrid binding/runtime. No source mutation via cells claimed.",
+    "Status cancellation is shown via OperationCanBeCanceled and progress visibility via IsBusy; zero progress uses indeterminate display. Preview visibility only hides its container and does not gate decoding upstream."
+  ],
+  "whole_files_read_total": 80,
+  "remaining_tracked_blobs": 12,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
