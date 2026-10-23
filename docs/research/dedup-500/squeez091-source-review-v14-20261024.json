@@ -1,0 +1,50 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v13-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/economy/preservation.rs",
+      "local": "64-src--economy--preservation.rs",
+      "sha256": "78c45c3c0cc219d32ee05ffb00316443ebb51489c13a6c63be1e21188645a334",
+      "whole_text_read": true,
+      "lines": 374
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 63,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 64,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 263,
+  "native_original_tests_added": {
+    "passed": 9,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0
+  },
+  "native_original_tests_cumulative": {
+    "passed": 369,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "different_space_paths_score": 1,
+    "dropped_extensionless_path_score": 1,
+    "dropped_second_verdict_score": 1,
+    "ordinary_distinct_paths_score": 0
+  },
+  "findings": [
+    "Different full paths /owned/first report.rs:7 and /other/second report.rs:7 both yield only shared suffix report.rs:7; preservation score1.0 despite changed location. Ordinary distinct-path negative control scores0.",
+    "Dropping extensionless /owned/README entirely scores1.0 because no anchors extracted.",
+    "Only first occurrence of each verdict keyword on each line is considered. Removing999 passed from 1 passed;999 passed retains score1.0.",
+    "Anchors are sets, so multiplicity and ordering are not preserved. Score is a structural heuristic, not semantic or byte equality.",
+    "Partial wrap.rs lines520-565 show guard evaluation only at reduction>=90 percent and separate retention logic; no new full-wrapper reproduction this turn."
+  ],
+  "transfer_decision": "Do not use heuristic anchor score for duplicate equality. Preserve whole path identity; qualify own exact scanner separately.",
+  "limits": [
+    "263 tracked files remain without whole review.",
+    "No claim that full wrapper emits these exact controls.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "test": "shared_filename_suffixes_and_extensionless_names_preserve_content_partitions",
+  "source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "scope": "Six owned physical files with equal12-byte sizes, distinct space-containing names sharing suffix, two extensionless names, two long extensions; two exact copy partitions and two unique files",
+  "matrix": "Forward/reverse explicit file roots plus overlapping parent directory; scan and scan_verified",
+  "assertions": [
+    "All six physical files observed once",
+    "Complete scan, no issues or aliases",
+    "Exactly two expected full-path content partitions",
+    "Every reported copy group has12-byte content"
+  ],
+  "result": {
+    "target": "exact_files",
+    "passed": 41,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "toolchain": "1.98.1",
+    "platform": "macOS"
+  },
+  "limits": [
+    "Finite filename/control matrix, not universal filesystem coverage.",
+    "Production implementation unchanged.",
+    "Native pHash.org/ASAN skipped."
+  ]
+}
