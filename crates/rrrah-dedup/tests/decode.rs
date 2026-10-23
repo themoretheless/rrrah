@@ -71,6 +71,46 @@ fn corrupt_missing_cancelled_and_frame_out_of_range_are_errors() {
     assert!(decode_selected_frame(&request, 10, &budget, || false).is_err());
 }
 
+#[test]
+fn undecodable_files_keep_exact_identity_before_and_after_decode_errors() {
+    let dir = tempfile::tempdir().unwrap();
+    let first = dir.path().join("broken.mp4");
+    let copy = dir.path().join("renamed.bin");
+    let different = dir.path().join("different.mp4");
+    // Readable encoded bytes, deliberately not a valid media container.
+    std::fs::write(&first, [1, 2, 3, 4]).unwrap();
+    std::fs::write(&copy, [1, 2, 3, 4]).unwrap();
+    std::fs::write(&different, [1, 2, 3, 5]).unwrap();
+    let mut expected = vec![first.clone(), copy.clone()];
+    expected.sort();
+    let roots = [dir.path().to_path_buf()];
+    let budget = MemoryBudget::new(1024 * 1024);
+    for after_decode_attempt in [false, true] {
+        if after_decode_attempt {
+            for path in [&first, &copy, &different] {
+                assert!(decode_selected_frame(&DecodeRequest::new(path), 10, &budget, || false).is_err());
+                assert_eq!(budget.used(), 0);
+            }
+        }
+        for verified in [false, true] {
+            let options = rrrah_dedup::exact::Options::default();
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &options, || false)
+            } else {
+                rrrah_dedup::exact::scan(&roots, &options, || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty());
+            assert_eq!(report.files_observed, 3);
+            assert_eq!(report.groups.len(), 1);
+            let mut paths = report.groups[0].paths.clone();
+            paths.sort();
+            assert_eq!(paths, expected);
+            assert_eq!(report.groups[0].bytes, 4);
+        }
+    }
+}
+
 fn bmp(bgr: [u8; 3], resolution: u32) -> Vec<u8> {
     let mut bytes = vec![0; 58];
     bytes[..2].copy_from_slice(b"BM");

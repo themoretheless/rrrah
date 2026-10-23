@@ -1,0 +1,73 @@
+{
+  "status": "verified-finite-regression",
+  "trigger": "Targie v29 native identical-undecodable-video control fails before exact grouping; local library should keep encoded identity independent of decoding.",
+  "change": "Added undecodable_files_keep_exact_identity_before_and_after_decode_errors integration test; no production algorithm change.",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --features decode --test decode undecodable_files_keep_exact_identity_before_and_after_decode_errors",
+  "executed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "other_decode_tests_filtered": 16,
+  "results": {
+    "readable_invalid_encoded_files": 3,
+    "identical_bytes": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "different_bytes": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "extensions": [
+      "mp4",
+      "bin",
+      "mp4"
+    ],
+    "decode_attempts": 3,
+    "decode_errors": 3,
+    "memory_budget_returned_to_zero_after_each_error": true,
+    "exact_scan_invocations": 4,
+    "scan_modes": [
+      "scan",
+      "scan_verified"
+    ],
+    "phases": [
+      "before decode failures",
+      "after decode failures"
+    ],
+    "every_scan_complete": true,
+    "every_scan_no_issues": true,
+    "every_scan_files_observed": 3,
+    "every_scan_groups": 1,
+    "group_members": [
+      "broken.mp4",
+      "renamed.bin"
+    ],
+    "group_bytes": 4
+  },
+  "scope": "Current working tree with pre-existing dirty raster/decode/develop changes. Post-run file hashes identify observed sources, not a frozen clean snapshot. Four tiny encoded-byte fixtures combinations, not valid video codec/container or universal media support.",
+  "semantics": "Both exact APIs require full hashes and fresh byte confirmation. scan_verified additionally observes full content for every admitted physical file, including pruned ones. Neither is an atomic filesystem snapshot. Decode failures must not erase independent exact-byte identity.",
+  "postrun_sha256": {
+    "crates/rrrah-dedup/tests/decode.rs": "319105d8e9c892da57fba87f14124bdd62a17c92888e3bfbd8f82ece28385fb4",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-decode/src/raster.rs": "09ad611c684df8cca89e805abd0cd80b95f6591c73d1fa56a912c97be58b8ef0",
+    "crates/rrrah-develop/src/raster.rs": "0410a2db1b4250eda1c53b3e1ee4448e9699afcf6cef50b93dbef43bd2e6a4d5",
+    "Cargo.lock": "b7cd9d8d509658bd5bcc7eba804f804e3697d1d0e51965c96ead4015fcabf04d"
+  },
+  "log_sha256": "fd081e3822d525403402906b5f98415773ba53567e7ff55f7fb7eb98ea4b0f83",
+  "verification": [
+    "Targeted native regression passed",
+    "rustfmt check on changed test file passed",
+    "git diff --check on changed test file passed"
+  ],
+  "limitations": [
+    "No production behavior changed; test locks existing intended separation.",
+    "No full decode suite rerun:16tests filtered.",
+    "No performance gain measured or all-case coverage established.",
+    "Repository review count unchanged249/500; Targie review now79/121 via separatev30."
+  ]
+}
