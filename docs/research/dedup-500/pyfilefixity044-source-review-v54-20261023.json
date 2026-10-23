@@ -1,0 +1,34 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "pprofile.py whole read, lines 1-240 v53 plus241-828 here; exact StatisticalThread class control with live-state seam, thread never started",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/pprofile/pprofile.py",
+    "sha256": "b718ff48650bf6f09afcc9033bd4bd2841e5ad7b94ed369b4dea0116cf127bdc"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 108,
+    "remaining_not_whole_reviewed": 36
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-statistical-stop-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "72fd8002c7b0d0f513e9eadabbf1e8adb49b3368",
+    "source_sha256": "b718ff48650bf6f09afcc9033bd4bd2841e5ad7b94ed369b4dea0116cf127bdc",
+    "scope": "Exact StatisticalThread class, constructed not started; is_alive seam keeps stopping thread live, deterministic clock",
+    "first_stop_elapsed": 1.0,
+    "second_stop_error": "unsupported operand type(s) for -: 'float' and 'NoneType'"
+  },
+  "findings": [
+    "StatisticalThread.stop resets _start_time while a thread can remain alive; second stop subtracts None. Exact class reproduces TypeError with synthetic live state and clock; no live scheduling/race frequency measured.",
+    "Profile.enable replaces sys trace, disable sets None; ThreadProfile does the same for threading trace. Existing trace handlers are not restored. Static finding, no process tracing hooks changed.",
+    "Durations use time.time imported as time, without monotonicity validation. Wall-clock corrections can affect totals; no clock manipulation performed.",
+    "StatisticalThread.run gathers all selected current frame stacks per sampling cycle; hit counts aggregate thread snapshots, not exact function invocations or CPU-exclusive duration.",
+    "StatisticalThread.stop does not join by design; context exit does stop then join. No thread execution or full Python2 runtime qualification.",
+    "callgrind truncates durations to integer microseconds and per-hit values; annotation and call-tree durations use different inclusive/exclusive interpretation. No export golden file or callgrind consumer run.",
+    "iterSource reads linecache at export time, not a frozen source snapshot. ZIP archive has no source-hash binding to observed code. No files exported.",
+    "runfile and runpath restore argv/path with finally; report creation in main finally can mask target exception and output handle close is after export rather than protected by its own finally. Static finding."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
