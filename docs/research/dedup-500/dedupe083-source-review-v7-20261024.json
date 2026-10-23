@@ -1,0 +1,77 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v6-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "dedupe/variables/__init__.py",
+      "local": "28-dedupe--variables--__init__.py",
+      "sha256": "3633bda269052804b46ea395c723b7ba2e36d7f12738bc50b28f0375186b5cbd",
+      "lines": 25,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/set.py",
+      "local": "29-dedupe--variables--set.py",
+      "sha256": "fa9e5ac6c0a45c322652ff653000b50b3b9cb019d6078e59cc689697160a359e",
+      "lines": 36,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/string.py",
+      "local": "30-dedupe--variables--string.py",
+      "sha256": "9de89a7f386ed7c0e8646c0a157b39c5551462be42c71225e05671a91166c8d5",
+      "lines": 109,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/variables/categorical_type.py",
+      "local": "31-dedupe--variables--categorical_type.py",
+      "sha256": "fb99970394968c1e02312bdd15c0c535544621ee8e272dc19b8aa2705ba2130d",
+      "lines": 27,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/predicate_functions.py",
+      "local": "32-dedupe--predicate_functions.py",
+      "sha256": "256fee52d0aa289996b3b3f82bb56f598b6d368b70adf635005992e1fa2de8e4",
+      "lines": 226,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/cpredicates.pyx",
+      "local": "33-dedupe--cpredicates.pyx",
+      "sha256": "8299691484ccc2ac478c6933258a3d6a179c6d6911a345ed3406573272e93b97",
+      "lines": 68,
+      "whole_text_read": true
+    },
+    {
+      "path": "setup.py",
+      "local": "34-setup.py",
+      "sha256": "609943eeafc4f0db18b22ee319113938a712459991b0e80493197e6ed3895db9",
+      "lines": 12,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 35,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 69,
+  "native_controls": {
+    "contiguous_gram_oracles": 32,
+    "token_boundary_fingerprint_collision": true,
+    "numeric_string_whole_field_collision": true,
+    "two_shared_set_members_can_have_no_common_adjacent_pair_key": true,
+    "scope": "Unchanged original pure predicate definitions. Observed collisions and omissions are candidate behavior; no classifier or exact-identity false acceptance claimed."
+  },
+  "findings": [
+    "Token fingerprint concatenates sorted tokens without boundaries; different tokenizations can share keys. Candidate match is not equality proof.",
+    "Set pair-key function emits adjacent windows of sorted elements, not every two-element combination; two shared elements need not share a generated pair-key.",
+    "Cython helpers operate on Unicode character slices after string conversion; extension build/runtime not qualified in this step."
+  ],
+  "limits": [
+    "Missing guessed categorical.py/fuzzycategorical.py paths were not counted; actual categorical_type.py read.",
+    "No full-package or upstream tests run.",
+    "No production code adopted."
+  ]
+}
