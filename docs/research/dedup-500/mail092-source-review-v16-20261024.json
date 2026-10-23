@@ -1,0 +1,82 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v15-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [],
+  "new_original_visual_files_reviewed": [
+    {
+      "path": "docs/assets/cli-coloured-header.png",
+      "local": "45-cli-coloured-header.png",
+      "sha256": "48ab163967e3f33b92c733a215ca72d62c837bd28cd3c3de4e09bc0a3af66a47",
+      "visual_reviewed_original": true,
+      "width": 916,
+      "height": 459,
+      "observation": "Historical cropped terminal command/load/hash/select/copy screen; commands shown treated as image content, not executed."
+    },
+    {
+      "path": "docs/assets/cli-coloured-run.png",
+      "local": "46-cli-coloured-run.png",
+      "sha256": "d9623027a5b874b7021f4051dc830202d8e9e9231fed9b09bb4651464e2885ea",
+      "visual_reviewed_original": true,
+      "width": 833,
+      "height": 1825,
+      "observation": "Historical full terminal run with1510found/retained/unique/copied,0duplicates and0deduplicated sets. Demonstrates presentation, not duplicate recall."
+    },
+    {
+      "path": "docs/assets/icon.png",
+      "local": "47-icon.png",
+      "sha256": "860680ecd831817881cfe65be3a6ae351e01493ad5abd6664b71f8123790e2bc",
+      "visual_reviewed_original": true,
+      "width": 128,
+      "height": 128,
+      "observation": "Small rounded square robot between paper stacks, yellow background."
+    },
+    {
+      "path": "docs/assets/mail-deduplicate-logo-header.png",
+      "local": "48-mail-deduplicate-logo-header.png",
+      "sha256": "a14e4173d14f845fae231f8d7364e03e70ef72fb5ddf8e2222f5774a7a38b2f3",
+      "visual_reviewed_original": true,
+      "width": 1280,
+      "height": 322,
+      "observation": "Horizontal robot mark with Mail Deduplicate lettering, blue-gray background."
+    },
+    {
+      "path": "docs/assets/mail-deduplicate-logo-square.png",
+      "local": "49-mail-deduplicate-logo-square.png",
+      "sha256": "372b2a00399920960397d4e6cd557d128b7815b4fd8f27805fbdc4a26e5e9f08",
+      "visual_reviewed_original": true,
+      "width": 624,
+      "height": 742,
+      "observation": "Larger robot-and-paper mark with yellow Mail Deduplicate lettering below."
+    },
+    {
+      "path": "docs/assets/mail-deduplicate-source-image.png",
+      "local": "50-mail-deduplicate-source-image.png",
+      "sha256": "991d680dec4f17c8836a283c882cbf3c5881b4e08ba4042531dbf13d6d4196bf",
+      "visual_reviewed_original": true,
+      "width": 512,
+      "height": 512,
+      "observation": "Square robot and paper stacks source illustration, no application runtime evidence."
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 45,
+  "cumulative_original_visual_files_reviewed": 6,
+  "cumulative_whole_reviewed_files": 51,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 29,
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "findings": [
+    "All six original PNGs visually inspected at original image paths and hashed against pinned inventory. PNG header dimensions recorded separately; metadata parsing alone is not visual inspection.",
+    "Historical terminal screenshot has1510unique messages and0duplicate sets; it is not duplicate discovery/recall validation. CLI phase naming differs from current source Step labels; no current-runtime equivalence inferred.",
+    "Logo assets are branding variations sharing the same robot-and-paper motif; visual relation is not byte/pixel equality. No pHash/distance threshold or decoded-pixel conclusion derived.",
+    "ICO,ICNS and both XCF multilayer sources remain pending. No derived preview credited as full original multilayer review."
+  ],
+  "transfer_decision": "Use source/test/runtime evidence for matching correctness; keep branding/screenshots separate. No image asset or foreign algorithm adopted.",
+  "limits": [
+    "45text plus6original PNGs reviewed:51of80;29remain.",
+    "315 original tests remains prior recorded macOS qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
