@@ -1,0 +1,111 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v11-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/testimages/Lolcat_this_is_mah_job.jpg",
+      "sha256": "09de99364b0f052033869dc87da529c10f90abec390bd8712c3d2b83cd4e6ba3",
+      "whole_visual_read": true,
+      "size": [
+        493,
+        389
+      ],
+      "scope": "Full image displayed on labelled contact sheet at scaled resolution;not per-pixel identity proof"
+    },
+    {
+      "path": "Tests/testimages/Lolcat_this_is_mah_job.png",
+      "sha256": "631aede1de6fe10cce0bbe41796d6258d98a6a9ceabbcb921f56865cbb770e93",
+      "whole_visual_read": true,
+      "size": [
+        493,
+        389
+      ],
+      "scope": "Full image displayed on labelled contact sheet at scaled resolution;not per-pixel identity proof"
+    },
+    {
+      "path": "Tests/testimages/Lolcat_this_is_mah_job_small.jpg",
+      "sha256": "e98ab73bcf418d9cfb7cc139c4fe8380f9bdbeafba431a3b10b8403e7a3c8768",
+      "whole_visual_read": true,
+      "size": [
+        300,
+        237
+      ],
+      "scope": "Full image displayed on labelled contact sheet at scaled resolution;not per-pixel identity proof"
+    },
+    {
+      "path": "Tests/testimages/dangerous-to-go-alone.jpg",
+      "sha256": "75f650dacc5bd4c5bff2e0da4f072c2ec91ec9c8889f5d95979a37e9a59d6563",
+      "whole_visual_read": true,
+      "size": [
+        325,
+        307
+      ],
+      "scope": "Full image displayed on labelled contact sheet at scaled resolution;not per-pixel identity proof"
+    },
+    {
+      "path": "Tests/testimages/lolcat-crocs.jpg",
+      "sha256": "27cbbe132dc59f4f53c88c903506f03c79d3b68c9ad7a7e65dfb026a6274f9e4",
+      "whole_visual_read": true,
+      "size": [
+        500,
+        363
+      ],
+      "scope": "Full image displayed on labelled contact sheet at scaled resolution;not per-pixel identity proof"
+    },
+    {
+      "path": "Tests/testimages/lolcat-oregon-trail.jpg",
+      "sha256": "0a17b0af7a2bdc6452b0f528ebc8509a616a1d215d84c176c4191d816176e72a",
+      "whole_visual_read": true,
+      "size": [
+        501,
+        356
+      ],
+      "scope": "Full image displayed on labelled contact sheet at scaled resolution;not per-pixel identity proof"
+    }
+  ],
+  "whole_text_files_read_total": 49,
+  "whole_visual_files_read_total": 6,
+  "whole_files_read_total": 55,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 99,
+  "contact_sheets": [
+    {
+      "local_path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-visual-20261024/archive-unique-1.png",
+      "sha256": "82225c4db521c890613df2cc2f017224fe8e3cdfd29454090f4f33b814f55a0c",
+      "viewed": true
+    },
+    {
+      "local_path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-visual-20261024/archive-unique-2.png",
+      "sha256": "540c626f9f901cb6bfe331481b99542ddc1982aa0a72c238292fde61ba74e15a",
+      "viewed": true
+    },
+    {
+      "local_path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-visual-20261024/original-six-contact.png",
+      "sha256": "a27d4914fb3fabd9175caca716ce41da543555ac735a853deb2c33b8d1765ea0",
+      "viewed": true
+    }
+  ],
+  "archive_visual_review": {
+    "unique_image_byte_variants": 22,
+    "member_occurrences_total": 132,
+    "metadata": "docs/research/dedup-500/intra095-archive-visual-metadata-20261024.json",
+    "whole_archive_credit": false
+  },
+  "findings": [
+    "SixtrackedtestimagespinnedSHAverified,decodedandvisuallydisplayedonlabelledcontactsheet. Threeformatsizesvariants ofsame sleepingcatpluskitten/crocs/catwagon memes. Theyarevisuallyrelatedbutencodedidentitynotinferred.",
+    "All22uniqueimagebytevariantsfromZIPfixturesdecodedandviewedontwolabelledcontact sheets withname,dimensions,SHA256prefix;originsretainedbymemberoccurrence.22includesstandalone6,not28uniqueimages.",
+    "Remainingarchiveimagesshowfullsize/resizedpairs,distinctmeme/poster/lineartpages,and100x100solidcoloredplaceholder. Placeholdernottreatedasreliableidentityevidencebeyonditsownbytes.",
+    "FourshortUTF8textpayloadsfullyreadinthestructuralmetadata:commontext,uniqueextendedtext,Macjunknoteanddeletednote. EmbeddedPythonfilesareonlyhashedunlessseparatelyread;Thumbs.dbremainsundecoded.",
+    "Archivecontainersstillnotcreditedwhole:visualimagesandCRCdonotcompleteallsource/binarymemberreview;tracked7zunqualified.",
+    "ContactsheetPNGsremaininownedlocalworkarea;onlysmallprovenanceJSONcommittedtoavoidduplicatingrasterassetsinresearchhistory. Original6sourceimagesremainavailableatpinnedrepositorypaths."
+  ],
+  "transfer_decision": "Keep visual labels and bytevariant provenance alongside hashes;distinguish resized/recodedvariants from identical encodedfilesanduninformativeplaceholderpages. No foreignproductioncodeadopted.",
+  "limits": [
+    "49wholetextplus6wholevisualtrackedfiles=55of154;99remain.",
+    "Reviewatcontactsheetresolution,notalloriginalpixelsorfonttextcertification.",
+    "All22ZIPimagevariantsreviewedbutcontainersnotwholecomplete;no full153/500claim.",
+    "No testsrunthisturn;prior19originaltestsremain14pass5errors.NativepHash.org/ASAN remains skipped."
+  ]
+}
