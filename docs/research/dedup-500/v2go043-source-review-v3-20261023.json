@@ -1,0 +1,59 @@
+{
+  "repository": "Danialsamadi/v2go",
+  "commit": "fcf4e1f1143ef32ddb4673aa176c8ab0a54c4c9e",
+  "evidence": [
+    {
+      "path": "internal/converter/converter.go",
+      "sha256": "1a005fb1c6437b4bc2c9ffdc26f45c2a743e036c53f9c960fd9ef36ce0e538c4",
+      "git_blob_sha1": "10f16853f6d9df6207937b9511c5a50c93bf85d0",
+      "whole_file_read": true
+    },
+    {
+      "path": "internal/converter/converter_test.go",
+      "sha256": "5870185cad5430cc65dfb456441b0aa25a9292f245900c742d8c217b26661877",
+      "git_blob_sha1": "cf1c83c4296990ebef54cfceb93c3d4996d31b04",
+      "whole_file_read": true
+    },
+    {
+      "path": "go.mod",
+      "sha256": "1aaf53e89b889e78a3acd49a4f727b66028405787e9bb644cbf3684741d0a85d",
+      "git_blob_sha1": "1eb61390d12ac2fa4793490ed4beece30fd5ed6c",
+      "whole_file_read": true
+    }
+  ],
+  "scope": "Pinned files verified against captured Git tree; static whole-file review.",
+  "findings": [
+    {
+      "id": "fractional-port",
+      "detail": "parseVMess converts numeric JSON port float64 to int before range checking, silently truncating fractional ports. String ports use Atoi and reject fractional values."
+    },
+    {
+      "id": "double-unescape",
+      "detail": "parseTrojan and parseHysteria2 apply QueryUnescape to User.Username already decoded by net/url. buildStreamSettings similarly applies QueryUnescape to values already decoded by ParseQuery (paths and spiderX). Literal plus and percent sequences can change a second time."
+    },
+    {
+      "id": "ignored-query-errors",
+      "detail": "URL parsers discard ParseQuery errors, permitting partially parsed option maps. Invalid settings may silently disappear rather than generating a typed diagnostic."
+    },
+    {
+      "id": "ss-query-loss",
+      "detail": "parseSS discards the entire query before parsing, including plugin options. Conversion success therefore does not prove preservation of input semantics."
+    },
+    {
+      "id": "validation-boundary",
+      "detail": "URL-based VLESS/Trojan/Hysteria parsers validate port and user credential but do not explicitly reject an empty Hostname. splitHostPort likewise accepts an empty host before a valid port. Downstream config loading may reject some such outputs; ConvertLink alone is not complete validation."
+    },
+    {
+      "id": "test-coverage",
+      "detail": "converter_test.go has three top-level tests: four fragment/load cases, four garbage inputs, and eight URL-host cases. Tests do not cover fractional ports, double decoding, empty hosts, or SS plugin preservation. No file/image deduplication is implemented here."
+    }
+  ],
+  "execution": {
+    "upstream_tests_run": false,
+    "reason": "go executable absent: command lookup and GOTOOLCHAIN=local go version returned command not found (exit 127). No toolchain installed.",
+    "dependencies_installed": false
+  },
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
