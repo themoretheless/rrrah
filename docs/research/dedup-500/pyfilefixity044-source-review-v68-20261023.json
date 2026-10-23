@@ -1,0 +1,43 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Original pinned ZIP fixture completely inspected: central metadata and only member decompressed, CRC checked, UTF8 decoded and whole payload read. No filesystem extraction or ECC execution.",
+  "new_structured_binary_review": {
+    "path": "pyFileFixity/tests/files/sub/Snark.zip",
+    "sha256": "222c35d3eb9ef54d389b7f3083bada386a22acf0d6dd9cdb0fe7ccbc37d6aa44",
+    "git_blob_sha1": "a988bfefbba2e08525cdc8dceb88dfbbda97932e",
+    "bytes": 2048,
+    "members": [
+      {
+        "name": "Snark.txt",
+        "bytes": 4117,
+        "compressed_bytes": 1896,
+        "compression": 8,
+        "flags": 0,
+        "crc32": "05960fcf",
+        "payload_sha256": "c08c0560f6e2b59911b13a943e149af80ff4005bf8dc9a03e510b0b301c4f3c4",
+        "extra_hex": "0a0020000000000001001800ab01e0f51f1ed10100ac8ed0cc1dd10100ac8ed0cc1dd101",
+        "payload_whole_read": true
+      }
+    ],
+    "zip_test_result": "PASS",
+    "archive_comment_hex": ""
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_reviewed": 1,
+    "reviewed_in_either_mode": 120,
+    "remaining_not_whole_text_reviewed": 25,
+    "remaining_without_text_or_structured_review": 24
+  },
+  "findings": [
+    "Single nonencrypted DEFLATE member Snark.txt,4117 uncompressed bytes,1896 compressed bytes. Original archive2048 bytes, including NTFS-style extra metadata. No nested archive or alternate compression represented.",
+    "Member contains HTML-style textField poem text, not a multi-file archive tree. Full payload read and strict UTF8 decode passed.",
+    "Standard library ZIP CRC success establishes finite fixture consistency, not malicious/corrupted-archive robustness or repaired-content identity. Original ECC integration tests not run here.",
+    "For exact file duplicate search archive bytes remain the identity input, including metadata. Member equality or successful decompression alone cannot substitute for byte equality. No production code changed.",
+    "Binary review recorded separately from whole-text count to avoid conflating source reading and structured inspection. Full repository remains incomplete."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
