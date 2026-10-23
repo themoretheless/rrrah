@@ -1,0 +1,44 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/data/repository/DirectMediaRepositoryImpl.kt",
+      "sha256": "d8b9bc0fc202b1faead4d850a8f9121c9c10e8a82bcffc16a02948da3ce36c74",
+      "git_blob_verified": true,
+      "lines": 1313,
+      "cumulative_read_line_ranges": [
+        [
+          1,
+          340
+        ],
+        [
+          341,
+          680
+        ],
+        [
+          681,
+          1020
+        ],
+        [
+          1021,
+          1313
+        ]
+      ]
+    }
+  ],
+  "findings": [
+    "DirectMediaRepositoryImpl now whole-read, 1313 lines. Prior partial findings remain qualified source observations.",
+    "scanPathsAndWait resumes true after a number of callbacks equal to requested paths, ignoring null URI and path identity. It has no timeout or deduplication of callbacks; missing callbacks can leave it suspended until cancellation. No Android callback simulation run.",
+    "getAllMediaFilePaths scans primary external-storage root by extension, skips dot directories and Android-prefix paths, but does not exclude processed/permanently sorted/translated To Edit folders. Thus duplicate scan discovery differs from folder-selection discovery intentionally or otherwise.",
+    "getMediaItemsFromPaths queries all MediaStore image/video records before processing the requested list; small scoped scans still load the global metadata map. Full-resolution fallback dimension probing remains a potential cost.",
+    "FolderDetailsCache conversion recomputes isPrimarySystemFolder from standard paths, resolving the missing-persistent-field concern recorded in v11.",
+    "Directory read exceptions are logged and omitted rather than propagated as coverage diagnostics. A scan can return a set without indicating inaccessible subtrees to the higher-level result.",
+    "triggerFullMediaStoreScan only submits paths not already known to MediaStore; it does not refresh metadata for existing records despite full-scan naming."
+  ],
+  "whole_files_read_total": 43,
+  "remaining_tracked_blobs": 87,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
