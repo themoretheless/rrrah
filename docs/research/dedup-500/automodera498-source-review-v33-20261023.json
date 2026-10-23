@@ -1,0 +1,43 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/resources/templates/subscriptions.html",
+      "sha256": "b390ff9a1d3772b0999657d39b5b9d50bb1a419c797868e3c4cad8b9c6b24094",
+      "lines": 130,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/templates/integration.html",
+      "sha256": "5457d540b008b05b87eac1f77c6b5be49380cb93e99eef27d001fdbb02219997",
+      "lines": 183,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/resources/templates/topics.html",
+      "sha256": "5f44dbd2e7068523cbd70ab046dc44682ae8345ea791aeb75509af795d067964",
+      "lines": 267,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_render": false,
+    "browser_run": false,
+    "form_actions": false
+  },
+  "findings": [
+    "Three remaining subscription/integration templateswhole-read/Gitblobverified. No requests, forms or statechanges performed.",
+    "Integration page advertisesAPIendpoint/integration/api but activeApiRestController route/rest/api/check. Source documentation/UI mismatch.",
+    "Topics downloadedcollection form submits/admin/topics/edit; reviewedIntegratorWebController has no corresponding mapping. Enable/Disable/Fetch/Delete labels therefore not implementationproof; HTTPbehaviorunrun.",
+    "Topicscollectionlinks omit/adminprefix and routeIDsplit, repeatingprevious navigationmismatch. Archive subscriptions template expects objectfieldsid/topic/subscriberId but currentsubscriptions areStringlists and archivecontroller exposesnosubscriptionspage; apparentlegacytemplate sourceonly.",
+    "Integrationhistory shows categoricalresult ratherthan rawscore/algorithm/provenance; no calibration or exactidentity proof provided. Everyreport rendered beforeDataTablesclientpagination.",
+    "Topics firstform matches reviewedsubscriptions/edit actionsfilter/unfilter; noselectionbinding and rollback behavior untested."
+  ],
+  "remaining": [
+    "10 other tracked blobs/assets",
+    "Five remainingtemplatepaths, license, coverimage and2nativebinaries plus further runtime qualification"
+  ],
+  "full_review_count": 249
+}
