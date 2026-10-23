@@ -1,0 +1,54 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v8-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/test_action.py",
+      "local": "18-tests--test_action.py",
+      "sha256": "3d657a091233fcf660acee82dd8a03d3c6aa5cea7400ca078a21e854c52e2daa",
+      "whole_text_read": true,
+      "lines": 351
+    }
+  ],
+  "whole_text_files_read_total": 19,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 61,
+  "native_original_tests_added": {
+    "target": "tests/test_action.py",
+    "passed": 29,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 0.75
+  },
+  "native_original_tests_cumulative": {
+    "passed": 258,
+    "failed": 0,
+    "scope": "Focused cache/mail/strategy/mail_box/action tests only"
+  },
+  "public_comparison_control": {
+    "scope": "Normally imported unmodified original hardlink_blocker, real EML box and physical owned files; mail records expose actual box/path; no AST adapters",
+    "stale_cached_comparison_allows_different_bytes": true,
+    "cleared_cache_rejects": true,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-real-blocker-0qwhvppg",
+    "limits": [
+      "No hardlink action or replacement invoked.",
+      "Control reproduces comparator gate, not full CLI content replacement."
+    ]
+  },
+  "findings": [
+    "Original29 action tests pass: real/dry-run copy/move/delete/hardlink matrix, unique-source preservation, hardlink idempotence, differing-content refusal unless explicitly requested, and file-based-box refusal. All mutations use owned pytest fixtures.",
+    "Normally imported original hardlink_blocker with real owned EML box reproduces warm filecmp false acceptance after equal-size restored-mtime rewrite. Clear-cache control rejects. No function AST extraction or folder-admission stub in this rerun.",
+    "Original byte-equality action test starts from differing copies; it does not seed positive filecmp cache before mutation. Passing test does not contradict stale-cache reproduction.",
+    "Hardlink tests validate stable files and inode counts, not check/use source mutation, crash durability or cross-filesystem behavior.",
+    "Source action implementations increment per-mail counters before side effects complete; error/report behavior beyond executed focused cases remains unqualified."
+  ],
+  "transfer_decision": "Retain fresh byte verification and source-identity guards for exact-file matching. Do not adopt cached comparison as content proof; no foreign production code copied.",
+  "limits": [
+    "19 whole text files of80;61 remain.",
+    "258 original focused tests, not whole suite/platform/release qualification.",
+    "Authored gate reproduction performs no replacement/hardlink; no full CLI corruption claim.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
