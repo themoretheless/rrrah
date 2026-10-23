@@ -1,0 +1,56 @@
+{
+  "repository": "atlassian-labs/webpack-deduplication-plugin",
+  "commit": "fb8b8d763b589fd955972088d0c18cfedc4a86d3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/__tests__/index.test.js",
+      "git_blob": "76774eba0b448f5c19d8e07e638a06d0f95264e7",
+      "sha256": "68a79a84aed955fb03880adb9fb420a823fa1675888a08942805df9ca755a188",
+      "bytes": 5275,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/__tests__/resolver.test.js",
+      "git_blob": "39195e4cf3e1199b1ecb1f0872fbfafeaec68c24",
+      "sha256": "5d12778256486ea5cd1400e9275f8294327a5f4477ce7d1a59c24d22d3cc233d",
+      "bytes": 2558,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/__tests__/utils.test.js",
+      "git_blob": "308433c4e316136df0407bba2333b0f6a5ad19db",
+      "sha256": "f1c426dc41e78a7a3d45096bf3a42208443fc5ad8025aa7994e7dff6f3650dba",
+      "bytes": 6647,
+      "whole_text_read": true
+    },
+    {
+      "path": "package.json",
+      "git_blob": "887ac32f0bfb4a32016cf0245973341824584eae",
+      "sha256": "1fa481788970e62d2b3c74203dd79660fa0cd2bdfd3dfb935d5ac8fa60171f32",
+      "bytes": 2045,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 8,
+  "tracked_blobs": 24,
+  "control": "webpack070-discovery-control-20261023.cjs",
+  "runtime_scope": "Unchanged pinned utils module evaluated in Node VM; real fs/crypto/path, explicit adapters for glob enumeration, lodash operations, mkdirp and app root. Entire Webpack and Jest not run.",
+  "control_results": {
+    "node": "v22.23.4",
+    "shared_cache_returns_other_root_paths": true,
+    "unequal_source_bytes_grouped": true,
+    "without_cache_correct_root": true,
+    "corrupt_cache_throws_without_rebuild": true
+  },
+  "findings": [
+    "Three test files contain ten it bodies: three redirection tests, one resolver test with four requests and six discovery/patch/cache tests. Read fully, not executed as Jest suite.",
+    "Existing tests check reuse/lockfile/name-list changes but not shared cache across roots, edited installed source, corrupt/truncated cache or atomic publication.",
+    "Native discovery control confirms second root receives first root absolute paths from same cache file without discovery. Removing cacheDir produces correct second-root paths.",
+    "Two packages with equal package manifests but unequal index.js bytes are grouped. This policy does not provide exact-file identity.",
+    "Malformed cache JSON throws directly; discovery is not retried. No full build or package manager integration qualification inferred.",
+    "Partial-match test checks untouched context using not.toContain(regex); this does not assert request equality. Nonmatching test compares original object to copied input after invocation, providing some no-change coverage."
+  ],
+  "full_review_count": 249,
+  "upstream_tests_run": false
+}
