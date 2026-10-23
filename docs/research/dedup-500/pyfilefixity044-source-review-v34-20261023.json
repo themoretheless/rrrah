@@ -1,0 +1,42 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "README.rst all1286 lines now read across v32-v34 ranges1-225,226-605,606-830,831-1050,1051-1286. External references, badges and illustrative image not fetched/viewed or treated as test evidence.",
+  "new_whole_read": {
+    "path": "README.rst",
+    "sha256": "5a1c5795b7e3cd5a9525aef21f3bb1d557920caff98d78f2f83e44085befdb35"
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 66,
+    "remaining_not_whole_reviewed": 78
+  },
+  "findings": [
+    {
+      "id": "explicit-qualification",
+      "detail": "Adaptive section states not foolproof and asks users to test on their own data. Preserve this qualification alongside other stronger promises."
+    },
+    {
+      "id": "codec-compatibility",
+      "detail": "Document differentiates algo4 from mutually compatible1..3; whole-file equality or cache key must not ignore codec parameters. Backend selected dynamically as Cython or pure Python; metadata alone does not identify measured implementation."
+    },
+    {
+      "id": "archival-not-discovery",
+      "detail": "Duplication discussion concerns archival redundancy/repair and mentions deduplication as a separate preprocessing operation. This candidate offers robustness lessons rather than a replacement discovery engine."
+    },
+    {
+      "id": "hardware-prose-boundary",
+      "detail": "Large storage-media/cost/firmware/cryptography comparison sections are historical upstream prose, not verified recommendations or requirements. No external commands executed and no hardware/network state changed."
+    },
+    {
+      "id": "docs-drift",
+      "detail": "Later recovery example uses filescraping_recover while implementation flag is filescraping_recovery. Storage recommendation sections contain different vintage preferred-media advice; documentation is not a current capability matrix."
+    },
+    {
+      "id": "badge-boundary",
+      "detail": "Build/coverage badges are remote status references, not pinned run evidence. Entire text review does not imply image review, dependency audit, or successful packaged integration."
+    }
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
