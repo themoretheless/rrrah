@@ -1,0 +1,57 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Support/DisplayThresholdEditing.swift",
+      "git_blob": "5b4c8c181ed56235a85a37ee3a70ff9d688b42d9",
+      "sha256": "7687e6fba9d5fba3e5bce0616db5a1a9972c72c77f929c071e3f180fcaee46f8",
+      "bytes": 3333,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/DisplayThresholdEditingTests.swift",
+      "git_blob": "12fffcca9983ae934ccf7aee2e5aea6fb647a898",
+      "sha256": "eb3902ea31cfa9a2307c2c3c434e2382fdfb9c62ae45f191b286bb3f47f746a7",
+      "bytes": 5017,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Services/CancellableAssetImageGenerator.swift",
+      "git_blob": "6e188d61193fe3d97ddb3643f2b9bc13e6d8219c",
+      "sha256": "c15a80323ad0d2e503713d08d278bad463185e26e202827b73878143c52f2d99",
+      "bytes": 1009,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 33,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 88,
+  "full_review_count": 249,
+  "control": "targie061-threshold-control-20261023.swift",
+  "runtime_scope": "Whole unchanged original DisplayThresholdEditing source compiled with native Foundation and authored control. Original DisplayThresholdEditingTests read but not executed this step; ScanViewModel/localization dependencies await full package build.",
+  "results": {
+    "1%": 1.0,
+    "0.88%": 0.88,
+    "1.01%": 0.6,
+    "8%8": 0.88,
+    "88%%": 0.88,
+    "nan_inf_empty_invalid_rejected": true,
+    "manual_85": 0.85,
+    "slider_85": 0.88
+  },
+  "findings": [
+    "Parser removes all percent characters before number parsing, then treats numeric<=1 as ratio even if explicit percent marker was present. This makes1% equal100%,1.01% clamp60%, and malformed embedded/repeated percent characters accepted. Reproduced native function behavior, not end-to-end UI entry.",
+    "Allowed display range60%-100%, recommendation88%, slider magnet84%-88% to88%; manual entry intentionally bypasses magnet. A display filter score is not duplicate probability or exact identity.",
+    "Original eight threshold tests cover usual percentages, clamping, text state, localization and initial model value; none covers explicit percent below/equal1 or percent placement. Tests read only here.",
+    "CancellableAssetImageGenerator uses AVAssetImageGenerator.image async with cancellation handler calling cancelAllCGImageGeneration; maps error to CancellationError when task cancelled and checks after successful decode. Read only, no video cancellation runtime evidence."
+  ],
+  "pending_full_package_run": {
+    "session_id": 91684,
+    "status": "running-creating-GRDB-working-copy",
+    "log": ".dedup-work/targie061-20261023/full-scanner-tests.log",
+    "observation": "GRDB fetched from cache130.84seconds; creating working copy. Same live handle, no restart, no test result yet."
+  },
+  "binary_sha256": "bd9a0d46c43b796b39cbc682e57dc51578283988f2100e12edaf46c1b8b9d744"
+}
