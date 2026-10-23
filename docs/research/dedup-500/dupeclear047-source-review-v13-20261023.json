@@ -1,0 +1,54 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/ViewModels/MessageBoxViewModel.cs",
+      "sha256": "7af0fafdc04f551331405b4f271a8bc13316fad20fdd1e2b5a59ef1b4a6da82c",
+      "lines": 192,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Views/MessageBoxWindow.axaml.cs",
+      "sha256": "13d2fa3c2aeb8f249af167f844659dab9f7141e7e9020035e9722639a51e7d19",
+      "lines": 76,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/MessageBox/MessageBoxButton.cs",
+      "sha256": "c699b83126c35f99c3df0b1b5ace1210b8a410910d76043792d60c06eb2e9025",
+      "lines": 14,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/MessageBox/MessageBoxDefaultButton.cs",
+      "sha256": "56b46de1f44dc5000aa7368bb0ea027ad1238a9d676930807bfced67b9f1c62b",
+      "lines": 14,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/MessageBox/MessageBoxIcon.cs",
+      "sha256": "46d9a847b7041c0799648efa76d0780acdc06b52343d67bf65ddea69856bcf80",
+      "lines": 18,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/Models/MessageBox/MessageBoxResult.cs",
+      "sha256": "502cca672716e02886ce361e75c1e6ea11e8f6eca839fb5f942638bee640f9e3",
+      "lines": 20,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Primary button closes with true, No with false, Cancel with null only for YesNoCancel and false otherwise. Window-manager close leaves initially null result; keyboard/default-button selection remains in unread XAML.",
+    "DefaultButton property defaults to OK even for YesNo button sets unless caller overrides. Whether OK maps to primary Yes focus requires XAML inspection; no keyboard behavior claim.",
+    "Primary label getter caches OK or Yes based on current Buttons value. Changing Buttons after first access does not invalidate that cached label; normal object-initializer ordering may avoid this scenario.",
+    "MessageBoxWindow copies secondary text only when explicit copy command runs. No clipboard operation executed. DataContext event detachment has the same nonmodel/null context gap seen in MainView.",
+    "Custom button actions are synchronous Action delegates; some reviewed callers supply async lambdas, creating async-void callback error/lifetime behavior. Full exception propagation remains untested."
+  ],
+  "whole_files_read_total": 61,
+  "remaining_tracked_blobs": 31,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
