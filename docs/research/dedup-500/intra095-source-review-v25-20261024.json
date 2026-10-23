@@ -1,0 +1,122 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v24-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "inspector/static/css/custom.css",
+      "local": "102-inspector--static--css--custom.css",
+      "sha256": "c2cfd688cd073631c4f37dc2b600e299e161333191ff17ab73f130dc56d1145d",
+      "whole_text_read": true,
+      "lines": 350
+    },
+    {
+      "path": "inspector/static/css/treeview.css",
+      "local": "103-inspector--static--css--treeview.css",
+      "sha256": "8fe13c74f21de483ec0684eb116606c8500eec30be1532223df60d0a5958c915",
+      "whole_text_read": true,
+      "lines": 137
+    },
+    {
+      "path": "inspector/static/css/jquery.contextMenu.css",
+      "local": "104-inspector--static--css--jquery.contextMenu.css",
+      "sha256": "b83a68d7ec3301da9045e1f4b1a8a289213b5f410c6ccbe22f08406fe3d84a0e",
+      "whole_text_read": true,
+      "lines": 153
+    },
+    {
+      "path": "inspector/static/favicon.ico",
+      "sha256": "72fc10c052b263fc17b05b1a8e21414403049411c6be09b930b20d2902a51df8",
+      "whole_visual_read": true,
+      "scope": "All decoded variants/frames viewed on labelled contact sheets."
+    },
+    {
+      "path": "inspector/static/img/icons.png",
+      "sha256": "2f311aeb467db22fe9df746bc0b8f6e10f46c331ab3543c04fa3d726a253e2eb",
+      "whole_visual_read": true,
+      "scope": "All decoded variants/frames viewed on labelled contact sheets."
+    },
+    {
+      "path": "inspector/static/img/loading.gif",
+      "sha256": "43a526a07a078d736e5c9d67d8479dd54072b7e5c6ddd2cd466f86a086e49ef5",
+      "whole_visual_read": true,
+      "scope": "All decoded variants/frames viewed on labelled contact sheets."
+    },
+    {
+      "path": "inspector/static/img/loading-bar.gif",
+      "sha256": "476a7b1085cc64de1c0eb74a6776fa8385d57eb18774f199df83fc4d7bbcc24e",
+      "whole_visual_read": true,
+      "scope": "All decoded variants/frames viewed on labelled contact sheets."
+    }
+  ],
+  "whole_text_files_read_total": 104,
+  "whole_visual_files_read_total": 20,
+  "whole_files_read_total": 124,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 30,
+  "contact_sheets": [
+    {
+      "local_path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-visual-20261024/interface-assets-contact.png",
+      "sha256": "538554c3ede34a66e528a933e9553e76a7edf2514bb0b7c1b511edc884a3ebac",
+      "viewed": true
+    },
+    {
+      "local_path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/intra095-visual-20261024/loading-bar-all-frames.png",
+      "sha256": "1625af8081be1977f79ec3bf24066fec035b8e6c926e106644c2931d290f25af",
+      "viewed": true
+    }
+  ],
+  "css_local_resource_inventory": [
+    {
+      "css": "inspector/static/css/treeview.css",
+      "url": "/static/img/icons.png",
+      "local_file_exists": true
+    },
+    {
+      "css": "inspector/static/css/jquery.contextMenu.css",
+      "url": "images/page_white_edit.png",
+      "local_file_exists": false
+    },
+    {
+      "css": "inspector/static/css/jquery.contextMenu.css",
+      "url": "images/cut.png",
+      "local_file_exists": false
+    },
+    {
+      "css": "inspector/static/css/jquery.contextMenu.css",
+      "url": "images/page_white_copy.png",
+      "local_file_exists": false
+    },
+    {
+      "css": "inspector/static/css/jquery.contextMenu.css",
+      "url": "images/page_white_paste.png",
+      "local_file_exists": false
+    },
+    {
+      "css": "inspector/static/css/jquery.contextMenu.css",
+      "url": "images/page_white_add.png",
+      "local_file_exists": false
+    },
+    {
+      "css": "inspector/static/css/jquery.contextMenu.css",
+      "url": "images/door.png",
+      "local_file_exists": false
+    }
+  ],
+  "findings": [
+    "All remaining interface raster assets decoded and visually viewed:one100x100ICO variant,one16x160PNGsprite,eight16x16loadingGIFframes,andten220x19loading-barGIFframes. GIFframes100ms each;frameRGBAhashesrecorded. Fourtrackedfiles,not20newfiles.",
+    "Full custom/treeview/contextMenu CSS sources read without browser/app execution. Treeview sprite URL resolves to the reviewed local PNG.",
+    "AllsixcontextMenuCSS relative images/*.png references have no corresponding local file in the pinned checkout. This proves asset absence for those static paths,not that every interface route renders a broken icon;stylesheet usage/browser behavior unqualified.",
+    "Source-only:customCSS yellow-highlight uses same palegreen colors asgreen-highlight. No screenshot or accessibility/contrast qualification.",
+    "Source-only:contextMenuCSS header declaresMIT/GPLv3 options;treeviewcreditsauthor and externalwebsite without full license text in this file. No CSS/assets adopted into production.",
+    "SHA256 of each new file matches the original pinned154blob inventory. GIF display review is separate from semantic animation equality and full decoder coverage."
+  ],
+  "transfer_decision": "Audit all animation frames and referenced asset presence;preserve frame timings and distinguish source review from browser/runtime proof. No foreign production code adopted.",
+  "limits": [
+    "124of154 whole tracked files:104text,20visual;30remain.",
+    "No new testsrun;prior25originalfocusedtests remain18passes,1failure,6errors.",
+    "Contact sheets are local provenance artifacts;compact metadata committed,not duplicate raster payloads.",
+    "No browser/server/network asset requests or native pHash.org/ASAN run."
+  ]
+}
