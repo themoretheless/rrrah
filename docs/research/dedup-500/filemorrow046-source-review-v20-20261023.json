@@ -1,0 +1,41 @@
+{
+  "repository": "M-Nabeegh/FileMorrow",
+  "commit": "b6ee1dc94aeba17c6328087bdf7d875074028666",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "SECURITY.md",
+      "sha256": "5d8959974fd5053adb5a1f1d81c5e2c133f58c3365437b55ac9eb5b812a80e25",
+      "lines": 19,
+      "git_blob_verified": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "4132e8d373b2d440ca88705913f13fdf55b79efe63d0e7e5933f3f94dee57166",
+      "lines": 13,
+      "git_blob_verified": true
+    },
+    {
+      "path": "docs/CLEAN_MACHINE_TEST.md",
+      "sha256": "b42ce93d1a6959f36b0bf161f0108a9196bbbe84ca321aee3eef7ec680eaaab0",
+      "lines": 32,
+      "git_blob_verified": true
+    },
+    {
+      "path": "docs/PROFILES.md",
+      "sha256": "9660439453d6b67e1a7e6b1382ef9e89c9a317c5117a44471630790dc568c6c9",
+      "lines": 52,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Clean-machine matrix explicitly requires a second eligible Mac and separate enabled/disabled Apple Intelligence states. Local test subset and smoke launch cannot substitute for these gates; none were claimed complete here.",
+    "Profiles document folderName as directly under Downloads, but reviewed import/organizer lack component/containment checks. Documentation expresses intended scope rather than enforcement proof.",
+    "Documentation describes shared profiles as category definitions without classification history, consistent with model shape; profile examples/names can still be user-authored. No export or sharing was performed.",
+    "Contributor guidance favors conservative classification and tests. Security document requests private reporting; it was read as project policy, not authorization to contact maintainers. No external issue/message/report was sent."
+  ],
+  "whole_files_read_total": 34,
+  "remaining_tracked_blobs": 24,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
