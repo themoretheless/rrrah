@@ -1,0 +1,66 @@
+{
+  "scope": "Unmodified original import/function AST nodes, main statements excluded; finite owned CSV fixtures. No trained model or database invoked.",
+  "results": [
+    {
+      "path": "csv_example/csv_evaluation.py",
+      "empty_found_or_truth_errors": [
+        "ZeroDivisionError",
+        "ZeroDivisionError"
+      ]
+    },
+    {
+      "path": "patent_example/patent_evaluation.py",
+      "empty_found_or_truth_errors": [
+        "ZeroDivisionError",
+        "ZeroDivisionError"
+      ]
+    },
+    {
+      "path": "record_linkage_example/record_linkage_example_evaluation.py",
+      "empty_found_or_truth_errors": [
+        "ZeroDivisionError",
+        "ZeroDivisionError"
+      ],
+      "pairs": [
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "expected_cross_source_pairs": [
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "path": "gazetteer_example/gazetteer_evaluation.py",
+      "empty_found_or_truth_errors": [
+        "ZeroDivisionError",
+        "ZeroDivisionError"
+      ],
+      "pairs": [
+        [
+          0,
+          1
+        ]
+      ],
+      "expected_cross_source_pairs": [
+        [
+          0,
+          1
+        ]
+      ]
+    }
+  ]
+}

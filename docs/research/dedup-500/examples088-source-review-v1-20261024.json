@@ -1,0 +1,188 @@
+{
+  "repository": "dedupeio/dedupe-examples",
+  "commit": "48916bf09205756a2948a30ec0275ac2e394288d",
+  "tracked_blobs": 42,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "05-README.md",
+      "sha256": "ea400533ce2473f80fe308d696bf99deb95f7a95d3028ff5dc99d89c539601bb",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE.md",
+      "local": "06-LICENSE.md",
+      "sha256": "414a07ed7cbef7513cae2cc04e66b186730404428460fdd474eb20731578bb0c",
+      "whole_text_read": true
+    },
+    {
+      "path": "csv_example/csv_evaluation.py",
+      "local": "07-csv_example--csv_evaluation.py",
+      "sha256": "22f35bd9722a5ca288f59179b7370edf1ee1f8166e5da290a947c49bb9c070e3",
+      "whole_text_read": true
+    },
+    {
+      "path": "csv_example/csv_example.py",
+      "local": "08-csv_example--csv_example.py",
+      "sha256": "2c0ba6d580c9207b513bda37746c07413510492c188127f3b1d01aadb6d49d81",
+      "whole_text_read": true
+    },
+    {
+      "path": "record_linkage_example/record_linkage_example_evaluation.py",
+      "local": "09-record_linkage_example--record_linkage_example_evaluation.py",
+      "sha256": "9729d1efb0c8c35f7aa66091de8afa136faa32a39540ed3fad5922fca9e956b3",
+      "whole_text_read": true
+    },
+    {
+      "path": "gazetteer_example/gazetteer_evaluation.py",
+      "local": "10-gazetteer_example--gazetteer_evaluation.py",
+      "sha256": "8b2cb0d730c4ed98507a61b8084ae836579ae1aa8f81118e50bc849a8e8a1a70",
+      "whole_text_read": true
+    },
+    {
+      "path": "patent_example/patent_evaluation.py",
+      "local": "11-patent_example--patent_evaluation.py",
+      "sha256": "8a469584de5393bc02de3eb3e50ca3a6980f14fb8c326634abb4c4ba0ca6d01a",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/gh-pages.yml",
+      "local": "12-.github--workflows--gh-pages.yml",
+      "sha256": "60140b11814f996ebc4c8d9c2e679fc6cd2a48ed15f9de206f21c47fb3875bd7",
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "13-.gitignore",
+      "sha256": "2d85f91b01eca894743f8ec5ea41df54a98faf429d6965902d4adbee0b32a170",
+      "whole_text_read": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "local": "14-CONTRIBUTING.md",
+      "sha256": "cb4fdd6e2e135f7541ec52bd3b2c9a3dd973d242be8397e4bc4ff2b21ff2c8b7",
+      "whole_text_read": true
+    },
+    {
+      "path": "requirements.txt",
+      "local": "15-requirements.txt",
+      "sha256": "d10a3cf574fec0e4b20633dbb31865bb6bd559d28fdd5e91a621b95850b76b0f",
+      "whole_text_read": true
+    },
+    {
+      "path": "csv_example/requirements.txt",
+      "local": "16-csv_example--requirements.txt",
+      "sha256": "e2e60d1b6974e2cd1d9b49844263cba36ceb8cb6e12cf2947ac2ebd9d393769a",
+      "whole_text_read": true
+    },
+    {
+      "path": "record_linkage_example/requirements.txt",
+      "local": "17-record_linkage_example--requirements.txt",
+      "sha256": "e2e60d1b6974e2cd1d9b49844263cba36ceb8cb6e12cf2947ac2ebd9d393769a",
+      "whole_text_read": true
+    },
+    {
+      "path": "gazetteer_example/requirements-1.x.txt",
+      "local": "18-gazetteer_example--requirements-1.x.txt",
+      "sha256": "82f1e0dd0cd3c062b95a0e09c775d13be1c269eb778a0d5b4fbb268a87ab3790",
+      "whole_text_read": true
+    },
+    {
+      "path": "gazetteer_example/requirements-2.x.txt",
+      "local": "19-gazetteer_example--requirements-2.x.txt",
+      "sha256": "bffb323cee2abe113734842a797df10ad0456dfea96ec97dcc0291665c031e60",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 15,
+  "remaining_without_whole_review": 27,
+  "whole_repo_complete": false,
+  "all_42_checkout_blobs_verified": true,
+  "csv_structural_review": {
+    "files": 9,
+    "rows": 70992,
+    "width_mismatch_rows": 0,
+    "manual_whole_file_credit": false
+  },
+  "original_upstream_tests_run": false,
+  "owned_function_controls": {
+    "scope": "Unmodified original import/function AST nodes, main statements excluded; finite owned CSV fixtures. No trained model or database invoked.",
+    "results": [
+      {
+        "path": "csv_example/csv_evaluation.py",
+        "empty_found_or_truth_errors": [
+          "ZeroDivisionError",
+          "ZeroDivisionError"
+        ]
+      },
+      {
+        "path": "patent_example/patent_evaluation.py",
+        "empty_found_or_truth_errors": [
+          "ZeroDivisionError",
+          "ZeroDivisionError"
+        ]
+      },
+      {
+        "path": "record_linkage_example/record_linkage_example_evaluation.py",
+        "empty_found_or_truth_errors": [
+          "ZeroDivisionError",
+          "ZeroDivisionError"
+        ],
+        "pairs": [
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "expected_cross_source_pairs": [
+          [
+            0,
+            1
+          ]
+        ]
+      },
+      {
+        "path": "gazetteer_example/gazetteer_evaluation.py",
+        "empty_found_or_truth_errors": [
+          "ZeroDivisionError",
+          "ZeroDivisionError"
+        ],
+        "pairs": [
+          [
+            0,
+            1
+          ]
+        ],
+        "expected_cross_source_pairs": [
+          [
+            0,
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  "findings": [
+    "All four evaluateDuplicates helpers divide by zero on empty found or truth sets.",
+    "Record-linkage linkPairs counts singleton sets for groups represented in only one source. Gazetteer helper skips these and returned only the expected cross-source pair on the same fixture.",
+    "CSV preProcess transliterates and lowercases fields; readData stores integer IDs in a dict with last-write overwrite on duplicate IDs, per source. Not a byte-preserving file comparison.",
+    "The only tracked workflow builds and deploys documentation; no upstream automated runtime test suite detected in the tracked inventory.",
+    "Examples use active human labeling and saved learned settings; the original complete examples have not been executed in this review."
+  ],
+  "transfer_decision": "Reject as implementation for exact/image file comparison. Evaluation helpers require empty-set and cross-source pair policies before reuse.",
+  "limits": [
+    "15/42 complete manual text reviews; nine CSVs fully parsed structurally only.",
+    "Database examples not executed; no connection to existing services.",
+    "No trained model quality, speed, image matching or universal coverage claim.",
+    "No foreign production source adopted; pHash.org/ASAN remains skipped."
+  ]
+}

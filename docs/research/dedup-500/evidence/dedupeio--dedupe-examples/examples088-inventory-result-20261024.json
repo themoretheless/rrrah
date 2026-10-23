@@ -1,0 +1,513 @@
+{
+  "repository": "dedupeio/dedupe-examples",
+  "commit": "48916bf09205756a2948a30ec0275ac2e394288d",
+  "tracked_blobs": 42,
+  "files": [
+    {
+      "path": ".github/workflows/gh-pages.yml",
+      "git_blob": "5531cdc381091d7fe5e4e1fb6e858cbc8992eb44",
+      "sha256": "60140b11814f996ebc4c8d9c2e679fc6cd2a48ed15f9de206f21c47fb3875bd7",
+      "bytes": 1704
+    },
+    {
+      "path": ".gitignore",
+      "git_blob": "3fb246838f619b8fa0648d630e505ff2a68cb269",
+      "sha256": "2d85f91b01eca894743f8ec5ea41df54a98faf429d6965902d4adbee0b32a170",
+      "bytes": 340
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "git_blob": "d83ac2ad143d2cabb37d67e8fc060562ac3e00d1",
+      "sha256": "ac773151423ec5eb717e3c1c9c50f995a71390602bb88dcd89bf8a3cf93e8ea8",
+      "bytes": 3213
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "git_blob": "e366f00c61c1eff042909fe782092e0c1eb5ba31",
+      "sha256": "cb4fdd6e2e135f7541ec52bd3b2c9a3dd973d242be8397e4bc4ff2b21ff2c8b7",
+      "bytes": 453
+    },
+    {
+      "path": "LICENSE.md",
+      "git_blob": "f797d3d94c165f2fe0104eff7f8528c9167135e4",
+      "sha256": "414a07ed7cbef7513cae2cc04e66b186730404428460fdd474eb20731578bb0c",
+      "bytes": 1069
+    },
+    {
+      "path": "README.md",
+      "git_blob": "bb1fe2c8f9c0433e570cb550f1ce67747f5b458d",
+      "sha256": "ea400533ce2473f80fe308d696bf99deb95f7a95d3028ff5dc99d89c539601bb",
+      "bytes": 4568
+    },
+    {
+      "path": "csv_example/csv_evaluation.py",
+      "git_blob": "263e28dd4fd7bf19635ca1221d125fbb59b52faa",
+      "sha256": "22f35bd9722a5ca288f59179b7370edf1ee1f8166e5da290a947c49bb9c070e3",
+      "bytes": 1203
+    },
+    {
+      "path": "csv_example/csv_example.py",
+      "git_blob": "868b3346b679a45d333b487fce1ff924e1273014",
+      "sha256": "2c0ba6d580c9207b513bda37746c07413510492c188127f3b1d01aadb6d49d81",
+      "bytes": 5866
+    },
+    {
+      "path": "csv_example/csv_example_input_with_true_ids.csv",
+      "git_blob": "e88dbcbe70a908c75bccf8fc845f841cb2724e89",
+      "sha256": "13cbb7b939c4b201f92b09b6e800ae034f1f783d825dda7095fdaccb2793edaa",
+      "bytes": 646436,
+      "csv_structure": {
+        "header": [
+          "True Id",
+          "Id",
+          "Source",
+          "Site name",
+          "Address",
+          "Zip",
+          "Phone",
+          "Fax",
+          "Program Name",
+          "Length of Day",
+          "IDHS Provider ID",
+          "Agency",
+          "Neighborhood",
+          "Funded Enrollment",
+          "Program Option",
+          "Number per Site EHS",
+          "Number per Site HS",
+          "Director",
+          "Head Start Fund",
+          "Eearly Head Start Fund",
+          "CC fund",
+          "Progmod",
+          "Website",
+          "Executive Director",
+          "Center Director",
+          "ECE Available Programs",
+          "NAEYC Valid Until",
+          "NAEYC Program Id",
+          "Email Address",
+          "Ounce of Prevention Description",
+          "Purple binder service type",
+          "Column",
+          "Column2"
+        ],
+        "rows": 3337,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "Zip": 1333,
+          "Fax": 3299,
+          "Program Name": 2009,
+          "Length of Day": 2009,
+          "IDHS Provider ID": 3298,
+          "Neighborhood": 2754,
+          "Funded Enrollment": 2424,
+          "Program Option": 2800,
+          "Number per Site EHS": 3319,
+          "Number per Site HS": 3319,
+          "Director": 3337,
+          "Head Start Fund": 3337,
+          "Eearly Head Start Fund": 2881,
+          "CC fund": 2818,
+          "Progmod": 2818,
+          "ECE Available Programs": 2379,
+          "NAEYC Valid Until": 2968,
+          "NAEYC Program Id": 3337,
+          "Email Address": 3203,
+          "Ounce of Prevention Description": 3185,
+          "Purple binder service type": 3215,
+          "Column": 3337,
+          "Column2": 3018,
+          "Agency": 3325,
+          "Website": 2815,
+          "Executive Director": 3114,
+          "Center Director": 2874,
+          "Phone": 146
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "csv_example/csv_example_messy_input.csv",
+      "git_blob": "7001ca08d9b65b0361557897159a9bbdc9fbb8a8",
+      "sha256": "eabbd703403541b2301e53209c52b731e8f4e25da372ededf0cf0c167ff84360",
+      "bytes": 577972,
+      "csv_structure": {
+        "header": [
+          "Id",
+          "Source",
+          "Site name",
+          "Address",
+          "Zip",
+          "Phone",
+          "Fax",
+          "Program Name",
+          "Length of Day",
+          "IDHS Provider ID",
+          "Agency",
+          "Neighborhood",
+          "Funded Enrollment",
+          "Program Option",
+          "Number per Site EHS",
+          "Number per Site HS",
+          "Director",
+          "Head Start Fund",
+          "Eearly Head Start Fund",
+          "CC fund",
+          "Progmod",
+          "Website",
+          "Executive Director",
+          "Center Director",
+          "ECE Available Programs",
+          "NAEYC Valid Until",
+          "NAEYC Program Id",
+          "Email Address",
+          "Ounce of Prevention Description",
+          "Purple binder service type",
+          "Column",
+          "Column2"
+        ],
+        "rows": 3337,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "Zip": 1333,
+          "Fax": 3299,
+          "IDHS Provider ID": 3298,
+          "Agency": 3325,
+          "Neighborhood": 2754,
+          "Funded Enrollment": 2424,
+          "Program Option": 2800,
+          "Number per Site EHS": 3319,
+          "Number per Site HS": 3319,
+          "Director": 3337,
+          "Head Start Fund": 3337,
+          "Eearly Head Start Fund": 2881,
+          "CC fund": 2818,
+          "Progmod": 2818,
+          "Website": 2815,
+          "Executive Director": 3114,
+          "Center Director": 2874,
+          "ECE Available Programs": 2379,
+          "NAEYC Valid Until": 2968,
+          "NAEYC Program Id": 3337,
+          "Email Address": 3203,
+          "Ounce of Prevention Description": 3185,
+          "Purple binder service type": 3215,
+          "Column": 3337,
+          "Column2": 3018,
+          "Phone": 146,
+          "Program Name": 2009,
+          "Length of Day": 2009
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "csv_example/requirements.txt",
+      "git_blob": "051b14ceb721b7dada9de4c83b54623dd28d1f17",
+      "sha256": "e2e60d1b6974e2cd1d9b49844263cba36ceb8cb6e12cf2947ac2ebd9d393769a",
+      "bytes": 10
+    },
+    {
+      "path": "extended-variables/officers.csv",
+      "git_blob": "466f228d830d02a34f84ba891c936af198a47faa",
+      "sha256": "a380389416884243afcb6b04a7b675351009d53adec607801d96c33dd83221fa",
+      "bytes": 4603894,
+      "csv_structure": {
+        "header": [
+          "ID",
+          "LastName",
+          "FirstName",
+          "Address1",
+          "Address2",
+          "City",
+          "State",
+          "Zip",
+          "Title",
+          "Phone",
+          "RedactionRequested"
+        ],
+        "rows": 55214,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "Address2": 51135,
+          "Phone": 16055,
+          "Zip": 906,
+          "City": 122,
+          "State": 119,
+          "Address1": 135,
+          "FirstName": 3,
+          "Title": 1,
+          "LastName": 3
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "extended-variables/officers.py",
+      "git_blob": "4560a4296e3bdc9222afb9d06eaee42e596ecf71",
+      "sha256": "dce3b15671652242d3cfd16c427acacca889f27708f27df2f0e4a3edc8747f9f",
+      "bytes": 6052
+    },
+    {
+      "path": "extended-variables/requirements.txt",
+      "git_blob": "6b94fdeeee9838359ac23683a94ba180f78e173f",
+      "sha256": "0f8d62cae9096c5e15e9cc90d18ccf93233c418f400df46b129a524aa54007c8",
+      "bytes": 45
+    },
+    {
+      "path": "gazetteer_example/README.md",
+      "git_blob": "18047276b0d9b435e09842a4ae1e87846d6ef08e",
+      "sha256": "d4b3765dd8170fca0a4486cb27bde07e2ec234006c1be741514d0752b1dc2c8a",
+      "bytes": 1854
+    },
+    {
+      "path": "gazetteer_example/data/AbtBuy_Abt.csv",
+      "git_blob": "cade06ccbe414c4756848433fe6f7624c566ac45",
+      "sha256": "98ee245f1c831138525f48d7cf31394e53c97e9520301116dccb171666942ebe",
+      "bytes": 340528,
+      "csv_structure": {
+        "header": [
+          "unique_id",
+          "title",
+          "description",
+          "price"
+        ],
+        "rows": 1081,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "price": 663
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "gazetteer_example/data/AbtBuy_Buy.csv",
+      "git_blob": "1422c816ad012707ecc75b4e34b77633398d8b6f",
+      "sha256": "a31023d7f02fd696d424d246f988fe5b80b41ab24b020592a6b1442c1ea26299",
+      "bytes": 107502,
+      "csv_structure": {
+        "header": [
+          "unique_id",
+          "title",
+          "description",
+          "price"
+        ],
+        "rows": 1092,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "price": 502,
+          "description": 446
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "gazetteer_example/gazetteer_evaluation.py",
+      "git_blob": "007ab11665dc2696e404220065ea7c9c158c1e2f",
+      "sha256": "8b2cb0d730c4ed98507a61b8084ae836579ae1aa8f81118e50bc849a8e8a1a70",
+      "bytes": 1380
+    },
+    {
+      "path": "gazetteer_example/gazetteer_example.py",
+      "git_blob": "9c21b9d5b6530545d22f1b0382a25cdd8b634187",
+      "sha256": "d1e40814dd6136e06ef73925c7fba961ca9d299357a0032dfc4a85e5eeb0f322",
+      "bytes": 6240
+    },
+    {
+      "path": "gazetteer_example/gazetteer_postgres_example.py",
+      "git_blob": "ef5514a7ff2ed3505a8f9c33b61cd11205c37207",
+      "sha256": "5d9786d94e5c82ccb465b72eb574743175d7355e5a1b5129e8b65bf239147304",
+      "bytes": 12360
+    },
+    {
+      "path": "gazetteer_example/requirements-1.x.txt",
+      "git_blob": "c267c5fdcf51c4a27a751dfe3f0898e9421e3843",
+      "sha256": "82f1e0dd0cd3c062b95a0e09c775d13be1c269eb778a0d5b4fbb268a87ab3790",
+      "bytes": 38
+    },
+    {
+      "path": "gazetteer_example/requirements-2.x.txt",
+      "git_blob": "0a3460f0cc01a281118e59964e77ab00cfdaac25",
+      "sha256": "bffb323cee2abe113734842a797df10ad0456dfea96ec97dcc0291665c031e60",
+      "bytes": 24
+    },
+    {
+      "path": "mysql_example/README.md",
+      "git_blob": "a027b3b070a00ba9af015bab9695e8d5f062dc45",
+      "sha256": "db96e776ba16ff03dc8f08abb1824784b4369632e45eb897d77f9cae1e0a6713",
+      "bytes": 744
+    },
+    {
+      "path": "mysql_example/mysql.cnf_LOCAL",
+      "git_blob": "17bded3fd4fd63a2e5ad4516d851462bc537d286",
+      "sha256": "57a2c2f92a0c3a3e6fe0531914270034fca80c0ec800778dfc70e6cab8b914d6",
+      "bytes": 90
+    },
+    {
+      "path": "mysql_example/mysql_example.py",
+      "git_blob": "b6dfd68aa1aba055ca43d8882ce5c9e7222e0eec",
+      "sha256": "1c65b9d5932b79e21c85f87a3e409e489c5bbce8a6afbc834bdb8d28912d9e9e",
+      "bytes": 12209
+    },
+    {
+      "path": "mysql_example/mysql_init_db.py",
+      "git_blob": "0eafccb3155e3068b6daf100a45d54449da88e2d",
+      "sha256": "c503b5d01bd0e07e6d168aded9bd177a79cd1b68d382132611c210be0ba400b0",
+      "bytes": 9118
+    },
+    {
+      "path": "mysql_example/requirements.txt",
+      "git_blob": "18c098ae967b343f3cab012d9e100221c433abad",
+      "sha256": "158f8e8ca47b84e05355d16d629c8935faa922406ff83362d3e1eaebc0218737",
+      "bytes": 12
+    },
+    {
+      "path": "patent_example/README.md",
+      "git_blob": "73c45725a6e3d119add7ccaa6214a485878202b2",
+      "sha256": "32e92e6ed346119fe77a8993c9d321922932286ab15324ae13874bfcbffda1dd",
+      "bytes": 1679
+    },
+    {
+      "path": "patent_example/patent_evaluation.py",
+      "git_blob": "81a0a36aef95bce3102ef9c72d1cf9d0529ad384",
+      "sha256": "8a469584de5393bc02de3eb3e50ca3a6980f14fb8c326634abb4c4ba0ca6d01a",
+      "bytes": 1279
+    },
+    {
+      "path": "patent_example/patent_example.py",
+      "git_blob": "efb6806e64bc7c13f2230f890253a69b79c5b65f",
+      "sha256": "e74856b87f8822f0839ce4f2740f1b6d8cba1248d49475980255b3513a9640d1",
+      "bytes": 5795
+    },
+    {
+      "path": "patent_example/patstat_input.csv",
+      "git_blob": "8f1300a578ab9ab2f222c5dcd82d743d8d71bc43",
+      "sha256": "c6cc44589f6a273f9c9c0866012dd3ab265b90ffa7ba5adc6e0a603e6c439fd7",
+      "bytes": 1116870,
+      "csv_structure": {
+        "header": [
+          "person_id",
+          "Lat",
+          "Lng",
+          "Coauthor",
+          "Name",
+          "Class"
+        ],
+        "rows": 2379,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "Class": 11,
+          "Name": 6
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "patent_example/patstat_reference.csv",
+      "git_blob": "b640c80fa375aa7cdf2677974198e20f337416e3",
+      "sha256": "043474e60cf7c9b33aff9afed3473700db4ed6a71cb7c1bc08fcebc6c35cfe89",
+      "bytes": 106093,
+      "csv_structure": {
+        "header": [
+          "person_id",
+          "leuven_id",
+          "person_name"
+        ],
+        "rows": 2379,
+        "width_mismatch_rows": 0,
+        "blank_fields": {},
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "pgsql_big_dedupe_example/README.md",
+      "git_blob": "d93bd6bf9b7e8d147f568ade02a209f57b994d86",
+      "sha256": "0cb6a397d73995c0c9312e605d8321f5b1d379db7c0bd9175652825a1b628edc",
+      "bytes": 485
+    },
+    {
+      "path": "pgsql_big_dedupe_example/pgsql_big_dedupe_example.py",
+      "git_blob": "13be3f7649bfbe3bbce89a41abc225d2e64c9e62",
+      "sha256": "57c6dd0f695a0ba253dc6d6b030b68a0d3b6970b8cc00758e5cacf659246413e",
+      "bytes": 13158
+    },
+    {
+      "path": "pgsql_big_dedupe_example/pgsql_big_dedupe_example_init_db.py",
+      "git_blob": "c4a849689aa6a367f1962ca76296d40e6807f5a4",
+      "sha256": "30d3d775a2331c55f4172678d8c2d73398b3906cfccf2537603c07c99a6de83c",
+      "bytes": 9454
+    },
+    {
+      "path": "pgsql_big_dedupe_example/requirements.txt",
+      "git_blob": "a86cd0be5ed432f9d5856204fe2f7fbe981073ce",
+      "sha256": "89486cc7b2642463cfab430c449169e2f42a1483f1eb99df24917fc169b0a3eb",
+      "bytes": 67
+    },
+    {
+      "path": "record_linkage_example/AbtBuy_Abt.csv",
+      "git_blob": "cade06ccbe414c4756848433fe6f7624c566ac45",
+      "sha256": "98ee245f1c831138525f48d7cf31394e53c97e9520301116dccb171666942ebe",
+      "bytes": 340528,
+      "csv_structure": {
+        "header": [
+          "unique_id",
+          "title",
+          "description",
+          "price"
+        ],
+        "rows": 1081,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "price": 663
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "record_linkage_example/AbtBuy_Buy.csv",
+      "git_blob": "1422c816ad012707ecc75b4e34b77633398d8b6f",
+      "sha256": "a31023d7f02fd696d424d246f988fe5b80b41ab24b020592a6b1442c1ea26299",
+      "bytes": 107502,
+      "csv_structure": {
+        "header": [
+          "unique_id",
+          "title",
+          "description",
+          "price"
+        ],
+        "rows": 1092,
+        "width_mismatch_rows": 0,
+        "blank_fields": {
+          "price": 502,
+          "description": 446
+        },
+        "scope": "Every row parsed structurally; not manual row-by-row semantic review"
+      }
+    },
+    {
+      "path": "record_linkage_example/record_linkage_example.py",
+      "git_blob": "29415890b3c67088f394d8ac4d3ee087066024fe",
+      "sha256": "36627e2209cc348aaedc9211d979e71b2b5a199f9a0c8e74f029493df4884972",
+      "bytes": 6648
+    },
+    {
+      "path": "record_linkage_example/record_linkage_example_evaluation.py",
+      "git_blob": "a8ba5ea0f34c646323055b3c60009d26c183b1ba",
+      "sha256": "9729d1efb0c8c35f7aa66091de8afa136faa32a39540ed3fad5922fca9e956b3",
+      "bytes": 1300
+    },
+    {
+      "path": "record_linkage_example/requirements.txt",
+      "git_blob": "051b14ceb721b7dada9de4c83b54623dd28d1f17",
+      "sha256": "e2e60d1b6974e2cd1d9b49844263cba36ceb8cb6e12cf2947ac2ebd9d393769a",
+      "bytes": 10
+    },
+    {
+      "path": "requirements.txt",
+      "git_blob": "fdbef1cca561f1a4eecea7e988a6a938860b71d8",
+      "sha256": "d10a3cf574fec0e4b20633dbb31865bb6bd559d28fdd5e91a621b95850b76b0f",
+      "bytes": 32
+    }
+  ]
+}

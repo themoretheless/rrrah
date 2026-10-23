@@ -2,7 +2,7 @@
   "index": 88,
   "repository": "dedupeio/dedupe-examples",
   "commit": "48916bf09205756a2948a30ec0275ac2e394288d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "15 complete pinned text files of 42; nine CSVs structurally parsed; original function controls, not full example runtime",
   "decision": "reject-domain",
   "finding": "Database/CSV entity-resolution examples; no image or exact file comparison implementation.",
   "license_metadata": "MIT",
@@ -63,6 +63,12 @@
       "lines": 21,
       "source": false,
       "test": false
+    }
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/examples088-source-review-v1-20261024.json",
+      "whole_repo_complete": false
     }
   ]
 }
