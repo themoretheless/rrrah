@@ -1,0 +1,28 @@
+{
+  "numeric_and_string_same_text_share_inflight_result": [
+    {
+      "value": 42,
+      "type": "number"
+    },
+    {
+      "value": 42,
+      "type": "number"
+    }
+  ],
+  "underlying_calls": 1,
+  "falsey_clear_cases": [
+    {
+      "key": 0,
+      "unrelated_recomputed": true
+    },
+    {
+      "key": false,
+      "unrelated_recomputed": true
+    },
+    {
+      "key": "",
+      "unrelated_recomputed": true
+    }
+  ],
+  "scope": "Original whole package with actual memory dependencies. No Redis, browser or original test suite; observed finite argument identity and clear behavior only."
+}

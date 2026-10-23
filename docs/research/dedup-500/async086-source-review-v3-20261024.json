@@ -1,0 +1,62 @@
+{
+  "repository": "mcollina/async-cache-dedupe",
+  "commit": "b303aba7affd22875b3f598c575cb17e55913859",
+  "previous_audit": "docs/research/dedup-500/async086-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "11-README.md",
+      "sha256": "4b819788803e5f3866baff4ae0d0d062c8dedb88e876e81cbd938ea4e115c88b",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/base.test.js",
+      "local": "12-test--base.test.js",
+      "sha256": "c87d4c731fe6b02aba967cfcbe4a94397dca713cf3a5d64b1433d86695417992",
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 50,
+  "remaining_without_whole_review": 39,
+  "native_controls": {
+    "numeric_and_string_same_text_share_inflight_result": [
+      {
+        "value": 42,
+        "type": "number"
+      },
+      {
+        "value": 42,
+        "type": "number"
+      }
+    ],
+    "underlying_calls": 1,
+    "falsey_clear_cases": [
+      {
+        "key": 0,
+        "unrelated_recomputed": true
+      },
+      {
+        "key": false,
+        "unrelated_recomputed": true
+      },
+      {
+        "key": "",
+        "unrelated_recomputed": true
+      }
+    ],
+    "scope": "Original whole package with actual memory dependencies. No Redis, browser or original test suite; observed finite argument identity and clear behavior only."
+  },
+  "findings": [
+    "README says supplied clear argument selects only that entry; native0,false,empty-string arguments also clear unrelated entries in same function.",
+    "Concurrent numeric42 and string42 share one result due string/nonstring serialization key collision. This is argument cache behavior, not file-identity evidence.",
+    "Original base test file includes Redis setup hook and actual Redis test; cannot run unchanged as a memory-only suite without providing a private Redis runtime.",
+    "Original base tests cover clear truthy42 and24 but not the three falsey controls."
+  ],
+  "limits": [
+    "Original base tests read, not executed.",
+    "No Redis started, globalcache modified or source copied into production.",
+    "Research controls do not prove all-case library coverage."
+  ]
+}
