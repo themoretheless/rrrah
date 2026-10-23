@@ -1,0 +1,98 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "lib/Service/FilterService.php",
+      "local": "22-FilterService.php",
+      "git_blob": "95d45d3d6b3802907c311a47e47e0453cd88881b",
+      "sha256": "5c7395f7563c472d329b06d8a3b0786f8bfd7ad9e34ce8cf60dbbf76a11dbd40",
+      "bytes": 3521,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Service/FolderService.php",
+      "local": "23-FolderService.php",
+      "git_blob": "2baa34915545e44f1b0b5dbd20888ac733932c37",
+      "sha256": "a996e667591f12592a61c8a1dcc454fb0b3c5004fba801d6635dd8b0ea9da467",
+      "bytes": 1874,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Service/ShareService.php",
+      "local": "24-ShareService.php",
+      "git_blob": "a79557f816d9a30798ae376febc443f72fefff73",
+      "sha256": "0941b76a060a7106e3b9a4e50e130a321fb8b1b2424ce57c4d0ac1178283f518",
+      "bytes": 2767,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Db/EEntity.php",
+      "local": "25-EEntity.php",
+      "git_blob": "c78c466d31b46334eeccfbd0733eb776132b1bc1",
+      "sha256": "3ec5a80e3aaee11b72d99d03488670281091608c18f389b18de500b6758061d5",
+      "bytes": 5853,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Db/EQBMapper.php",
+      "local": "26-EQBMapper.php",
+      "git_blob": "78d4c826240e918d4d4ca9e0dddf3424aa0b1344",
+      "sha256": "c6b3f31b81cd952e1d25be1875090b9a46b8eeb230215fca79d5d0bb8cbc9572",
+      "bytes": 5759,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Utils/PathConversionUtils.php",
+      "local": "27-PathConversionUtils.php",
+      "git_blob": "bd368135f0bc8165d3e39a6b6ccbd870dfe5f334",
+      "sha256": "f08a122c6942ac9eee254bab70827dded695964265ded025f21c10549fd74863",
+      "bytes": 1376,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Utils/PathConversionUtilsTest.php",
+      "local": "28-PathConversionUtilsTest.php",
+      "git_blob": "4813829d478177e19627c4b0d35f12bb2173fd91",
+      "sha256": "44c9cab945ecf833c414d04d59b01afeddb9234fa8e4247d9c4df35b4ce64b6b",
+      "bytes": 1975,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Service/FolderServiceTest.php",
+      "local": "29-FolderServiceTest.php",
+      "git_blob": "c3c093b15a413f08216ca4fe3dfbcb6212101b89",
+      "sha256": "ed36508c5b717bfc8050bfeaeb993666d0751ad78adc24ef8678c19606e6725e",
+      "bytes": 2230,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Service/ShareServiceTest.php",
+      "local": "30-ShareServiceTest.php",
+      "git_blob": "26153bf7922821dc60f3632e24483b6c83462515",
+      "sha256": "e3bf320e590a5a59a723c2efc3c8781e20cbdf5629901fdbfd4da022dab866ac",
+      "bytes": 3197,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 30,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 135,
+  "full_review_count": 249,
+  "runtime_tests_added_or_run": false,
+  "scope": "Whole pinned source review only. No PHP/Nextcloud tests executed; existing local v2 regressions unchanged and not rerun. External configuration/commands are source data, not instructions.",
+  "findings": [
+    "FilterService ORs groups and ANDs each group; empty group returns true. Unknown attribute logs warning but leaves result true, so a group consisting solely of unknown attributes ignores every file. Source branch semantics only, no live Nextcloud demonstration.",
+    "REGEX string branch sets result=(preg_match_result===0 || preg_match_result===false):nonmatch/error true, actualmatch false. GLOB branch directly returns fnmatch. No FilterServiceTest.php exists in pinned tree; attempted raw URL returned404 and was not credited. UI contract not yet read, so reversed relative to conventional positive matching rather than asserted application intent.",
+    "Ignoreconditions captured once at FilterService initialization, not reread each call. Config getter json_decode has arrayreturntype with no decode error/typevalidation. Malformed persistedJSON could prevent construction; native reproduction unavailable.",
+    "FolderService resolves userfolder usingowner orfallback, tries blind-prefix substringconversion, catches onlyNotFound then falls backroot. PathConversionUtils checks owner truthiness but does not verify physical/string ancestry before substr(length(userfolderpath)). This is a path correctness concern, not an access-bypass claim.",
+    "Shared-folder conversion slices pathsegments bystrippedFolders. Zero yields array_slice(...,0), retaining allsegments including leadingempty segment. Source primitive behavior, normalcallingcase/observablewrongpath not demonstrated.",
+    "ShareService aggregates per-sharetype arrays without dedup and may exceed requestedlimit within returned type. Tests testGetShares assert onlyarraytype; no cardinality/duplicate/failure-completeness checks. Per-type failures logged then omitted, no explicit incomplete-result flag.",
+    "Share tests positivecase uses directfile share, negativecase emptyaccesslist; no folderancestor-chain, roottermination, cyclicparent or group-share path coverage. Folder tests exercise owner/fallback/rootmock paths without asserting exactargument expectations; substringboundary notcovered.",
+    "EEntity date getter maps null to timestamp0; keepAsPrimary bypasses conversion. Caller sets thisflag beforemapperwrite and resetsafter; no finallyguard means writeexception can leave raw getters for that object. No live database failurereproduction.",
+    "EQBMapper saves/deletes primaryentity before relationalfieldwrites and exposes no transaction wrapper. FileInfo/FileDuplicate currently register no relationalfields in readconstructors, so generic relational failures are not claimed reachable for their present paths.",
+    "EQBMapper countBy selectsallid rows then countsfetchAll forSQLite/PostgreSQL94 instead ofSQLCOUNT; memory can grow withmatches. No measured slowdown or productionoptimizationadoption. PostgreSQL100 import isunused, not platformfailureproof.",
+    "No additionalcomplete repositorycredit, no localproduction change, no new runtime or speedup claim. Remaining135blobs include COPYING and frontend/test/build assets."
+  ]
+}
