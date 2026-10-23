@@ -1,0 +1,37 @@
+{
+  "sha256": "d4d914affd0b83454033b3b30095e02a662a455c0a1d7a7f454429d0bee22348",
+  "bytes": 180,
+  "schema": {
+    "type": "record",
+    "name": "hihoValue",
+    "fields": [
+      {
+        "name": "intColumn",
+        "type": "int"
+      },
+      {
+        "name": "stringColumn",
+        "type": "string"
+      }
+    ]
+  },
+  "metadata_keys": [
+    "avro.schema"
+  ],
+  "codec": "null (absent codec metadata)",
+  "sync_hex": "eaf5ce9f7ca3f422a7303178534ecd65",
+  "blocks": [
+    {
+      "count": 1,
+      "payload_bytes": 5
+    }
+  ],
+  "records": [
+    {
+      "intColumn": 12,
+      "stringColumn": "sam"
+    }
+  ],
+  "consumed": 180,
+  "scope": "All180bytes accounted by header,metadata,sync,varints,blockpayload and repeatedsync; fixture-specific structural decoder, not a general Avro implementation/upstream test"
+}

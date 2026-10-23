@@ -1,0 +1,99 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v24-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/test/java/co/nubetech/hiho/testdata/Student.java",
+      "local": "134-Student.java",
+      "sha256": "ed6cec7607bb68bb2c51c64ba004949921960727e5232cc73a971b5d6eb44ce5",
+      "git_blob": "a91cae1ebfdaed7f156791897c43d357988a510d",
+      "bytes": 3167,
+      "lines": 141,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/testdata/SequenceFileWriteDemo.java",
+      "local": "135-SequenceFileWriteDemo.java",
+      "sha256": "bfc1b0948fb00cc00661a472b27cfbe3ac6cb22ab1db3e04b8cae851cf665850",
+      "git_blob": "706bd54463dedf0bbb8fc5f1848dab2264c2bf1e",
+      "bytes": 1812,
+      "lines": 56,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/testdata/SequenceFileForCustomObject.java",
+      "local": "136-SequenceFileForCustomObject.java",
+      "sha256": "a5d81303765459eeed118a657f667883553a22618bf680abe829fbf7dccd684c",
+      "git_blob": "ac6f1eea2ce057f81eef27b2f17afc15c65b9de3",
+      "bytes": 3357,
+      "lines": 84,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/testdata/AvroDataFileWriteDemo.java",
+      "local": "137-AvroDataFileWriteDemo.java",
+      "sha256": "eac0bd84d6d47127f906c386c8c46286e74bf0cff4ebf8df8834bf5ede768e1d",
+      "git_blob": "b98dcdc71fbc295771015db1d9bd403a8e2c342e",
+      "bytes": 4388,
+      "lines": 160,
+      "whole_text_read": true
+    },
+    {
+      "path": "testData/avro/data.avro",
+      "local": "138-data.avro",
+      "sha256": "d4d914affd0b83454033b3b30095e02a662a455c0a1d7a7f454429d0bee22348",
+      "git_blob": "060037df3c83898965b3603dc98240b6de158f47",
+      "bytes": 180,
+      "lines": null,
+      "whole_binary_review": true,
+      "method": "All180rawbytes hex inspected, complete Avro1.4.1 DataFileReader schema/record/EOF decode, independent bounded structural parser accounts header/metadata/sync/blockpayload/trailer throughEOF"
+    }
+  ],
+  "whole_text_files_read_total": 132,
+  "whole_binary_files_reviewed_total": 7,
+  "whole_files_read_total": 139,
+  "remaining_without_whole_review": 31,
+  "original_tests_cumulative": {
+    "total": 81,
+    "passed": 79,
+    "failed": 2,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 5,
+    "cumulative": 107,
+    "report": "docs/research/dedup-500/hiho098-demo-native-controls-20261024.json",
+    "confirmed": [
+      "Student serialization roundtrip preserves equals/hashCode.",
+      "Student.compareTo(Student) casts toText and throwsClassCastException.",
+      "Distinct Student names Aa/BB share Text-derived32bit hashCode, inheritedObject.toString, originalHihoTuple MD5 andcompareTo0. Actual distinct fields, not forcedMD5 or cryptanalytic collision. Fullcluster custom-record merge notexecuted.",
+      "Avro1.4.1 reads exactly1fixture record{intColumn:12,stringColumn:sam} throughEOF180.",
+      "Demo getSchema(Types.ARRAY) callsSchema.create(ARRAY), rejected byAvroRuntimeException."
+    ],
+    "author_correction": "Initial assumption equal Student values would get different Object.toString hashes was rejected. Overridden hashCode determines Object.toString suffix. Replaced own hypothesis with distinct Aa/BB collision case, preserving initial author assertion failure separately; no upstream test counted as failing.",
+    "scope": "Original classes/helper methods andrealAvrolibrary, no demo main file writes/DB/network/cluster"
+  },
+  "binary_fixture": {
+    "report": "docs/research/dedup-500/hiho098-avro-fixture-structure-20261024.json",
+    "codec": "null",
+    "bytes": 180,
+    "records": 1,
+    "scope": "Independent exact fixture structural decode plus actualAvroReader; not generalparser or upstreamtest; current demo main has stringfield commented so does not exactly regenerate existing2field fixture"
+  },
+  "new_runtime_dependency": {
+    "url": "https://repo.maven.apache.org/maven2/org/apache/avro/avro/1.4.1/avro-1.4.1.jar",
+    "sha256": "a50e786e397cf25b55e46a2572f906da532b404c7687664c9ace6bb05a4695ca",
+    "bytes": 597450
+  },
+  "dependency_scope": "Avro1.4.1 matches pinnedpom; Jackson1.4.0 selected earlier; fullresolvedcohort/licenses unqualified; no productioncodeadoption",
+  "source_only_findings": [
+    "SequenceFileWriteDemo writes2records, consistent with prior fixture decode.",
+    "SequenceFile demos catch/print write exceptions and return from main without explicit failureexit; no mains executed.",
+    "CustomObject demo mobile literal012 is Java octal10; source observation, not measured bug or userdata interpretation."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

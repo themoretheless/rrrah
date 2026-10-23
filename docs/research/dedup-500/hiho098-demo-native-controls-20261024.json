@@ -1,0 +1,69 @@
+{
+  "author_correction": "Initial hypothesis that equal Student objects hash differently was rejected: Object.toString uses overridden hashCode. Final control constructs distinct Aa/BB names with equal32bit hashCode, not MD5 cryptanalysis.",
+  "initial_attempt": {
+    "scope": "5authorcontrols of original Student,HihoTuple,Avro demo schema plus actual Avro1.4.1 fixtureReader. No originalJUnittests, no demo output writes, no DB/network/cluster.",
+    "commands": [
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "-d",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HashUtility.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HihoTuple.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/Student.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/AvroDataFileWriteDemo.java",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DemoBoundaryControl.java"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/AvroDataFileWriteDemo.java:51: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tdatum.put(\"intColumn\", new Integer(12));\n\t\t                       ^\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HihoTuple.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HihoTuple.java uses unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n1 warning\n"
+      },
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "DemoBoundaryControl",
+          "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/138-data.avro"
+        ],
+        "returncode": 1,
+        "stdout": "PASS Student serialization preserves equals/hashCode\nOBSERVED Student.compareTo(Student) casts argument toText and fails\n",
+        "stderr": "Exception in thread \"main\" java.lang.AssertionError: expected identity-string hash observation\n\tat DemoBoundaryControl.main(DemoBoundaryControl.java:5)\n"
+      }
+    ]
+  },
+  "scope": "5authorcontrols of original Student,HihoTuple,Avro demo schema plus actual Avro1.4.1 fixtureReader. No originalJUnittests, no demo output writes, no DB/network/cluster.",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HashUtility.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HihoTuple.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/Student.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/AvroDataFileWriteDemo.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/DemoBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/AvroDataFileWriteDemo.java:51: warning: [removal] Integer(int) in Integer has been deprecated and marked for removal\n\t\tdatum.put(\"intColumn\", new Integer(12));\n\t\t                       ^\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HihoTuple.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/HihoTuple.java uses unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n1 warning\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "DemoBoundaryControl",
+        "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/sonalgoyal--hiho/138-data.avro"
+      ],
+      "returncode": 0,
+      "stdout": "PASS Student serialization preserves equals/hashCode\nOBSERVED Student.compareTo(Student) casts argument toText and fails\nOBSERVED distinct Student names Aa/BB share32bit hashCode, Object.toString and original tupleMD5; compareTo0\nSCHEMA {\"type\":\"record\",\"name\":\"hihoValue\",\"fields\":[{\"name\":\"intColumn\",\"type\":\"int\"},{\"name\":\"stringColumn\",\"type\":\"string\"}]}\nROW {\"intColumn\": 12, \"stringColumn\": \"sam\"}\nPASS Avro1.4.1 completefixture decode:1record,EOF=180\nOBSERVED demo ARRAY schema construction rejected: Can't create a: ARRAY\ndemo checks=5; no demo main writes or cluster\n",
+      "stderr": ""
+    }
+  ]
+}
