@@ -1,0 +1,66 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "381930fd2882ca65dd12a446bbb0908896070fec36c6623f6ad16f5260a71fe1",
+      "lines": 30,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "sha256": "20cd900c12511d5d4aea691ba1ab170748a27b54922cdb8cbb8944c52d05860d",
+      "lines": 18,
+      "git_blob_verified": true
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "bd591329667c54da62011e8be7f4e76e972b59af73474d038473167de358d8a4",
+      "lines": 44,
+      "git_blob_verified": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "98bf7ce3508372bb3d9e7aa2a166c3cd492eedc7d33b23549f1dd4bdc71f03d9",
+      "lines": 80,
+      "git_blob_verified": true
+    },
+    {
+      "path": "FUNDING.md",
+      "sha256": "3f8868e99bd443dbf2d7235cc6f4f32564c0cfec605e3ca650cdc81a75095be1",
+      "lines": 19,
+      "git_blob_verified": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "deacc644e6418ca6b897517a9978546f36a3453d025269f7d228a364fc74df5d",
+      "lines": 100,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/keywords.txt",
+      "sha256": "d047db026a670d702f3c7f521389607f0615b5101f60c519f1ba62fef90ee985",
+      "lines": 38,
+      "git_blob_verified": true
+    },
+    {
+      "path": "app/proguard-rules.pro",
+      "sha256": "0018b1e56a963e2f57153425ee9a1fb89308df3cea358479d9716cf55ba62828",
+      "lines": 78,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "README promises 100-percent identical files, but previously reviewed exact use case hashes image thumbnails or the first 256 KiB of video without full byte confirmation. The documented exactness contract is not supported by that implementation.",
+    "README claims all media discovery, while reviewed discovery uses extension, storage-root and hidden/Android/processed-folder policies and can omit inaccessible paths. No universal media coverage is demonstrated.",
+    "README describes folder taps as instant moves; the reviewed ViewModel queues pending moves and applies them later. The operational distinction matters for pending-plan persistence and failure handling.",
+    "CONTRIBUTING documents issue-first upstream contribution workflow and narrow composable parameters. This local research review does not submit upstream changes; no issue or PR was created.",
+    "ProGuard rules broadly preserve media/database/UI dependencies and Parcelable creators; release shrinking/packaging has not been run. Dictionary and funding/template files contain no duplicate matching algorithm."
+  ],
+  "whole_files_read_total": 83,
+  "remaining_tracked_blobs": 47,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
