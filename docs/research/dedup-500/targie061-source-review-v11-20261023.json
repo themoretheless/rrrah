@@ -1,0 +1,57 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Models/ScanIntensity.swift",
+      "git_blob": "37b10298b25038df81cae782b9c7ca991725bbc5",
+      "sha256": "d5d449e3acac720bd70a070e6e99f616e0a636a24dd881b1b6a47e88d5cbaa41",
+      "bytes": 2889,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/App/SimilarVideoFinderApp.swift",
+      "git_blob": "1549594920a0616f8cf4e641ce8f660a5613b27e",
+      "sha256": "3b68cb6df31825b6f6ffdf7b7160af4303518fffdc421382f86daad4a4aafa00",
+      "bytes": 1916,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/ScanIntensityTests.swift",
+      "git_blob": "3cce1c8d4320883f8cf7232d5f0d0723969b5c99",
+      "sha256": "f09177f4979cd7ae436d9a5362a91c59a7beb77df2d52cc09f7396609a23daa1",
+      "bytes": 2788,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 18,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 103,
+  "full_review_count": 249,
+  "control": "targie061-intensity-control-20261023.swift",
+  "runtime_scope": "Whole unchanged original ScanIntensity with native Foundation, authored exhaustive processors1..128 times3modes times4stages; thermal states supplied explicitly, no actual temperature/load benchmark.",
+  "results": {
+    "mode_processor_stage_cases": 1536,
+    "fair_to_serious_limit_increases": 639,
+    "fast_vision_fair_limit": 1,
+    "fast_vision_serious_limit": 2,
+    "all_limits_within_nominal": true,
+    "all_critical_limits_one": true
+  },
+  "upstream_tests": {
+    "executed": 4,
+    "failed": 0,
+    "scope": "Whole unchanged original ScanIntensityTests and ScanIntensity in isolated SwiftPM macOS14 target, native XCTest. Full app not executed.",
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/discovery-tests --filter ScanIntensityTests",
+    "log_sha256": "e2045747a1ed43c61a873de5d1320c9f1e765d2218394720c7b01f3ed64992d4"
+  },
+  "findings": [
+    "Intensity only chooses concurrency limits, not content-verification depth. Nominal caps metadata2/4/8, hash2/4/6, comparison2/6/8 and Vision1/2/3.",
+    "Thermal fair halves base with floor1, serious caps base at2. For base2 or3 this permits an increase on worsening state; 639/1536 evaluated mode/processor/stage tuples show this. Vision results repeat across processor dimension; 639 is not unique configurations or measured incidents.",
+    "Original four tests pass but do not assert monotonic limits across all thermal states. No temperature, RSS, task cancellation, actual CPU scheduling or throughput conclusion.",
+    "App entry owns ScanViewModel at App level to survive window closing, activates regular macOS application and supplies same model to WindowGroup. Read only; no UI launch or multiwindow behavior verification.",
+    "No source adopted. Source license notices retained in cached modules; no production optimization claimed."
+  ],
+  "binary_sha256": "7e0005467f9d27cb9393dc48937161794fbb8f0230541145e4715997921a9164"
+}
