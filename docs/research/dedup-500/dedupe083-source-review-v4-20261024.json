@@ -1,0 +1,49 @@
+{
+  "repository": "dedupeio/dedupe",
+  "commit": "3f61e79102910bd355e920a2df7e44c14c9cb247",
+  "previous_audit": "docs/research/dedup-500/dedupe083-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "dedupe/core.py",
+      "local": "10-core.py",
+      "sha256": "7bd4be9ca0f7d6f037ad736c64fdc6cf8fd9a8bc7238d4f60573ae9b90906541",
+      "lines": 339,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/datamodel.py",
+      "local": "11-datamodel.py",
+      "sha256": "7d92e9245675d017c332fee05c51d33ca7290b699cc3d8bcbb5c141502f4b4b2",
+      "lines": 202,
+      "whole_text_read": true
+    },
+    {
+      "path": "dedupe/serializer.py",
+      "local": "12-serializer.py",
+      "sha256": "2c441076bd745fe1e42af7345a783194084bb7278ff6a906a5754ad4654343c0",
+      "lines": 77,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 13,
+  "tracked_blobs": 104,
+  "remaining_without_whole_review": 91,
+  "controls": {
+    "source_sha256": "7bd4be9ca0f7d6f037ad736c64fdc6cf8fd9a8bc7238d4f60573ae9b90906541",
+    "integer_ids_preserved": true,
+    "distinct_257_character_ids_collapse_to_same_256_character_id": true,
+    "scope": "Original ScoreGazette and sniff_id_type definitions with real NumPy, synthetic classifier/featurizer. No learned-model/full-package or arbitrary identifier qualification."
+  },
+  "findings": [
+    "Original scoring converts string identifiers to NumPy Unicode width256; two distinct 257-character identifiers collide in a finite original-method control.",
+    "Score worker queue uses two batches and default batch20000; this is not a hard memory budget because feature width and worker count also matter.",
+    "Missing distances become zero with optional missingness-indicator columns; this is feature policy rather than exact equality.",
+    "Serializer uses tagged tuple/frozenset dictionaries; arbitrary record fields matching reserved tags need roundtrip validation before reuse."
+  ],
+  "limits": [
+    "No full-package import, learned model or upstream test run.",
+    "Synthetic scorer controls do not qualify classifier accuracy.",
+    "No production code adopted into rrrah."
+  ]
+}
