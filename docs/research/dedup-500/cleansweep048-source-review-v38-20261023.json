@@ -1,0 +1,30 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/SwiperViewModel.kt",
+      "sha256": "f2f79bdf7ebbc416d5ea8832c35cbe99450cdff240d73404fd9c60c48e995b8d",
+      "lines": 1545,
+      "git_blob_verified": true,
+      "cumulative_prior_reviews": [
+        36,
+        37
+      ]
+    }
+  ],
+  "findings": [
+    "Creating/importing a destination with alsoMove=true calls moveToFolder after asynchronous repository/preferences work; it selects whichever item is current then, without preserving the item that opened the dialog.",
+    "renameTargetFolder rewrites exact Move target paths in pending state but does not update SavedStateHandle pendingChanges, descendant targets, source item paths or repository folder cache. Process recreation can restore old move targets.",
+    "Folder import obtains a name and publishes FolderAdded without checking destination existence or writability here. Creation validation is delegated to the previously reviewed repository.",
+    "forgetSortedMediaInFolder and resetProcessedMedia call initializeMedia with unchanged buckets; the previously reviewed nonempty-list early return can prevent immediate reinitialization despite comments promising it.",
+    "Exit handlers emit navigation without checking isApplyingChanges or awaiting an active operation. ViewModel destruction may cancel work after partial filesystem effects; no runtime cancellation experiment was run.",
+    "prewarmNextImages limits each enqueue batch to three non-video items, but retains no request handles and launches anew on each call. Repeated requests and decoder dimensions depend on Coil behavior; no memory or speed claim.",
+    "Playback position ignores zero updates, so returning playback to the start does not clear an existing positive saved position."
+  ],
+  "whole_files_read_total": 75,
+  "remaining_tracked_blobs": 55,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
