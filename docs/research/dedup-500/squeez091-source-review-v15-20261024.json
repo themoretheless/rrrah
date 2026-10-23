@@ -1,0 +1,70 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v14-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/economy/handler_stats.rs",
+      "local": "65-src--economy--handler_stats.rs",
+      "sha256": "bd341564eab0d74b0bb2eae6f4eb099bdd9c099a17b7d0c4d5edb81b9161b3a9",
+      "whole_text_read": true,
+      "lines": 309
+    },
+    {
+      "path": "tests/test_handler_stats.rs",
+      "local": "66-tests--test_handler_stats.rs",
+      "sha256": "90b28688c6d4c284a88491416b21daa115c8d360cd79df3ed06291a07abdfb2c",
+      "whole_text_read": true,
+      "lines": 136
+    },
+    {
+      "path": "src/economy/efficiency.rs",
+      "local": "67-src--economy--efficiency.rs",
+      "sha256": "125bd73f9673dec60ae3204556038d486b5b24227edfa2f87da043108b0d4af6",
+      "whole_text_read": true,
+      "lines": 156
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 66,
+  "cumulative_visual_images_reviewed_total": 1,
+  "cumulative_whole_reviewed_files": 67,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 260,
+  "native_original_tests_added": {
+    "passed": 21,
+    "failed": 0,
+    "ignored": 0,
+    "groups": {
+      "handler_stats_lib": 9,
+      "efficiency_lib": 7,
+      "test_handler_stats": 5
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 390,
+    "failed": 0,
+    "scope": "Focused original groups only; full suite not run"
+  },
+  "public_control": {
+    "stale_snapshot_loses_git_increment": true,
+    "both_saves_sequential": true,
+    "full_savings_extreme_basis_points": 1,
+    "ordinary_full_savings_basis_points": 10000,
+    "efficiency_extreme_panics_debug": true,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-handler-stats-1b1fmira"
+  },
+  "findings": [
+    "Two HandlerStats snapshots loaded before either updates can lose a call even with sequential complete saves. Initial git1; snapshotA increments git2; snapshotB records cargo1 then saves; final git1,cargo1. Deterministic stale-state schedule, not a timing race or corrupt-write control.",
+    "HandlerStats rows saturates saved*10000 before division; in=u64::MAX,out=0 yields1 basis point instead of10000. Ordinary1000/0 control yields10000. Extreme synthetic arithmetic only.",
+    "Efficiency compute uses ordinary u64 products; synthetic total_in=u64::MAX,total_out0 panics in original debug library. Release behavior not measured.",
+    "HandlerStats load truncates to shortest parallel array; record caps new handlers at64; save ignores write and rename errors and uses shared temporary pathname. Those source observations have no additional write-failure control this turn.",
+    "Efficiency scores blend compression, agent overhead estimate, exact+fuzzy hit frequency and budget conservation; this is not a correctness/recall measure for duplicate detection."
+  ],
+  "transfer_decision": "Do not equate telemetry score or hit rate with duplicate correctness. Avoid blind replacement when aggregating independently loaded statistics. No production code copied.",
+  "limits": [
+    "260 tracked files remain without whole review.",
+    "390 focused original tests do not qualify full package, concurrent aggregation or universal numeric inputs.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
