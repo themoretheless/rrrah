@@ -2,7 +2,7 @@
   "index": 68,
   "repository": "PaulLereverend/NextcloudDuplicateFinder",
   "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
-  "review_scope": "45/165 pinned blobs whole-read through v5. Cleanup/report/migration source traced; new local real-file rename/removal/recreation regression passes both exact scan APIs. PHP/Nextcloud runtime unqualified; bundledJS partial.",
+  "review_scope": "65/165 pinned blobs whole-read through v6, including every lib/ blob and seven migrations. Database upgrades and PHP/Nextcloud runtime remain unexecuted; frontend/bundles/license/assets/test review incomplete.",
   "decision": "reference",
   "finding": "Nextcloud background/CLI duplicate jobs and controller tests; server integration not directly reusable in native rrrah.",
   "license_metadata": "AGPL-3.0",
@@ -94,6 +94,10 @@
     },
     {
       "audit": "docs/research/dedup-500/nextcloud068-source-review-v5-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/nextcloud068-source-review-v6-20261023.json",
       "whole_repo_complete": false
     }
   ]
