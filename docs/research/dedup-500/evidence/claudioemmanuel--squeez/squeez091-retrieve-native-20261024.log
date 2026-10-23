@@ -1,0 +1,18 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.00s
+     Running unittests src/lib.rs (.dedup-work/squeez091-target-20261024/debug/deps/squeez-b712cde0f180fb8f)
+
+running 11 tests
+test context::retrieve::tests::rejects_path_traversal_and_bad_ids ... ok
+test context::retrieve::tests::retrieve_checked_returns_not_found_for_missing_id ... ok
+test context::retrieve::tests::sensitive_dotenv_body_is_not_stashed ... ok
+test context::retrieve::tests::sensitive_private_key_is_not_stashed ... ok
+test context::retrieve::tests::identical_content_is_content_addressed ... ok
+test context::retrieve::tests::store_then_retrieve_round_trips ... ok
+test context::retrieve::tests::retrieve_checked_returns_found_for_intact_blob ... ok
+test context::retrieve::tests::prune_removes_expired_blobs_and_reports_stats ... ok
+test context::retrieve::tests::clean_content_still_round_trips_through_store_guarded ... ok
+test context::retrieve::tests::retrieve_checked_detects_corruption ... ok
+test context::retrieve::tests::prune_keeps_fresh_blobs ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 543 filtered out; finished in 0.00s
+

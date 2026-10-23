@@ -1,0 +1,29 @@
+{
+  "scope": "Original library hash function, process allocator requested bytes; excludes input construction from measured delta, not RSS or speed",
+  "cases": [
+    {
+      "tokens": 1000,
+      "input_bytes": 8889,
+      "sketch_len": 96,
+      "sketch_capacity": 998,
+      "retained_requested_bytes": 7984,
+      "peak_additional_requested_bytes": 24394
+    },
+    {
+      "tokens": 10000,
+      "input_bytes": 98889,
+      "sketch_len": 96,
+      "sketch_capacity": 9998,
+      "retained_requested_bytes": 79984,
+      "peak_additional_requested_bytes": 342157
+    },
+    {
+      "tokens": 100000,
+      "input_bytes": 1088889,
+      "sketch_len": 96,
+      "sketch_capacity": 99998,
+      "retained_requested_bytes": 799984,
+      "peak_additional_requested_bytes": 2897168
+    }
+  ]
+}

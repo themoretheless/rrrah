@@ -1,0 +1,95 @@
+{
+  "repository": "claudioemmanuel/squeez",
+  "commit": "5bb983418153ac30cdd35b100cd0e52058fb80db",
+  "previous_audit": "docs/research/dedup-500/squeez091-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "src/context/stash_index.rs",
+      "local": "15-src--context--stash_index.rs",
+      "sha256": "4029151052217586ca533927b636624324b6950f347b5a4e0f7ee5b2200089e0",
+      "whole_text_read": true,
+      "lines": 273
+    },
+    {
+      "path": "tests/test_repro_mcp_fuzzy.rs",
+      "local": "16-tests--test_repro_mcp_fuzzy.rs",
+      "sha256": "a42cba4939331d4a47eeec71d7bd8845d52fbfb877b84a029eb8ce13fd5b5894",
+      "whole_text_read": true,
+      "lines": 94
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 15,
+  "tracked_blobs": 327,
+  "remaining_without_whole_review": 312,
+  "all_327_original_and_runtime_bytes_reverified": true,
+  "native_original_tests_added": {
+    "passed": 22,
+    "failed": 0,
+    "ignored": 0,
+    "exit_code": 0,
+    "groups": {
+      "context::retrieve::tests": 11,
+      "context::stash_index::tests": 8,
+      "test_repro_mcp_fuzzy": 3
+    }
+  },
+  "native_original_tests_cumulative": {
+    "passed": 59,
+    "failed": 0,
+    "scope": "Eight focused groups, not entire package suite."
+  },
+  "memory_public_function_control": {
+    "scope": "Original library hash function, process allocator requested bytes; excludes input construction from measured delta, not RSS or speed",
+    "cases": [
+      {
+        "tokens": 1000,
+        "input_bytes": 8889,
+        "sketch_len": 96,
+        "sketch_capacity": 998,
+        "retained_requested_bytes": 7984,
+        "peak_additional_requested_bytes": 24394
+      },
+      {
+        "tokens": 10000,
+        "input_bytes": 98889,
+        "sketch_len": 96,
+        "sketch_capacity": 9998,
+        "retained_requested_bytes": 79984,
+        "peak_additional_requested_bytes": 342157
+      },
+      {
+        "tokens": 100000,
+        "input_bytes": 1088889,
+        "sketch_len": 96,
+        "sketch_capacity": 99998,
+        "retained_requested_bytes": 799984,
+        "peak_additional_requested_bytes": 2897168
+      }
+    ]
+  },
+  "store_search_retrieve_control": {
+    "scope": "Full unmodified public store/search/retrieve API with owned directory and synthetic text",
+    "intact_roundtrip": true,
+    "missing_blob_still_searchable": true,
+    "missing_retrieve_refused": true,
+    "corrupt_blob_still_searchable": true,
+    "corrupt_retrieve_refused": true,
+    "interpretation": "Sidecar hits are candidates, not verified live blob contents; public retrieval checks integrity separately.",
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/squeez091-index-state-__tu7i4a"
+  },
+  "findings": [
+    "shingle_minhash truncates vector length but retains original allocation capacity: at100000 tokens, len96/cap99998 retains799984 requested bytes. This contradicts interpreting SHINGLE_K as bounded retained vector memory, not only peak memory.",
+    "Process-global counting allocator reports additional peak requested bytes24394/342157/2897168 for1000/10000/100000 input tokens respectively. Input construction is outside measurement delta; no RSS, wall-time or production memory-admission claim.",
+    "Index search returns the sidecar hit after deleting its blob and after replacing blob bytes. Public retrieve returns None for missing content and retrieve_checked classifies changed bytes asCorrupted. A search hit is not verified live content.",
+    "Original MCP regression tests preserve distinct or near-identical synthetic snapshots and still collapse byte-identical snapshots; no actual browser or installed hook was exercised."
+  ],
+  "transfer_decision": "Do not adopt the supposedly bounded sketch allocation. Preserve independent content verification after candidate lookup; no foreign production code copied.",
+  "limits": [
+    "15/327 complete manual file reviews; cache remains partial.",
+    "Finite allocator measurements and owned directory mutations do not establish concurrent-writer safety, crash durability, total memory bounds or universal similarity coverage.",
+    "Original59 focused tests do not qualify full package, host hooks or MCP transport integration.",
+    "rrrah production code unchanged in this turn. Native pHash.org/ASAN remains skipped."
+  ],
+  "raw_log_note": "Original Cargo logs retain their trailing blank lines for exact evidence."
+}
