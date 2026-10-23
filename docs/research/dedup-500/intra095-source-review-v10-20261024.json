@@ -1,0 +1,85 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v9-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_BKTree_2.py",
+      "local": "45-Tests--Test_BKTree_2.py",
+      "sha256": "e96030a76e0b4e2d4b93f2e64384fc093eea9a42cd8419fb82d4d923cd395cf1",
+      "whole_text_read": true,
+      "lines": 291
+    },
+    {
+      "path": "server/decorators.py",
+      "local": "46-server--decorators.py",
+      "sha256": "41b01fc4356abf10602ac9061bafc9f53784bbc16321621002a193f675086fc3",
+      "whole_text_read": true,
+      "lines": 50
+    }
+  ],
+  "whole_text_files_read_total": 46,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 108,
+  "authored_native_control": {
+    "result": {
+      "exit_code": 0,
+      "stdout": "{\"assertions_enabled\":false,\"items_after_root_removal\":6,\"expected_items_after_root_removal\":3,\"deleted_id_still_found\":false}\n",
+      "stderr": "main entered\nbefore root removal\nafter root removal\nafter snapshot\nafter second removal\n",
+      "timed_out": false
+    },
+    "build_flags": [
+      "-std=c++17",
+      "-O2",
+      "-DNDEBUG",
+      "-pthread"
+    ],
+    "build_exit_code": 0,
+    "source": "unchanged pinned deduplicator/bktree.hpp",
+    "parsed_stdout": {
+      "assertions_enabled": false,
+      "items_after_root_removal": 6,
+      "expected_items_after_root_removal": 3,
+      "deleted_id_still_found": false
+    }
+  },
+  "attempt_history": [
+    {
+      "timeout_seconds": 10,
+      "scope": "Initial harness subprocess timeout raised uncaught TimeoutExpired;no result JSON;not upstream testfailure"
+    },
+    {
+      "timeout_seconds": 3,
+      "timed_out": true,
+      "stderr": "",
+      "scope": "Child killed/reaped;no main marker observed,not evidence of algorithm deadlock"
+    },
+    {
+      "timeout_seconds": 20,
+      "timed_out": false,
+      "exit_code": 2,
+      "scope": "Native execution completed,6enumerateditemsanddeleted_id_still_foundFalse;owned harness expected ghostID and returned2;hypothesis rejected,not original testfailure"
+    },
+    {
+      "timeout_seconds": 30,
+      "timed_out": false,
+      "exit_code": 0,
+      "scope": "Final control checks observed duplicate enumeration and absence of ghostID;all stage markers reached"
+    }
+  ],
+  "findings": [
+    "Withassertionsdisabledrootremoval0id0fromfourentries leaves6get_allitemsinsteadof3. Samepinnedheader;priorassert-enabledrootremovalaborted. This runqualifiesdifferentexplicitbuildmode,notdefaultCythonflags.",
+    "Followupremovehash1id2doesnotreturndeletedIDinsearch1radius0. InitialghostIDhypothesisnotconfirmed;donotclaimsearchfalsepositivefromthiscase.",
+    "Short10/3secondobservations expired withoutmain-stageoutput;20/30secondattemptscompleted. No deadlockorCPUperformanceclaim supported;allownedchildrenreaped.",
+    "Whole Test_BKTree_2 containsflat65distancebranches,narrow65onebitfixture and signedunsignedconversionchecks including50000randombitstrings. Nineoriginaltestmethodsreadbutnotexecuted;no deletiontests inthisfile.",
+    "Whole server.decorators.Singleton explicitly documentsnon-thread-safebehavior. Absenceoflockingnotreportedasanunexpectedcontractbug;no serverorRPCstarted.",
+    "exposify sourcealiasespubliccallablesincludinginheritedmembers;source-onlyreading,noremoteserviceoperation."
+  ],
+  "transfer_decision": "Qualify assert-enabled and assert-disabled invariants separately;retain rejected hypotheses and distinguish process startup observation from algorithm hangs. No foreignproductioncodeadopted.",
+  "limits": [
+    "46of154whole files;108remain.",
+    "Originalupstream17testsremain13pass4errors;authorednativecontrolisnotupstreamtest.",
+    "No Cythonbindings,concurrency/RSS/sanitizerqualification;nativepHash.org/ASAN remains skipped."
+  ]
+}
