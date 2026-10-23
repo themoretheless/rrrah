@@ -1,0 +1,30 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/SwiperScreen.kt",
+      "sha256": "2c59ae2b45076c06625d046f8d3b67dd36b7c34d38d414fb6e4c02040741fea5",
+      "lines": 1734,
+      "git_blob_verified": true,
+      "cumulative_prior_reviews": [
+        47
+      ]
+    }
+  ],
+  "findings": [
+    "Gesture drag begins only when a single positionChange exceeds touchSlop; small movements are not accumulated toward that threshold. A smooth long drag made of sub-slop events can be treated as a tap/long press rather than a swipe. No device gesture replay was run.",
+    "Sensitivity LOW/MEDIUM/HIGH maps to 60/80/140dp thresholds, so the label HIGH requires the greatest travel. Naming intent needs resource review; measured usability is unknown.",
+    "Gesture pointerInput keys item.id and swipeDownAction but not sensitivity/full callback policy, so updated thresholds may remain captured until restart. MainContent key(item.id) correctly resets card gesture state for a different item.",
+    "Fullscreen gesture attachment uses outer coordinates, but long-press menu offset adds inner card globalPosition; when those origins differ the menu location can be shifted. No visual positioning test was run.",
+    "formatFileSize repeats the unclamped five-unit array previously found in session setup; files >=1024^5 bytes can exceed the unit index.",
+    "Folder chip disables same-parent moves by lexical equality only; canonical aliases are not resolved. Disabled chips still allow long press for folder menu.",
+    "Video TextureView is detached on AndroidView release; ExoPlayer ownership and release are handled by the earlier screen lifecycle block. No decoder/render/runtime validation was performed.",
+    "Collapsed vertical folder bar eagerly composes every target with FlowRow; other branches use lazy rows/grids or estimated bounded FlowRow. No performance gain is claimed."
+  ],
+  "whole_files_read_total": 100,
+  "remaining_tracked_blobs": 30,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
