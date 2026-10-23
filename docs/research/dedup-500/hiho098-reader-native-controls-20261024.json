@@ -1,0 +1,40 @@
+{
+  "scope": "6authorcontrols of unchanged DBRecordReader/DataDrivenDBRecordReader/DBConfiguration with realHadooptypes and recording Mockito JDBC objects; authored DBInputSplit/NullDBWritable/DataDriven hosts in isolatedclassesdir; no DriverManager/database/SQL/network or cluster",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/DBConfiguration.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/DBInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/DBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/DBWritable.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/DataDrivenDBInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/DataDrivenDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/InterfaceAudience.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/InterfaceStability.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/MySQLDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/MySQLDataDrivenDBRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/src/ReaderBoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-reader-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "co.nubetech.hiho.mapreduce.lib.db.apache.ReaderBoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS2rows,offsetkeys,EOF,healthyclose\nOBSERVED early close failure skips later cleanup: stage=0\nOBSERVED early close failure skips later cleanup: stage=1\nOBSERVED early close failure skips later cleanup: stage=2\nOBSERVED missing token returns identical unpartitioned query for2distinctsplits\nPASS token partitions generated query;reader checks=6\n",
+      "stderr": "26/10/24 03:33:22 ERROR apache.DataDrivenDBRecordReader: Could not find the clause substitution token $CONDITIONS in the query: [select val from records]. Parallel splits may not work correctly.\n26/10/24 03:33:22 ERROR apache.DataDrivenDBRecordReader: Could not find the clause substitution token $CONDITIONS in the query: [select val from records]. Parallel splits may not work correctly.\n"
+    }
+  ]
+}

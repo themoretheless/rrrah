@@ -1,0 +1,92 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v18-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBRecordReader.java",
+      "local": "114-DBRecordReader.java",
+      "sha256": "cea664c4304d65a8c26bfc7cc8ced4509032d09b54cfb7d23470760ae282d02a",
+      "git_blob": "cbdf40b31509630aba0315b4c431725337eaa8aa",
+      "lines": 272,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DataDrivenDBRecordReader.java",
+      "local": "115-DataDrivenDBRecordReader.java",
+      "sha256": "211324673c89f4354b37637761aa937881cf1c06e1f18a04bf53f55bbcef3c31",
+      "git_blob": "ca6c8cf5130828afdb6db1c38e84fb28031377e3",
+      "lines": 136,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/MySQLDBRecordReader.java",
+      "local": "116-MySQLDBRecordReader.java",
+      "sha256": "070c49fffdb64fe7c9abe87b91e7fcdfdb76affaf64a1700a259ebe266ea74f0",
+      "git_blob": "ce2ce9c8967dbb85f9dc7be476e14bd863115263",
+      "lines": 49,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/MySQLDataDrivenDBRecordReader.java",
+      "local": "117-MySQLDataDrivenDBRecordReader.java",
+      "sha256": "416fee817dc8a39433c41d6d531fd910ca371d46eb1e969e67ebae30c3cce70b",
+      "git_blob": "4a34bc2759cde360532a6995725bb0819f076bb8",
+      "lines": 50,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/OracleDataDrivenDBRecordReader.java",
+      "local": "118-OracleDataDrivenDBRecordReader.java",
+      "sha256": "017ca185aa077e6072d376961ea1e2c7b482de6b3e815167f596a59c9c702390",
+      "git_blob": "c11a85f429a4e95cb4fc929ee049ee51ff18841a",
+      "lines": 47,
+      "whole_text_read": true
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBConfiguration.java",
+      "local": "119-DBConfiguration.java",
+      "sha256": "07bf20542c129270ceeccd0c77c71148ed2d76768f5c2eeff9591af050b855f5",
+      "git_blob": "68118247fd1bf97f5766471f00b63dc006819820",
+      "lines": 265,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 114,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 120,
+  "remaining_without_whole_review": 50,
+  "original_tests_cumulative": {
+    "total": 70,
+    "passed": 70,
+    "new_original_tests": 0
+  },
+  "author_controls": {
+    "new": 6,
+    "cumulative": 75,
+    "report": "docs/research/dedup-500/hiho098-reader-native-controls-20261024.json",
+    "confirmed": [
+      "Ordinary2row reader returns keys5and6,payloadsx/y,EOF; healthyclose closes result/statement,commits,andclosesconnection.",
+      "Injected ResultSet.close SQLException skips statementclose,commit andconnectionclose.",
+      "Injected statementclose SQLException skips commit andconnectionclose.",
+      "Injected commit SQLException skips connectionclose.",
+      "Custom query without $CONDITIONS returns identical unpartitioned query for2differentDataDrivenDBInputSplit bounds; no actual duplicate SQL results tested.",
+      "With $CONDITIONS token, generatedqueries include different expectedboundclauses."
+    ],
+    "scope": "Original unchanged DBRecordReader/DataDrivenDBRecordReader/DBConfiguration methods; actual Hadooptypes plus Mockito JDBC recording objects. Authored DBInputSplit/NullDBWritable/DataDrivenDBInputFormat hosts bind known nested semantics in separateclassesdir. No realconnection/DriverManager, SQL, database, network orcluster."
+  },
+  "source_only_findings": [
+    "MySQL reader variants use fetchSize=Integer.MIN_VALUE for streaming; actualMySQL driver behavior unqualified.",
+    "OracleDataDrivenDBRecordReader calls OracleDBRecordReader.setSessionTimeZone; source reviewed only, Oracle constructor/runtime not executed."
+  ],
+  "partial_dependency": {
+    "path": "src/main/java/co/nubetech/hiho/mapreduce/lib/db/apache/DBInputFormat.java",
+    "sha256": "8809d674f342e4013e8b9920897b6b9d66e69351f461f51a519fddf6fcabf00a",
+    "whole_review": false,
+    "scope": "Only NullDBWritable and DBInputSplit source definitions read for recording-host semantics; no fullfile credit"
+  },
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}
