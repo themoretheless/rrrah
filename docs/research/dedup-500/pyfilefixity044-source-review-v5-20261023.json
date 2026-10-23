@@ -1,0 +1,33 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "rfigc.py now read whole across v2/v5 plus prior parameter reads: 1-74,75-115,116-254,255-310,311-360,361-389,390-505,506-524,525-600 and final entry point. No whole-repository promotion.",
+  "findings": [
+    {
+      "id": "append-missing-database",
+      "detail": "Update-append opens a nonexistent database in append mode but writes schema headers only for generate. Its first data row is subsequently interpreted as CSV headers. Check mode then sees no records and returns False (exit-code-equivalent success) even after source content changes. Confirmed through original unchanged main, not merely inferred."
+    },
+    {
+      "id": "generation-durability",
+      "detail": "Generate directly truncates the destination database before traversal. File hash or stat failures in generation are outside the check-mode per-file error handler; an exception can leave a partial database. No generation transaction/completeness marker."
+    },
+    {
+      "id": "structure-result",
+      "detail": "check_structure returns None for unsupported extensions, False for verified images and error string for failure; callers report errors only on truthy result. Successful run therefore does not establish structure verification of every file."
+    }
+  ],
+  "control": {
+    "path": "pyfilefixity044-headerless-control-20261023.py",
+    "process_exit_code": 0,
+    "append_return": 0,
+    "database_has_schema_header": false,
+    "parsed_data_rows": 0,
+    "check_return_after_content_change": false,
+    "interpretation": "Assertions pass because the defect is reproduced. Original check returns boolean False, numerically zero and treated as successful CLI termination."
+  },
+  "fixture_scope": "One temporary authored .bin file and temporary CSV; no user data altered.",
+  "upstream_source_modified": false,
+  "production_code_copied": false,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
