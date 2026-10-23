@@ -1,0 +1,44 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": ".editorconfig",
+      "sha256": "3aad3c7c862b157952b1401f03000842a89f3bbad4da447fee00de549abedad8",
+      "lines": 271,
+      "git_blob_verified": true,
+      "method": "Whole pinned text read"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "ca02e3d05ded8cf0c0cad45845ac445e7a14f15c66d38665c6b2ef1691145a27",
+      "lines": 66,
+      "git_blob_verified": true,
+      "method": "Whole pinned text read"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "69cb4469b5ed0c5d7eebb44cd1b7a244cb022f27886e7a2b2be9d635391ed39b",
+      "lines": 456,
+      "git_blob_verified": true,
+      "method": "Whole pinned text read"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "lines": 674,
+      "git_blob_verified": true,
+      "method": "Exact byte-equivalent GPLv3 text reused from imagedup491 complete-source review"
+    }
+  ],
+  "findings": [
+    "Root LICENSE is exact-byte GPLv3 text, SHA256 matching prior fully reviewed imagedup491 LICENSE. This does not establish bundled DLL/font licensing or provenance; no code adopted.",
+    "Editorconfig defines style rules with later cs/vb overrides, including final-newline preference overriding earlier false for C#. These are formatting settings, not quality/runtime checks.",
+    "Gitattributes normalizes text automatically and marks linux_build.sh -text. Gitignore is a Visual Studio/macOS/Windows template plus global *.svg exclusion; no execution or package installation performed."
+  ],
+  "whole_files_read_total": 84,
+  "remaining_tracked_blobs": 8,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
