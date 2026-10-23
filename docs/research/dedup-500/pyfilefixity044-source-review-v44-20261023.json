@@ -1,0 +1,39 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Two vendored object-collection/summary modules read whole and pinned. Only exact AST-extracted filter body executed, with deterministic len size-provider seam; not whole module/profiling integration.",
+  "new_whole_reads": [
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/muppy.py",
+      "sha256": "6980b3b3300f3ae9e77dc2e5507c2bbad9dc0ad7f8120deb66dc4b3b6a8c396b",
+      "syntax": "PASS"
+    },
+    {
+      "path": "pyFileFixity/lib/profilers/visual/pympler/summary.py",
+      "sha256": "4f3198307cd5978b6cc03b8a6b1f755dcd02c55a67db42ccf7ca5b63832b964c",
+      "syntax": "PASS"
+    }
+  ],
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 94,
+    "remaining_not_whole_reviewed": 50
+  },
+  "control": {
+    "path": "pyfilefixity044-object-filter-control-20261023.py",
+    "exit_code": 0,
+    "plain_filter_input_count": 2,
+    "plain_filter_result_count": 0,
+    "range_expected_count": 1,
+    "range_actual_count": 0
+  },
+  "findings": [
+    "filter starts empty result and populates only when Type provided; no-filter or size-only calls return empty. Size min uses < instead of >= and max uses > instead of <=. Exact function control reproduced empty result for valid range.",
+    "get_objects invokes gc.collect before snapshot and excludes frame objects by default; snapshot does not describe precollection memory or all process allocations.",
+    "_remove_duplicates uses id(item), which is appropriate object identity while list retains references. This is not content equality and must not be reused as a file-content dedup key.",
+    "get_referents recursively extends same list while iterating it; indirect levels/cyclic graphs need bounded traversal qualification. No such object graph executed.",
+    "Summary labels collapse objects by textual type/function/module representation; equal labels are aggregate bins, not equal object identity. get_diff implementation computes right-left despite docstring saying subtract right from left."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
