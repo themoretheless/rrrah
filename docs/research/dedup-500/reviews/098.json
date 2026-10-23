@@ -2,7 +2,7 @@
   "index": 98,
   "repository": "sonalgoyal/hiho",
   "commit": "77dd5af9b4b19167f062112945433dd588d10640",
-  "review_scope": "3/170 whole retained pinned source blobs read and blob hashes verified; DedupJob/KeyMapper/KeyReducer; no Hadoop or original tests executed; partial review",
+  "review_scope": "11/170 whole pinned source/test blobs read; fresh8raw files verified against retained Git tree; MD5-only ordering and generic Object/toString path reviewed; no upstream Hadoop runtime or tests",
   "decision": "reject-domain",
   "finding": "Hadoop database/key MapReduce integration; not image/file equality.",
   "license_metadata": "Apache-2.0",
@@ -79,6 +79,10 @@
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/hiho098-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/hiho098-source-review-v2-20261024.json",
       "whole_repo_complete": false
     }
   ]

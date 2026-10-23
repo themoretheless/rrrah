@@ -1,0 +1,106 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/HashUtility.java",
+      "local": "06-HashUtility.java",
+      "sha256": "d4b78b318978c33d162becaa19ef0369eb96562c780361ce60889b0c07643122",
+      "git_blob": "33a317714ad74733b6895bb35cccf0720468461e",
+      "whole_text_read": true,
+      "lines": 80
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/HihoTuple.java",
+      "local": "07-HihoTuple.java",
+      "sha256": "f055eb69ff6363152dfbc29b84712c9b1a8be53582265482232c739f71452e86",
+      "git_blob": "53ade8e8a1d11e394515748f460f0a8c910f5bd2",
+      "whole_text_read": true,
+      "lines": 136
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/HihoHashPartitioner.java",
+      "local": "08-HihoHashPartitioner.java",
+      "sha256": "cdb5e047812cdffaa06560100fc9ad58f1d855839726496b4781e53ede7aa364",
+      "git_blob": "5048969d343bef9f5df1c21400cc14dc3da6d1f1",
+      "whole_text_read": true,
+      "lines": 28
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupValueMapper.java",
+      "local": "09-DedupValueMapper.java",
+      "sha256": "e58cc2290452df87269f2dcb3d823e2f3f0e21be93638d7c570b8107cf83a055",
+      "git_blob": "e8c0377356d1a35b71af2d8b21601199026dc7c2",
+      "whole_text_read": true,
+      "lines": 41
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupValueReducer.java",
+      "local": "10-DedupValueReducer.java",
+      "sha256": "03128d3953e480aaa25cc0d5760f9317995304e90be707a06218333fbfd3b033",
+      "git_blob": "9c0d9d8b71bece5427c789f07679a5b83fe41a0d",
+      "whole_text_read": true,
+      "lines": 41
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/DedupRecordCounter.java",
+      "local": "11-DedupRecordCounter.java",
+      "sha256": "fadb9dc25dd9e1f6966c66068faa0e26a7d927074b310baa7a1d890a3448b03a",
+      "git_blob": "1b19a58c0491102c0c525f83651f68710c9b5dd9",
+      "whole_text_read": true,
+      "lines": 19
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestHashUtility.java",
+      "local": "12-TestHashUtility.java",
+      "sha256": "13074ba8f7b1203758057cc66a6522bdb501bbf2476c006f2d756160ff78236f",
+      "git_blob": "74c476c80a5e7135126cc74cd11633880597ab0b",
+      "whole_text_read": true,
+      "lines": 114
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestHihoTuple.java",
+      "local": "13-TestHihoTuple.java",
+      "sha256": "ca436b54ad8c8c1077d10722d0915cc8b30ebb08c97bcb2c933d28e076d77abb",
+      "git_blob": "f873a2fdea8e08e11a362e3106157dfd552a7dbe",
+      "whole_text_read": true,
+      "lines": 45
+    }
+  ],
+  "whole_files_read_total": 11,
+  "remaining_without_whole_review": 159,
+  "findings": [
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/HihoTuple.java",
+      "finding": "compareTo compares only16MD5bytes; equals also checks key and keyClass. Equal digests of distinct keys compare0 without content tie-break.",
+      "qualification": "source-only; no upstream Hadoop runtime"
+    },
+    {
+      "path": "src/main/java/co/nubetech/hiho/dedup/HashUtility.java",
+      "finding": "Object overload hashes toString; HihoTuple generic bound is Writable, so setKey calls Object overload rather than runtime-specific overloads. Direct Text/BytesWritable overloads digest complete backing arrays without logical length.",
+      "qualification": "Java overload resolution/source finding; backing-buffer effects not reproduced with Hadoop dependency"
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestHashUtility.java",
+      "finding": "10tests hash the same object twice; no equal-content independently allocated objects, buffer-capacity history, or unequal-content collision cases."
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestHihoTuple.java",
+      "finding": "2tests cover setters/getters only; no compareTo/equals consistency or serialization roundtrip."
+    }
+  ],
+  "upstream_tests_run": false,
+  "adopted_code": false,
+  "own_library_evidence": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --lib exact::collision_tests",
+    "log": "docs/research/dedup-500/rrrah-hiho098-collision-tests-20261024.log",
+    "passed": 10,
+    "failed": 0,
+    "ignored": 0,
+    "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "scope": "Current focused module only; forced sampled/full digest collisions separated by byte equality, mutation and cancellation cases; not full library suite"
+  }
+}
