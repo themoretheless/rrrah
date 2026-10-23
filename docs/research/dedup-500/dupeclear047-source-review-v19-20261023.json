@@ -1,0 +1,26 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "source_control": "docs/research/dedup-500/dupeclear047-size-control-20261023.cs",
+  "runtime": {
+    "command": "dotnet run --project .dedup-work/dupeclear047-20261023/size-control/Control.csproj --configuration Release",
+    "target_framework": "net8.0",
+    "exit_code": 0,
+    "checks_passed": 5,
+    "upstream_converter_unchanged": true,
+    "source_sha256": "97379a85817cec801d43913c56d2f14450f74b8932660d5c2d9619241ac49d5c",
+    "adapter": "IValueConverter interface only, no Avalonia implementation",
+    "full_application_run": false
+  },
+  "findings": [
+    "2 KiB roundtrip positive control passed. 1536 bytes converts to 1 decimal KiB, confirming integer truncation before cast.",
+    "1.5 decimal KiB converts back to 2048 bytes because Convert.ToInt64 rounds before multiplication. Integer N0 UI normally narrows fractional use; direct converter behavior confirmed.",
+    "Declared UI maximum Int64.MaxValue KiB converts to -1024 bytes in default unchecked C# arithmetic. Largest whole KiB fitting Int64 remains positive in boundary control. This confirms converter overflow, not full numeric-control acceptance or binding-error UI behavior.",
+    "FinderService compares length < minLength, so a negative bound would stop filtering positive file lengths; actual UI end-to-end propagation not executed."
+  ],
+  "whole_files_read_total": 79,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249
+}
