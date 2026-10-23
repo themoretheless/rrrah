@@ -1,0 +1,80 @@
+{
+  "repository": "fake-name/IntraArchiveDeduplicator",
+  "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
+  "previous_audit": "docs/research/dedup-500/intra095-source-review-v7-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Tests/Test_ArchiveIntersectionPathFilter.py",
+      "local": "37-Tests--Test_ArchiveIntersectionPathFilter.py",
+      "sha256": "43de81230ee4af97c693c2231b04bf975a8f86204286e2de6d576faaff666433",
+      "whole_text_read": true,
+      "lines": 205
+    },
+    {
+      "path": "Tests/Test_ArchiveIntersectionExtraction.py",
+      "local": "38-Tests--Test_ArchiveIntersectionExtraction.py",
+      "sha256": "59ca8409516fd7c22f54bcc7209a87e501a7082ac3bed2cfdabadf170c0542e8",
+      "whole_text_read": true,
+      "lines": 167
+    },
+    {
+      "path": "cross_link/DbBase.py",
+      "local": "39-cross_link--DbBase.py",
+      "sha256": "fec5f366df0125eb913cacc63412a7b9a3d75b5418869cff9263fb308157b1ed",
+      "whole_text_read": true,
+      "lines": 51
+    },
+    {
+      "path": "cross_link/LogBase.py",
+      "local": "40-cross_link--LogBase.py",
+      "sha256": "955aafadaaaaad4ff403b9fbf4b45251fd1993159b6138a037a61edbb7d1201b",
+      "whole_text_read": true,
+      "lines": 49
+    },
+    {
+      "path": "cross_link/dbPool.py",
+      "local": "41-cross_link--dbPool.py",
+      "sha256": "3d1efef54707edfe367375614c0d34af6d28506a2d38706eb698845840b5ce20",
+      "whole_text_read": true,
+      "lines": 29
+    },
+    {
+      "path": "cross_link/__init__.py",
+      "local": "42-cross_link--__init__.py",
+      "sha256": "065ef0c4ba10081e2aaebfa572cdaf7a9ec09db5e30494d5948cb7e5860f1552",
+      "whole_text_read": true,
+      "lines": 1
+    }
+  ],
+  "whole_text_files_read_total": 42,
+  "tracked_blobs": 154,
+  "remaining_without_whole_review": 112,
+  "authored_control": {
+    "result": {
+      "keyword_binary_count": 0,
+      "keyword_phash_count": 1,
+      "prefix_binary_count": 0,
+      "prefix_phash_count": 0,
+      "scope": "Exact AST-selected original methods;real owned candidate path plus query/row adapters;no PostgreSQL or file mutations"
+    },
+    "exit_code": 0
+  },
+  "findings": [
+    "Original ArchiveIntersectionPathFilter.test_pathNegativeFiltering_3 explicitly expects prefix test to exclude test_ptree. ArchChecker negativeMaskedPaths uses intended string-prefix policy;earlier skip-other omission is observed policy,not enough to call an upstreambug. Scanner mask_path contract independentlynotestablished.",
+    "Original _getBinaryMatchesForHash checks negativeKeywords but _doRowLookup has no keywordfilter. Same owned candidatewith excluded-keyword name:binary0matches,phash1match. Both otherwise same row/path/resolution. This is inconsistent filter propagation in reviewed methods,not actual PostgreSQL integration.",
+    "Prefix positivecontrol:negativeMaskedPaths skip excludes skip-other on both binary/perceptual lookups,consistent with explicit original test expectations.",
+    "Whole two archiveintersectiontestmodules read:11test methods plussetup require DB-backed fixtures and Cython;not executed or credited as passing. Tests include junk filtering,resolution effects,multiple expected archivepaths and prefixmasks.",
+    "cross_link.dbPool creates pooled databaseconnection at module import. Source read only;not imported or connected. DbBase opens socketthenIPfallback;no DBsettings used.",
+    "LoggerMixin chooses logger based on threadname and mutates shared loggers/index without explicitlocking;source-only,noraceassertionorcontrol.",
+    "cross_link/nameTools.py initialcombinedreadtruncated;not credited wholefile andnotexecuted. No broad import with database/watchers sideeffects."
+  ],
+  "correction_to_prior_interpretation": "String prefix pathmask semantics in ArchChecker are intentional per original tests;do notlabel siblingprefix omission alone asbug.",
+  "transfer_decision": "Carry exclusion policy through every retrieval channel;derive pathmask contract from explicit tests before treating prefix behavior aswrong. No foreignproductioncodeadopted.",
+  "limits": [
+    "42of154whole files;112remain.",
+    "Original test count remains17run13pass4errors;new11DB-backed tests readonly.",
+    "Authored filtercontrol uses metadata/row adapters,not full archive/database runtime.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
