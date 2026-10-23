@@ -1,0 +1,67 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "previous_audit": "docs/research/dedup-500/distill094-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pkg/cache/cache.go",
+      "local": "16-pkg--cache--cache.go",
+      "sha256": "afc3b5fed32534d21aa8bd7a1ec4dd9432120384832d9152082b226fc0ccb19d",
+      "whole_text_read": true,
+      "lines": 126
+    },
+    {
+      "path": "pkg/cache/memory.go",
+      "local": "17-pkg--cache--memory.go",
+      "sha256": "8d6a6de77d614baf616833c0b50e3c39152b573b6101c4d1c883dcfd1596f7cb",
+      "whole_text_read": true,
+      "lines": 267
+    }
+  ],
+  "whole_text_files_read_total": 15,
+  "tracked_blobs": 455,
+  "remaining_without_whole_review": 440,
+  "original_selected_tests": {
+    "names": [
+      "TestMemoryCache_GetSet",
+      "TestMemoryCache_Delete",
+      "TestMemoryCache_Has",
+      "TestMemoryCache_Clear",
+      "TestMemoryCache_TTL",
+      "TestMemoryCache_LRUEviction",
+      "TestMemoryCache_Stats",
+      "TestStats_HitRate"
+    ],
+    "passed": 8,
+    "failed": 0,
+    "exit_code": 0,
+    "scope": "Eight exact original bodies from cache_test.go, unused imports removed in isolated selected test file; two original cache modules unchanged"
+  },
+  "authored_native_control": {
+    "result": {
+      "after_existing_key_growth_bytes": 11,
+      "canceled_write_stored": true,
+      "configured_bytes": 10,
+      "get_mutation_changes_cache": true,
+      "input_mutation_changes_cache": true
+    },
+    "exit_code": 0,
+    "scope": "Original cache public APIs, owned in-memory data only"
+  },
+  "findings": [
+    "Two entries consume4key/value bytes under10-byte policy; replacing existing a with8-byte value raises SizeBytes11without eviction/error. Existing-key path bypasses aggregate needsEviction. Native control confirms.",
+    "Set retains caller []byte directly and Get returns stored slice directly. Mutating input changes cached value; mutating retrieved output also changes future reads. These are observed ownership semantics; no original immutable-copy contract assumed.",
+    "Already-canceled context passed to Set still stores value and returnsnil; methods accept context but do not inspect it. Cancellation contract must be explicit rather than inferred.",
+    "Selected eight original tests coverGetSet/Delete/Has/Clear/TTL/LRU/Stats/HitRate and pass; no update-growth or mutable-input/output assertions among these selected bodies.",
+    "Source Config says zeroMaxSize unlimited but constructor replaces0with10000. Source Cache.Set says zeroTTL noexpiration but implementation applies positiveDefaultTTL. These documentation-policy mismatches not additionally timed/control-qualified.",
+    "cache_test.go only selected prefix/first240lines read; whole494-line file not credited."
+  ],
+  "transfer_decision": "Resource limits must apply to replacement as well as insertion; preserve explicit byte ownership and cancellation semantics. No foreign production code copied.",
+  "limits": [
+    "15of455whole files;440remain.",
+    "Eight selected original unit bodies plus prior8one-iteration benchmarks; not entire upstream package/tests/dependencies.",
+    "No races/RSS/latency/platform qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
