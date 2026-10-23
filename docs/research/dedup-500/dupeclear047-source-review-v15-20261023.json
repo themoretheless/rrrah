@@ -1,0 +1,60 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear.Desktop/DupeClear.Desktop.csproj",
+      "sha256": "e519a2ef17e2046e5f74c54ababfcddef1e1cee0ffb73a8d97918531f3fa3fdd",
+      "lines": 29,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Desktop/app.manifest",
+      "sha256": "d5cfdbcbcec0c29a784497f1bbe01d8e36c3d501b0cb9b62f35d6ed03576ef41",
+      "lines": 18,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Linux/DupeClear.Native.Linux.csproj",
+      "sha256": "e33a0b7be592c140937d242a86bf8b114829975e6959d86fc97999007d41c94f",
+      "lines": 10,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native.Windows/DupeClear.Native.Windows.csproj",
+      "sha256": "1f2f52c99da60a8e9d760c1e8e4f1126cea10277c0198bd04426ac8afe9ef17b",
+      "lines": 15,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.Native/DupeClear.Native.csproj",
+      "sha256": "e84699924d2200cb35e0f8b199c68fa36fdd397798b9e3f63b4e6d3a9d86b384",
+      "lines": 10,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear.sln",
+      "sha256": "d2c185299ae943c8e343e2379f9340906ac6297a2b7e9c39075e2b88a8f22140",
+      "lines": 54,
+      "git_blob_verified": true
+    },
+    {
+      "path": "Libraries/AppUpdater.deps.json",
+      "sha256": "bca78b9c837a48364247d9373a2ffa779ca840d7f8a6a43a68d463ed27c8b278",
+      "lines": 59,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Desktop entry project targets net8.0-windows even though README and native service dispatch also describe Linux. This explains the hardcoded net8.0-windows build-output path in linux_build.sh; Linux execution itself remains unqualified.",
+    "Native Windows project targets net8.0 with unsafe code enabled and System.Drawing.Common 10.0.8; platform restriction is expressed on relevant classes rather than the project target. Native Linux references the shared Avalonia-based service interface project.",
+    "Solution includes five projects and Debug/Release Any CPU configurations, but no test project. Existing JPEG harness is task-owned and does not constitute upstream application tests.",
+    "AppUpdater.deps.json lists AppUpdater 1.0.0 plus Semver 3.0.0 and Microsoft.Extensions.Primitives 5.0.1. It is metadata, not source; listed package SHA512 values have not been independently checked against artifacts.",
+    "Desktop sets source-revision inclusion false and version 3.2.0-preview. Application manifest contains historical AvaloniaTest.Desktop assembly name and Windows 10 compatibility declaration. No OS compatibility claim derived from these declarations."
+  ],
+  "whole_files_read_total": 69,
+  "remaining_tracked_blobs": 23,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
