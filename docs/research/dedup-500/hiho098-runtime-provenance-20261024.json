@@ -1,0 +1,31 @@
+{
+  "jdk": {
+    "release": "jdk-21.0.13+9",
+    "url": "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.13%2B9/OpenJDK21U-jdk_aarch64_mac_hotspot_21.0.13_9.tar.gz",
+    "sha256": "bf036b35b071bfb2f54f2c0af8ee8d88afa95ee6eb3dce02c0f94cfc2524d04a",
+    "bytes": 199754598
+  },
+  "jars": [
+    {
+      "url": "https://repo.maven.apache.org/maven2/org/apache/hadoop/hadoop-core/0.20.2/hadoop-core-0.20.2.jar",
+      "sha256": "3699d07e35cf58982d228bebaf3073ef4cf84e0f4f82dc91636118cab132e4f6",
+      "bytes": 2687928
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+      "sha256": "ce6f913cad1f0db3aad70186d65c5bc7ffcc9a99e3fe8e0b137312819f7c362f",
+      "bytes": 60686
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/log4j/log4j/1.2.15/log4j-1.2.15.jar",
+      "sha256": "9f5f5799707881451a39c1b2dd22b4e43b97a80698db7daf1c9697f545e24387",
+      "bytes": 391834
+    },
+    {
+      "url": "https://repo.maven.apache.org/maven2/junit/junit/4.5/junit-4.5.jar",
+      "sha256": "923babc51db675f3923777c39ff7d868e7a76e69a45340ba4ecf38ce531adf0e",
+      "bytes": 198945
+    }
+  ],
+  "setup": "Local .dedup-work only; no global installation; original default hadoop0.20.2 selected from retained pom excerpt; full pom not reviewed or credited; supporting commonslogging1.1.1/log4j1.2.15/JUnit4.5; Java21 compile defaults, not original Java6 environment"
+}

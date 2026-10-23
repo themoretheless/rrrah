@@ -1,0 +1,59 @@
+{
+  "scope": "Author assertions execute unchanged original Java methods with real Hadoop0.20.2; forced digest equality is injected, not a discovered MD5 collision; not full MapReduce runtime",
+  "rejected_initial_fixture": "Text.set(String) did not retain spare bytes in this runtime; initial author assertion failed, not an upstream test failure. Final control uses set(byte[],offset,length).",
+  "initial_attempt": {
+    "scope": "Author assertions execute unchanged original Java methods with real Hadoop0.20.2; forced digest equality is injected, not a discovered MD5 collision; not full MapReduce runtime",
+    "commands": [
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "-d",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/BoundaryControl.java"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      {
+        "args": [
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+          "-cp",
+          "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+          "BoundaryControl"
+        ],
+        "returncode": 1,
+        "stdout": "PASS equal digest compares0 for distinct keys\nPASS same logical Text after shrink\n",
+        "stderr": "Exception in thread \"main\" java.lang.AssertionError: direct Text overload hashes spare backing bytes\n\tat BoundaryControl.require(BoundaryControl.java:8)\n\tat BoundaryControl.main(BoundaryControl.java:19)\n"
+      }
+    ]
+  },
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/BoundaryControl.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "BoundaryControl"
+      ],
+      "returncode": 0,
+      "stdout": "PASS equal digest compares0 for distinct keys\nPASS same logical Text after shrink\nPASS direct Text overload hashes spare backing bytes\nPASS generic tuple Object overload avoids Text backing-buffer difference\nPASS independent equal-element arrays get different toString hashes\nPASS ASCII middle field control\nOBSERVED invalid slice: a,b,c column=3 ArrayIndexOutOfBoundsException\nOBSERVED invalid slice: a,b,c column=0 ArrayIndexOutOfBoundsException\nOBSERVED invalid slice: abc column=1 ArrayIndexOutOfBoundsException\nPASS multibyte delimiter corrupts field\nmultibyte field raw=a762\nPASS empty middle field retained\nboundary checks=11\n",
+      "stderr": ""
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupKeyMapper.java",
+      "local": "18-TestDedupKeyMapper.java",
+      "sha256": "ba6a3545a430be6dc09323ea482d7d8b6b257662a2f7e252240950a18a69c42a",
+      "git_blob": "96d38ee901bd805008edeaa9f2ff31ac8a87a1eb",
+      "whole_text_read": true,
+      "lines": 67
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupKeyReducer.java",
+      "local": "19-TestDedupKeyReducer.java",
+      "sha256": "12fa016347f9e0c159e89de65ad87c8437974dddfef1cb9b2493e0957b3f9ea7",
+      "git_blob": "2dd8811b67a30bcfc7dbed7d99dc43455064aac1",
+      "whole_text_read": true,
+      "lines": 150
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupValueMapper.java",
+      "local": "20-TestDedupValueMapper.java",
+      "sha256": "47925d166b15f7e919f837b5b43417ee5ed72c51d86e51748d0b326809f2d6f1",
+      "git_blob": "9c00d13a98da3bf22b9fb04dc35c11da88a20bdf",
+      "whole_text_read": true,
+      "lines": 67
+    },
+    {
+      "path": "src/test/java/co/nubetech/hiho/dedup/TestDedupValueReducer.java",
+      "local": "21-TestDedupValueReducer.java",
+      "sha256": "9970ff8b05c4708b6027fd232fbde2d439042f24db9b0da2986770900f765199",
+      "git_blob": "395e81a7694e1553134281df4ce7d29542a9439f",
+      "whole_text_read": true,
+      "lines": 148
+    }
+  ],
+  "whole_files_read_total": 20,
+  "remaining_without_whole_review": 150,
+  "subsystem": "All20 tracked src main/test Java blobs in dedup package fully reviewed; other150 repository blobs remain",
+  "upstream_tests": {
+    "total": 23,
+    "passed": 23,
+    "failed": 0,
+    "report": "docs/research/dedup-500/hiho098-native-original-tests-20261024.json",
+    "scope": "4originalJUnitfiles,8unchangedselectedJavafiles compiled; realHadoop0.20.2;noHDFS/cluster/fullupstreamsuite"
+  },
+  "boundary_controls": {
+    "checks": 11,
+    "report": "docs/research/dedup-500/hiho098-native-boundary-controls-20261024.json",
+    "scope": "Author controls not counted as upstream tests",
+    "confirmed": [
+      "Forced identical digest: distinct key tuples compare0 but equalsFalse; injected equality not naturally found MD5 collision",
+      "Direct Text overload differs for equal logical content after byte-array setter retains backing capacity; generic tuple Object overload hashes equal Texts equally",
+      "Independent ArrayWritable with equal string elements receives different toString-derived MD5",
+      "Last ASCII field without following delimiter throws ArrayIndexOutOfBoundsException",
+      "Column0 and missing delimiter throw ArrayIndexOutOfBoundsException",
+      "Second field of a\u00a7b\u00a7c using \u00a7 returns bytes a762 instead of b",
+      "ASCII middle field and empty middle field positive controls pass"
+    ],
+    "rejected_initial_fixture": "Text.set(String) recreated buffer, so initial author assertion about retained capacity failed. Recorded separately; no upstream test failure."
+  },
+  "test_source_findings": [
+    "Reducer NullValues tests supply nonnull list with one null element, not null Iterable; empty/null Iterable branches untested.",
+    "Mapper tests check null key, not null value.",
+    "Reducer tests explicitly expect first supplied value; this confirms key/value consolidation policy, not preservation of all different record payloads."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "license_scope": "Original Java Apache headers read; full root/dependency license review still incomplete; no production code copied",
+  "skipped": "native pHash.org/ASAN"
+}

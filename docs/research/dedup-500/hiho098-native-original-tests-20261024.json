@@ -1,0 +1,40 @@
+{
+  "scope": "23 original JUnit methods in4 original files; unchanged selected8sourcefiles; real Hadoop0.20.2/Java21.0.13; no cluster or full upstream suite",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DelimitedLineRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/DelimitedTextInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HashUtility.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HihoTuple.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestDelimitedLineRecordReader.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestDelimitedTextInputFormat.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestHashUtility.java",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestHihoTuple.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/TestHashUtility.java:101: warning: [removal] Byte(String) in Byte has been deprecated and marked for removal\n\t\tByteWritable key = new ByteWritable(new Byte(\"123\"));\n\t\t                                    ^\nNote: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/src/HihoTuple.java uses or overrides a deprecated API.\nNote: Recompile with -Xlint:deprecation for details.\nNote: Some input files use unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n1 warning\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "org.junit.runner.JUnitCore",
+        "co.nubetech.hiho.dedup.TestHashUtility",
+        "co.nubetech.hiho.dedup.TestHihoTuple",
+        "co.nubetech.hiho.dedup.TestDelimitedLineRecordReader",
+        "co.nubetech.hiho.dedup.TestDelimitedTextInputFormat"
+      ],
+      "returncode": 0,
+      "stdout": "JUnit version 4.5\n.............key is: ghd\n.key is: i'jd\n.key is: i\\'jd\n.key is: ijd\n.key is: i%jd\n.key is: ijd\n.key is: ijd\n.key is: ijd\n...\nTime: 0.186\n\nOK (23 tests)\n\n",
+      "stderr": "26/10/24 03:08:30 INFO jvm.JvmMetrics: Initializing JVM Metrics with processName=JobTracker, sessionId=\n"
+    }
+  ]
+}
