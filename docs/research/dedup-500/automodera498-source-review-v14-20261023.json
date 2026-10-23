@@ -1,0 +1,56 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/cli/ArchiveCLI.java",
+      "sha256": "72cd1d79e96ab2223de634c95df659286ecfe5dd83394722c5c16af78f74171a",
+      "lines": 154,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/cli/BaseNodeCLI.java",
+      "sha256": "7e3e49c9fdf7a6fb4c6ddee4fcb3012d51141518103a294b5dbea9214c6440c8",
+      "lines": 319,
+      "git_blob_verified": true
+    },
+    {
+      "path": "common/src/main/java/uk/ac/uws/danielszabo/automodera/common/cli/CustomPromptProvider.java",
+      "sha256": "3aaed8b99e98c0d0e09231cda9e8fb8926e8712b272ba55b630c15623780c2c6",
+      "lines": 66,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/cli/IntegratorCLI.java",
+      "sha256": "1577e6603c4169edbb5a007bb2a0a48aec4766a796234814d7d201541f31b940",
+      "lines": 167,
+      "git_blob_verified": true
+    },
+    {
+      "path": "operator/src/main/java/uk/ac/uws/danielszabo/automodera/operator/cli/OperatorCLI.java",
+      "sha256": "1b21e4838f75a0cfd2a677280ea5f5fc725b5bee5cd806fb09c4685f6c512878",
+      "lines": 135,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_shell_run": false,
+    "commands_executed": false
+  },
+  "findings": [
+    "All5CLIclasseswhole-read/Gitblobverified, including previously truncated BaseNodeCLI tail reread explicitly. No shell command or network action invoked.",
+    "CustomPromptProvider contains actual EventListener methods for local/config update: simply replaces stored object reference. No subscription initialization there; previous uncertainty narrowed for this listener only.",
+    "Archive hash command checks nonblank path/id/name/description/topics, splits comma topics without trimming/lowercase/dedup and forwards forceRecalc. Existing collection append/filename issues fromv4 remain caller-reachable source paths, not runtime verified.",
+    "Integrator hash boolean sync declares ShellOption defaultValue=sync, not true/false. Framework binding behavior untested; cannot claim usable default synchronization command.",
+    "Integrator check calls same checkImage then renders Report as XML or toString; no additional score/recipe validation, so firstcandidate reporting defect not corrected in CLI.",
+    "Base info checks local node but dereferences network configuration in both branches without null guard. getPrompt handles both missing refs asunknown, showing inconsistent uninitialized-state behavior.",
+    "CLI subscription add forwards raw topic; subscription matching elsewhere lowercases query, so case normalization contract inconsistent. Source-only.",
+    "CLI annotations conditional enabling differs among subclasses; actual Spring annotation inheritance/bean behavior requires Java runtime."
+  ],
+  "remaining": [
+    "81 other tracked blobs/assets",
+    "Remaining service/web/templates/assets, opaque native binaries and runtime qualification"
+  ],
+  "full_review_count": 249
+}
