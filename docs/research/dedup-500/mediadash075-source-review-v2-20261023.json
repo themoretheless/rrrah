@@ -1,0 +1,52 @@
+{
+  "repository": "crackruckles/MediaDash",
+  "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Jellyfin.Plugin.MediaDash/Scanners/DuplicateScanner.cs",
+      "local": "06-DuplicateScanner.cs",
+      "sha256": "97bb9866ab811913a0ce7f8b4ca11e1aa7f9f34e9eb0ba5b9ac826c4f65bdce1",
+      "git_blob": "f57a9b7c788d02e593c9f74e41efcb42ea7ce071",
+      "whole_text_read": true,
+      "read_ranges": [
+        "1-230",
+        "231-460",
+        "461-EOF"
+      ]
+    }
+  ],
+  "whole_text_files_read_total": 5,
+  "tracked_blobs": 583,
+  "remaining_without_whole_review": 578,
+  "native_control": {
+    "command": "dotnet run --project .dedup-work/mediadash075-20261023/Probe.csproj",
+    "exit_code": 0,
+    "target_framework": "net10.0",
+    "original_source_sha256": "c6a86389da5bbe35b7c30ddafe81535712b3381c0bd3a09b30680d4bdb348e1b",
+    "harness": "docs/research/dedup-500/mediadash075-filehasher-control-20261023.cs",
+    "harness_sha256": "3277d914b05b0095c45a661994d5116c37a150709f60b1b3eea559d62aa09b45",
+    "log": ".dedup-work/mediadash075-20261023/filehasher-control.log",
+    "log_sha256": "92322cef164c822bca8b751465a682e3975036eb101814784d94d5f726cb74f3",
+    "result": {
+      "controls": 4,
+      "passed": 4,
+      "baselineSha256": "9f64a747e1b97f131fabb6b447296c9b6f0201e79fb3c5356e6c77e89b6a806a",
+      "mutatedSha256": "55e5509f8052998294266ee5b50cb592938191fb5d67f73cac2e60b0276b1bdd",
+      "restoredMetadataReturnsStaleHash": true,
+      "cancelledCacheHitReturnsHash": true,
+      "cancelledCacheMissThrows": true,
+      "scope": "Complete pinned original FileHasher body, real .NET SHA256 and owned filesystem; in-memory cache/log adapters, not original DB or Jellyfin runtime. Counterexamples asserted, not repaired."
+    },
+    "adapters": "Minimal in-memory keyed cache and no-op logger; original DB, scanner and Jellyfin not executed."
+  },
+  "upstream_tests_run": false,
+  "findings": [
+    "Whole DuplicateScanner now read. Metadata grouping and edition splitting precede optional SHA256 check: this is not exhaustive arbitrary-file exact dedup. Books use ISBN/title; movies provider+year or normalized title/year/filename; audio provider or artist/album/title/truncated duration/filename.",
+    "NormalizeName removes all characters outside ASCII a-z0-9. Non-Latin filenames can collapse to empty normalization; no native scanner reproduction performed.",
+    "Hash match overrides title/runtime vetoes and scores exact confidence 1.0, but trusts FileHasher cached digest. No byte-by-byte comparison observed in these two whole bodies.",
+    "Full original FileHasher native controls: SHA256 baseline, restored-size/mtime stale hash, cancelled cache-hit returns cached digest, cancelled fresh hashing propagates cancellation. Four assertions pass; these preserve counterexamples, not fixes.",
+    "Existing rrrah fresh-byte exact confirmation and repeated-metadata tests address relevant identity boundary. No GPL implementation copied and no production change from this review.",
+    "Scanner considers positive-size non-symlink candidates first when ranking, reappending excluded candidates as losers. This is source policy only, not disposal qualification."
+  ]
+}

@@ -2,9 +2,9 @@
   "index": 75,
   "repository": "crackruckles/MediaDash",
   "commit": "97fbd6085312baa74df48a7bf7752244f2c1e73c",
-  "review_scope": "4/583 pinned blobs whole text through v1: FileHasher, DuplicateFixer, ArtworkScanner and its 5 authored tests. Runtime/scanner and remaining blobs pending.",
+  "review_scope": "5/583 pinned blobs whole text through v2, including complete DuplicateScanner. Four finite original-FileHasher native controls with in-memory cache/logger adapters; no original DB/Jellyfin runtime or upstream suite.",
   "decision": "reference",
-  "finding": "Jellyfin SHA256 cache keyed by path/size/mtime and duplicate scanner; changing-file cache weakness must be assessed.",
+  "finding": "Metadata-gated duplicate scanner; full original hasher under a keyed cache adapter reproduces restored-metadata stale digest and cancelled cache-hit behavior. Not an exhaustive arbitrary-file exact comparer.",
   "license_metadata": "GPL-3.0",
   "license_scope": "GitHub screening metadata; nested licenses need review before code copying",
   "tests_detected": 0,
@@ -88,6 +88,10 @@
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/mediadash075-source-review-v1-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/mediadash075-source-review-v2-20261023.json",
       "whole_repo_complete": false
     }
   ]
