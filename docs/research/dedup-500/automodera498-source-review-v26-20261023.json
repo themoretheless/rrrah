@@ -1,0 +1,33 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/web/gui/IntegratorWebController.java",
+      "sha256": "0155fda0f43faead48e6fca42e3fb4e885538c7e0fa4b3bffe47145c7f338783",
+      "lines": 458,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "browser_run": false,
+    "uploads": false
+  },
+  "findings": [
+    "IntegratorGUIcontrollerwhole-read/Gitblobverified. No formsubmitted, filesuploaded, settingschanged or runtime server used.",
+    "Collection route expects collection/{arch}/{coll} then repositorylookup archive+/+collection. Commonnode template links collection/ID only, while commontopic constructs archiveID/collectionID; existing collectionID composition must match route and repository, no canonical-ID adapter. No live navigation proof.",
+    "postNetwork test branch setsfailuretext when fetchnull, then unconditionally overwritesconnectionStatus with Testconnection. Source-level loss of failurestatus.",
+    "postTest reuses temp/originalfilename and invokes same flawedcheckImage path. No cleanup/generation isolation after completion; concurrent filenamecollision remains untested.",
+    "Bulk subscriptions sequentially add/remove each selectedtopic with separate persistence/events; no dedup, normalization or all-or-nothing boundary in controller. Previous subscription nullstate not repaired.",
+    "Integration status modifies in-memory component activeflag, not persisted configuration. Restart persistence not established; actualrestart not run.",
+    "Report history loadsall reports throughservice and passeslist totemplate without pagination request; memory/latency unmeasured.",
+    "getSubscriptions gathersremote topic metadata through previouslyreviewed services; renderingpage may performnetworkrefresh and datawrites. No action performed duringreview."
+  ],
+  "remaining": [
+    "32 other tracked blobs/assets",
+    "TwoGUIcontrollers, remainingtemplates/demos/license/IDE/media/native artifacts and runtime qualification"
+  ],
+  "full_review_count": 249
+}
