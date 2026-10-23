@@ -1,0 +1,29 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "pstatsloader.py read whole and pin verified; Python3 syntax parse only, no pstats artifact loaded or GUI launched.",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/runsnakerun/pstatsloader.py",
+    "sha256": "55fcb2ab0a9ed6e9939f13718e41178078af2d9721d919899168112287f182da",
+    "syntax": {
+      "result": "SyntaxError",
+      "line": 300,
+      "message": "Missing parentheses in call to 'print'. Did you mean print(...)?"
+    }
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 95,
+    "remaining_not_whole_reviewed": 49
+  },
+  "findings": [
+    "Python2 except/print syntax prevents Python3 module import; iteritems/itervalues/has_key also require porting.",
+    "load_functions calls self.load without required stats argument. load_location empty-row fallback does same; these lazy paths are not independently qualified.",
+    "find_root selects largest cumulative row and also all parentless rows; threaded/recursive robustness is explicitly TODO. Combined totals can include overlapping cumulative subtrees and need provenance qualification.",
+    "PStatGroup.calculate_totals local_children branch sums children instead of local_children, omitting the named set. Group constructor discards supplied name by assigning empty string.",
+    "PStatRow maps raw call-count tuple into calls/recursive and per-call denominators; recursive versus total-call labels require comparison with exact pstats producer schema. No numerical timing validation executed.",
+    "Location construction copies mapping but reuses row objects and adds grouping parents, so function and location views share mutable relation state. Adapter tree filtering is part of interpretation."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
