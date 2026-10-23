@@ -1,0 +1,63 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/model/IntegrationContext.java",
+      "sha256": "605872edd8ee127b1fbe4381d58a040c668ffd4f205075e24c4cc96752e7e7c8",
+      "lines": 59,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/model/Report.java",
+      "sha256": "37b5f78a292f425be05d7b9b6109359a830421c894f1d1d1510e63310a2edeee",
+      "lines": 131,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/repository/ReportRepository.java",
+      "sha256": "fbaed36314bb37910ec96469587bdf1e49b9c2dac76f7c74e2582df37a636db3",
+      "lines": 30,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/web/IntegrationInterceptor.java",
+      "sha256": "91fdeff349ef2d7281c8b6e5dd812d755c919319168cd6448692eb4cdc17d6b5",
+      "lines": 73,
+      "git_blob_verified": true
+    },
+    {
+      "path": "integrator/src/main/java/uk/ac/uws/danielszabo/automodera/integrator/web/rest/ApiRestController.java",
+      "sha256": "9663f9085833d5a606295d8586b4d73c93ee3fcc1a5bd47345f82d9a2f93d6b5",
+      "lines": 89,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "upstream_java_run": false,
+    "http_requests_sent": false,
+    "database_run": false
+  },
+  "source_reasoning_controls": {
+    "method": "threshold comparison transcription, not Java execution",
+    "score_categories": {
+      "0": "NONE",
+      "0.951": "EXACT",
+      "-1": "NONE"
+    }
+  },
+  "findings": [
+    "Report constructor maps score through fixed upper bounds NONE<=.75,LOW<=.80,MODERATE<=.90,HIGH<=.95,EXACT<=1. Source comparison witness confirms0.951namedEXACT; this is not byte/pixel identity proof or calibrated probability.",
+    "Combined with v5 singleton selection bug, a sole0.9candidate is reported0/NONE and constructor drops highestMatch/topicList. This consequence follows active source branches; Java/database behavior remains unexecuted.",
+    "Negative scores accepted asNONE; NaN/+infinity fall through to OutOfRangeException. No finite0..1 guard before comparisons.",
+    "Report highestMatch marked JPA Transient, so matched-image linkage not persisted by this entity mapping. Score/category/date/source retained, algorithm/recipe identity absent. NONE constructor leaves topicList unset despite NonNull field annotation; persistence behavior untested.",
+    "API writes input to temp path derived from original filename, sleeps1second then calls checkImage and marshals XML. No request-specific temporary-file lifecycle/cleanup visible in method; same-name concurrent jobs could share file. Source-only reliability observation, no upload or collision experiment.",
+    "IntegrationContext and interceptor whole-read; request counter refresh Thread object constructed without start, leaving requests default0. This can prevent API use if interceptor registered; registration not yet reviewed. No access-control bypass or live endpoint testing."
+  ],
+  "remaining": [
+    "132 other tracked blobs/assets",
+    "WebMvc registration, remaining authored source/assets and native/runtime qualification"
+  ],
+  "full_review_count": 249
+}
