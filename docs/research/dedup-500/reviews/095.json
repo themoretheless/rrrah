@@ -2,7 +2,7 @@
   "index": 95,
   "repository": "fake-name/IntraArchiveDeduplicator",
   "commit": "f26f1fa88fa45125171a5e29461a03b54ab82d3d",
-  "review_scope": "59whole pinned files of154(53text,6visual);19originaltests14pass5errors;7zbackend verified and archive testload blocked bylibmagic;partial review",
+  "review_scope": "60 whole pinned files of 154 (54 text, 6 visual); 24 original tests: 18 pass, 1 failure, 5 errors; real ZIP/7z/MIME integration and rrrah regression; partial review",
   "decision": "shortlist",
   "finding": "BK Hamming popcount tree, archive member hashing and database proxy; BSD source worth comparing retrieval against full scan.",
   "license_metadata": "BSD-3-Clause",
@@ -147,7 +147,11 @@
     {
       "audit": "docs/research/dedup-500/intra095-source-review-v13-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/intra095-source-review-v14-20261024.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "19original tests in5focused converter/hash/loading/resizing modules;14passed5NumPy alias errors;adapted diagnostic repetitions excluded;not fullsuite"
+  "upstream_tests_scope": "24 original tests in 7 focused modules: 18 passed, 1 MIME expectation failure, 5 NumPy alias errors. Real archive backend qualified with isolated native libmagic; not the full suite."
 }

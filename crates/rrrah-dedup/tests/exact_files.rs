@@ -1686,3 +1686,44 @@ fn text_normalization_does_not_replace_encoded_byte_equality() {
         }
     }
 }
+
+#[test]
+fn service_style_names_remain_eligible_for_exact_content_matches() {
+    use std::collections::BTreeSet;
+    let root = tempfile::tempdir().unwrap();
+    fs::create_dir(root.path().join("__MACOSX")).unwrap();
+    let paths = ["Thumbs.db", "binary-copy", "__MACOSX/page.txt", "text-copy", "deleted.txt", "note-copy"]
+        .map(|name| root.path().join(name));
+    let contents: [&[u8]; 6] = [b"\xd0\xcf\x11\xe0", b"\xd0\xcf\x11\xe0", b"page", b"page", b"note", b"note"];
+    for (path, content) in paths.iter().zip(contents) {
+        fs::write(path, content).unwrap();
+    }
+    let expected = BTreeSet::from([
+        BTreeSet::from([paths[0].clone(), paths[1].clone()]),
+        BTreeSet::from([paths[2].clone(), paths[3].clone()]),
+        BTreeSet::from([paths[4].clone(), paths[5].clone()]),
+    ]);
+    for reverse in [false, true] {
+        let mut roots = paths.to_vec();
+        roots.push(root.path().to_path_buf());
+        if reverse {
+            roots.reverse();
+        }
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, paths.len());
+            let actual: BTreeSet<BTreeSet<_>> = report
+                .groups
+                .into_iter()
+                .map(|group| group.paths.into_iter().collect())
+                .collect();
+            assert_eq!(actual, expected);
+        }
+    }
+}
