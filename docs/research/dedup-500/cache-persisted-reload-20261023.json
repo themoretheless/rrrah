@@ -1,0 +1,31 @@
+{
+  "scope": "End-to-end persisted fingerprint cache across reload and image edits",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test cache_reload",
+  "result": {
+    "passed": 2,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 0
+  },
+  "new_regression": "persisted_cache_rechecks_content_and_preserves_previous_publication_on_cancel",
+  "verified": [
+    "Real PPM decoded and fingerprint cache atomically saved, loaded into a new object, then reused.",
+    "File changes red\u2192green with same encoded length and explicitly restored modified timestamp; disk-loaded cache misses and fingerprint differs.",
+    "Cancelled save leaves original cache file byte-for-byte intact; newly loaded old cache misses green.",
+    "Restoring red content reuses original persisted fingerprint.",
+    "Flipped persisted checksum byte rejects load with CacheError::Invalid.",
+    "Explicit fresh-cache rebuild and atomic save restore successful reload/hit; managed budget returns0."
+  ],
+  "post_run_source_sha256": {
+    "crates/rrrah-dedup/src/cache.rs": "aa9e54f0dfe6a6f62ec7374f391f0d1c6516c5da430d257592ecffb222ecf601",
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-dedup/tests/cache_reload.rs": "9b2a6a6338a469314dd13fa8fd89434432e76c9766b0c87f14425e9ff42a1669"
+  },
+  "production_change": false,
+  "limits": [
+    "Authored one-pixel PPM fixture, not broad formats/platforms or all-case proof.",
+    "Current workspace includes unrelated uncommitted decoder changes. No clean snapshot or whole workspace qualification.",
+    "Cancellation injected at save entry; mid-write/crash checks remain separate cache integration evidence.",
+    "Missing source/corrupt image reload coverage remains in existing first test."
+  ]
+}
