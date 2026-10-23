@@ -1,0 +1,57 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v4-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pyproject.toml",
+      "local": "12-pyproject.toml",
+      "sha256": "17f742a74129c601324c1062da1c17ca48d7e6d41c6e369537bf40515d1c1055",
+      "whole_text_read": true,
+      "lines": 415
+    },
+    {
+      "path": "tests/test_cache.py",
+      "local": "13-tests--test_cache.py",
+      "sha256": "674cf4d7317eb9683c2eef7fe592a35d35ef2764f73a84f1b807d87857ba3713",
+      "whole_text_read": true,
+      "lines": 415
+    }
+  ],
+  "whole_text_files_read_total": 14,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 66,
+  "upstream_tests_run": true,
+  "native_original_tests": {
+    "target": "tests/test_cache.py",
+    "passed": 30,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds": 2.69,
+    "scope": "Original source and original tests; default parallel/coverage addopts cleared, import-mode importlib; focused test file only"
+  },
+  "runtime": {
+    "path": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-runtime-20261024/bin/python",
+    "packages": "docs/research/dedup-500/mail092-runtime-packages-20261024.json",
+    "lock_frozen": false
+  },
+  "findings": [
+    "Original cache tests30pass cover six mailbox formats times jobs1/2, stable warm/cold metrics, settings invalidation, ordinary rewrites, growing boxes, pruning, skipped unreadable cache and held-database fallback.",
+    "Modified-mail test rewrites different content without restoring previous size/mtime. It does not cover our independently reproduced stale-key equality case.",
+    "Vanishing mail test explicitly expects retained1 and CLI exit115 due inconsistent complete-source accounting; successful empty/complete behavior is not inferred.",
+    "No cache source changes to make tests pass. Original tests and package imported normally rather than AST adapters for this run.",
+    "Pyproject defaults all-core xdist and coverage95percent. Focused run clears those default options and does not establish package-wide coverage or all-platform correctness."
+  ],
+  "harness_notes": [
+    "Fresh Python3.15 venv, binary-only dependency installation; resolved versions recorded, not pinned uv.lock reproduction.",
+    "One preliminary inspection used incorrect relative working-directory paths; corrected before pytest started, no original test failure."
+  ],
+  "transfer_decision": "Preserve ordinary-cache regression evidence and stricter source-identity controls separately. No production code copied.",
+  "limits": [
+    "14 whole text files of80;66 remain without whole review.",
+    "Only30 upstream cache tests run; no complete suite/release/package/platform qualification.",
+    "Temporary synthetic mailbox fixtures only.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
