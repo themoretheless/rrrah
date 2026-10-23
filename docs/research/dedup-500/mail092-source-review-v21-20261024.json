@@ -1,0 +1,80 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v20-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "docs/assets/dependencies.mmd",
+      "local": "73-docs--assets--dependencies.mmd",
+      "sha256": "5d212bf6482f74f95da3ae07f6b67e95ce68a43d919ebd7176095c66fae53839",
+      "whole_text_read": true,
+      "lines": 271
+    },
+    {
+      "path": "changelog.md",
+      "local": "74-changelog.md",
+      "sha256": "af580b9bec11522be405bd10410279e7e9d1e41b4a0c4a26fae1d81b7ebac97d",
+      "whole_text_read": true,
+      "lines": 605
+    }
+  ],
+  "cumulative_whole_text_files_read_total": 67,
+  "cumulative_original_visual_files_reviewed": 8,
+  "cumulative_whole_reviewed_files": 75,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 5,
+  "structural_only": [
+    {
+      "path": "uv.lock",
+      "parse": "tomllib full file",
+      "packages": 71,
+      "whole_manual_read": false,
+      "sha256": "558bd85115c7d4de82471c9911eb182f9271063b55c504754a835a7e1c2f2a38"
+    },
+    {
+      "path": "docs/assets/binaries.csv",
+      "parse": "csv DictReader full file",
+      "rows": 93,
+      "columns": [
+        "Version",
+        "Platform",
+        "Released",
+        "VirusTotal"
+      ],
+      "whole_manual_read": false,
+      "sha256": "cf5811559ef9be5b72e32eb40655c3df80032cecd48597501ab8273ea61849b7"
+    },
+    {
+      "path": "docs/assets/virustotal-scans.csv",
+      "parse": "csv DictReader full file",
+      "rows": 35,
+      "columns": [
+        "tag",
+        "filename",
+        "sha256",
+        "scanned",
+        "malicious",
+        "suspicious",
+        "undetected",
+        "harmless"
+      ],
+      "whole_manual_read": false,
+      "sha256": "a27cf4a7b7b6a34b9bbe88402eb2b6a1bf0e2101e84aa0b64ce9594fa7a787cc"
+    }
+  ],
+  "native_original_tests_distinct_total": 315,
+  "new_original_tests_run": false,
+  "findings": [
+    "Complete605-line changelog read. Historical claims about fixes,release availability,benchmarks and platform support were not re-executed on every prior tag. Current frozen-pin tests remain separate evidence.",
+    "Complete271-line dependency graph source read. It includes runtime,documentation,test andtyping groups; graph edges do not prove installed-runtime dependency presence, compatibility or third-party source review.",
+    "uv.lock fully TOML-parsed into71packages; two CSV catalogs fully structurally parsed into93binary rows and35scan rows. These3files are not credited as whole manual review. External links/packages/scan verdicts not fetched or validated.",
+    "Remaining full-review gaps are exactly uv.lock,two CSV catalogs,two XCF sources. No false full-repository declaration."
+  ],
+  "transfer_decision": "Preserve clear current-vs-historical validation and dependency/source-review boundaries. No foreign production code copied.",
+  "limits": [
+    "67text plus8visual assets:75of80;5remain.",
+    "No new tests, external artifact scan/release availability or historical platform qualification.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
