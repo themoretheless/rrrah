@@ -1,0 +1,63 @@
+{
+  "repository": "scinos/yarn-deduplicate",
+  "commit": "8a3cfc168cbd43eb09261f05a9ce514ced52b4c0",
+  "previous_audit": "docs/research/dedup-500/yarn084-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "whole_text_files_read_total": 23,
+  "tracked_blobs": 24,
+  "structured_lock_files_inspected": 1,
+  "remaining_without_manual_full_text_read": [
+    "yarn.lock"
+  ],
+  "native_controls": {
+    "node": "v22.23.4",
+    "node_path": "/opt/homebrew/opt/node@22/bin/node",
+    "compiled_cli_sha256": "8aa6d0b595962dde5d7920117dcef8ba76a7df0d9c0dfc96934d61efdbfa231d",
+    "fixture_sha256": "db52a0b8dbae47dd30b3bae47bba51b68c49f87854c1c91b63f9caf66f120679",
+    "cli_controls": [
+      {
+        "case": "list-fail",
+        "exit_code": 1,
+        "bytes_preserved": true
+      },
+      {
+        "case": "write-fail",
+        "exit_code": 1,
+        "bytes_changed": true
+      },
+      {
+        "case": "second-write-fail",
+        "exit_code": 0,
+        "idempotent": true
+      },
+      {
+        "case": "CRLF",
+        "exit_code": 0,
+        "only_CRLF": true
+      }
+    ],
+    "root_lock_structural": {
+      "metadata": {
+        "version": 6,
+        "cacheKey": 8
+      },
+      "entries": 950
+    },
+    "root_lock_sha256": "5259f22d2fa0ad3cbbe11397763d0c1b2d3a421e369406ef597eb1e556cc8cc2",
+    "limits": [
+      "Whole YAML structural parse is not manual reading of every lock entry or locked dependency replay.",
+      "Owned CLI fixtures only; root manifests untouched.",
+      "Node version captured for this run separately from prior test audit."
+    ]
+  },
+  "findings": [
+    "Whole CLI confirms --list --fail preserves bytes, --fail writes changes then exits1, second invocation is idempotent, CRLF output retained.",
+    "All950 root Yarn6-format lock entries structurally parsed; this root dependency lock is not supported Yarn1 CLI input.",
+    "No root lock rewriting or dependency adoption performed."
+  ],
+  "limits": [
+    "No whole repository manual-read completion increment.",
+    "Initial workdir-relative path/probe errors rejected and did not mutate files."
+  ]
+}

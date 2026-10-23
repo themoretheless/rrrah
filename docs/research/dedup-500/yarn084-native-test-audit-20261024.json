@@ -44,6 +44,8 @@
     "Not Node14/16/18 CI matrix or locked Yarn dependency replay.",
     "Some CLI test close callbacks not explicitly awaited; passing original suite does not prove those process-exit assertions were observed.",
     "No root project dependencies/lockfiles changed; package domain remains unrelated to file/image content duplicate search.",
-    "Large root yarn.lock not fully reviewed; no whole-repository completion flag."
-  ]
+    "Large root yarn.lock not fully reviewed; no whole-repository completion flag.",
+    "Do not treat prep-shell Node version as measured Jest executable version. Later waited CLI controls explicitly capture their executable and version."
+  ],
+  "node_version_provenance": "22.23.4 was observed in preparation shell, not captured from Jest process itself. Later cwd-dependent shell resolves different node paths; exact historical Jest executable not established."
 }
