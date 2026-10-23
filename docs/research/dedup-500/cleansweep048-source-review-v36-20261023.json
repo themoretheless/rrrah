@@ -1,0 +1,37 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files_read": [
+    {
+      "path": "app/src/main/java/com/cleansweep/ui/screens/swiper/SwiperViewModel.kt",
+      "sha256": "f2f79bdf7ebbc416d5ea8832c35cbe99450cdff240d73404fd9c60c48e995b8d",
+      "git_blob_verified": true,
+      "ranges": [
+        [
+          780,
+          1012
+        ],
+        [
+          1349,
+          1433
+        ]
+      ],
+      "total_lines": 1545
+    }
+  ],
+  "findings": [
+    "ScreenshotAndDelete unconditionally adds originalItem to itemsToDelete even when conversionResults lacks that item after failed conversion. Source deletion is not conditioned on confirmed output creation. No conversion or delete was executed.",
+    "applyChanges has no isApplyingChanges admission guard or retained job/mutex. revertChange and resetPendingChanges also do not check it, confirming the previously identified UI mutations are not refused at these handlers.",
+    "Conversion failures are discarded via getOrNull and do not set success=false. A screenshot-only failure can reach a successful completion message and be remembered as processed.",
+    "completeChanges subtracts item count and original size for every original pending action, including Keep and Screenshot, and multiple actions for one item. Only moved outputs are added back. These deltas do not represent actual filesystem changes.",
+    "Partial move/delete failure leaves the full original pending plan for retry without recording successful per-item operations. A retry can revisit actions already applied; identity and content are not revalidated by existence filtering.",
+    "applyChanges lacks outer try/finally; unexpected errors can leave isApplyingChanges true. Completion launches a separate coroutine and clears the current pending list rather than only the captured applied plan.",
+    "revertChange removes all actions sharing the timestamp rather than an explicit unique action ID. Timestamp construction and collision likelihood remain unread."
+  ],
+  "whole_files_read_total": 74,
+  "remaining_tracked_blobs": 56,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
