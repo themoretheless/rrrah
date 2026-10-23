@@ -1,0 +1,44 @@
+{
+  "repository": "Danialsamadi/v2go",
+  "commit": "fcf4e1f1143ef32ddb4673aa176c8ab0a54c4c9e",
+  "scope": "Whole sort.go and cli_test.go; main.go lines 555-660 and 775-898 only. Static review, no upstream execution or network probing.",
+  "evidence": [
+    {
+      "file": "04-sort.go",
+      "sha256": "788ebdacb8e4506af77639c70ffa48aa58b0fcac303bfede1c7f87472176107f"
+    },
+    {
+      "file": "05-cli_test.go",
+      "sha256": "0c86b6679d4ef2185f7357d09d602f4ea80270866f19b0ee2e5287c392d5f1eb"
+    },
+    {
+      "file": "03-main.go",
+      "sha256": "1e2a3057998f22215be4c94bf4615d479eee7e6230cbb11a94305602176ef2cb"
+    }
+  ],
+  "findings": [
+    {
+      "id": "identity-not-content",
+      "detail": "parseCoreIdentity VLESS branch uses UUID alone, discarding host and port. Other protocols use protocol/host/port, discarding credentials and transport parameters. Neither is a file-content identity or a suitable exact-file deduplication key."
+    },
+    {
+      "id": "claim-before-validation",
+      "detail": "filterForProtocols sets seen[identity] before checkPort. A failed first candidate suppresses later candidates sharing identity. Concurrent workers choose the representative nondeterministically."
+    },
+    {
+      "id": "bounded-workers-not-resources",
+      "detail": "300 workers and channels of capacity 100 bound active workers and queued messages, but seen and final filtered slice grow with input."
+    },
+    {
+      "id": "test-scope",
+      "detail": "cli_test.go contains eight top-level test functions (one table contains three invalid argument cases). Tests cover CLI errors and precedence, not identity collisions, failed-first-candidate suppression, or deterministic selection. Tests were read, not run."
+    },
+    {
+      "id": "sort-scope",
+      "detail": "sortConfigs assumes already deduplicated input; writes protocol files sequentially without atomic whole-output publication. A failed write leaves partially updated output."
+    }
+  ],
+  "decision": "Reject as a file/image duplicate algorithm source; retain general lessons on identity, validation order, deterministic representatives and bounded resource accounting. No production code copied.",
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
