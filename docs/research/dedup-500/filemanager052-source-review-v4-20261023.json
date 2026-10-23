@@ -1,0 +1,67 @@
+{
+  "repository": "math2001/FileManager",
+  "commit": "40c452353384566da275ae9a4b73692385d3413f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "libs/input_for_path.py",
+      "sha256": "97b63db0f75cbfc46818239cb72f6850528065b0aa7fcf21c8d86455b38da84d",
+      "lines": 382,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/create_from_selection.py",
+      "sha256": "84827dfbc13fae6281da79fbca2bfc18eadccebc685593901e133898436ca314",
+      "lines": 152,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/open_all.py",
+      "sha256": "91bdafc6b400dda7fc1ab1a6efbc59c546aca47608bc8afc93d1c9760587821f",
+      "lines": 11,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/open_in_browser.py",
+      "sha256": "d73e97c1453d506d195476be3ed209bcd9ad66d24c6a7aa34458bd9dab078ae6",
+      "lines": 32,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/open_in_explorer.py",
+      "sha256": "af677ba15862939f3c589f11d890b2eea917a16d08ead8efd0ac40ada69f09d3",
+      "lines": 24,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/open_terminal.py",
+      "sha256": "5cefd1fac1c65d4c62abfcd7ee52c7a5f701e0e9346a1e74c736a8ce9525f277",
+      "lines": 63,
+      "git_blob_verified": true
+    },
+    {
+      "path": "commands/__init__.py",
+      "sha256": "f000816a6fc7ea5db18edb32202b1cb252685e0abaada411969c0d26e797bec3",
+      "lines": 3,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/filemanager052-terminal-control-20261023.py",
+  "runtime": {
+    "original_open_terminal_body_extracted": true,
+    "subprocess_replaced_with_recorder": true,
+    "processes_launched": false,
+    "control_passed": true
+  },
+  "findings": [
+    "open_terminal mutates the command list in place when replacing $cwd. Reusing the same list for /first then /second leaves the command argument at /first while Popen cwd is /second; reproduced using the unchanged method with a process recorder. Whether Sublime settings returns shared nested objects remains an application-runtime qualification gap.",
+    "InputForPath completion performs synchronous listdir and isdir calls without handling disappearing or unreadable directories. Cancellation closes the active view if its filename matches any browser item, without checking whether this instance opened it transiently; source observation only.",
+    "Input completion accesses text[-1] with existing completion state; clearing the input can reach an empty-string indexing failure. Callback ordering and reachability were not tested in Sublime.",
+    "open_in_browser tests folder membership with substring containment and replaces every occurrence; its per-folder else can request file URLs before a later folder matches. No browser-opening command was executed.",
+    "create_from_selection strips quotes then indexes strings without an empty-result guard. Direct run/description unpack get_path even when it returns None; menu visibility guards some normal paths. Source observation only.",
+    "open_all and open_in_explorer forward supplied paths to editor commands; no duplicate-discovery algorithm exists in these files."
+  ],
+  "whole_files_read_total": 25,
+  "remaining_tracked_blobs": 45,
+  "full_review_count": 249
+}
