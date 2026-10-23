@@ -1,0 +1,49 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/bats/outputs/2_list.bats_2.out",
+      "local": "157-2_list.bats_2.out",
+      "git_blob": "1f4dc1cc2dcf0a751f1e4fbf58cef7fb4e5cee1b",
+      "sha256": "384ba067bfc79275d87aaa18f01aab48832e80268bac84b43eb8c8b2d48a2fb7",
+      "bytes": 37336,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 157,
+  "whole_binary_files_read_total": 1,
+  "whole_visual_files_read_total": 1,
+  "whole_tracked_blobs_reviewed_total": 159,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 6,
+  "full_review_count": 249,
+  "read_coverage": [
+    "1-280",
+    "281-560",
+    "561-840",
+    "841-1080"
+  ],
+  "snapshot_oracle": {
+    "command": "python3 docs/research/dedup-500/nextcloud068-global-list-control-20261023.py docs/research/dedup-500/evidence/PaulLereverend--NextcloudDuplicateFinder/157-2_list.bats_2.out",
+    "exit_code": 0,
+    "result": {
+      "snapshot_sha256": "384ba067bfc79275d87aaa18f01aab48832e80268bac84b43eb8c8b2d48a2fb7",
+      "groups": 26,
+      "paths": 1053,
+      "zero_family_members": 3,
+      "content_and_membership_mismatches": 0,
+      "sorted_text_hash_matches_original_scenario": true,
+      "scope": "Pinned saved listing only; no actual server, BATS, permissions or file reads."
+    },
+    "harness_sha256": "9a2def12f6be5fc2d147d4ffeb7485f02c8780199d06b052e3a01bac7c8191b1"
+  },
+  "findings": [
+    "Whole1080line savedglobal listing read in4boundedchunks. Exactindependent pathpartition for26integer-newlinefamilies acrossadmin/tests,tuser/tests,tuser/tests2 yields1053uniquepaths,withzeroextras/missing/repetitions. EverygroupheaderSHA256 matchesitsauthoredfamilycontent.",
+    "Zero-family hasonefileperdirectory and3globalmembers; correctlyformsagroup globally although omittedfromsingle-directory snapshots. This finite savedfixture illustrates scope-sensitive grouping, not actual peruser permission correctness.",
+    "Sortedtext SHA256 equalsoriginal2_list global expectedconstant. This verifiesrecordedfixtureconsistency andallmembers, not freshbackendhashing, byteconfirmation orrelease/runtimequalification.",
+    "No Rustsourceor regressionchange thisstep; previous38testresults notrerunorclaimedfresh. No Nextcloud/PHP/BATS/databasecommands executed.",
+    "Oneadditionalwholetextfile gives157text+1binary+1visual=159/165. Sixpending:2largefind-alloutputs,settingsbundle,2sourcemaps,package-lock. Repositoryfullreviewfalse andmainobjectiveunproven."
+  ]
+}
