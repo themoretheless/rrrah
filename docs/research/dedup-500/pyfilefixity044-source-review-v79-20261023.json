@@ -1,0 +1,43 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "bottle3.py now whole read1-1714 acrossv77-v79; exact template helper controlled with inert adapters; original import attempted, no server or requests",
+  "new_whole_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/util/bottle3.py",
+    "sha256": "b43ce02c370dc2c051d3256d2e9ccbbfc853afd6df0ded75c37500ad5cf75481"
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-bottle-template-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "104839baf8c9596f61cd5d3981964fea29abdaf0",
+    "source_sha256": "b43ce02c370dc2c051d3256d2e9ccbbfc853afd6df0ded75c37500ad5cf75481",
+    "scope": "Exact template AST with inert adapters; original import attempted in disposable interpreter, no network listener or request",
+    "requested_second_adapter": "B",
+    "actual_second_result": "A",
+    "python": "3.15.0",
+    "original_import": {
+      "error": "ModuleNotFoundError",
+      "message": "No module named 'cgi'"
+    }
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 121,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 127,
+    "remaining_without_full_text_binary_or_visual_review": 17
+  },
+  "findings": [
+    "Original full import fails ModuleNotFoundError cgi on Python3.15. No shim or compatibility port used to imply original runtime success.",
+    "template cache key is tpl only, omitting adapter/lookup/settings. Same name first adapterA then adapterB returnsA; exact helper control reproduced.",
+    "Jinja2Template.loader opens text then calls decode on returned str, a Python3 type mismatch. Static finding; no Jinja dependency imported.",
+    "CheetahTemplate.render clears thread-local vars only after successful str rendering, not finally; failed render can leave stale values. Static finding, no template engine execution.",
+    "SimpleTemplate has cgi.escape default and compiles embedded Python; source/error template assumes top-level bottle module. Installed-template availability and escaping correctness remain unqualified.",
+    "Optional server adapters contain historic APIs and some explicitly Untested labels. Presence of adapters does not prove installed/runtime server support.",
+    "Reloader parent/child handling has no termination cleanup finally and source TODO notes surviving children. No process or reloader executed.",
+    "Full source reading completes this file, not end-to-end web report qualification. No production duplicate finder changes or full repository promotion."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
