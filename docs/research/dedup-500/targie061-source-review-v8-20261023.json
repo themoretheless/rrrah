@@ -1,0 +1,79 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Tests/SimilarVideoFinderTests/PerceptualHasherTests.swift",
+      "git_blob": "7f6068bd5384dd562120b2a32c079398749ec682",
+      "sha256": "134da2a624dd4cb92246c4931d9f4ae5640e44d552100df8975c048885dfbaab",
+      "bytes": 13458,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 13,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 108,
+  "full_review_count": 249,
+  "url_control": {
+    "source": "targie061-image-url-control-20261023.swift",
+    "scope": "Full original image/perceptual hasher modules, native CoreGraphics PNG writer and ImageIO URL thumbnail decoder. Authored white grayscale PNGs at sizes1,2,16,32,64; isolated temp directory removed after run. Video decoder fatalError adapter unused.",
+    "url_hash_matches_direct_image_hash_at_every_size": true,
+    "white_1_vs_32_similarity": 0.4375,
+    "white_32_and_64_hashes_equal": true,
+    "binary_sha256": "13e2441b118a2510333a5efb8542cf805ba257e42194b7ff182b8486fab7ac03"
+  },
+  "upstream_tests": {
+    "new_video_hash_tests": 25,
+    "rerun_image_hash_tests": 3,
+    "executed": 28,
+    "failed": 0,
+    "names": [
+      "testDCT1DConstantInputProducesDCOnly",
+      "testDCT1DSingleFrequency",
+      "testDCT1DEmptyInput",
+      "testDCT2DConstantImage",
+      "testDCT2DWrongSizeReturnsEmpty",
+      "testHammingDistanceIdenticalIsZero",
+      "testHammingDistanceAllDifferent",
+      "testHammingDistancePartialDifference",
+      "testHammingDistanceOneBit",
+      "testHammingDistanceUnequalLengths",
+      "testComputeHashProducesDeterministicResult",
+      "testComputeHashDifferentFramesProduceDifferentHashes",
+      "testComputeHashIdenticalFramesProduceSameHash",
+      "testVideoPerceptualHashSimilarity",
+      "testHashBitCountMatchesExpected",
+      "testNormalizeSampleSlotsRequiresAtLeastTwoDecodedFrames",
+      "testNormalizeSampleSlotsPreservesAllFiveOriginalSlots",
+      "testNormalizeSampleSlotsFillsMissingMiddleSlotWithoutShiftingLaterFrames",
+      "testNormalizeSampleSlotsUsesDeterministicNearestFrameAtEdges",
+      "testNormalizedTwoThreeFourAndFiveFrameInputsProduceEightByteHashes",
+      "testComputeHashRejectsNonCanonicalFrameCount",
+      "testUnequalLengthVideoHashSimilarityReturnsZero",
+      "testNormalizedMissingSlotsRemainWithinCandidateDistance",
+      "testDownsampleToGrayProducesCorrectCount",
+      "testDownsampleToGrayConstantImage"
+    ],
+    "command": "DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/image-tests --filter PerceptualHasherTests",
+    "scope": "Unchanged full original test files, original perceptual modules and BKTree. Test target adds exported CoreGraphics and exact copied static threshold24 from pinned SimilarityPipeline line103; full pipeline not compiled. Unused video decoder adapter aborts on call. No actual video demux/frame extraction or app integration.",
+    "log_sha256": "7efa052ad995974af6bb1bfcc0dc5cad9f454417dc77290c792a7b6a57f84553"
+  },
+  "partial_source_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Services/SimilarityPipeline.swift",
+      "lines": [
+        103,
+        363
+      ],
+      "whole_text_read": false,
+      "sha256": "6685b24de313d9daf312ad0aa32913ab06c44cd420ff7be870f41504f6e974c2"
+    }
+  ],
+  "findings": [
+    "Tiny-image empty-cell behavior is reachable through normal ImageIO URL entry point for native generated PNGs; direct-CGImage-only limitation of v6 is resolved for these fixtures. This is a candidate-quality issue, not exact-file identity evidence.",
+    "25 original tests cover DCT, Hamming, canonical frame counts, sample-slot interpolation, BKTree candidate presence and grayscale constants. These finite synthetic tests do not establish real-video recall.",
+    "Filter substring also selected ImagePerceptualHasherTests, so total28 includes three reruns, not28 new tests.",
+    "No source adopted, no measured optimization claim, no additional complete repository credited."
+  ]
+}
