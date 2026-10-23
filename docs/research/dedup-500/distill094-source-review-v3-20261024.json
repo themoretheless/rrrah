@@ -1,0 +1,54 @@
+{
+  "repository": "Siddhant-K-code/distill",
+  "commit": "2417e00dabe498eb8187f4544f001d5a49fbdb45",
+  "previous_audit": "docs/research/dedup-500/distill094-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pkg/contextlab/selector.go",
+      "local": "12-pkg--contextlab--selector.go",
+      "sha256": "1350f9e6e28ef4e9b2164a3d5c36c76834e08ef47a3dfd4e08f786bfabba5067",
+      "whole_text_read": true,
+      "lines": 262
+    },
+    {
+      "path": "pkg/contextlab/mmr.go",
+      "local": "13-pkg--contextlab--mmr.go",
+      "sha256": "18778434495f137c0f9dfba99701f00123e5683a6189b6ff1e6aa4b645292bb8",
+      "whole_text_read": true,
+      "lines": 262
+    }
+  ],
+  "whole_text_files_read_total": 11,
+  "tracked_blobs": 455,
+  "remaining_without_whole_review": 444,
+  "upstream_tests_run": false,
+  "authored_native_control": {
+    "result": {
+      "empty_selection_coverage": 0,
+      "nan_lambda_results": 0,
+      "negative_k_panics": true,
+      "normal_lambda_results": 1,
+      "perfect_selection_coverage": 0,
+      "query_rerank_mutates_caller_scores": true,
+      "top_k_all_first": "low",
+      "top_k_one_first": "high"
+    },
+    "exit_code": 0,
+    "scope": "Exact original six Go source modules in isolated minimal module; authored public-API caller; no network/services"
+  },
+  "findings": [
+    "CoverageScore(empty,nonempty) returns0, identical to perfectly covered nonempty input. Lower-is-better metric therefore cannot distinguish total omission without separate cardinality/validity state. Native positive and omission controls confirm.",
+    "MMR with NaN Lambda and TargetK1 returns empty result for two valid chunks without error; normal Lambda1 selects high-score chunk. Constructor clamps only values comparing below0/above1, so NaN survives.",
+    "SelectTopK returns unsorted input order when len(representatives)<=k, despite returns-topK-by-score comment; atK2 low first, atK1 high first. NegativeK panics at slicing.",
+    "RerankWithQuery overwrites caller slice Score fields even when result selects subset. Native caller-mutation control confirms; no existing immutability contract assumed.",
+    "MMR equal-score candidates traverse map iteration order and allocate n-by-n similarity matrix. Tie determinism/resource bounds not qualified by current controls."
+  ],
+  "transfer_decision": "Do not treat empty coverage as proven success; validate nonfinite policies and requested counts, and make ordering/mutation contracts explicit. No foreign production implementation copied.",
+  "limits": [
+    "11of455whole files;444remain.",
+    "Authored public controls only, no original upstream suite/full dependencies.",
+    "No recall/performance/platform/peak-memory claims.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
