@@ -1,0 +1,74 @@
+{
+  "repository": "kdeldycke/mail-deduplicate",
+  "commit": "dfa4053fe9f39974cc5527eadbcf26c2362f9980",
+  "previous_audit": "docs/research/dedup-500/mail092-source-review-v2-20261024.json",
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "tests/conftest.py",
+      "local": "08-conftest.py",
+      "sha256": "85651bb15c8f46283c0b26f81e5c4899cc7ef7929160ab9f08bb8d9c464ace92",
+      "whole_text_read": true,
+      "lines": 251
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "06-__init__.py",
+      "sha256": "4fe05adb6a7c29b2543d80c4cc94db312af9b5382a55ad0f3ead824e4de6be7a",
+      "whole_text_read": true,
+      "lines": 17
+    },
+    {
+      "path": "docs/license.md",
+      "local": "02-license.md",
+      "sha256": "b8a200317bfc9e1ab63c2f758cfc27ab0cd1a18a6e1e50d2fcfdedf6a36a7951",
+      "whole_text_read": true,
+      "lines": 18
+    },
+    {
+      "path": "license",
+      "local": "01-license",
+      "sha256": "8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643",
+      "whole_text_read": true,
+      "lines": 339
+    },
+    {
+      "path": "mail_deduplicate/cache.py",
+      "local": "09-cache.py",
+      "sha256": "359ebe619bd0086b656981b500249694311ad6d2adf471f82c7e563f3a1d12f9",
+      "whole_text_read": true,
+      "lines": 423
+    }
+  ],
+  "whole_text_files_read_total": 10,
+  "tracked_blobs": 80,
+  "remaining_without_whole_review": 70,
+  "upstream_tests_run": false,
+  "control": {
+    "scope": "Original complete cache module AST with platform path/mail-path adapters only; real SQLite and physical owned files",
+    "python": "3.15.0 (main, Oct  9 2026, 11:16:41) [Clang 21.0.0 (clang-2100.3.34.2)]",
+    "sqlite": "3.54.1",
+    "same_size_restored_mtime_returns_old_hash": true,
+    "changed_mtime_invalidates": true,
+    "changed_recipe_invalidates": true,
+    "owned_directory": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/mail092-cache-f3cmley5",
+    "limits": [
+      "No full package test suite or mailbox decoding tested.",
+      "No crash/power-loss/concurrency durability qualification."
+    ]
+  },
+  "findings": [
+    "Persistent SQLite HashCache identifies staleness using only size and mtime_ns. Exact original module with path adapters returns cached old-hash after owned aaaa->bbbb rewrite and exact mtime restoration. Changed-mtime and changed-fingerprint controls invalidate correctly.",
+    "Cache fingerprint includes schema version,hash_headers,hash_body,time_source. Recipe identity is explicit but does not establish source content immutability.",
+    "Complete conftest defaults use body hashing skip,size threshold512,content threshold768. Fixture helpers compare sorted message renderings and lengths, preserving multiplicity rather than reducing to sets. No original tests executed yet.",
+    "Root license and docs/license.md completely read: GPLv2-or-later notices; no production copying. Asset provenance statements read, assets not yet visually reviewed.",
+    "All80 tracked blob identities and local SHA256 inventoried at exact pin; inventory does not count as manual source/visual review."
+  ],
+  "transfer_decision": "Do not reuse cached equality solely from source size/mtime. Our prior51dc01f8 same-mtime scan regression remains distinct passing evidence; production logic unchanged this turn.",
+  "limits": [
+    "10 whole text files of80;70 remain without whole review.",
+    "Complete cache AST runs with original SQLite logic and two path adapters; full CLI/dependencies/upstream tests not qualified.",
+    "No real mailbox/user cache accessed.",
+    "Native pHash.org/ASAN remains skipped."
+  ]
+}
