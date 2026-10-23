@@ -1,0 +1,154 @@
+{
+  "repository": "PaulLereverend/NextcloudDuplicateFinder",
+  "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "lib/Utils/ScannerUtil.php",
+      "local": "09-ScannerUtil.php",
+      "git_blob": "8aeecbe06fa38fb52459647ba5c6453f0a969278",
+      "sha256": "4ff6034d5f54abd4b022ceeee3fa56e361bae43bf4a3fff66dec0b1705760c35",
+      "bytes": 4321,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Service/ConfigService.php",
+      "local": "10-ConfigService.php",
+      "git_blob": "83d113948b8703bcbbf8c556a53a6c4706fcf661",
+      "sha256": "01dbcc64428f67daa0c89c41ae44f5204929a7f0ab46ab3c3dd6c338d52a60a6",
+      "bytes": 3755,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Db/FileInfoMapper.php",
+      "local": "11-FileInfoMapper.php",
+      "git_blob": "34b730f19126f5eba0518b8b58a03bd95a40e39d",
+      "sha256": "200bca577e887204bd5b118e2a7a3183e7c3c18d79a2c0a3162ac178b9afa30f",
+      "bytes": 3524,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Db/FileDuplicateMapper.php",
+      "local": "12-FileDuplicateMapper.php",
+      "git_blob": "395655245b5004e6f992a8fe312d0a2d15c824ea",
+      "sha256": "f51758ed1eeb1ac6a6328aac401121e0b307c74b12b1aeefc05f3f00782e55bd",
+      "bytes": 1936,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Db/FileInfo.php",
+      "local": "13-FileInfo.php",
+      "git_blob": "925a49fbc77ad757af37fd09836ab03a5c39fcc1",
+      "sha256": "fb7a8de340d0c2dfe54dc6bd792afa2cfb43cae8129b15785cec51734b6da2ee",
+      "bytes": 1902,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Db/FileDuplicate.php",
+      "local": "14-FileDuplicate.php",
+      "git_blob": "02f1ed447bd775bd046f9cc694b59a3c07db021b",
+      "sha256": "6de67635b15bdccb1489069c203b8c18fdd0d74fa094ce5da056b28e57cb34b0",
+      "bytes": 1552,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Listener/FileInfoListener.php",
+      "local": "15-FileInfoListener.php",
+      "git_blob": "bdae507c236f7aa83879a97e1951bd7029d7d746",
+      "sha256": "01651170777caa33717e954e8ef8280c0efab32e1da2893ee1168ab1628dda01",
+      "bytes": 1572,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Listener/FilesytemListener.php",
+      "local": "16-FilesytemListener.php",
+      "git_blob": "05763c660ac9bef8ceab15d9174ae741d34c79be",
+      "sha256": "c680d7b2231ac4367f8945e7f80daa504a73625985769598ae34dc7bbd2486e8",
+      "bytes": 3571,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Listener/NewHashListener.php",
+      "local": "17-NewHashListener.php",
+      "git_blob": "cb170a7df400ffc0f70b305aec208e2a014650b6",
+      "sha256": "13fe87f5f6d688d262c37986dded3cbae19ea7b5ecbf8d370f223d1550658132",
+      "bytes": 2181,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/AppInfo/Application.php",
+      "local": "18-Application.php",
+      "git_blob": "b5bb4f32b4b8df704b339e120782f33629119027",
+      "sha256": "67c23e099e40d0811f118872068185b05633b560349e43e5d17655a9e6a837cc",
+      "bytes": 1979,
+      "whole_text_read": true
+    },
+    {
+      "path": "lib/Event/CalculatedHashEvent.php",
+      "local": "19-CalculatedHashEvent.php",
+      "git_blob": "c5b0c948c971fdd5c574ac6d68e2aef9120c62b5",
+      "sha256": "ce672e81a78b24ac676ab770de66777cf7be8e75024d5182d69183e3849cfd8a",
+      "bytes": 811,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Service/FileInfoServiceTest.php",
+      "local": "20-FileInfoServiceTest.php",
+      "git_blob": "86243c9a8dac268cd4c37e60dc17d8a036e890c8",
+      "sha256": "a6f1da7d3f97b89028b28fd264e48730fe74fbb7e261b7a4f95e47275490a7a7",
+      "bytes": 3297,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Unit/Event/CalculatedHashEventTest.php",
+      "local": "21-CalculatedHashEventTest.php",
+      "git_blob": "8eb880997d6caa6356870dbdc3beaf355981ad1d",
+      "sha256": "4fa577f995a05864547db4a741e42aa72138b1b2bec924c9e1c0636bf5938b04",
+      "bytes": 1139,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 21,
+  "tracked_blobs": 165,
+  "remaining_without_whole_review": 144,
+  "full_review_count": 249,
+  "runtime_tests": {
+    "upstream_executed": false,
+    "limitation": "No PHP on PATH or Nextcloud runtime. Source traces below are not native upstream reproductions.",
+    "local_library_runs": [
+      {
+        "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_repeated_metadata",
+        "exit_code": 0,
+        "passed": 1,
+        "failed": 0,
+        "log_sha256": "44e24a0167dca9342ca5249f6c14052d6ce35c906d0611976c6b69729eef014c"
+      },
+      {
+        "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --test exact_files missing_input_and_overlap_do_not_lose_valid_results",
+        "exit_code": 0,
+        "passed": 1,
+        "failed": 0,
+        "log_sha256": "e5f904db5c860511c787e1c1b81ee48602b02281bab24a4ba9f9b8a632d1a476"
+      }
+    ],
+    "local_source_sha256": {
+      "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+      "crates/rrrah-dedup/tests/exact_repeated_metadata.rs": "84cf30c288f3906de934126838566951b69c3c1524394258050f0cb56daa581d",
+      "crates/rrrah-dedup/tests/exact_files.rs": "64d467bac80614f82027ec92488d7159c06ff1462e79422123900888e8766345",
+      "Cargo.lock": "b7cd9d8d509658bd5bcc7eba804f804e3697d1d0e51965c96ead4015fcabf04d"
+    }
+  },
+  "findings": [
+    "ConfigService actual find default432000seconds=5days and cleanup172800seconds=2days. README prose agrees with find source; README table swaps these two defaults. Corrects unresolved discrepancy in v1.",
+    "FileInfoListener handles both New/UpdatedFileInfoEvent but, when size bucket count>1, asks findBySize(size) with default onlyEmptyHash=true. Mapper restricts to file_hash IS NULL. Thus modified already-hashed files in a duplicate-size bucket are excluded from this recalculation path. updateFileMeta updates size/mimetype/owner/ignored but does not clear hash. Event registration confirmed NodeWritten/Touched -> filesystem save -> UpdatedFileInfoEvent -> same listener. No native end-to-end server reproduction.",
+    "Local real-file repeated metadata regression passes:4sizes times2scan modes with in-place final-byte rewrite preserving exactmtime,size,and unixdev/inode; both fresh scans retain untouched matching pair and exclude rewritten file. This is finite Linux/macOS-style filesystem API coverage on current macOS host, not an atomic snapshot guarantee or all storage providers.",
+    "Local missing input+overlap regression passes:existing valid2file group retained,2files observed,missingpath Ioissue,reportcompletefalse. Existing test covers scan; no new scan_verified missing-root evidence claimed.",
+    "NewHashListener hashA->hashB updates only B when newhash nonnull; oldA cleanup branch occurs only when currenthash null. Residual old duplicate record may remain until other cleanup; UI service filters groups to>1 currentlylinked files. No live database counterexample executed.",
+    "ScannerUtil checks interruption only after saveScannedFile, after caught NotFound/ForcedIgnore or completed save. No check before blocking scanner/hash operations and no latency bound. Other exceptions can escape scanner callback; FileInfoListener separately catches allThrowable and logs, without propagating incomplete scan status.",
+    "Shared-node filter uses strpos(nodepath,requestedpath)==0, a loose comparison rather than explicit===0 or component-aware ancestry. False and0 ambiguity and sibling-prefix boundary are source concerns, not a validated Nextcloud traversal reproduction.",
+    "FileDuplicateMapper orders id first and uses id>offset, so v1 ordering/cursor mismatch concern is not supported by the now-read implementation. Requestedhash/type ordering is secondary toid. Userargument unused in mapper, access filtering performed later in service.",
+    "FileInfoMapper.find matches sha1(path) plus optionalowner, without exactpath postcheck in method. SHA1 used intentionally as path index, not contenthash. Collision/admission implications not tested; no exploit or practical collision claim.",
+    "Four FileInfoService tests mock mapper/node and cover find/enrichment only, not calculateHashes, rescanning, stale content, cancellation, failure isolation. Eventtest checks3authoredhash states, not dispatch/event invalidation workflow.",
+    "No upstream implementation adopted or local algorithm changes needed for the two already-protected cases. No measured speedup, fullrepository completion or additional500review credit."
+  ]
+}

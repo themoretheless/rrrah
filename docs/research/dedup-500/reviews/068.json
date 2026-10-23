@@ -2,7 +2,7 @@
   "index": 68,
   "repository": "PaulLereverend/NextcloudDuplicateFinder",
   "commit": "dc64f8240eab29388c2fae62136983f5801392e6",
-  "review_scope": "8/165 pinned blobs whole-read in v1; service/CLI/background/controller-test source analysis only. PHP absent on PATH; no original tests or Nextcloud runtime run.",
+  "review_scope": "21/165 pinned blobs whole-read through v2:scan/config/mapper/event invalidation source traces. Two local rrrah regressions pass; no upstream PHP/Nextcloud runtime tests.",
   "decision": "reference",
   "finding": "Nextcloud background/CLI duplicate jobs and controller tests; server integration not directly reusable in native rrrah.",
   "license_metadata": "AGPL-3.0",
@@ -78,6 +78,10 @@
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/nextcloud068-source-review-v1-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/nextcloud068-source-review-v2-20261023.json",
       "whole_repo_complete": false
     }
   ]
