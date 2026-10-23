@@ -1,0 +1,32 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Selected structural_adaptive_ecc source, chiefly stream_entry_assemble lines139-168 read whole; earlier combined output truncated, so no whole-file claim. Exact original AST functions compute_ecc_params, feature_scaling and stream_entry_assemble executed in isolation without modifying bodies. Not module/backend integration.",
+  "source_sha256": "c02bf6f420582373272f33773ec3c6375d556e5e83dd00df0f3703de7ca3199e",
+  "control": "pyfilefixity044-entry-bound-control-20261023.py",
+  "result": {
+    "exit_code": 0,
+    "declared_entry_end": 3,
+    "actual_ecc_cursor": 7,
+    "returned_hash": "HH",
+    "returned_ecc": "XNEXT",
+    "bytes_consumed_past_end": 4
+  },
+  "findings": [
+    {
+      "id": "cross-entry-read-confirmed",
+      "detail": "Loop checks cursor before read but does not cap hash+ECC read to remaining entry bytes. Truncated entry can consume following marker/metadata into current ECC block; reproduced by exact function extraction and authored BytesIO input. This confirms local parser boundary violation, not whole-file repair corruption or exploitability."
+    },
+    {
+      "id": "message-end-only-guard",
+      "detail": "Function stops when source message read returns empty; declared filesize is used for rate scaling, not as a hard remaining source bound. Track boundary controls iteration, so independent size/entry consistency checks must be established in callers."
+    },
+    {
+      "id": "completeness-warning",
+      "detail": "If track ends before source, function prints a warning after generator loop, rather than returning a typed incomplete status. Consumers must exhaust generator to even observe warning."
+    }
+  ],
+  "whole_text_reviewed_count_unchanged": 61,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
