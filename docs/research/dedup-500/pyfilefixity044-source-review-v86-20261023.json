@@ -1,0 +1,55 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "Original pinned alice.pdf6 pages rendered with Poppler and every page visually read in two complete3-page batches. Byte-level hash/parity evidence separately recorded in v85.",
+  "new_full_pdf_review": {
+    "path": "pyFileFixity/tests/files/alice.pdf",
+    "sha256": "4726bf9c8524af919917b601b08ef8d258eb129302e297f149b53ffde0bd1bc0",
+    "bytes": 67254,
+    "pages": 6,
+    "encrypted": false,
+    "metadata": {
+      "/ModDate": "D:20151113131434-05'00'",
+      "/CreationDate": "D:20151113131434-05'00'",
+      "/Producer": "iText\u00ae 5.5.2 \u00a92000-2014 iText Group NV (ONLINE PDF SERVICES; licensed version)"
+    },
+    "text_characters_by_page": [
+      3633,
+      3722,
+      3246,
+      3264,
+      3571,
+      3795
+    ]
+  },
+  "rendering": {
+    "tool": "Poppler pdftoppm",
+    "dpi": 110,
+    "pages_visually_reviewed": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 122,
+    "structured_binary_fully_reviewed": 1,
+    "visual_assets_reviewed": 5,
+    "pdf_fully_reviewed": 2,
+    "database_structural_inventory_only": 10,
+    "reviewed_in_full_mode": 130,
+    "remaining_without_full_text_binary_visual_or_pdf_review": 14
+  },
+  "findings": [
+    "Six-page plain literary-text excerpt, title identifies Alice chapters1 and2. Paragraphs, poem formatting and page transitions reviewed; no obvious rendering corruption observed in this fixture.",
+    "A single unencrypted text PDF with these pages is not a broad PDF capability matrix: no forms, encryption, multimedia, attachments or repaired-object structures qualified.",
+    "Visual readability is distinct from original byte equality; v85 independently reconstructs stored tracks but does not run correction/repair.",
+    "The PDF content is test data, not instructions or an algorithm specification. No production code changed or external action taken."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
