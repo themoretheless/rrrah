@@ -1,0 +1,118 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v10-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "conf/dbDelimitedExport.xml",
+      "local": "54-conf--dbDelimitedExport.xml",
+      "git_blob": "4922adf17ad72ef941adf684410e030466013283",
+      "sha256": "0a0a1f0db69c7460bccac81a67517d67e0c836c979306c89d897a9305445f887",
+      "lines": 47,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/dbInputQueryAvro.xml",
+      "local": "55-conf--dbInputQueryAvro.xml",
+      "git_blob": "b7ae6b4f229a203090455b383087fa9fde39f7d3",
+      "sha256": "7cdd8873acf27d64e37d84a6967faca409a2730ada4a93585a2cc30a393440e3",
+      "lines": 66,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/dbInputQueryDelimited.xml",
+      "local": "56-conf--dbInputQueryDelimited.xml",
+      "git_blob": "d6147335b6eec43b935654e42433cbaecb1ed211",
+      "sha256": "8440eff99e2aae0975c522627be68c7c273a0720f162722ac36c9313820792e7",
+      "lines": 71,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/dbInputQueryDelimitedHive.xml",
+      "local": "57-conf--dbInputQueryDelimitedHive.xml",
+      "git_blob": "56b1aead26dfa9373856235177079be9e260c098",
+      "sha256": "51c8032c9f181e33472668b22951b9749e8fafeba902685defa33c1f9e033c30",
+      "lines": 115,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/dbInputTableDelimited.xml",
+      "local": "58-conf--dbInputTableDelimited.xml",
+      "git_blob": "5f82c3656683d4e715f11c4554559612a4f76bbc",
+      "sha256": "1beefbfda60d51cdbd736fb5d413f81c7e2701fa36b4337e0ac6eae2c62d92f2",
+      "lines": 71,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/dbInputTableDelimitedHive.xml",
+      "local": "59-conf--dbInputTableDelimitedHive.xml",
+      "git_blob": "2f1ec207d35816add7ec2f7856a68580dad2b516",
+      "sha256": "31dc8559b43b963020bc71b1700f5483bffd102fe94470f41a849c3ee8263920",
+      "lines": 116,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/ftpExport.xml",
+      "local": "60-conf--ftpExport.xml",
+      "git_blob": "f6ecea95cdbfa1a740df40f6853090a3a97824d8",
+      "sha256": "4cc081e98c1960be5cb2e68994e25678d263b72ce7240e441c247b4d26995d7e",
+      "lines": 38,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/mysqlExport.xml",
+      "local": "61-conf--mysqlExport.xml",
+      "git_blob": "508914a0e3fe9a10d439791b58ae552bf43f7851",
+      "sha256": "4f0f5a9bdd34ee114b936bbd7b0c996082fe12c1bcba4ae676ce833b94d50d00",
+      "lines": 43,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/oracleExport.xml",
+      "local": "62-conf--oracleExport.xml",
+      "git_blob": "4f49b18a4f3774eda258e0b438851f4efa5c5b98",
+      "sha256": "ffbdf710b1940c8fab859221bb96fc4d6864152866374a9fa0ee89c8b9ff285a",
+      "lines": 78,
+      "whole_text_read": true
+    },
+    {
+      "path": "conf/salesForceExport.xml",
+      "local": "63-conf--salesForceExport.xml",
+      "git_blob": "1a961254c373fcbf40251ba85a2e1a366d8a68d3",
+      "sha256": "d932bc800bc4988cd4184940a7ff560802c398b88e236fdc862148d6047a7283",
+      "lines": 40,
+      "whole_text_read": true
+    },
+    {
+      "path": "build.xml",
+      "local": "64-build.xml",
+      "sha256": "077ae2da547c33990d80a95ac78910fd70f3c963a7c0d801d0cc5875aefc227d",
+      "git_blob": "3b46a20b5709edff8836132153ee6596d33ce908",
+      "lines": 450,
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 65,
+  "remaining_without_whole_review": 105,
+  "original_tests_cumulative": {
+    "total": 54,
+    "passed": 54,
+    "new_original_tests": 0
+  },
+  "author_native_controls_cumulative": 33,
+  "structural_control": {
+    "report": "docs/research/dedup-500/hiho098-config-structure-20261024.json",
+    "result": "10configuration XML and Ant XML parse; no duplicate configuration property names; active Ant targets exclude test",
+    "scope": "Structural parser/tree-membership evidence, not original runtime tests or DB/FTP/Hive/Salesforce connection proof"
+  },
+  "source_findings": [
+    "Ant references ivy/libraries.properties,ivy/ivysettings.xml,ivy.xml which are absent from pinned tracked tree; external overrides/generated files not qualified. No claim that all possible configured Ant builds fail.",
+    "Ant test and jarTest definitions are inside comments. compile srcdir points at src and includes allJava, while compileTest uses test directory absent from tracked tree. Source-only layout mismatch, Ant not executed.",
+    "Eclipse .project external builder references are also absent from tracked tree.",
+    "Configuration examples concern external database/import/export services rather than file/image identity; read-only review, no configured endpoint contacted."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

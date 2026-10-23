@@ -1,0 +1,113 @@
+{
+  "scope": "XML structural parsing and retained tracked-tree membership only; no Ant/Maven/configured service execution",
+  "configurations": [
+    {
+      "path": "conf/dbDelimitedExport.xml",
+      "properties": 6,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/dbInputQueryAvro.xml",
+      "properties": 11,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/dbInputQueryDelimited.xml",
+      "properties": 12,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/dbInputQueryDelimitedHive.xml",
+      "properties": 23,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/dbInputTableDelimited.xml",
+      "properties": 12,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/dbInputTableDelimitedHive.xml",
+      "properties": 23,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/ftpExport.xml",
+      "properties": 4,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/mysqlExport.xml",
+      "properties": 5,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/oracleExport.xml",
+      "properties": 10,
+      "duplicate_names": [],
+      "root": "configuration"
+    },
+    {
+      "path": "conf/salesForceExport.xml",
+      "properties": 4,
+      "duplicate_names": [],
+      "root": "configuration"
+    }
+  ],
+  "ant_targets": [
+    "init",
+    "ivy-retrieve-hadoop",
+    "ivy-retrieve-hive",
+    "makepom",
+    "compile",
+    "compileTest",
+    "jar",
+    "clean",
+    "clean-cache",
+    "veryclean",
+    "ivy-download",
+    "ivy-init-antlib",
+    "ivy-init",
+    "ivy-resolve-common",
+    "ivy-retrieve-common",
+    "ivy-resolve-hadoop",
+    "ivy-resolve-hive",
+    "ivy-resolve-pig",
+    "ivy-resolve-redist",
+    "ivy-retrieve-redist",
+    "package",
+    "tar",
+    "deploy"
+  ],
+  "has_active_test_target": false,
+  "local_references": [
+    {
+      "path": "ivy/libraries.properties",
+      "tracked": false
+    },
+    {
+      "path": "ivy/ivysettings.xml",
+      "tracked": false
+    },
+    {
+      "path": "ivy.xml",
+      "tracked": false
+    },
+    {
+      "path": ".externalToolBuilders/org.eclipse.jdt.core.javabuilder.launch",
+      "tracked": false
+    },
+    {
+      "path": ".externalToolBuilders/Ant_Builder.launch",
+      "tracked": false
+    }
+  ]
+}
