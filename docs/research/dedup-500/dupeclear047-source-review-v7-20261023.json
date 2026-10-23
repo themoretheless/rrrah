@@ -1,0 +1,44 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "partial_files": [
+    {
+      "path": "DupeClear/ViewModels/MainViewModel.cs",
+      "sha256": "34c43f021c1b2ea3334c49a5b0fb4770e47ceec2acc3efc029b0f5cfd7952722",
+      "git_blob_verified": true,
+      "read_line_ranges": [
+        [
+          1230,
+          1430
+        ],
+        [
+          1850,
+          2025
+        ],
+        [
+          2745,
+          2860
+        ],
+        [
+          3274,
+          3355
+        ]
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "findings": [
+    "SearchAsync passes enabled date filters directly to FinderService, so the previously reviewed DateModifiedTo comparison is not corrected at this call site.",
+    "ImportAsync restores serialized group and IsMarked values onto freshly constructed DuplicateFile objects. Constructor can refresh metadata, but this import path does not rehash or compare group content. Subsequent Refresh only tests existence, so existing changed files can retain old groups and marks; source-only, no deletion executed.",
+    "Import clears the live result list then appends entries with cancellation checkpoints. Cancellation or a malformed entry can leave a partially imported list rather than restoring the previous one.",
+    "Export writes XML directly through StreamWriter to the chosen destination; Save writes preferences directly with WriteAllText. No atomic replacement or rollback visible in these methods.",
+    "Delete confirmation warns if all existing members of a group are marked, defaulting to No for that warning. This is a useful UI safeguard but does not revalidate content/physical identity before the previously reviewed path-based deletion.",
+    "AddDirectoryForInclusion trims all trailing directory separators; a filesystem root such as / can become empty. This source concern has not been reproduced through the full UI."
+  ],
+  "upstream_runtime_run": false,
+  "whole_files_read_total": 49,
+  "remaining_tracked_blobs": 43,
+  "full_review_count": 249
+}
