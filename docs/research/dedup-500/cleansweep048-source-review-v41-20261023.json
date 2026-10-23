@@ -1,0 +1,34 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "gradlew",
+      "sha256": "734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933",
+      "lines": 251,
+      "git_blob_verified": true
+    },
+    {
+      "path": "gradlew.bat",
+      "sha256": "57931b17dd228e5c24dac90e815d0bf82477e831a4618dfab4136f5446b42a9f",
+      "lines": 94,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Both launcher scripts carry Apache-2.0 notices independent of the root GPL license; retain file-level licensing if any launcher content is reused. No code was adopted.",
+    "POSIX launcher resolves its own symlinks, quotes accumulated command arguments and launches GradleWrapperMain from the local wrapper JAR. Environment option parsing explicitly documents unsupported newline/unmatched-quote cases.",
+    "Windows launcher performs its own Java lookup and delegates percent-star arguments to java.exe. It was source-read only, not executed under Windows.",
+    "No duplicate matching logic is present in these launchers. Shell syntax validation alone does not qualify Gradle, Kotlin compilation, release packaging or Android behavior."
+  ],
+  "checks": {
+    "posix_shell_syntax_exit_code": 0,
+    "launcher_executed": false,
+    "wrapper_jar_reviewed": false
+  },
+  "whole_files_read_total": 97,
+  "remaining_tracked_blobs": 33,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
