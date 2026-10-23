@@ -1,0 +1,35 @@
+{
+  "repository": "n24q02m/modhash",
+  "commit": "3968350080e87dec1ea04ca87ca6cf54629a6e34",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "modhash-primitives/src/distance.rs",
+      "sha256": "66312ea4c0c3376a80cc86da4bd78d4a3d333d68af6d6f0cde29a3a22285f83b",
+      "lines": 38,
+      "git_blob_verified": true
+    }
+  ],
+  "controls": [
+    "docs/research/dedup-500/modhash496-distance-control-20261023.rs"
+  ],
+  "runtime": {
+    "rust": "1.98.1",
+    "exit_code": 0,
+    "independent_comparisons": 8448,
+    "additional_symmetry_comparisons": 8448,
+    "lengths": "0..65 bytes",
+    "cases_per_length": 128
+  },
+  "findings": [
+    "Original distance module included unchanged; minimal Digest adapter supplies array storage/as_bytes only. Not original Digest implementation or package runtime qualification.",
+    "All8448 comparisons match independent per-bit loop, including zero length, identical arrays, all-zero/all-one and pseudorandom inputs across8-byte boundaries; reverse order checked separately.",
+    "widen comment says short chunk is padded on right, implementation fold effectively leaves leading zeros. For equal-length chunk pairs XOR/popcount unaffected, as boundary controls confirm.",
+    "u32 total could overflow only at extraordinarily large digest sizes; no huge-allocation/overflow runtime control executed and no defect asserted for ordinary digest lengths."
+  ],
+  "remaining": [
+    "Other661 tracked blobs and assets",
+    "Original Digest semantics/package runtime and broader performance qualification"
+  ],
+  "full_review_count": 247
+}
