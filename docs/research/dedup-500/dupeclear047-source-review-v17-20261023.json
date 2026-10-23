@@ -1,0 +1,28 @@
+{
+  "repository": "antikmozib/Dupe-Clear",
+  "commit": "3d1a4c0d7362bde0c5631e381888f36a331ef3b3",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "DupeClear/Resources/Colors.axaml",
+      "sha256": "8cc0921ad1760685242a12fd5af311b208fe1965480f5954fdf44c0ef6a3eea3",
+      "lines": 154,
+      "git_blob_verified": true
+    },
+    {
+      "path": "DupeClear/ViewModels/DesignMessageBoxViewModel.cs",
+      "sha256": "621ac01fba5ff16e14a48bd5a4826c0b35c6edd73e67c532daa153b2a4893a02",
+      "lines": 21,
+      "git_blob_verified": true
+    }
+  ],
+  "findings": [
+    "Colors resource dictionary defines default brushes and aliases with dark-theme overrides for start/delete/default-dialog buttons. Visual contrast and theme-resource resolution have not been rendered or measured.",
+    "Deleted and disabled result foregrounds use different theme brushes. These are presentation cues, not source validity checks; file identity remains handled elsewhere.",
+    "DesignMessageBoxViewModel contains only placeholder long text and sample labels/buttons; it does not run searches or qualify application error dialogs. Its large Lorem ipsum string was read as fixture content."
+  ],
+  "whole_files_read_total": 79,
+  "remaining_tracked_blobs": 13,
+  "full_review_count": 249,
+  "upstream_runtime_run": false
+}
