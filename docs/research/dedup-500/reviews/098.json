@@ -2,7 +2,7 @@
   "index": 98,
   "repository": "sonalgoyal/hiho",
   "commit": "77dd5af9b4b19167f062112945433dd588d10640",
-  "review_scope": "126/170whole pinnedfiles (120text,6decodedSequenceFiles);71originalJUnitmethods pass;92authorcontrols incl batchfailure/columnpreservation; remaining44files/realDBclusterintegration incomplete",
+  "review_scope": "127/170whole pinnedfiles (121text,6decodedSequenceFiles);75distinctoriginalJUnitmethods:73pass,2identity-oracle failures;94authorcontrols; remaining43files/realDBclusterintegration incomplete",
   "decision": "reject-domain",
   "finding": "Hadoop database/key MapReduce integration; not image/file equality.",
   "license_metadata": "Apache-2.0",
@@ -160,7 +160,11 @@
     {
       "audit": "docs/research/dedup-500/hiho098-source-review-v21-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/hiho098-source-review-v22-20261024.json",
+      "whole_repo_complete": false
     }
   ],
-  "upstream_tests_scope": "71originalJUnitmethods in20files,2partial; no fullcluster suite/configuredDBtests;92author controls separate"
+  "upstream_tests_scope": "75originalJUnitmethods in21files,2partial:73passed,2failed; failedmappercases have matching captured payloads but identity-based verification mismatch; diagnostic2controls remain separate; no fullcluster suite/configuredDBtests"
 }

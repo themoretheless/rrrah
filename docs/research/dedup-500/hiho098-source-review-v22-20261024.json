@@ -1,0 +1,49 @@
+{
+  "repository": "sonalgoyal/hiho",
+  "commit": "77dd5af9b4b19167f062112945433dd588d10640",
+  "previous_audit": "docs/research/dedup-500/hiho098-source-review-v21-20261024.json",
+  "whole_repo_complete": false,
+  "tracked_blobs": 170,
+  "new_whole_files_read": [
+    {
+      "path": "src/test/java/co/nubetech/hiho/mapreduce/TestGenericDBLoadDataMapper.java",
+      "local": "126-TestGenericDBLoadDataMapper.java",
+      "sha256": "002e81d4c7b6c9411aad496eeee735564b612db9fcbc32b3a505178b724a5f3e",
+      "git_blob": "9b366a1690e3aec2237e9e000923656243650f9d",
+      "lines": 255,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 121,
+  "whole_binary_files_reviewed_total": 6,
+  "whole_files_read_total": 127,
+  "remaining_without_whole_review": 43,
+  "original_tests": {
+    "new": 4,
+    "new_passed": 2,
+    "new_failed": 2,
+    "cumulative_distinct": 75,
+    "cumulative_passed": 73,
+    "cumulative_failed": 2,
+    "report": "docs/research/dedup-500/hiho098-generic-mapper-original-tests-20261024.json",
+    "scope": "4unchangedoriginalJUnitmethods;21testfiles cumulatively,2partial; no DB/network/cluster",
+    "failures": [
+      "testMapperWithValidValues",
+      "testMapperWithNullValues"
+    ]
+  },
+  "author_controls": {
+    "new": 2,
+    "cumulative": 94,
+    "report": "docs/research/dedup-500/hiho098-mapper-value-diagnostic-20261024.json",
+    "confirmed": "Actual originalmapper outputs typed lists[1L,Sam,true,84.0] and[1L,null,true,84.0] matching fixture values. Independently reconstructed GenericDBWritable holder compares unequal because it has no value-based equals. Original verify(context).write(reconstructed,null) therefore fails.",
+    "scope": "Argument capture and independent typed-value comparison of actual emitted originalobjects; original tests/code unchanged, diagnostic successes not counted as upstream passes"
+  },
+  "source_findings": [
+    "Original nullvalues test uses whitespace field, not consecutive delimiters; empty middlefield handling remains untested by upstreammethod.",
+    "DECIMAL and unsupported SQLtypes not covered. DATE case is commented out.",
+    "Setup test checks metadata JSON deserialization but not full database import."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

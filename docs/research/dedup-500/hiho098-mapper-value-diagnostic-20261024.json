@@ -1,0 +1,30 @@
+{
+  "scope": "2authorcontrols capture actual originalmapper arguments and compare typed payloads for2failed upstreamcases; original tests/source unchanged; these diagnostic passes do not replace upstream failures; no DB/SQL/network/cluster",
+  "commands": [
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/javac",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "-d",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MapperValueDiagnostic.java"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "Note: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/src/MapperValueDiagnostic.java uses unchecked or unsafe operations.\nNote: Recompile with -Xlint:unchecked for details.\n"
+    },
+    {
+      "args": [
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jdk-21.0.13+9/Contents/Home/bin/java",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "-cp",
+        "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-format-runtime-20261024/classes:/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/hiho098-runtime-20261024/jars/*",
+        "MapperValueDiagnostic"
+      ],
+      "returncode": 0,
+      "stdout": "PASS captured original payload equals expected values [1, Sam, true, 84.0];distinct equivalent holder compares unequal\nPASS captured original payload equals expected values [1, null, true, 84.0];distinct equivalent holder compares unequal\nvalue diagnostic checks=2;original tests unchanged and still counted as failures\n",
+      "stderr": ""
+    }
+  ]
+}
