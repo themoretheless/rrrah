@@ -1,0 +1,44 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "asizeof.py lines881-1240 read, cumulative1-1240. Exact _Typedef class exercised with setup bypass and estimate/getsizeof seams; no original complete sizing import",
+  "partial_source_read": {
+    "path": "pyFileFixity/lib/profilers/visual/pympler/asizeof.py",
+    "lines": [
+      881,
+      1240
+    ],
+    "cumulative_lines": [
+      1,
+      1240
+    ],
+    "sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef"
+  },
+  "control": "docs/research/dedup-500/pyfilefixity044-flat-size-control-20261023.py",
+  "control_result": {
+    "source_git_blob_verified": "12c820e1ea7b8254ad44dd8855fb078003bb5344",
+    "source_sha256": "fa649837e012bfd5c4c276bc0916122189a7ef0f01e8e9b1f008fe72ac4d6bef",
+    "scope": "Exact _Typedef class, __new__ bypass of setup, length and getsizeof seams only; no full sizing module import",
+    "estimate_error": "authored estimate failure",
+    "getsizeof_called_after_failed_estimate": false,
+    "getsizeof_overrides_successful_estimate": 100,
+    "bytes_str_type_guard_value_on_runtime": false
+  },
+  "counts": {
+    "tracked_blobs": 144,
+    "whole_text_reviewed": 119,
+    "structured_binary_fully_reviewed": 1,
+    "database_structural_inventory_only": 10,
+    "remaining_without_full_text_or_binary_review": 24
+  },
+  "findings": [
+    "Typedef.flat computes self.leng*item before sys.getsizeof. A failed estimate prevents even a successful independent size provider from running; reproduced. Successful estimate is then overwritten by getsizeof, as documented.",
+    "bytes registration checks type(bytes) is not type(str); both class objects have type type on current Python, so guard is false even though bytes and str differ. Guard evaluated in control; later dynamic fallback remains unread, no claim bytes is entirely unsized.",
+    "_Typedef.__lt__ always returns True, violating strict order assumptions. Static finding, no sorted report runtime.",
+    "Slice length helper from v72 is wired into slice typedef with positive pointer item size, so its error can occur before getsizeof override. No full import or live sizing performed.",
+    "Typedef references distinguish object identity, class definitions and instances. This is internal sizing key design, not a content fingerprint or exact duplicate identity algorithm.",
+    "Static registry probes array/types/stat(curdir) during module initialization; compatibility success depends on runtime and platform. Original import still fails earlier unicode-internal."
+  ],
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
