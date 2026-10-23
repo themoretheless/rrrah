@@ -1,0 +1,37 @@
+{
+  "repository": "szabodanika/automodera",
+  "commit": "ae8915bd838bf5d4df6404006af6182f1568746f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/service/ArchiveServiceFacade.java",
+      "sha256": "ccd255dd7ee763e39fdfcc26b75acf455befe0989f0f871c5db5ac29dca30952",
+      "lines": 134,
+      "git_blob_verified": true
+    },
+    {
+      "path": "archive/src/main/java/uk/ac/uws/danielszabo/automodera/archive/service/ArchiveServiceFacadeImpl.java",
+      "sha256": "113e932155478657f5c78d3f2a4fcec0ab6eafbfa31c963576f2410a711a0050",
+      "lines": 335,
+      "git_blob_verified": true
+    }
+  ],
+  "runtime": {
+    "java_run": false,
+    "network_publish": false,
+    "database_run": false
+  },
+  "findings": [
+    "Archive facade interface/implementation whole-read/Gitblobverified. generateHashCollection prepends literal./input to path by string concatenation, no path join: images=>./inputimages,/images=>./input/images. Source algebra witness only, no filesystem/hash execution.",
+    "Generation delegates to previously inspected collection service, no version increment or append/filename correction here.",
+    "Repertoire send selects enabled metadata-only collections; optional collectionID filter applied after fetching all enabled metadata. No per-integrator subscription filter in these methods; receiving integrator filters topics elsewhere.",
+    "enable/disable changes enabled and saves, without version/updated increment or send call. remove deletes locally without published tombstone in this method. Prior integrator checkImage iterates all locallystored collections, so remote disable/deletion propagation remains unproven.",
+    "retrieveHashCollectionsByArchive catches all exceptions, sets node offline/inactive then returns empty list. Missingremote data can appear identical to legitimate empty collection result at return-type boundary; no structured partialerror.",
+    "getLocalNode initializes certificate issuer without certificate-null guard when nodeexists; no new subscription initialization here. No remote services contacted."
+  ],
+  "remaining": [
+    "79 other tracked blobs/assets",
+    "Remaining services/web/templates/native binaries and runtime qualification"
+  ],
+  "full_review_count": 249
+}
