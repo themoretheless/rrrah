@@ -1,0 +1,48 @@
+{
+  "repository": "Mahoskian/sift",
+  "commit": "fc5235afe3a33e49c161b2d7d8ebd68801f1a69d",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "src/project/project.hpp",
+      "sha256": "6688ed3cebba454e4bae5bef0db5dc077cf762361dd1810765bd529198663cc4",
+      "lines": 42,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/project/pca.cpp",
+      "sha256": "85297b03d9c212533b1e6ff1c802ed22f5e46fc7a91aee6ee40318488d233e2e",
+      "lines": 192,
+      "git_blob_verified": true
+    },
+    {
+      "path": "src/project/tsne.cpp",
+      "sha256": "0d2ee3f2cf9dbfde0782c0ccb2988cdeeb949715c5686d181f1b1ed11b6c06af",
+      "lines": 231,
+      "git_blob_verified": true
+    }
+  ],
+  "source_control": "docs/research/dedup-500/sift497-projection-control-20261023.cpp",
+  "runtime": {
+    "exit_code": 0,
+    "rank_one_pca_oracle_pass": true,
+    "pca_tsne_thread_parity": true,
+    "identical_tsne_zero_coordinates": true,
+    "eigen_max_absolute_residual": 1.88856,
+    "residual_matrix_samples": 32,
+    "residual_matrix_features": 64
+  },
+  "findings": [
+    "Original PCA and t-SNE compiled unchanged with original thread helpers. Rank-one PCA gives unit explained variance and correct endpoint distance. Deterministic32x64 binary features produce identical PCA and12-iteration t-SNE coordinates under1/4 threads, all tested t-SNE coordinates finite. Thread parity does not establish mathematical correctness.",
+    "Jacobi eigen solver stops after200 single-pivot rotations with no convergence status. Independent Av-lambda*v residual over original centered Gram matrix reaches1.88856 on deterministic32x64 data; unqualified principal-coordinate accuracy is not justified.",
+    "Eight identical feature vectors remain all-zero through20 t-SNE iterations because initialization and every displacement are zero. This is a degenerate input result, not evidence of general t-SNE convergence.",
+    "Feature parser silently zero-pads missing hexadecimal bits: a and a0 both yield identical eight-bit features, empty hash yields zero vector. Invalid hex sscanf result is unchecked; malformed text not executed.",
+    "PCA clamps output dimensions to min(requested,samples,features), t-SNE allocates gradient by requested dimensions but initializes coordinates with clamped PCA dimensions. Requested dimensions exceeding available PCA coordinates can cause unchecked access; source only, not executed.",
+    "Ragged feature rows and nonfinite parameters lack local validation. Pairwise matrices require quadratic storage; no resource-admission benchmark performed."
+  ],
+  "remaining": [
+    "71 other tracked blobs/assets and dependencies",
+    "Full CLI and UI qualification, real video decoding and independent wavelet/t-SNE oracle"
+  ],
+  "full_review_count": 248
+}
