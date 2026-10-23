@@ -1,0 +1,61 @@
+{
+  "repository": "LiruiYu33/Targie-The-Similar-Videos-Images-Finder",
+  "commit": "1d1c9d2a275a51115213e60b2b51cddc54ea493f",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "Sources/SimilarVideoFinder/Support/ClickOutsideMonitor.swift",
+      "git_blob": "798afee51f86bcfc8d214023471840456d5ea66d",
+      "sha256": "b2c7b65aff821e3d7f38acbb4422df0941437b4ad6ddc135845dbe29ff8b9d3c",
+      "bytes": 3543,
+      "whole_text_read": true
+    },
+    {
+      "path": "Tests/SimilarVideoFinderTests/ClickOutsideMonitorTests.swift",
+      "git_blob": "00055f85bf0512e39d19c21d3251bcfb7478ce15",
+      "sha256": "e422e2f76868bdaa29c156d659f5e0c775fd2bc8e59380e6087ef01ad823679a",
+      "bytes": 1411,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/MediaThumbnailView.swift",
+      "git_blob": "bbf30a1ed4fe9d11a13255ffc1ce37210e3f5841",
+      "sha256": "f087b0b670d246ae5baa734d914f9621da3958a6aeeebb59cb1522ff446d816f",
+      "bytes": 1840,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/ToolbarLabeledButton.swift",
+      "git_blob": "10a27c4d8adea6a7eef2338de1910f6a2aefca2a",
+      "sha256": "762641cd30a5e7322ec71b87bbe5aa85a20033a241edb960935c53f379fc8350",
+      "bytes": 3781,
+      "whole_text_read": true
+    },
+    {
+      "path": "Sources/SimilarVideoFinder/Views/VideoCardView.swift",
+      "git_blob": "dc7bfc2b2b523f6f84e04e7eb127794846d9eb10",
+      "sha256": "b10ee9584ae500d3ca160728fe8cd2b6a9fb5af48c88dd790e160beb4a84deb7",
+      "bytes": 3784,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 64,
+  "tracked_blobs": 121,
+  "remaining_without_whole_review": 57,
+  "full_review_count": 249,
+  "runtime": {
+    "command": "TARGIE_CACHE_ROOT=$PWD/.dedup-work/targie061-20261023/test-cache-root DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer /usr/bin/xcrun swift test --package-path .dedup-work/targie061-20261023/full-package --filter ClickOutsideMonitorTests",
+    "executed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "log_sha256": "dc34f4c40e20a2a7d790fa80c5244c76e571429d26b1737d9f9c90bc337a9285",
+    "scope": "Unchanged original full package; two geometry helper tests only. No synthesized native events, app window launch, monitor lifecycle or screenshot checks."
+  },
+  "findings": [
+    "ClickOutsideMonitor installs local left/right mouse monitor only while active and attached to window, ignores other windows, dispatches callback asynchronously after rechecking active flag. Store removes existing monitor on restart and deinit/dismantle. Lifecycle read, not executed by two point-containment tests.",
+    "MediaThumbnailLoader checks requestedItemID and cancellation after awaited load to avoid publishing different-item stale result. Same-item-ID content/thumbnail changes do not by themselves change task(id:item.id); no identity-change runtime control here. Cache backend not reviewed by this file read.",
+    "VideoCardView displays percent score with explanatory help, evidence text, dimensions/duration and checkbox state. Rendering/help accessibility correctness not established merely by compilation/source.",
+    "Toolbar custom capsule hover/press style and popover toggle are presentation code. No toolbar hitbox, disabled-to-enabled hover reset or event behavior qualification.",
+    "No external actions invoked or real media modified. Five files actually whole-read and pinned hashes verified; no production/library speedup or full repository credit."
+  ]
+}
