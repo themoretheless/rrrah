@@ -1,0 +1,1546 @@
+{
+  "status": "all_decode_target_results_verified",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-sequence-target-20261021 cargo +1.98.1 test -p rrrah-dedup --features decode --lib --tests",
+  "cargo_process_pid": 78782,
+  "cargo_process_terminal": true,
+  "cargo_exit_code": null,
+  "cargo_exit_note": "Original process session handle was lost in earlier truncated tool output. Do not infer exact shell exit code. PID is absent, every metadata-declared target has one complete successful result, and dependent all-features run has started.",
+  "compiler": "Rust1.98.1 macOSarm64",
+  "metadata_targets_expected": 163,
+  "target_results_observed": 163,
+  "missing_targets": [],
+  "extra_targets": [],
+  "totals": {
+    "passed": 1068,
+    "failed": 0,
+    "ignored": 7,
+    "measured": 0,
+    "filtered_out": 0
+  },
+  "targets": [
+    {
+      "name": "rrrah_dedup",
+      "passed": 129,
+      "failed": 0,
+      "ignored": 5,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "2.50s"
+    },
+    {
+      "name": "affine_candidate_search",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.59s"
+    },
+    {
+      "name": "affine_color",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "affine_color_heldout_negative",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "affine_region",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.03s"
+    },
+    {
+      "name": "affine_region_file",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "affine_region_grid",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "affine_region_input_contract",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_candidate_search",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "4.41s"
+    },
+    {
+      "name": "anchor_collection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "34.69s"
+    },
+    {
+      "name": "anchor_collection_preflight",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_collection_scaled",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "5.77s"
+    },
+    {
+      "name": "anchor_fallback_collection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "10.41s"
+    },
+    {
+      "name": "anchor_fallback_collection_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "77.67s"
+    },
+    {
+      "name": "anchor_fallback_collection_preflight",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_fallback_search",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.82s"
+    },
+    {
+      "name": "anchor_file_search_preflight",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_geometry_collection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "3.54s"
+    },
+    {
+      "name": "anchor_geometry_collection_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "25.30s"
+    },
+    {
+      "name": "anchor_geometry_collection_preflight",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_geometry_rank_fallback",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.74s"
+    },
+    {
+      "name": "anchor_geometry_search",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "5.39s"
+    },
+    {
+      "name": "anchor_geometry_smoothing",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "3.04s"
+    },
+    {
+      "name": "anchor_rank",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.11s"
+    },
+    {
+      "name": "anchor_rank_driven_collection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "8.13s"
+    },
+    {
+      "name": "anchor_rank_driven_collection_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "67.92s"
+    },
+    {
+      "name": "anchor_rank_driven_collection_preflight",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_rank_file",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "anchor_reflected_geometry",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "3.77s"
+    },
+    {
+      "name": "anchor_reflection_collection",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "26.99s"
+    },
+    {
+      "name": "anchor_reflection_collection_cancel",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "anchor_reflection_collection_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "118.93s"
+    },
+    {
+      "name": "anchor_reflection_collection_tokens",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "48.46s"
+    },
+    {
+      "name": "anchor_reflection_fallback",
+      "passed": 12,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "7.91s"
+    },
+    {
+      "name": "animated",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.28s"
+    },
+    {
+      "name": "bank_geometry",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "bank_partition",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "build_context",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "cache",
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.84s"
+    },
+    {
+      "name": "cache_interpretation",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "cache_reload",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.03s"
+    },
+    {
+      "name": "cache_rla_interpretation",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "candidate_geometry_only",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "1.01s"
+    },
+    {
+      "name": "candidate_reflected_geometry",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.29s"
+    },
+    {
+      "name": "candidate_union_files",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "66.99s"
+    },
+    {
+      "name": "competitive_rank",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "container",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "2.01s"
+    },
+    {
+      "name": "content_snapshot",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "correspondence_union",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "crop",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "decode",
+      "passed": 17,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "2.04s"
+    },
+    {
+      "name": "diagonal_proposals",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "encoded_srgb",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "exact_files",
+      "passed": 38,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "1.13s"
+    },
+    {
+      "name": "exact_large_files",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "1.44s"
+    },
+    {
+      "name": "exact_repeated_metadata",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "exposure",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "exposure_files",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "filtered",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "five_collection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "256.45s"
+    },
+    {
+      "name": "five_gradient_region_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "61.03s"
+    },
+    {
+      "name": "five_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "41.11s"
+    },
+    {
+      "name": "five_region_admission",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "five_region_lifecycle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "70.87s"
+    },
+    {
+      "name": "geometry",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "geometry_validation",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "gradient",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.05s"
+    },
+    {
+      "name": "gradient_candidate_smoothing",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "gradient_collection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "10.59s"
+    },
+    {
+      "name": "gradient_distinct_locations",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "gradient_empty",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "gradient_index",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.04s"
+    },
+    {
+      "name": "gradient_index_reflection",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "gradient_interpolated",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "gradient_reflection",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "gradient_scale",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.22s"
+    },
+    {
+      "name": "gradient_scale_files",
+      "passed": 19,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "20.65s"
+    },
+    {
+      "name": "groups",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.08s"
+    },
+    {
+      "name": "hamming_image_corpus",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.14s"
+    },
+    {
+      "name": "icc_oracle",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "information",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.07s"
+    },
+    {
+      "name": "joint_projective",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.88s"
+    },
+    {
+      "name": "joint_witnesses",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "20.30s"
+    },
+    {
+      "name": "jpeg_orientation",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.03s"
+    },
+    {
+      "name": "linear",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "local",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "local_collection",
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "6.14s"
+    },
+    {
+      "name": "local_index",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.09s"
+    },
+    {
+      "name": "local_rank",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.47s"
+    },
+    {
+      "name": "local_rank_cached",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.19s"
+    },
+    {
+      "name": "local_scan",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "10.75s"
+    },
+    {
+      "name": "managed_evidence",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "mesh_deformation",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "mesh_grid",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "mesh_landmark_admission",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "mesh_rank",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "mesh_rank_regions",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "mesh_refine",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "model_compare",
+      "passed": 47,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "11.91s"
+    },
+    {
+      "name": "model_input",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "model_input_file",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.13s"
+    },
+    {
+      "name": "model_projected_compare",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.03s"
+    },
+    {
+      "name": "model_projected_tiles",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.11s"
+    },
+    {
+      "name": "model_tiles",
+      "passed": 21,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.40s"
+    },
+    {
+      "name": "native_anchor_recovery",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "2.25s"
+    },
+    {
+      "name": "native_pixel_domain",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "opposite_native",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "2.82s"
+    },
+    {
+      "name": "ordinal",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.03s"
+    },
+    {
+      "name": "oriented",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.23s"
+    },
+    {
+      "name": "pages",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.06s"
+    },
+    {
+      "name": "pair_schedule",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "palette_mutation",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "palette_transparency",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "periodic_capture",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "3.19s"
+    },
+    {
+      "name": "photo_collages",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "71.63s"
+    },
+    {
+      "name": "photo_files",
+      "passed": 27,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "63.54s"
+    },
+    {
+      "name": "photo_jpeg_oracle",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.03s"
+    },
+    {
+      "name": "photometric",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "photos_heldout",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "16.54s"
+    },
+    {
+      "name": "piecewise_local_rank",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.22s"
+    },
+    {
+      "name": "piecewise_warp",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "pixel_search",
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.09s"
+    },
+    {
+      "name": "pixels",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "png_alpha_channels",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "png_pinned_corpus",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "png_primary_policy",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "pnm_precision",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "portfolio_collection",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "8.20s"
+    },
+    {
+      "name": "presentation_digest",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "presentation_kind",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "projected_collection",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.33s"
+    },
+    {
+      "name": "projected_portfolio",
+      "passed": 25,
+      "failed": 0,
+      "ignored": 1,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "5.02s"
+    },
+    {
+      "name": "projective_domains",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "projective_exhaustive_domains",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "projective_files",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "149.67s"
+    },
+    {
+      "name": "projective_geometry",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.10s"
+    },
+    {
+      "name": "projective_grid",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "projective_pruning",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.10s"
+    },
+    {
+      "name": "proposals",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "pyramid",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.04s"
+    },
+    {
+      "name": "rank_region",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "raster",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "raster_equality",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.13s"
+    },
+    {
+      "name": "raw_selected",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.02s"
+    },
+    {
+      "name": "region_footprint",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "region_grid",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "region_grid_files",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "4.28s"
+    },
+    {
+      "name": "region_transform",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "3.55s"
+    },
+    {
+      "name": "scan",
+      "passed": 13,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.04s"
+    },
+    {
+      "name": "scan_cancellation_checkpoints",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.14s"
+    },
+    {
+      "name": "scan_group_publication",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "scan_retry",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "search_portfolio",
+      "passed": 40,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "3.39s"
+    },
+    {
+      "name": "sequence",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "spatial",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "tiny_raster",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "triangulation",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "visual",
+      "passed": 10,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.00s"
+    },
+    {
+      "name": "visual_publication",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "wal_dependency",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.07s"
+    },
+    {
+      "name": "warp",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.01s"
+    },
+    {
+      "name": "worker",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.10s"
+    },
+    {
+      "name": "worker_group",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "measured": 0,
+      "filtered_out": 0,
+      "duration": "0.54s"
+    }
+  ],
+  "ignored_tests": [
+    {
+      "name": "gradient::batch_tests::alternating_matcher_timing",
+      "reason": "manual alternating exact matcher timing control"
+    },
+    {
+      "name": "gradient::batch_tests::real_photo_matcher_timing",
+      "reason": "manual real-photo exact matcher timing and parity"
+    },
+    {
+      "name": "gradient::matching_tests::alternating_matcher_timing",
+      "reason": "manual alternating exact matcher timing control"
+    },
+    {
+      "name": "gradient::matching_tests::real_photo_matcher_timing",
+      "reason": "manual real-photo exact matcher timing and parity"
+    },
+    {
+      "name": "gradient_index::row_major_tests::row_major_index_build_latency_probe",
+      "reason": "explicit alternating index construction measurement"
+    },
+    {
+      "name": "pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels",
+      "reason": "requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS"
+    },
+    {
+      "name": "exact_collection_scaling_latency_probe",
+      "reason": "bounded collection I/O scaling measurement; run explicitly"
+    }
+  ],
+  "raw_log": "docs/research/dedup-joint-library-suite-20261023/decode-suite.log",
+  "raw_log_sha256": "82a27b3e0dfbd51bacbefdfa757101e750b4d3288bce5ec34005a95f63017ca9",
+  "cargo_metadata": "docs/research/dedup-joint-library-suite-20261023/cargo-metadata.json",
+  "cargo_metadata_sha256": "749916a4e03fb7c763c5888ac39b36c330d2531fd66985da15ffae92628f6e17",
+  "selected_input_manifest": "docs/research/dedup-500/joint-library-selected-inputs-20261023.json",
+  "selected_inputs_checked": 457,
+  "selected_inputs_changed": [],
+  "all_features_initial_attempt": {
+    "raw_log": "docs/research/dedup-joint-library-suite-20261023/all-features.log",
+    "sha256": "ee869df963669868a4b081cc93fa21604f821b746095225f433ce6cfa4e02a79",
+    "exit_code": 101,
+    "scope": "Build stopped before tests because LibTorch environment was unset. Not a library test failure."
+  },
+  "all_features_prepared_runtime_attempt": {
+    "status": "compiling_at_observation",
+    "pid": 3371,
+    "runtime": "/Users/themoretheless/.codex/tmp/rrrah-loftr-native-runtime-20261010",
+    "libtorch_use_pytorch": "1",
+    "pytorch": "2.10.0",
+    "scope": "Native LoFTR/tch build progressed; tests and full results pending."
+  },
+  "limits": [
+    "Finite Mac decode feature library gate only; no allfeatures/LoFTR corpus, platform or universal format/quality proof.",
+    "Seven ignored tests not executed: six manual performance controls and one SHA-pinned external PNG corpus control.",
+    "Selected457input hashes unchanged, not a fully frozen entireworkspace/vendor/environment snapshot. Pre-existing decode/develop/Cargo.lock changes remain separate.",
+    "Full500repository review and original allcases objective remain incomplete."
+  ]
+}

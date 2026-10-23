@@ -2,7 +2,7 @@
   "index": 82,
   "repository": "9001/copyparty",
   "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
-  "review_scope": "5/486 whole text blobs plus selected complete up2k functions through v3.2original methods pass with owned allocator; high-level safededup50 mutation controls reproduce growth reuse and reject restored-mtime edit.6actual rrrah snapshot growth refusals/retries;481wholeblobs/server/fullmodule runtime pending.",
+  "review_scope": "9/486 whole text blobs plus selected up2k functions throughv4.4distinctoriginaldedup/copy/movemethods pass; correctedfixturevariant covers effective dedup-off for12copy/936move cases.477blobs/fullmodule/server/platform qualification pending.",
   "decision": "reference",
   "finding": "Actual file-dedup tests use original up2k+SQLite through virtual HTTP fixtures. Separate decoded-media CLI hashes are not exact file identity. Full server/runtime and whole implementation unqualified.",
   "license_metadata": "MIT",
@@ -86,6 +86,10 @@
     },
     {
       "audit": "docs/research/dedup-500/copyparty082-source-review-v3-20261023.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/copyparty082-source-review-v4-20261023.json",
       "whole_repo_complete": false
     }
   ]

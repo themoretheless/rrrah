@@ -1,0 +1,181 @@
+{
+  "repository": "9001/copyparty",
+  "commit": "74b17374c24b89ec365965781eee130f1cee5fd7",
+  "whole_repo_complete": false,
+  "whole_files_read": [
+    {
+      "path": "tests/test_cp.py",
+      "local": "09-tests-test_cp.py",
+      "git_blob": "3ef9e029e1291f36527b6208c8e41c3f54283907",
+      "sha256": "415f008c775519cba23377a1d4530da23b83ff675f74d68bcd2130e657d11aba",
+      "bytes": 3935,
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_mv.py",
+      "local": "10-tests-test_mv.py",
+      "git_blob": "39d8fc7aa8fbf33ab1112c15948df29aa5abe1f2",
+      "sha256": "3057d8c6f7352f5df15d9ebccf7be0705aa6f0193855c7fe421cd42c59e311f0",
+      "bytes": 6769,
+      "whole_text_read": true
+    },
+    {
+      "path": "pyproject.toml",
+      "local": "11-pyproject.toml",
+      "git_blob": "a63c86c1438b1de3fe2195448aba852baffafe58",
+      "sha256": "ca57a0cb0bd249a1650e9793dd49c7f87041a8bebbf8af951bfd14ffebf24bbe",
+      "bytes": 4495,
+      "whole_text_read": true
+    },
+    {
+      "path": "setup.py",
+      "local": "12-setup.py",
+      "git_blob": "71b78e71f34cc649789c86c42e91fbe7d46f5e03",
+      "sha256": "77a366bd217a67d95ec3d4ea0892c32b51877c31c6a171f8b6624eebd18af817",
+      "bytes": 5025,
+      "whole_text_read": true
+    }
+  ],
+  "whole_text_files_read_total": 9,
+  "tracked_blobs": 486,
+  "remaining_without_whole_review": 477,
+  "original_distinct_test_methods_passed_total": 4,
+  "runs": {
+    "copy-move": {
+      "artifact": "docs/research/dedup-500/copyparty082-copy-move-result-20261023.json",
+      "sha256": "f654489430c8a038b01c8b60293ea6ca9f68a46d8892167ebd1faf5fc7a0e7ea",
+      "result": {
+        "tests_run": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "method_calls": {
+          "tests.test_cp.do_cp": 12,
+          "tests.test_mv.handshake": 3744,
+          "tests.test_mv.put_chunk": 936,
+          "tests.test_mv.curl": 7488,
+          "tests.test_mv.do_mv": 936
+        },
+        "modules": [
+          "tests.test_cp",
+          "tests.test_mv"
+        ],
+        "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+        "scope": "Original whole selected dedup/copy/move test methods and actual filesystem/SQLite/up2k with original in-memory HTTP test fixtures. Owned tempfile allocator replaces global RAM-disk helper; counting wrappers delegate unchanged bodies. Not real socket server, production deployment or full suite qualification."
+      }
+    },
+    "default-runner-check": {
+      "artifact": "docs/research/dedup-500/copyparty082-default-runner-check-result-20261023.json",
+      "sha256": "3948f3a236eaf516da60e867cfe16ece682bf38e3f1d9a78ba154ffc91e542a4",
+      "result": {
+        "tests_run": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "method_calls": {
+          "tests.test_dedup.do_tc": 174,
+          "tests.test_dedup.handshake": 531,
+          "tests.test_dedup.put_chunk": 327,
+          "tests.test_dedup.curl": 1009
+        },
+        "modules": [
+          "tests.test_dedup"
+        ],
+        "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+        "scope": "Original whole selected dedup/copy/move test methods and actual filesystem/SQLite/up2k with original in-memory HTTP test fixtures. Owned tempfile allocator replaces global RAM-disk helper; counting wrappers delegate unchanged bodies. Not real socket server, production deployment or full suite qualification."
+      }
+    },
+    "copy-move-corrected": {
+      "artifact": "docs/research/dedup-500/copyparty082-copy-move-corrected-result-20261023.json",
+      "sha256": "c63c2571cb2110a56a326069fdd54d5bc97fc862ee03b2a49ed2139eb4fcb5aa",
+      "result": {
+        "tests_run": 2,
+        "failures": 0,
+        "errors": 2,
+        "skipped": 0,
+        "method_calls": {
+          "tests.test_cp.do_cp": 0,
+          "tests.test_mv.handshake": 0,
+          "tests.test_mv.put_chunk": 0,
+          "tests.test_mv.curl": 0,
+          "tests.test_mv.do_mv": 0
+        },
+        "modules": [
+          "tests.test_cp",
+          "tests.test_mv"
+        ],
+        "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+        "fixture_no_dedup_translation": true,
+        "corrected_config_calls": 0,
+        "scope": "Original whole selected dedup/copy/move test methods and actual filesystem/SQLite/up2k with original in-memory HTTP test fixtures. Owned tempfile allocator replaces global RAM-disk helper; counting wrappers delegate unchanged bodies. Not real socket server, production deployment or full suite qualification."
+      }
+    },
+    "copy-move-corrected-v2": {
+      "artifact": "docs/research/dedup-500/copyparty082-copy-move-corrected-v2-result-20261023.json",
+      "sha256": "e1fd75e77be631ffd12aaa1ebeab318b23c550c160463616419eb0aef9c6485c",
+      "result": {
+        "tests_run": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "method_calls": {
+          "tests.test_cp.do_cp": 12,
+          "tests.test_mv.handshake": 3744,
+          "tests.test_mv.put_chunk": 936,
+          "tests.test_mv.curl": 7488,
+          "tests.test_mv.do_mv": 936
+        },
+        "modules": [
+          "tests.test_cp",
+          "tests.test_mv"
+        ],
+        "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+        "fixture_no_dedup_translation": true,
+        "corrected_config_calls": 331,
+        "scope": "Original whole selected dedup/copy/move test methods and actual filesystem/SQLite/up2k with original in-memory HTTP test fixtures. Owned tempfile allocator replaces global RAM-disk helper; counting wrappers delegate unchanged bodies. Not real socket server, production deployment or full suite qualification."
+      }
+    },
+    "effective-dedup": {
+      "artifact": "docs/research/dedup-500/copyparty082-effective-dedup-result-20261023.json",
+      "sha256": "8ffeed44bbf75c1be58fd8f63fffe07336e4346b2a319f6a2905c061371e4f10",
+      "result": [
+        {
+          "case": "original_default",
+          "args_dedup": true,
+          "args_no_dedup": null,
+          "effective_volume_dedup": true
+        },
+        {
+          "case": "original_no_branch",
+          "args_dedup": true,
+          "args_no_dedup": true,
+          "effective_volume_dedup": true
+        },
+        {
+          "case": "explicit_dedup_off",
+          "args_dedup": false,
+          "args_no_dedup": null,
+          "effective_volume_dedup": false
+        }
+      ]
+    }
+  },
+  "current_harness": {
+    "path": "docs/research/dedup-500/copyparty082-dedup-control-20261023.py",
+    "sha256": "43be1733655325a8562f7c5422bec525a123aae15d9fc87ee360b346b6bce5cb",
+    "applies_to": "Final corrected-v2 run. Initial original copy/move run predates optional correction branch. V1 historical runner source retained in Git commit8aa120f8."
+  },
+  "commands": {
+    "original": "python copyparty082-dedup-control-20261023.py CHECKOUT WORK tests.test_cp tests.test_mv",
+    "corrected_fixture": "python copyparty082-dedup-control-20261023.py CHECKOUT WORK tests.test_cp tests.test_mv --correct-no-dedup-fixture"
+  },
+  "findings": [
+    "Whole original copy/move tests read and both methods pass:12copycalls,936movecalls,3744handshakes,936chunkuploads,7488GETcalls. These are finite virtualHTTP/file/SQLite operations with original assertions, not live server or allfiletypes/large-scale qualification.",
+    "Found original fixture gap: no-mode sets no_dedup=True while Cfg.dedup remainsTrue. Three native actualAuthSrvconfig controls verify default/on,unusedlegacyattribute/on,explicitdedupFalse/off. Thus original labels do not prove dedup-off branch. Hardlink branch code is unreachable because mode lists omit hard.",
+    "Corrected fixture variant translates only original test module Cfg keyword no_dedup to dedup=False, leaving production code and assertions unchanged. Both original methods pass again withsame12copy/936move counts;331Cfgcalls translated. Not a new distinct original test-method count.",
+    "First corrected attempt changed tests.util.Cfg global via subclass and broke its super(Cfg,self), causing2harness errors before operations. Failure result preserved; fixed by wrapping each test module Cfg callable while leaving tests.util.Cfg class untouched. Not an upstream test failure.",
+    "Generalized shared runner default dedup invocation rechecked:2methods pass with174do_tc/531handshake/327chunk/1009curl counts unchanged fromv1. No double-counted original pass increment.",
+    "Whole pyproject/setup metadata read:baseJinja2 dependency,optionalmedia/services and source/wheel declaration. Legacy setup writesMANIFEST at invocation and notes it is no longer current packaging path; not executed. Advertised>=Python3.3 is not current source/runtime/packaging compatibility proof; tests herePython3.12 only.",
+    "Whole repository review still9/486;477blobs pending. No foreign production implementation adopted in rrrah. Current rrrah decode gate independently reports1068passes/7ignored across163expectedtargets; fullallfeatures/LoFTR still pending."
+  ]
+}

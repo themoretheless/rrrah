@@ -1,0 +1,80 @@
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling subtle v2.6.1
+   Compiling zstd-sys v2.1.1+zstd.1.5.7
+   Compiling zstd-safe v5.0.2+zstd.1.5.2
+   Compiling bzip2-sys v0.1.13+1.0.8
+   Compiling base64ct v1.8.3
+   Compiling cpufeatures v0.2.17
+   Compiling simd-adler32 v0.3.10
+   Compiling num-conv v0.2.2
+   Compiling powerfmt v0.2.1
+   Compiling deranged v0.5.8
+   Compiling time-core v0.1.9
+   Compiling rand_core v0.6.4
+   Compiling getrandom v0.2.17
+   Compiling constant_time_eq v0.1.5
+   Compiling miniz_oxide v0.9.1
+   Compiling zmij v1.0.23
+   Compiling matrixmultiply v0.3.11
+   Compiling serde_json v1.0.151
+   Compiling password-hash v0.4.2
+   Compiling ppv-lite86 v0.2.21
+   Compiling itoa v1.0.18
+   Compiling rawpointer v0.2.1
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling tch v0.23.0
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling rand_chacha v0.3.1
+   Compiling flate2 v1.1.10
+   Compiling time v0.3.55
+   Compiling rand v0.8.8
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling inout v0.1.4
+   Compiling cipher v0.4.4
+   Compiling digest v0.10.7
+   Compiling hmac v0.12.1
+   Compiling sha2 v0.10.9
+   Compiling sha1 v0.10.7
+   Compiling aes v0.8.4
+   Compiling pbkdf2 v0.11.0
+   Compiling ndarray v0.16.1
+   Compiling bzip2 v0.4.4
+   Compiling safetensors v0.3.3
+   Compiling zstd v0.11.2+zstd.1.5.2
+   Compiling zip v0.6.6
+   Compiling torch-sys v0.23.0
+error: failed to run custom build command for `torch-sys v0.23.0`
+
+Caused by:
+  process didn't exit successfully: `/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/local-sequence-target-20261021/debug/build/torch-sys-1bde7493d8cd8568/build-script-build` (exit status: 1)
+  --- stdout
+  cargo:rerun-if-env-changed=LIBTORCH_USE_PYTORCH
+  cargo:rerun-if-env-changed=LIBTORCH
+
+  --- stderr
+  Error: 
+  Cannot find a libtorch install, you can either:
+  - Install libtorch manually and set the LIBTORCH environment variable to appropriate path.
+  - Use a system wide install in /usr/lib/libtorch.so.
+  - Use a Python environment with PyTorch installed by setting LIBTORCH_USE_PYTORCH=1
+
+  See the readme for more details:
+  https://github.com/LaurentMazare/tch-rs/blob/main/README.md
+
