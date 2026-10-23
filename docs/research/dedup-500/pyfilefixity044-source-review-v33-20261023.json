@@ -1,0 +1,35 @@
+{
+  "repository": "lrq3000/pyFileFixity",
+  "commit": "496b0518ebd51cdcd594fcd63a85066a13d1921c",
+  "scope": "README.rst226-605 now read; combined with v32 covers1-605 only, not full1286-line document. External references not opened or endorsed.",
+  "findings": [
+    {
+      "id": "documented-limitations",
+      "detail": "README explicitly limits application to archival/static data and says insertion/deletion/missing-file recovery is generally unsupported. Retain these boundaries rather than assuming universal repair from ECC branding."
+    },
+    {
+      "id": "documented-parameters",
+      "detail": "README strongly requires identical generation/correction parameters and independent preservation. This corroborates source behavior: comments are not automatically authoritative decoding configuration."
+    },
+    {
+      "id": "conservative-claim",
+      "detail": "README says successful repair is checked before committing blocks. Source OR acceptance and probable-repair messaging do not constitute independent original-byte verification; previously reproduced parser coverage gaps further limit the claim."
+    },
+    {
+      "id": "unambiguous-fixity-claim",
+      "detail": "Claim that rfigc identifies corruption without ambiguity is contradicted by reproduced headerless-database false success and unchecked complete-corpus scope. Claim requires narrower conditions than prose states."
+    },
+    {
+      "id": "header-openability",
+      "detail": "README promises header protection ensures files can always be opened. No format-specific decoder verification follows source repair; header bytes alone do not prove format validity or whole-file equality."
+    },
+    {
+      "id": "reference-material",
+      "detail": "Storage-medium/RAID/PAR2 comparisons are upstream prose, not independently verified research or recommendations in this audit. Do not transfer external hardware claims into library requirements."
+    }
+  ],
+  "whole_readme_review": false,
+  "whole_text_reviewed_count_unchanged": 65,
+  "full_repository_review": false,
+  "global_full_review_count_changed": false
+}
