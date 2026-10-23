@@ -1,0 +1,23 @@
+{
+  "repository": "loopotto/CleanSweep",
+  "commit": "2af68f24f57c72731ceb2945fcfd41e97fa33bc0",
+  "whole_repo_complete": false,
+  "whole_files_read": [],
+  "source_control": "docs/research/dedup-500/cleansweep048-cache-sql-control-20261023.py",
+  "runtime": {
+    "sqlite_version": "3.54.1",
+    "checks_passed": 6,
+    "summary_reader_misses_written_type": true,
+    "scoped_replace_deletes_full_group_and_refs": true,
+    "summary_key_shared_across_scopes": true
+  },
+  "scope": "In-memory Python SQLite with minimal columns preserving reviewed primary-key, foreign-key cascade and DAO predicate semantics. Not Android Room generated SQL execution or a full schema migration test.",
+  "findings": [
+    "Reader query finds no summary written with SUMMARY_UNSCANNABLE, while the ordinary-group query includes it because it excludes UNSCANNABLE_SUMMARY. Both actual source predicates reproduced.",
+    "INSERT OR REPLACE of a SCOPED group with the same signature removes the prior FULL row and cascades deletion of its two member refs. Actual Room-generated insert has not been inspected; SQL control matches declared REPLACE strategy.",
+    "Replacing the global summary key for SCOPED removes the FULL summary too. Six assertions passed in SQLite 3.54.1."
+  ],
+  "whole_files_read_total": 17,
+  "remaining_tracked_blobs": 113,
+  "full_review_count": 249
+}
