@@ -1,0 +1,48 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v20-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "95bb13c35e1416e4378e7e098c3fcbc2486044cf",
+      "sha256": "7d885628e55033d7a140a8c4af3430bb4e1133e9cefbdb7b51c415bf610b8d08",
+      "whole_text_read": true,
+      "whole_visual_review": false
+    },
+    {
+      "path": ".github/assets/banner.webp",
+      "local": "36-banner.webp",
+      "git_blob": "bdf89522a99157e5bd5e27017ab7ad2f44614521",
+      "sha256": "cf2ef6461ae44f5e13d5df613a0bb9982a2a711f5082a558a5a29cdb8eb62b7c",
+      "whole_text_read": false,
+      "whole_visual_review": true
+    }
+  ],
+  "whole_files_read_total": 36,
+  "whole_text_files_read_total": 35,
+  "whole_binary_files_reviewed_total": 1,
+  "remaining_without_whole_review": 3,
+  "original_tests": {
+    "integrity_methods_passed": 20,
+    "baseline_named_assertions_passed": 299,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "cumulative": 43,
+    "new": 0
+  },
+  "findings": [
+    "README whole text reviewed; application is Markdown entity/card memory and graph upkeep, not exact file-content or image comparison.",
+    "299baseline/20integrity figures independently reproduced earlier on pinned runtime; no new run counted. README product comparison/scale/customer claims not verified.",
+    "README says dense hybrid search opt-in, while reviewed search.py explicitly omits dense layer; no callable dense integration found in18script review. Scope/document drift, no installed external integration audit.",
+    "Banner decoded and visually inspected in full: dark background, colored node graph, AUTOGRAPH title and Obsidian-like second-brain subtitle. Promotional image, no algorithm fixtures or benchmark evidence.",
+    "Remaining whole-review paths: README.ru.md, skills/autograph/SKILL.md, skills/autograph/tests/test_autograph.py. Baseline test executes completely but source only partially read."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
