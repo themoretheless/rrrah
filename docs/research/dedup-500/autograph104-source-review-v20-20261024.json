@@ -1,0 +1,45 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v19-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "commands/research.md",
+      "local": "34-research.md",
+      "git_blob": "25b261bef7e15dc7bf17285f56405656ae020fa2",
+      "sha256": "50e02515fa86dac5642d72c7690858645b6446c81844ef32c38f9cd2188992d9",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/references/bootstrap-workflow.md",
+      "local": "35-bootstrap-workflow.md",
+      "git_blob": "f78e9cc43f9b8b9646e19d8e38757158cde11e4c",
+      "sha256": "028e2d332af79220e53bb3e6c3f28179a9f782bcf46ac4b66acea404784ff8b0",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 34,
+  "remaining_without_whole_review": 5,
+  "original_tests": {
+    "integrity_methods_passed": 20,
+    "baseline_named_assertions_passed": 299,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "cumulative": 43,
+    "new": 0
+  },
+  "findings": [
+    "Bootstrap document promises each batch within token budget; reviewed bin_pack explicitly gives over-budget file own batch. Source contradicts hard guarantee; no new model/token runtime test.",
+    "Bootstrap document calls legacy links backward-compatible, but current enrich main only accepts tags/swarm-links and rejects other commands. Source/document drift.",
+    "Historical864fileproduction metrics,81.6percentmatchrate and cost are author-reported, not independently reproduced; no performance or cost claim adopted.",
+    "Strict stem set membership ensures name existence but not ambiguity-free entity binding; earlier duplicate stem control remains relevant despite document claim eliminating hallucination entirely.",
+    "Research command prose requests user approval and multiple agents for its own vault workflow. These documents were inspected as upstream artifacts, not invoked skills; no agent spawning/user-vault mutation or approval flow triggered.",
+    "Research prose says discovery failure implies wrong path; earlier runtime evidence shows other read/schema/dependency failures possible, so not a valid universal diagnostic."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
