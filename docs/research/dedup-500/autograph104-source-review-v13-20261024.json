@@ -1,0 +1,50 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v12-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/swarm_prepare.py",
+      "local": "23-swarm_prepare.py",
+      "git_blob": "df935a1263251f2ae589f59a8a1ba0efc5aa92a1",
+      "sha256": "6a35679aba6160c6315b82597cba9c1e4c5fafb0a051693516fb53208e7160e7",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/scripts/swarm_reduce.py",
+      "local": "24-swarm_reduce.py",
+      "git_blob": "1ef5f63c9e43ef438fcddba1dadfd5fd8bdb9774",
+      "sha256": "bb72c36ebf361dda828745d826ba016f80e60fbcb7014b6c50e9f2450cc93542",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 23,
+  "remaining_without_whole_review": 16,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 34,
+    "report": "docs/research/dedup-500/autograph104-batch-controls-20261024.json",
+    "scope": "Owned temporary vault, original scripts; no agents launched or external outputs submitted."
+  },
+  "confirmed_findings": [
+    "Reprepare reducing batchcount2to1 leaves old batch002manifest on disk; meta reports1while2manifestfiles remain.",
+    "Duplicate classification path appears twice and frequency count reports2; no uniqueness or expected-manifest coverage check in read/count functions.",
+    "validate_schema accepts rate string invalid and floor empty list when required sections and3node_types provided; validation only, schema never applied."
+  ],
+  "source_only_findings": [
+    "Oversize file receives standalone batch above token budget; comment explicitly permits it, no hard budget guarantee.",
+    "Token estimate size//4 ignores prompt overhead and byte/token language differences; no real model-budget measurement.",
+    "read_classifications catches JSONDecodeError only, not all parsed-value shapes; schema node_types .items assumes dict. Not executed malformed top-level types.",
+    "Prompt templates are upstream source data, not instructions followed by agent. No delegation or remote calls performed."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
