@@ -1,0 +1,44 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v15-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/enrich.py",
+      "local": "27-enrich.py",
+      "git_blob": "01de8e1d0f0cd661168e82695b27cce45f797ddc",
+      "sha256": "7aa951d8e3bbbd055871bc04451a56dc1896b9b78b1bdb147480dcdf8c12d8d9",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 26,
+  "remaining_without_whole_review": 13,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 43,
+    "report": "docs/research/dedup-500/autograph104-enrich-controls-20261024.json",
+    "scope": "Original helpers, owned temporary notes, mocked call_openrouter. No real API/model invocation or credentials accessed."
+  },
+  "confirmed_findings": [
+    "scan_vault_for_links stores one stem_to_path value, last sorted duplicate stem wins. Owned a/Same.md and b/Same.md resolve Same to b/Same.md without ambiguity marker.",
+    "Link batch accepts model result path not among submitted files and validates suggested stem only. Mocked remote result retained as not-in-batch.md; never applied that result to user data.",
+    "apply_links scans all text after Related marker for existing links including Later section; link there suppresses Related insertion. Finite observed scope behavior, no deletion."
+  ],
+  "source_only_findings": [
+    "Tag application replaces existing tags with result list; stale cached result may overwrite newer metadata. No timestamp/hash binding in resume results, not executed this pass.",
+    "apply_tags/apply_links trust result paths and do not perform validator-style vault containment checks; no out-of-vault mutation performed.",
+    "Specialists directory named in orchestrator instructions differs from cmd_swarm_links own swarm-links result directory; CLI integration unqualified.",
+    "Swarm links budget option not used to pack8filechunks; tags does use bin_pack, no actual model token measurement.",
+    "External call/retry path reviewed as source only, no claim of API compatibility."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

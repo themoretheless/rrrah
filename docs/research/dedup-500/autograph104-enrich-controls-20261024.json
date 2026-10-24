@@ -1,0 +1,21 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "ambiguous-stem-last-path-wins",
+      "mapped_path": "b/Same.md",
+      "scope": "Sorted walk, different files same stem; no semantic equivalence assumed"
+    },
+    {
+      "control": "response-file-not-checked-against-batch",
+      "accepted_path": "not-in-batch.md",
+      "scope": "API function mocked; no network or keys used"
+    },
+    {
+      "control": "later-section-link-suppresses-related-insertion",
+      "applied": 0,
+      "scope": "Existing-link scan extends beyond Related section, actual link retained in Later"
+    }
+  ],
+  "scope": "Original enrich/common, temporary owned notes and mocked model response; no user vault or external calls"
+}
