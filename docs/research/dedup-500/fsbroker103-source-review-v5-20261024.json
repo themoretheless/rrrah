@@ -1,0 +1,56 @@
+{
+  "repository": "helshabini/fsbroker",
+  "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
+  "previous_audit": "docs/research/dedup-500/fsbroker103-source-review-v4-20261024.json",
+  "tracked_blobs": 30,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "windows.go",
+      "local": "27-windows.go",
+      "git_blob": "bb4c129b5f3ed92468537f813ec0ad8eac8e1be0",
+      "sha256": "f04da024ad8e5e1a6f4ad5eac8bfd3a994e58ef8c2e77188d42f47cb212e9816",
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "28-.gitignore",
+      "git_blob": "0a857376721ddde3a5e1aec463632868ae50730b",
+      "sha256": "8a5e0a16da04bf1f9a4e85409fa69bf09cb66263fe093f182899bfbde6f7372e",
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "13ef4317f9e998c454de12e03dbaa9ca679e51ca",
+      "sha256": "01d1256c4670963564df721ac2bb755755ef323f170c582f19c0d2bb0e4e54ec",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 29,
+  "remaining_without_whole_review": 1,
+  "remaining_paths": [
+    "fsbroker_test.go"
+  ],
+  "original_tests": {
+    "distinct_total": 19,
+    "passed": 19,
+    "new": 0
+  },
+  "author_controls": {
+    "cumulative": 5,
+    "new": 0
+  },
+  "cross_compile_report": "docs/research/dedup-500/fsbroker103-windows-cross-compile-20261024.json",
+  "source_only_findings": [
+    "README explicitly acknowledges imperfect event accuracy dependent on batching interval; event interpretation cannot prove all content-dedup cases.",
+    "Windows getFileID uses FileIndexHigh/Low without VolumeSerialNumber despite querying volume data; cross-volume collision and hardlink lifecycle unqualified.",
+    "Windows existing-ID Create at same path only appends event without setting Subject in newly created action; possible nil Subject depends on event cohort; not executed.",
+    "Windows Rename fallback leaves existing watchmap entry until another event path updates it; Linux/Darwin remove by path in corresponding branch. Runtime difference unqualified.",
+    "README documents AddWatch file support but implementation calls os.ReadDir(path) unconditionally; file-path case source-only here.",
+    "README Feature list says raw pre-processing filter while Filter API/source filter processed actions before emission; no upstream behavior changed.",
+    ".gitignore reviewed fully as configuration; no execution semantics inferred."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

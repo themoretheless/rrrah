@@ -2,7 +2,7 @@
   "index": 103,
   "repository": "helshabini/fsbroker",
   "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
-  "review_scope": "26/30 whole pinned files;19 original core tests pass;5 author controls;Linux core cross-compiles only;4 files and real event/full suite qualification incomplete",
+  "review_scope": "29/30 whole pinned files;19 original core tests pass;5 author controls;Linux and Windows core cross-compile only;main broker test file and full real-event qualification incomplete",
   "decision": "reference",
   "finding": "Filesystem notification event stack/broker; useful invalidation event coalescing, not content comparison.",
   "available_source_evidence": [
@@ -91,6 +91,10 @@
     },
     {
       "audit": "docs/research/dedup-500/fsbroker103-source-review-v4-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/fsbroker103-source-review-v5-20261024.json",
       "whole_repo_complete": false
     }
   ]
