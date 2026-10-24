@@ -1,0 +1,42 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v8-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/moc.py",
+      "local": "19-moc.py",
+      "git_blob": "e36def834f7e97adc34dfc1dfcf77a197ef69667",
+      "sha256": "d2a98b18c9d905957e76c84bbc7978300b51c53cf792d3eb35ed42d96378064b",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 18,
+  "remaining_without_whole_review": 21,
+  "original_tests": {
+    "cumulative_passed": 20,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 22,
+    "report": "docs/research/dedup-500/autograph104-moc-controls-20261024.json",
+    "scope": "Unchanged moc/common, owned temporary files only; original integrity MOC test passed earlier and not counted again."
+  },
+  "confirmed_findings": [
+    "Existing frontmatter remains outside regenerated managed block; old description stays while new body updates. Ownership choice, not inferred violation of metadata update contract.",
+    "Exactly one start/end marker in reversed order passes count check then raises ValueError before write; original bytes preserved in owned fixture.",
+    "Generated MOC has frontmatter and is not excluded by shared walk_vault; second scan includes it as card and generated output includes self-link. Finite no-schema personal-domain fixture."
+  ],
+  "source_only_findings": [
+    "build_moc_data removes all .md substrings from relative path, same parent-directory limitation observed in graph. Not separately executed here.",
+    "generate_moc hardcodes type:moc rather than selecting valid type from schema; schema compatibility unqualified.",
+    "format_card_line assumes region supports upper and status list entries are strings; malformed typed YAML behavior not tested here.",
+    "save_moc uses direct write_text; interruption/concurrent edits and mode preservation unqualified."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
