@@ -1,0 +1,19 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "core-tier-decay-preservation",
+      "bytes_unchanged": true
+    },
+    {
+      "control": "same-day-repeat-decay-idempotence",
+      "bytes_unchanged_second_run": true
+    },
+    {
+      "control": "future-date-relevance-unbounded-above-one",
+      "relevance": 5327.275,
+      "scope": "No documented max score contract inferred; anomalous future date propagated"
+    }
+  ],
+  "scope": "Unchanged engine/common with owned temporary files; no user vault"
+}

@@ -1,0 +1,43 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v11-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/engine.py",
+      "local": "22-engine.py",
+      "git_blob": "99e14e9f09320d1cbe89a29f94bf05e30b0ee25b",
+      "sha256": "d75d9b67f4017ce5279c658397d9be19c8b4a97d816cbc5909900f586274895d",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 21,
+  "remaining_without_whole_review": 18,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 31,
+    "report": "docs/research/dedup-500/autograph104-engine-controls-20261024.json"
+  },
+  "confirmed_findings": [
+    "core-tier bytes unchanged by decay, positive owned fixture.",
+    "Second decay on same day preserves bytes after first update, positive finite idempotence control.",
+    "Future last_accessed2999-01-01 yields relevance greater than1 because common calculation lower-clamps only. No advertised maximum-score contract inferred."
+  ],
+  "source_only_findings": [
+    "decay and touch direct writes; atomicity/concurrent mutation not qualified.",
+    "cmd_init strict metadata failure propagates and may interrupt batch after earlier changes; no batch transaction, not executed.",
+    "touch intentionally backdates last_accessed during one-step tier promotion; this is graduated recall semantics, not exact last-I/O timestamp.",
+    "stats labels character count/1024 as KB, so Unicode byte sizes differ; no native memory measurement.",
+    "creative recall random sampling and tiers are candidate selection, not duplicate file equality."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
