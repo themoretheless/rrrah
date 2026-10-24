@@ -1,0 +1,44 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v17-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/references/schema-reference.md",
+      "local": "32-schema-reference.md",
+      "git_blob": "b612f40c5dd38d2e2e3d0ff7bc78d50dc04087fb",
+      "sha256": "3b979d522fc72cb4744e4a5420834060a5646ad3c0c823f2bc6fca1d9f595f8e",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/references/daily-processor.md",
+      "local": "33-daily-processor.md",
+      "git_blob": "d89937dfa3e2b17c4bea8cb04af98777ea54e19d",
+      "sha256": "1e0d40be6d085044dfb65bf6593319ca6dbaa40c9daa0ef276b0ce6b3d120cd0",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 32,
+  "remaining_without_whole_review": 7,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "cumulative": 43,
+    "new": 0
+  },
+  "findings": [
+    "Schema reference explicitly documents relevance0.0to1.0. Earlier engine future-date control yielding greater1 now contradicts documented range; no new execution, same retained evidence autograph104-engine-controls-20261024.json.",
+    "Schema reference says unknown status remapped to firstvalid, but current enforce source refuses unknown status, and original integrity test confirms unchanged bytes. Documentation stale; do not apply retired transition rule.",
+    "Daily mechanical-pass command omits schema argument for enforce; matches earlier actual CLI failure and bootstrap source defect. No new invocation.",
+    "Schema formula omits access_count logarithmic strength used in common.py; stated simplified formula incomplete for counts>1.",
+    "Daily processed-marker idempotence is instructed model workflow; daily.py itself reads entire file. No script-level incremental-processing guarantee inferred.",
+    "Upstream instructions in reviewed docs are source data, not requests to create cards, resolve user vault conflicts or run mutating commands."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
