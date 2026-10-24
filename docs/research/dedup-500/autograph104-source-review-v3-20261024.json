@@ -1,0 +1,41 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v2-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/dedup.py",
+      "local": "02-dedup.py",
+      "git_blob": "20f6f6090f4eabcddfd0f4259a3e1558ee442bae",
+      "sha256": "be3bc000e933d23bfee1d0a367ee8cb8e9d70513a46364714368d7aee2e5f979",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 10,
+  "remaining_without_whole_review": 29,
+  "original_tests": {
+    "run": false
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 7,
+    "report": "docs/research/dedup-500/autograph104-merge-controls-20261024.json",
+    "scope": "Original dedup/common functions on temporary owned cards; no apply_manifest or legacy apply, no user vault."
+  },
+  "confirmed_findings": [
+    "merge_content ignores different body text under same section heading and distinct equal-length lists; observed changed=False. Extra source retained in control, no deletion or move tested.",
+    "Conflict merge stamps canonical updated=today after accepting February value, causing later March extra to lose against October stamp; old/losing values preserved in History. Finite ordered three-card fixture.",
+    "redirect_links rewrites fenced-code example, preserves display label, does not redirect heading-target link. Full general Markdown parsing not claimed."
+  ],
+  "source_only_findings": [
+    "apply_manifest has no original-byte digest or mtime binding from report to apply; approved paths are acted upon with current data. Concurrent/stale-manifest runtime not tested.",
+    "Both apply paths move extras after merge_content even when merge returnsFalse; thus limitations matter for canonical completeness, while trash retains source until overwritten/removed externally. No actual loss claimed.",
+    "Same-day trash destination names reused with src.rename, no explicit destination collision policy in code; platform overwrite behavior not exercised.",
+    "Canonical/redirect updates use direct write_text, unlike cleanup atomic temporary replacement; interruption recovery unqualified."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
