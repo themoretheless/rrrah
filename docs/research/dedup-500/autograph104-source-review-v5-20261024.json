@@ -1,0 +1,50 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v4-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/supersede.py",
+      "local": "13-supersede.py",
+      "git_blob": "dab329a621298ca80c425be2ad0bfcb49003196c",
+      "sha256": "fe22c89b53c9df327d4e6cde14577ed0c5f5f98e910935f4b197eba977264b8c",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/scripts/link_cleanup.py",
+      "local": "14-link_cleanup.py",
+      "git_blob": "c11202601e9b38fc9ec2c2247740b91252899fab",
+      "sha256": "646f2c7cec51f5c9ef4457d8c62380f3b83cf2dbe01c3a1fb8e5d4a9b86e2823",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 13,
+  "remaining_without_whole_review": 26,
+  "original_tests": {
+    "cumulative_passed": 20,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 10,
+    "report": "docs/research/dedup-500/autograph104-links-controls-20261024.json",
+    "scope": "Original common/link_cleanup/supersede on temporary owned fixtures; not upstream tests."
+  },
+  "confirmed_findings": [
+    "cleanup_related_section reports missing link removed but keeps whole line if another link on line resolves; observed missing link remains in output.",
+    "cleanup_relative_section passes no source path to shared resolver; ./child valid relative to folder/source.md is rejected and Related section removed in owned fixture.",
+    "apply_supersede equal-date pair leaves old card bytes unchanged; positive refusal control."
+  ],
+  "source_only_findings": [
+    "supersede dates compare lexicographic strings without date-format validation; read-only scan ranks same way. Malformed-date runtime not tested.",
+    "supersede main searches nested skill schema then load_schema default candidates including CWD, not vault-root schema.json directly; no CLI wrong-schema runtime claim.",
+    "link cleanup parses Related with regex and calls extract_wikilinks line-by-line; multiline fence context not retained. Source-only.",
+    "link cleanup deletes entire section when kept empty, but run_cleanup writes changed text only when removed nonempty; helper and CLI behavior scopes differ.",
+    "supersede stamps metadata using direct write_text and does not merge bodies; intended pointer-based archival, not canonical content consolidation."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
