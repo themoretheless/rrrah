@@ -1,0 +1,79 @@
+{
+  "repository": "helshabini/fsbroker",
+  "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
+  "previous_audit": "docs/research/dedup-500/fsbroker103-source-review-v1-20261024.json",
+  "tracked_blobs": 30,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "fsmap.go",
+      "local": "14-fsmap.go",
+      "git_blob": "b7bf88ef967a8d3963e4bec03aa66cdb2dfad753",
+      "sha256": "cf7cbd53064544af0a043dd2b306850644c52ae82912e85f66c2df0a1058ea5e",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsmap_test.go",
+      "local": "15-fsmap_test.go",
+      "git_blob": "3bd29a890fb07e7814842d56c284e99c5cac0654",
+      "sha256": "af00842ce337680fa9a637cdc099d9034f91eafcad0e8c52c342eb3a37a08ca6",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsinfo_test.go",
+      "local": "16-fsinfo_test.go",
+      "git_blob": "7fbe8a0bd5935a70d17cdb17c79ebb85c1865cc9",
+      "sha256": "e7ef975f9328f5577d75e40064808ea8001a41a3241442ca9af6d34e6f342881",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsconfig_test.go",
+      "local": "17-fsconfig_test.go",
+      "git_blob": "d23d985681ad3635047024c69633d03b925ed054",
+      "sha256": "ee0702fdda2fa188157b25479be9088f77e5fb59119432e37df875a2e7af3438",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsevent_test.go",
+      "local": "18-fsevent_test.go",
+      "git_blob": "9d66fd0ace31dda387085103a5787e8c8ac6b592",
+      "sha256": "02cc332a9191d5833317b9fdedc53e79d7a476636d3bcb612ee11aeaa0f5474d",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsaction_test.go",
+      "local": "19-fsaction_test.go",
+      "git_blob": "799021a639d12deaf4c25b09eaf129511fe02876",
+      "sha256": "3a9481c7b9bb198e3483f5b6cc377ed0f969dd5699b158436c7341b80b031feb",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 16,
+  "remaining_without_whole_review": 14,
+  "original_tests": {
+    "distinct_total": 19,
+    "new": 12,
+    "passed": 19,
+    "failed": 0,
+    "race_detector": true,
+    "report": "docs/research/dedup-500/fsbroker103-core-original-tests-20261024.jsonl",
+    "scope": "Isolated original core files and six original test files; no broker/platform watcher. Repeated seven stack tests counted once; top-level functions counted, subtests not inflated."
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "report": "docs/research/dedup-500/fsbroker103-owned-boundary-tests-20261024.jsonl",
+    "findings": [
+      "Same path with IDs1then2 retains both IDentries; DeleteById(1) removes path mapping belonging toID2 while ID2still exists. No actual filesystem operations.",
+      "Mutating stored FSInfo.Path old->new before Set leaves old alias; after DeleteById both IDmap empty and old path still resolves stale pointer. No caller immutability contract inferred before broker review.",
+      "EventStack List slice copy shares event objects: mutating returned event Path changes later Pop. Serial control, not a demonstrated concurrent race."
+    ]
+  },
+  "source_only_findings": [
+    "IterateIds/Paths execute callback while RLock held; reentrant writes may block, not executed here.",
+    "Original map concurrency tests use unique IDs and unique paths; no same-path replacement or stored-object mutation coverage.",
+    "Combined fsnotify operations map to first matching operation by fixed priority; upstream tests explicitly expect this behavior. No event-loss assertion without broker lifecycle review."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
