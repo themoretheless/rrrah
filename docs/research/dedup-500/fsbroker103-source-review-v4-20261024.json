@@ -1,0 +1,79 @@
+{
+  "repository": "helshabini/fsbroker",
+  "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
+  "previous_audit": "docs/research/dedup-500/fsbroker103-source-review-v3-20261024.json",
+  "tracked_blobs": 30,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "Makefile",
+      "local": "21-Makefile",
+      "git_blob": "aadcda55fef8fdb7e373d48754f9849cca564e75",
+      "sha256": "9f1aaaa1709eb6bf72ee37a58de6366c70bf9902242a28e624ba1a5f917d68d9",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/FUNDING.yml",
+      "local": "22-.github--FUNDING.yml",
+      "git_blob": "f055c7a24533a48df303b27bd36030e0e3c6b28d",
+      "sha256": "57a303c580efc9c4665dbfe161d4ff8f8d572dd0919c3be402c5b3b6fb60a886",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "local": "23-.github--workflows--release.yml",
+      "git_blob": "69d50e5563b9dd5d8a828a068d0967a0b086c9dc",
+      "sha256": "8f64bb3c499593a05b9159c670291e52f377724c61e037f0f415ed3370b6f2b3",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsbroker_test_posix.go",
+      "local": "24-fsbroker_test_posix.go",
+      "git_blob": "8c8e651dd6f9ec4f20fdc91938ddc6ca8ddd7148",
+      "sha256": "a32125947daed7e1d01a72bdb9dcd279facf5742483bdfcd8e1f1df07f36d76c",
+      "whole_text_read": true
+    },
+    {
+      "path": "fsbroker_test_windows.go",
+      "local": "25-fsbroker_test_windows.go",
+      "git_blob": "5cf7407c1bc6b4f1656b601588bd40b3f8a2ebe8",
+      "sha256": "bd11608bfa8ab9e68d529a94aa2314a6f4dc6a5ac9bcb2d4c3bce739dd37c366",
+      "whole_text_read": true
+    },
+    {
+      "path": "linux.go",
+      "local": "26-linux.go",
+      "git_blob": "1b8347dd4113c4844b49f7a53f9e738b6934c7f5",
+      "sha256": "faf477d80c097289b22ad9d7bbbf7bab843f2a83fca5b2992125f559618a16f0",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 26,
+  "remaining_without_whole_review": 4,
+  "original_tests": {
+    "distinct_total": 19,
+    "passed": 19,
+    "new": 0
+  },
+  "author_controls": {
+    "cumulative": 5,
+    "new": 0
+  },
+  "cross_compile_report": "docs/research/dedup-500/fsbroker103-linux-cross-compile-20261024.json",
+  "source_only_findings": [
+    "Linux FromOSInfo populates inode/path/mode only, unlike Darwin size/modtime; these fields remain zero. No Linux runtime measured.",
+    "Linux duplicate rename branch creates FromFSEvent action and marks Message but does not assign NoOp type despite appending to noop collection; potential semantic mismatch, source-only.",
+    "Linux and Darwin group by inode without device number, follow os.Stat; no cross-device or symlink runtime qualification.",
+    "fsbroker_test_posix.go and fsbroker_test_windows.go are ordinary .go files rather than _test.go suffix: platform helper imports testing into package builds. No dependency size/runtime claim.",
+    "Release workflow tests debug build on three OSs when release trigger tags pushed; no separate race check present. Workflow read only, never executed or release/tag modified.",
+    "Makefile test target clears test cache; coverage target discards test stdout/stderr. Neither target executed."
+  ],
+  "remaining_paths": [
+    "README.md",
+    ".gitignore",
+    "windows.go",
+    "fsbroker_test.go"
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
