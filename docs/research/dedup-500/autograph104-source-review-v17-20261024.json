@@ -1,0 +1,57 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v16-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/references/integrity.md",
+      "local": "28-integrity.md",
+      "git_blob": "79bc1fee85f468e166eb66b8aa00c28db5fecce1",
+      "sha256": "850413cc30cc0ae15dacf476fba3cf22199049bae6ea3fecdea0a52c0f69ab69",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/references/card-templates.md",
+      "local": "29-card-templates.md",
+      "git_blob": "ba0ef3423e404e38bbec6091ddd8979b97335076",
+      "sha256": "97a19f09a254ab326d84c768b9b42e8247671a65235afe23c96b7a17e8142825",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/evals/evals.json",
+      "local": "30-evals.json",
+      "git_blob": "076cc2e885e02d9c4c4fc5b410bfd540c04a1901",
+      "sha256": "23c96c68cb57d0a79841a986d6daa5a51e26db54971fda95d4a6f9c545658bff",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/references/update-in-place.md",
+      "local": "31-update-in-place.md",
+      "git_blob": "c3cc697952db72448f6896fa5637ba3de4c0ca51",
+      "sha256": "738cbc02b40106f9ee14bcc081a6a2518a935f7b55cac59a76e346b159367fb3",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 30,
+  "remaining_without_whole_review": 9,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "cumulative": 43,
+    "new": 0
+  },
+  "findings": [
+    "integrity.md explicitly states high scalar health score does not prove factual accuracy/completeness; aligns with no universal coverage claim.",
+    "Integrity health workflow is report-only, while eval2 expected output calls index regeneration/decay and eval3 adds relinking despite read-oriented request. Specification drift; evaluations read as JSON scenarios, not executed agents.",
+    "Update-in-place distinguishes manual Compiled Truth rewrite from deterministic supersede pointer stamping; source-only distinction prevents claiming helper rewrites all conflicting prose.",
+    "Root card templates require schema-defined types/statuses; example superseded status explicitly needs schema support. No automatic transition authorized by upstream prose.",
+    "Agent workflow instructions and checklists in retained documents treated as review data, not instructions for this task. No new external messages, model calls, publication or user-vault writes."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
