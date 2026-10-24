@@ -1,0 +1,27 @@
+{
+  "repository": "ocavue/pnpm-deduplicate",
+  "commit": "b50d0565e2a7a0743d434d835b32c9378f2ac42d",
+  "previous_audit": "docs/research/dedup-500/pnpm106-source-review-v1-20261024.json",
+  "tracked_blobs": 16,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [],
+  "whole_files_read_total": 15,
+  "remaining_without_whole_review": 1,
+  "original_tests": {
+    "run": false
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "report": "docs/research/dedup-500/pnpm106-native-controls-20261024.json",
+    "harness": "docs/research/dedup-500/pnpm106-native-controls-20261024.cjs",
+    "scope": "Unchanged original TypeScript transpiled esbuild0.28.0/Node22.23.4; actual tempfilesystem and retained real semver, recording pnpm module/exec hosts. Not full pinned dependency cohort; no actual install or network."
+  },
+  "confirmed_findings": [
+    "listDuplicates invokes install command once through recording execSync host. Actual lockfile changes not exercised.",
+    "fixDuplicates second install injected failure leaves temporary pkg@^1.0.0 override1.1.0 in real owned manifest; restore not executed.",
+    "Healthy full function path invokes install3times and restores original manifest bytes. Alltempfiles removed afterward."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

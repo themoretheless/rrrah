@@ -1,0 +1,23 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "list-dispatches-install",
+      "install_calls": 1,
+      "scope": "Recording execSync host, no real package manager or network"
+    },
+    {
+      "control": "failed-second-install-leaves-overrides",
+      "install_calls": 2,
+      "overrides": {
+        "pkg@^1.0.0": "1.1.0"
+      }
+    },
+    {
+      "control": "healthy-path-restores-original-bytes",
+      "install_calls": 3,
+      "restored": true
+    }
+  ],
+  "scope": "Original index.ts transpiled by esbuild0.28.0, Node22.23.4 vm modules, real filesystem and semver 6.3.1, recording pnpm/dependency metadata hosts. Not original full dependency cohort or upstream tests."
+}
