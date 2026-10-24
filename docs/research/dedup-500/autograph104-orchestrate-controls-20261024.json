@@ -1,0 +1,21 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "bootstrap-enforce-argv-missing-schema",
+      "exit_code": 1,
+      "error": "FileNotFoundError for schema path --apply"
+    },
+    {
+      "control": "bootstrap-failure-not-propagated-by-cli",
+      "first_step_exit": 7,
+      "main_returned_normally": true
+    },
+    {
+      "control": "graph-prepare-reuses-stale-report-after-failure",
+      "failed_step_exit": 9,
+      "stale_node_retained": true
+    }
+  ],
+  "scope": "Original orchestrator helpers, mocked failing child jobs and one actual enforce CLI in owned temp vault; no agents/network or user data"
+}

@@ -1,0 +1,43 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v14-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/orchestrate.py",
+      "local": "26-orchestrate.py",
+      "git_blob": "e746ca6f0bed84506221ac79c69e10e22ff99ccf",
+      "sha256": "f0f32633f98df1cb38438e1667d8e2360cc4078ccd023efc24eab4c808067a6a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 25,
+  "remaining_without_whole_review": 14,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 40,
+    "report": "docs/research/dedup-500/autograph104-orchestrate-controls-20261024.json",
+    "scope": "One actual original enforce child CLI on owned tempvault; mocked failures for original orchestrator CLI/graph preparation. No bootstrap real mutations beyond attempted schema read."
+  },
+  "confirmed_findings": [
+    "Bootstrap enforce arguments are vault,--apply while enforce requires vault,schema; actual child raises FileNotFoundError loading --apply as schema even with vault/schema.json present.",
+    "Mocked first-step rc7 stops bootstrap but main returns normally, without nonzero SystemExit; original bootstrap CLI error propagation defect.",
+    "Graph preparation ignores graph child rc9 and consumes existing stale vault-graph.json, writing analysis with old node and score. Mocked process failure, real local report IO."
+  ],
+  "source_only_findings": [
+    "Dedup scan failure exempted from bootstrap abort condition; link/MOC/final-health return codes ignored later. No actual whole bootstrap run this pass.",
+    "Dedup previews limited500bodycharacters and selected fields; no source hashes/current-state binding in generated review input.",
+    "Graph analysis limits200nodes/50orphans/30brokenlinks; sample report not whole evidence of repository review.",
+    "Source prompt instructions are material under review; no messages, approvals or agents initiated."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
