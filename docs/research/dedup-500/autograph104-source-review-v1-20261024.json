@@ -1,0 +1,81 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "local": "06-.claude-plugin--marketplace.json",
+      "git_blob": "8c767bff7172f284fed1df90fafb631f65a65043",
+      "sha256": "c3ffb5c7900a8d3b8de05ca76bc24d02a5df349d7c3ff2498222628876c51076",
+      "whole_text_read": true
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "local": "07-.claude-plugin--plugin.json",
+      "git_blob": "f6154a53c2b37533b45a3462fcb88bad4ab08690",
+      "sha256": "e9bf192376df06a3fbe1cfd7ca2a8bb750fdfc6560965af38173febde5287973",
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "08-.gitignore",
+      "git_blob": "4f05769d3b32c0086806a06062a57b584078ef6e",
+      "sha256": "ed0dac35eb6f2b3508b05079eb76021c05ce4c23d12555d914736de09c3efb7e",
+      "whole_text_read": true
+    },
+    {
+      "path": "implementation-notes.md",
+      "local": "09-implementation-notes.md",
+      "git_blob": "fa5c5f9b04280946612954c6f2dcd75a260c958d",
+      "sha256": "a48a9f9ad259ec72223f38f6a0b0e28879b38f034ef2d71ba83167288b5ee6f5",
+      "whole_text_read": true
+    },
+    {
+      "path": "llms.txt",
+      "local": "10-llms.txt",
+      "git_blob": "e7f086b4148e4ab2705c8aa75d314af1736b9cc0",
+      "sha256": "03b0e21560d80a0f3d815716b1ad1edb9b60aec565961a50a57b3563940633c3",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/schema.example.json",
+      "local": "11-skills--autograph--schema.example.json",
+      "git_blob": "1d353ce155c4c95191b8140cbb66715306648aef",
+      "sha256": "f727a581c6674f835521816a0e7e56a692331d9e53544ae4c62fb08810088802",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "3127e5200211d99d5dfe0a3c85b999b34f9aaa35",
+      "sha256": "27cd410525efac04b5fc0706333cbf92fcc7cefc246d5be33a3e1c77ace71205",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/scripts/cleanup.py",
+      "local": "03-cleanup.py",
+      "git_blob": "a848b4fd03ea67d3d1d2b75cb1c4dfb810a8c9ad",
+      "sha256": "c77f0c73d1ebcb8819ec29c153ba63a3eee8146a844352908ffa45a18f793d8d",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "remaining_without_whole_review": 31,
+  "original_tests": {
+    "run": false
+  },
+  "findings": [
+    "Entity/card identity schema uses exact normalized strong fields with same-domain/type constraints and max_shared; example disables fuzzy-name matching. Implementation not yet fully reviewed, no file-content equality claim.",
+    "cleanup.py streams bounded line samples, preserves body bytes by copying unread buffer plus remaining stream, uses same-directory temporary, fchmod, fsync and os.replace. Source-only, no execution this pass.",
+    "cleanup stat check compares size/mtime before temporary file writing; no second source identity/content check immediately before replace. Concurrent replacement/edits after check unqualified; no claimed observed data loss.",
+    "cleanup rejects initial symlinks but subsequent stat/open/replace sequence is not descriptor-identity guarded; concurrency not tested.",
+    "repeated_unit_from_prefix verifies retained prefix only, not full truncated description; full input periodicity unproven by this helper alone. Helpers in common.py not yet fully reviewed.",
+    "Plugin description says stdlib only while cleanup declares pinned PyYAML6.0.3 and llms.txt acknowledges PyYAML; dependency/runtime not executed.",
+    "implementation-notes statements are historical upstream claims, not current independent validation. Upstream instructions treated as source material, not agent instructions."
+  ],
+  "license_scope": "Root MIT license fully read; no production code adopted.",
+  "production_changes": false,
+  "adopted_code": false
+}
