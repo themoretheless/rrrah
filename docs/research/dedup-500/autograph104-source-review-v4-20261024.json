@@ -1,0 +1,38 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v3-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/tests/test_integrity.py",
+      "local": "12-test_integrity.py",
+      "git_blob": "d06135ee44a915c5f4c5bbf4e4cec5b7eb39bd0d",
+      "sha256": "0a3e03efca8def4b14941f83b6c75ef002767f8beab1f8e99d56a97dadff96d6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 11,
+  "remaining_without_whole_review": 28,
+  "original_tests": {
+    "new": 20,
+    "passed": 20,
+    "failed": 0,
+    "report": "docs/research/dedup-500/autograph104-integrity-original-tests-20261024.json",
+    "runtime_inputs": "docs/research/dedup-500/autograph104-integrity-runtime-inputs-20261024.json",
+    "scope": "All20 original IntegrityTests methods unmodified; pinned dependent scripts fetched/hash-verified for runtime only and not credited as fully read. Temporary owned vaults and mocks; Python3.15.0/PyYAML6.0.3."
+  },
+  "author_controls": {
+    "cumulative": 7,
+    "new": 0
+  },
+  "findings": [
+    "Original integrity tests cover nested/quoted YAML roundtrip, duplicate keys and merge-key refusal, invalid-source merge preservation, malformed card skip, Unicode relative graph links, MOC manual section preservation and no implicit health mutation. All20 actually pass.",
+    "extract_wikilinks literal-code tests passing does not contradict redirect_links code rewrite control: separate functions, distinct contracts.",
+    "No test in reviewed IntegrityTests covers different body content under same heading, equal-length list union or ordered three-card recency stamp issue. Prior author controls remain evidence.",
+    "Full test_autograph.py not yet read or executed; no full upstream suite claim."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

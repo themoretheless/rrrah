@@ -2,7 +2,7 @@
   "index": 104,
   "repository": "smixs/autograph",
   "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
-  "review_scope": "10/39 whole pinned files;7 author controls on original common/cleanup/dedup;merge and link boundary findings;no original tests executed;29files remain",
+  "review_scope": "11/39 whole pinned files;20 original integrity tests passed;7 author controls separate;28files and baseline test suite remain",
   "decision": "reject-domain",
   "finding": "Obsidian typed-card/entity canonicalization and repeated-line cleanup; no image comparison.",
   "available_source_evidence": [
@@ -50,7 +50,7 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 2,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -87,6 +87,10 @@
     },
     {
       "audit": "docs/research/dedup-500/autograph104-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/autograph104-source-review-v4-20261024.json",
       "whole_repo_complete": false
     }
   ]
