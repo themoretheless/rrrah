@@ -1,0 +1,29 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "research-plan-is-bounded-sample",
+      "total_files": 120,
+      "manifest_files": 100,
+      "scope": "Explicit max5agents x20files, not full coverage promise; no agents launched"
+    },
+    {
+      "control": "declared-folder-map-overwritten",
+      "observed_domain": "personal",
+      "requested_domain": "knowledge"
+    },
+    {
+      "control": "research-schema-vs-finalize-validator",
+      "errors": [
+        "node_type 'note' missing 'description'",
+        "node_type 'note' missing 'required'",
+        "node_type 'contact' missing 'description'",
+        "node_type 'contact' missing 'required'",
+        "node_type 'project' missing 'description'",
+        "node_type 'project' missing 'required'"
+      ],
+      "scope": "Different generation pipeline contracts; no schema applied"
+    }
+  ],
+  "scope": "Original research/common/reducer, temporary owned fixture; no user vault or agent calls"
+}

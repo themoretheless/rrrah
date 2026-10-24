@@ -1,0 +1,42 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v13-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/research.py",
+      "local": "25-research.py",
+      "git_blob": "bfb9c04f36651b728055b8a86383a81b97329e1a",
+      "sha256": "6ec13ba66224ba954ea20b129cf96becd4cae8175aad2825b8c5d6013ab76b01",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 24,
+  "remaining_without_whole_review": 15,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 37,
+    "report": "docs/research/dedup-500/autograph104-research-controls-20261024.json",
+    "scope": "Original research/common/reducer helpers; temporary120notevault, no model/agent launch."
+  },
+  "confirmed_findings": [
+    "Plan120files produces100unique manifest paths, explicit5x20sample limit. Not violation of documented sampling contract, not full review evidence.",
+    "User domain_map notes/=knowledge overwritten to personal when observed folder notes and declared_domains personal: folder membership checked without slash then slash key assigned.",
+    "Research reduced three-type draft lacks description/required pertype and is rejected by swarm_reduce validator. Different pipeline contracts; no schema applied and no universal interoperability claim."
+  ],
+  "source_only_findings": [
+    "gate examines first500 sorted files, not randomized sample; empty verdict total<=20 regardless metadata. Source semantics, not exact file scanning coverage.",
+    "gate exceptions excluded from hits but denominator retains sampled files; no explicit read-error count.",
+    "Generated prompt templates request agent work, but are reviewed as source data only. No delegation performed."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
