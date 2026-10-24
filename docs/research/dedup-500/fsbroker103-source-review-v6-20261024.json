@@ -1,0 +1,67 @@
+{
+  "repository": "helshabini/fsbroker",
+  "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
+  "previous_audit": "docs/research/dedup-500/fsbroker103-source-review-v5-20261024.json",
+  "tracked_blobs": 30,
+  "whole_repo_complete": true,
+  "completion_scope": "All30 tracked file contents reviewed, not universal behavior or all-platform/full-suite qualification.",
+  "new_whole_files_read": [
+    {
+      "path": "fsbroker_test.go",
+      "local": "29-fsbroker_test.go",
+      "git_blob": "daec2fed1904386d440be6ea3c40d07e31cf2c6e",
+      "sha256": "35c3007f1c963fba0c0d3ca5aeb7c40162ec36614d5411ace69eae54624559a8",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 30,
+  "remaining_without_whole_review": 0,
+  "original_tests": {
+    "previous_core_top_level": {
+      "passed": 19,
+      "failed": 0
+    },
+    "new_integration_parent": "failed",
+    "integration_subtests": {
+      "passed": [
+        "TestFSBrokerIntegration/CreateEmptyFile",
+        "TestFSBrokerIntegration/CreateNonEmptyFile",
+        "TestFSBrokerIntegration/ModifyFile",
+        "TestFSBrokerIntegration/ClearFile",
+        "TestFSBrokerIntegration/RenameFileInplace",
+        "TestFSBrokerIntegration/MoveFileWatchedToWatched",
+        "TestFSBrokerIntegration/MoveFileUnwatchedToWatched",
+        "TestFSBrokerIntegration/MoveFileWatchedToUnwatched",
+        "TestFSBrokerIntegration/HardDeleteFile",
+        "TestFSBrokerIntegration/CreateDirectory",
+        "TestFSBrokerIntegration/RenameDirectoryInplace",
+        "TestFSBrokerIntegration/MoveDirectoryWatchedToWatched",
+        "TestFSBrokerIntegration/MoveDirectoryUnwatchedToWatched",
+        "TestFSBrokerIntegration/MoveDirectoryWatchedToUnwatched",
+        "TestFSBrokerIntegration/HardDeleteDirectory",
+        "TestFSBrokerIntegration/IgnoreHiddenFile",
+        "TestFSBrokerIntegration/IgnoreSystemFile"
+      ],
+      "failed": [
+        "TestFSBrokerIntegration/WriteDeduplication",
+        "TestFSBrokerIntegration/DeleteDeduplication",
+        "TestFSBrokerIntegration/MixedRapidActions"
+      ]
+    },
+    "race_detector": true,
+    "report": "docs/research/dedup-500/fsbroker103-integration-original-tests-20261024.jsonl",
+    "scope": "Unchanged complete original macOS production/core and upstream integration source, test-run selector only integration.19 core original functions tested earlier; author tests excluded by selector. Linux/Windows execution and debug-tag suite not run.",
+    "failure_analysis": "Three failures are race-detector reports: upstream subtests mutate shared config.Timeout after setupTestEnv starts broker, concurrently with eventloop reading it. No action/map assertion failure reported in this run. Original sources not patched; failures retained."
+  },
+  "author_controls": {
+    "cumulative": 5,
+    "new": 0
+  },
+  "findings": [
+    "Full source review complete; use event coalescing only as advisory invalidation, with reconciliation and content revalidation required for duplicate detection. No production code adopted.",
+    "Rapid-action tests change timeout after Start, so intended larger batching window also not guaranteed to be applied. No stable configuration control run yet.",
+    "No count from finite event scenarios proves all file-library cases. Previously found AddWatch and RemoveWatch defects remain in original source."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
