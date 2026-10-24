@@ -1,0 +1,63 @@
+{
+  "repository": "helshabini/fsbroker",
+  "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
+  "previous_audit": "docs/research/dedup-500/fsbroker103-source-review-v2-20261024.json",
+  "tracked_blobs": 30,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "fsbroker.go",
+      "local": "20-fsbroker.go",
+      "git_blob": "ed993845ff83bc7b62ebb89a0a66056c4af4cd78",
+      "sha256": "99938997845b66a4fa02ca8db501323cb5bd326c85ccfd5a25673e2aa3b93bbd",
+      "whole_text_read": true
+    },
+    {
+      "path": "darwin.go",
+      "local": "02-darwin.go",
+      "git_blob": "80789644f723bb4ed7de7e17b688868b7463806f",
+      "sha256": "f44f18e22ea01c00956eb59addb912574cc0881bcb156f2bd3238fce712f2a03",
+      "whole_text_read": true
+    },
+    {
+      "path": "debug_off.go",
+      "local": "03-debug_off.go",
+      "git_blob": "b872b8fc3fffe6b850694b4f2f72c3be2f4b9ec6",
+      "sha256": "9fc3f568f7c440f15e504f7af495b3958e11b3688a18fedd691425f5b64fb49e",
+      "whole_text_read": true
+    },
+    {
+      "path": "debug_on.go",
+      "local": "04-debug_on.go",
+      "git_blob": "6a89776a509a1a49def41b5e2fc8693d48ce2a7d",
+      "sha256": "52790d4f9e92028aaa95272a5f58b4f74261d3cf296ad12de9f18b3913ab8c9c",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 20,
+  "remaining_without_whole_review": 10,
+  "original_tests": {
+    "distinct_total": 19,
+    "passed": 19,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 2,
+    "cumulative": 5,
+    "report": "docs/research/dedup-500/fsbroker103-owned-broker-tests-20261024.jsonl",
+    "scope": "Unchanged original broker/darwin/core files; real macOS fsnotify watcher opened and closed, no Start/event delivery. Temporary directory with two files cleaned by t.TempDir. Race detector enabled.",
+    "confirmed": [
+      "AddWatch stats parent path for each child; both children share parent inode and directory mode, map retains last child only.",
+      "RemoveWatch string-prefix removal clears sibling /owned/ab/file when removing /owned/a. Synthetic map paths only."
+    ]
+  },
+  "source_only_findings": [
+    "Start switches on exact fsnotify.Op constants, so combined operation flags accepted by mapOpToOpType are omitted before handleEvent. Not executed this pass.",
+    "Darwin FromOSInfo identifies by inode without device, follows os.Stat symlinks; cross-device/hardlink behavior not qualified.",
+    "Resolve consumes stack LIFO, groups by inode and emits actions in map iteration order; real rename/write sequences not yet tested.",
+    "emitAction and emitError use blocking sends without quit selection; shutdown with unconsumed channels and repeated Stop unqualified.",
+    "Debug init replaces global slog default in both build modes. Source-only side effect."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

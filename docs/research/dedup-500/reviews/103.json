@@ -2,7 +2,7 @@
   "index": 103,
   "repository": "helshabini/fsbroker",
   "commit": "946648ed5761bded04749f8af07d622d24f9b0f8",
-  "review_scope": "16/30 whole pinned files;19 distinct original core tests pass with race detector;3 separate author controls reproduce index/alias boundaries;14 files and real watcher/full suite incomplete",
+  "review_scope": "20/30 whole pinned files;19 original core tests pass;5 separate author controls including real macOS watcher setup;10 files, event delivery and full suite incomplete",
   "decision": "reference",
   "finding": "Filesystem notification event stack/broker; useful invalidation event coalescing, not content comparison.",
   "available_source_evidence": [
@@ -83,6 +83,10 @@
     },
     {
       "audit": "docs/research/dedup-500/fsbroker103-source-review-v2-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/fsbroker103-source-review-v3-20261024.json",
       "whole_repo_complete": false
     }
   ]
