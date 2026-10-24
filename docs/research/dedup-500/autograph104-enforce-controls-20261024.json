@@ -1,0 +1,21 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "numeric-priority-crashes-enforce",
+      "exception": "AttributeError"
+    },
+    {
+      "control": "enforce-vs-validator-tags-shape",
+      "enforce_needs_review": 0,
+      "validator_issue": "tags must be a list of strings",
+      "wrote_inferred_fields": true
+    },
+    {
+      "control": "oversize-excluded-positive",
+      "skipped": 1,
+      "duplicate_groups": 0
+    }
+  ],
+  "scope": "Unchanged enforce/common, temporary owned cards only; sparse oversized fixture cleaned; no user vault"
+}

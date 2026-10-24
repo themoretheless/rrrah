@@ -1,0 +1,42 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v6-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/enforce.py",
+      "local": "17-enforce.py",
+      "git_blob": "f3731e1828eeffb3c22cd88d21231fb27bf45ddb",
+      "sha256": "da14a12b5ad532fb640cf0b137185f4135a4aba9167738b2c5eff47cbf88addd",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 16,
+  "remaining_without_whole_review": 23,
+  "original_tests": {
+    "cumulative_passed": 20,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 16,
+    "report": "docs/research/dedup-500/autograph104-enforce-controls-20261024.json",
+    "scope": "Original enforce/common on owned temporary cards; sparse10MiB+1 fixture, no production/library edits."
+  },
+  "confirmed_findings": [
+    "Integer priority1 triggers AttributeError in unconditional truthy pri.lower path even without priority field fixes. Exception is caught only by author harness; original function crashes.",
+    "String tags passes enforce required-presence check and inferred fields written with needs_review0; validate_cards flags tags must be list of strings on same card. Native mismatch observed.",
+    "10MiB+1 file skipped and excluded from duplicate grouping when no eligible files; positive bounded-work guard fixture. No peak-memory measurement."
+  ],
+  "source_only_findings": [
+    "enforce read/stat exceptions continue without error/review counter; health score cannot distinguish unreadable source from other unqualified cards.",
+    "validate_cards strict read path has containment check and error reporting but no enforce-size guard; whole-batch resource behavior unmeasured.",
+    "Status default from schema is assigned after unknown-status check, without validating default belongs to allowed statuses. Source-only.",
+    "enforce direct write_text normalizes successfully parsed body newlines, unlike cleanup byte-preservation contract; no general exact-byte claim."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
