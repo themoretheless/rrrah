@@ -1,0 +1,38 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v1-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/common.py",
+      "local": "04-common.py",
+      "git_blob": "71c076e74d183b490f7dc58c0ef1fd380e2425bf",
+      "sha256": "6aec506dc390e424b45c431cc49dd66780847c9b178702b40c6d53d3eec698ad",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 9,
+  "remaining_without_whole_review": 30,
+  "original_tests": {
+    "run": false
+  },
+  "author_controls": {
+    "passed": 4,
+    "report": "docs/research/dedup-500/autograph104-native-controls-20261024.json",
+    "runtime": "Task-local venv Python3.15.0, PyYAML6.0.3 built from PyPI source distribution; not minimum-supported Python runtime validation.",
+    "scope": "Unchanged common.py and cleanup.py; temporary owned cards, no user vault. Positive preservation assertion and domain incompatibility observations; not four upstream failures."
+  },
+  "findings": [
+    "Same-stem/domain/type cards grouped despite different body bytes; native observed, intended card-candidate behavior not exact file identity.",
+    "Transitive identity bridge joins3cards although each key used by2cards and max_shared2. max_shared is per-key guard, not advertised component-size limit; no breach of that contract inferred.",
+    "NFC normalization coalesces explicit exact-index path keys; last supplied spelling wins. On macOS no claim both Unicode spellings are separate on-disk files.",
+    "Cleanup repaired repeated description and preserved NUL-containing body bytes in positive owned fixture. No concurrent mutation test in this increment.",
+    "FrontmatterLoader rejects duplicate/non-string YAML keys and merge keys; serializer re-parses fields to verify value preservation. Source read, broader YAML runtime tests not executed.",
+    "files=empty list falls back to vault walk via files or walk_vault, so caller cannot use [] to explicitly select zero files. Source-only.",
+    "infer_domain uses configured startswith patterns while raw_dirs validation enforces slash boundaries. Inference fallback choices not a file identity contract."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

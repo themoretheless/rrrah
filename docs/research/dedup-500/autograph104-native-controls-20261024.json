@@ -1,0 +1,39 @@
+{
+  "author_controls": [
+    {
+      "control": "same-stem-different-bytes",
+      "observed_groups": [
+        [
+          "a/Same.md",
+          "b/Same.md"
+        ]
+      ]
+    },
+    {
+      "control": "identity-bridge-component-exceeds-max-shared",
+      "observed_groups": [
+        [
+          "A.md",
+          "B.md",
+          "C.md"
+        ]
+      ],
+      "scope": "max_shared is per-key frequency guard, not documented component size limit; A/C share no strong field directly"
+    },
+    {
+      "control": "NFC-path-key-coalescing",
+      "result": [
+        "n/é",
+        "exact"
+      ],
+      "scope": "Build index given explicit paths; filesystem may normalize aliases on macOS, so no distinct-on-disk files claimed"
+    },
+    {
+      "control": "cleanup-body-preservation-positive",
+      "result": "cleaned"
+    }
+  ],
+  "count": 4,
+  "original_tests_run": false,
+  "scope": "Unchanged common.py/cleanup.py, temporary owned cards; no user vault touched"
+}
