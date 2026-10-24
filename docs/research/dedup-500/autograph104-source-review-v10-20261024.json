@@ -1,0 +1,44 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v9-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/search.py",
+      "local": "20-search.py",
+      "git_blob": "a35635114ef71c69bd50a702d07feda1307854d2",
+      "sha256": "5a555fe13a1e31e365cc18c6a3fd9c073827c6217be424276be6f9e2f6d594a5",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 19,
+  "remaining_without_whole_review": 20,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "new_unittest": 0,
+    "new_builtin_selftests": 1,
+    "selftest_report": "docs/research/dedup-500/autograph104-search-selftest-20261024.json",
+    "scope": "Built-in selftest is separate artifact, not inflated into upstream unittest count; three-card ranking/no-match assertions passed."
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 25,
+    "report": "docs/research/dedup-500/autograph104-search-controls-20261024.json"
+  },
+  "confirmed_findings": [
+    "Only first8000bodycharacters indexed and used by fallback; unique term in tail not found in owned fixture. Candidate recall limitation, not exact identity algorithm.",
+    "Explicit scope templates remains excluded by IGNORE_DIRS despite comment suggesting scope includes excluded templates; owned fixture returns0.",
+    "count records pre-limit candidates while hits contains sliced limit; observed2count/1hit, API semantic observation not inferred bug."
+  ],
+  "source_only_findings": [
+    "BM25 uses prefix OR query plus graph-neighbor expansion and stale-card demotion; ranking not proof of file equality.",
+    "Every search rebuilds in-memory FTS table from current docs; no cache or speedup measurement made.",
+    "Overlapping scopes may load same file repeatedly; normalization of duplicate input paths not explicit before BM25 insert. Not executed.",
+    "Common parser import catches any Exception then uses tiny parser, changing YAML semantics; fallback path unqualified in this pass."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
