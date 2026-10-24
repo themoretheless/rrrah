@@ -2,7 +2,7 @@
   "index": 104,
   "repository": "smixs/autograph",
   "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
-  "review_scope": "38/39 whole pinned files (37text,1visual);299baseline assertions,20integrity methods,1search selftest passed;43authorcontrols;baseline whole-text review remains",
+  "review_scope": "39/39 whole pinned files (38text,1visual);299baseline assertions,20integrity methods,1search selftest passed;43authorcontrols;full source review complete, runtime qualification finite",
   "decision": "reject-domain",
   "finding": "Obsidian typed-card/entity canonicalization and repeated-line cleanup; no image comparison.",
   "available_source_evidence": [
@@ -75,7 +75,7 @@
       "test": false
     }
   ],
-  "full_repository_read": false,
+  "full_repository_read": true,
   "incremental_reviews": [
     {
       "audit": "docs/research/dedup-500/autograph104-source-review-v1-20261024.json",
@@ -164,6 +164,10 @@
     {
       "audit": "docs/research/dedup-500/autograph104-source-review-v22-20261024.json",
       "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/autograph104-source-review-v23-20261024.json",
+      "whole_repo_complete": true
     }
   ],
   "upstream_tests_scope": "299 custom named assertions in original baseline script,20unittest integrity methods,1built-in search selftest all passed; Python3.15/PyYAML6.0.3; no real model/crossplatform qualification"

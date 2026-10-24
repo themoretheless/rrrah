@@ -1,0 +1,47 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v22-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": true,
+  "completion_scope": "All39pinned tracked files reviewed (38text,1decodedvisual), not allpossible behavior or all500repositories/librarygoal.",
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/tests/test_autograph.py",
+      "local": "05-test_autograph.py",
+      "git_blob": "cd78734ae13ac2f9ed1efc11c0a01aaf4b4d5d51",
+      "sha256": "6b954efbf30b75a15a2c78bb45144f0b772b6865ade88e5977043bd39ab87e14",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 39,
+  "whole_text_files_read_total": 38,
+  "whole_binary_files_reviewed_total": 1,
+  "remaining_without_whole_review": 0,
+  "inventory_audit": "Union of incremental whole-review paths equals retained complete39blobtree, every local SHA256/Gitblob verified.",
+  "original_tests": {
+    "integrity_methods_passed": 20,
+    "baseline_named_assertions_passed": 299,
+    "builtin_search_selftest_passed": 1,
+    "new": 0,
+    "scope": "Earlier actual execution retained; no rerun after unchanged sources. Baseline full2050lines now read. Runtime Python3.15/PyYAML6.0.3; minimum-version,otherOS,live-model paths unqualified."
+  },
+  "author_controls": {
+    "cumulative": 43,
+    "new": 0
+  },
+  "test_coverage_findings": [
+    "Swarm deterministic rerun removes entire old swarm directory before second prepare; cannot detect obsolete manifest retention on ordinary rerun.",
+    "Budget assertion explicitly permits overbudget single-file batch, despite docs hardlimit statement.",
+    "Broken frontmatter test fm is not None or fm is None is tautology once parse returns; only uncaught exception detection.",
+    "Dedup scan assertion accepts either Duplicate groups or No duplicates, so does not prove duplicate discovery for that fixture.",
+    "Graph fix test uses synthetic broken_link_list with uniquely resolvable target; does not show build_graph naturally reports that target broken.",
+    "Several swarm filtering checks simulate local comprehensions rather than calling production helper, though separate mocked end-to-end helpers also run.",
+    "Recency merge tests cover pairs only; do not contradict authored3card stamp-order control. List merge uses larger extra list, not equal-length distinct lists.",
+    "Cleanup tests verify mode,tempcleanup,bodybytes,periodic and cappedcases; do not test concurrent replacement or prefix-periodic nonperiodic tail."
+  ],
+  "conclusion": "Keep domain reference only: YAMLroundtrip/boundedstream/bodypreservation/explicitmanifest and refusal ideas useful, but entitygrouping/metadataheuristics not exact file equality;43finitecontrols record adoption risks. No upstream code adopted.",
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN remains outside current review"
+}
