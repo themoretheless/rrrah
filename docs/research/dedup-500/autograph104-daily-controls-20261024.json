@@ -1,0 +1,33 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "repeated-mention-self-relationship",
+      "people_count": 2,
+      "relationship": {
+        "from": "@alice",
+        "from_type": "person",
+        "to": "@alice",
+        "to_type": "person",
+        "type": "co_mentioned"
+      }
+    },
+    {
+      "control": "email-domain-read-as-mention",
+      "people": [
+        {
+          "handle": "@example",
+          "type": "mention"
+        }
+      ]
+    },
+    {
+      "control": "code-examples-parsed-as-facts",
+      "people": 1,
+      "financial": 1,
+      "decisions": 1,
+      "scope": "Mention/amount/decision extraction uses raw text; wikilink extractor separately ignores code"
+    }
+  ],
+  "scope": "Original daily/common functions on literal owned strings; no vault mutation"
+}

@@ -1,0 +1,42 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v10-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/daily.py",
+      "local": "21-daily.py",
+      "git_blob": "d2876e65090dfc8d032492c911e08374aa56ceac",
+      "sha256": "f768a4eafe2e296727644df9208f77e656a07b9ed5f5b95f3ce2ae572b3b2c67",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 20,
+  "remaining_without_whole_review": 19,
+  "original_tests": {
+    "cumulative_unittest_passed": 20,
+    "builtin_search_selftest_passed": 1,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 28,
+    "report": "docs/research/dedup-500/autograph104-daily-controls-20261024.json"
+  },
+  "confirmed_findings": [
+    "Repeated @alice extracted twice and yields co_mentioned relationship from @alice to itself; no entity de-duplication before pair assembly.",
+    "Email person@example.test produces mention @example because regex does not exclude email context.",
+    "Raw code-fence text produces mentions, amount and approved decision; wikilink extraction uses separate code-aware helper. Finite literal fixture."
+  ],
+  "source_only_findings": [
+    "build_vault_index applies global .md replacement while shared link index strips final suffix; same path-key mismatch already demonstrated in graph, not separately executed here.",
+    "Relative wikilinks resolved without daily source context; ambiguous sources may remain unresolved.",
+    "process_full accepts any filename matching????-??-??.md without date parsing; source-only, no arbitrary-file content execution.",
+    "All extraction heuristics produce advisory candidates, not content equality. No outputs adopted into duplicate-library decisions."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
