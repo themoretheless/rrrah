@@ -1,0 +1,42 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v7-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/graph.py",
+      "local": "18-graph.py",
+      "git_blob": "8cbe6890da7aa1d36bdc01173b265606783084d5",
+      "sha256": "9181cd66f46cde6f4e066bd13b30bd83d5810bbace4a952b4b610e83d33a9b80",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 17,
+  "remaining_without_whole_review": 22,
+  "original_tests": {
+    "cumulative_passed": 20,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 19,
+    "report": "docs/research/dedup-500/autograph104-graph-controls-20261024.json",
+    "scope": "Original graph/common, temporary owned markdown and mocked read errors; not full upstream suite."
+  },
+  "confirmed_findings": [
+    "All file read errors skipped; observed zero-file graph health100. Injected read exceptions, no actual filesystem permission claim.",
+    "Node key uses rp.replace(.md,empty) across parent directory, while link index removes final extension only. folder.md/child.md stored as folder/child but resolved outgoing folder.md/child has no node; missing incoming and no broken link reported.",
+    "Configured raw daily/ boundary excludes daily-old/; positive native control."
+  ],
+  "source_only_findings": [
+    "Link repair rebuilds same resolver as build_graph, so missing links in unchanged vault may offer no unique-resolution fix; no broader repair effectiveness claim.",
+    "Backlink fallback matches path.endswith(stem), not exact basename; unrelated suffix names can match, not executed this pass.",
+    "Health-history parsing error discards prior history before direct rewrite; corruption recovery unqualified.",
+    "Graph node domain inferred from path rather than explicit domain metadata; scope differs from duplicate grouping, not file equality."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

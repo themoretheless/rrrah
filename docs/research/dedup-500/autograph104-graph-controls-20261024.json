@@ -1,0 +1,28 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "all-read-errors-healthy-empty-graph",
+      "total_files": 0,
+      "health_score": 100.0
+    },
+    {
+      "control": "md-in-parent-directory-graph-key-mismatch",
+      "nodes": [
+        "folder/child",
+        "source"
+      ],
+      "outgoing": [
+        "folder.md/child"
+      ],
+      "incoming": [],
+      "broken_links": 0
+    },
+    {
+      "control": "raw-prefix-directory-boundary-positive",
+      "daily": true,
+      "daily-old": false
+    }
+  ],
+  "scope": "Unchanged original graph/common, temporary owned inputs and injected read errors; no user vault"
+}
