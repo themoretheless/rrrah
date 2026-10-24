@@ -1,0 +1,48 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v5-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "skills/autograph/scripts/discover.py",
+      "local": "15-discover.py",
+      "git_blob": "f370b802927e0872803ee9a5d76b0531e73c1ca3",
+      "sha256": "ae923b497472846e683925ee270ed105a65a1af01ca0a3d2d0ba1a8ac2ebfbf4",
+      "whole_text_read": true
+    },
+    {
+      "path": "skills/autograph/scripts/generate_schema.py",
+      "local": "16-generate_schema.py",
+      "git_blob": "237a8545996a39b304929d8231f3cdfcb368c477",
+      "sha256": "a5479a3b2c45024c32469758319ef0ebcfc60b31829ca1e1fcdbee1a4c30060c",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 15,
+  "remaining_without_whole_review": 24,
+  "original_tests": {
+    "cumulative_passed": 20,
+    "new": 0
+  },
+  "author_controls": {
+    "new": 3,
+    "passed": 3,
+    "cumulative": 13,
+    "report": "docs/research/dedup-500/autograph104-schema-controls-20261024.json",
+    "scope": "Unchanged original scripts, owned temporary markdown and mocked read failure; eight bounded child interpreters for hash seeds."
+  },
+  "confirmed_findings": [
+    "discover increments total file count before read and continues on error without increasing no_frontmatter; owned injected failure yields100percent frontmatter coverage despite zero successful reads.",
+    "discover immediately continues for missing frontmatter, excluding plain Markdown body links and headings from patterns. This is scope limitation, not content deletion.",
+    "generate_schema.build_field_fixes iterates popular values set and selects first similar; equal candidate input yields different mapping across Python hash seeds1..8. Artificial edit-distance fixture, not semantic synonym proof."
+  ],
+  "source_only_findings": [
+    "Schema generator returns explicitly labelled draft; fuzzy alias matching threshold0.3 and fixed domain keywords are heuristics, not duplicate-content evidence.",
+    "Type/path hints also iterate sets; broader whole-schema determinism unqualified.",
+    "Discovery enum coverage uses occurrence count for list entries, so may exceed file percentage for multi-valued fields; not tested here."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}

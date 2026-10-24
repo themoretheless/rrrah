@@ -1,0 +1,40 @@
+{
+  "passed": 3,
+  "author_controls": [
+    {
+      "control": "read-error-frontmatter-coverage",
+      "observed": {
+        "vault_dir": "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/autograph104-schema-owned-03_bwd9z",
+        "total_files": 1,
+        "no_frontmatter": 0,
+        "frontmatter_coverage": 100.0,
+        "scanned_at": "2026-10-24T04:09:40.217159"
+      },
+      "scope": "Injected read failure, not actual permission configuration"
+    },
+    {
+      "control": "plain-body-patterns-skipped",
+      "edge_patterns": {},
+      "section_headers": []
+    },
+    {
+      "control": "ambiguous-field-fix-hash-seed-dependence",
+      "variants": {
+        "{\"name\": {\"aaaa\": \"aaac\"}}": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "{\"name\": {\"aaaa\": \"aaab\"}}": [
+          7,
+          8
+        ]
+      },
+      "scope": "Same input insertion order, differing Python hash seeds; no claim these artificial names are actual synonyms"
+    }
+  ],
+  "scope": "Original discover/generate_schema functions and owned inputs; no user vault"
+}
