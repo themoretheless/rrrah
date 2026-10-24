@@ -1,0 +1,33 @@
+{
+  "repository": "smixs/autograph",
+  "commit": "4549de36fe6e4ec55d40a9add1074e049c5e889b",
+  "previous_audit": "docs/research/dedup-500/autograph104-source-review-v18-20261024.json",
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [],
+  "whole_files_read_total": 32,
+  "remaining_without_whole_review": 7,
+  "original_tests": {
+    "integrity_unittest_methods_passed": 20,
+    "baseline_named_assertions_passed": 299,
+    "baseline_named_assertions_failed": 0,
+    "builtin_search_selftest_passed": 1,
+    "new_baseline_assertions": 299,
+    "report": "docs/research/dedup-500/autograph104-baseline-original-tests-20261024.json",
+    "scope": "Original custom test(name, condition) counter:299assertions, not299unittest methods. Whole baseline script executed unchanged against original18scripts+schema.example. Tempfixtures and mocked model calls. No minimal-Python/crossplatform/live-model qualification.",
+    "baseline_source_git_blob": "fetched retained tree verified before execution",
+    "baseline_source_sha256": "6b954efbf30b75a15a2c78bb45144f0b772b6865ade88e5977043bd39ab87e14"
+  },
+  "author_controls": {
+    "cumulative": 43,
+    "new": 0
+  },
+  "findings": [
+    "Baseline test script whole-file review incomplete: inspected setup, fixture lifecycle, CLI dispatch and mock enrichment sections plus ending, not all2050lines. Execution is credited independently of source-reading status.",
+    "All299original named conditions pass; no source modifications to make them pass. Known authored boundary controls are separate and remain authoritative for cases absent from baseline.",
+    "Original baseline uses many pure helpers and subprocess CLIs, plus local enrichment mock. No evidence of real OpenRouter/model output quality.",
+    "Comparison across partial source review and executed tests does not prove all500repositories or allfilelibrarycases complete."
+  ],
+  "production_changes": false,
+  "adopted_code": false
+}
