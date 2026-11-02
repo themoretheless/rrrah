@@ -1,4 +1,4 @@
-//! Material texture upload; encoded color is decoded by sRGB views before filtering.
+//! Material texture upload; color is linearized before filtering, with linear alpha.
 use rrrah_core::{MemoryBudget, Reservation};
 use std::sync::{Arc, OnceLock};
 
@@ -8,6 +8,8 @@ pub enum MaterialTextureError {
     InvalidLayout,
     #[error("unsupported glTF sampler enum")]
     InvalidSampler,
+    #[error("16-bit material textures require FLOAT32_FILTERABLE on the device")]
+    Float32FilteringUnavailable,
     #[error("material texture upload cancelled")]
     Cancelled,
     #[error(transparent)]
@@ -74,7 +76,7 @@ impl MaterialSampler {
 pub struct MaterialTextureUploader {
     device: wgpu::Device,
     queue: wgpu::Queue,
-    pipelines: Arc<[OnceLock<wgpu::RenderPipeline>; 2]>,
+    pipelines: Arc<[OnceLock<wgpu::RenderPipeline>; 3]>,
 }
 impl MaterialTextureUploader {
     pub fn new(device: &wgpu::Device, queue: &wgpu::Queue) -> Self {
@@ -115,6 +117,96 @@ impl MaterialTextureUploader {
         sampler: MaterialSampler,
         mut cancelled: impl FnMut() -> bool,
     ) -> Result<MaterialTexture, MaterialTextureError> {
+        let format = if srgb {
+            wgpu::TextureFormat::Rgba8UnormSrgb
+        } else {
+            wgpu::TextureFormat::Rgba8Unorm
+        };
+        self.upload_bytes(
+            budget,
+            size,
+            pixels,
+            format,
+            usize::from(srgb),
+            sampler,
+            &mut cancelled,
+        )
+    }
+
+    /// Preserve normalized 16-bit data in RGBA32Float. Color RGB is converted
+    /// to linear before filtering; alpha stays linear. No 8-bit or half rounding.
+    /// Caller must enable FLOAT32_FILTERABLE when requesting the device.
+    pub fn upload_rgba16(
+        &self,
+        budget: &MemoryBudget,
+        size: [u32; 2],
+        pixels: &[u16],
+        srgb: bool,
+        sampler: MaterialSampler,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<MaterialTexture, MaterialTextureError> {
+        if cancelled() {
+            return Err(MaterialTextureError::Cancelled);
+        }
+        if !self
+            .device
+            .features()
+            .contains(wgpu::Features::FLOAT32_FILTERABLE)
+        {
+            return Err(MaterialTextureError::Float32FilteringUnavailable);
+        }
+        sampler.descriptor()?;
+        let samples = (u64::from(size[0]) * u64::from(size[1])).checked_mul(4);
+        if size.contains(&0)
+            || size
+                .iter()
+                .any(|&n| n > self.device.limits().max_texture_dimension_2d)
+            || samples != Some(pixels.len() as u64)
+        {
+            return Err(MaterialTextureError::InvalidLayout);
+        }
+        let mut linear = budget.try_buffer(pixels.len(), 0f32)?;
+        for (i, (input, output)) in pixels.iter().zip(linear.iter_mut()).enumerate() {
+            if i % 16384 == 0 && cancelled() {
+                return Err(MaterialTextureError::Cancelled);
+            }
+            let v = f64::from(*input) / 65535.;
+            *output = if srgb && i % 4 != 3 {
+                if v <= 0.04045 {
+                    v / 12.92
+                } else {
+                    ((v + 0.055) / 1.055).powf(2.4)
+                }
+            } else {
+                v
+            } as f32;
+        }
+        self.upload_bytes(
+            budget,
+            size,
+            bytemuck::cast_slice(&linear),
+            wgpu::TextureFormat::Rgba32Float,
+            2,
+            sampler,
+            &mut cancelled,
+        )
+    }
+
+    fn upload_bytes(
+        &self,
+        budget: &MemoryBudget,
+        size: [u32; 2],
+        pixels: &[u8],
+        format: wgpu::TextureFormat,
+        pipeline_index: usize,
+        sampler: MaterialSampler,
+        cancelled: &mut impl FnMut() -> bool,
+    ) -> Result<MaterialTexture, MaterialTextureError> {
+        let texel_bytes = if format == wgpu::TextureFormat::Rgba32Float {
+            16
+        } else {
+            4
+        };
         let device = &self.device;
         let queue = &self.queue;
         if cancelled() {
@@ -126,7 +218,7 @@ impl MaterialTextureUploader {
             || height == 0
             || width > device.limits().max_texture_dimension_2d
             || height > device.limits().max_texture_dimension_2d
-            || u64::from(width) * u64::from(height) * 4 != pixels.len() as u64
+            || u64::from(width) * u64::from(height) * texel_bytes != pixels.len() as u64
         {
             return Err(MaterialTextureError::InvalidLayout);
         }
@@ -136,20 +228,15 @@ impl MaterialTextureUploader {
             width.max(height).ilog2() + 1
         };
         let bytes: u64 = (0..mip_count)
-            .map(|m| u64::from((width >> m).max(1)) * u64::from((height >> m).max(1)) * 4)
+            .map(|m| u64::from((width >> m).max(1)) * u64::from((height >> m).max(1)) * texel_bytes)
             .sum();
         let credit = Arc::new(budget.try_reserve(bytes)?);
-        let row = (u64::from(width) * 4).div_ceil(256) * 256;
+        let row = (u64::from(width) * texel_bytes).div_ceil(256) * 256;
         let queued = budget.try_reserve(row * u64::from(height))?;
         let _upload = crate::QueuedUploadReservation {
             queue: queue.clone(),
             reservation: Some(queued),
             resources: crate::GpuResourceLease::new([credit.clone()]),
-        };
-        let format = if srgb {
-            wgpu::TextureFormat::Rgba8UnormSrgb
-        } else {
-            wgpu::TextureFormat::Rgba8Unorm
         };
         let texture = device.create_texture(&wgpu::TextureDescriptor {
             label: Some("glTF material texture"),
@@ -181,7 +268,7 @@ impl MaterialTextureUploader {
             pixels,
             wgpu::TexelCopyBufferLayout {
                 offset: 0,
-                bytes_per_row: Some(width * 4),
+                bytes_per_row: Some(width * texel_bytes as u32),
                 rows_per_image: Some(height),
             },
             wgpu::Extent3d {
@@ -191,8 +278,8 @@ impl MaterialTextureUploader {
             },
         );
         if mip_count > 1 {
-            let pipeline = self.pipelines[usize::from(srgb)].get_or_init(|| mip_pipeline(device, format));
-            generate_mips(device, queue, &texture, pipeline, mip_count, &mut cancelled)?;
+            let pipeline = self.pipelines[pipeline_index].get_or_init(|| mip_pipeline(device, format));
+            generate_mips(device, queue, &texture, pipeline, mip_count, cancelled)?;
         }
         if cancelled() {
             return Err(MaterialTextureError::Cancelled);
@@ -354,6 +441,19 @@ mod tests {
         let (device, queue) = pollster::block_on(adapter.request_device(&Default::default())).unwrap();
         let uploader = MaterialTextureUploader::new(&device, &queue);
         let uploader = uploader.clone();
+        let missing_feature_budget = MemoryBudget::new(1024);
+        assert!(matches!(
+            uploader.upload_rgba16(
+                &missing_feature_budget,
+                [1, 1],
+                &[1u16; 4],
+                false,
+                MaterialSampler::default(),
+                || false
+            ),
+            Err(MaterialTextureError::Float32FilteringUnavailable)
+        ));
+        assert_eq!(missing_feature_budget.used(), 0);
         // Black/white checker: linear RGB average .5 encodes near 188 in sRGB,
         // whereas data averages to 128. Alpha must stay linear in either role.
         let pixels = [0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0];
@@ -477,5 +577,232 @@ mod tests {
         ));
         device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
         assert_eq!(budget.used(), 0);
+    }
+    #[cfg(target_os = "macos")]
+    fn read_float_texture(
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        texture: &wgpu::Texture,
+        mip: u32,
+    ) -> Vec<f32> {
+        let width = (texture.width() >> mip).max(1);
+        let height = (texture.height() >> mip).max(1);
+        let row = (width * 16).div_ceil(256) * 256;
+        let read = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: u64::from(row) * u64::from(height),
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        let mut encoder = device.create_command_encoder(&Default::default());
+        encoder.copy_texture_to_buffer(
+            wgpu::TexelCopyTextureInfo {
+                texture,
+                mip_level: mip,
+                origin: wgpu::Origin3d::ZERO,
+                aspect: wgpu::TextureAspect::All,
+            },
+            wgpu::TexelCopyBufferInfo {
+                buffer: &read,
+                layout: wgpu::TexelCopyBufferLayout {
+                    offset: 0,
+                    bytes_per_row: Some(row),
+                    rows_per_image: Some(height),
+                },
+            },
+            wgpu::Extent3d {
+                width,
+                height,
+                depth_or_array_layers: 1,
+            },
+        );
+        queue.submit([encoder.finish()]);
+        let (tx, rx) = std::sync::mpsc::channel();
+        read.slice(..)
+            .map_async(wgpu::MapMode::Read, move |r| tx.send(r).unwrap());
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        rx.recv().unwrap().unwrap();
+        let mapped = read.slice(..).get_mapped_range().unwrap();
+        let mut out = Vec::new();
+        for y in 0..height as usize {
+            let bytes = &mapped[y * row as usize..y * row as usize + width as usize * 16];
+            out.extend(
+                bytes
+                    .chunks_exact(4)
+                    .map(|b| f32::from_ne_bytes(b.try_into().unwrap())),
+            );
+        }
+        drop(mapped);
+        read.unmap();
+        out
+    }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    #[ignore = "actual Metal all 65536 normalized codes, sRGB and float32 mip proof"]
+    fn material_texture_16bit_metal() {
+        let mut desc = wgpu::InstanceDescriptor::new_without_display_handle();
+        desc.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(desc);
+        let adapter = pollster::block_on(instance.request_adapter(&Default::default())).unwrap();
+        assert_eq!(adapter.get_info().backend, wgpu::Backend::Metal);
+        eprintln!("MATERIAL_16_ADAPTER {:?}", adapter.get_info());
+        let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+            required_features: wgpu::Features::FLOAT32_FILTERABLE,
+            ..Default::default()
+        }))
+        .unwrap();
+        let uploader = MaterialTextureUploader::new(&device, &queue);
+        let input: Vec<u16> = (0..=u16::MAX).flat_map(|v| [v, v, v, v]).collect();
+        for srgb in [false, true] {
+            let budget = MemoryBudget::new(4 * 1024 * 1024);
+            let texture = uploader
+                .upload_rgba16(
+                    &budget,
+                    [256, 256],
+                    &input,
+                    srgb,
+                    MaterialSampler::default(),
+                    || false,
+                )
+                .unwrap();
+            let base = read_float_texture(&device, &queue, texture.texture(), 0);
+            for (i, pixel) in base.chunks_exact(4).enumerate() {
+                for (c, &value) in pixel.iter().enumerate() {
+                    let v = f64::from(value);
+                    let encoded = if srgb && c != 3 {
+                        if v <= 0.0031308 {
+                            v * 12.92
+                        } else {
+                            1.055 * v.powf(1. / 2.4) - 0.055
+                        }
+                    } else {
+                        v
+                    };
+                    assert_eq!((encoded * 65535.).round() as usize, i, "srgb={srgb} channel={c}");
+                }
+            }
+            let mip = read_float_texture(&device, &queue, texture.texture(), 1);
+            // First footprint contains source codes 0,1,256,257. All are in
+            // the linear toe for sRGB; independent average is exactly 128.5 codes.
+            let average = 128.5 / 65535.;
+            for c in 0..4 {
+                let expected = if srgb && c != 3 { average / 12.92 } else { average };
+                assert!((f64::from(mip[c]) - expected).abs() < 1e-9);
+            }
+            eprintln!(
+                "16bit srgb={srgb}: all 65536 codes roundtrip, first mip={:?}",
+                &mip[..4]
+            );
+            drop(texture);
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(budget.used(), 0);
+        }
+        // Exercise the actual native PNG adapter and the shared root, not only
+        // authored GPU input. Compare with independently authored LE16 oracle.
+        for role in [
+            rrrah_decode::glb::GlbTextureRole::Normal,
+            rrrah_decode::glb::GlbTextureRole::BaseColor,
+        ] {
+            let budget = MemoryBudget::new(1024 * 1024);
+            let mut request = rrrah_decode::DecodeRequest::new("embedded-PNG16");
+            request.memory_budget = Some(budget.clone());
+            let image = rrrah_decode::decode_gltf_texture_bytes(
+                include_bytes!("../../../tests/fixtures/glb/texture-codec/color6-16.png"),
+                rrrah_decode::glb::GlbImageMime::Png,
+                role,
+                &request,
+            )
+            .unwrap();
+            let rrrah_decode::GltfTexturePixels::Rgba16(pixels) = image.pixels() else {
+                panic!("16-bit source narrowed")
+            };
+            let candidate = uploader
+                .upload_rgba16(
+                    &budget,
+                    [image.width(), image.height()],
+                    pixels,
+                    role.is_srgb(),
+                    MaterialSampler::default(),
+                    || false,
+                )
+                .unwrap();
+            let actual = read_float_texture(&device, &queue, candidate.texture(), 0);
+            let expected = include_bytes!("../../../tests/fixtures/glb/texture-codec/color6-16.png.rgba16le");
+            for (i, (&sample, bytes)) in actual.iter().zip(expected.chunks_exact(2)).enumerate() {
+                let v = f64::from(sample);
+                let code = if role.is_srgb() && i % 4 != 3 {
+                    if v <= 0.0031308 {
+                        v * 12.92
+                    } else {
+                        1.055 * v.powf(1. / 2.4) - 0.055
+                    }
+                } else {
+                    v
+                };
+                assert_eq!(
+                    (code * 65535.).round() as u16,
+                    u16::from_le_bytes(bytes.try_into().unwrap())
+                );
+            }
+            assert_eq!(actual.len() * 2, expected.len());
+            drop(candidate);
+            drop(image);
+            drop(request);
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(budget.used(), 0);
+            eprintln!("native PNG16 -> Metal {role:?}: all original codes retained; shared root zero");
+        }
+        let invalid_budget = MemoryBudget::new(656);
+        for (size, input) in [
+            ([u32::MAX, u32::MAX], &[][..]),
+            ([0, 1], &[][..]),
+            ([1, 1], &[1u16; 3][..]),
+        ] {
+            assert!(matches!(
+                uploader.upload_rgba16(
+                    &invalid_budget,
+                    size,
+                    input,
+                    false,
+                    MaterialSampler::default(),
+                    || false
+                ),
+                Err(MaterialTextureError::InvalidLayout)
+            ));
+            assert_eq!(invalid_budget.used(), 0);
+        }
+        let small = [
+            1u16, 257, 258, 65534, 2, 258, 259, 65535, 3, 259, 260, 65533, 4, 260, 261, 65532,
+        ];
+        let budget = MemoryBudget::new(655);
+        assert!(matches!(
+            uploader.upload_rgba16(&budget, [2, 2], &small, false, MaterialSampler::default(), || {
+                false
+            }),
+            Err(MaterialTextureError::Memory(_))
+        ));
+        assert_eq!(budget.used(), 0);
+        let budget = MemoryBudget::new(656);
+        let candidate = uploader
+            .upload_rgba16(&budget, [2, 2], &small, false, MaterialSampler::default(), || {
+                false
+            })
+            .unwrap();
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        assert_eq!(budget.used(), 80);
+        drop(candidate);
+        assert_eq!(budget.used(), 0);
+        let mut calls = 0;
+        assert!(matches!(
+            uploader.upload_rgba16(&budget, [2, 2], &small, false, MaterialSampler::default(), || {
+                calls += 1;
+                calls == 5
+            }),
+            Err(MaterialTextureError::Cancelled)
+        ));
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        assert_eq!(budget.used(), 0);
+        eprintln!("16bit exact logical peak 656, refusal at 655, cancellation and final root zero");
     }
 }
