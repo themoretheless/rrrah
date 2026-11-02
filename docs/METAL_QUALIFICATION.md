@@ -1,5 +1,28 @@
 # Metal storage and HDR qualification
 
+## Sustained mixed-worker monitor
+
+The monitor also supports `--suite worker-mixed` with a current `rrrah` binary
+test executable (built with `cargo test --locked -p rrrah --bin rrrah --no-run`).
+It drives the real foreground worker over64 authored PPM/TGA/BMP files, fixed
+managed pressure, bounded RAM/swap and seven changing prefetch windows including
+`usize::MAX`. Every selected digest and63×65 SDR/HDR regression frame is checked.
+
+```sh
+python3 scripts/run-metal-collection-soak.py --suite worker-mixed --binary <rrrah test executable> --output <new results directory> --scratch <new scratch directory> --seconds 10800 --rss-limit-mib 6144 --sample-seconds 10
+```
+
+`state.json` records the exact binary/monitor hashes, source pins, live child PID,
+RSS samples and terminal status. Three consecutive samples above the configured
+RSS limit stop the owned child and fail the run. A zero exit alone cannot pass:
+validation requires a real Metal adapter, the requested workload duration, all
+seven windows, exact workload limits and one passing/nonignored test. Keep the
+original logs; a live `running` state is not a successful qualification.
+
+This uses simulated managed-memory pressure and real local swap files, not an
+OS-wide memory-pressure generator or physical slow disk. HDR values are checked
+offscreen; calibrated display output remains a separate requirement.
+
 The 2026-10-07 selected-scenario result is recorded in
 [the soak report](research/metal-soak-qualification-2026-10-07.json) and
 [the live HDR report](research/metal-live-hdr-2026-10-07.json).
