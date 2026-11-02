@@ -1,0 +1,91 @@
+
+running 86 tests
+test cache_telemetry::tests::stale_prefetch_generation_cannot_overwrite_new_plan ... ok
+test decode_gate::tests::cancelled_prefetch_waiter_returns_none_while_permit_is_busy ... ok
+test decode_gate::tests::dropping_current_ticket_unblocks_prefetch ... ok
+test decode_gate::tests::foreground_intent_is_nonblocking_and_invalidates_prefetch_generation ... ok
+test decode_gate::tests::foreground_jumps_a_waiting_prefetch_after_current_permit ... ok
+test decode_gate::tests::granted_prefetch_token_is_invalidated_before_foreground_waits ... ok
+test decode_gate::tests::permits_serialize_foreground_and_prefetch_work ... ok
+test decode_gate::tests::prefetch_waits_for_idle_debounce ... ok
+test decode_gate::tests::production_prefetch_debounce_is_two_hundred_milliseconds ... ok
+test decode_gate::tests::viewport_token_cancels_prefetch_waiter_while_foreground_permit_is_live ... ok
+test dicom_pipeline_tests::high_precision_alpha_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::legacy_rasters_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::managed_nrrd_mrc_fits_windows_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::multirow_alpha_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::official_ktx2_producers_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::original_gray_alpha_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::png_tiff_metadata_ram_swap_and_blocked_prefetch ... ok
+test dicom_pipeline_tests::prefetch_watchdog_excludes_gpu_idle_but_cancels_a_blocked_call ... ok
+test dicom_pipeline_tests::rle_multiframe_prefetch_windows_preserve_nearest_under_count_and_byte_limits ... ok
+test dicom_pipeline_tests::uncompressed_frames_windows_ram_swap_and_blocked_prefetch ... ok
+test external_collection_qualification::external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure ... ignored, external mixed-source manifest; RRRAH_COLLECTION_MANIFEST and RRRAH_COLLECTION_REPORT
+test folder_worker_qualification::real_worker_direction_reversal_cancels_blocked_prefetch ... ok
+test folder_worker_qualification::real_worker_metal_direction_reversal_cancels_blocked_prefetch ... ignored, manual actual Metal direction reversal
+test folder_worker_qualification::real_worker_metal_prefetch_window_order_and_full_pressure_hits ... ignored, manual actual Metal real prefetch windows
+test folder_worker_qualification::real_worker_prefetch_window_order_and_full_pressure_hits ... ok
+test foreground_loader_tests::animation_prefetch_phase_updates_coalesced_request_without_redecode ... ok
+test foreground_loader_tests::changed_source_retry_keeps_explicit_or_disabled_prefetch_plan ... ok
+test foreground_loader_tests::cli_prefetch_counts_support_defaults_aliases_and_disabled_sides ... ok
+test foreground_loader_tests::disabled_raw_disk_warmer_preserves_gallery_prefetch_in_both_directions ... ok
+test foreground_loader_tests::dpx_cineon_prefetch_keeps_srgb_and_linear_cache_entries_distinct ... ok
+test foreground_loader_tests::folder_paths_open_and_prefetch_before_blocked_sibling_covers_finish ... ok
+test foreground_loader_tests::foreground_prefetch_respects_asymmetric_and_disabled_windows ... ok
+test foreground_loader_tests::hundred_thousand_valid_sources_navigate_with_bounded_prefetch_and_pressure ... ignored, manual 100000 valid file paths with mixed-format cache navigation
+test foreground_loader_tests::incomplete_pdf_prefetch_is_not_cached_and_next_decode_can_run ... ok
+test foreground_loader_tests::known_prefetch_windows_bypass_scanning_and_keep_exact_priority ... ok
+test foreground_loader_tests::mixed_gallery_reversals_bound_prefetch_and_release_managed_pixels ... ok
+test foreground_loader_tests::mixed_gallery_reversals_preserve_metal_frames_and_prefetch_pressure ... ignored, requires actual GPU for mixed-format prefetch navigation readback
+test foreground_loader_tests::model_prefetch_headroom_skips_cold_load_but_keeps_ready_geometry ... ok
+test foreground_loader_tests::model_retained_prefetch_skips_protected_count_slots_and_retries ... ok
+test foreground_loader_tests::raster_prefetch_headroom_preserves_ram_hits_and_recovers_after_pressure ... ok
+test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS
+test foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads ... ok
+test foreground_loader_tests::retained_raster_prefetch_avoids_unretainable_swap_reads ... ok
+test foreground_loader_tests::retained_raster_prefetch_reclaims_old_restore_slot_after_window_change ... ok
+test foreground_loader_tests::unknown_prefetch_window_scans_once_and_preserves_backward_order ... ok
+test gallery::cyclic_prefetch_tests::cyclic_windows_match_independent_modulo_model_without_duplicates ... ok
+test gallery::cyclic_prefetch_tests::virtual_maximum_cycles_stay_lazy_overflow_safe_and_wrap_direction_correct ... ok
+test gallery::repeat_phase_prefetch_tests::final_pass_is_linear_and_auto_wrap_direction_is_explicit ... ok
+test gallery::tests::directional_prefetch_iterator_paired_profile ... ignored, paired resident path-plan microbenchmark; no file I/O
+test gallery::tests::directional_prefetch_matches_sorted_distance_model_for_all_small_windows ... ok
+test gallery::tests::dropping_thumbnail_prefetcher_cancels_active_loader ... ok
+test gallery::tests::eip_prefetch_restores_exact_sensor_and_fingerprints_complete_package ... ignored, requires authored EIP pair and local EOS R8 CR3
+test gallery::tests::huge_container_prefetch_plan_is_lazy_and_preserves_order ... ok
+test gallery::tests::large_gallery_rapid_jumps_keep_only_latest_bounded_prefetch_command ... ok
+test gallery::tests::mixed_camera_worker_prefetch_preserves_full_metal_frames ... ignored, requires real RAW manifest and actual Metal
+test gallery::tests::new_camera_formats_enter_gallery_and_directional_prefetch_window ... ok
+test gallery::tests::prefetch_plan_handles_edges_without_duplicates ... ok
+test gallery::tests::prefetch_plan_is_forward_biased_and_bounded ... ok
+test gallery::tests::raw_prefetch_backward_window_is_bounded_at_gallery_edges ... ok
+test gallery::tests::raw_prefetch_byte_limit_preserves_present_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_count_limit_counts_retained_neighbours_after_missing_file ... ignored, requires external Sony DSC-F828 SRF fixture
+test gallery::tests::raw_prefetch_count_limit_preserves_highest_priority_neighbour ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_duplicate_source_does_not_consume_distinct_count_slot ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_failed_nearest_does_not_consume_count_slot_in_either_direction ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_filtered_clone_paired_profile ... ignored, manual alternating paired mixed-gallery RAW planning profile
+test gallery::tests::raw_prefetch_paths_are_two_back_then_five_ahead ... ok
+test gallery::tests::raw_prefetch_paths_swap_window_when_travelling_backward ... ok
+test gallery::tests::raw_prefetch_respects_shared_budget_and_recovers_after_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
+test gallery::tests::raw_prefetch_shutdown_cancels_only_its_own_lifetime ... ok
+test gallery::tests::raw_prefetch_shutdown_joins_and_releases_worker_memory ... ok
+test gallery::tests::raw_prefetch_shutdown_joins_real_idle_worker ... ok
+test gallery::tests::raw_prefetch_window_is_bounded_at_both_gallery_edges ... ok
+test gallery::tests::virtual_maximum_collection_prefetch_stays_lazy_and_never_overflows ... ok
+test gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions ... ignored, manual original CR3 foreground prefetch priority qualification
+test raster_swap_viewer_tests::apng_selected_frame_ttl_prefetch_preserves_metal_sdr_hdr ... ignored, manual actual Metal APNG nonzero TTL and decoder-blocked prefetch qualification
+test raster_swap_viewer_tests::apng_selected_frames_expire_and_prefetch_from_swap_without_decode ... ok
+test raster_swap_viewer_tests::ico_cur_selected_images_loader_cache_and_blocked_prefetch ... ok
+test raster_swap_viewer_tests::ico_cur_selected_images_loader_cache_and_blocked_prefetch_metal ... ignored, actual Metal ICO/CUR production loader cache and blocked prefetch
+test raster_swap_viewer_tests::looping_animation_prefetch_warms_wrapped_first_frame_under_full_memory_pressure ... ok
+test raster_swap_viewer_tests::model_prefetch_priority_survives_count_bytes_and_failed_neighbor ... ok
+test raster_swap_viewer_tests::nearest_prefetched_raster_survives_count_and_byte_pressure_after_failed_neighbor ... ok
+test raster_swap_viewer_tests::repeated_hdr_ttl_viewer_prefetch_restore_preserves_metal_frames ... ignored, requires actual Metal for viewer TTL swap and prefetch readback
+test raster_swap_viewer_tests::selected_page_prefetch_cancel_after_restore_admission_metal ... ignored, manual 64MiB selected-page swap cancellation after admission and Metal retry
+test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_prefetch ... ok
+test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_prefetch_metal ... ignored, actual Metal TIFF viewer selected-page cache/TTL/prefetch qualification
+test raster_swap_viewer_tests::wal_prefetch_replaces_palette_identity_while_old_lease_stays_immutable ... ok
+
+test result: ok. 64 passed; 0 failed; 22 ignored; 0 measured; 361 filtered out; finished in 11.34s
+

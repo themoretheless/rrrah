@@ -1595,6 +1595,10 @@ impl ForegroundLoader {
                                         match warmed {
                                             Ok((raster, _, lease)) => {
                                                 #[cfg(test)]
+                                                if lease.is_none() && matches!(&proxy, LoaderWake::ObservePrefetch(_)) {
+                                                    eprintln!("unretained prefetch generation={generation} path={} bytes={} resident={} entries={}", request.path.display(), raster.capacity_bytes(), raster_cache.resident_bytes(), raster_cache.len());
+                                                }
+                                                #[cfg(test)]
                                                 proxy.observe_prefetch(generation, &request.path, lease.is_some());
                                                 #[cfg(debug_assertions)]
                                                 gpu_recovery_probe::record_raster_prefetch(generation, &request.path, lease.is_some());
@@ -1608,6 +1612,12 @@ impl ForegroundLoader {
                                                 }
                                             }
                                             Err(error) => {
+                                                #[cfg(test)]
+                                                if matches!(&proxy, LoaderWake::ObservePrefetch(_))
+                                                    && !matches!(error, RasterCacheLoadError::ProtectedCount)
+                                                    && !error.to_string().contains("protected byte budget exhausted") {
+                                                    eprintln!("prefetch refusal generation={generation} path={}: {error}", request.path.display());
+                                                }
                                                 if matches!(error, RasterCacheLoadError::ProtectedCount) {
                                                     container_prefetch_exhausted.store(true, Ordering::Release);
                                                 }

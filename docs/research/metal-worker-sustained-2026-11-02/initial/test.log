@@ -1,0 +1,36 @@
+
+running 1 test
+test folder_worker_qualification::real_worker_large_collection_pressure_soak ... large soak adapter: Metal Apple M4 Max
+large soak selections=64 seconds=8.0 settled=100663296 root_peak=134217728
+large soak selections=128 seconds=18.1 settled=100663296 root_peak=134217728
+large soak selections=192 seconds=31.0 settled=100663296 root_peak=134217728
+large soak selections=256 seconds=40.4 settled=100663296 root_peak=134217728
+large soak selections=320 seconds=51.4 settled=100663296 root_peak=134217728
+large soak selections=384 seconds=59.5 settled=100663296 root_peak=134217728
+large soak selections=448 seconds=73.7 settled=100663296 root_peak=134217728
+large soak selections=512 seconds=83.4 settled=100663296 root_peak=134217728
+large soak selections=576 seconds=92.7 settled=100663296 root_peak=134217728
+large soak selections=640 seconds=102.5 settled=100663296 root_peak=134217728
+large soak selections=704 seconds=111.7 settled=100663296 root_peak=134217728
+large soak selections=768 seconds=125.7 settled=100663296 root_peak=134217728
+large soak selections=832 seconds=133.1 settled=100663296 root_peak=134217728
+large soak selections=896 seconds=143.6 settled=100663296 root_peak=134217728
+large soak selections=960 seconds=153.7 settled=100663296 root_peak=134217728
+large soak selections=1024 seconds=164.7 settled=100663296 root_peak=134217728
+large soak selections=1088 seconds=174.3 settled=100663296 root_peak=134217728
+large soak selections=1152 seconds=181.9 settled=100663296 root_peak=134217728
+
+thread 'folder_worker_qualification::real_worker_large_collection_pressure_soak' (14107280) panicked at crates/rrrah-app/src/folder_worker_qualification.rs:876:17:
+assertion `left == right` failed: selection=1156 rank=0 path=/Users/themoretheless/.codex/tmp/rrrah-worker3h-20261102/scratch/.tmpVaHtsI/032.bmp root=83886080: nearest must fit; farther slots protected
+  left: false
+ right: true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    folder_worker_qualification::real_worker_large_collection_pressure_soak
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 446 filtered out; finished in 187.26s
+

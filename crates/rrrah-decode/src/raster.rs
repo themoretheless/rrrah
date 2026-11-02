@@ -13,6 +13,8 @@ use thiserror::Error;
 
 use crate::{DecodeError, DecodeRequest, bounded_io::read_bounded};
 
+#[path = "bmp_color.rs"]
+mod bmp_color;
 #[path = "ico_pages.rs"]
 mod ico_pages;
 #[path = "png_profile.rs"]
@@ -38,6 +40,8 @@ pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Debug, Error)]
 pub enum RasterDecodeError {
+    #[error("invalid or unsupported BMP color: {0}")]
+    InvalidBmpColor(&'static str),
     #[error("invalid or unsupported TGA extension metadata: {0}")]
     InvalidTgaAlpha(&'static str),
     #[error("invalid or unsupported TGA layout: {0}")]
@@ -876,6 +880,9 @@ fn decode_raster_bytes_inner(
         reader.set_format(ImageFormat::Tga);
     }
     let format = reader.format().ok_or(RasterDecodeError::UnsupportedFormat)?;
+    let bmp_color = (format == ImageFormat::Bmp)
+        .then(|| bmp_color::parse(bytes, request))
+        .transpose()?;
     let tga_layout = (format == ImageFormat::Tga)
         .then(|| tga_layout::Layout::parse(bytes, request))
         .transpose()?;
@@ -929,6 +936,26 @@ fn decode_raster_bytes_inner(
             None
         };
         let mut decoder = image::codecs::tiff::TiffDecoder::new(reader.into_inner())?;
+        decoder.set_limits(limits)?;
+        (Box::new(decoder), Some(profile))
+    } else if let Some(metadata) = &bmp_color {
+        let profile = if let Some(bytes) = metadata.profile {
+            owned_profile_credit = request
+                .memory_budget
+                .as_ref()
+                .map(|budget| budget.try_reserve(bytes.len() as u64))
+                .transpose()
+                .map_err(DecodeError::Memory)?;
+            let mut profile = Vec::new();
+            profile
+                .try_reserve_exact(bytes.len())
+                .map_err(|_| RasterDecodeError::OutputTooLarge)?;
+            profile.extend_from_slice(bytes);
+            Some(profile)
+        } else {
+            None
+        };
+        let mut decoder = image::codecs::bmp::BmpDecoder::new(Cursor::new(&bytes[..metadata.pixel_end]))?;
         decoder.set_limits(limits)?;
         (Box::new(decoder), Some(profile))
     } else if format == ImageFormat::Avif {
@@ -1080,6 +1107,7 @@ fn decode_raster_bytes_inner(
                     .or(avif_properties.color)
                     .or(exr_metadata.color)
                     .or(hdr_color)
+                    .or_else(|| bmp_color.as_ref().map(|metadata| metadata.color.clone()))
                     .unwrap_or(match format {
                         ImageFormat::Hdr => RasterColorSpace::LinearRgbUnspecified,
                         ImageFormat::Farbfeld => RasterColorSpace::AssumedSrgb,

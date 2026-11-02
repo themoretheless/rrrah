@@ -1,5 +1,19 @@
 # Current coverage of the requested viewer scope
 
+Sustained-worker counterexample (2026-11-02): the requested three-hour Metal
+run failed at selection1156 after1152 logged successful selections/181.9s:
+nearest BMP neighbor retention was refused. Monitor/child are terminal failures;
+no RSS stop occurred. Minute passes below do not supersede this open sustained
+failure. [Original evidence](research/metal-worker-sustained-2026-11-02/REPORT.md).
+
+BMP V5 ICC checkpoint (2026-11-02): native bounded profile extraction/admission
+replaces the unconditional sRGB assertion for V4/V5 declarations. Five focused
+and265 decoder tests pass; required M4 Max native/prepared RAM/swap/pressure/
+cancel/retry and SDR/HDR checks agree with independent LittleCMS color for two
+authored orientations. Calibrated color/linked profiles/full BMP remain open;
+catalogue count remains94 subsets/6pending/0fullyqualified.
+[Evidence](research/bmp-v5-icc-2026-11-02/REPORT.md).
+
 Extreme prefetch boundary checkpoint (2026-11-02): the actual M4 Max worker
 passes392 selections/60.035s across seven windows including `usize::MAX` in one
 or both directions, with independent exact neighbor ordering,326 retained and
