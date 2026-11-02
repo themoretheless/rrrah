@@ -498,20 +498,76 @@ not apply them, generate derivative frames, light, draw, cache or publish GLB.
   and tests/fixtures/glb/vertex-reference-manifest.json. Original model/reference
   remains subject to the existing Cesium attribution, not a new CC0 asset.
 
+## Owned GLB scene/image asset and real cache composition
+
+`rrrah_decode::decode_glb_asset(request, selection)` now returns an immutable,
+cloneable `GlbAsset` with the selected owned hierarchy, unique source-primitive
+metadata and decoded-image table. It validates each selected source primitive's
+geometry/material/UV bindings, decodes each referenced embedded image once and
+retains the original container/tape. Nodes sharing a mesh retain separate world
+transforms and share source geometry. Different texture indices, samplers and
+color/data roles can point to the same decoded image; retagging shares pixels.
+
+Borrowed `GlbDocument::meshes`/`GlbMesh::primitives` permit linear mesh traversal
+without repeated root mesh-array lookup. The source is not expanded to world
+triangle/vertex arrays. Asset bounds are a conservative union of transformed
+local AABB corners, **not tight per-vertex world fitting**. Raw whole-container
+bytes, including unknown chunks/padding, remain available for future lossless
+swap. This change does not implement that swap path or wire the app's ModelReady
+worker/cache/renderer. GLB remains excluded from ordinary discovery/viewing.
+
+All owned metadata vectors and pixels use the request's shared root. Tables are
+admitted before allocation and actual capacities reconciled. Source/node/JSON
+capacity accessors and `GlbAsset::capacity_bytes` count retained managed data once
+per asset; clones share allocations. Inline, Arc, allocator, codec-internal and
+process/driver overhead remain excluded. Absent an explicit root, this API uses
+a finite 1 GiB logical budget. Limits: 65536 source meshes/images/unique selected
+primitives, 16777216 selected source vertices and 1048576 instance-primitive
+bound contributions, in addition to the existing container/codec limits.
+Referenced external/data URI images still refuse. Unsupported inactive meshes
+or images are not mistaken for selected content. No partial asset is published
+when a later selected primitive or image fails.
+
+[Controls](asset-controls.log) and [combined regression](asset-regression.log):
+
+- Original BoxTextured: complete container and all 262144 RGBA bytes agree with
+  retained source/independent FFmpeg fixture; one selected primitive, one image,
+  twelve triangles. On this Mac its retained managed weight is 272620 bytes and
+  preparation peak 469356; capacity weight equals the root's retained occupancy.
+- A budget of 469355 refuses and releases everything; 469356 succeeds. These
+  are logical managed counters, not a physical RSS bound.
+- Three instances share one primitive/image. Base-color and normal texture
+  indices share image0 despite different samplers; color/data pixel handles are
+  pointer-equal. Known translated AABB union is [-2.5,-.5,-.5]..[2.5,.5,.5].
+- Real `rrrah_memory::LeaseCache<_, GlbAsset>` verifies exact byte refusal,
+  count-limit protection by live consumer leases, later replacement/eviction,
+  TTL eviction and retained consumer ownership, with final root zero. TTL policy
+  changes affect future insertions; existing deadlines remain fixed. This is
+  composition with the actual cache, **not integration with ModelDisplayCache**.
+- Stale generation, new-generation retry, selected point primitives/empty
+  primitive arrays and failure on a second URI image after decoding the first
+  all release transient and retained credits on error.
+- Regression: decode 284 passed/9 manual ignored, mesh 98 passed, GPU 80
+  passed/10 manual ignored; no failures. The six material controls, including
+  three actual M4 Max/Metal probes, pass again after the native changes.
+- [Production checks](asset-check.log), formatting and diff checks pass. The only
+  dependency change is a local rrrah-memory **test dependency**; no third-party
+  version or production dependency changes.
+
 ## Required continuation
 
-1. Prepare/validate referenced geometry and whole-scene fitting bounds for the
-   common owned model path, preserving source sharing and failure atomicity.
-   Complete source min/max/schema and usage rules beyond the selected contracts.
-2. Qualify broader texture variants/backend scratch, resolve external/data image
-   resources and integrate role-specific pixel upload; implement PBR lighting,
-   sampler/mip/alpha/culling GPU
-   behavior, then remaining material extensions, skin/morph/animation and point/
-   line geometry. Required unsupported extensions still explicitly refuse.
-3. Common model API, discovery, bounded ownership, cache identity and lossless
-   swap; previous/next prefetch with TTL/size/count and cancellation/pressure.
-4. Original independent geometry/material references and actual Metal SDR/HDR
-   readback/window presentation, including measured file-to-first-frame latency.
+1. Connect the owned asset and GPU material pass to the common model worker,
+   renderer selection and generation publication. Preserve geometry/image
+   sharing and instance transforms; qualify fitting/normal/tangent conversion.
+   Full source min/max/schema and usage rules remain beyond the selected slice.
+2. Qualify broader texture variants and backend scratch; resolve external/data
+   image resources. General MikkTSpace/seams, material extensions, skin/morph/
+   animation and point/line geometry remain open. Required unsupported
+   extensions still explicitly refuse.
+3. Integrate app cache identity, GLB lossless swap and previous/next prefetch
+   with TTL/size/count and cancellation/pressure, using the owned asset.
+4. Original independent rendered model comparisons, actual Metal SDR/HDR
+   window presentation and measured file-to-first-frame latency.
    NVIDIA/CUDA remains deferred by the user.
 
 Schema follow-up: a component just above1 with near-unit quaternion length now refuses before normalization. The21 source-node controls include this case; the component range is independent of the length tolerance.

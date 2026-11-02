@@ -61,6 +61,10 @@ pub use rrrah_vector::{
     svg, wmf,
 };
 
+mod glb_asset;
+pub use glb_asset::{
+    GlbAsset, GlbAssetError, GlbAssetImage, GlbAssetPrimitive, GlbAssetTexture, decode_glb_asset,
+};
 mod gltf_texture;
 pub use gltf_texture::{
     GltfTextureError, GltfTextureImage, GltfTexturePixels, decode_glb_texture, decode_gltf_texture_bytes,

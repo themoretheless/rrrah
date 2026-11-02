@@ -1,61 +1,44 @@
-warning: hiding a lifetime that's elided elsewhere is confusing
-   --> vendor/jxl-color/src/icc/parse.rs:229:38
-    |
-229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
-    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
-    |                                      |
-    |                                      the lifetime is elided here
-    |
-    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
-    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
-help: use `'_` for type paths
-    |
-229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
-    |                                                                 ++++
-
-warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
-    Finished `test` profile [optimized + debuginfo] target(s) in 0.30s
-     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah_gpu-78bcd0e347a5a9c3)
+     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah_gpu-8308875643db644b)
 
 running 90 tests
+test capacity_tiling_tests::default_eager_cap_refusal_still_searches_admissible_geometry ... ok
 test capacity_tiling_tests::real_cr3_shape_fits_64_mib_without_changing_unlimited_default ... ok
 test capacity_tiling_tests::extreme_explicit_halos_and_edges_refuse_without_overflow ... ok
-test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
-test capacity_tiling_tests::default_eager_cap_refusal_still_searches_admissible_geometry ... ok
-test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
 test demosaic_compute::tests::full_sensor_bayer_windows_match_independent_bilinear_every_pixel ... ignored, full-sensor Bayer output and CPU reference exceed 500MB
+test backend::vendor_tests::hardware_vendor_filter_rejects_other_ids_and_incompatible_surfaces ... ok
 test demosaic_compute::tests::sensor_geometry_stays_within_wgsl_integer_ranges ... ok
+test backend::tests::explicit_backend_masks_and_unavailable_requests_never_fallback ... ok
 test filmstrip::tests::hit_testing_finds_tiles_and_rejects_gaps_and_padding ... ok
-test edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline ... ok
 test filmstrip::tests::max_scroll_is_zero_when_everything_fits ... ok
 test filmstrip::tests::scroll_to_reveal_moves_only_when_needed ... ok
+test capacity_tiling_tests::tight_capacity_finds_unaligned_edge_and_matches_exhaustive_minimum ... ok
 test filmstrip::tests::strip_band_hit_region ... ok
-test edit_panel::tests::coordinates_and_conflict_buttons_match_rendered_layout ... ok
 test material_render::tests::material_draw_metal ... ignored, actual Metal material draw, alpha, culling, lighting and root leases
+test edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline ... ok
 test material_texture::tests::material_texture_16bit_metal ... ignored, actual Metal all 65536 normalized codes, sRGB and float32 mip proof
 test material_texture::tests::material_texture_metal_readback_and_budget ... ignored, actual Metal material sRGB/data mip readback and admission
+test edit_panel::tests::coordinates_and_conflict_buttons_match_rendered_layout ... ok
 test material_texture::tests::sampler_all_core_modes_and_rejections ... ok
 test histogram::tests::histogram_shader_validates_and_storage_is_bounded ... ok
-test model::tests::model_shader_validates ... ok
 test material_texture::tests::material_mip_shader_validates ... ok
-test capacity_tiling_tests::tight_capacity_finds_unaligned_edge_and_matches_exhaustive_minimum ... ok
+test model::tests::model_shader_validates ... ok
+test material_render::tests::material_shader_and_layout_validate ... ok
 test raster::tile_admission_tests::constrained_metal_refusal_partial_cancel_and_retry_keep_previous_frame ... ignored, actual Metal constrained-device upload rollback and exact SDR/HDR readback
 test raster::tile_admission_tests::metadata_region_rejects_invalid_geometry_without_source_allocation ... ok
 test raster::tile_admission_tests::rejects_unrepresentable_extents_layers_and_padded_over_budget ... ok
 test raster::tile_admission_tests::repeated_view_uniform_ab_probe ... ignored, manual actual Metal paired uniform-update timing for RR-0027
 test raster::tile_admission_tests::view_uniform_full_frame_pairs ... ignored, actual Metal full-frame A/A and A/B including native allocation samples
-test raster::tile_admission_tests::visible_region_normalizes_view_and_skips_wholly_offscreen_images ... ok
-test material_render::tests::material_shader_and_layout_validate ... ok
 test raw_reuse_qualification::cancelled_in_place_reuse_changes_the_retained_frame_metal ... ignored, actual Metal negative control: in-place RAW atlas reuse corrupts retained frame
+test raster::tile_admission_tests::visible_region_normalizes_view_and_skips_wholly_offscreen_images ... ok
 test rgbe_plan::tests::full_srf_plan_and_small_limit_segments_cover_without_overlap ... ok
 test rgbe_plan::tests::invalid_geometry_planes_and_device_admission_fail_before_allocating_pixels ... ok
 test rgbe_plan::tests::source_larger_than_binding_is_windowed_with_interpolation_halo ... ok
-test demosaic_compute::tests::bayer_demosaic_compute_shader_validates_with_naga ... ok
 test telemetry_pass_qualification::editor_panels_do_not_inherit_extreme_hdr_background_metal ... ignored, actual Metal editor panel contrast over black/white/extreme HDR backgrounds
 test telemetry_pass_qualification::telemetry_clear_pass_pairs_metal ... ignored, real Metal telemetry pass readback, resize, native allocation and timestamp A/A A/B
+test tests::card_description_wraps_and_clips_by_line_count ... ok
+test demosaic_compute::tests::bayer_demosaic_compute_shader_validates_with_naga ... ok
 test tests::card_layout_is_safe_for_empty_and_tiny_viewports ... ok
 test tests::card_layout_scales_for_a_retina_surface ... ok
-test tests::card_description_wraps_and_clips_by_line_count ... ok
 test tests::compact_card_metrics_keep_dense_descriptions_readable ... ok
 test tests::default_tiling_avoids_the_4096_frame_regression ... ok
 test tests::default_tiling_errors_when_layer_limit_cannot_be_met ... ok
@@ -65,7 +48,6 @@ test tests::default_tiling_shrinks_for_small_adapters ... ok
 test tests::default_tiling_uses_c2_optimum_with_aligned_extent ... ok
 test tests::default_tiling_uses_one_frame_tile_when_layer_growth_would_waste_atlas_space ... ok
 test tests::default_tiling_uses_one_small_frame_tile_when_atlas_is_materially_smaller ... ok
-test raster::tile_admission_tests::authoring_shader_and_host_layout_validate ... ok
 test tests::dense_card_grid_scales_for_a_retina_surface ... ok
 test tests::direct_white_balance_preserves_backend_neutral_contract ... ok
 test tests::display_keeps_decoder_white_balance_gains_bit_exact ... ok
@@ -75,10 +57,11 @@ test tests::five_column_dashboard_scales_exactly_for_a_retina_surface ... ok
 test tests::five_column_metrics_preserve_timing_title_and_description_capacity ... ok
 test tests::forty_one_cards_keep_algorithm_descriptions_readable ... ok
 test tests::four_cards_fill_the_nominal_telemetry_dashboard ... ok
+test tests::hud_shader_parses_and_validates_with_naga ... ok
+test raster::tile_admission_tests::authoring_shader_and_host_layout_validate ... ok
 test tests::hud_space_is_blank_instead_of_unknown_glyph ... ok
 test tests::malformed_dimensions_do_not_panic_helper_paths ... ok
 test tests::odd_dense_card_count_keeps_row_major_order ... ok
-test tests::hud_shader_parses_and_validates_with_naga ... ok
 test tests::padded_upload_rows_cancel_and_preserve_bytes ... ok
 test tests::ten_cards_fill_a_two_column_five_row_grid ... ok
 test tests::thirty_eight_cards_fill_a_five_column_eight_row_dashboard ... ok
@@ -97,8 +80,8 @@ test tests::rowwise_tile_halo_matches_scalar_oracle_across_randomized_geometry .
 test tests::viewport_shader_parses_and_validates_with_naga ... ok
 test rgbe_plan::tests::aligned_windows_contain_every_lattice_read_for_varied_odd_extents ... ok
 test demosaic_compute::tests::bayer_demosaic_compute_rejects_invalid_inputs_and_cancels_cleanly ... ok
-test histogram::tests::newer_frame_supersedes_result_even_within_one_decode_generation_metal ... ok
 test histogram::tests::latest_generation_replaces_pending_and_obsolete_result_is_not_published_metal ... ok
+test histogram::tests::newer_frame_supersedes_result_even_within_one_decode_generation_metal ... ok
 test histogram::tests::histogram_matches_analytic_cpu_oracle_and_refuses_budget_metal ... ok
 test demosaic_compute::tests::calibrated_native_bayer_resident_preserves_signed_linear_hdr ... ok
 test demosaic_compute::tests::bayer_demosaic_compute_algorithms_preserve_constant_hdr_and_sharpen_edges_on_gpu ... ok
@@ -109,4 +92,4 @@ test histogram::tests::odd_crops_extreme_values_and_repeated_navigation_metal ..
 test demosaic_compute::tests::bayer_compute_admitted_cancellation_retries_every_algorithm_exactly ... ok
 test demosaic_compute::tests::bayer_output_windows_match_whole_frame_all_algorithms_and_cfa_phases ... ok
 
-test result: ok. 80 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.24s
+test result: ok. 80 passed; 0 failed; 10 ignored; 0 measured; 0 filtered out; finished in 0.22s

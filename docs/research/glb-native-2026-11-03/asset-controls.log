@@ -1,0 +1,30 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.19s
+     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah_decode-171946670f41680c)
+
+running 4 tests
+test glb_asset::tests::repeated_instances_and_color_data_sampler_aliases_share_one_image_and_primitive ... ok
+GLB asset original retained=272620 managed_peak=469356
+test glb_asset::tests::original_asset_retained_weight_pixels_and_clone_lifetime_are_exact ... ok
+test glb_asset::tests::asset_cache_leases_size_count_and_ttl_keep_the_source_and_pixels_until_last_owner ... ok
+GLB asset exact managed peak 469356, one-byte refusal, retry/cancel/partial image cleanup passed
+test glb_asset::tests::quota_cancellation_selected_errors_and_partial_image_failure_release_every_owner ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 289 filtered out; finished in 0.00s

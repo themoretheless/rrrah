@@ -31,6 +31,9 @@ pub(crate) struct JsonTape {
     tokens: PixelBuffer<Token>,
 }
 impl JsonTape {
+    pub(crate) fn capacity_bytes(&self) -> u64 {
+        self.tokens.capacity_bytes()
+    }
     pub(crate) fn parse(bytes: &[u8], request: &DecodeRequest) -> Result<Self, GlbError> {
         request.check_cancelled()?;
         if bytes.len() > crate::glb::MAX_GLB_JSON_BYTES {

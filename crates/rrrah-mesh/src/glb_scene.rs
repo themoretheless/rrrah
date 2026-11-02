@@ -273,6 +273,11 @@ impl GlbDocument {
     }
 }
 impl GlbScene {
+    pub fn capacity_bytes(&self) -> u64 {
+        self.document
+            .capacity_bytes()
+            .saturating_add(self.nodes.capacity_bytes())
+    }
     pub fn scene_index(&self) -> usize {
         self.index
     }

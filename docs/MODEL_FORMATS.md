@@ -798,4 +798,31 @@ Shared OBJ object/group/material payloads now consume retained credit once per a
 
 ## Native GLB foundation (2026-11-03)
 
-`rrrah-mesh::glb` now provides native container/JSON parsing, admitted immutable source ownership and borrowed embedded accessors. Original Box framing,316 JSON syntax and60 exact-integer controls,180 original /714 authored accessor components and43 malformed accessor layouts pass. Local-space triangle primitives now support indexed/nonindexed triangles, strips and fans without expanded arrays:12 original Box and20 authored triangles match independent source/index oracles, with separate analytic winding/area checks. POSITION min/max, referenced-vertex fitting bounds, index/restart rules and selected attribute semantics are validated;30 malformed primitive contracts refuse. The96-test mesh run passes. Local node matrix/TRS parsing and affine composition/normal math now match40 independent Decimal point and35 Gauss-Jordan normal controls, plus all12 original Box triangles transformed through known source nodes. Owned static scene traversal now validates the forest and scene roots, selects default/explicit scenes and preserves preorder/instancing without copying geometry. Automatic Box selection and4 scenes/8 instances/18 Decimal world triangles pass, including exact4624-byte Box metadata admission and one-byte-short refusal. Core metallic-roughness material metadata and a CPU point-texel reference now pass32 independent Decimal surface controls and28 refusal contracts; original BoxTextured material/sampler and exact embedded PNG byte sharing are verified. A separate rrrah-decode GLB texture adapter now decodes embedded PNG8/16 and core JPEG while ignoring display metadata and retaining raw color/data roles;15 controls and all262144 original BoxTextured RGBA bytes match independent references. Decode regression280 passed/9 manual ignored. Codec-internal scratch is not fully root-accounted. This still does not filter textures or render PBR. GLB remains outside ordinary viewing: full schema, image resources/PBR GPU shading, skin/animation/point-line handling and common model/cache/renderer integration remain outstanding. [Scope and evidence](research/glb-native-2026-11-03/REPORT.md).
+`rrrah-mesh::glb` provides native framing/JSON, admitted immutable source ownership,
+borrowed accessors/triangle streams, local/world transforms and selected scene
+hierarchy. Original Box/BoxTextured and authored independent geometry, Decimal
+transform/material and malformed-layout references are retained. The current
+mesh regression passes 98 tests. Resolved material vertex streams preserve
+indexed positions, normals, tangents, colors and five role-specific UV bindings
+without expanding whole meshes.
+
+`rrrah-decode` decodes embedded PNG8/16 and core JPEG with glTF raw color/data
+semantics, ignoring display metadata. The owned `GlbAsset` now validates selected
+primitives, retains hierarchy/geometry and decodes shared images once. Its real
+LeaseCache composition verifies byte/count/TTL behavior and last-owner memory
+release. Decode regression: 284 passed, 9 manual ignored. Codec scratch is not
+fully root-accounted; asset bounds are conservative transformed local AABBs.
+[Native scope and evidence](research/glb-native-2026-11-03/REPORT.md).
+
+The GPU material component supports role-specific RGBA8/linear float32 textures,
+linear-light mip generation, five-role sampling, GGX directional lighting,
+normal frames, alpha/culling and offscreen linear HDR. Six material controls
+including three actual M4 Max/Metal probes pass; GPU regression is 80 passed,
+10 manual ignored. These are bounded component proofs.
+[GPU scope and evidence](research/glb-material-gpu-2026-11-03/REPORT.md).
+
+GLB remains outside ordinary viewing. App model/cache/worker integration,
+lossless GLB swap, prefetch/navigation, general tangent/UV/transparent-ordering
+qualification, full schema/extensions, external resources, skin/animation and
+point/line handling remain outstanding. No full GLB or 100-format qualification
+is claimed.

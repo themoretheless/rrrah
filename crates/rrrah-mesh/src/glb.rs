@@ -113,6 +113,13 @@ pub struct GlbSource {
     layout: GlbLayout,
 }
 impl GlbSource {
+    /// Complete immutable container, including unknown chunks and padding.
+    pub fn container_bytes(&self) -> &[u8] {
+        &self.bytes
+    }
+    pub fn capacity_bytes(&self) -> u64 {
+        self.bytes.capacity_bytes()
+    }
     pub fn read(request: &DecodeRequest) -> Result<Self, GlbError> {
         request.check_cancelled()?;
         if request.image_index != 0 {
@@ -147,7 +154,7 @@ pub use crate::glb_material::{
     GlbAlphaMode, GlbImageMime, GlbImageSource, GlbMaterial, GlbMaterialSamples, GlbNormalTexture,
     GlbOcclusionTexture, GlbSampler, GlbSurface, GlbTexture, GlbTextureBinding, GlbTextureRole,
 };
-pub use crate::glb_primitive::{GlbPrimitive, GlbTopology};
+pub use crate::glb_primitive::{GlbMesh, GlbPrimitive, GlbTopology};
 pub use crate::glb_scene::{GlbInstance, GlbScene, GlbScenePrimitive};
 pub use crate::glb_transform::GlbTransform;
 pub use crate::glb_vertex::{GlbVertex, GlbVertexStreams};
@@ -160,6 +167,11 @@ pub struct GlbDocument {
     json: crate::glb_json::JsonTape,
 }
 impl GlbDocument {
+    pub fn capacity_bytes(&self) -> u64 {
+        self.source
+            .capacity_bytes()
+            .saturating_add(self.json.capacity_bytes())
+    }
     pub fn read(request: &DecodeRequest) -> Result<Self, GlbError> {
         let source = GlbSource::read(request)?;
         let json = crate::glb_json::JsonTape::parse(source.json_bytes(), request)?;

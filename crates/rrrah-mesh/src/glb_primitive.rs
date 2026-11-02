@@ -208,7 +208,61 @@ fn metadata_bounds(object: JsonValue<'_>, request: &DecodeRequest) -> Result<[[f
     }
     Ok(result)
 }
+/// Borrowed mesh descriptor for linear traversal without repeated root-array lookup.
+#[derive(Debug, Clone, Copy)]
+pub struct GlbMesh<'a> {
+    document: &'a GlbDocument,
+    source: JsonValue<'a>,
+}
+impl<'a> GlbMesh<'a> {
+    pub fn primitive_count(self, request: &DecodeRequest) -> Result<usize, GlbError> {
+        let mut count = 0;
+        for _ in required(self.source, "primitives", request)?
+            .array()
+            .ok_or(GlbError::Invalid("mesh primitives array"))?
+        {
+            request.check_cancelled()?;
+            count += 1;
+        }
+        if count == 0 {
+            return Err(GlbError::Invalid("empty mesh primitives"));
+        }
+        Ok(count)
+    }
+    pub fn primitives<'r>(
+        self,
+        request: &'r DecodeRequest,
+    ) -> Result<impl Iterator<Item = Result<GlbPrimitive<'a>, GlbError>> + 'r, GlbError>
+    where
+        'a: 'r,
+    {
+        request.check_cancelled()?;
+        let mut array = required(self.source, "primitives", request)?
+            .array()
+            .ok_or(GlbError::Invalid("mesh primitives array"))?;
+        let first = array.next().ok_or(GlbError::Invalid("empty mesh primitives"))?;
+        Ok(std::iter::once(first)
+            .chain(array)
+            .map(move |value| self.document.primitive_source(value, request)))
+    }
+}
 impl GlbDocument {
+    pub fn meshes<'a>(
+        &'a self,
+        request: &DecodeRequest,
+    ) -> Result<impl Iterator<Item = GlbMesh<'a>>, GlbError> {
+        request.check_cancelled()?;
+        let values = self
+            .root()
+            .field("meshes", request)?
+            .map(|v| v.array().ok_or(GlbError::Invalid("meshes array")))
+            .transpose()?;
+        Ok(values.into_iter().flatten().map(move |source| GlbMesh {
+            document: self,
+            source,
+        }))
+    }
+
     /// Validate a triangle primitive and retain only borrowed source views.
     /// Positions remain local: node transforms, morphing, skinning, materials
     /// and shader interpretation are separate scene/rendering responsibilities.
@@ -221,6 +275,14 @@ impl GlbDocument {
         request.check_cancelled()?;
         let mesh = array_item(self.root(), "meshes", mesh, request)?;
         let source = array_item(mesh, "primitives", primitive, request)?;
+        self.primitive_source(source, request)
+    }
+    fn primitive_source<'a>(
+        &'a self,
+        source: JsonValue<'a>,
+        request: &DecodeRequest,
+    ) -> Result<GlbPrimitive<'a>, GlbError> {
+        request.check_cancelled()?;
         if source.field("targets", request)?.is_some() {
             return Err(GlbError::Unsupported("morph targets"));
         }

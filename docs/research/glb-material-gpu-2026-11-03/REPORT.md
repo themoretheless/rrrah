@@ -49,7 +49,7 @@ mip upload. No wall-clock speedup is claimed without a controlled benchmark.
 - [GPU regression](gpu-regression.log): 80 passed, 0 failed, 10 manual hardware
   tests ignored; all three material Metal probes were run separately and passed above.
 - [Production check](production-check.log), cargo fmt and git diff checks passed.
-- [Source hashes](sources.json) pin the implementation and unchanged lockfile.
+- [Source hashes](sources.json) pin the implementation and lockfile.
 
 ## 16-bit source precision and filtering
 
@@ -147,6 +147,10 @@ host size checks verify the 96-byte vertex/176-byte uniform layout.
 Primary semantics and BRDF guidance:
 [glTF 2.0 materials and Appendix B](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html).
 This probe is a bounded implementation proof, not full glTF conformance.
+
+Owned scene/image preparation and actual LeaseCache composition now have
+[separate native evidence](../glb-native-2026-11-03/REPORT.md#owned-glb-sceneimage-asset-and-real-cache-composition).
+The existing GPU probes were rerun successfully after these native changes.
 
 ## Remaining work
 

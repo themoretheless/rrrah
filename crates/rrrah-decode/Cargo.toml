@@ -33,6 +33,7 @@ thiserror.workspace = true
 libheif-rs = { version = "=3.0.0", default-features = false, features = ["v1_17"] }
 
 [dev-dependencies]
+rrrah-memory = { path = "../rrrah-memory", version = "0.1.0" }
 # Independent encoder used only by examples/generate_basis_fixtures.rs.
 basis-universal = "=0.3.1"
 rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }
