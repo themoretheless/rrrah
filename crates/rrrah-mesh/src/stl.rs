@@ -146,8 +146,14 @@ fn stream_binary_facets(
     }
     request.check_cancelled()?;
     let mut extra = [0u8; 1];
-    if reader.read(&mut extra).map_err(io_error)? != 0 {
-        return Err(StlDecodeError::Invalid("binary source grew during read"));
+    loop {
+        request.check_cancelled()?;
+        match reader.read(&mut extra) {
+            Ok(0) => break,
+            Ok(_) => return Err(StlDecodeError::Invalid("binary source grew during read")),
+            Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+            Err(error) => return Err(io_error(error).into()),
+        }
     }
     request.check_cancelled()?;
     Ok((mesh, reservation))
@@ -348,6 +354,74 @@ mod tests {
         bytes.extend_from_slice(&0_u16.to_le_bytes());
         bytes
     }
+    #[test]
+    fn streamed_eof_retries_interruptions_but_preserves_errors_and_cancellation() {
+        use std::io::{Error, ErrorKind, Read};
+        use std::sync::{
+            Arc,
+            atomic::{AtomicU64, Ordering},
+        };
+        struct InterruptedTail {
+            calls: usize,
+            outcome: std::io::Result<usize>,
+            cancel: Option<Arc<AtomicU64>>,
+        }
+        impl Read for InterruptedTail {
+            fn read(&mut self, _: &mut [u8]) -> std::io::Result<usize> {
+                self.calls += 1;
+                if self.calls <= 3 {
+                    if let Some(generation) = &self.cancel {
+                        generation.store(2, Ordering::Release);
+                    }
+                    Err(Error::from(ErrorKind::Interrupted))
+                } else {
+                    std::mem::replace(&mut self.outcome, Ok(0))
+                }
+            }
+        }
+        let budget = rrrah_core::MemoryBudget::new(size_of::<StlMesh>() as u64);
+        let mut request = DecodeRequest::new("unused.stl");
+        request.memory_budget = Some(budget.clone());
+        for outcome in [Ok(0), Ok(1), Err(Error::from(ErrorKind::PermissionDenied))] {
+            let expected = match &outcome {
+                Ok(n) => *n,
+                Err(_) => 2,
+            };
+            let mut reader = InterruptedTail {
+                calls: 0,
+                outcome,
+                cancel: None,
+            };
+            let result = stream_binary_facets(&mut reader, 0, &request);
+            match expected {
+                0 => assert!(result.is_ok()),
+                1 => assert!(matches!(
+                    result,
+                    Err(StlDecodeError::Invalid("binary source grew during read"))
+                )),
+                _ => assert!(
+                    matches!(&result, Err(StlDecodeError::Source(DecodeError::Io { source, .. })) if source.kind() == ErrorKind::PermissionDenied)
+                ),
+            }
+            assert_eq!(reader.calls, 4);
+            drop(result);
+            assert_eq!(budget.used(), 0);
+        }
+        let generation = Arc::new(AtomicU64::new(1));
+        request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));
+        let mut reader = InterruptedTail {
+            calls: 0,
+            outcome: Ok(0),
+            cancel: Some(generation),
+        };
+        assert!(matches!(
+            stream_binary_facets(&mut reader, 0, &request),
+            Err(StlDecodeError::Source(DecodeError::Cancelled))
+        ));
+        assert_eq!(reader.calls, 1);
+        assert_eq!(budget.used(), 0);
+    }
+
     #[test]
     fn streamed_binary_blocks_preserve_facets_cancel_and_recover() {
         use std::io::Read;
