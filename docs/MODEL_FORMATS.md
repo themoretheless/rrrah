@@ -798,4 +798,4 @@ Shared OBJ object/group/material payloads now consume retained credit once per a
 
 ## Native GLB foundation (2026-11-03)
 
-A borrowed GLB2 container parser and admitted immutable source owner now exist in `rrrah-mesh::glb`. Original Khronos Box framing, source-clone credit and malformed boundaries pass; this is not registered as decoded/viewable GLB. JSON semantics, geometry, scene transforms/materials, cache/swap and Metal remain required. [Scope and evidence](research/glb-native-2026-11-03/REPORT.md).
+A borrowed GLB2 container parser and admitted immutable source owner now exist in `rrrah-mesh::glb`. Original Khronos Box framing, source-clone credit and malformed boundaries pass; this is not registered as decoded/viewable GLB. A bounded native JSON tape and basic asset-version validation now pass316 independent syntax and60 exact-integer controls, with escaped/duplicate-key semantics and source/token ownership. Full scene/accessor semantics, geometry, transforms/materials, cache/swap and Metal remain required. [Scope and evidence](research/glb-native-2026-11-03/REPORT.md).

@@ -1,4 +1,4 @@
-//! Native GLB 2 container foundation. JSON/scene semantics are a separate layer.
+//! Native GLB 2 container and bounded JSON document. Scene semantics are a separate layer.
 //! BIN and JSON remain slices of one immutable, optionally admitted allocation.
 use crate::{DecodeError, DecodeRequest};
 use std::ops::Range;
@@ -17,6 +17,8 @@ pub enum GlbError {
     Invalid(&'static str),
     #[error("unsupported GLB container version: {0}")]
     Version(u32),
+    #[error("unsupported glTF: {0}")]
+    Unsupported(&'static str),
     #[error("GLB resource limit: {0}")]
     Limit(&'static str),
 }
@@ -123,8 +125,9 @@ impl GlbSource {
         let layout = GlbLayout::parse(&bytes, request)?;
         Ok(Self { bytes, layout })
     }
-    /// Original UTF-8 JSON bytes including container padding. The forthcoming
-    /// JSON decoder must validate encoding, syntax, asset version and schema.
+    /// Original JSON bytes including padding. This container-only accessor
+    /// does not validate JSON; `GlbDocument` validates syntax and asset version.
+    /// Scene/accessor schema validation remains a subsequent layer.
     pub fn json_bytes(&self) -> &[u8] {
         &self.bytes[self.layout.json.clone()]
     }
@@ -135,6 +138,54 @@ impl GlbSource {
     }
     pub fn layout(&self) -> &GlbLayout {
         &self.layout
+    }
+}
+
+pub use crate::glb_json::{JsonArray, JsonKind, JsonValue};
+
+/// Syntactically validated, admitted JSON document over an immutable GLB source.
+/// Scene/accessor semantics are not yet a decoded model.
+#[derive(Debug, Clone)]
+pub struct GlbDocument {
+    source: GlbSource,
+    json: crate::glb_json::JsonTape,
+}
+impl GlbDocument {
+    pub fn read(request: &DecodeRequest) -> Result<Self, GlbError> {
+        let source = GlbSource::read(request)?;
+        let json = crate::glb_json::JsonTape::parse(source.json_bytes(), request)?;
+        let document = Self { source, json };
+        let root = document.root();
+        let asset = root
+            .field("asset", request)?
+            .ok_or(GlbError::Invalid("missing asset"))?;
+        let version = asset
+            .field("version", request)?
+            .ok_or(GlbError::Invalid("missing asset.version"))?;
+        if !version.string_eq("2.0") {
+            return Err(GlbError::Unsupported("asset.version"));
+        }
+        if let Some(minimum) = asset.field("minVersion", request)? {
+            if !minimum.string_eq("2.0") {
+                return Err(GlbError::Unsupported("asset.minVersion"));
+            }
+        }
+        if let Some(required) = root.field("extensionsRequired", request)? {
+            let mut required = required
+                .array()
+                .ok_or(GlbError::Invalid("extensionsRequired array"))?;
+            if required.next().is_some() {
+                return Err(GlbError::Unsupported("required extensions"));
+            }
+        }
+        request.check_cancelled()?;
+        Ok(document)
+    }
+    pub fn root(&self) -> JsonValue<'_> {
+        self.json.root(self.source.json_bytes())
+    }
+    pub fn source(&self) -> &GlbSource {
+        &self.source
     }
 }
 
@@ -155,6 +206,100 @@ mod tests {
     fn parse(bytes: &[u8]) -> Result<GlbLayout, GlbError> {
         GlbLayout::parse(bytes, &DecodeRequest::new("unused.glb"))
     }
+    #[test]
+    fn original_box_document_admits_exact_source_and_native_token_tape() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/glb/Box.glb");
+        // Independent Python census: 165 tokens; native fixed token is 16 bytes.
+        let budget = rrrah_core::MemoryBudget::new(4304);
+        let mut request = DecodeRequest::new(path);
+        request.memory_budget = Some(budget.clone());
+        let document = GlbDocument::read(&request).unwrap();
+        assert_eq!(budget.used(), 4304);
+        let accessors = document.root().field("accessors", &request).unwrap().unwrap();
+        let mut accessors = accessors.array().unwrap();
+        assert_eq!(
+            accessors
+                .next()
+                .unwrap()
+                .field("count", &request)
+                .unwrap()
+                .unwrap()
+                .as_u64(),
+            Some(36)
+        );
+        assert_eq!(
+            accessors
+                .next()
+                .unwrap()
+                .field("count", &request)
+                .unwrap()
+                .unwrap()
+                .as_u64(),
+            Some(24)
+        );
+        assert_eq!(
+            accessors
+                .next()
+                .unwrap()
+                .field("count", &request)
+                .unwrap()
+                .unwrap()
+                .as_u64(),
+            Some(24)
+        );
+        assert!(accessors.next().is_none());
+        let clone = document.clone();
+        drop(document);
+        assert_eq!(budget.used(), 4304);
+        drop(clone);
+        assert_eq!(budget.used(), 0);
+        request.memory_budget = Some(rrrah_core::MemoryBudget::new(4303));
+        assert!(matches!(
+            GlbDocument::read(&request),
+            Err(GlbError::Source(DecodeError::Memory(_)))
+        ));
+        let budget = request.memory_budget.as_ref().unwrap();
+        assert_eq!(budget.used(), 0);
+        assert_eq!(budget.peak(), 1664);
+    }
+    #[test]
+    fn document_version_schema_failures_release_source_and_json_credit() {
+        let path = std::env::temp_dir().join(format!("rrrah-glb-document-{}.glb", std::process::id()));
+        let budget = rrrah_core::MemoryBudget::new(4096);
+        let mut request = DecodeRequest::new(&path);
+        request.memory_budget = Some(budget.clone());
+        for (text, valid) in [
+            (r#"{"asset":{"version":"2.0"}}"#, true),
+            (
+                r#"{"asset":{"version":"1.0","\u0076ersion":"2.0"},"extensionsRequired":[]}"#,
+                true,
+            ),
+            (r#"{"asset":{"version":"2.0","minVersion":"2.0"}}"#, true),
+            (r#"{"asset":{"version":"2.1"}}"#, false),
+            (r#"{"asset":{"version":"2.0","minVersion":"2.1"}}"#, false),
+            (
+                r#"{"asset":{"version":"2.0"},"extensionsRequired":["KHR_unknown"]}"#,
+                false,
+            ),
+            (r#"{"asset":{"version":"2.0"},"extensionsRequired":{}}"#, false),
+            (r#"{"asset":1}"#, false),
+            (r#"{"asset":{}}"#, false),
+            ("[]", false),
+            (r#"{"asset":{"version":"2.0"},}"#, false),
+        ] {
+            let mut bytes = text.as_bytes().to_vec();
+            while bytes.len() % 4 != 0 {
+                bytes.push(b' ');
+            }
+            std::fs::write(&path, container(&[(JSON, &bytes)])).unwrap();
+            let result = GlbDocument::read(&request);
+            assert_eq!(result.is_ok(), valid, "{text}: {result:?}");
+            drop(result);
+            assert_eq!(budget.used(), 0);
+        }
+        std::fs::remove_file(path).unwrap();
+    }
+
     #[test]
     fn original_khronos_box_matches_independent_container_ranges() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/glb/Box.glb");
