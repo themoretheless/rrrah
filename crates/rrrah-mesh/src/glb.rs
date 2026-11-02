@@ -141,6 +141,7 @@ impl GlbSource {
     }
 }
 
+pub use crate::glb_accessor::{GlbAccessor, GlbComponent, GlbShape, MAX_ACCESSOR_ELEMENTS};
 pub use crate::glb_json::{JsonArray, JsonKind, JsonValue};
 
 /// Syntactically validated, admitted JSON document over an immutable GLB source.

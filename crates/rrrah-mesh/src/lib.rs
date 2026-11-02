@@ -14,6 +14,7 @@
 pub use rrrah_raw::{DecodeError, DecodeRequest, GenerationToken, bounded_io};
 
 pub mod glb;
+mod glb_accessor;
 mod glb_json;
 
 mod off_swap;
