@@ -393,13 +393,89 @@ Full PBR lighting, texture pixels/ICC-EXIF policy, extension semantics, sampler
 filtering/mips, material GPU upload/cache identity and live presentation remain
 required; GLB is still not registered as normally viewable.
 
+## glTF-specific embedded PNG/JPEG pixel decoding
+
+The unified `rrrah-decode` facade now exposes `glb` and
+`decode_glb_texture`/`decode_gltf_texture_bytes`. This adapter uses the existing
+pinned vendored image / Rust PNG / zune JPEG backends; it does not implement a
+new entropy codec or invoke an external runtime decoder. FFmpeg is oracle-only.
+PNG8/16 grayscale, gray-alpha, RGB, RGBA and palette expansion preserve source
+samples in admitted RGBA8/RGBA16 buffers. Core JPEG is currently8-bit,1/3-component
+baseline/extended-sequential/progressive with fixed positive dimensions; other
+coding/depth/components and deferred height/DNL explicitly refuse.
+
+The adapter bypasses the ordinary photo display importer. A bounded admitted
+range table creates virtual input over the original bytes, dropping non-pixel
+metadata before codec construction. PNG ICC/gamma/chromaticity/EXIF/text/physical
+aspect and animation controls are ignored; the default PNG IDAT image remains.
+Palette/tRNS remain because they affect pixels. JPEG APP1/2 and other non-pixel
+APP/comment segments are omitted while JFIF/Adobe hints and coded data remain.
+Orientation is intentionally not applied. PNG framing/CRC and consecutive IDAT
+rules, JPEG marker/extents/entropy boundaries, exact end framing and MIME magic
+are checked. Original caller bytes stay immutable. This is not validation of
+ignored metadata payload semantics or every PNG/JPEG variant.
+
+PNG input is not copied into an intermediate sanitized file. The existing JPEG
+backend still owns a compressed-input copy: its exact Vec capacity is admitted
+before retention. Final RGBA capacity is reserved before codec construction;
+native-channel overlap and range tables also consume root credit. The output
+retains only its shared pixel allocation. Color/data role is explicit; raw RGB
+stays encoded for sRGB roles and numeric for data roles, with straight alpha.
+`with_role` shares identical pixels rather than decoding/copying again. No ICC,
+orientation, display transfer or tone mapping is inherited from normal raster
+import. Image filtering/mips and color decoding before GPU filtering remain
+separate rendering work. External/data URI resolution still explicitly refuses.
+
+**Accounting boundary:** backend-internal row/entropy/progressive scratch is not
+fully charged to the shared root. Codec/dimension settings bound the supported
+image shape, but these checks do not prove a process/RSS bound equal to the root
+quota. A JPEG CPU decode cannot be interrupted inside the backend call; source
+reads/conversion and pre/post publication checks are cancellable. This limitation
+remains open for complete working-memory/latency qualification.
+
+Implementation resource limits are2GiB encoded input,65536 retained ranges /
+PNG chunks,65536 per dimension and512MiB final RGBA. Dimension limits are checked
+before output multiplication, including adversarial uint32-max dimensions.
+
+Current evidence:
+
+- [Decode regression](texture-decode-regression.log):280 passed,0 failed,9 existing
+  manual cases ignored. The four new tests include15 authored/reused PNG/JPEG
+  controls: exact PNG8/16 codes and alpha, palette+tRNS, ICC/EXIF/gamma/aspect/text
+  bypass, APNG default image, baseline/progressive JPEG and tagged counterparts
+  (existing independent JPEG oracle tolerance2 levels).
+- All262144 RGBA bytes of the original BoxTextured256x256 PNG match independent
+  FFmpeg9.0.2 readback, not only metadata or dimensions. Original source/license
+  attribution remains with the model. This still does not qualify a rendered
+  scene, sampler or GPU texture.
+- Role retagging preserves pixel pointer identity and final-owner credit.
+  Source/codec transients release before returning the output. For the authored
+  RGBA3x2 case, managed peak120 =96 range bytes +24 output; a one-byte external
+  reservation refuses, releasing it allows same-source retry, and final credit0.
+  This deliberately excludes caller-owned encoded input and backend scratch;
+  it is not a claim the codec runs in120 physical bytes.
+- Every truncated prefix of selected PNG/baseline/progressive sources refuses.
+  CRC/MIME failures, oversized dimensions and unsupported deferred JPEG height
+  refuse without leaked owned buffers or integer-overflow panic. Cancellation/
+  new-generation retry passes. Broad malformed entropy and mid-codec cancellation
+  remain additional qualification work.
+- [Production check](texture-decode-check.log), formatting and diff checks pass.
+  Check retains the pre-existing jxl-color lifetime warning; no unrelated fix was
+  made. All codec fixture files regenerate byte-identically with the recorded
+  [oracle provenance](texture-codec-provenance.json). No dependency/lockfile edits.
+
+The metadata override follows the primary
+[Khronos image rules](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#file-extensions-and-media-types).
+No runtime LibRaw, FFmpeg or external viewer is used by this texture path.
+
 ## Required continuation
 
 1. Prepare/validate referenced geometry and whole-scene fitting bounds for the
    common owned model path, preserving source sharing and failure atomicity.
    Complete source min/max/schema and usage rules beyond the selected contracts.
-2. Decode core texture images with role-specific transfer/metadata policy and
-   resolve image resources; implement PBR lighting, sampler/mip/alpha/culling GPU
+2. Qualify broader texture variants/backend scratch, resolve external/data image
+   resources and integrate role-specific pixel upload; implement PBR lighting,
+   sampler/mip/alpha/culling GPU
    behavior, then remaining material extensions, skin/morph/animation and point/
    line geometry. Required unsupported extensions still explicitly refuse.
 3. Common model API, discovery, bounded ownership, cache identity and lossless

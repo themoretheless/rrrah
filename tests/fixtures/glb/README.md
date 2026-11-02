@@ -66,3 +66,14 @@ storing duplicate payloads. `material-manifest.json` pins all outputs, the
 original model SHA and its embedded PNG range/hash. No image codec, sampler
 filter, lighting/shader, complete texture interoperability or viewer result is
 qualified by these fixtures.
+
+`texture-codec` contains authored PNG sample/framing controls, reused baseline/
+progressive JPEG sources and existing raster oracles, metadata-tagged variants,
+and the independent FFmpeg RGBA readback of the original BoxTextured model PNG.
+PNG references are authored CC0 data. Reused JPEG data keeps its existing raster
+fixture provenance; BoxTextured pixel references retain the model attribution
+and mark notice above. The generator is
+`scripts/generate-gltf-texture-codec-fixtures.py`; `texture-codec-manifest.json`
+pins source/reference hashes. These prove selected raw pixel import and managed
+buffer lifetime, not complete codec scratch accounting, image filtering or GPU
+presentation. Input metadata is intentionally ignored under glTF interpretation.

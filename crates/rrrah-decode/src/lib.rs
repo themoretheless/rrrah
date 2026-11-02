@@ -32,6 +32,7 @@ pub use rrrah_raw::{
     read_optio_s4_sensor_with_budget, sniff, unpack_bay_sensor, unpack_optio_s4_sensor, vc5,
 };
 
+pub use rrrah_mesh::glb;
 pub use rrrah_mesh::{
     DecodedModel, ModelBuffer, ModelDecodeError, ObjCorner, ObjDecodeError, ObjFace, ObjMesh, ObjSwapError,
     ObjTriangle, OffColor, OffDecodeError, OffEncoding, OffFace, OffMesh, OffSwapError, PlyDecodeError,
@@ -58,6 +59,11 @@ pub use rrrah_vector::{
     outline_eps_join, outline_eps_polyline, outline_eps_prepared_stroke, outline_eps_segment,
     parse_eps_number, pdf, pict, png_color, prepare_eps_stroke, rasterize_eps_fills, rasterize_eps_scene,
     svg, wmf,
+};
+
+mod gltf_texture;
+pub use gltf_texture::{
+    GltfTextureError, GltfTextureImage, GltfTexturePixels, decode_glb_texture, decode_gltf_texture_bytes,
 };
 
 mod jpeg_cmyk;
