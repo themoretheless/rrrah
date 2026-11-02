@@ -1,5 +1,13 @@
 # Current coverage of the requested viewer scope
 
+Current-source Metal collection regression (2026-11-02): eight 12 MP RGBA32F
+images completed 161 restore/pressure/cancellation/TTL cycles in 120.022 seconds
+on Apple M4 Max. Every cycle preserves native float bits and exact full-size
+SDR/HDR regression frames; final managed root/queue usage is zero. Required-device
+test and workload validator pass, with sampled peak process RSS 2,090,024,960
+bytes. This is finite storage/GPU transport evidence, not full-format, physical
+HDR, slow-disk or OS-pressure qualification. [Report and original evidence](research/metal-current-collection-2026-11-02/REPORT.md).
+
 2026-11-02 AI rendering checkpoint: an experimental conservative carry boundary
 passes111encode tests and256public feature tests. The normal production backend
 is unchanged by this module-only step. A guarded1024-strip control preserves the
