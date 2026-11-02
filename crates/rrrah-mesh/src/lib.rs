@@ -17,6 +17,7 @@ pub mod glb;
 mod glb_accessor;
 mod glb_json;
 mod glb_primitive;
+mod glb_scene;
 mod glb_transform;
 
 mod off_swap;

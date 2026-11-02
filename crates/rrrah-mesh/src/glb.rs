@@ -144,6 +144,7 @@ impl GlbSource {
 pub use crate::glb_accessor::{GlbAccessor, GlbComponent, GlbShape, MAX_ACCESSOR_ELEMENTS};
 pub use crate::glb_json::{JsonArray, JsonKind, JsonObject, JsonValue};
 pub use crate::glb_primitive::{GlbPrimitive, GlbTopology};
+pub use crate::glb_scene::{GlbInstance, GlbScene, GlbScenePrimitive};
 pub use crate::glb_transform::GlbTransform;
 
 /// Syntactically validated, admitted JSON document over an immutable GLB source.
@@ -183,6 +184,11 @@ impl GlbDocument {
         }
         request.check_cancelled()?;
         Ok(document)
+    }
+    pub(crate) fn json_at(&self, index: u32) -> JsonValue<'_> {
+        self.json
+            .at(self.source.json_bytes(), index)
+            .expect("validated source token handle")
     }
     pub fn root(&self) -> JsonValue<'_> {
         self.json.root(self.source.json_bytes())

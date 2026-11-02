@@ -53,6 +53,9 @@ impl GlbTransform {
         {
             return Err(GlbError::Invalid("non-finite node TRS"));
         }
+        if rotation.into_iter().any(|v| v.abs() > 1.) {
+            return Err(GlbError::Invalid("node quaternion component range"));
+        }
         let largest = rotation.into_iter().map(f64::abs).fold(0., f64::max);
         if largest == 0. {
             return Err(GlbError::Invalid("zero node quaternion"));
@@ -266,25 +269,31 @@ impl GlbDocument {
     ) -> Result<GlbTransform, GlbError> {
         request.check_cancelled()?;
         let node = array_item(self.root(), "nodes", index, request)?;
-        let matrix = node.field("matrix", request)?;
-        let translation = node.field("translation", request)?;
-        let rotation = node.field("rotation", request)?;
-        let scale = node.field("scale", request)?;
-        let result = if let Some(matrix) = matrix {
-            if translation.is_some() || rotation.is_some() || scale.is_some() {
-                return Err(GlbError::Invalid("node matrix and TRS coexist"));
-            }
-            GlbTransform::from_local_columns(array(matrix)?)?
-        } else {
-            GlbTransform::from_trs(
-                translation.map(array).transpose()?.unwrap_or([0.; 3]),
-                rotation.map(array).transpose()?.unwrap_or([0., 0., 0., 1.]),
-                scale.map(array).transpose()?.unwrap_or([1.; 3]),
-            )?
-        };
-        request.check_cancelled()?;
-        Ok(result)
+        transform_from_json(node, request)
     }
+}
+pub(crate) fn transform_from_json(
+    node: JsonValue<'_>,
+    request: &DecodeRequest,
+) -> Result<GlbTransform, GlbError> {
+    let matrix = node.field("matrix", request)?;
+    let translation = node.field("translation", request)?;
+    let rotation = node.field("rotation", request)?;
+    let scale = node.field("scale", request)?;
+    let result = if let Some(matrix) = matrix {
+        if translation.is_some() || rotation.is_some() || scale.is_some() {
+            return Err(GlbError::Invalid("node matrix and TRS coexist"));
+        }
+        GlbTransform::from_local_columns(array(matrix)?)?
+    } else {
+        GlbTransform::from_trs(
+            translation.map(array).transpose()?.unwrap_or([0.; 3]),
+            rotation.map(array).transpose()?.unwrap_or([0., 0., 0., 1.]),
+            scale.map(array).transpose()?.unwrap_or([1.; 3]),
+        )?
+    };
+    request.check_cancelled()?;
+    Ok(result)
 }
 
 #[cfg(test)]
@@ -428,7 +437,7 @@ mod tests {
             assert_eq!(budget.used(), 0);
             count += 1;
         }
-        assert_eq!(count, 20);
+        assert_eq!(count, 21);
         let mut request = request("Box.glb", &budget);
         let generation = Arc::new(AtomicU64::new(1));
         request.cancellation = Some(crate::GenerationToken::new(generation.clone(), 1));

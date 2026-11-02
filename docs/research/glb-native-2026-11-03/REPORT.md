@@ -1,8 +1,8 @@
-# Native GLB geometry and node-transform foundations — 2026-11-03
+# Native GLB static scene and geometry foundations — 2026-11-03
 
 This implements native container/JSON/accessor and selected local-space triangle
-primitive decoding toward GLB/glTF scene loading. It does **not** register GLB/glTF
-in model discovery or claim automatic scene/hierarchy traversal, viewing, material interpretation,
+primitive decoding and automatic static scene/hierarchy traversal. It does **not**
+register GLB/glTF in model discovery or claim full viewing/material interpretation,
 cache/swap, Metal, HDR, first-frame timing or format qualification.
 The raster catalogue remains 94 implemented subsets, 6 pending, 0 fully qualified.
 
@@ -49,7 +49,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
 
 ## Evidence
 
-- [Mesh tests](mesh-tests.log): 86 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
+- [Mesh tests](mesh-tests.log): 91 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
   truncated prefixes, malformed order/alignment/length/version, chunk/JSON
   limits, cancellation, last-owner source credit, exact and one-byte-short
   admission, malformed-input cleanup.
@@ -76,7 +76,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
   failures release source and token credit.
 - The numeric fixture generator initially produced invalid `000e-2`; Rust
   correctly refused. The generator now independently checks JSON grammar before
-  Decimal conversion and writes legal `0e-2`. Current86-test result includes the repaired controls.
+  Decimal conversion and writes legal `0e-2`. Current91-test result includes the repaired controls.
 - [Source pins](sources.json). No new dependency or lockfile changes.
 
 ## Borrowed embedded accessors
@@ -178,7 +178,7 @@ scratch and duplicate-name comparison. Aggregate attribute component validation
 is capped at128 million. Scans check cancellation every1024 elements. These are
 implementation limits; broad large-scene timing and OS memory are not qualified.
 
-Current proof in the86-test mesh run:
+Current proof in the91-test mesh run:
 
 - 12 original Box local triangles match independent Python struct index/position
   reads. The source node matrix is deliberately not applied by this API.
@@ -212,7 +212,7 @@ and finite float64 interpretation. Raw original JSON remains unchanged.
 
 Local matrix bottom row must be affine. Normalized nonzero columns must be
 orthogonal within1e-6, accepting negative/zero scales but refusing local shear.
-Quaternion length must be within1e-6 of1; accepted rounded quaternions are
+Quaternion components must stay in[-1,1] and length must be within1e-6 of1; accepted rounded quaternions are
 normalized for calculation. TRS composition uses T*R*S. Parent.compose(local)
 uses parent*local and deliberately permits world shear produced by valid nested
 nonuniform TRS; it does not reapply the local decomposability restriction.
@@ -230,7 +230,7 @@ Values outside float64 precision/range are not universally qualified; ordinary
 floating underflow may discard unrepresentable components. No exact-arithmetic
 or all-extreme-transform guarantee is asserted.
 
-Evidence in the current86-test run:
+Evidence in the current91-test run:
 
 - 40 point transformations across8 source nodes agree with independent80-digit
   Decimal Hamilton quaternion multiplication / explicit matrix math. Cases cover
@@ -243,7 +243,7 @@ Evidence in the current86-test run:
   composed with node1's identity and match the independent transformed-coordinate
   oracle. This is manual known-node composition, **not automatic hierarchy or
   scene-selection qualification**. The original source plus token peak remains4304.
-- 20 malformed source-node contracts refuse with final credit0. Cancellation and
+- 21 malformed source-node contracts refuse with final credit0. Cancellation and
   new-generation retry preserve the immutable source; final document clone owns
   source/token credit. Transform math creates no additional managed allocation.
 - Analytic extreme diagonal cases include1e300/1e-300 and the smallest float64
@@ -254,11 +254,76 @@ Evidence in the current86-test run:
 - Six transform-generator artifacts regenerate byte-identically; Python syntax,
   Cargo formatting, production check and diff checks pass. No new dependencies.
 
+## Owned static scene hierarchy and instancing
+
+`GlbDocument::scene(selection, request)` now builds an owned admitted static scene.
+It clones the immutable document/source/token owner and allocates one fixed160-byte
+node descriptor per source node. Geometry remains in the original shared BIN.
+Cloning a scene shares both source and node-table allocation; final owners retain
+their credits. Internal JSON handles avoid self-referential borrowed scene storage.
+Bookkeeping and bounded stack scratch remain outside managed heap accounting.
+
+Every node and child edge is processed with checked references and single-parent
+admission; duplicate children, cycles and multiple parents refuse. Parent-chain
+resolution is iterative, using at most64 stack entries, and computes each world
+matrix once. Depth is checked even when a parent was already resolved. Limits
+are65,536 nodes /64 hierarchy levels. All source scene root lists are checked
+for duplicates, bounds and true-root status; the same root can belong to different
+scenes. This is structure/transform validation, not complete glTF schema validation.
+
+Explicit selection overrides a valid default asset.scene; without either, scene0
+is selected deterministically. An absent scenes array explicitly reports an
+unsupported scene-less asset; an empty scene object is supported. Explicit empty
+nodes/children/root arrays refuse per the schema. Selected traversal retains
+root/child order, including nodes without meshes. Instance iteration emits one
+node/mesh/world-matrix record per selected mesh node; it does not duplicate mesh
+arrays. Selected skin or morph-weight nodes explicitly refuse. Animations are
+not applied: this API describes the declared static source pose.
+
+`scene.primitive(node, primitive, request)` resolves local geometry lazily using
+the existing primitive validator, then supplies fallible world-space triangle
+reads. World-point arithmetic range errors propagate; no complete model is
+published by this layer. It does **not** prevalidate every mesh/material, compute
+whole-scene fitting bounds, schedule animation or integrate the application,
+cache/swap or GPU renderer. Those remain required continuation.
+
+Evidence in the current91-test mesh run:
+
+- Automatic default Box selection visits nodes0,1 and emits node1/mesh0. All12
+  triangles match the independent original-node transformed-coordinate oracle.
+  No manual parent selection is used by this new test.
+- Four authored scenes /7 nodes emit8 total selected instances in the independent
+  expected order, with18 world triangles matching recursive80-digit Decimal
+  source-pose references. Controls include reused meshes, source root order,
+  child order differing from node-index order, translation/rotation/nonuniform
+  scale, reflection, composed world shear, alternate/default and empty scenes.
+- Box admits exactly4624 bytes:4304 original source/tokens plus320 for two nodes.
+  A4623 limit refuses metadata before allocation, retaining source-only peak4304.
+  A one-byte external reservation causes a retryable metadata refusal; releasing
+  it permits the same immutable document to build the scene. Cancellation/new
+  generation retry and last-scene-clone cleanup return final0. Source BIN pointer
+  identity proves source sharing; this is not a total physical heap/RSS claim.
+- 23 authored structure/boundary controls refuse, covering cycles/self-cycles,
+  multiple parents, duplicate children/roots, invalid refs/types/default selection,
+  scene-less/empty-array boundaries and selected skin/weight refusal. They are
+  contract controls, not independent full-glTF conformance certification.
+- Reverse-index parent chains succeed at64 and refuse65; the leaf translation
+  is analytically64. A2048-node flat forest is traversed, while65,537 nodes refuse
+  before node-table admission. An empty scene without nodes succeeds.
+- Five scene-generator artifacts regenerate byte-identically. Python syntax,
+  production check, Cargo formatting and diff checks pass. Latest logs replace
+  intermediate runs in this same report; no dependency/lockfile change.
+
+Hierarchy/root constraints were checked against the primary
+[Khronos scene schema](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/scene.schema.json)
+and [node schema](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/node.schema.json).
+The runtime remains native Rust; no external glTF runtime is invoked.
+
 ## Required continuation
 
-1. Scene selection and node hierarchy/transforms/instancing; retain the local
-   primitive geometry rather than flattening source metadata. Complete source
-   min/max/schema and usage rules beyond the selected contracts above.
+1. Prepare/validate referenced geometry and whole-scene fitting bounds for the
+   common owned model path, preserving source sharing and failure atomicity.
+   Complete source min/max/schema and usage rules beyond the selected contracts.
 2. Materials/textures, skin/morph/animation handling and point/line geometry.
    External/data URI resources and compressed/quantized extensions remain
    unsupported; required extensions still explicitly refuse.
@@ -267,3 +332,5 @@ Evidence in the current86-test run:
 4. Original independent geometry/material references and actual Metal SDR/HDR
    readback/window presentation, including measured file-to-first-frame latency.
    NVIDIA/CUDA remains deferred by the user.
+
+Schema follow-up: a component just above1 with near-unit quaternion length now refuses before normalization. The21 source-node controls include this case; the component range is independent of the length tolerance.

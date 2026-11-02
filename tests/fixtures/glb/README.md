@@ -35,7 +35,15 @@ material, skin, animation, GPU or window behavior.
 Transform files are CC0 authored controls from
 `scripts/generate-glb-transform-fixtures.py`:40 points from80-digit Decimal
 Hamilton quaternion / matrix math and35 inverse-transpose normals from independent
-Gauss-Jordan elimination, plus20 malformed nodes. `Box-node-triangles.tsv`
+Gauss-Jordan elimination, plus21 malformed nodes. `Box-node-triangles.tsv`
 applies the original Box node0 matrix to its local triangle coordinates; it does
 not independently discover a scene hierarchy. `transform-manifest.json` pins the
 six outputs. These controls do not qualify complete scenes, GPU or presentation.
+
+Scene controls are CC0 authored by `scripts/generate-glb-scene-fixtures.py`,
+reusing the authored primitive data. Four scenes preserve shared roots/meshes
+across selections, non-index child order and static transforms. The instance
+order and18 world triangles come from an independent recursive Decimal oracle.
+`scene-invalid.tsv` has23 structure/unsupported boundary controls; it is not a
+full-glTF validator result. `scene-manifest.json` pins all five outputs. Scene
+geometry remains lazy; these fixtures do not qualify cache/swap or GPU viewing.

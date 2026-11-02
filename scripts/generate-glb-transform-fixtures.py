@@ -72,9 +72,9 @@ bad('short-translation',dict(translation=[0,0]));bad('long-translation',dict(tra
 bad('null-translation',dict(translation=None));bad('empty-scale',dict(scale=[]))
 bad('null-scale',dict(scale=None));bad('short-rotation',dict(rotation=[0,0,1]))
 bad('long-rotation',dict(rotation=[0,0,0,0,1]));bad('zero-quaternion',dict(rotation=[0,0,0,0]))
-bad('nonunit-quaternion',dict(rotation=[0,0,0,2]));bad('huge-quaternion',dict(rotation=[1e300,0,0,0]))
+bad('component-outside-unit-range',dict(rotation=[0,0,0,1.0000001]));bad('nonunit-quaternion',dict(rotation=[0,0,0,2]));bad('huge-quaternion',dict(rotation=[1e300,0,0,0]))
 bad('not-object',[]);bad('nonnumeric-scale',dict(scale=[1,True,1]))
 (ROOT/'transform-invalid.tsv').write_text(''.join(f'{name}\t{b.hex()}\n' for name,b in invalid))
 outputs=['transform-controls.glb','transform-points.tsv','transform-normals.tsv','Box-node-triangles.tsv','transform-invalid.tsv']
 (ROOT/'transform-manifest.json').write_text(json.dumps(dict(nodes=len(nodes),points=40,normals=35,original_box_triangles=len(out),invalid_nodes=len(invalid),sha256={p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in outputs}),indent=2)+'\n')
-print(f'{len(nodes)} nodes,40 Decimal points,35 Gauss-Jordan normals,12 original Box triangles,20 invalid nodes')
+print(f'{len(nodes)} nodes,40 Decimal points,35 Gauss-Jordan normals,12 original Box triangles,21 invalid nodes')

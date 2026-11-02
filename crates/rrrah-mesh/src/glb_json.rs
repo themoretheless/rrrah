@@ -47,6 +47,14 @@ impl JsonTape {
         };
         Ok(tape)
     }
+    pub(crate) fn at<'a>(&'a self, bytes: &'a [u8], index: u32) -> Option<JsonValue<'a>> {
+        self.tokens.get(index as usize)?;
+        Some(JsonValue {
+            bytes,
+            tokens: &self.tokens,
+            index: index as usize,
+        })
+    }
     pub(crate) fn root<'a>(&'a self, bytes: &'a [u8]) -> JsonValue<'a> {
         JsonValue {
             bytes,
@@ -64,6 +72,9 @@ pub struct JsonValue<'a> {
     index: usize,
 }
 impl<'a> JsonValue<'a> {
+    pub(crate) fn token_index(self) -> u32 {
+        self.index as u32
+    }
     pub fn kind(self) -> JsonKind {
         self.tokens[self.index].kind
     }
