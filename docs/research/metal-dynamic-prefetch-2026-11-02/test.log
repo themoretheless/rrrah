@@ -1,0 +1,18 @@
+
+running 1 test
+test folder_worker_qualification::real_worker_large_collection_pressure_soak ... large soak adapter: Metal Apple M4 Max
+
+thread 'folder_worker_qualification::real_worker_large_collection_pressure_soak' (13950041) panicked at crates/rrrah-app/src/folder_worker_qualification.rs:868:17:
+assertion `left == right` failed: selection=32 rank=0 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpwnq8Gr/007.tga root=100663296: nearest must fit; farther slots protected
+  left: false
+ right: true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    folder_worker_qualification::real_worker_large_collection_pressure_soak
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 445 filtered out; finished in 10.29s
+

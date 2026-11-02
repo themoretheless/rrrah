@@ -2937,11 +2937,21 @@ fn load_cached_raster_mode_resolving_key_policy(
                         .and_then(|swap| swap.minimum_restore_weight(&probe))
                         .unwrap_or(4);
                     if cache.can_admit_key_by_minimum_weight(&probe, minimum) {
-                        match cache.try_get_background_with_cancel(&probe, cancelled) {
-                            Ok(frame) => frame,
-                            Err(error) => {
-                                swap_memory_refused |= retryable_memory_pressure(&error);
-                                None
+                        loop {
+                            match cache.try_get_background_with_cancel(&probe, cancelled) {
+                                Ok(frame) => break frame,
+                                Err(error) => {
+                                    // The old unprotected neighbor can still own a restore
+                                    // pool slot after a window/direction change. Retention
+                                    // preflight above guarantees a cache slot; release only
+                                    // unpinned LRU storage before retrying the same object.
+                                    let retryable = retryable_memory_pressure(&error);
+                                    if retryable && !cancelled() && cache.release_lru_unpinned() {
+                                        continue;
+                                    }
+                                    swap_memory_refused |= retryable;
+                                    break None;
+                                }
                             }
                         }
                     } else {
@@ -11317,6 +11327,82 @@ mod foreground_loader_tests {
                 assert_eq!(root.used(), 0);
             }
         }
+    }
+
+    #[test]
+    fn retained_raster_prefetch_reclaims_old_restore_slot_after_window_change() {
+        let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/associated-emission-rec709.exr");
+        let weight = load_raster_for_display_typed(&DecodeRequest::new(&source), None)
+            .unwrap()
+            .0
+            .capacity_bytes();
+        let directory = tempfile::tempdir().unwrap();
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut cache = raster_cache_with_swap(
+            Some(directory.path()),
+            false,
+            rrrah_cache::CacheLimits {
+                max_bytes: weight * 2,
+                max_entries: Some(2),
+                ttl: None,
+            },
+            Some(rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(1024 * 1024),
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight * 2,
+            }),
+            Some(&root),
+        );
+        let requests: Vec<_> = (0..3)
+            .map(|index| {
+                let path = directory.path().join(format!("neighbor-{index}.exr"));
+                std::fs::copy(&source, &path).unwrap();
+                let mut request = DecodeRequest::new(path);
+                request.memory_budget = Some(root.clone());
+                let (frame, assumed) = load_raster_for_display_typed(&request, None).unwrap();
+                let mut key = raster_display_key(&request, None).unwrap();
+                key.6 = assumed;
+                cache.swap().unwrap().enqueue(key, frame);
+                cache.swap().unwrap().wait_idle().unwrap();
+                request
+            })
+            .collect();
+        assert_eq!(root.used(), 0);
+        let selected = load_cached_raster_for_display(&requests[0], None, &mut cache).unwrap();
+        let gate = Arc::new(DecodeGate::new());
+        let (old, _, old_lease) = preload_raster_with_lease(&requests[1], None, &mut cache, &gate).unwrap();
+        assert!(old_lease.is_some());
+        drop(old);
+        assert_eq!(root.used(), weight * 2);
+        assert!(preload_raster_with_lease(&requests[2], None, &mut cache, &gate).is_err());
+        assert_eq!(
+            cache.swap().unwrap().stats().reads,
+            2,
+            "protected slots must not trigger reads"
+        );
+        drop(old_lease); // New window no longer protects the old neighbor.
+        let (new, _, new_lease) = preload_raster_with_lease(&requests[2], None, &mut cache, &gate).unwrap();
+        assert!(new_lease.is_some());
+        assert_eq!(cache.swap().unwrap().stats().reads, 3);
+        assert_eq!(root.used(), weight * 2);
+        let hit = load_cached_raster_with(&requests[0], None, &mut cache, || {
+            panic!("visible selected frame must remain resident")
+        })
+        .unwrap();
+        let (rrrah_core::RasterPixels::Rgba32Float(expected), rrrah_core::RasterPixels::Rgba32Float(actual)) =
+            (selected.0.pixels(), new.pixels())
+        else {
+            panic!()
+        };
+        assert_eq!(
+            bytemuck::cast_slice::<f32, u8>(expected),
+            bytemuck::cast_slice::<f32, u8>(actual)
+        );
+        cache.swap().unwrap().shutdown();
+        drop((selected, hit, new, new_lease, cache));
+        assert_eq!(root.used(), 0);
     }
 
     #[test]

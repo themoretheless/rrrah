@@ -1,5 +1,15 @@
 # Current coverage of the requested viewer scope
 
+Dynamic-window production fix (2026-11-02): changing prefetch windows exposed
+an old unpinned neighbor occupying the restore pool and refusing the new nearest
+neighbor. Retained-prefetch admission now releases unpinned LRU storage and
+retries eligible restores, preserving protected frames. A required M4 Max run
+passes399 selections/60.122s across five windows (including disabled and both
+one-sided modes),319 retained neighbors,921 capacity refusals, exact SDR/HDR
+regression frames and final managed0. Focused restore-slot regression,64 ordinary
+prefetch tests, five worker tests and production check pass (groups overlap).
+[Failure, repair and evidence](research/metal-dynamic-prefetch-2026-11-02/REPORT.md).
+
 Mixed-format real-worker checkpoint (2026-11-02): an authored PPM/TGA/BMP
 64-file collection completed 292 selections over 60.084 seconds on actual
 Metal with behind=1/ahead=2 prefetch. Fixed 64 MiB pressure under a 128 MiB root,

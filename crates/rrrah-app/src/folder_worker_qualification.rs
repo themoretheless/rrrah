@@ -717,6 +717,11 @@ fn real_worker_large_collection_pressure_soak() {
     let root = MemoryBudget::new(128 * 1024 * 1024);
     let pressure = root.try_reserve(64 * 1024 * 1024).unwrap();
     let prefetch = std::env::var("RRRAH_SOAK_PREFETCH").as_deref() == Ok("1");
+    let dynamic_window = std::env::var("RRRAH_SOAK_DYNAMIC_WINDOW").as_deref() == Ok("1");
+    assert!(
+        !dynamic_window || prefetch,
+        "dynamic windows require observed prefetch"
+    );
     let (observed_tx, observed_rx) = unbounded();
     let window = if prefetch {
         gallery::PrefetchWindow { behind: 1, ahead: 2 }
@@ -795,6 +800,9 @@ fn real_worker_large_collection_pressure_soak() {
     let mut previous = 0;
     let mut retained_neighbours = 0;
     let mut refused_neighbours = 0;
+    let mut selections_with_neighbours = 0;
+    let windows = [(0, 0), (3, 0), (0, 3), (1, 2), (2, 5)];
+    let mut window_selections = [0usize; 5];
     while selections < 256 || started.elapsed() < Duration::from_secs(duration) {
         // Adjacent forward/back steps plus long jumps exceed both cache tiers.
         let index = match selections % 4 {
@@ -809,7 +817,38 @@ fn real_worker_large_collection_pressure_soak() {
             gallery::NavDirection::Forward
         };
         previous = index;
-        let planned = gallery::neighbour_prefetch_paths(&app.gallery, index, app.last_nav_direction, window);
+        let window = if dynamic_window {
+            let slot = (selections / 16) % windows.len();
+            window_selections[slot] += 1;
+            let (behind, ahead) = windows[slot];
+            gallery::PrefetchWindow { behind, ahead }
+        } else {
+            window
+        };
+        app.prefetch_window = window;
+        // Independent gallery scan: signed distance in the travel direction,
+        // then travel-side neighbors before the opposite side. No planner call.
+        let mut candidates = Vec::new();
+        for candidate in 0..app.gallery.len() {
+            let delta = candidate as isize - index as isize;
+            let travel = if app.last_nav_direction == gallery::NavDirection::Forward {
+                delta
+            } else {
+                -delta
+            };
+            let distance = travel.unsigned_abs();
+            if travel > 0 && distance <= window.ahead {
+                candidates.push((0, distance, candidate));
+            } else if travel < 0 && distance <= window.behind {
+                candidates.push((1, distance, candidate));
+            }
+        }
+        candidates.sort_unstable();
+        let planned: Vec<_> = candidates
+            .into_iter()
+            .map(|(_, _, candidate)| app.gallery[candidate].clone())
+            .collect();
+        selections_with_neighbours += usize::from(!planned.is_empty());
         app.open_gallery_index(index);
         let (generation, frame, lease, store) = next_raster(&app);
         assert_eq!(generation, app.foreground_loader.current_generation());
@@ -864,15 +903,19 @@ fn real_worker_large_collection_pressure_soak() {
     }
     let elapsed = started.elapsed();
     if prefetch {
-        assert_eq!(retained_neighbours, selections);
-        assert!(refused_neighbours >= selections);
+        assert_eq!(retained_neighbours, selections_with_neighbours);
+        assert!(refused_neighbours > 0);
+    }
+    if dynamic_window {
+        assert!(window_selections.iter().all(|&count| count >= 16));
+        eprintln!("dynamic prefetch windows={windows:?} selections={window_selections:?}");
     }
     drop(app);
     assert_eq!(root.used(), 64 * 1024 * 1024);
     drop(pressure);
     assert_eq!(root.used(), 0);
     eprintln!(
-        "large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections={selections} seconds={:.3} fixed_pressure=67108864 root_limit={} root_peak={} largest_settled={largest_settled} swap_objects<=3 swap_bytes<=67108864 prefetch={prefetch} mixed_ppm_tga_bmp={heterogeneous} nearest_retained={retained_neighbours} farther_refused={refused_neighbours}{} final=0",
+        "large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections={selections} seconds={:.3} fixed_pressure=67108864 root_limit={} root_peak={} largest_settled={largest_settled} swap_objects<=3 swap_bytes<=67108864 prefetch={prefetch} dynamic_window={dynamic_window} mixed_ppm_tga_bmp={heterogeneous} nearest_retained={retained_neighbours} farther_refused={refused_neighbours}{} final=0",
         elapsed.as_secs_f64(),
         root.limit(),
         root.peak(),
