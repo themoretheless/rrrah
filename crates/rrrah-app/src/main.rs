@@ -18144,25 +18144,25 @@ mod gpr_preload_tests {
     #[test]
     #[ignore = "requires local EOS R8 original for retained swap-pressure recovery"]
     fn real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure() {
-        qualify_real_cr3_retained_pressure(RawPressureCase::Swap);
+        qualify_real_cr3_retained_pressure(RawPressureCase::Swap, None);
     }
 
     #[test]
     #[ignore = "requires local EOS R8 original for persistent-cache pressure recovery"]
     fn real_cr3_retained_disk_reclaims_old_neighbor_under_root_pressure() {
-        qualify_real_cr3_retained_pressure(RawPressureCase::Persistent);
+        qualify_real_cr3_retained_pressure(RawPressureCase::Persistent, None);
     }
 
     #[test]
     #[ignore = "requires local EOS R8 original for cold-source pressure recovery"]
     fn real_cr3_retained_cold_reclaims_old_neighbor_under_root_pressure() {
-        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSensor);
+        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSensor, None);
     }
 
     #[test]
     #[ignore = "requires local EOS R8 original for compressed-source pressure recovery"]
     fn real_cr3_retained_cold_source_reclaims_two_old_neighbors() {
-        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSource);
+        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSource, None);
     }
 
     #[derive(Clone, Copy, Debug)]
@@ -18173,7 +18173,25 @@ mod gpr_preload_tests {
         ColdSource,
     }
 
-    fn qualify_real_cr3_retained_pressure(case: RawPressureCase) {
+    #[test]
+    #[ignore = "requires original EOS R8 CR3 and actual Metal SDR/HDR readback"]
+    fn real_cr3_retained_pressure_metal_sdr_hdr() {
+        let gpu = navigation_metal_readback::qualification_gpu().expect("required actual Metal");
+        eprintln!("RAW retained-pressure adapter: {}", gpu.adapter_name());
+        for case in [
+            RawPressureCase::Swap,
+            RawPressureCase::Persistent,
+            RawPressureCase::ColdSensor,
+            RawPressureCase::ColdSource,
+        ] {
+            qualify_real_cr3_retained_pressure(case, Some(&gpu));
+        }
+    }
+
+    fn qualify_real_cr3_retained_pressure(
+        case: RawPressureCase,
+        gpu: Option<&navigation_metal_readback::GpuReadback>,
+    ) {
         let persistent = matches!(case, RawPressureCase::Persistent);
         let cold = matches!(case, RawPressureCase::ColdSensor | RawPressureCase::ColdSource);
         let source_starved = matches!(case, RawPressureCase::ColdSource);
@@ -18211,6 +18229,12 @@ mod gpr_preload_tests {
         assert_ne!(keys[0], keys[1]);
         assert_ne!(keys[1], keys[2]);
         let baseline = NativeRawDecoder.decode(&requests[0]).unwrap().mosaic;
+        let expected = gpu.map(|gpu| {
+            (
+                gpu.render(&baseline, [64, 64]).pixels,
+                gpu.render_raw_half(&baseline, [63, 65]),
+            )
+        });
         let weight = baseline.pixels.capacity_bytes();
         let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits {
             max_bytes: (candidate as u64 + 1) * weight,
@@ -18279,6 +18303,13 @@ mod gpr_preload_tests {
         let next = next.unwrap();
         assert_eq!(&*next.pixels, &*baseline.pixels);
         assert_eq!(next.metadata, baseline.metadata);
+        if let (Some(gpu), Some((sdr, hdr))) = (gpu, expected.as_ref()) {
+            assert_eq!(&gpu.render(&next, [64, 64]).pixels, sdr);
+            assert_eq!(&gpu.render_raw_half(&next, [63, 65]), hdr);
+            assert_eq!(&gpu.render(&selected, [64, 64]).pixels, sdr);
+            assert_eq!(&gpu.render_raw_half(&selected, [63, 65]), hdr);
+            eprintln!("RAW {case:?}: recovered and selected Metal SDR64x64/HDR63x65 exact");
+        }
         assert_eq!(
             ram.swap().unwrap().stats().reads,
             if persistent {

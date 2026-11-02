@@ -1,0 +1,34 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 36.57s
+     Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
+
+running 1 test
+test gpr_preload_tests::real_cr3_retained_pressure_metal_sdr_hdr ... RAW retained-pressure adapter: Metal Apple M4 Max
+RAW Swap: recovered and selected Metal SDR64x64/HDR63x65 exact
+RAW retained Swap: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0
+RAW Persistent: recovered and selected Metal SDR64x64/HDR63x65 exact
+RAW retained Persistent: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0
+RAW ColdSensor: recovered and selected Metal SDR64x64/HDR63x65 exact
+RAW retained ColdSensor: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0
+RAW ColdSource: recovered and selected Metal SDR64x64/HDR63x65 exact
+RAW retained ColdSource: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 458 filtered out; finished in 65.33s
+

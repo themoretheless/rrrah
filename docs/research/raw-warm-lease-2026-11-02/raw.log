@@ -1,24 +1,3 @@
-    Blocking waiting for file lock on package cache
-    Blocking waiting for file lock on package cache
-warning: hiding a lifetime that's elided elsewhere is confusing
-   --> vendor/jxl-color/src/icc/parse.rs:229:38
-    |
-229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
-    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
-    |                                      |
-    |                                      the lifetime is elided here
-    |
-    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
-    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
-help: use `'_` for type paths
-    |
-229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
-    |                                                                 ++++
-
-warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
-   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
-    Finished `test` profile [optimized + debuginfo] target(s) in 45.97s
-     Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
 
 running 7 tests
 test gpr_preload_tests::real_cr3_partial_protected_budget_skips_swap_until_lease_release ... RAW_PARTIAL_SWAP protected=2W capacity=2.5W refused_reads=0 retry_reads=1 sensor_metadata=exact warm_under_pressure=hit final=0
@@ -36,5 +15,5 @@ ok
 test gpr_preload_tests::real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure ... RAW retained Swap: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0
 ok
 
-test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 451 filtered out; finished in 3.59s
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 452 filtered out; finished in 3.53s
 

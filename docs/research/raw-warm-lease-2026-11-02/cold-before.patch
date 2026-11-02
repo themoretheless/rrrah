@@ -64,19 +64,19 @@
 -                        return Ok((false, None));
 -                    }
 @@ -18147 +18089 @@
--        qualify_real_cr3_retained_pressure(RawPressureCase::Swap);
+-        qualify_real_cr3_retained_pressure(RawPressureCase::Swap, None);
 +        qualify_real_cr3_retained_pressure(false, false);
 @@ -18153 +18095 @@
--        qualify_real_cr3_retained_pressure(RawPressureCase::Persistent);
+-        qualify_real_cr3_retained_pressure(RawPressureCase::Persistent, None);
 +        qualify_real_cr3_retained_pressure(true, false);
-@@ -18159,23 +18101,4 @@
--        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSensor);
+@@ -18159,41 +18101,4 @@
+-        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSensor, None);
 -    }
 -
 -    #[test]
 -    #[ignore = "requires local EOS R8 original for compressed-source pressure recovery"]
 -    fn real_cr3_retained_cold_source_reclaims_two_old_neighbors() {
--        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSource);
+-        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSource, None);
 -    }
 -
 -    #[derive(Clone, Copy, Debug)]
@@ -87,7 +87,25 @@
 -        ColdSource,
 -    }
 -
--    fn qualify_real_cr3_retained_pressure(case: RawPressureCase) {
+-    #[test]
+-    #[ignore = "requires original EOS R8 CR3 and actual Metal SDR/HDR readback"]
+-    fn real_cr3_retained_pressure_metal_sdr_hdr() {
+-        let gpu = navigation_metal_readback::qualification_gpu().expect("required actual Metal");
+-        eprintln!("RAW retained-pressure adapter: {}", gpu.adapter_name());
+-        for case in [
+-            RawPressureCase::Swap,
+-            RawPressureCase::Persistent,
+-            RawPressureCase::ColdSensor,
+-            RawPressureCase::ColdSource,
+-        ] {
+-            qualify_real_cr3_retained_pressure(case, Some(&gpu));
+-        }
+-    }
+-
+-    fn qualify_real_cr3_retained_pressure(
+-        case: RawPressureCase,
+-        gpu: Option<&navigation_metal_readback::GpuReadback>,
+-    ) {
 -        let persistent = matches!(case, RawPressureCase::Persistent);
 -        let cold = matches!(case, RawPressureCase::ColdSensor | RawPressureCase::ColdSource);
 -        let source_starved = matches!(case, RawPressureCase::ColdSource);
@@ -97,7 +115,7 @@
 +    }
 +
 +    fn qualify_real_cr3_retained_pressure(persistent: bool, cold: bool) {
-@@ -18185,16 +18108,16 @@
+@@ -18203,16 +18108,16 @@
 -        let requests: Vec<_> =
 -            (0..=candidate)
 -                .map(|i| {
@@ -130,28 +148,35 @@
 +                request
 +            })
 +            .collect();
-@@ -18216,2 +18139,2 @@
+@@ -18232,6 +18136,0 @@
+-        let expected = gpu.map(|gpu| {
+-            (
+-                gpu.render(&baseline, [64, 64]).pixels,
+-                gpu.render_raw_half(&baseline, [63, 65]),
+-            )
+-        });
+@@ -18240,2 +18139,2 @@
 -            max_bytes: (candidate as u64 + 1) * weight,
 -            max_entries: Some(candidate + 1),
 +            max_bytes: 3 * weight,
 +            max_entries: Some(3),
-@@ -18225 +18148 @@
+@@ -18249 +18148 @@
 -                    queue_bytes: (candidate as u64 + 1) * weight,
 +                    queue_bytes: 3 * weight,
-@@ -18227 +18150 @@
+@@ -18251 +18150 @@
 -                    restore_bytes: candidate as u64 * weight,
 +                    restore_bytes: 2 * weight,
-@@ -18229,2 +18152,2 @@
+@@ -18253,2 +18152,2 @@
 -                retained_queue_budget((candidate as u64 + 1) * weight),
 -                root.child(candidate as u64 * weight),
 +                retained_queue_budget(3 * weight),
 +                root.child(2 * weight),
-@@ -18236,3 +18159 @@
+@@ -18260,3 +18159 @@
 -            if cold && index == candidate {
 -                continue;
 -            }
 +            if cold && index == 2 { continue; }
-@@ -18252,16 +18173,3 @@
+@@ -18276,16 +18173,3 @@
 -        let extra = if source_starved {
 -            preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate)
 -                .unwrap()
@@ -171,10 +196,10 @@
 +        assert_eq!(root.used(), 3 * weight);
 +        let source_headroom = if cold { std::fs::metadata(&source).unwrap().len() } else { 0 };
 +        let pressure = root.try_reserve(root.available_bytes() - source_headroom).unwrap();
-@@ -18269 +18177 @@
+@@ -18293 +18177 @@
 -            preload_raw_with_lease(&requests[candidate], &disk, &mut ram, None, 1, &gate).unwrap();
 +            preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
-@@ -18271,7 +18179,3 @@
+@@ -18295,7 +18179,3 @@
 -        assert_eq!(
 -            ram.swap().unwrap().stats().reads,
 -            if persistent { 0 } else { candidate as u64 }
@@ -185,7 +210,14 @@
 +        assert_eq!(ram.swap().unwrap().stats().reads, if persistent { 0 } else { 2 });
 +        drop(old);
 +        let (admitted, next) = preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
-@@ -18282,10 +18186 @@
+@@ -18306,17 +18186 @@
+-        if let (Some(gpu), Some((sdr, hdr))) = (gpu, expected.as_ref()) {
+-            assert_eq!(&gpu.render(&next, [64, 64]).pixels, sdr);
+-            assert_eq!(&gpu.render_raw_half(&next, [63, 65]), hdr);
+-            assert_eq!(&gpu.render(&selected, [64, 64]).pixels, sdr);
+-            assert_eq!(&gpu.render_raw_half(&selected, [63, 65]), hdr);
+-            eprintln!("RAW {case:?}: recovered and selected Metal SDR64x64/HDR63x65 exact");
+-        }
 -        assert_eq!(
 -            ram.swap().unwrap().stats().reads,
 -            if persistent {
@@ -197,12 +229,12 @@
 -            }
 -        );
 +        assert_eq!(ram.swap().unwrap().stats().reads, if persistent { 0 } else if cold { 2 } else { 3 });
-@@ -18294,4 +18189 @@
+@@ -18325,4 +18189 @@
 -        assert_eq!(
 -            root.used(),
 -            root.limit() - source_headroom - if source_starved { weight } else { 0 }
 -        );
 +        assert_eq!(root.used(), root.limit() - source_headroom);
-@@ -18303 +18195 @@
+@@ -18334 +18195 @@
 -            "RAW retained {case:?}: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0"
 +            "RAW retained persistent={persistent} cold={cold}: original CR3; full root and two-slot restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0"

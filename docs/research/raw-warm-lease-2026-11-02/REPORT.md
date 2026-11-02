@@ -22,7 +22,7 @@ directory; [pins.json](pins.json) records its size/hash and the test binary/sour
 hashes without copying the photograph.
 
 The current required original-source suite passes **7/0 failed/0 ignored** in [raw.log](raw.log).
-The ordinary viewer suite passes **354 tests/104 manual ignored** in
+The ordinary viewer suite passes **354 tests/105 manual ignored** in
 [viewer.log](viewer.log); [production check](production-check.log), formatting
 and diff whitespace checks pass. The manual case is among those skipped by the
 ordinary filter and was executed separately; it is not counted as an additional
@@ -42,7 +42,7 @@ NVIDIA/CUDA, or the separate pending three-hour raster-worker run.
 
 The new original CR3 case uses three actual file copies with distinct timestamps/keys. One native decode supplies their identical expected sensor payload; three swap objects are written and read. A restore pool of two sensor allocations is full while the managed root's remaining capacity is reserved. Two held leases refuse the third restore without a pixel read (reads=2). Dropping the old neighbor's lease lets retained prefetch reclaim that neighbor and restore the third (reads=3), with exact samples/metadata, the same selected allocation still pinned, and final managed usage zero. This is controlled managed admission pressure, not physical OS memory exhaustion or slow-disk qualification.
 
-The original-source tests also cover both prefetch directions and count/byte limits, partial protected-budget admission, and warm TTL handoff. [Cache suite](cache.log): 160 passed, 5 ignored, zero failures, including a small managed-pool regression with cancellation and protected refusal/replacement. Current ordinary viewer:354 passed/104 ignored; required original-source:7 passed/zero ignored. Production check covers the current implementation. Format and diff checks pass.
+The original-source tests also cover both prefetch directions and count/byte limits, partial protected-budget admission, and warm TTL handoff. [Cache suite](cache.log): 160 passed, 5 ignored, zero failures, including a small managed-pool regression with cancellation and protected refusal/replacement. Current ordinary viewer:354 passed/105 ignored; required original-source:7 passed/zero ignored. Production check covers the current implementation. Format and diff checks pass.
 
 ```sh
 cargo test --locked -p rrrah-cache --lib
@@ -70,8 +70,20 @@ Two original CR3 cases pass:
 - **ColdSensor**: the available root space equals the22,382,226-byte source. Two restored sensor leases protect the selected/old neighbors. The candidate refuses cleanly; releasing the old lease permits reclaiming that neighbor before allocating the new sensor.
 - **ColdSource**: the root is initially full, with three restored sensor leases and a separate reference sensor. Releasing two old leases permits reclaiming one neighbor for compressed input and another for the sensor. The selected allocation remains resident; final steady root usage is one sensor below the limit.
 
-Both candidates have no persistent or swap object. All sensor samples/metadata match the native reference; swap-read counters remain at the initial restored-neighbor count, proving the candidate did not come from swap. Final managed usage is zero. [Current original-source suite](raw.log):7 passed/zero ignored. [Current ordinary viewer](viewer.log):354 passed/104 ignored/zero failed. Production check, formatting and diff checks pass. The cache implementation itself is unchanged from the160-test checkpoint above.
+Both candidates have no persistent or swap object. All sensor samples/metadata match the native reference; swap-read counters remain at the initial restored-neighbor count, proving the candidate did not come from swap. Final managed usage is zero. [Current original-source suite](raw.log):7 passed/zero ignored. [Current ordinary viewer](viewer.log):354 passed/105 ignored/zero failed. Production check, formatting and diff checks pass. The cache implementation itself is unchanged from the160-test checkpoint above.
 
 These focused EOS R8 cases do not establish other cameras' working-set requirements, performance under slow disks, physical memory exhaustion, or new GPU/HDR qualification. Source-headroom recovery is shared by RAW prefetch; the sensor-size preflight is specifically native CR3. The long Metal raster-worker run uses a frozen earlier binary and remains separate; its observed low-power system sleep must be retained when reporting duration.
 
 The preserved reverse patches use zero context; validate/apply them with `git apply --unidiff-zero` against the pinned current source. They reconstruct their respective failed source snapshots, including test-only changes.
+
+## Actual Metal SDR/HDR after recovery
+
+The retained-pressure helper now optionally renders the native reference before pressure, then both the recovered candidate and still-selected lease after recovery. Required Metal Apple M4 Max [readback](metal.log) passes all four cases: Swap, Persistent, ColdSensor and ColdSource. SDR64x64 RGBA8 and HDR63x65 scene-linear RGBA16Float outputs match exactly. All sensor/metadata, protected refusal, read counters and managed final-zero checks remain enabled in these GPU cases.
+
+The required GPU test passes1/zero ignored, separately from the7 CPU original-source cases. The current ordinary viewer suite passes354/105 ignored, zero failed. Formatting/diff checks pass; production implementation is unchanged from the production check above (this addition is test-only). The original-source filter now excludes the separately required GPU case with `--skip gpr_preload_tests::real_cr3_retained_pressure_metal_sdr_hdr`.
+
+```sh
+RRRAH_GPU_BACKEND=metal RRRAH_GPU_OPTIONAL=0 RRRAH_GPU_VENDOR=any cargo test --locked -p rrrah --bin rrrah gpr_preload_tests::real_cr3_retained_pressure_metal_sdr_hdr -- --exact --ignored --nocapture --test-threads=1
+```
+
+Reference and recovered frames use the same default RawRenderer, with full sensor upload and small offscreen targets. This proves cache-to-renderer equivalence for the original source; it does not independently validate camera color/demosaic math, every compute algorithm, full-resolution output, physical HDR luminance, or NVIDIA. The local512MiB root tracks the tested CPU sensor/source/cache allocations; GPU renderer allocations use their own existing accounting. Pressure is managed admission pressure, not OS exhaustion.
