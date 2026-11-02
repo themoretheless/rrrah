@@ -143,6 +143,10 @@ impl GlbSource {
 
 pub use crate::glb_accessor::{GlbAccessor, GlbComponent, GlbShape, MAX_ACCESSOR_ELEMENTS};
 pub use crate::glb_json::{JsonArray, JsonKind, JsonObject, JsonValue};
+pub use crate::glb_material::{
+    GlbAlphaMode, GlbImageMime, GlbImageSource, GlbMaterial, GlbMaterialSamples, GlbNormalTexture,
+    GlbOcclusionTexture, GlbSampler, GlbSurface, GlbTexture, GlbTextureBinding, GlbTextureRole,
+};
 pub use crate::glb_primitive::{GlbPrimitive, GlbTopology};
 pub use crate::glb_scene::{GlbInstance, GlbScene, GlbScenePrimitive};
 pub use crate::glb_transform::GlbTransform;

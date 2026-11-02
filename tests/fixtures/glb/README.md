@@ -47,3 +47,22 @@ order and18 world triangles come from an independent recursive Decimal oracle.
 `scene-invalid.tsv` has23 structure/unsupported boundary controls; it is not a
 full-glTF validator result. `scene-manifest.json` pins all five outputs. Scene
 geometry remains lazy; these fixtures do not qualify cache/swap or GPU viewing.
+
+`BoxTextured.glb` is the unmodified Cesium BoxTextured sample from Khronos
+sample-assets commit `8f492390ddc7a2ae221a1369ef560589cf8c70fb`:
+https://github.com/KhronosGroup/glTF-Sample-Assets/tree/8f492390ddc7a2ae221a1369ef560589cf8c70fb/Models/BoxTextured
+Copyright2017 Cesium, [CC BY4.0](https://creativecommons.org/licenses/by/4.0/legalcode).
+Original attribution is retained in `BoxTextured-README.md`; the original Cesium
+mark notice is retained in `Cesium-mark-license.txt`. The asset is unmodified
+and used here as a model fixture, including its original embedded texture.
+
+Material controls and TSV samples are separate CC0 authored data from
+`scripts/generate-glb-material-fixtures.py`. Eight core materials have32
+independent80-digit Decimal point-texel evaluations. They are numerical samples,
+not decoded/filtering output from the embedded PNG. The generated1x1 PNG uses
+Python zlib/CRC and only proves byte-range retention at this checkpoint.
+The28 negative metadata records share the positive immutable BIN instead of
+storing duplicate payloads. `material-manifest.json` pins all outputs, the
+original model SHA and its embedded PNG range/hash. No image codec, sampler
+filter, lighting/shader, complete texture interoperability or viewer result is
+qualified by these fixtures.

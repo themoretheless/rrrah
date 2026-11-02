@@ -1,4 +1,4 @@
-# Native GLB static scene and geometry foundations — 2026-11-03
+# Native GLB scene, geometry and core material foundations — 2026-11-03
 
 This implements native container/JSON/accessor and selected local-space triangle
 primitive decoding and automatic static scene/hierarchy traversal. It does **not**
@@ -49,7 +49,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
 
 ## Evidence
 
-- [Mesh tests](mesh-tests.log): 91 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
+- [Mesh tests](mesh-tests.log): 96 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
   truncated prefixes, malformed order/alignment/length/version, chunk/JSON
   limits, cancellation, last-owner source credit, exact and one-byte-short
   admission, malformed-input cleanup.
@@ -76,7 +76,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
   failures release source and token credit.
 - The numeric fixture generator initially produced invalid `000e-2`; Rust
   correctly refused. The generator now independently checks JSON grammar before
-  Decimal conversion and writes legal `0e-2`. Current91-test result includes the repaired controls.
+  Decimal conversion and writes legal `0e-2`. Current96-test result includes the repaired controls.
 - [Source pins](sources.json). No new dependency or lockfile changes.
 
 ## Borrowed embedded accessors
@@ -178,7 +178,7 @@ scratch and duplicate-name comparison. Aggregate attribute component validation
 is capped at128 million. Scans check cancellation every1024 elements. These are
 implementation limits; broad large-scene timing and OS memory are not qualified.
 
-Current proof in the91-test mesh run:
+Current proof in the96-test mesh run:
 
 - 12 original Box local triangles match independent Python struct index/position
   reads. The source node matrix is deliberately not applied by this API.
@@ -230,7 +230,7 @@ Values outside float64 precision/range are not universally qualified; ordinary
 floating underflow may discard unrepresentable components. No exact-arithmetic
 or all-extreme-transform guarantee is asserted.
 
-Evidence in the current91-test run:
+Evidence in the current96-test run:
 
 - 40 point transformations across8 source nodes agree with independent80-digit
   Decimal Hamilton quaternion multiplication / explicit matrix math. Cases cover
@@ -287,7 +287,7 @@ published by this layer. It does **not** prevalidate every mesh/material, comput
 whole-scene fitting bounds, schedule animation or integrate the application,
 cache/swap or GPU renderer. Those remain required continuation.
 
-Evidence in the current91-test mesh run:
+Evidence in the current96-test mesh run:
 
 - Automatic default Box selection visits nodes0,1 and emits node1/mesh0. All12
   triangles match the independent original-node transformed-coordinate oracle.
@@ -319,14 +319,89 @@ Hierarchy/root constraints were checked against the primary
 and [node schema](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/node.schema.json).
 The runtime remains native Rust; no external glTF runtime is invoked.
 
+## Core material data and point-texel reference
+
+`GlbDocument::material` now reads core metallic-roughness factors/defaults,
+base/emissive colors, alpha mode/cutoff, double-sided metadata and five texture
+bindings. Values and lengths are checked against core constraints. Normal scale
+may be negative; occlusion strength stays within[0,1]. Alpha cutoff may exceed1,
+which makes MASK fully transparent; OPAQUE/BLEND ignore that cutoff. Texture
+indices, image references, sampler descriptors and embedded image bounds resolve
+without copying image bytes. Missing filter fields remain unspecified; wrap
+fields default toREPEAT. Unknown sampler enums/alpha modes explicitly report
+Unsupported, distinguishing an unimplemented future value from malformed types.
+
+Images expose either a borrowed PNG/JPEG BIN slice with required MIME, or a
+retained URI string. Conflicting/missing sources and image stride/target refuse.
+URI/data resources are **not** resolved or fetched. Encoded pixels, color/profile
+handling, filtering and mip generation are not decoded/executed by this layer.
+Material texCoord references can be checked against a validated primitive's UV
+sets; the current set-index resource limit remains64. Original unknown metadata
+and optional extension JSON remain preserved rather than being interpreted.
+
+`GlbMaterial::evaluate_texel` is a fixed-size CPU reference for unfiltered sample
+semantics, **not a BRDF or rendering fallback**. Base/emissive texture RGB is
+sRGB decoded; factors and vertex colors remain linear, and vertex color clamps
+to[0,1]. Base alpha is linear. Metallic uses B, roughness G, occlusion R with
+strength interpolation, and the normal map uses linear RGB with XY scale then
+normalization. Unused channels are ignored. Bound-but-missing texture samples,
+nonfinite used values and zero reconstructed tangent normals refuse. Output
+RGB is straight/unpremultiplied; MASK returns discard/coverage separately.
+Occlusion remains a separate parameter rather than incorrectly darkening all
+base/emissive light. Double-sided metadata is retained; culling/back-face normal
+handling and lighting are not implemented here. The texture-role enum separates
+sRGB roles from data roles; it does not yet constitute GPU cache-key validation.
+
+Current evidence in the96-test mesh run:
+
+- Eight authored materials have32 surface evaluations matching an independent
+  80-digit Decimal oracle within2e-13*max(1,abs(expected)). Cases cover factors,
+  channel swizzles, both sRGB branches, linear vertex color/clamping, straight
+  alpha, OPAQUE/MASK/BLEND, cutoff equality/above1, negative/zero normal scale and
+  occlusion strength. Publicly edited numeric factors are also checked on use.
+- 28 metadata/type/reference/unsupported-boundary controls refuse. Missing bound
+  samples and nonfinite used channels refuse; nonfinite ignored channels remain
+  irrelevant. UV linkage succeeds for two source UV sets and refuses a mesh
+  without the referenced set. No original codec or sampler output is claimed.
+- Original unmodified Cesium BoxTextured from Khronos sample-assets commit
+  `8f492390ddc7a2ae221a1369ef560589cf8c70fb`,5956 bytes, SHA256
+  `b510eca2e2ef33f62f9ed57d6e7ce2d10ebb2bdebc4a8e59d347719ba81abdf4`:
+  native material0 preserves white linear base, metallic0, default roughness1,
+  OPAQUE and base-color texture0/UV0. Sampler9729/9986/REPEAT is exact. Its3750-byte
+  PNG at absolute2204..5954 matches the independent source byte-range census and
+  stays pointer-shared across document clones. This is **byte/metadata evidence,
+  not image decoding, texture filtering, rendered likeness or HDR qualification**.
+  Attribution/CC BY4.0 and original mark notice are retained with the fixture.
+- Metadata reads and reference evaluation do not increase managed usage/peak;
+  final document owner returns0. Cancellation/new-generation retry passes. This
+  does not measure physical heap/RSS, source-to-frame latency or GPU allocations.
+- All six material-generator outputs regenerate byte-identically. Negative
+  metadata controls reuse one BIN rather than duplicating payloads. Python
+  syntax, formatting, production check and diff checks pass; no dependencies or
+  lockfile edits. Tests/check used isolated target
+  `/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103`: the queued
+  shared-target run was deliberately stopped after a live independent dedup
+  build on another toolchain was confirmed to hold that target lock.
+
+Core rules were checked against primary Khronos
+[material](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/material.schema.json),
+[PBR](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/material.pbrMetallicRoughness.schema.json),
+[sampler](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/sampler.schema.json)
+and [image](https://raw.githubusercontent.com/KhronosGroup/glTF/main/specification/2.0/schema/image.schema.json)
+schemas. Normal/occlusion metadata follows the associated primary schema files.
+Full PBR lighting, texture pixels/ICC-EXIF policy, extension semantics, sampler
+filtering/mips, material GPU upload/cache identity and live presentation remain
+required; GLB is still not registered as normally viewable.
+
 ## Required continuation
 
 1. Prepare/validate referenced geometry and whole-scene fitting bounds for the
    common owned model path, preserving source sharing and failure atomicity.
    Complete source min/max/schema and usage rules beyond the selected contracts.
-2. Materials/textures, skin/morph/animation handling and point/line geometry.
-   External/data URI resources and compressed/quantized extensions remain
-   unsupported; required extensions still explicitly refuse.
+2. Decode core texture images with role-specific transfer/metadata policy and
+   resolve image resources; implement PBR lighting, sampler/mip/alpha/culling GPU
+   behavior, then remaining material extensions, skin/morph/animation and point/
+   line geometry. Required unsupported extensions still explicitly refuse.
 3. Common model API, discovery, bounded ownership, cache identity and lossless
    swap; previous/next prefetch with TTL/size/count and cancellation/pressure.
 4. Original independent geometry/material references and actual Metal SDR/HDR

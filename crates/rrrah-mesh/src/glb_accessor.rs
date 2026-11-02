@@ -122,11 +122,11 @@ impl GlbShape {
     }
 }
 #[derive(Debug, Clone, Copy)]
-struct View<'a> {
-    bytes: &'a [u8],
+pub(crate) struct View<'a> {
+    pub(crate) bytes: &'a [u8],
     offset: usize,
-    stride: Option<usize>,
-    target: Option<usize>,
+    pub(crate) stride: Option<usize>,
+    pub(crate) target: Option<usize>,
 }
 #[derive(Debug, Clone, Copy)]
 struct Sparse<'a> {
@@ -325,7 +325,7 @@ impl GlbDocument {
         }
         Ok(&bin[..length])
     }
-    fn view(&self, index: usize, request: &DecodeRequest) -> Result<View<'_>, GlbError> {
+    pub(crate) fn view(&self, index: usize, request: &DecodeRequest) -> Result<View<'_>, GlbError> {
         let view = array_item(self.root(), "bufferViews", index, request)?;
         if integer(required(view, "buffer", request)?)? != 0 {
             return Err(GlbError::Unsupported("non-embedded buffer"));
