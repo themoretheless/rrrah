@@ -1,0 +1,52 @@
+--- a/crates/rrrah-app/src/main.rs
++++ b/crates/rrrah-app/src/main.rs
+@@ -2585,38 +2585,8 @@
+     let budget = ram
+         .swap()
+         .map(|swap| swap.restore_budget())
+-        .or(request.memory_budget.as_ref())
+-        .cloned();
+-    let mut fenced = false;
+-    let cached = loop {
+-        let cached = disk.load_with_cancel(key, budget.as_ref(), cancelled);
+-        if cancelled() {
+-            return Err("RAW prefetch cancelled".into());
+-        }
+-        if let Err(rrrah_cache::CacheError::Memory(rrrah_core::BufferError::Capacity {
+-            requested,
+-            limit,
+-            ..
+-        })) = &cached
+-        {
+-            // The persistent header supplies the true sensor allocation size.
+-            // Reclaim only when retaining that allocation is possible.
+-            if requested <= limit && ram.can_admit_key_by_minimum_weight(&key, *requested) {
+-                if ram.release_lru_unpinned() {
+-                    continue;
+-                }
+-                if !fenced {
+-                    fenced = true;
+-                    if let Some(swap) = ram.swap() {
+-                        if swap.wait_idle_with_cancel(cancelled).unwrap_or(false) {
+-                            continue;
+-                        }
+-                    }
+-                }
+-            }
+-        }
+-        break cached;
+-    };
++        .or(request.memory_budget.as_ref());
++    let cached = disk.load_with_cancel(key, budget, cancelled);
+     // Cancellation is terminal for speculative work, not a cache miss. Avoid
+     // entering native decode after a generation changes during disk restore.
+     if cancelled() {
+@@ -18184,7 +18154,7 @@
+         drop((next, selected, ram, baseline, pressure));
+         assert_eq!(root.used(), 0);
+         eprintln!(
+-            "RAW retained persistent={persistent}: original CR3; full root and two-slot restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0"
++            "RAW retained persistent={persistent}: original CR3; full root and two-slot restore pool; protected refusal reads=2; released old neighbor replaced reads=3; exact sensor/metadata; selected resident; final=0"
+         );
+     }
+ 

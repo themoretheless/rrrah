@@ -2585,8 +2585,38 @@ fn preload_raw_with_lease(
     let budget = ram
         .swap()
         .map(|swap| swap.restore_budget())
-        .or(request.memory_budget.as_ref());
-    let cached = disk.load_with_cancel(key, budget, cancelled);
+        .or(request.memory_budget.as_ref())
+        .cloned();
+    let mut fenced = false;
+    let cached = loop {
+        let cached = disk.load_with_cancel(key, budget.as_ref(), cancelled);
+        if cancelled() {
+            return Err("RAW prefetch cancelled".into());
+        }
+        if let Err(rrrah_cache::CacheError::Memory(rrrah_core::BufferError::Capacity {
+            requested,
+            limit,
+            ..
+        })) = &cached
+        {
+            // The persistent header supplies the true sensor allocation size.
+            // Reclaim only when retaining that allocation is possible.
+            if requested <= limit && ram.can_admit_key_by_minimum_weight(&key, *requested) {
+                if ram.release_lru_unpinned() {
+                    continue;
+                }
+                if !fenced {
+                    fenced = true;
+                    if let Some(swap) = ram.swap() {
+                        if swap.wait_idle_with_cancel(cancelled).unwrap_or(false) {
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
+        break cached;
+    };
     // Cancellation is terminal for speculative work, not a cache miss. Avoid
     // entering native decode after a generation changes during disk restore.
     if cancelled() {
@@ -18056,6 +18086,16 @@ mod gpr_preload_tests {
     #[test]
     #[ignore = "requires local EOS R8 original for retained swap-pressure recovery"]
     fn real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure() {
+        qualify_real_cr3_retained_pressure(false);
+    }
+
+    #[test]
+    #[ignore = "requires local EOS R8 original for persistent-cache pressure recovery"]
+    fn real_cr3_retained_disk_reclaims_old_neighbor_under_root_pressure() {
+        qualify_real_cr3_retained_pressure(true);
+    }
+
+    fn qualify_real_cr3_retained_pressure(persistent: bool) {
         let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
         let directory = tempfile::tempdir().unwrap();
         let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
@@ -18108,11 +18148,15 @@ mod gpr_preload_tests {
             )
             .unwrap(),
         );
+        let disk = DiskMosaicCache::with_max_bytes(directory.path().join("disk"), root.limit());
         for key in &keys {
-            ram.swap().unwrap().enqueue(*key, baseline.clone());
+            if persistent {
+                disk.store(*key, &baseline).unwrap();
+            } else {
+                ram.swap().unwrap().enqueue(*key, baseline.clone());
+            }
         }
         ram.swap().unwrap().wait_idle().unwrap();
-        let disk = DiskMosaicCache::with_max_bytes(directory.path().join("disk"), root.limit());
         let gate = Arc::new(DecodeGate::new());
         let (_, selected) = preload_raw_with_lease(&requests[0], &disk, &mut ram, None, 1, &gate).unwrap();
         let selected = selected.unwrap();
@@ -18124,14 +18168,14 @@ mod gpr_preload_tests {
         let (admitted, lease) =
             preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
         assert!(!admitted && lease.is_none());
-        assert_eq!(ram.swap().unwrap().stats().reads, 2);
+        assert_eq!(ram.swap().unwrap().stats().reads, if persistent { 0 } else { 2 });
         drop(old);
         let (admitted, next) = preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
         assert!(admitted);
         let next = next.unwrap();
         assert_eq!(&*next.pixels, &*baseline.pixels);
         assert_eq!(next.metadata, baseline.metadata);
-        assert_eq!(ram.swap().unwrap().stats().reads, 3);
+        assert_eq!(ram.swap().unwrap().stats().reads, if persistent { 0 } else { 3 });
         assert_eq!(ram.visible(), Some(keys[0]));
         assert!(ram.get_lease(&keys[0]).unwrap().pixels.ptr_eq(&selected.pixels));
         assert_eq!(root.used(), root.limit());
@@ -18140,7 +18184,7 @@ mod gpr_preload_tests {
         drop((next, selected, ram, baseline, pressure));
         assert_eq!(root.used(), 0);
         eprintln!(
-            "RAW retained swap: original CR3; full root and two-slot restore pool; protected refusal reads=2; released old neighbor replaced reads=3; exact sensor/metadata; selected resident; final=0"
+            "RAW retained persistent={persistent}: original CR3; full root and two-slot restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0"
         );
     }
 

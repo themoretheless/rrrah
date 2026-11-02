@@ -21,9 +21,9 @@ is a test guard, not a performance result. The original stays outside this evide
 directory; [pins.json](pins.json) records its size/hash and the test binary/source
 hashes without copying the photograph.
 
-The current required original-source suite passes **4/0 failed/0 ignored** in [raw.log](raw.log).
-Ordinary prefetch regression passes **69 tests/24 manual ignored** in
-[prefetch.log](prefetch.log); [production check](production-check.log), formatting
+The current required original-source suite passes **5/0 failed/0 ignored** in [raw.log](raw.log).
+The ordinary viewer suite passes **354 tests/102 manual ignored** in
+[viewer.log](viewer.log); [production check](production-check.log), formatting
 and diff whitespace checks pass. The manual case is among those skipped by the
 ordinary filter and was executed separately; it is not counted as an additional
 ordinary-suite pass.
@@ -38,11 +38,11 @@ NVIDIA/CUDA, or the separate pending three-hour raster-worker run.
 
 ## Retained swap recovery
 
-`MosaicRamCache::try_get_retained_with_cancel` is an explicit retained-consumer path. It checks byte/count admission before restoration, may reclaim unpinned/unleased LRU entries on recoverable memory refusal, and fences active spills at most once with cancellation before retrying. Visible pins and consumer leases remain protected. The legacy background-clone API keeps its refusal-without-eviction behavior. RAW worker prefetch receives the returned lease directly. Cold source decode and persistent disk-cache memory recovery are not changed by this repair.
+`MosaicRamCache::try_get_retained_with_cancel` is an explicit retained-consumer path. It checks byte/count admission before restoration, may reclaim unpinned/unleased LRU entries on recoverable memory refusal, and fences active spills at most once with cancellation before retrying. Visible pins and consumer leases remain protected. The legacy background-clone API keeps its refusal-without-eviction behavior. RAW worker prefetch receives the returned lease directly. Cold source decode is not changed by this repair; persistent disk-cache recovery is described below.
 
 The new original CR3 case uses three actual file copies with distinct timestamps/keys. One native decode supplies their identical expected sensor payload; three swap objects are written and read. A restore pool of two sensor allocations is full while the managed root's remaining capacity is reserved. Two held leases refuse the third restore without a pixel read (reads=2). Dropping the old neighbor's lease lets retained prefetch reclaim that neighbor and restore the third (reads=3), with exact samples/metadata, the same selected allocation still pinned, and final managed usage zero. This is controlled managed admission pressure, not physical OS memory exhaustion or slow-disk qualification.
 
-The four original-source tests also cover both prefetch directions and count/byte limits, partial protected-budget admission, and warm TTL handoff. [Cache suite](cache.log): 160 passed, 5 ignored, zero failures, including a small managed-pool regression with cancellation and protected refusal/replacement. Current ordinary prefetch:69 passed/24 ignored; required original-source:4 passed/zero ignored. The final added case is test-only; production check ran on the same production implementation before that case was added. Format and diff checks pass.
+The original-source tests also cover both prefetch directions and count/byte limits, partial protected-budget admission, and warm TTL handoff. [Cache suite](cache.log): 160 passed, 5 ignored, zero failures, including a small managed-pool regression with cancellation and protected refusal/replacement. Current ordinary viewer:354 passed/102 ignored; required original-source:5 passed/zero ignored. Production check covers the current implementation. Format and diff checks pass.
 
 ```sh
 cargo test --locked -p rrrah-cache --lib
@@ -50,3 +50,11 @@ cargo test --locked -p rrrah --bin rrrah gpr_preload_tests::real_cr3 -- --ignore
 ```
 
 These are CPU sensor/cache proofs. They do not add new physical HDR, Metal shader, camera-format-wide, or NVIDIA qualification. Logs and pins above replace the earlier positive checkpoint rather than duplicate it.
+
+## Persistent RAW cache recovery
+
+The original CR3 scenario also runs with three persistent disk-cache objects and an empty swap index. Two restored sensor allocations fill the shared restore pool; the remaining managed root is reserved. With both consumer leases held the candidate is refused. After the old neighbor's lease drops, the previous implementation still returned `admitted=false`: [original failure](disk-before.log), [reverse patch](disk-before.patch), exact before-source hash in [pins.json](pins.json).
+
+Persistent prefetch now uses the validated header's allocation size to check both the individual memory limit and RAM retention feasibility. It releases only an unpinned/unleased LRU neighbor on a recoverable memory refusal, then retries the persistent read. At most one cancellable active-spill fence is used when no RAM victim remains. Cancellation remains terminal, impossible retention/oversized allocations do not trigger reclamation, and transient persistent-cache memory errors do not fall through to native decode.
+
+The repaired original-source case passes with exact sensor samples and metadata, the selected allocation still resident, no swap reads, root never exceeding its configured limit, and final managed usage zero. Five required original CR3 tests and the full ordinary viewer suite pass on the pinned binary. This proves this authored native sensor/cache scenario, not slow storage, physical OS memory exhaustion, every camera, cold-source recovery, or physical HDR. The three-hour raster-worker run remains separate and pending.
