@@ -25,6 +25,46 @@ pub struct ObjFace {
     pub material: Option<Arc<str>>,
     pub smoothing_group: Option<u32>,
 }
+pub(crate) fn same_object(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
+    previous.is_some_and(|previous| Arc::ptr_eq(&face.object, &previous.object))
+}
+pub(crate) fn same_groups(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
+    previous.is_some_and(|previous| Arc::ptr_eq(&face.groups, &previous.groups))
+}
+pub(crate) fn same_material(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
+    match (
+        &face.material,
+        previous.and_then(|previous| previous.material.as_ref()),
+    ) {
+        (Some(value), Some(previous)) => Arc::ptr_eq(value, previous),
+        _ => false,
+    }
+}
+impl ObjFace {
+    /// Adjacent allocation runs match the lossless swap representation. Distinct
+    /// equal text and nonadjacent reused allocations stay conservatively charged.
+    pub(crate) fn metadata_bytes(&self, previous: Option<&Self>, retained: bool) -> u64 {
+        let object = if same_object(self, previous) {
+            0
+        } else {
+            self.object.len() as u64
+        };
+        let material = if same_material(self, previous) {
+            0
+        } else {
+            self.material.as_ref().map_or(0, |m| m.len() as u64)
+        };
+        let groups = if same_groups(self, previous) {
+            0
+        } else {
+            self.groups.iter().fold(
+                (self.groups.len() as u64).saturating_mul(std::mem::size_of::<String>() as u64),
+                |sum, s| sum.saturating_add(if retained { s.capacity() } else { s.len() } as u64),
+            )
+        };
+        object.saturating_add(material).saturating_add(groups)
+    }
+}
 #[derive(Debug, Clone, Default)]
 pub struct ObjMesh {
     /// Source xyz coordinates and rational-curve weight; omitted w is one.
@@ -476,26 +516,20 @@ fn decode_bytes_budgeted(
                         bounds[1][axis] = bounds[1][axis].max(vertex[axis]);
                     }
                 }
-                // Match the conservative cache weight for shared metadata references.
-                let metadata = object.len()
-                    + material.as_ref().map_or(0, |v: &Arc<str>| v.len())
-                    + groups.len() * std::mem::size_of::<String>()
-                    + groups.iter().map(String::capacity).sum::<usize>();
+                let face = ObjFace {
+                    corners: start..end,
+                    object: object.clone(),
+                    groups: groups.clone(),
+                    material: material.clone(),
+                    smoothing_group: smoothing,
+                };
+                let metadata = usize::try_from(face.metadata_bytes(mesh.faces.last(), true))
+                    .map_err(|_| ObjDecodeError::Invalid("metadata storage overflow"))?;
                 budget.charge_metadata(
                     metadata,
                     &mut [&mut object_credit, &mut material_credit, &mut groups_credit],
                 )?;
-                push(
-                    &mut mesh.faces,
-                    ObjFace {
-                        corners: start..end,
-                        object: object.clone(),
-                        groups: groups.clone(),
-                        material: material.clone(),
-                        smoothing_group: smoothing,
-                    },
-                    &mut budget,
-                )?;
+                push(&mut mesh.faces, face, &mut budget)?;
             }
             command @ ("o" | "g" | "usemtl" | "mtllib") => {
                 let mut name_credit = managed
@@ -1220,5 +1254,173 @@ mod fixture_tests {
             Err(ObjDecodeError::Source(DecodeError::Cancelled))
         ));
         assert!(crate::is_supported_model_path(&request.path));
+    }
+}
+
+#[cfg(test)]
+mod shared_metadata_budget_tests {
+    use super::*;
+    use std::collections::HashSet;
+    fn source() -> String {
+        let mut text = format!(
+            "v 0 0 0\nv 1 0 0\nv 0 1 0\no {}\ng {} {}\nusemtl {}\n",
+            "o".repeat(1024),
+            "g".repeat(512),
+            "h".repeat(512),
+            "m".repeat(1024)
+        );
+        for _ in 0..128 {
+            text.push_str("f 1 2 3\n");
+        }
+        text
+    }
+    // Independent physical-allocation census, deliberately using pointer sets,
+    // not the production adjacent-reference estimator.
+    fn physical(mesh: &ObjMesh, capacity: bool) -> u64 {
+        fn array<T>(v: &Vec<T>, capacity: bool) -> usize {
+            (if capacity { v.capacity() } else { v.len() }) * size_of::<T>()
+        }
+        let mut bytes = size_of::<ObjMesh>()
+            + array(&mesh.positions, capacity)
+            + array(&mesh.texcoords, capacity)
+            + array(&mesh.normals, capacity)
+            + array(&mesh.corners, capacity)
+            + array(&mesh.faces, capacity)
+            + array(&mesh.triangles, capacity)
+            + array(&mesh.material_libraries, capacity)
+            + mesh
+                .material_libraries
+                .iter()
+                .map(|s| if capacity { s.capacity() } else { s.len() })
+                .sum::<usize>();
+        let mut objects = HashSet::new();
+        let mut groups = HashSet::new();
+        let mut materials = HashSet::new();
+        for face in &mesh.faces {
+            if objects.insert(Arc::as_ptr(&face.object)) {
+                bytes += face.object.len();
+            }
+            if groups.insert(Arc::as_ptr(&face.groups)) {
+                bytes += face.groups.len() * size_of::<String>();
+                bytes += face
+                    .groups
+                    .iter()
+                    .map(|s| if capacity { s.capacity() } else { s.len() })
+                    .sum::<usize>();
+            }
+            if let Some(material) = &face.material {
+                if materials.insert(Arc::as_ptr(material)) {
+                    bytes += material.len();
+                }
+            }
+        }
+        bytes as u64
+    }
+    fn parsed() -> ObjMesh {
+        decode_bytes_budgeted(source().as_bytes(), None, || Ok(()))
+            .unwrap()
+            .0
+    }
+    #[test]
+    fn adjacent_shared_metadata_weight_matches_physical_allocations() {
+        let mesh = parsed();
+        let expected = physical(&mesh, true);
+        let minimum = physical(&mesh, false);
+        let model = crate::DecodedModel::Obj(Arc::new(mesh).into());
+        assert_eq!(model.capacity_bytes(), expected);
+        assert_eq!(model.minimum_restore_weight(), minimum);
+    }
+    #[test]
+    fn native_and_restored_shared_metadata_fit_their_real_working_envelopes() {
+        let mesh = parsed();
+        let retained = physical(&mesh, true);
+        let minimum = physical(&mesh, false);
+        let bytes = source();
+        let root = rrrah_core::MemoryBudget::new(retained);
+        let (native, credit) = decode_bytes_budgeted(bytes.as_bytes(), Some(&root), || Ok(())).unwrap();
+        let native = crate::ModelBuffer::from_reserved(native, credit.unwrap());
+        assert_eq!(root.used(), retained);
+        assert_eq!(root.peak(), retained);
+        assert!(Arc::ptr_eq(&native.faces[0].object, &native.faces[127].object));
+        assert!(Arc::ptr_eq(&native.faces[0].groups, &native.faces[127].groups));
+        let mut encoded = Vec::new();
+        crate::write_obj_swap_payload(&native, &mut encoded).unwrap();
+        let clone = native.clone();
+        drop(native);
+        assert_eq!(root.used(), retained);
+        drop(clone);
+        assert_eq!(root.used(), 0);
+        let scratch = 1024; // final material Arc construction overlaps its source String
+        let restore = rrrah_core::MemoryBudget::new(minimum + scratch);
+        let decoded =
+            crate::read_obj_swap_payload(&mut encoded.as_slice(), encoded.len() as u64, &restore).unwrap();
+        assert_eq!(restore.used(), minimum);
+        assert_eq!(restore.peak(), minimum + scratch);
+        assert_eq!(physical(&decoded, true), minimum);
+        assert!(Arc::ptr_eq(&decoded.faces[0].object, &decoded.faces[127].object));
+        assert!(Arc::ptr_eq(&decoded.faces[0].groups, &decoded.faces[127].groups));
+        let mut again = Vec::new();
+        crate::write_obj_swap_payload(&decoded, &mut again).unwrap();
+        assert_eq!(again, encoded);
+        drop(decoded);
+        assert_eq!(restore.used(), 0);
+        let short = rrrah_core::MemoryBudget::new(minimum + scratch - 1);
+        assert!(matches!(
+            crate::read_obj_swap_payload(&mut encoded.as_slice(), encoded.len() as u64, &short),
+            Err(crate::ObjSwapError::Memory(_))
+        ));
+        assert_eq!(short.used(), 0);
+        let short = rrrah_core::MemoryBudget::new(retained - 1);
+        assert!(decode_bytes_budgeted(bytes.as_bytes(), Some(&short), || Ok(())).is_err());
+        assert_eq!(short.used(), 0);
+        eprintln!(
+            "OBJ shared metadata: native retained/peak={retained}; restored retained={minimum} peak={}; exact payload and Arc sharing; both one-byte-short refuse; final=0",
+            minimum + scratch
+        );
+    }
+    #[test]
+    fn nonadjacent_sharing_keeps_the_swap_restoration_lower_bound_conservative() {
+        let mut mesh = parsed();
+        mesh.faces[64].object = Arc::from("middle");
+        assert!(Arc::ptr_eq(&mesh.faces[0].object, &mesh.faces[127].object));
+        let native_physical = physical(&mesh, false);
+        let model = crate::DecodedModel::Obj(Arc::new(mesh).into());
+        let minimum = model.minimum_restore_weight();
+        assert!(minimum > native_physical);
+        let crate::DecodedModel::Obj(mesh) = &model else {
+            panic!()
+        };
+        let mut encoded = Vec::new();
+        crate::write_obj_swap_payload(mesh, &mut encoded).unwrap();
+        let root = rrrah_core::MemoryBudget::new(minimum + 1024);
+        let restored =
+            crate::read_obj_swap_payload(&mut encoded.as_slice(), encoded.len() as u64, &root).unwrap();
+        assert_eq!(physical(&restored, true), minimum);
+        assert_eq!(root.used(), minimum);
+        assert!(!Arc::ptr_eq(
+            &restored.faces[0].object,
+            &restored.faces[127].object
+        ));
+        assert!(Arc::ptr_eq(
+            &restored.faces[65].object,
+            &restored.faces[127].object
+        ));
+        let mut again = Vec::new();
+        crate::write_obj_swap_payload(&restored, &mut again).unwrap();
+        assert_eq!(again, encoded);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn equal_text_in_distinct_allocations_is_not_deduplicated() {
+        let mut mesh = parsed();
+        for face in &mut mesh.faces {
+            face.object = Arc::from(&*face.object);
+            face.groups = Arc::from(face.groups.to_vec());
+            face.material = face.material.as_ref().map(|m| Arc::from(&**m));
+        }
+        let expected = physical(&mesh, true);
+        let model = crate::DecodedModel::Obj(Arc::new(mesh).into());
+        assert_eq!(model.capacity_bytes(), expected);
     }
 }

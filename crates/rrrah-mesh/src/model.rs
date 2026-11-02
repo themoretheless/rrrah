@@ -150,13 +150,13 @@ impl DecodedModel {
     }
     /// Conservative retained-capacity weight for cache admission.
     /// Includes vectors and nested attributes/strings, excludes allocator and
-    /// Arc bookkeeping. Shared OBJ face strings are charged per reference.
+    /// Arc bookkeeping. Shared OBJ metadata is charged once per adjacent run.
     pub fn capacity_bytes(&self) -> u64 {
         self.storage_bytes(true)
     }
     /// Lower bound for the retained weight after lossless payload restoration.
     /// Counts logical contents instead of source-side spare vector capacity.
-    /// Uses the same per-reference accounting as `capacity_bytes`.
+    /// Uses the same adjacent-allocation accounting as `capacity_bytes`.
     pub fn minimum_restore_weight(&self) -> u64 {
         self.storage_bytes(false)
     }
@@ -219,16 +219,11 @@ impl DecodedModel {
                     )),
                     strings(&mesh.material_libraries, retained),
                 ]);
+                let mut previous = None;
                 vectors.saturating_add(sum(mesh.faces.iter().map(|face| {
-                    sum([
-                        face.object.len() as u64,
-                        face.material.as_ref().map_or(0, |m| m.len() as u64),
-                        cap::<String>(face.groups.len()),
-                        sum(face
-                            .groups
-                            .iter()
-                            .map(|s| extent(s.len(), s.capacity(), retained) as u64)),
-                    ])
+                    let bytes = face.metadata_bytes(previous, retained);
+                    previous = Some(face);
+                    bytes
                 })))
             }
             Self::Off(mesh) => sum([

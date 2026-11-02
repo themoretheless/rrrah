@@ -24,21 +24,7 @@ fn optional_index(value: Option<u32>) -> [u8; 5] {
     }
     bytes
 }
-fn same_object(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
-    previous.is_some_and(|previous| Arc::ptr_eq(&face.object, &previous.object))
-}
-fn same_groups(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
-    previous.is_some_and(|previous| Arc::ptr_eq(&face.groups, &previous.groups))
-}
-fn same_material(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
-    match (
-        &face.material,
-        previous.and_then(|previous| previous.material.as_ref()),
-    ) {
-        (Some(value), Some(previous)) => Arc::ptr_eq(value, previous),
-        _ => false,
-    }
-}
+use crate::obj::{same_groups, same_material, same_object};
 fn arrays<const N: usize>(writer: &mut impl Write, values: &[[f32; N]]) -> io::Result<()> {
     uint(writer, values.len())?;
     crate::off_swap::scalar_blocks(writer, values.iter().flatten().map(|value| value.to_le_bytes()))
@@ -597,7 +583,6 @@ pub fn read_obj_swap_payload(
         let object = match read_tag(&mut r)? {
             0 => {
                 let value = &faces.last().ok_or_else(bad)?.object;
-                charge(&mut credit, value.len())?;
                 value.clone()
             }
             1 => read_arc(&mut r, &mut credit, budget)?,
@@ -606,13 +591,6 @@ pub fn read_obj_swap_payload(
         let groups = match read_tag(&mut r)? {
             0 => {
                 let value = &faces.last().ok_or_else(bad)?.groups;
-                charge(
-                    &mut credit,
-                    value.len().checked_mul(size_of::<String>()).ok_or_else(bad)?,
-                )?;
-                for group in value.iter() {
-                    charge(&mut credit, group.capacity())?;
-                }
                 value.clone()
             }
             1 => {
@@ -638,7 +616,6 @@ pub fn read_obj_swap_payload(
                     .last()
                     .and_then(|face| face.material.as_ref())
                     .ok_or_else(bad)?;
-                charge(&mut credit, value.len())?;
                 Some(value.clone())
             }
             2 => Some(read_arc(&mut r, &mut credit, budget)?),

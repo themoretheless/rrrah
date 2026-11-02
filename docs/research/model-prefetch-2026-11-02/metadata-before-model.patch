@@ -1,0 +1,23 @@
+--- a/crates/rrrah-mesh/src/model.rs
++++ b/crates/rrrah-mesh/src/model.rs
+@@ -153 +153 @@
+-    /// Arc bookkeeping. Shared OBJ metadata is charged once per adjacent run.
++    /// Arc bookkeeping. Shared OBJ face strings are charged per reference.
+@@ -159 +159 @@
+-    /// Uses the same adjacent-allocation accounting as `capacity_bytes`.
++    /// Uses the same per-reference accounting as `capacity_bytes`.
+@@ -222 +221,0 @@
+-                let mut previous = None;
+@@ -224,3 +223,9 @@
+-                    let bytes = face.metadata_bytes(previous, retained);
+-                    previous = Some(face);
+-                    bytes
++                    sum([
++                        face.object.len() as u64,
++                        face.material.as_ref().map_or(0, |m| m.len() as u64),
++                        cap::<String>(face.groups.len()),
++                        sum(face
++                            .groups
++                            .iter()
++                            .map(|s| extent(s.len(), s.capacity(), retained) as u64)),
++                    ])

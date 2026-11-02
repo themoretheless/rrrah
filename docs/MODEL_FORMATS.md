@@ -86,7 +86,7 @@ Cloning a model now shares its complete source geometry instead of deeply copyin
 its vectors. Triangle iteration and bounds retain the native geometry contract;
 individual decoder mesh APIs remain owned. A regression verifies shared OFF
 geometry allocation and survival after the original model handle is dropped.
-`DecodedModel::capacity_bytes` now provides a conservative cache-admission weight covering allocated vector capacity, nested PLY properties/lists, OFF face colors and OBJ strings. Shared OBJ strings are charged per face reference; allocator/Arc bookkeeping is excluded. Tests verify reserved geometry counts even when no triangles exist. The foreground viewer now has a 512 MiB model RAM cache using this weight and source fingerprint/image-index keys. Hits retain the shared original mesh and bypass decoder admission; the selected model is pinned and foreground replacement restores the previous pin if admission fails. `--no-cache` refuses model admission. Independent model policy is configured with `--model-cache-mb`, `--model-cache-count` and `--model-cache-ttl-secs`; defaults are 512 MiB and unlimited count/TTL. Zero count rejects admission; zero TTL misses immediately. Hits do not renew TTL. Neighbour model preloading now uses the foreground loading worker during idle queue periods, the configured previous/next window and navigation direction. New foreground generations cancel in-flight decoding and replace pending neighbour paths. Background admission preserves the visible model pin and obeys model cache limits. A real OFF preload regression confirms a subsequent shared-geometry hit without decoder admission; physical navigation latency remains unmeasured. Disk/swap persistence and a total allocation budget remain pending.
+`DecodedModel::capacity_bytes` now provides a conservative cache-admission weight covering allocated vector capacity, nested PLY properties/lists, OFF face colors and OBJ strings. Shared OBJ payloads are charged once per adjacent allocation run; nonadjacent sharing remains conservative for restoration. Allocator/Arc bookkeeping is excluded. Tests verify reserved geometry counts even when no triangles exist. The foreground viewer now has a 512 MiB model RAM cache using this weight and source fingerprint/image-index keys. Hits retain the shared original mesh and bypass decoder admission; the selected model is pinned and foreground replacement restores the previous pin if admission fails. `--no-cache` refuses model admission. Independent model policy is configured with `--model-cache-mb`, `--model-cache-count` and `--model-cache-ttl-secs`; defaults are 512 MiB and unlimited count/TTL. Zero count rejects admission; zero TTL misses immediately. Hits do not renew TTL. Neighbour model preloading now uses the foreground loading worker during idle queue periods, the configured previous/next window and navigation direction. New foreground generations cancel in-flight decoding and replace pending neighbour paths. Background admission preserves the visible model pin and obeys model cache limits. A real OFF preload regression confirms a subsequent shared-geometry hit without decoder admission; physical navigation latency remains unmeasured. Disk/swap persistence and a total allocation budget remain pending.
 
 ## Managed OBJ geometry admission
 
@@ -94,14 +94,14 @@ geometry allocation and survival after the original model handle is dropped.
 normals, corners, faces and triangles. Reported vector capacity is charged and
 the reservation transfers to `ModelBuffer`, remaining live through the final
 shared owner. Polygon coordinates and triangulator arrays use the same ancestor
-budget. Shared face metadata is conservatively charged per reference to match
+budget. Shared face metadata is charged once per adjacent allocation run to match
 `capacity_bytes`; library string capacity is also included in retained admission.
 Metadata token joining now measures the normalized name first, reserves before
 String allocation and writes directly without a temporary token-pointer vector.
 A 10,000-token group line rejects early under insufficient memory. Object and
 material Arc payloads now reserve before construction. Their active-state credits
-merge into the geometry reservation on the first retained face; later references
-retain the existing conservative per-face weight. Unused/replaced states release
+merge into the geometry reservation on the first retained face; later adjacent
+references retain shared ownership without duplicate payload charges. Unused/replaced states release
 credit, and cancellation after metadata construction cleans up all reservations.
 Group strings and Arc slot payloads now reserve before allocation; a separate
 transient credit covers Vec/Arc conversion overlap. Their first-face credits also
@@ -298,10 +298,10 @@ It validates float finiteness, optional index tags, bounds of vertex/texture/
 normal/corner references, contiguous face ranges, triangle counts and face
 ownership, UTF-8 metadata, previous-face reference availability and exact
 framing. Restored adjacent object/group/material references share Arc storage.
-Arrays, strings and conservative per-face shared metadata weights are admitted
+Arrays and newly introduced strings/metadata runs are admitted
 before allocation; temporary string-to-Arc and group-array conversion overlap
 is also budgeted. The resulting model retains credit until its last owner drops.
-The viewer swap adapter has not yet been extended to OBJ.
+The common viewer swap adapter also routes OBJ through this reader.
 
 Tests compare encoded roundtrips and bounds/corner/triangle data for six native
 OBJ fixtures. Shared metadata tests verify Arc identity and retained capacity,
@@ -791,3 +791,7 @@ Four native Metal App EXR→STL/OBJ/PLY/OFF→EXR roundtrips passed on authored 
 ### Retained model prefetch under transient restore pressure — 2026-10-24
 
 STL/OBJ/OFF/PLY retained background prefetch now stops after transient swap-memory admission refusal, preserving the visible model and immutable swap entry rather than entering native decode/decode-gate work. A later attempt restores exact payloads and actual M4 Max SDR/HDR frames after pressure releases. Permanently too-small configured restore caps still allow native fallback when shared memory permits. Full app330/85ignored and required focused Metal1/0ignored pass; material/texture and physical-display qualification remain separate. [Evidence](research/model-partial-swap-admission-2026-10-19/REPORT.md#transient-shared-root-restore-refusal--2026-10-24).
+
+## Adjacent metadata accounting — 2026-11-03
+
+Shared OBJ object/group/material payloads now consume retained credit once per adjacent allocation run in native decode, capacity estimation and lossless restore. This corrects a421576-byte charge for a25336-byte authored mesh; physical payload sharing itself is unchanged. The independent128-face census, exact/one-byte-short working budgets, distinct equal-value allocations and conservative nonadjacent restore boundary pass, with61 mesh tests and current Metal cache equivalence checks. [Failure, current proof and source pins](research/model-prefetch-2026-11-02/REPORT.md#shared-obj-metadata-quota-correction--2026-11-03).

@@ -1,0 +1,31 @@
+--- a/crates/rrrah-mesh/src/obj_swap.rs
++++ b/crates/rrrah-mesh/src/obj_swap.rs
+@@ -27 +27,15 @@
+-use crate::obj::{same_groups, same_material, same_object};
++fn same_object(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
++    previous.is_some_and(|previous| Arc::ptr_eq(&face.object, &previous.object))
++}
++fn same_groups(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
++    previous.is_some_and(|previous| Arc::ptr_eq(&face.groups, &previous.groups))
++}
++fn same_material(face: &ObjFace, previous: Option<&ObjFace>) -> bool {
++    match (
++        &face.material,
++        previous.and_then(|previous| previous.material.as_ref()),
++    ) {
++        (Some(value), Some(previous)) => Arc::ptr_eq(value, previous),
++        _ => false,
++    }
++}
+@@ -585,0 +600 @@
++                charge(&mut credit, value.len())?;
+@@ -593,0 +609,7 @@
++                charge(
++                    &mut credit,
++                    value.len().checked_mul(size_of::<String>()).ok_or_else(bad)?,
++                )?;
++                for group in value.iter() {
++                    charge(&mut credit, group.capacity())?;
++                }
+@@ -618,0 +641 @@
++                charge(&mut credit, value.len())?;
