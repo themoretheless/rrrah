@@ -31,3 +31,11 @@ source duplicate-key override is intentional. `primitive-invalid.tsv` contains
 original Box above in local coordinates, without applying its node transform.
 `primitive-manifest.json` pins output counts/hashes. None of these prove scene,
 material, skin, animation, GPU or window behavior.
+
+Transform files are CC0 authored controls from
+`scripts/generate-glb-transform-fixtures.py`:40 points from80-digit Decimal
+Hamilton quaternion / matrix math and35 inverse-transpose normals from independent
+Gauss-Jordan elimination, plus20 malformed nodes. `Box-node-triangles.tsv`
+applies the original Box node0 matrix to its local triangle coordinates; it does
+not independently discover a scene hierarchy. `transform-manifest.json` pins the
+six outputs. These controls do not qualify complete scenes, GPU or presentation.

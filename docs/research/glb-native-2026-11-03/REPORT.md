@@ -1,8 +1,8 @@
-# Native GLB container, JSON, accessors and primitives — 2026-11-03
+# Native GLB geometry and node-transform foundations — 2026-11-03
 
 This implements native container/JSON/accessor and selected local-space triangle
 primitive decoding toward GLB/glTF scene loading. It does **not** register GLB/glTF
-in model discovery or claim scene transforms, viewing, material interpretation,
+in model discovery or claim automatic scene/hierarchy traversal, viewing, material interpretation,
 cache/swap, Metal, HDR, first-frame timing or format qualification.
 The raster catalogue remains 94 implemented subsets, 6 pending, 0 fully qualified.
 
@@ -49,7 +49,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
 
 ## Evidence
 
-- [Mesh tests](mesh-tests.log): 82 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
+- [Mesh tests](mesh-tests.log): 86 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
   truncated prefixes, malformed order/alignment/length/version, chunk/JSON
   limits, cancellation, last-owner source credit, exact and one-byte-short
   admission, malformed-input cleanup.
@@ -76,7 +76,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
   failures release source and token credit.
 - The numeric fixture generator initially produced invalid `000e-2`; Rust
   correctly refused. The generator now independently checks JSON grammar before
-  Decimal conversion and writes legal `0e-2`. Current82-test result includes the repaired controls.
+  Decimal conversion and writes legal `0e-2`. Current86-test result includes the repaired controls.
 - [Source pins](sources.json). No new dependency or lockfile changes.
 
 ## Borrowed embedded accessors
@@ -178,7 +178,7 @@ scratch and duplicate-name comparison. Aggregate attribute component validation
 is capped at128 million. Scans check cancellation every1024 elements. These are
 implementation limits; broad large-scene timing and OS memory are not qualified.
 
-Current proof in the82-test mesh run:
+Current proof in the86-test mesh run:
 
 - 12 original Box local triangles match independent Python struct index/position
   reads. The source node matrix is deliberately not applied by this API.
@@ -202,6 +202,57 @@ Current proof in the82-test mesh run:
   syntax, production check, Cargo formatting and diff checks pass. No dependency
   or lockfile change. Existing JSON/accessor proofs are included in the same
   current test log; old intermediate logs are replaced rather than duplicated.
+
+## Local node transforms and affine math
+
+`node_local_transform` now reads a node's matrix or TRS into a fixed128-byte
+column-major `GlbTransform`. Matrix and any TRS property may not coexist, even
+if a TRS field is null or default-valued. Transform arrays require exact sizes
+and finite float64 interpretation. Raw original JSON remains unchanged.
+
+Local matrix bottom row must be affine. Normalized nonzero columns must be
+orthogonal within1e-6, accepting negative/zero scales but refusing local shear.
+Quaternion length must be within1e-6 of1; accepted rounded quaternions are
+normalized for calculation. TRS composition uses T*R*S. Parent.compose(local)
+uses parent*local and deliberately permits world shear produced by valid nested
+nonuniform TRS; it does not reapply the local decomposability restriction.
+
+Point transformation checks arithmetic range. Normal transformation uses the
+inverse-transpose direction with per-column scale extraction and binary-exponent
+ratios, then normalizes. It avoids forming a huge reciprocal matrix. Orientation
+reports mirrored/preserving/singular for supported numerical conditions. A
+normalized determinant magnitude below1e-12 explicitly refuses reliable normal
+or nonzero-orientation interpretation; this is an Unsupported numeric boundary,
+not evidence a valid scene is corrupt. Singular geometry can still transform
+points, while its inverse normal transform explicitly refuses. Arithmetic range
+exhaustion returns Limit; malformed/nonfinite source values remain Invalid.
+Values outside float64 precision/range are not universally qualified; ordinary
+floating underflow may discard unrepresentable components. No exact-arithmetic
+or all-extreme-transform guarantee is asserted.
+
+Evidence in the current86-test run:
+
+- 40 point transformations across8 source nodes agree with independent80-digit
+  Decimal Hamilton quaternion multiplication / explicit matrix math. Cases cover
+  identity, translation, reflection, nonuniform/zero scale, source matrices and
+  quaternions with all X/Y/Z/W components nonzero.
+- 35 transformed normals agree with an independent Decimal Gauss-Jordan inverse
+  followed by normalization. A composed parent/child world-shear case is included.
+  The point/normal comparison tolerance is2e-14*max(1,abs(expected)).
+- All12 original Box triangles are transformed using its original node0 matrix
+  composed with node1's identity and match the independent transformed-coordinate
+  oracle. This is manual known-node composition, **not automatic hierarchy or
+  scene-selection qualification**. The original source plus token peak remains4304.
+- 20 malformed source-node contracts refuse with final credit0. Cancellation and
+  new-generation retry preserve the immutable source; final document clone owns
+  source/token credit. Transform math creates no additional managed allocation.
+- Analytic extreme diagonal cases include1e300/1e-300 and the smallest float64
+  subnormal. Unit direction and its expected1e-300/subnormal components are checked,
+  rather than only checking finiteness. Valid world shear composes, local shear
+  refuses, zero-scale points remain usable, and singular/ill-conditioned normals,
+  nonfinite input and overflowing point/composition cases explicitly refuse.
+- Six transform-generator artifacts regenerate byte-identically; Python syntax,
+  Cargo formatting, production check and diff checks pass. No new dependencies.
 
 ## Required continuation
 

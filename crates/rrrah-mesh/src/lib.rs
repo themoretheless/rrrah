@@ -17,6 +17,7 @@ pub mod glb;
 mod glb_accessor;
 mod glb_json;
 mod glb_primitive;
+mod glb_transform;
 
 mod off_swap;
 pub use off_swap::{OffSwapError, off_swap_payload_len, read_off_swap_payload, write_off_swap_payload};
