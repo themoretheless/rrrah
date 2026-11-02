@@ -683,6 +683,41 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         }
     }
 
+    /// Waits for earlier spills to release their buffers. Returns false when
+    /// cancelled, including while the bounded command queue is full. Cancellation
+    /// stops only this wait; an in-flight writer still owns its payload until it exits.
+    pub fn wait_idle_with_cancel(&self, mut cancelled: impl FnMut() -> bool) -> std::io::Result<bool> {
+        let (tx, rx) = mpsc::channel();
+        let mut command = Command::Barrier(tx);
+        loop {
+            if cancelled() {
+                return Ok(false);
+            }
+            match self.tx.try_send(command) {
+                Ok(()) => break,
+                Err(mpsc::TrySendError::Full(returned)) => {
+                    command = returned;
+                    std::thread::sleep(std::time::Duration::from_millis(1));
+                }
+                Err(mpsc::TrySendError::Disconnected(_)) => {
+                    return Err(std::io::Error::other("swap worker disconnected"));
+                }
+            }
+        }
+        loop {
+            if cancelled() {
+                return Ok(false);
+            }
+            match rx.recv_timeout(std::time::Duration::from_millis(2)) {
+                Ok(()) => return Ok(!cancelled()),
+                Err(mpsc::RecvTimeoutError::Timeout) => {}
+                Err(mpsc::RecvTimeoutError::Disconnected) => {
+                    return Err(std::io::Error::other("swap worker disconnected"));
+                }
+            }
+        }
+    }
+
     pub fn wait_idle(&self) -> std::io::Result<()> {
         let (tx, rx) = mpsc::channel();
         self.tx
@@ -739,6 +774,134 @@ mod write_cancellation_tests {
             })
         }
     }
+    #[test]
+    fn cancellable_fence_does_not_block_on_active_or_full_queue() {
+        for full_queue in [false, true] {
+            let directory = tempfile::tempdir().unwrap();
+            let root = MemoryBudget::new(2);
+            let swap = ImageSwapCache::<u8, Payload>::new(
+                directory.path(),
+                ImageSwapConfig {
+                    limits: CacheLimits::bytes(16),
+                    queue_bytes: 2,
+                    queue_count: 1,
+                    restore_bytes: 2,
+                },
+            )
+            .unwrap();
+            let (started, start_rx) = mpsc::channel();
+            let (resume, resume_rx) = mpsc::channel();
+            swap.enqueue(
+                1,
+                Payload {
+                    buffer: root.try_buffer(1, 7).unwrap().freeze(),
+                    pause: Some((started, resume_rx, false)),
+                },
+            );
+            start_rx.recv_timeout(std::time::Duration::from_secs(5)).unwrap();
+            if full_queue {
+                swap.enqueue(
+                    2,
+                    Payload {
+                        buffer: root.try_buffer(1, 9).unwrap().freeze(),
+                        pause: None,
+                    },
+                );
+            }
+            let used = root.used();
+            std::thread::scope(|scope| {
+                let (done, done_rx) = mpsc::channel();
+                let swap_ref = &swap;
+                scope.spawn(move || {
+                    let mut checks = 0;
+                    done.send(swap_ref.wait_idle_with_cancel(|| {
+                        checks += 1;
+                        checks >= 3
+                    }))
+                    .unwrap();
+                });
+                let result = done_rx.recv_timeout(std::time::Duration::from_secs(1));
+                assert_eq!(
+                    root.used(),
+                    used,
+                    "cancelled wait cannot release writer-owned pixels"
+                );
+                // Always release the codec before inspecting the result, so even
+                // a broken blocking implementation cannot strand the test worker.
+                resume.send(()).unwrap();
+                swap.wait_idle().unwrap();
+                assert!(!result.unwrap().unwrap());
+            });
+            assert_eq!(root.used(), 0);
+            assert!(swap.wait_idle_with_cancel(|| false).unwrap());
+            swap.shutdown();
+        }
+    }
+
+    #[test]
+    fn cancelled_spill_fence_releases_restore_pool_before_retry() {
+        let directory = tempfile::tempdir().unwrap();
+        let root = MemoryBudget::new(1);
+        let queue = MemoryBudget::new(2);
+        let swap = ImageSwapCache::<u8, Payload>::new_with_budgets(
+            directory.path(),
+            ImageSwapConfig {
+                limits: CacheLimits::bytes(16),
+                queue_bytes: 2,
+                queue_count: 1,
+                restore_bytes: 1,
+            },
+            queue.clone(),
+            root.clone(),
+        )
+        .unwrap();
+        for key in [1, 2] {
+            swap.enqueue(
+                key,
+                Payload {
+                    buffer: MemoryBudget::new(1).try_buffer(1, key).unwrap().freeze(),
+                    pause: None,
+                },
+            );
+            swap.wait_idle().unwrap();
+        }
+        let restored = swap.get(&1, || false).unwrap();
+        assert_eq!(root.used(), 1);
+        let (started, start_rx) = mpsc::channel();
+        let (resume, resume_rx) = mpsc::channel();
+        swap.enqueue(
+            3,
+            Payload {
+                buffer: restored.buffer,
+                pause: Some((started, resume_rx, true)),
+            },
+        );
+        start_rx.recv_timeout(std::time::Duration::from_secs(5)).unwrap();
+        assert!(matches!(
+            swap.try_get(&2, || false),
+            Err(rrrah_memory::BufferError::Capacity { .. })
+        ));
+        swap.discard_pending_writes();
+        assert_eq!(root.used(), 1, "discard is asynchronous until the codec returns");
+        let mut checks = 0;
+        assert!(
+            swap.wait_idle_with_cancel(|| {
+                checks += 1;
+                if checks == 3 {
+                    resume.send(()).unwrap();
+                }
+                false
+            })
+            .unwrap()
+        );
+        assert_eq!((root.used(), queue.used()), (0, 0));
+        let retry = swap.try_get(&2, || false).unwrap().unwrap();
+        assert_eq!(&*retry.buffer, &[2]);
+        drop(retry);
+        swap.shutdown();
+        assert_eq!((root.used(), queue.used()), (0, 0));
+    }
+
     #[test]
     fn terminal_shutdown_joins_idle_worker_and_releases_temporary_directory() {
         for ttl in [None, Some(std::time::Duration::from_secs(3600))] {

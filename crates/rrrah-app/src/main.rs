@@ -2639,22 +2639,19 @@ fn preload_raster_mode(
     ),
     RasterCacheLoadError,
 > {
-    let mut resolved = None;
     let skip_unretained_swap = retain;
     // Explicit opt-in benchmark control; absent from production builds.
     #[cfg(test)]
     let skip_unretained_swap =
         skip_unretained_swap && std::env::var("RRRAH_BENCH_LEGACY_PREFETCH_SWAP").as_deref() != Ok("1");
-    let (frame, assumed) = load_cached_raster_mode_resolving_key_policy(
+    let (frame, assumed, lease) = load_cached_raster_mode_resolving_key_policy_with_lease(
         request,
-        || {
-            resolved = raster_display_key(request, window);
-            resolved.clone()
-        },
+        || raster_display_key(request, window),
         cache,
         false,
         retain,
         skip_unretained_swap,
+        retain,
         || {
             let cancelled = || {
                 request
@@ -2677,14 +2674,6 @@ fn preload_raster_mode(
             result
         },
     )?;
-    let lease = if retain {
-        resolved.and_then(|mut key| {
-            key.6 = assumed;
-            cache.get_lease(&key)
-        })
-    } else {
-        None
-    };
     Ok((frame, assumed, lease))
 }
 
@@ -2911,8 +2900,38 @@ fn load_cached_raster_mode_resolving_key_policy(
     visible: bool,
     require_retention: bool,
     skip_unretained_swap: bool,
-    mut load: impl FnMut() -> Result<(rrrah_core::DecodedRaster, bool), RasterLoadError>,
+    load: impl FnMut() -> Result<(rrrah_core::DecodedRaster, bool), RasterLoadError>,
 ) -> Result<(rrrah_core::DecodedRaster, bool), RasterCacheLoadError> {
+    load_cached_raster_mode_resolving_key_policy_with_lease(
+        request,
+        resolve_key,
+        cache,
+        visible,
+        require_retention,
+        skip_unretained_swap,
+        false,
+        load,
+    )
+    .map(|(frame, assumed, _)| (frame, assumed))
+}
+
+fn load_cached_raster_mode_resolving_key_policy_with_lease(
+    request: &DecodeRequest,
+    resolve_key: impl FnOnce() -> Option<RasterDisplayKey>,
+    cache: &mut RasterDisplayCache,
+    visible: bool,
+    require_retention: bool,
+    skip_unretained_swap: bool,
+    handoff_lease: bool,
+    mut load: impl FnMut() -> Result<(rrrah_core::DecodedRaster, bool), RasterLoadError>,
+) -> Result<
+    (
+        rrrah_core::DecodedRaster,
+        bool,
+        Option<rrrah_cache::CacheLease<rrrah_core::DecodedRaster>>,
+    ),
+    RasterCacheLoadError,
+> {
     if request
         .cancellation
         .as_ref()
@@ -2921,6 +2940,7 @@ fn load_cached_raster_mode_resolving_key_policy(
         return Err("raster load cancelled".into());
     }
     let key = resolve_key();
+    let mut retained = None;
     let mut swap_weight_refused = false;
     let mut swap_memory_refused = false;
     if let Some(key) = &key {
@@ -2940,13 +2960,18 @@ fn load_cached_raster_mode_resolving_key_policy(
                 cache.get_with_cancel(&probe, cancelled)
             } else if skip_unretained_swap {
                 if let Some(lease) = cache.get_lease(&probe) {
-                    Some((*lease).clone())
+                    let frame = (*lease).clone();
+                    if handoff_lease {
+                        retained = Some(lease);
+                    }
+                    Some(frame)
                 } else {
                     let minimum = cache
                         .swap()
                         .and_then(|swap| swap.minimum_restore_weight(&probe))
                         .unwrap_or(4);
                     if cache.can_admit_key_by_minimum_weight(&probe, minimum) {
+                        let mut waited_for_spills = false;
                         loop {
                             match cache.try_get_background_with_cancel(&probe, cancelled) {
                                 Ok(frame) => break frame,
@@ -2958,6 +2983,23 @@ fn load_cached_raster_mode_resolving_key_policy(
                                     let retryable = retryable_memory_pressure(&error);
                                     if retryable && !cancelled() && cache.release_lru_unpinned() {
                                         continue;
+                                    }
+                                    // A removed frame may still be owned by an in-flight
+                                    // cancelled spill. Wait for that writer's fence once,
+                                    // while allowing a new foreground generation to cancel.
+                                    if retryable
+                                        && !waited_for_spills
+                                        && !cancelled()
+                                        && let Some(swap) = cache.swap()
+                                    {
+                                        waited_for_spills = true;
+                                        // The writer may already have released its final
+                                        // bytes between the failed restore and this check.
+                                        if swap.stats().queued_bytes == 0
+                                            || swap.wait_idle_with_cancel(cancelled).unwrap_or(false)
+                                        {
+                                            continue;
+                                        }
                                     }
                                     swap_memory_refused |= retryable;
                                     break None;
@@ -2981,10 +3023,13 @@ fn load_cached_raster_mode_resolving_key_policy(
                     let after = cache.swap().map_or(0, |swap| swap.stats().reads);
                     gpu_recovery_probe::record_raster_cache_hit(&request.path, before, after);
                 }
+                if handoff_lease && retained.is_none() {
+                    retained = cache.get_lease(&probe);
+                }
                 if visible {
                     cache.mark_visible(probe);
                 }
-                return Ok((raster, assumed));
+                return Ok((raster, assumed, retained));
             }
         }
     }
@@ -3041,13 +3086,17 @@ fn load_cached_raster_mode_resolving_key_policy(
     }
     if let Some(mut key) = key {
         key.6 = assumed;
+        let lease_key = handoff_lease.then(|| key.clone());
         if visible {
             cache.insert_visible(key, raster.clone());
         } else {
             cache.insert(key, raster.clone());
         }
+        if let Some(key) = lease_key {
+            retained = cache.get_lease(&key);
+        }
     }
-    Ok((raster, assumed))
+    Ok((raster, assumed, retained))
 }
 
 #[cfg(test)]
@@ -11337,6 +11386,60 @@ mod foreground_loader_tests {
                 assert_eq!(root.used(), 0);
             }
         }
+    }
+
+    #[test]
+    fn retained_raster_prefetch_handoff_keeps_first_lease_across_ttl() {
+        let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster/associated-emission-rec709.exr");
+        let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+        let mut request = DecodeRequest::new(source);
+        request.memory_budget = Some(root.clone());
+        let (warm, assumed) = load_raster_for_display_typed(&request, None).unwrap();
+        let mut key = raster_display_key(&request, None).unwrap();
+        key.6 = assumed;
+        for handoff in [false, true] {
+            let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
+                max_bytes: warm.capacity_bytes(),
+                max_entries: Some(1),
+                ttl: Some(Duration::from_millis(100)),
+            });
+            assert!(cache.insert(key.clone(), warm.clone()));
+            let (frame, actual_assumed, lease) = load_cached_raster_mode_resolving_key_policy_with_lease(
+                &request,
+                || Some(key.clone()),
+                &mut cache,
+                false,
+                true,
+                true,
+                handoff,
+                || panic!("the warmed frame must be a RAM hit"),
+            )
+            .unwrap();
+            assert_eq!(actual_assumed, assumed);
+            assert_eq!(lease.is_some(), handoff);
+            std::thread::sleep(Duration::from_millis(150));
+            // TTL still forbids new consumers. Only the lease acquired before
+            // expiry may protect this frame across its handoff to the worker.
+            assert!(cache.get_lease(&key).is_none());
+            let mut other = key.clone();
+            other.4 += 1;
+            assert_eq!(cache.can_admit_key_by_count(&other), !handoff);
+            if let Some(lease) = &lease {
+                let (rrrah_core::RasterPixels::Rgba32Float(a), rrrah_core::RasterPixels::Rgba32Float(b)) =
+                    (frame.pixels(), lease.pixels())
+                else {
+                    panic!()
+                };
+                assert!(a.ptr_eq(b));
+                assert!(!cache.release_lru_unpinned());
+            }
+            drop((lease, frame));
+            assert!(cache.can_admit_key_by_count(&other));
+            drop(cache);
+        }
+        drop(warm);
+        assert_eq!(root.used(), 0);
     }
 
     #[test]

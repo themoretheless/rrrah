@@ -1,5 +1,14 @@
 # Current coverage of the requested viewer scope
 
+Sustained-worker repair candidate (2026-11-02): the diagnostic repetition failed
+at4228 with an explicit restore-memory refusal. A cancelled writer can retain
+restored pixels after logical eviction. Retained-prefetch now fences outstanding
+spills with cancellation before one retry; a separate RAM-hit lease handoff
+fix preserves an existing consumer across TTL without admitting expired new
+consumers.159 cache and65 prefetch tests plus production check pass. A new
+three-hour run is in progress, so sustained qualification remains unproven.
+[Failure, controlled reproduction and checks](research/metal-worker-sustained-2026-11-02/REPORT.md#diagnostic-reproduction-and-candidate-repair).
+
 Sustained-worker counterexample (2026-11-02): the requested three-hour Metal
 run failed at selection1156 after1152 logged successful selections/181.9s:
 nearest BMP neighbor retention was refused. Monitor/child are terminal failures;
