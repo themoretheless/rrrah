@@ -1,6 +1,6 @@
 {
   "status": "passed",
-  "monitor_pid": 23907,
+  "monitor_pid": 39269,
   "binary": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-66296b73a0654ad2",
   "command": [
     "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-66296b73a0654ad2",
@@ -10,8 +10,8 @@
     "--nocapture",
     "--test-threads=1"
   ],
-  "binary_sha256": "a5d1b7426f778ea750308cd37e3eef30f185cd5968fda79c14b00b593b02f2c5",
-  "monitor_sha256": "635d88bc589be144bcddc35944bf16180cc425cc5f6bce7c59bde47ad4334658",
+  "binary_sha256": "e7621d2f99c4a6fa9f55506054c5bd833c9ad28cc1b7ecdeacd22274d75d9b77",
+  "monitor_sha256": "fba8b85b9d565b19141beea73c9d9fa0476ea5a55e83cabaa1f323ba44ec458b",
   "suite": "worker-mixed",
   "requested_seconds": 300,
   "full_hdr_output": [
@@ -26,7 +26,7 @@
   "managed_root_limit": 134217728,
   "managed_queue_limit": 16777216,
   "swap_limit": 67108864,
-  "scratch": "/Users/themoretheless/.codex/tmp/rrrah-slow-worker-20261102/scratch",
+  "scratch": "/Users/themoretheless/.codex/tmp/rrrah-slow-worker-20261102/scratch-counters",
   "io_delay_ms": 1,
   "max_io_request_bytes": 16384,
   "rss_guard_bytes": 6442450944,
@@ -35,23 +35,34 @@
   "allocator_environment": {
     "MallocNanoZone": "0"
   },
-  "started_utc": "2026-11-02T19:26:25.136528+00:00",
-  "rss_samples": 31,
+  "started_utc": "2026-11-02T19:41:23.553346+00:00",
+  "rss_samples": 32,
   "fixed_pressure_bytes": 67108864,
   "restore_limit": 33554432,
   "io_injection_scope": "swap_payload_codec",
-  "child_pid": 23908,
+  "child_pid": 39270,
   "last_sample": {
-    "elapsed_seconds": 300.3809060410131,
-    "rss_bytes": 306151424
+    "elapsed_seconds": 310.3356202499999,
+    "rss_bytes": 304693248
   },
-  "elapsed_seconds": 310.3903456660046,
+  "elapsed_seconds": 320.3436084999994,
   "last_progress": {
-    "cycles": 384,
-    "test_elapsed_seconds": 278.3
+    "cycles": 256,
+    "test_elapsed_seconds": 285.6
   },
   "exit_code": 0,
-  "ended_utc": "2026-11-02T19:31:35.532496+00:00",
+  "ended_utc": "2026-11-02T19:46:43.903941+00:00",
   "io_injection_confirmed": true,
+  "io_totals": {
+    "read_calls": 119227,
+    "read_bytes": 1560287104,
+    "max_read_request": 16384,
+    "write_calls": 135811,
+    "write_bytes": 1777493632,
+    "max_write_request": 16384,
+    "completed_spills": 97,
+    "completed_restores": 93
+  },
+  "io_directions_confirmed": true,
   "workload_evidence_valid": true
 }

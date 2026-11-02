@@ -1,6 +1,7 @@
 //! Opt-in delayed/short codec I/O over the real swap store's verified streams.
 //! This does not simulate source-file reads, seek/fsync latency or blocked OS calls.
 use std::io::{self, Read, Write};
+use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Duration;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -43,13 +44,94 @@ impl Config {
         }
     }
 }
+/// Process-wide qualification counters. Observe after all tested cache workers
+/// have joined; live snapshots can span concurrent operations. No reset API.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub struct Snapshot {
+    pub read_calls: u64,
+    pub read_bytes: u64,
+    pub max_read_request: u64,
+    pub write_calls: u64,
+    pub write_bytes: u64,
+    pub max_write_request: u64,
+    pub completed_spills: u64,
+    pub completed_restores: u64,
+}
+struct Direction {
+    calls: AtomicU64,
+    bytes: AtomicU64,
+    maximum: AtomicU64,
+}
+impl Direction {
+    const fn new() -> Self {
+        Self {
+            calls: AtomicU64::new(0),
+            bytes: AtomicU64::new(0),
+            maximum: AtomicU64::new(0),
+        }
+    }
+    fn record(&self, requested: usize, result: &io::Result<usize>) {
+        if requested == 0 {
+            return;
+        }
+        self.calls.fetch_add(1, Ordering::Relaxed);
+        self.maximum.fetch_max(requested as u64, Ordering::Relaxed);
+        if let Ok(count) = result {
+            self.bytes.fetch_add(*count as u64, Ordering::Relaxed);
+        }
+    }
+}
+struct Counters {
+    read: Direction,
+    write: Direction,
+    spills: AtomicU64,
+    restores: AtomicU64,
+}
+impl Counters {
+    const fn new() -> Self {
+        Self {
+            read: Direction::new(),
+            write: Direction::new(),
+            spills: AtomicU64::new(0),
+            restores: AtomicU64::new(0),
+        }
+    }
+    fn snapshot(&self) -> Snapshot {
+        Snapshot {
+            read_calls: self.read.calls.load(Ordering::Relaxed),
+            read_bytes: self.read.bytes.load(Ordering::Relaxed),
+            max_read_request: self.read.maximum.load(Ordering::Relaxed),
+            write_calls: self.write.calls.load(Ordering::Relaxed),
+            write_bytes: self.write.bytes.load(Ordering::Relaxed),
+            max_write_request: self.write.maximum.load(Ordering::Relaxed),
+            completed_spills: self.spills.load(Ordering::Relaxed),
+            completed_restores: self.restores.load(Ordering::Relaxed),
+        }
+    }
+}
+static COUNTERS: Counters = Counters::new();
+pub fn snapshot() -> Snapshot {
+    COUNTERS.snapshot()
+}
+pub(crate) fn record_spill() {
+    COUNTERS.spills.fetch_add(1, Ordering::Relaxed);
+}
+pub(crate) fn record_restore() {
+    COUNTERS.restores.fetch_add(1, Ordering::Relaxed);
+}
+
 pub(crate) struct Io<'a, T: ?Sized> {
     inner: &'a mut T,
     config: Option<Config>,
+    counters: &'a Counters,
 }
 impl<'a, T: ?Sized> Io<'a, T> {
     pub(crate) fn new(inner: &'a mut T, config: Option<Config>) -> Self {
-        Self { inner, config }
+        Self {
+            inner,
+            config,
+            counters: &COUNTERS,
+        }
     }
     fn length(&self, length: usize) -> usize {
         if length == 0 {
@@ -68,13 +150,21 @@ impl<'a, T: ?Sized> Io<'a, T> {
 impl<T: Read + ?Sized> Read for Io<'_, T> {
     fn read(&mut self, bytes: &mut [u8]) -> io::Result<usize> {
         let length = self.length(bytes.len());
-        self.inner.read(&mut bytes[..length])
+        let result = self.inner.read(&mut bytes[..length]);
+        if self.config.is_some() {
+            self.counters.read.record(length, &result);
+        }
+        result
     }
 }
 impl<T: Write + ?Sized> Write for Io<'_, T> {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {
         let length = self.length(bytes.len());
-        self.inner.write(&bytes[..length])
+        let result = self.inner.write(&bytes[..length]);
+        if self.config.is_some() {
+            self.counters.write.record(length, &result);
+        }
+        result
     }
     fn flush(&mut self) -> io::Result<()> {
         self.inner.flush()
@@ -114,20 +204,50 @@ mod tests {
                 Ok(())
             }
         }
+        let counters = Counters::new();
         let config = Config::parse(Some("0"), Some("3")).unwrap();
         let mut output = Recorder {
             bytes: Vec::new(),
             requests: Vec::new(),
         };
-        Io::new(&mut output, config).write_all(b"abcdefgh").unwrap();
+        Io {
+            inner: &mut output,
+            config,
+            counters: &counters,
+        }
+        .write_all(b"abcdefgh")
+        .unwrap();
         assert_eq!(output.bytes, b"abcdefgh");
         assert_eq!(output.requests, [3, 3, 2]);
         let mut input = std::io::Cursor::new(output.bytes);
         let mut bytes = [0; 8];
-        Io::new(&mut input, config).read_exact(&mut bytes).unwrap();
+        Io {
+            inner: &mut input,
+            config,
+            counters: &counters,
+        }
+        .read_exact(&mut bytes)
+        .unwrap();
         assert_eq!(&bytes, b"abcdefgh");
-        assert_eq!(Io::new(&mut input, config).read(&mut []).unwrap(), 0);
-        assert!(Io::new(&mut input, config).read_exact(&mut [0; 1]).is_err());
+        assert_eq!(
+            Io {
+                inner: &mut input,
+                config,
+                counters: &counters
+            }
+            .read(&mut [])
+            .unwrap(),
+            0
+        );
+        assert!(
+            Io {
+                inner: &mut input,
+                config,
+                counters: &counters
+            }
+            .read_exact(&mut [0; 1])
+            .is_err()
+        );
         struct Fails;
         impl Read for Fails {
             fn read(&mut self, _: &mut [u8]) -> io::Result<usize> {
@@ -143,16 +263,51 @@ mod tests {
             }
         }
         assert_eq!(
-            Io::new(&mut Fails, config).read(&mut [0; 1]).unwrap_err().kind(),
+            Io {
+                inner: &mut Fails,
+                config,
+                counters: &counters
+            }
+            .read(&mut [0; 1])
+            .unwrap_err()
+            .kind(),
             io::ErrorKind::PermissionDenied
         );
         assert_eq!(
-            Io::new(&mut Fails, config).write(b"x").unwrap_err().kind(),
+            Io {
+                inner: &mut Fails,
+                config,
+                counters: &counters
+            }
+            .write(b"x")
+            .unwrap_err()
+            .kind(),
             io::ErrorKind::PermissionDenied
         );
         assert_eq!(
-            Io::new(&mut Fails, config).flush().unwrap_err().kind(),
+            Io {
+                inner: &mut Fails,
+                config,
+                counters: &counters
+            }
+            .flush()
+            .unwrap_err()
+            .kind(),
             io::ErrorKind::PermissionDenied
         );
+        let snapshot = counters.snapshot();
+        assert_eq!((snapshot.read_bytes, snapshot.write_bytes), (8, 8));
+        assert_eq!((snapshot.max_read_request, snapshot.max_write_request), (3, 3));
+        assert_eq!((snapshot.read_calls, snapshot.write_calls), (5, 4));
+        assert_eq!((snapshot.completed_spills, snapshot.completed_restores), (0, 0));
+        let idle = Counters::new();
+        Io {
+            inner: &mut Vec::new(),
+            config: None,
+            counters: &idle,
+        }
+        .write_all(b"unconfigured")
+        .unwrap();
+        assert_eq!(idle.snapshot(), Snapshot::default());
     }
 }

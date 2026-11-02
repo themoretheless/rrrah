@@ -51,8 +51,13 @@ class MonitorFailure(unittest.TestCase):
         # Replayed old successful output cannot qualify requested new instrumentation.
         original = (monitor.ROOT / 'docs/research/metal-prefetch-boundaries-2026-11-02/window-soak.log').read_bytes()
         marker = b'large soak injected swap codec I/O: delay_ms=1 chunk_bytes=16384\n'
-        for prefix, expected in [(b'', False), (marker, True), (marker+marker, False),
-                                 (marker.replace(b'delay_ms=1', b'delay_ms=2'), False)]:
+        totals = (b'large soak injected swap codec totals: read_calls=1025 read_bytes=16777280 '
+                  b'max_read_request=16384 write_calls=1025 write_bytes=16777280 '
+                  b'max_write_request=16384 completed_spills=1 completed_restores=1\n')
+        for prefix, expected, stats in [(b'', False, totals), (marker, True, totals),
+                                        (marker+marker, False, totals),
+                                        (marker.replace(b'delay_ms=1', b'delay_ms=2'), False, totals),
+                                        (marker, False, b'')]:
             with self.subTest(prefix=prefix), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 binary = root / 'synthetic-child'
@@ -61,7 +66,7 @@ class MonitorFailure(unittest.TestCase):
                 def spawn(*args, **kwargs):
                     self.assertEqual(kwargs['env']['RRRAH_QUALIFY_SWAP_DELAY_MS'], '1')
                     self.assertEqual(kwargs['env']['RRRAH_QUALIFY_SWAP_CHUNK_BYTES'], '16384')
-                    kwargs['stdout'].write(prefix + original)
+                    kwargs['stdout'].write(prefix + stats + original)
                     kwargs['stdout'].flush()
                     child = object.__new__(ExitedChild)
                     return child
@@ -72,9 +77,26 @@ class MonitorFailure(unittest.TestCase):
                      patch.object(monitor.runpy, 'run_path', return_value={}):
                     self.assertEqual(monitor.main(), 0 if expected else 1)
                 state = json.loads((root / 'out/state.json').read_text())
-                self.assertEqual(state['io_injection_confirmed'], expected)
+                self.assertEqual(state['io_injection_confirmed'], prefix == marker)
+                self.assertEqual(state['io_directions_confirmed'], bool(stats))
                 self.assertEqual(state['workload_evidence_valid'], expected)
                 self.assertEqual(state['io_injection_scope'], 'swap_payload_codec')
+
+    def test_injected_io_totals_reject_missing_duplicate_and_inconsistent_directions(self):
+        line = ('large soak injected swap codec totals: read_calls=1025 read_bytes=16777280 '
+                'max_read_request=16384 write_calls=1025 write_bytes=16777280 '
+                'max_write_request=16384 completed_spills=1 completed_restores=1\n')
+        self.assertIsNotNone(monitor.injected_io_evidence(line, 16384))
+        for changed in ['', line + line,
+                        line.replace('completed_restores=1', 'completed_restores=0'),
+                        line.replace('completed_spills=1', 'completed_spills=0'),
+                        line.replace('read_bytes=16777280', 'read_bytes=64'),
+                        line.replace('write_bytes=16777280', 'write_bytes=64'),
+                        line.replace('max_read_request=16384', 'max_read_request=16385'),
+                        line.replace('max_write_request=16384', 'max_write_request=16385'),
+                        line.replace('read_calls=1025', 'read_calls=1'),
+                        line.replace('completed_restores=1', 'completed_restores=2')]:
+            self.assertIsNone(monitor.injected_io_evidence(changed, 16384))
 
 
 if __name__ == '__main__':

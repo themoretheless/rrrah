@@ -707,6 +707,14 @@ fn real_worker_large_collection_pressure_soak() {
         "requested slow I/O requires the qualification-slow-io build feature"
     );
     #[cfg(feature = "qualification-slow-io")]
+    if injected {
+        assert_eq!(
+            rrrah_cache::qualification_io::snapshot(),
+            rrrah_cache::qualification_io::Snapshot::default(),
+            "qualification requires a fresh process"
+        );
+    }
+    #[cfg(feature = "qualification-slow-io")]
     if let Some(config) = rrrah_cache::qualification_io::Config::from_environment().unwrap() {
         eprintln!(
             "large soak injected swap codec I/O: delay_ms={} chunk_bytes={}",
@@ -936,6 +944,31 @@ fn real_worker_large_collection_pressure_soak() {
     assert_eq!(root.used(), 64 * 1024 * 1024);
     drop(pressure);
     assert_eq!(root.used(), 0);
+    #[cfg(feature = "qualification-slow-io")]
+    if let Some(config) = rrrah_cache::qualification_io::Config::from_environment().unwrap() {
+        let io = rrrah_cache::qualification_io::snapshot();
+        eprintln!(
+            "large soak injected swap codec totals: read_calls={} read_bytes={} max_read_request={} write_calls={} write_bytes={} max_write_request={} completed_spills={} completed_restores={}",
+            io.read_calls,
+            io.read_bytes,
+            io.max_read_request,
+            io.write_calls,
+            io.write_bytes,
+            io.max_write_request,
+            io.completed_spills,
+            io.completed_restores
+        );
+        assert!(
+            io.completed_spills > 0 && io.completed_restores > 0,
+            "both completed I/O directions must be exercised"
+        );
+        assert!(
+            io.read_bytes >= io.completed_restores * 16777216
+                && io.write_bytes >= io.completed_spills * 16777216
+        );
+        assert!(io.max_read_request > 0 && io.max_read_request <= config.chunk_bytes as u64);
+        assert!(io.max_write_request > 0 && io.max_write_request <= config.chunk_bytes as u64);
+    }
     eprintln!(
         "large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections={selections} seconds={:.3} fixed_pressure=67108864 root_limit={} root_peak={} largest_settled={largest_settled} swap_objects<=3 swap_bytes<=67108864 prefetch={prefetch} dynamic_window={dynamic_window} mixed_ppm_tga_bmp={heterogeneous} nearest_retained={retained_neighbours} farther_refused={refused_neighbours}{} final=0",
         elapsed.as_secs_f64(),

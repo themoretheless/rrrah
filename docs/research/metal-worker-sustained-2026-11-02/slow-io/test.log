@@ -2,15 +2,14 @@
 running 1 test
 test folder_worker_qualification::real_worker_large_collection_pressure_soak ... large soak injected swap codec I/O: delay_ms=1 chunk_bytes=16384
 large soak adapter: Metal Apple M4 Max
-large soak selections=64 seconds=91.2 settled=100663296 root_peak=121634816
-large soak selections=128 seconds=111.0 settled=100663296 root_peak=134217728
-large soak selections=192 seconds=182.8 settled=100663296 root_peak=134217728
-large soak selections=256 seconds=245.5 settled=100663296 root_peak=134217728
-large soak selections=320 seconds=261.8 settled=100663296 root_peak=134217728
-large soak selections=384 seconds=278.3 settled=100663296 root_peak=134217728
-dynamic prefetch windows=[(0, 0), (3, 0), (0, 3), (1, 2), (2, 5), (0, 18446744073709551615), (18446744073709551615, 18446744073709551615)] selections=[64, 64, 64, 64, 63, 48, 48]
-large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections=415 seconds=300.074 fixed_pressure=67108864 root_limit=134217728 root_peak=134217728 largest_settled=100663296 swap_objects<=3 swap_bytes<=67108864 prefetch=true dynamic_window=true mixed_ppm_tga_bmp=true nearest_retained=349 farther_refused=4786 exact Metal SDR/HDR every selection final=0
+large soak selections=64 seconds=83.1 settled=100663296 root_peak=134217728
+large soak selections=128 seconds=127.8 settled=100663296 root_peak=134217728
+large soak selections=192 seconds=223.2 settled=100663296 root_peak=134217728
+large soak selections=256 seconds=285.6 settled=100663296 root_peak=134217728
+dynamic prefetch windows=[(0, 0), (3, 0), (0, 3), (1, 2), (2, 5), (0, 18446744073709551615), (18446744073709551615, 18446744073709551615)] selections=[48, 48, 48, 48, 34, 32, 32]
+large soak injected swap codec totals: read_calls=119227 read_bytes=1560287104 max_read_request=16384 write_calls=135811 write_bytes=1777493632 max_write_request=16384 completed_spills=97 completed_restores=93
+large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections=290 seconds=300.107 fixed_pressure=67108864 root_limit=134217728 root_peak=134217728 largest_settled=100663296 swap_objects<=3 swap_bytes<=67108864 prefetch=true dynamic_window=true mixed_ppm_tga_bmp=true nearest_retained=240 farther_refused=3175 exact Metal SDR/HDR every selection final=0
 ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 458 filtered out; finished in 304.46s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 458 filtered out; finished in 305.95s
 

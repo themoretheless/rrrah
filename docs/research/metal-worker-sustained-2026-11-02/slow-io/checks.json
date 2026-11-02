@@ -1,17 +1,17 @@
 {
-  "base_commit": "b1d3c6b73977a1dd49304056b47d43f49d878a90",
+  "base_commit": "08deccf492c550ed8cb8d8ad5d52555f88e8bed0",
   "source_sha256": {
     "crates/rrrah-cache/Cargo.toml": "861bfb0006f23e21b0081855874d86fc5fee6703ae4c551e5939521f3993025d",
     "crates/rrrah-app/Cargo.toml": "ed71136c0b2d45f852e470fae3defd5629c72c1fe1d6827e05d38df0afa8bbbd",
-    "crates/rrrah-cache/src/qualification_io.rs": "f32292082153e4f7e540c6f4f69431dd8c8111e827dad113cb14434f2bcb49f4",
+    "crates/rrrah-cache/src/qualification_io.rs": "143dba6a27648911947700d1d2e86356edebe80f7155f87bcd1a6c3efd51530c",
     "crates/rrrah-cache/src/lib.rs": "3fd47ad4145b307bba5494de4154279aceb21f2049077c270fb5d67cb159604d",
-    "crates/rrrah-cache/src/swap.rs": "bf2a5e517c71c0843a9b1fa82e7c3a3d5b80f4a1c006d86325610803e3703443",
-    "crates/rrrah-app/src/folder_worker_qualification.rs": "987732b2d8f25884bf3e5b5813516be6001477fcea7d4801c8773fead82f07a7",
-    "scripts/run-metal-collection-soak.py": "635d88bc589be144bcddc35944bf16180cc425cc5f6bce7c59bde47ad4334658",
-    "scripts/test-soak-monitor-failure.py": "c7eac2ab5c20742f29b060ed239d7521dab19dd16023d11adaf7a0956811e100"
+    "crates/rrrah-cache/src/swap.rs": "91f9db1dcfedc8135751cb6cf972c245d70b49d54fb3c64ea1dead88a674b279",
+    "crates/rrrah-app/src/folder_worker_qualification.rs": "3eb67ddad484775038e8dc7c13ecc970b26d69362784adeb65aa7c22efd3524a",
+    "scripts/run-metal-collection-soak.py": "fba8b85b9d565b19141beea73c9d9fa0476ea5a55e83cabaa1f323ba44ec458b",
+    "scripts/test-soak-monitor-failure.py": "482d112094deee2c86c57de897bc25e4f261b4e3faecc8dc805c3424b54d5fc6"
   },
-  "sampled_rss_max_bytes": 323010560,
-  "sample_count": 31,
+  "sampled_rss_max_bytes": 321519616,
+  "sample_count": 32,
   "cache_tests": {
     "passed": 164,
     "ignored": 5
@@ -20,7 +20,17 @@
     "passed": 2,
     "ignored": 0
   },
-  "monitor_test_methods": 5,
+  "monitor_test_methods": 6,
   "format_check": "passed",
-  "whitespace_check": "passed"
+  "whitespace_check": "passed",
+  "io_totals": {
+    "read_calls": 119227,
+    "read_bytes": 1560287104,
+    "max_read_request": 16384,
+    "write_calls": 135811,
+    "write_bytes": 1777493632,
+    "max_write_request": 16384,
+    "completed_spills": 97,
+    "completed_restores": 93
+  }
 }

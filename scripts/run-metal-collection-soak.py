@@ -80,6 +80,26 @@ def worker_evidence(text, seconds):
         return False
 
 
+def injected_io_evidence(text, chunk_bytes):
+    keys = ('read_calls', 'read_bytes', 'max_read_request', 'write_calls', 'write_bytes',
+            'max_write_request', 'completed_spills', 'completed_restores')
+    pattern = r'large soak injected swap codec totals: ' + ' '.join(key + r'=(\d+)' for key in keys)
+    matches = re.findall(pattern, text)
+    if len(matches) != 1:
+        return None
+    values = dict(zip(keys, map(int, matches[0])))
+    if any(value <= 0 for value in values.values()):
+        return None
+    for direction, completed in [('read', 'completed_restores'), ('write', 'completed_spills')]:
+        calls = values[direction + '_calls']
+        size = values[direction + '_bytes']
+        maximum = values['max_' + direction + '_request']
+        if not (maximum <= chunk_bytes and calls >= values[completed]
+                and values[completed] * 16777216 <= size <= calls * maximum):
+            return None
+    return values
+
+
 def main():
     def interrupted(signum, _frame):
         raise InterruptedError(f'monitor signal {signum}')
@@ -232,6 +252,11 @@ def main():
             if not state['io_injection_confirmed']:
                 valid = False
                 state['validation_error'] = 'requested swap I/O injection was not confirmed by the worker'
+            state['io_totals'] = injected_io_evidence(text, args.swap_chunk_bytes)
+            state['io_directions_confirmed'] = state['io_totals'] is not None
+            if not state['io_directions_confirmed']:
+                valid = False
+                state['validation_error'] = 'completed swap I/O directions or bounded byte totals were not confirmed'
         state.update(status='passed' if valid else 'failed', workload_evidence_valid=valid)
         save(output / 'state.json', state)
         print(json.dumps({'status': state['status'], 'exit_code': state['exit_code'],

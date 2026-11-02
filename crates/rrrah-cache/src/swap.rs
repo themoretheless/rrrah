@@ -417,6 +417,10 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                                     bytes,
                                 ) {
                                     worker_counters.writes.fetch_add(1, Ordering::Relaxed);
+                                    #[cfg(feature = "qualification-slow-io")]
+                                    if io_qualification.is_some() {
+                                        crate::qualification_io::record_spill();
+                                    }
                                 } else {
                                     worker_counters.dropped.fetch_add(1, Ordering::Relaxed);
                                 }
@@ -636,6 +640,10 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         match result {
             Ok(mosaic) => {
                 self.counters.reads.fetch_add(1, Ordering::Relaxed);
+                #[cfg(feature = "qualification-slow-io")]
+                if self.io_qualification.is_some() {
+                    crate::qualification_io::record_restore();
+                }
                 Ok(Some(mosaic))
             }
             Err(rrrah_swap::SwapError::Cancelled) => Ok(None),
