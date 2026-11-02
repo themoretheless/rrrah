@@ -77,27 +77,46 @@ pub struct MaterialTextureUploader {
     device: wgpu::Device,
     queue: wgpu::Queue,
     pipelines: Arc<[OnceLock<wgpu::RenderPipeline>; 3]>,
+    owner: Arc<()>,
 }
 impl MaterialTextureUploader {
+    pub(crate) fn device(&self) -> &wgpu::Device {
+        &self.device
+    }
+    pub(crate) fn owns(&self, texture: &MaterialTexture) -> bool {
+        Arc::ptr_eq(&self.owner, &texture.owner)
+    }
     pub fn new(device: &wgpu::Device, queue: &wgpu::Queue) -> Self {
         Self {
             device: device.clone(),
             queue: queue.clone(),
             pipelines: Arc::new(std::array::from_fn(|_| OnceLock::new())),
+            owner: Arc::new(()),
         }
     }
 }
 
 /// Immutable candidate: publication/replacement is owned by the caller.
 /// GPU use after upload must retain `resource_lease` until the draw completes.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MaterialTexture {
     texture: wgpu::Texture,
-    pub view: wgpu::TextureView,
-    pub sampler: wgpu::Sampler,
+    view: wgpu::TextureView,
+    sampler: wgpu::Sampler,
     credit: Arc<Reservation>,
+    owner: Arc<()>,
+    color_role: bool,
 }
 impl MaterialTexture {
+    pub fn view(&self) -> &wgpu::TextureView {
+        &self.view
+    }
+    pub fn sampler(&self) -> &wgpu::Sampler {
+        &self.sampler
+    }
+    pub fn is_color_role(&self) -> bool {
+        self.color_role
+    }
     pub fn texture(&self) -> &wgpu::Texture {
         &self.texture
     }
@@ -128,6 +147,7 @@ impl MaterialTextureUploader {
             pixels,
             format,
             usize::from(srgb),
+            srgb,
             sampler,
             &mut cancelled,
         )
@@ -187,6 +207,7 @@ impl MaterialTextureUploader {
             bytemuck::cast_slice(&linear),
             wgpu::TextureFormat::Rgba32Float,
             2,
+            srgb,
             sampler,
             &mut cancelled,
         )
@@ -199,6 +220,7 @@ impl MaterialTextureUploader {
         pixels: &[u8],
         format: wgpu::TextureFormat,
         pipeline_index: usize,
+        color_role: bool,
         sampler: MaterialSampler,
         cancelled: &mut impl FnMut() -> bool,
     ) -> Result<MaterialTexture, MaterialTextureError> {
@@ -290,6 +312,8 @@ impl MaterialTextureUploader {
             view,
             sampler: device.create_sampler(&descriptor),
             credit,
+            owner: self.owner.clone(),
+            color_role,
         })
     }
 }

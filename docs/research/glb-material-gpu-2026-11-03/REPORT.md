@@ -2,7 +2,7 @@
 
 Implemented `MaterialTextureUploader::upload_rgba8` and `upload_rgba16`, an immutable candidate separate from
 visible model publication. This is a building block for glTF rendering, **not an
-integrated GLB viewer or PBR qualification**. No decoder dependency was added to
+integrated GLB viewer or complete PBR qualification**. No decoder dependency was added to
 the production GPU crate; callers supply admitted raw RGBA8/RGBA16 pixels.
 
 Color roles use `Rgba8UnormSrgb`: texture loads decode RGB before averaging and
@@ -36,7 +36,7 @@ mip upload. No wall-clock speedup is claimed without a controlled benchmark.
 ## Verified evidence
 
 - [Actual Metal readback](metal-readback.log): Apple M4 Max, Metal backend;
-  four tests passed, including Naga validation and all core sampler mappings.
+  six material tests passed, including Naga validation and all core sampler mappings.
 - 2x2 black/white RGBA checker: data mip `[128,128,128,128]`, sRGB mip
   `[188,188,188,128]`, matching independent analytic averages within one code.
 - 3x1 and 1x3 white/black/white: data `[170,170,170,170]`, sRGB
@@ -46,8 +46,8 @@ mip upload. No wall-clock speedup is claimed without a controlled benchmark.
   leaves both pipelines uninitialized, and releases its logical root to zero.
 - Exact 2x2 logical peak 532 bytes (20 resident + 512 queued); 531 refuses
   without leaking. Queued cancellation and draw lease retention end at root zero.
-- [GPU regression](gpu-regression.log): 79 passed, 0 failed, 9 manual hardware
-  tests ignored; both material Metal probes were run separately and passed above.
+- [GPU regression](gpu-regression.log): 80 passed, 0 failed, 10 manual hardware
+  tests ignored; all three material Metal probes were run separately and passed above.
 - [Production check](production-check.log), cargo fmt and git diff checks passed.
 - [Source hashes](sources.json) pin the implementation and unchanged lockfile.
 
@@ -81,12 +81,81 @@ Actual M4 Max/Metal proof in the linked log:
   sample count and feature-unavailable refusal release all logical credits.
 - Source-to-GPU shared roots return to zero after resources and requests drop.
 
+## Material draw pass and native source-to-frame proof
+
+`MaterialRenderer` now prepares immutable expanded triangle draws from world-space
+`MaterialVertex` records and `MaterialParameters`. A cached pipeline is selected
+by alpha mode, sidedness and winding. The caller supplies the projection,
+Depth32Float attachment, five material textures and their role-specific UVs.
+No model/scene is silently routed through this path yet.
+
+The WGSL pass samples the five roles, uses base RGBA/vertex factors, MR green and
+blue, AO red/strength on indirect light, emissive RGB and normal XY scale. Core
+lighting is a single directional GGX lobe with Schlick Fresnel, height-correlated
+Smith visibility and Lambert diffuse. Neutral diffuse environment intensity is
+explicit; this is not image-based environment lighting. Roughness zero is
+regularized at alpha-squared 1e-8. Output saturates at finite half-float 65504.
+Color samples arrive linear via sRGB views or the admitted float32 source path.
+
+MASK discards below the cutoff; OPAQUE ignores alpha; BLEND uses straight-alpha
+Porter-Duff over, disables depth writes and requires caller sorting. Back-face
+culling honors the winding selection; double-sided lighting reverses the final
+back normal. Missing normals select flat derivative normals and ignore supplied
+tangents. Missing tangents select a derivative UV frame; this **has not been
+qualified as a replacement for MikkTSpace across general meshes/seams**.
+
+Texture handles retain their upload-context and color/data identities. Renderer
+preparation rejects another context or an incorrectly tagged role. Texture view
+and sampler getters are immutable. Draws own cloned texture handles/credits;
+callers retain a draw resource lease through submission completion. Geometry and
+uniform bytes are admitted before buffers are created. Pipeline/bind-group/driver
+storage and caller-owned depth/output/CPU preparation are not counted by these
+credits. The caller must attach all managed budgets to the intended common root.
+Host geometry/parameters must be finite and within |value| <= 1e15; rebase/fit
+source coordinates before f32 packing. More extreme ranges explicitly refuse.
+
+Actual Apple M4 Max/Metal readback in the canonical log:
+
+| Case | Observed center RGBA8 |
+| --- | --- |
+| Emissive OPAQUE | 137,188,255,255 |
+| MASK below cutoff | 0,0,0,0 |
+| Straight BLEND over transparent | 71,99,137,64 |
+| Dielectric direct GGX at N=V=L | 110,80,57,255 |
+| Explicit tangent, derivative tangent, flat normal | 110,80,58,255 each |
+| Native authored GLB + material/vertex streams + PNG decoder + draw | 34,6,25,48 |
+
+The first cases agree with analytic linear emission/alpha/GGX expectations within
+one code. MASK equality at 0.25 is opaque, while cutoff 0.25001 discards. The
+native GLB case uses material-controls.glb's actual factors, normal UV1 versus
+other UV0 streams, PNG bytes and straight alpha; its emissive/alpha pixel matches
+an independent f64 calculation. It is an authored control, **not original producer
+appearance or application navigation qualification**. Culling, winding and reversed
+back lighting are checked independently. Float32 textures from 16-bit source
+produce the same white-map draw as RGBA8. A linear RGBA16Float target yields
+[2.494140625,1.2724609375,0.66162109375,1], matching the directional GGX reference
+within half-float rounding (0.002). This is offscreen HDR radiance, not physical
+HDR luminance/display calibration.
+
+A 3-vertex draw requires exactly 464 logical bytes (288 vertex + 176 uniform):
+463 refuses; 464 succeeds; a held lease preserves credits after draw drop and
+releases them afterward. Cancellation after buffer creation, invalid numeric
+ranges/NaNs, incompatible contexts/role tags and unsupported target formats
+refuse without leaking; final shared root is zero. Naga validates the WGSL and
+host size checks verify the 96-byte vertex/176-byte uniform layout.
+
+Primary semantics and BRDF guidance:
+[glTF 2.0 materials and Appendix B](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html).
+This probe is a bounded implementation proof, not full glTF conformance.
+
 ## Remaining work
 
-Connect decoded glTF roles and sampler metadata to the model renderer and its
-cache; request float32 filtering where supported and expose explicit refusal
-otherwise. Benchmark the actual connected path before speed claims. Implement
-full material sampling/UVs, normal maps, PBR lighting, alpha/culling, cache
-eviction and render comparisons. Full multi-level/large-texture/odd-grid and
-adversarial cancellation qualification remains beyond this Metal slice.
-NVIDIA/CUDA remains deferred by the user.
+Connect the owned scene/vertex/material/texture preparation to the application's
+model worker, renderer selection, cache and generation publication. Preserve
+per-instance transforms, reuse geometry and image data, qualify general tangent
+frames/MikkTSpace, transparent ordering and full five-role sampling across a
+broader independent corpus. Add original producer render comparisons, HDR window
+presentation and benchmark the actual connected path. The GLB format is still
+not registered as ordinary viewable content. Full multi-level/large-texture/
+odd-grid and adversarial cancellation qualification remains beyond this Metal
+slice. NVIDIA/CUDA remains deferred by the user.
