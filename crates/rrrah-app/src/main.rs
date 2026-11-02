@@ -2525,6 +2525,48 @@ fn preload_raw(
     preload_raw_with_lease(request, disk, ram, writer, generation, gate).map(|(admitted, _)| admitted)
 }
 
+/// Reclaim only unleased, unpinned RAW neighbors before a known allocation.
+/// A prepared source may stay alive while its sensor headroom is recovered.
+fn reclaim_raw_prefetch_headroom(
+    ram: &mut MosaicRamCache,
+    budget: &rrrah_core::MemoryBudget,
+    required: u64,
+    mut cancelled: impl FnMut() -> bool,
+) -> Result<bool, String> {
+    if cancelled() {
+        return Err("RAW prefetch cancelled".into());
+    }
+    if required > budget.limit() {
+        return Ok(false);
+    }
+    let mut fenced = false;
+    while budget.available_bytes() < required {
+        if cancelled() {
+            return Err("RAW prefetch cancelled".into());
+        }
+        if ram.release_lru_unpinned() {
+            continue;
+        }
+        if !fenced {
+            fenced = true;
+            if let Some(swap) = ram.swap() {
+                if swap.wait_idle_with_cancel(&mut cancelled).unwrap_or(false) {
+                    continue;
+                }
+            }
+        }
+        return if cancelled() {
+            Err("RAW prefetch cancelled".into())
+        } else {
+            Ok(false)
+        };
+    }
+    if cancelled() {
+        return Err("RAW prefetch cancelled".into());
+    }
+    Ok(true)
+}
+
 fn preload_raw_with_lease(
     request: &DecodeRequest,
     disk: &DiskMosaicCache,
@@ -2628,7 +2670,14 @@ fn preload_raw_with_lease(
         Err(rrrah_cache::CacheError::Memory(_)) => return Ok((false, None)),
         _ => {
             if !prefetch_source_fits(request) {
-                return Ok((false, None));
+                if let Some(budget) = &request.memory_budget {
+                    let source_bytes = std::fs::metadata(&request.path)
+                        .map_err(|error| error.to_string())?
+                        .len();
+                    if !reclaim_raw_prefetch_headroom(ram, budget, source_bytes, cancelled)? {
+                        return Ok((false, None));
+                    }
+                }
             }
             let mosaic = if recipe.decoder_backend_id() == rrrah_decode::NATIVE_CR3_BACKEND_ID {
                 let prepared = match rrrah_decode::NativeCr3Decoder.prepare(request) {
@@ -2638,6 +2687,15 @@ fn preload_raw_with_lease(
                 };
                 if !ram.can_admit_key_by_minimum_weight(&key, prepared.minimum_pixel_bytes()) {
                     return Ok((false, None));
+                }
+                if let Some(budget) = &request.memory_budget {
+                    let sensor_bytes = prepared.minimum_pixel_bytes();
+                    let working_bytes = sensor_bytes.checked_add(prepared.source_bytes() as u64);
+                    if working_bytes.is_none_or(|bytes| bytes > budget.limit())
+                        || !reclaim_raw_prefetch_headroom(ram, budget, sensor_bytes, cancelled)?
+                    {
+                        return Ok((false, None));
+                    }
                 }
                 prepared.decode().map_err(|error| error.to_string())?.mosaic
             } else {
@@ -18086,35 +18144,60 @@ mod gpr_preload_tests {
     #[test]
     #[ignore = "requires local EOS R8 original for retained swap-pressure recovery"]
     fn real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure() {
-        qualify_real_cr3_retained_pressure(false);
+        qualify_real_cr3_retained_pressure(RawPressureCase::Swap);
     }
 
     #[test]
     #[ignore = "requires local EOS R8 original for persistent-cache pressure recovery"]
     fn real_cr3_retained_disk_reclaims_old_neighbor_under_root_pressure() {
-        qualify_real_cr3_retained_pressure(true);
+        qualify_real_cr3_retained_pressure(RawPressureCase::Persistent);
     }
 
-    fn qualify_real_cr3_retained_pressure(persistent: bool) {
+    #[test]
+    #[ignore = "requires local EOS R8 original for cold-source pressure recovery"]
+    fn real_cr3_retained_cold_reclaims_old_neighbor_under_root_pressure() {
+        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSensor);
+    }
+
+    #[test]
+    #[ignore = "requires local EOS R8 original for compressed-source pressure recovery"]
+    fn real_cr3_retained_cold_source_reclaims_two_old_neighbors() {
+        qualify_real_cr3_retained_pressure(RawPressureCase::ColdSource);
+    }
+
+    #[derive(Clone, Copy, Debug)]
+    enum RawPressureCase {
+        Swap,
+        Persistent,
+        ColdSensor,
+        ColdSource,
+    }
+
+    fn qualify_real_cr3_retained_pressure(case: RawPressureCase) {
+        let persistent = matches!(case, RawPressureCase::Persistent);
+        let cold = matches!(case, RawPressureCase::ColdSensor | RawPressureCase::ColdSource);
+        let source_starved = matches!(case, RawPressureCase::ColdSource);
+        let candidate: usize = if source_starved { 3 } else { 2 };
+
         let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
         let directory = tempfile::tempdir().unwrap();
         let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
-        let requests: Vec<_> = (0..3)
-            .map(|i| {
-                let path = directory.path().join(format!("{i}.CR3"));
-                std::fs::copy(&source, &path).unwrap();
-                std::fs::File::open(&path)
-                    .unwrap()
-                    .set_times(
-                        std::fs::FileTimes::new()
-                            .set_modified(std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i)),
-                    )
-                    .unwrap();
-                let mut request = DecodeRequest::new(path);
-                request.memory_budget = Some(root.clone());
-                request
-            })
-            .collect();
+        let requests: Vec<_> =
+            (0..=candidate)
+                .map(|i| {
+                    let path = directory.path().join(format!("{i}.CR3"));
+                    std::fs::copy(&source, &path).unwrap();
+                    std::fs::File::open(&path)
+                        .unwrap()
+                        .set_times(std::fs::FileTimes::new().set_modified(
+                            std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i as u64),
+                        ))
+                        .unwrap();
+                    let mut request = DecodeRequest::new(path);
+                    request.memory_budget = Some(root.clone());
+                    request
+                })
+                .collect();
         let keys: Vec<_> = requests
             .iter()
             .map(|request| {
@@ -18130,8 +18213,8 @@ mod gpr_preload_tests {
         let baseline = NativeRawDecoder.decode(&requests[0]).unwrap().mosaic;
         let weight = baseline.pixels.capacity_bytes();
         let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits {
-            max_bytes: 3 * weight,
-            max_entries: Some(3),
+            max_bytes: (candidate as u64 + 1) * weight,
+            max_entries: Some(candidate + 1),
             ttl: None,
         });
         ram.enable_swap(
@@ -18139,17 +18222,20 @@ mod gpr_preload_tests {
                 directory.path(),
                 rrrah_cache::MosaicSwapConfig {
                     limits: rrrah_cache::CacheLimits::bytes(4 * weight),
-                    queue_bytes: 3 * weight,
+                    queue_bytes: (candidate as u64 + 1) * weight,
                     queue_count: 4,
-                    restore_bytes: 2 * weight,
+                    restore_bytes: candidate as u64 * weight,
                 },
-                retained_queue_budget(3 * weight),
-                root.child(2 * weight),
+                retained_queue_budget((candidate as u64 + 1) * weight),
+                root.child(candidate as u64 * weight),
             )
             .unwrap(),
         );
         let disk = DiskMosaicCache::with_max_bytes(directory.path().join("disk"), root.limit());
-        for key in &keys {
+        for (index, key) in keys.iter().enumerate() {
+            if cold && index == candidate {
+                continue;
+            }
             if persistent {
                 disk.store(*key, &baseline).unwrap();
             } else {
@@ -18163,28 +18249,58 @@ mod gpr_preload_tests {
         ram.mark_visible(&keys[0]);
         let (_, old) = preload_raw_with_lease(&requests[1], &disk, &mut ram, None, 1, &gate).unwrap();
         let old = old.unwrap();
-        assert_eq!(root.used(), 3 * weight);
-        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        let extra = if source_starved {
+            preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate)
+                .unwrap()
+                .1
+        } else {
+            None
+        };
+        assert_eq!(root.used(), (candidate as u64 + 1) * weight);
+        let source_headroom = if matches!(case, RawPressureCase::ColdSensor) {
+            std::fs::metadata(&source).unwrap().len()
+        } else {
+            0
+        };
+        let pressure = root
+            .try_reserve(root.available_bytes() - source_headroom)
+            .unwrap();
         let (admitted, lease) =
-            preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
+            preload_raw_with_lease(&requests[candidate], &disk, &mut ram, None, 1, &gate).unwrap();
         assert!(!admitted && lease.is_none());
-        assert_eq!(ram.swap().unwrap().stats().reads, if persistent { 0 } else { 2 });
-        drop(old);
-        let (admitted, next) = preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
+        assert_eq!(
+            ram.swap().unwrap().stats().reads,
+            if persistent { 0 } else { candidate as u64 }
+        );
+        drop((old, extra));
+        let (admitted, next) =
+            preload_raw_with_lease(&requests[candidate], &disk, &mut ram, None, 1, &gate).unwrap();
         assert!(admitted);
         let next = next.unwrap();
         assert_eq!(&*next.pixels, &*baseline.pixels);
         assert_eq!(next.metadata, baseline.metadata);
-        assert_eq!(ram.swap().unwrap().stats().reads, if persistent { 0 } else { 3 });
+        assert_eq!(
+            ram.swap().unwrap().stats().reads,
+            if persistent {
+                0
+            } else if cold {
+                candidate as u64
+            } else {
+                candidate as u64 + 1
+            }
+        );
         assert_eq!(ram.visible(), Some(keys[0]));
         assert!(ram.get_lease(&keys[0]).unwrap().pixels.ptr_eq(&selected.pixels));
-        assert_eq!(root.used(), root.limit());
+        assert_eq!(
+            root.used(),
+            root.limit() - source_headroom - if source_starved { weight } else { 0 }
+        );
         ram.swap().unwrap().wait_idle().unwrap();
         ram.swap().unwrap().shutdown();
         drop((next, selected, ram, baseline, pressure));
         assert_eq!(root.used(), 0);
         eprintln!(
-            "RAW retained persistent={persistent}: original CR3; full root and two-slot restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0"
+            "RAW retained {case:?}: original CR3; controlled root pressure and bounded restore pool; protected refusal then released neighbor replaced; swap-read counters checked; exact sensor/metadata; selected resident; final=0"
         );
     }
 

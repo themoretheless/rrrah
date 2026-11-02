@@ -1,5 +1,5 @@
 
-running 456 tests
+running 458 tests
 test accessibility::tests::collection_and_container_positions_are_distinct ... ok
 test accessibility::tests::commands_are_focusable_and_selection_and_errors_have_text ... ok
 test cache_maintenance::tests::continuous_neighbours_do_not_postpone_expiry_and_pins_survive ... ok
@@ -326,6 +326,8 @@ test gpr_preload_tests::prepared_cr3_source_reuses_snapshot_and_releases_cancell
 test gpr_preload_tests::real_cr3_partial_protected_budget_skips_swap_until_lease_release ... ignored, requires local EOS R8 tests/IMG_9043.CR3 fixture
 test gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions ... ignored, manual original CR3 foreground prefetch priority qualification
 test gpr_preload_tests::real_cr3_prefetch_returns_first_ram_lease_under_pressure_and_ttl ... ignored, requires local EOS R8 original for retained warm RAW handoff
+test gpr_preload_tests::real_cr3_retained_cold_reclaims_old_neighbor_under_root_pressure ... ignored, requires local EOS R8 original for cold-source pressure recovery
+test gpr_preload_tests::real_cr3_retained_cold_source_reclaims_two_old_neighbors ... ignored, requires local EOS R8 original for compressed-source pressure recovery
 test gpr_preload_tests::real_cr3_retained_disk_reclaims_old_neighbor_under_root_pressure ... ignored, requires local EOS R8 original for persistent-cache pressure recovery
 test gpr_preload_tests::real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure ... ignored, requires local EOS R8 original for retained swap-pressure recovery
 test gpu_backend_cli_tests::backend_selection_is_explicit_and_cuda_is_not_a_wgpu_backend ... ok
@@ -457,5 +459,5 @@ test speculative_pressure_tests::raster_preload_refuses_pressure_without_discard
 test thumbnail_retry_tests::retry_keeps_managed_pixels_and_rejects_expired_or_changed_source ... ok
 test thumbnail_retry_tests::thumbnail_budget_callbacks_progress_without_surface_redraw ... ignored, requires actual Metal device
 
-test result: ok. 354 passed; 0 failed; 102 ignored; 0 measured; 0 filtered out; finished in 42.14s
+test result: ok. 354 passed; 0 failed; 104 ignored; 0 measured; 0 filtered out; finished in 25.37s
 
