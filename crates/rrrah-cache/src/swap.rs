@@ -2440,6 +2440,68 @@ mod raster_tests {
         assert_eq!(swap.stats().errors, 0);
     }
     #[test]
+    fn bmp_calibration_disk_swap_preserves_fields_across_pressure_and_retry() {
+        for header in [108u32, 124] {
+            let root = MemoryBudget::new(4);
+            let fields = std::array::from_fn(|i| (i * 73 + 11) as u8);
+            let calibration = rrrah_core::BmpRgbCalibration::from_dib(
+                header,
+                fields,
+                (header == 124).then_some(0xdeadbeef),
+            )
+            .unwrap();
+            let expected = RasterColorSpace::BmpCalibratedRgb(calibration);
+            let native = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba8(Arc::new(vec![11, 22, 33, 44]).into()),
+                expected.clone(),
+            )
+            .unwrap()
+            .with_pixel_aspect(Some(1.5))
+            .unwrap()
+            .try_manage_pixels(&root)
+            .unwrap();
+            let directory = tempfile::tempdir().unwrap();
+            let swap = RasterSwapCache::new_with_budgets(
+                directory.path(),
+                ImageSwapConfig {
+                    limits: CacheLimits::bytes(1024),
+                    queue_bytes: 4,
+                    queue_count: 1,
+                    restore_bytes: 4,
+                },
+                MemoryBudget::new(4),
+                root.child(4),
+            )
+            .unwrap();
+            swap.enqueue(1u32, native);
+            swap.wait_idle().unwrap();
+            assert_eq!(root.used(), 0);
+            assert_eq!(swap.stats().writes, 1);
+            assert_eq!(swap.disk_usage().unwrap().objects, 1);
+            let pressure = root.try_reserve(4).unwrap();
+            assert!(swap.try_get(&1, || false).is_err());
+            assert!(swap.get(&1, || true).is_none());
+            assert_eq!(swap.stats().reads, 0);
+            assert_eq!(swap.stats().errors, 0);
+            drop(pressure);
+            let restored = swap.get(&1, || false).unwrap();
+            assert_eq!(restored.color_space(), &expected);
+            assert_eq!(restored.pixel_aspect(), Some(1.5));
+            let RasterPixels::Rgba8(pixels) = restored.pixels() else {
+                panic!()
+            };
+            assert_eq!(&pixels[..], &[11, 22, 33, 44]);
+            assert!(restored.to_linear_srgb().is_err());
+            assert_eq!(root.used(), 4);
+            assert_eq!(swap.stats().reads, 1);
+            swap.shutdown();
+            drop((restored, swap));
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
     fn raster_ram_eviction_spills_and_pressure_restore_preserves_visible_frame() {
         let root = MemoryBudget::new(38);
         let swap = RasterSwapCache::new_with_budgets(

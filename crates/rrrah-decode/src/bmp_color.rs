@@ -50,6 +50,17 @@ pub(super) fn parse<'a>(bytes: &'a [u8], request: &DecodeRequest) -> Result<Meta
         .get(..14 + size)
         .ok_or_else(|| bad("truncated V4/V5 header"))?;
     match number(14 + 56)? {
+        0 => {
+            let fields = bytes[14 + 60..14 + 108].try_into().unwrap();
+            let intent = if size == 124 {
+                Some(number(14 + 108)?)
+            } else {
+                None
+            };
+            result.color = RasterColorSpace::BmpCalibratedRgb(
+                rrrah_core::BmpRgbCalibration::from_dib(size as u32, fields, intent).unwrap(),
+            );
+        }
         0x7352_4742 | 0x5769_6e20 => {} // sRGB / Windows default sRGB.
         0x4c49_4e4b => return Err(bad("linked profiles require explicit external-resource support")),
         0x4d42_4544 => {
@@ -81,8 +92,7 @@ pub(super) fn parse<'a>(bytes: &'a [u8], request: &DecodeRequest) -> Result<Meta
             // Truncated bitmap data must never be completed with bytes from its profile.
             result.pixel_end = start;
         }
-        // Preserve the samples, but do not turn unimplemented calibrated/unknown
-        // declarations into an sRGB assertion. Their display transform remains open.
+        // Unknown declarations remain unqualified rather than asserting sRGB.
         _ => result.color = RasterColorSpace::Unspecified,
     }
     Ok(result)
@@ -180,15 +190,54 @@ mod tests {
         let request = DecodeRequest::new("profile.bmp");
         let mut bytes = bitmap();
         bytes[70..74].fill(0);
-        assert_eq!(
-            parse(&bytes, &request).unwrap().color,
-            RasterColorSpace::Unspecified
-        );
+        let RasterColorSpace::BmpCalibratedRgb(calibration) = parse(&bytes, &request).unwrap().color else {
+            panic!()
+        };
+        assert_eq!(calibration.header_size(), 124);
+        assert_eq!(calibration.endpoints_raw(), [0; 9]);
+        assert_eq!(calibration.gamma_raw(), [0; 3]);
+        assert_eq!(calibration.intent_raw(), Some(0));
         bytes[70..74].copy_from_slice(&0x7352_4742u32.to_le_bytes());
         bytes[126..134].fill(255);
         let metadata = parse(&bytes, &request).unwrap();
         assert!(metadata.profile.is_none());
         assert_eq!(metadata.color, RasterColorSpace::Srgb);
+    }
+    #[test]
+    fn calibrated_fields_survive_public_decode_without_inventing_srgb() {
+        let endpoints = [i32::MIN, -1, 0, 1, i32::MAX, 0x12345678, -42, 777, 13];
+        let gammas = [0, 0x0002_20ab, u32::MAX];
+        for header in [108u32, 124] {
+            let mut bytes = bitmap();
+            bytes[14..18].copy_from_slice(&header.to_le_bytes());
+            bytes[70..74].fill(0);
+            for (i, value) in endpoints.iter().enumerate() {
+                bytes[74 + i * 4..78 + i * 4].copy_from_slice(&value.to_le_bytes());
+            }
+            for (i, value) in gammas.iter().enumerate() {
+                bytes[110 + i * 4..114 + i * 4].copy_from_slice(&value.to_le_bytes());
+            }
+            bytes[122..126].copy_from_slice(&0xdeadbeefu32.to_le_bytes());
+            let root = rrrah_core::MemoryBudget::new(7);
+            let mut request = DecodeRequest::new("calibrated.bmp");
+            request.memory_budget = Some(root.clone());
+            request.assume_untagged_srgb = true;
+            let raster = crate::raster::decode_raster_bytes(bytes, &request).unwrap();
+            let RasterColorSpace::BmpCalibratedRgb(calibration) = raster.color_space() else {
+                panic!()
+            };
+            assert_eq!(calibration.endpoints_raw(), endpoints);
+            assert_eq!(calibration.gamma_raw(), gammas);
+            assert_eq!(calibration.header_size(), header);
+            assert_eq!(calibration.intent_raw(), (header == 124).then_some(0xdeadbeef));
+            assert_eq!(raster.capacity_bytes(), 4);
+            assert_eq!(raster.color_profile_capacity_bytes(), 0);
+            assert!(crate::prepare_raster_for_display(&raster).is_err());
+            assert_eq!(root.used(), 4);
+            assert_eq!(root.peak(), 7);
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
     }
     #[test]
     fn resolution_ratio_survives_native_and_prepared_bmp_headers() {

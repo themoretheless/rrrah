@@ -54,6 +54,10 @@ fn color(hash: &mut blake3::Hasher, value: &RasterColorSpace) -> Result<(), Cach
             }
             hash.update(&[u8::from(*full_range)]);
         }
+        RasterColorSpace::BmpCalibratedRgb(calibration) => {
+            hash.update(&[9]);
+            bytes(hash, calibration.as_le_bytes())?;
+        }
         RasterColorSpace::Unspecified => {
             hash.update(&[8]);
         }
@@ -164,4 +168,40 @@ pub(crate) fn update_interpretation(
         u8::from(*pfm_top_down),
     ]);
     Ok(())
+}
+
+#[cfg(test)]
+mod calibration_tests {
+    use super::*;
+    fn digest(value: RasterColorSpace) -> blake3::Hash {
+        let mut hash = blake3::Hasher::new();
+        color(&mut hash, &value).unwrap();
+        hash.finalize()
+    }
+    #[test]
+    fn bmp_calibration_identity_includes_layout_every_field_byte_and_intent() {
+        let calibration = |header, fields, intent| {
+            RasterColorSpace::BmpCalibratedRgb(
+                rrrah_core::BmpRgbCalibration::from_dib(header, fields, intent).unwrap(),
+            )
+        };
+        let v4 = digest(calibration(108, [0; 48], None));
+        let v5 = digest(calibration(124, [0; 48], Some(0)));
+        assert_ne!(v4, v5);
+        assert_ne!(v4, digest(RasterColorSpace::Unspecified));
+        for header in [108, 124] {
+            let original = if header == 108 { v4 } else { v5 };
+            for index in 0..48 {
+                let mut fields = [0; 48];
+                fields[index] = 1;
+                assert_ne!(
+                    original,
+                    digest(calibration(header, fields, (header == 124).then_some(0)))
+                );
+            }
+        }
+        for bit in 0..32 {
+            assert_ne!(v5, digest(calibration(124, [0; 48], Some(1 << bit))));
+        }
+    }
 }

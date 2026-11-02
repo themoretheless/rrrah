@@ -24,10 +24,10 @@ pub use rrrah_demosaic::{
 };
 
 pub use rrrah_develop::{
-    self as develop, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW, DECODE_IMAGE_INDEX_IN_KEY,
-    DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DecodedRaster, KNOWN_MOSAIC_DECODE_FLAGS,
-    LevelGrid, MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1, ManifestError,
-    MosaicRecipeManifest, Orientation, Photometric, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,
+    self as develop, BmpRgbCalibration, DECODE_CROP_AS_METADATA, DECODE_FULL_SENSOR_RAW,
+    DECODE_IMAGE_INDEX_IN_KEY, DECODE_INTEGER_U16, DECODE_SENSOR_COORDINATES, DecodedMosaic, DecodedRaster,
+    KNOWN_MOSAIC_DECODE_FLAGS, LevelGrid, MOSAIC_RECIPE_MANIFEST_BYTES, MOSAIC_RECIPE_MANIFEST_VERSION_V1,
+    ManifestError, MosaicRecipeManifest, Orientation, Photometric, REQUIRED_SENSOR_MOSAIC_DECODE_FLAGS,
     RasterAlphaAssociation, RasterAnimationTiming, RasterColorSpace, RasterError, RasterPixels, RawMetadata,
     Rect, SENSOR_MOSAIC_ARTIFACT_KIND_CODE, ThumbnailError, WhiteLevel, bayer, edit, histogram, rgbe,
 };

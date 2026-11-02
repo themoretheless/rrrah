@@ -41,6 +41,42 @@ impl RasterPixels {
     }
 }
 
+/// Exact BMP V4/V5 calibration declaration. Fixed-point endpoint/gamma bits
+/// are retained without asserting a qualified display transform or white point.
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct BmpRgbCalibration([u8; 56]);
+impl BmpRgbCalibration {
+    pub fn from_dib(header_size: u32, fields: [u8; 48], intent: Option<u32>) -> Option<Self> {
+        if !matches!((header_size, intent), (108, None) | (124, Some(_))) {
+            return None;
+        }
+        let mut bytes = [0; 56];
+        bytes[..4].copy_from_slice(&header_size.to_le_bytes());
+        bytes[4..52].copy_from_slice(&fields);
+        bytes[52..].copy_from_slice(&intent.unwrap_or(0).to_le_bytes());
+        Some(Self(bytes))
+    }
+    pub fn from_le_bytes(bytes: [u8; 56]) -> Option<Self> {
+        let header = u32::from_le_bytes(bytes[..4].try_into().unwrap());
+        (header == 124 || (header == 108 && bytes[52..] == [0; 4])).then_some(Self(bytes))
+    }
+    pub fn as_le_bytes(&self) -> &[u8; 56] {
+        &self.0
+    }
+    pub fn header_size(&self) -> u32 {
+        u32::from_le_bytes(self.0[..4].try_into().unwrap())
+    }
+    pub fn endpoints_raw(&self) -> [i32; 9] {
+        std::array::from_fn(|i| i32::from_le_bytes(self.0[4 + i * 4..8 + i * 4].try_into().unwrap()))
+    }
+    pub fn gamma_raw(&self) -> [u32; 3] {
+        std::array::from_fn(|i| u32::from_le_bytes(self.0[40 + i * 4..44 + i * 4].try_into().unwrap()))
+    }
+    pub fn intent_raw(&self) -> Option<u32> {
+        (self.header_size() == 124).then(|| u32::from_le_bytes(self.0[52..].try_into().unwrap()))
+    }
+}
+
 /// Interpretation of RGB samples. Embedded profiles need color management
 /// before display; their samples must not be silently treated as sRGB.
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -56,6 +92,8 @@ pub enum RasterColorSpace {
     /// Explicit validated linear primaries/white; native relative-colorimetric conversion.
     LinearRgb(crate::RgbChromaticities),
     Icc(Vec<u8>),
+    /// Explicit BMP calibration retained verbatim; requires a qualified transform.
+    BmpCalibratedRgb(BmpRgbCalibration),
     /// Container CICP declaration. Requires a qualified display transform;
     /// retain HDR and unfamiliar declarations rather than erase them.
     Cicp {

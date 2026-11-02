@@ -48,6 +48,7 @@ fn descriptor_with_limit(
         RasterColorSpace::Bt709 => (6, &[]),
         RasterColorSpace::Cicp { .. } => (7, &[]),
         RasterColorSpace::LinearRgb(chroma) => (8, chroma.color_metadata_bytes()),
+        RasterColorSpace::BmpCalibratedRgb(calibration) => (9, calibration.as_le_bytes()),
     };
     let pixel_bytes = u64::from(frame.width())
         .checked_mul(u64::from(frame.height()))
@@ -286,10 +287,11 @@ fn read_raster_payload_impl(
         || height == 0
         || count > MAX_PIXELS / size
         || profile_len > MAX_PROFILE
-        || h[17] > 8
+        || h[17] > 9
         || (chroma_version != (h[17] == 8))
         || (h[17] == 8 && profile_len != if neutral_version { 80 } else { 64 })
-        || (h[17] != 4 && h[17] != 8 && profile_len != 0)
+        || (h[17] == 9 && profile_len != 56)
+        || (h[17] != 4 && h[17] != 8 && h[17] != 9 && profile_len != 0)
         || !scale.is_finite()
         || scale <= 0.
         || index >= images
@@ -340,6 +342,14 @@ fn read_raster_payload_impl(
     profile.resize(allocated_profile_len, 0);
     reader.read_exact(&mut profile)?;
     let color = match h[17] {
+        9 => {
+            let mut bytes = [0; 56];
+            reader.read_exact(&mut bytes)?;
+            RasterColorSpace::BmpCalibratedRgb(
+                rrrah_core::BmpRgbCalibration::from_le_bytes(bytes)
+                    .ok_or(RasterPayloadError::Invalid("BMP calibration layout"))?,
+            )
+        }
         8 => {
             let mut bytes = [0u8; 80];
             reader.read_exact(&mut bytes[..profile_len])?;
@@ -779,6 +789,54 @@ mod tests {
         assert_eq!(budget.used(), 8);
         drop(restored);
         assert_eq!(budget.used(), 0);
+    }
+    #[test]
+    fn bmp_calibration_roundtrips_inline_with_exact_pixel_budget_and_rejects_damage() {
+        for header in [108u32, 124] {
+            let fields = std::array::from_fn(|i| (i * 73 + 11) as u8);
+            let calibration = rrrah_core::BmpRgbCalibration::from_dib(
+                header,
+                fields,
+                (header == 124).then_some(0xdeadbeef),
+            )
+            .unwrap();
+            let frame = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba8(Arc::new(vec![11, 22, 33, 44]).into()),
+                RasterColorSpace::BmpCalibratedRgb(calibration),
+            )
+            .unwrap()
+            .with_pixel_aspect(Some(1.5))
+            .unwrap();
+            let mut encoded = Vec::new();
+            write_raster_payload(&mut encoded, &frame).unwrap();
+            let budget = MemoryBudget::new(4);
+            let restored = read_raster_payload(&mut Cursor::new(&encoded), &budget).unwrap();
+            assert_eq!(restored.color_space(), frame.color_space());
+            assert_eq!(restored.pixel_aspect(), Some(1.5));
+            let (RasterPixels::Rgba8(actual), RasterPixels::Rgba8(expected)) =
+                (restored.pixels(), frame.pixels())
+            else {
+                panic!()
+            };
+            assert_eq!(&actual[..], &expected[..]);
+            assert_eq!(budget.used(), 4);
+            assert_eq!(budget.peak(), 4);
+            assert!(restored.to_linear_srgb().is_err());
+            drop(restored);
+            assert_eq!(budget.used(), 0);
+            for truncated in [63, 64, 64 + 55, encoded.len() - 1] {
+                assert!(read_raster_payload(&mut Cursor::new(&encoded[..truncated]), &budget).is_err());
+                assert_eq!(budget.used(), 0);
+            }
+            for (at, value) in [(48, 55u32), (48, 57), (64, 40)] {
+                let mut damaged = encoded.clone();
+                damaged[at..at + 4].copy_from_slice(&value.to_le_bytes());
+                assert!(read_raster_payload(&mut Cursor::new(damaged), &budget).is_err());
+                assert_eq!(budget.used(), 0);
+            }
+        }
     }
     #[test]
     fn every_color_declaration_roundtrips_default_metadata() {
