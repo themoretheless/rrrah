@@ -1,5 +1,7 @@
 # Current coverage of the requested viewer scope
 
+Retained RAW swap checkpoint (2026-11-02): explicit retained-lease restore reclaims only unpinned/unleased neighbors after byte/count admission and uses one cancellable spill fence. An original CR3 with three distinct source identities passes two-slot restore-pool/full-managed-root refusal then replacement, exact sensor/metadata, selected-allocation preservation and final0. Required original-source4/0ignored, cache160/5ignored, prefetch69/24ignored; production/fmt pass. Cold/persistent RAW recovery, physical pressure and broad camera qualification remain open. [Updated RAW evidence](research/raw-warm-lease-2026-11-02/REPORT.md#retained-swap-recovery).
+
 Model prefetch checkpoint (2026-11-02): first warm RAM lease is handed through TTL; retained swap and cold native decode reclaim only unpinned geometry and retry with bounded cancellable spill fencing. Four STL/OFF/OBJ/PLY fixtures pass TTL, protected-slot refusal/replacement and measured cold-memory regressions; required M4 Max SDR/HDR cache equivalence passes. Ordinary viewer354/100ignored, prefetch69/24ignored; production/fmt pass. Broad 3D collections, physical HDR and sustained mixed-worker completion remain open. [Evidence and original cold failure](research/model-prefetch-2026-11-02/REPORT.md).
 
 Warm RAW handoff checkpoint (2026-11-02): resident sensor prefetch now returns

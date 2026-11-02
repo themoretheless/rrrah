@@ -147,6 +147,55 @@ impl MosaicRamCache {
     ) -> Result<Option<DecodedMosaic>, rrrah_memory::BufferError> {
         self.try_get_mode(key, false, cancelled)
     }
+    /// Retained speculative restore may reclaim unpinned neighbors after admission
+    /// preflight, and returns its first lease without a second TTL-sensitive lookup.
+    pub fn try_get_retained_with_cancel(
+        &mut self,
+        key: &CacheKey,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<Option<CacheLease<DecodedMosaic>>, rrrah_memory::BufferError> {
+        if cancelled() {
+            return Ok(None);
+        }
+        if let Some(lease) = self.get_lease(key) {
+            return Ok((!cancelled()).then_some(lease));
+        }
+        let minimum = self
+            .swap
+            .as_ref()
+            .and_then(|swap| swap.minimum_restore_weight(key))
+            .unwrap_or(2);
+        if !self.can_admit_key_by_minimum_weight(key, minimum) {
+            return Ok(None);
+        }
+        let mut fenced = false;
+        loop {
+            match self.try_get_background_with_cancel(key, &mut cancelled) {
+                Ok(Some(_)) => return Ok(self.inner.get(key)),
+                Err(error @ rrrah_memory::BufferError::Capacity { requested, limit, .. })
+                    if requested <= limit =>
+                {
+                    if cancelled() {
+                        return Ok(None);
+                    }
+                    if self.release_lru_unpinned() {
+                        continue;
+                    }
+                    if !fenced {
+                        fenced = true;
+                        if let Some(swap) = &self.swap {
+                            if swap.wait_idle_with_cancel(&mut cancelled).unwrap_or(false) {
+                                continue;
+                            }
+                        }
+                    }
+                    return Err(error);
+                }
+                Err(error) => return Err(error),
+                Ok(None) => return Ok(None),
+            }
+        }
+    }
     fn get_mode(
         &mut self,
         key: &CacheKey,
@@ -856,6 +905,66 @@ mod tests {
         assert!(cache.get(&key(1)).is_some());
         drop(external);
         assert_eq!(budget.used(), 8);
+        drop(cache);
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
+    fn retained_raw_restore_reclaims_only_unleased_neighbor() {
+        let (parent, mut cache) = swap_cache(64, 4);
+        cache.swap = None;
+        cache.enable_swap(
+            crate::MosaicSwapCache::new(
+                parent.path(),
+                crate::MosaicSwapConfig {
+                    limits: crate::CacheLimits::bytes(4096),
+                    queue_bytes: 64,
+                    queue_count: 4,
+                    restore_bytes: 16,
+                },
+            )
+            .unwrap(),
+        );
+        cache.inner = LeaseCache::new(crate::CacheLimits {
+            max_bytes: 24,
+            max_entries: Some(3),
+            ttl: None,
+        });
+        let budget = rrrah_memory::MemoryBudget::new(16);
+        cache.swap.as_mut().unwrap().set_restore_budget(budget.clone());
+        for n in 1..=3 {
+            cache.swap().unwrap().enqueue(key(n), mosaic(4));
+        }
+        cache.swap().unwrap().wait_idle().unwrap();
+        let selected = cache
+            .try_get_retained_with_cancel(&key(1), || false)
+            .unwrap()
+            .unwrap();
+        cache.mark_visible(&key(1));
+        let old = cache
+            .try_get_retained_with_cancel(&key(2), || false)
+            .unwrap()
+            .unwrap();
+        assert!(cache.try_get_retained_with_cancel(&key(3), || false).is_err());
+        assert_eq!(cache.swap().unwrap().stats().reads, 2);
+        assert!(
+            cache
+                .try_get_retained_with_cancel(&key(3), || true)
+                .unwrap()
+                .is_none()
+        );
+        assert_eq!(cache.len(), 2);
+        drop(old);
+        let next = cache
+            .try_get_retained_with_cancel(&key(3), || false)
+            .unwrap()
+            .unwrap();
+        assert_eq!(next.pixels, mosaic(4).pixels);
+        assert_eq!(cache.swap().unwrap().stats().reads, 3);
+        assert_eq!(cache.visible(), Some(key(1)));
+        assert!(cache.get_lease(&key(1)).is_some());
+        assert_eq!(budget.used(), 16);
+        drop(next);
+        drop(selected);
         drop(cache);
         assert_eq!(budget.used(), 0);
     }

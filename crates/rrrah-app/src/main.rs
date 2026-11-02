@@ -2566,8 +2566,8 @@ fn preload_raw_with_lease(
     if !ram.can_admit_key_by_minimum_weight(&key, minimum) {
         return Ok((false, None));
     }
-    match ram.try_get_background_with_cancel(&key, cancelled) {
-        Ok(Some(_)) => return Ok((true, ram.get_lease(&key))),
+    match ram.try_get_retained_with_cancel(&key, cancelled) {
+        Ok(Some(lease)) => return Ok((true, Some(lease))),
         Err(error) if retryable_memory_pressure(&error) => {
             if cancelled() {
                 return Err("RAW prefetch cancelled".into());
@@ -18050,6 +18050,97 @@ mod gpr_preload_tests {
         assert_eq!(root.used(), 0);
         eprintln!(
             "RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0"
+        );
+    }
+
+    #[test]
+    #[ignore = "requires local EOS R8 original for retained swap-pressure recovery"]
+    fn real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure() {
+        let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let directory = tempfile::tempdir().unwrap();
+        let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
+        let requests: Vec<_> = (0..3)
+            .map(|i| {
+                let path = directory.path().join(format!("{i}.CR3"));
+                std::fs::copy(&source, &path).unwrap();
+                std::fs::File::open(&path)
+                    .unwrap()
+                    .set_times(
+                        std::fs::FileTimes::new()
+                            .set_modified(std::time::UNIX_EPOCH + Duration::from_secs(1_700_000_000 + i)),
+                    )
+                    .unwrap();
+                let mut request = DecodeRequest::new(path);
+                request.memory_budget = Some(root.clone());
+                request
+            })
+            .collect();
+        let keys: Vec<_> = requests
+            .iter()
+            .map(|request| {
+                CacheKey::for_mosaic_recipe(
+                    &SourceFingerprint::from_path(&request.path).unwrap(),
+                    0,
+                    NativeRawDecoder.mosaic_recipe(request).unwrap(),
+                )
+            })
+            .collect();
+        assert_ne!(keys[0], keys[1]);
+        assert_ne!(keys[1], keys[2]);
+        let baseline = NativeRawDecoder.decode(&requests[0]).unwrap().mosaic;
+        let weight = baseline.pixels.capacity_bytes();
+        let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits {
+            max_bytes: 3 * weight,
+            max_entries: Some(3),
+            ttl: None,
+        });
+        ram.enable_swap(
+            rrrah_cache::MosaicSwapCache::new_with_budgets(
+                directory.path(),
+                rrrah_cache::MosaicSwapConfig {
+                    limits: rrrah_cache::CacheLimits::bytes(4 * weight),
+                    queue_bytes: 3 * weight,
+                    queue_count: 4,
+                    restore_bytes: 2 * weight,
+                },
+                retained_queue_budget(3 * weight),
+                root.child(2 * weight),
+            )
+            .unwrap(),
+        );
+        for key in &keys {
+            ram.swap().unwrap().enqueue(*key, baseline.clone());
+        }
+        ram.swap().unwrap().wait_idle().unwrap();
+        let disk = DiskMosaicCache::with_max_bytes(directory.path().join("disk"), root.limit());
+        let gate = Arc::new(DecodeGate::new());
+        let (_, selected) = preload_raw_with_lease(&requests[0], &disk, &mut ram, None, 1, &gate).unwrap();
+        let selected = selected.unwrap();
+        ram.mark_visible(&keys[0]);
+        let (_, old) = preload_raw_with_lease(&requests[1], &disk, &mut ram, None, 1, &gate).unwrap();
+        let old = old.unwrap();
+        assert_eq!(root.used(), 3 * weight);
+        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        let (admitted, lease) =
+            preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
+        assert!(!admitted && lease.is_none());
+        assert_eq!(ram.swap().unwrap().stats().reads, 2);
+        drop(old);
+        let (admitted, next) = preload_raw_with_lease(&requests[2], &disk, &mut ram, None, 1, &gate).unwrap();
+        assert!(admitted);
+        let next = next.unwrap();
+        assert_eq!(&*next.pixels, &*baseline.pixels);
+        assert_eq!(next.metadata, baseline.metadata);
+        assert_eq!(ram.swap().unwrap().stats().reads, 3);
+        assert_eq!(ram.visible(), Some(keys[0]));
+        assert!(ram.get_lease(&keys[0]).unwrap().pixels.ptr_eq(&selected.pixels));
+        assert_eq!(root.used(), root.limit());
+        ram.swap().unwrap().wait_idle().unwrap();
+        ram.swap().unwrap().shutdown();
+        drop((next, selected, ram, baseline, pressure));
+        assert_eq!(root.used(), 0);
+        eprintln!(
+            "RAW retained swap: original CR3; full root and two-slot restore pool; protected refusal reads=2; released old neighbor replaced reads=3; exact sensor/metadata; selected resident; final=0"
         );
     }
 

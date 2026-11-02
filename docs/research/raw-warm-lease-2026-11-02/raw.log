@@ -1,7 +1,13 @@
 
-running 1 test
+running 4 tests
+test gpr_preload_tests::real_cr3_partial_protected_budget_skips_swap_until_lease_release ... RAW_PARTIAL_SWAP protected=2W capacity=2.5W refused_reads=0 retry_reads=1 sensor_metadata=exact warm_under_pressure=hit final=0
+ok
+test gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions ... RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0
+ok
 test gpr_preload_tests::real_cr3_prefetch_returns_first_ram_lease_under_pressure_and_ttl ... RAW warm handoff: original CR3, blocked decoder and exhausted root bypassed; same sensor allocation and metadata; TTL new consumers refused; held lease protects; final=0
 ok
+test gpr_preload_tests::real_cr3_retained_swap_reclaims_old_neighbor_under_root_pressure ... RAW retained swap: original CR3; full root and two-slot restore pool; protected refusal reads=2; released old neighbor replaced reads=3; exact sensor/metadata; selected resident; final=0
+ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 449 filtered out; finished in 1.19s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 451 filtered out; finished in 2.55s
 

@@ -1,24 +1,5 @@
-warning: hiding a lifetime that's elided elsewhere is confusing
-   --> vendor/jxl-color/src/icc/parse.rs:229:38
-    |
-229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
-    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
-    |                                      |
-    |                                      the lifetime is elided here
-    |
-    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
-    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
-help: use `'_` for type paths
-    |
-229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
-    |                                                                 ++++
 
-warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
-   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
-    Finished `test` profile [optimized + debuginfo] target(s) in 29.87s
-     Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
-
-running 89 tests
+running 93 tests
 test cache_telemetry::tests::stale_prefetch_generation_cannot_overwrite_new_plan ... ok
 test decode_gate::tests::cancelled_prefetch_waiter_returns_none_while_permit_is_busy ... ok
 test decode_gate::tests::dropping_current_ticket_unblocks_prefetch ... ok
@@ -61,6 +42,10 @@ test foreground_loader_tests::model_retained_prefetch_skips_protected_count_slot
 test foreground_loader_tests::raster_prefetch_headroom_preserves_ram_hits_and_recovers_after_pressure ... ok
 test foreground_loader_tests::real_ai_pages_use_shared_ram_hits_and_independent_prefetch_keys ... ignored, requires pinned AI source corpus; set RRRAH_AI_CORPUS
 test foreground_loader_tests::retained_model_prefetch_avoids_unretainable_swap_reads ... ok
+test foreground_loader_tests::retained_model_prefetch_cold_decode_reclaims_stale_geometry ... ok
+test foreground_loader_tests::retained_model_prefetch_hands_first_lease_across_ttl ... ok
+test foreground_loader_tests::retained_model_prefetch_reclaims_old_restore_pool_slot ... ok
+test foreground_loader_tests::retained_model_prefetch_reclaims_old_restore_pool_slot_metal ... ignored, actual Metal retained model restore-pool replacement
 test foreground_loader_tests::retained_raster_prefetch_avoids_unretainable_swap_reads ... ok
 test foreground_loader_tests::retained_raster_prefetch_cold_pressure_reclaims_only_unprotected_frames ... ok
 test foreground_loader_tests::retained_raster_prefetch_handoff_keeps_first_lease_across_ttl ... ok
@@ -109,5 +94,5 @@ test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_pref
 test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_prefetch_metal ... ignored, actual Metal TIFF viewer selected-page cache/TTL/prefetch qualification
 test raster_swap_viewer_tests::wal_prefetch_replaces_palette_identity_while_old_lease_stays_immutable ... ok
 
-test result: ok. 66 passed; 0 failed; 23 ignored; 0 measured; 361 filtered out; finished in 13.47s
+test result: ok. 69 passed; 0 failed; 24 ignored; 0 measured; 362 filtered out; finished in 12.82s
 
