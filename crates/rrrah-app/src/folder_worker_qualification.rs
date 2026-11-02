@@ -759,19 +759,26 @@ fn real_worker_large_collection_pressure_soak() {
         };
         blake3::hash(bytemuck::cast_slice(&p[..]))
     };
+    let heterogeneous = std::env::var("RRRAH_SOAK_MIXED").as_deref() == Ok("1");
     let mut references = Vec::new();
     for index in 0..64usize {
-        let path = workspace.path().join(format!("{index:03}.ppm"));
-        let mut bytes = b"P6\n1024 1024\n255\n".to_vec();
+        let extension = if heterogeneous {
+            ["ppm", "tga", "bmp"][index % 3]
+        } else {
+            "ppm"
+        };
+        let path = workspace.path().join(format!("{index:03}.{extension}"));
+        let mut rgb = Vec::with_capacity(1024 * 1024 * 3);
         for y in 0..1024usize {
             for x in 0..1024usize {
-                bytes.extend_from_slice(&[
+                rgb.extend_from_slice(&[
                     (x.wrapping_add(index * 17) % 256) as u8,
                     (y.wrapping_add(index * 29) % 256) as u8,
                     ((x ^ y).wrapping_add(index * 41) % 256) as u8,
                 ]);
             }
         }
+        let bytes = encode_soak_rgb(extension, &rgb, 1024, 1024);
         std::fs::write(&path, bytes).unwrap();
         let mut request = DecodeRequest::new(&path);
         request.assume_untagged_srgb = true;
@@ -865,7 +872,7 @@ fn real_worker_large_collection_pressure_soak() {
     drop(pressure);
     assert_eq!(root.used(), 0);
     eprintln!(
-        "large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections={selections} seconds={:.3} fixed_pressure=67108864 root_limit={} root_peak={} largest_settled={largest_settled} swap_objects<=3 swap_bytes<=67108864 prefetch={prefetch} nearest_retained={retained_neighbours} farther_refused={refused_neighbours}{} final=0",
+        "large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections={selections} seconds={:.3} fixed_pressure=67108864 root_limit={} root_peak={} largest_settled={largest_settled} swap_objects<=3 swap_bytes<=67108864 prefetch={prefetch} mixed_ppm_tga_bmp={heterogeneous} nearest_retained={retained_neighbours} farther_refused={refused_neighbours}{} final=0",
         elapsed.as_secs_f64(),
         root.limit(),
         root.peak(),
@@ -875,4 +882,50 @@ fn real_worker_large_collection_pressure_soak() {
             ""
         }
     );
+}
+
+// Deliberately authored uncompressed files: no production encoder is used as an oracle.
+fn encode_soak_rgb(extension: &str, rgb: &[u8], width: u32, height: u32) -> Vec<u8> {
+    assert_eq!(rgb.len(), width as usize * height as usize * 3);
+    match extension {
+        "ppm" => {
+            let mut bytes = format!("P6\n{width} {height}\n255\n").into_bytes();
+            bytes.extend_from_slice(rgb);
+            bytes
+        }
+        "tga" => {
+            let mut bytes = vec![0; 18];
+            bytes[2] = 2; // Uncompressed true color, top-left origin.
+            bytes[12..14].copy_from_slice(&u16::try_from(width).unwrap().to_le_bytes());
+            bytes[14..16].copy_from_slice(&u16::try_from(height).unwrap().to_le_bytes());
+            bytes[16] = 24;
+            bytes[17] = 0x20;
+            for pixel in rgb.chunks_exact(3) {
+                bytes.extend_from_slice(&[pixel[2], pixel[1], pixel[0]]);
+            }
+            bytes
+        }
+        "bmp" => {
+            let stride = (width as usize * 3 + 3) & !3;
+            let payload = stride * height as usize;
+            let mut bytes = vec![0; 54 + payload];
+            bytes[..2].copy_from_slice(b"BM");
+            bytes[2..6].copy_from_slice(&u32::try_from(54 + payload).unwrap().to_le_bytes());
+            bytes[10..14].copy_from_slice(&54u32.to_le_bytes());
+            bytes[14..18].copy_from_slice(&40u32.to_le_bytes());
+            bytes[18..22].copy_from_slice(&i32::try_from(width).unwrap().to_le_bytes());
+            bytes[22..26].copy_from_slice(&(-i32::try_from(height).unwrap()).to_le_bytes());
+            bytes[26..28].copy_from_slice(&1u16.to_le_bytes());
+            bytes[28..30].copy_from_slice(&24u16.to_le_bytes());
+            bytes[34..38].copy_from_slice(&u32::try_from(payload).unwrap().to_le_bytes());
+            for (y, row) in rgb.chunks_exact(width as usize * 3).enumerate() {
+                for (x, pixel) in row.chunks_exact(3).enumerate() {
+                    bytes[54 + y * stride + x * 3..54 + y * stride + x * 3 + 3]
+                        .copy_from_slice(&[pixel[2], pixel[1], pixel[0]]);
+                }
+            }
+            bytes
+        }
+        _ => panic!("unsupported authored soak format"),
+    }
 }

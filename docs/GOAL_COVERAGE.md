@@ -1,5 +1,14 @@
 # Current coverage of the requested viewer scope
 
+Mixed-format real-worker checkpoint (2026-11-02): an authored PPM/TGA/BMP
+64-file collection completed 292 selections over 60.084 seconds on actual
+Metal with behind=1/ahead=2 prefetch. Fixed 64 MiB pressure under a 128 MiB root,
+two-entry/32 MiB/250 ms RAM cache and three-object/64 MiB swap preserve all
+selected digests and SDR/HDR regression frames. Nearest neighbors retained=292,
+farther candidates refused=557, final managed usage=0. Five ordinary worker
+tests also pass. This does not qualify all formats or multi-hour/physical
+pressure. [Report](research/metal-mixed-worker-2026-11-02/REPORT.md).
+
 Current-source Metal collection regression (2026-11-02): eight 12 MP RGBA32F
 images completed 161 restore/pressure/cancellation/TTL cycles in 120.022 seconds
 on Apple M4 Max. Every cycle preserves native float bits and exact full-size
