@@ -2048,6 +2048,7 @@ fn adjusted_scalar_window(
 
 #[derive(Debug)]
 enum ModelLoadError {
+    SourceHeadroom { recoverable: bool },
     Decode(rrrah_decode::ModelDecodeError),
     Message(String),
 }
@@ -2064,6 +2065,9 @@ impl From<String> for ModelLoadError {
 impl std::fmt::Display for ModelLoadError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::SourceHeadroom { .. } => {
+                f.write_str("model prefetch skipped: insufficient source memory headroom")
+            }
             Self::Decode(error) => error.fmt(f),
             Self::Message(message) => f.write_str(message),
         }
@@ -2071,6 +2075,9 @@ impl std::fmt::Display for ModelLoadError {
 }
 impl ModelLoadError {
     fn retryable_memory_pressure(&self) -> bool {
+        if let Self::SourceHeadroom { recoverable } = self {
+            return *recoverable;
+        }
         use rrrah_decode::{DecodeError as D, ModelDecodeError as M};
         let memory = match self {
             Self::Decode(M::Memory(error)) | Self::Decode(M::Source(D::Memory(error))) => Some(error),
@@ -2206,16 +2213,51 @@ impl ModelDisplayCache {
         resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
         visible: bool,
         require_retention: bool,
+        decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<rrrah_decode::DecodedModel, String> {
+        self.load_with_cancel_resolving_key_mode_with_lease(
+            resolve_key,
+            visible,
+            require_retention,
+            false,
+            decode,
+            cancelled,
+        )
+        .map(|(model, _)| model)
+    }
+    fn load_with_cancel_resolving_key_mode_with_lease(
+        &mut self,
+        resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
+        visible: bool,
+        require_retention: bool,
+        handoff_lease: bool,
         mut decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
         mut cancelled: impl FnMut() -> bool,
-    ) -> Result<rrrah_decode::DecodedModel, String> {
+    ) -> Result<
+        (
+            rrrah_decode::DecodedModel,
+            Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
+        ),
+        String,
+    > {
         if cancelled() {
             return Err("model load cancelled".into());
         }
         let key = resolve_key();
         self.spill_expired();
+        let mut retained = None;
         if let Some(key) = &key {
-            if let Some(model) = self.entries.get_cloned(key) {
+            let resident = if handoff_lease {
+                self.entries.get(key).map(|lease| {
+                    let model = (*lease).clone();
+                    retained = Some(lease);
+                    model
+                })
+            } else {
+                self.entries.get_cloned(key)
+            };
+            if let Some(model) = resident {
                 if cancelled() {
                     return Err("model load cancelled".into());
                 }
@@ -2226,7 +2268,7 @@ impl ModelDisplayCache {
                     self.entries.pin(key);
                     self.visible = Some(key.clone());
                 }
-                return Ok(model);
+                return Ok((model, retained));
             }
         }
         if require_retention
@@ -2251,6 +2293,7 @@ impl ModelDisplayCache {
         }
         let mut restored = None;
         if let (Some(key), Some(swap)) = (&key, &self.swap) {
+            let mut waited_for_spills = false;
             loop {
                 match swap.try_get(key, &mut cancelled) {
                     Ok(value) => {
@@ -2270,8 +2313,21 @@ impl ModelDisplayCache {
                         if cancelled() {
                             return Err("model load cancelled".into());
                         }
-                        // A transiently rejected cached restore must not enter
-                        // speculative native decode or wait for its decode gate.
+                        // Retention preflight has admitted a slot. Old unpinned
+                        // geometry may still consume this restore pool or be
+                        // retained by its cancelled asynchronous spill.
+                        swap.discard_pending_writes();
+                        if self.entries.take_lru().is_some() {
+                            continue;
+                        }
+                        if !waited_for_spills {
+                            waited_for_spills = true;
+                            if swap.stats().queued_bytes == 0
+                                || swap.wait_idle_with_cancel(&mut cancelled).unwrap_or(false)
+                            {
+                                continue;
+                            }
+                        }
                         return Err("model prefetch skipped: swap restore memory admission refused".into());
                     }
                     Err(_) => break,
@@ -2282,6 +2338,8 @@ impl ModelDisplayCache {
         if cancelled() {
             return Err("model load cancelled".into());
         }
+        let retained_candidate = require_retention && key.is_some();
+        let mut waited_for_cold_spills = false;
         let model = if let Some(model) = restored {
             model
         } else {
@@ -2291,13 +2349,23 @@ impl ModelDisplayCache {
                 }
                 match decode() {
                     Ok(model) => break model,
-                    Err(error)
-                        if visible
-                            && error.retryable_memory_pressure()
-                            && !cancelled()
-                            && self.release_lru_unpinned() =>
-                    {
-                        continue;
+                    Err(_) if cancelled() => return Err("model load cancelled".into()),
+                    Err(error) if (visible || retained_candidate) && error.retryable_memory_pressure() => {
+                        if self.release_lru_unpinned() {
+                            continue;
+                        }
+                        if retained_candidate
+                            && !waited_for_cold_spills
+                            && let Some(swap) = &self.swap
+                        {
+                            waited_for_cold_spills = true;
+                            if swap.stats().queued_bytes == 0
+                                || swap.wait_idle_with_cancel(&mut cancelled).unwrap_or(false)
+                            {
+                                continue;
+                            }
+                        }
+                        return Err(error.to_string());
                     }
                     Err(error) => return Err(error.to_string()),
                 }
@@ -2308,8 +2376,9 @@ impl ModelDisplayCache {
         }
         if let Some(key) = key {
             if !visible {
+                let lease_key = handoff_lease.then(|| key.clone());
                 self.insert(key, model.clone());
-                return Ok(model);
+                return Ok((model, lease_key.and_then(|key| self.entries.get(&key))));
             }
             let previous = self.visible.take();
             if let Some(previous) = &previous {
@@ -2325,7 +2394,7 @@ impl ModelDisplayCache {
                 self.visible = previous;
             }
         }
-        Ok(model)
+        Ok((model, retained))
     }
 }
 
@@ -2407,13 +2476,10 @@ fn preload_model_mode(
     ),
     String,
 > {
-    let mut resolved = None;
-    let model = cache.load_with_cancel_resolving_key_mode(
-        || {
-            resolved = model_display_key(request);
-            resolved.clone()
-        },
+    let (model, lease) = cache.load_with_cancel_resolving_key_mode_with_lease(
+        || model_display_key(request),
         false,
+        retain,
         retain,
         || {
             let cancelled = || {
@@ -2425,8 +2491,13 @@ fn preload_model_mode(
             let Some(permit) = gate.acquire_prefetch(cancelled) else {
                 return Err("model prefetch cancelled".into());
             };
-            if !prefetch_source_fits(request) {
-                return Err("model prefetch skipped: insufficient source memory headroom".into());
+            if let Some(budget) = &request.memory_budget
+                && let Ok(metadata) = std::fs::metadata(&request.path)
+                && metadata.len() > budget.available_bytes()
+            {
+                return Err(ModelLoadError::SourceHeadroom {
+                    recoverable: metadata.len() <= budget.limit(),
+                });
             }
             let model = rrrah_decode::decode_model(request).map_err(ModelLoadError::Decode);
             drop(permit);
@@ -2439,11 +2510,6 @@ fn preload_model_mode(
                 .is_some_and(GenerationToken::is_cancelled)
         },
     )?;
-    let lease = if retain {
-        resolved.and_then(|key| cache.entries.get(&key))
-    } else {
-        None
-    };
     Ok((model, lease))
 }
 
@@ -11311,6 +11377,248 @@ mod foreground_loader_tests {
                 drop((retry, retry_lease, cache));
                 assert_eq!(root.used(), 0);
             }
+        }
+    }
+
+    #[test]
+    fn retained_model_prefetch_cold_decode_reclaims_stale_geometry() {
+        for name in [
+            "triangle.stl",
+            "off-attributes-binary.off",
+            "obj-shared-metadata.obj",
+            "ply-64-le.ply",
+        ] {
+            let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/models")
+                .join(name);
+            let probe = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = DecodeRequest::new(path.clone());
+            request.memory_budget = Some(probe.clone());
+            let sample = rrrah_decode::decode_model(&request).unwrap();
+            let weight = sample.capacity_bytes();
+            let retained = probe.used();
+            let working = probe.peak();
+            drop(sample);
+            assert_eq!(probe.used(), 0);
+            let root = rrrah_core::MemoryBudget::new(working + retained);
+            request.memory_budget = Some(root.clone());
+            let selected_key = model_display_key(&request).unwrap();
+            let mut old_key = selected_key.clone();
+            old_key.4 = 1;
+            let mut candidate_key = selected_key.clone();
+            candidate_key.4 = 2;
+            let mut cache = ModelDisplayCache::new(rrrah_cache::CacheLimits {
+                max_bytes: weight * 2,
+                max_entries: Some(2),
+                ttl: None,
+            });
+            let selected = rrrah_decode::decode_model(&request).unwrap();
+            assert!(cache.insert(selected_key.clone(), selected));
+            cache.entries.pin(&selected_key);
+            cache.visible = Some(selected_key.clone());
+            assert!(cache.insert(old_key.clone(), rrrah_decode::decode_model(&request).unwrap()));
+            assert_eq!(root.used(), retained * 2);
+            let mut calls = 0;
+            let (model, lease) = cache
+                .load_with_cancel_resolving_key_mode_with_lease(
+                    || Some(candidate_key),
+                    false,
+                    true,
+                    true,
+                    || {
+                        calls += 1;
+                        rrrah_decode::decode_model(&request).map_err(ModelLoadError::Decode)
+                    },
+                    || false,
+                )
+                .unwrap();
+            assert!(lease.is_some());
+            assert_eq!(calls, 2, "{name}: exactly one stale victim must be reclaimed");
+            assert!(cache.entries.get(&old_key).is_none());
+            let selected = cache
+                .load(&request, true, || panic!("selected geometry cannot be displaced"))
+                .unwrap();
+            assert_eq!(root.used(), retained * 2);
+            drop((selected, model, lease, cache));
+            assert_eq!(root.used(), 0);
+            eprintln!(
+                "model cold {name}: measured working={working} retained={retained}; root_limit={}; attempts=2; selected resident; final=0",
+                root.limit()
+            );
+        }
+    }
+
+    #[test]
+    fn retained_model_prefetch_hands_first_lease_across_ttl() {
+        for name in [
+            "triangle.stl",
+            "off-attributes-binary.off",
+            "obj-shared-metadata.obj",
+            "ply-64-le.ply",
+        ] {
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = DecodeRequest::new(
+                PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                    .join("../../tests/fixtures/models")
+                    .join(name),
+            );
+            request.memory_budget = Some(root.clone());
+            let baseline = rrrah_decode::decode_model(&request).unwrap();
+            let key = model_display_key(&request).unwrap();
+            let used = root.used();
+            for handoff in [false, true] {
+                let mut cache = ModelDisplayCache::new(rrrah_cache::CacheLimits {
+                    max_bytes: baseline.capacity_bytes(),
+                    max_entries: Some(1),
+                    ttl: Some(Duration::from_millis(100)),
+                });
+                assert!(cache.insert(key.clone(), baseline.clone()));
+                let (model, lease) = cache
+                    .load_with_cancel_resolving_key_mode_with_lease(
+                        || Some(key.clone()),
+                        false,
+                        true,
+                        handoff,
+                        || panic!("warm model must not decode"),
+                        || false,
+                    )
+                    .unwrap();
+                assert_eq!(lease.is_some(), handoff);
+                std::thread::sleep(Duration::from_millis(150));
+                assert!(cache.entries.get(&key).is_none());
+                let mut other = key.clone();
+                other.4 += 1;
+                assert_eq!(cache.entries.can_admit_key_by_count(&other), !handoff);
+                if let Some(lease) = &lease {
+                    let mut expected = Vec::new();
+                    let mut actual = Vec::new();
+                    rrrah_cache::SwapPayload::write_payload(
+                        &model_swap::ModelPayload(model.clone()),
+                        &mut expected,
+                    )
+                    .unwrap();
+                    rrrah_cache::SwapPayload::write_payload(
+                        &model_swap::ModelPayload((**lease).clone()),
+                        &mut actual,
+                    )
+                    .unwrap();
+                    assert_eq!(actual, expected);
+                    assert!(!cache.release_lru_unpinned());
+                }
+                assert_eq!(root.used(), used);
+                drop((lease, model));
+                assert!(cache.entries.can_admit_key_by_count(&other));
+                drop(cache);
+            }
+            drop(baseline);
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
+    fn retained_model_prefetch_reclaims_old_restore_pool_slot() {
+        qualify_model_prefetch_reclaims_old_restore_pool_slot(None);
+    }
+    #[test]
+    #[ignore = "actual Metal retained model restore-pool replacement"]
+    fn retained_model_prefetch_reclaims_old_restore_pool_slot_metal() {
+        let gpu = navigation_metal_readback::qualification_gpu().expect("required actual Metal");
+        eprintln!("model retained-slot adapter: {}", gpu.adapter_name());
+        qualify_model_prefetch_reclaims_old_restore_pool_slot(Some(&gpu));
+    }
+    fn qualify_model_prefetch_reclaims_old_restore_pool_slot(
+        gpu: Option<&navigation_metal_readback::GpuReadback>,
+    ) {
+        for name in [
+            "triangle.stl",
+            "off-attributes-binary.off",
+            "obj-shared-metadata.obj",
+            "ply-64-le.ply",
+        ] {
+            let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/models");
+            let directory = tempfile::tempdir().unwrap();
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let requests: Vec<_> = (0..3)
+                .map(|index| {
+                    let path = directory.path().join(format!("{index}-{name}"));
+                    std::fs::copy(fixtures.join(name), &path).unwrap();
+                    let mut request = DecodeRequest::new(path);
+                    request.memory_budget = Some(root.clone());
+                    request
+                })
+                .collect();
+            let sample = rrrah_decode::decode_model(&requests[2]).unwrap();
+            let reference = gpu.map(|g| {
+                let triangles = sample.triangles().collect::<Vec<_>>();
+                (
+                    g.render_model(&triangles, [64, 64], 0.4, -0.2).pixels,
+                    g.render_model_half(&triangles, [63, 65], 0.4, -0.2),
+                )
+            });
+            let weight = sample.capacity_bytes();
+            let mut expected = Vec::new();
+            rrrah_cache::SwapPayload::write_payload(&model_swap::ModelPayload(sample), &mut expected)
+                .unwrap();
+            assert_eq!(root.used(), 0);
+            let mut cache = model_cache_with_swap(
+                Some(directory.path()),
+                false,
+                rrrah_cache::CacheLimits {
+                    max_bytes: weight * 2,
+                    max_entries: Some(2),
+                    ttl: None,
+                },
+                Some(rrrah_cache::ImageSwapConfig {
+                    limits: rrrah_cache::CacheLimits::bytes(65536),
+                    queue_bytes: weight,
+                    queue_count: 1,
+                    restore_bytes: weight * 2,
+                }),
+                Some(&root),
+            );
+            for request in &requests {
+                let model = rrrah_decode::decode_model(request).unwrap();
+                assert_eq!(model.capacity_bytes(), weight);
+                cache.swap.as_ref().unwrap().enqueue(
+                    model_display_key(request).unwrap(),
+                    model_swap::ModelPayload(model),
+                );
+                cache.swap.as_ref().unwrap().wait_idle().unwrap();
+            }
+            let selected = cache
+                .load(&requests[0], true, || panic!("selected must restore"))
+                .unwrap();
+            let gate = Arc::new(DecodeGate::new());
+            let (old, old_lease) = preload_model_with_lease(&requests[1], &mut cache, &gate).unwrap();
+            assert!(old_lease.is_some());
+            drop(old);
+            assert!(preload_model_with_lease(&requests[2], &mut cache, &gate).is_err());
+            assert_eq!(cache.swap.as_ref().unwrap().stats().reads, 2);
+            drop(old_lease);
+            let (model, lease) = preload_model_with_lease(&requests[2], &mut cache, &gate).unwrap();
+            assert!(lease.is_some());
+            assert_eq!(cache.swap.as_ref().unwrap().stats().reads, 3);
+            let mut actual = Vec::new();
+            rrrah_cache::SwapPayload::write_payload(&model_swap::ModelPayload(model.clone()), &mut actual)
+                .unwrap();
+            assert_eq!(actual, expected);
+            if let (Some(g), Some((sdr, hdr))) = (gpu, &reference) {
+                let triangles = model.triangles().collect::<Vec<_>>();
+                assert_eq!(g.render_model(&triangles, [64, 64], 0.4, -0.2).pixels, *sdr);
+                assert_eq!(g.render_model_half(&triangles, [63, 65], 0.4, -0.2), *hdr);
+            }
+            let visible = cache
+                .load(&requests[0], true, || {
+                    panic!("visible geometry must remain resident")
+                })
+                .unwrap();
+            cache.swap.as_ref().unwrap().shutdown();
+            drop((selected, visible, model, lease, cache));
+            assert_eq!(root.used(), 0);
+            eprintln!(
+                "model retained-slot {name}: protected refusal reads=2; old lease released; replacement reads=3; exact payload{}; selected resident; final=0",
+                if gpu.is_some() { " and SDR/HDR" } else { "" }
+            );
         }
     }
 

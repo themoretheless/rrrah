@@ -1,5 +1,7 @@
 # Current coverage of the requested viewer scope
 
+Model prefetch checkpoint (2026-11-02): first warm RAM lease is handed through TTL; retained swap and cold native decode reclaim only unpinned geometry and retry with bounded cancellable spill fencing. Four STL/OFF/OBJ/PLY fixtures pass TTL, protected-slot refusal/replacement and measured cold-memory regressions; required M4 Max SDR/HDR cache equivalence passes. Ordinary viewer354/100ignored, prefetch69/24ignored; production/fmt pass. Broad 3D collections, physical HDR and sustained mixed-worker completion remain open. [Evidence and original cold failure](research/model-prefetch-2026-11-02/REPORT.md).
+
 Warm RAW handoff checkpoint (2026-11-02): resident sensor prefetch now returns
 its first lease directly. An original EOS R8 CR3 remains a shared sensor/metadata
 hit with the decode gate blocked and the managed root exhausted; its held lease

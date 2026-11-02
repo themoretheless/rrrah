@@ -1,0 +1,86 @@
+--- a/crates/rrrah-app/src/main.rs
++++ b/crates/rrrah-app/src/main.rs
+@@ -2048,7 +2048,6 @@
+ 
+ #[derive(Debug)]
+ enum ModelLoadError {
+-    SourceHeadroom { recoverable: bool },
+     Decode(rrrah_decode::ModelDecodeError),
+     Message(String),
+ }
+@@ -2065,9 +2064,6 @@
+ impl std::fmt::Display for ModelLoadError {
+     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+         match self {
+-            Self::SourceHeadroom { .. } => {
+-                f.write_str("model prefetch skipped: insufficient source memory headroom")
+-            }
+             Self::Decode(error) => error.fmt(f),
+             Self::Message(message) => f.write_str(message),
+         }
+@@ -2075,9 +2071,6 @@
+ }
+ impl ModelLoadError {
+     fn retryable_memory_pressure(&self) -> bool {
+-        if let Self::SourceHeadroom { recoverable } = self {
+-            return *recoverable;
+-        }
+         use rrrah_decode::{DecodeError as D, ModelDecodeError as M};
+         let memory = match self {
+             Self::Decode(M::Memory(error)) | Self::Decode(M::Source(D::Memory(error))) => Some(error),
+@@ -2338,8 +2331,6 @@
+         if cancelled() {
+             return Err("model load cancelled".into());
+         }
+-        let retained_candidate = require_retention && key.is_some();
+-        let mut waited_for_cold_spills = false;
+         let model = if let Some(model) = restored {
+             model
+         } else {
+@@ -2349,23 +2340,13 @@
+                 }
+                 match decode() {
+                     Ok(model) => break model,
+-                    Err(_) if cancelled() => return Err("model load cancelled".into()),
+-                    Err(error) if (visible || retained_candidate) && error.retryable_memory_pressure() => {
+-                        if self.release_lru_unpinned() {
+-                            continue;
+-                        }
+-                        if retained_candidate
+-                            && !waited_for_cold_spills
+-                            && let Some(swap) = &self.swap
+-                        {
+-                            waited_for_cold_spills = true;
+-                            if swap.stats().queued_bytes == 0
+-                                || swap.wait_idle_with_cancel(&mut cancelled).unwrap_or(false)
+-                            {
+-                                continue;
+-                            }
+-                        }
+-                        return Err(error.to_string());
++                    Err(error)
++                        if visible
++                            && error.retryable_memory_pressure()
++                            && !cancelled()
++                            && self.release_lru_unpinned() =>
++                    {
++                        continue;
+                     }
+                     Err(error) => return Err(error.to_string()),
+                 }
+@@ -2491,13 +2472,8 @@
+             let Some(permit) = gate.acquire_prefetch(cancelled) else {
+                 return Err("model prefetch cancelled".into());
+             };
+-            if let Some(budget) = &request.memory_budget
+-                && let Ok(metadata) = std::fs::metadata(&request.path)
+-                && metadata.len() > budget.available_bytes()
+-            {
+-                return Err(ModelLoadError::SourceHeadroom {
+-                    recoverable: metadata.len() <= budget.limit(),
+-                });
++            if !prefetch_source_fits(request) {
++                return Err("model prefetch skipped: insufficient source memory headroom".into());
+             }
+             let model = rrrah_decode::decode_model(request).map_err(ModelLoadError::Decode);
+             drop(permit);
