@@ -1,0 +1,55 @@
+{
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-ae18d7943590843b",
+  "binary_sha256": "776cd7f8b56c9028e65cc50142473cbb89e552c2a5e72a649ce41976bf320104",
+  "environment": {
+    "RRRAH_GPU_BACKEND": "metal",
+    "RRRAH_GPU_OPTIONAL": "0",
+    "RRRAH_GPU_VENDOR": "any",
+    "RRRAH_SOAK_METAL": "1",
+    "RRRAH_SOAK_PREFETCH": "1",
+    "RRRAH_SOAK_MIXED": "1",
+    "RRRAH_SOAK_DYNAMIC_WINDOW": "1",
+    "RRRAH_SOAK_SECONDS": "60"
+  },
+  "sources": {
+    "Cargo.lock": "a020e36e00203badaca46653a7f4a9d1285f48800abdd730692a49fecc139b0f",
+    "crates/rrrah-app/src/main.rs": "1b959179f72517c3846b670e04090638e965aad0d19459ece3b9f27325c95d9a",
+    "crates/rrrah-app/src/gallery.rs": "811a4e30ccd33d2ced864947b8819baae07e8555005b1f8b79d583a8611eb2a8",
+    "crates/rrrah-app/src/folder_worker_qualification.rs": "2e7c21d54bc5548b5b243811ed6e10ff710220120f404bc739b4acb219aa7909"
+  },
+  "runs": [
+    {
+      "name": "window-soak",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-ae18d7943590843b",
+        "folder_worker_qualification::real_worker_large_collection_pressure_soak",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "cancel-reversal",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-ae18d7943590843b",
+        "folder_worker_qualification::real_worker_metal_direction_reversal_cancels_blocked_prefetch",
+        "--exact",
+        "--ignored",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "ordinary-prefetch",
+      "command": [
+        "/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-ae18d7943590843b",
+        "prefetch",
+        "--test-threads=1"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

@@ -801,8 +801,16 @@ fn real_worker_large_collection_pressure_soak() {
     let mut retained_neighbours = 0;
     let mut refused_neighbours = 0;
     let mut selections_with_neighbours = 0;
-    let windows = [(0, 0), (3, 0), (0, 3), (1, 2), (2, 5)];
-    let mut window_selections = [0usize; 5];
+    let windows = [
+        (0, 0),
+        (3, 0),
+        (0, 3),
+        (1, 2),
+        (2, 5),
+        (0, usize::MAX),
+        (usize::MAX, usize::MAX),
+    ];
+    let mut window_selections = [0usize; 7];
     while selections < 256 || started.elapsed() < Duration::from_secs(duration) {
         // Adjacent forward/back steps plus long jumps exceed both cache tiers.
         let index = match selections % 4 {

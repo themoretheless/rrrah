@@ -1,5 +1,15 @@
 # Current coverage of the requested viewer scope
 
+Extreme prefetch boundary checkpoint (2026-11-02): the actual M4 Max worker
+passes392 selections/60.035s across seven windows including `usize::MAX` in one
+or both directions, with independent exact neighbor ordering,326 retained and
+4684 capacity-refused neighbors. Exact SDR/HDR regression frames, bounded
+RAM/swap and final managed0 hold. A separately gated reversal cancels old
+prefetch before pixel allocation and publishes the new foreground before
+backward neighbors;64 ordinary prefetch tests also pass. This is finite
+three-format transport evidence, not completion of the broader goal.
+[Report](research/metal-prefetch-boundaries-2026-11-02/REPORT.md).
+
 Dynamic-window production fix (2026-11-02): changing prefetch windows exposed
 an old unpinned neighbor occupying the restore pool and refusing the new nearest
 neighbor. Retained-prefetch admission now releases unpinned LRU storage and

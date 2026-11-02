@@ -1,0 +1,15 @@
+
+running 1 test
+test folder_worker_qualification::real_worker_large_collection_pressure_soak ... large soak adapter: Metal Apple M4 Max
+large soak selections=64 seconds=7.4 settled=100663296 root_peak=134217728
+large soak selections=128 seconds=16.4 settled=100663296 root_peak=134217728
+large soak selections=192 seconds=28.9 settled=100663296 root_peak=134217728
+large soak selections=256 seconds=39.9 settled=100663296 root_peak=134217728
+large soak selections=320 seconds=51.0 settled=100663296 root_peak=134217728
+large soak selections=384 seconds=58.5 settled=100663296 root_peak=134217728
+dynamic prefetch windows=[(0, 0), (3, 0), (0, 3), (1, 2), (2, 5), (0, 18446744073709551615), (18446744073709551615, 18446744073709551615)] selections=[64, 64, 64, 56, 48, 48, 48]
+large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections=392 seconds=60.035 fixed_pressure=67108864 root_limit=134217728 root_peak=134217728 largest_settled=100663296 swap_objects<=3 swap_bytes<=67108864 prefetch=true dynamic_window=true mixed_ppm_tga_bmp=true nearest_retained=326 farther_refused=4684 exact Metal SDR/HDR every selection final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 446 filtered out; finished in 66.78s
+
