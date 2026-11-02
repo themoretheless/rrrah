@@ -91,12 +91,21 @@ def main():
     parser.add_argument('--scratch', type=Path, required=True)
     parser.add_argument('--seconds', type=int, default=3600)
     parser.add_argument('--suite', choices=('metal', 'float-delayed', 'worker-mixed'), default='metal')
+    parser.add_argument('--swap-delay-ms', type=int,
+                        help='worker-only qualification delay per swap codec I/O call')
+    parser.add_argument('--swap-chunk-bytes', type=int,
+                        help='worker-only maximum swap codec I/O request, 1..65536')
     parser.add_argument('--rss-limit-mib', type=int, default=12288)
     parser.add_argument('--sample-seconds', type=float, default=5)
     args = parser.parse_args()
     if not 10 <= args.seconds <= 86400 or args.rss_limit_mib <= 0 or not 0 < args.sample_seconds <= 60:
         parser.error('duration 10..86400, positive RSS limit, sample interval (0,60] required')
     worker = args.suite == 'worker-mixed'
+    if (args.swap_delay_ms is None) != (args.swap_chunk_bytes is None):
+        parser.error('swap delay and chunk limit must be specified together')
+    if args.swap_delay_ms is not None and (not worker or not 1 <= args.swap_delay_ms <= 1000
+                                           or not 1 <= args.swap_chunk_bytes <= 65536):
+        parser.error('swap injection requires worker-mixed, delay 1..1000 ms, chunk 1..65536 bytes')
     if worker and args.seconds < 60:
         parser.error('worker duration must be at least 60 seconds')
     binary, output, scratch = (p.resolve() for p in (args.binary, args.output, args.scratch))
@@ -109,6 +118,11 @@ def main():
     metal = args.suite == 'metal'
     env = dict(os.environ, TMPDIR=str(scratch))
     if worker:
+        for name in ('RRRAH_QUALIFY_SWAP_DELAY_MS', 'RRRAH_QUALIFY_SWAP_CHUNK_BYTES'):
+            env.pop(name, None)
+        if args.swap_delay_ms is not None:
+            env.update(RRRAH_QUALIFY_SWAP_DELAY_MS=str(args.swap_delay_ms),
+                       RRRAH_QUALIFY_SWAP_CHUNK_BYTES=str(args.swap_chunk_bytes))
         env.update(RRRAH_GPU_BACKEND='metal', RRRAH_GPU_VENDOR='any', RRRAH_GPU_OPTIONAL='0',
                    RRRAH_SOAK_METAL='1', RRRAH_SOAK_PREFETCH='1', RRRAH_SOAK_MIXED='1',
                    RRRAH_SOAK_DYNAMIC_WINDOW='1', RRRAH_SOAK_SECONDS=str(args.seconds))
@@ -140,8 +154,11 @@ def main():
         state.update(full_hdr_output=[63, 65], frames=64, dimensions=[1024, 1024],
                      managed_root_limit=134217728, managed_queue_limit=16777216,
                      swap_limit=67108864, fixed_pressure_bytes=67108864,
-                     restore_limit=33554432, io_delay_ms=None, max_io_request_bytes=None)
-    sources = [ROOT / 'Cargo.lock', ROOT / ('crates/rrrah-app/tests/ttl_swap_metal.rs' if metal
+                     restore_limit=33554432, io_delay_ms=args.swap_delay_ms,
+                     max_io_request_bytes=args.swap_chunk_bytes,
+                     io_injection_scope='swap_payload_codec' if args.swap_delay_ms is not None else None)
+    sources = [ROOT / 'Cargo.lock', ROOT / 'crates/rrrah-app/Cargo.toml',
+               ROOT / 'crates/rrrah-cache/Cargo.toml', ROOT / ('crates/rrrah-app/tests/ttl_swap_metal.rs' if metal
                                          else 'crates/rrrah-cache/tests/sustained_swap.rs'),
                ROOT / 'crates/rrrah-gpu/tests/common/mod.rs']
     if worker:
@@ -209,6 +226,12 @@ def main():
                           else validators['large_float_storage_evidence'](text, args.seconds)))
         except Exception as error:
             state['validation_error'] = f'{type(error).__name__}: {error}'
+        if worker and args.swap_delay_ms is not None:
+            injections = re.findall(r'large soak injected swap codec I/O: delay_ms=(\d+) chunk_bytes=(\d+)', text)
+            state['io_injection_confirmed'] = injections == [(str(args.swap_delay_ms), str(args.swap_chunk_bytes))]
+            if not state['io_injection_confirmed']:
+                valid = False
+                state['validation_error'] = 'requested swap I/O injection was not confirmed by the worker'
         state.update(status='passed' if valid else 'failed', workload_evidence_valid=valid)
         save(output / 'state.json', state)
         print(json.dumps({'status': state['status'], 'exit_code': state['exit_code'],

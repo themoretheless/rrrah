@@ -20,6 +20,9 @@ pub use raster_payload::{
 pub use raster_regions::{RasterRegion, RasterRegionError, SwappedRaster};
 mod raster_ram;
 pub use raster_ram::RasterRamCache;
+#[cfg(feature = "qualification-slow-io")]
+#[doc(hidden)]
+pub mod qualification_io;
 mod swap;
 pub use swap::{
     ImageSwapCache, ImageSwapConfig, ImageSwapStats, MAX_SWAP_QUEUE_COUNT, MosaicSwapCache, MosaicSwapConfig,

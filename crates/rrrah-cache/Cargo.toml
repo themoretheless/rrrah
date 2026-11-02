@@ -22,6 +22,8 @@ thiserror.workspace = true
 tempfile.workspace = true
 
 [features]
+# Explicit test/qualification instrumentation; absent from normal builds.
+qualification-slow-io = []
 bench-internals = []
 restore-profile-parallel = ["blake3/rayon", "dep:rayon"]
 

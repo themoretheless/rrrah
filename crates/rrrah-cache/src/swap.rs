@@ -248,6 +248,8 @@ impl<K: Eq + Hash> Drop for PendingSpill<K> {
 }
 #[derive(Debug)]
 pub struct ImageSwapCache<K, V> {
+    #[cfg(feature = "qualification-slow-io")]
+    io_qualification: Option<crate::qualification_io::Config>,
     tx: SyncSender<Command<K, V>>,
     worker: Mutex<Option<std::thread::JoinHandle<()>>>,
     index: Arc<Mutex<WeightedLru<K, StoredPayload>>>,
@@ -290,6 +292,8 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                 format!("swap queue count exceeds {MAX_SWAP_QUEUE_COUNT}"),
             ));
         }
+        #[cfg(feature = "qualification-slow-io")]
+        let io_qualification = crate::qualification_io::Config::from_environment()?;
         let queue_budget = queue_budget.child(config.queue_bytes);
         let scratch_budget = restore_budget.clone();
         let restore_budget = restore_budget.child(config.restore_bytes);
@@ -391,6 +395,9 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                                 }
                                 let minimum_restore_weight = mosaic.minimum_restore_weight();
                                 let handle = worker_store.write_stream(bytes, cancelled, |mut writer| {
+                                    #[cfg(feature = "qualification-slow-io")]
+                                    let mut writer =
+                                        crate::qualification_io::Io::new(&mut writer, io_qualification);
                                     mosaic.write_payload(&mut writer)
                                 })?;
                                 if cancelled() {
@@ -435,6 +442,8 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                 }
             })?;
         Ok(Self {
+            #[cfg(feature = "qualification-slow-io")]
+            io_qualification,
             tx,
             worker: Mutex::new(Some(worker)),
             index,
@@ -592,6 +601,8 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         let allowance = self.restore_limit.saturating_sub(live);
         let restore = self.restore_budget.child(allowance);
         let decode = |mut reader: &mut dyn Read| {
+            #[cfg(feature = "qualification-slow-io")]
+            let mut reader = crate::qualification_io::Io::new(&mut reader, self.io_qualification);
             let decoded = V::read_payload(&mut reader, handle.byte_len(), &restore);
             match decoded {
                 Err(SwapPayloadError::Memory(error)) => {

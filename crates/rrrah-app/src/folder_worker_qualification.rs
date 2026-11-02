@@ -700,6 +700,20 @@ fn real_worker_metal_direction_reversal_cancels_blocked_prefetch() {
 #[test]
 #[ignore = "manual actual worker 60s large-frame collection soak; optional Metal via RRRAH_SOAK_METAL=1"]
 fn real_worker_large_collection_pressure_soak() {
+    let injected = std::env::var_os("RRRAH_QUALIFY_SWAP_DELAY_MS").is_some()
+        || std::env::var_os("RRRAH_QUALIFY_SWAP_CHUNK_BYTES").is_some();
+    assert!(
+        !injected || cfg!(feature = "qualification-slow-io"),
+        "requested slow I/O requires the qualification-slow-io build feature"
+    );
+    #[cfg(feature = "qualification-slow-io")]
+    if let Some(config) = rrrah_cache::qualification_io::Config::from_environment().unwrap() {
+        eprintln!(
+            "large soak injected swap codec I/O: delay_ms={} chunk_bytes={}",
+            config.delay.as_millis(),
+            config.chunk_bytes
+        );
+    }
     let duration = std::env::var("RRRAH_SOAK_SECONDS")
         .ok()
         .map(|v| v.parse::<u64>().unwrap())

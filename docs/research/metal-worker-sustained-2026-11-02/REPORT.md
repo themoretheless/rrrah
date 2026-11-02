@@ -89,3 +89,21 @@ A fresh10800-second run of the rebuilt candidate was started only after the
 prior monitor and child were confirmed terminal. Its pending result is not
 recorded as a pass. The three finite counterexamples and the broad goal remain
 open until sufficient subsequent evidence is available.
+
+## Real worker with delayed swap codec I/O
+
+An explicit `qualification-slow-io` feature now instruments the generic image-swap payload stream. The real foreground worker can exercise delayed/short codec reads and writes through its normal RAM/swap admission, cancellation, spill fences and rendering paths. The normal production feature graph excludes this feature ([feature check](slow-io/production-features.log)); [production check](slow-io/production-check.log) passes. No default runtime delay or codec adapter is introduced.
+
+Required actual Apple M4 Max [run](slow-io/test.log) passes415 selections over300.074 workload seconds. Each instrumented codec I/O call waits1ms and permits at most16KiB. The64 authored1024-square PPM/TGA/BMP sources prepare to16MiB frames; fixed pressure64MiB, root128MiB, RAM32MiB/two entries/250ms TTL, restore32MiB, swap64MiB/three objects and queue16MiB/one item are unchanged. All seven windows occur, including unbounded ahead and both directions; their selection counts are[64,64,64,64,63,48,48].349 nearest neighbors retain their leases,4786 farther candidates refuse at protected capacity. Selected CPU digests and full63x65 SDR/HDR references match on every selection. Root peak128MiB, settled maximum96MiB, final root0.
+
+The monitor reaches terminal passed/exit0 with exact instrumentation confirmation and full workload validation: [state](slow-io/state.json), [source hashes](slow-io/sources.json), [RSS samples](slow-io/rss.jsonl).31 ten-second samples have maximum323010560 bytes; this is a sampled RSS maximum, not an assertion of unsampled peak or OS exhaustion. MallocNanoZone=0 and the6144MiB RSS guard are recorded. Test304.46s and monitor310.39s include setup/sampling overhead and are diagnostic, not throughput benchmarks.
+
+[Cache suite](slow-io/cache.log):164 passed/5 ignored with the feature enabled and no injection requested. Two additional [cancellable spill-fence cases](slow-io/cancel-fences.log) run with1ms/16KiB injection and pass. Five [monitor test methods](slow-io/monitor-tests.log) pass, including replayed synthetic output controls: missing, wrong or duplicate injection confirmation must fail even when the old worker contract otherwise passes. These parser controls are not hardware evidence. Invalid/unpaired/unbounded settings, short byte transfer and underlying I/O errors are covered by the cache tests. Formatting and whitespace checks pass; [check pins](slow-io/checks.json).
+
+```sh
+cargo test --locked -p rrrah --bin rrrah --features qualification-slow-io --no-run
+# Use the executable printed by that command:
+MallocNanoZone=0 python3 scripts/run-metal-collection-soak.py --suite worker-mixed --binary /absolute/test-binary --output /fresh/evidence --scratch /fresh/scratch --seconds 300 --rss-limit-mib 6144 --sample-seconds 10 --swap-delay-ms 1 --swap-chunk-bytes 16384
+```
+
+This injects latency at codec calls over real checksum-verified swap files. The store may buffer/coalesce those requests;16KiB is not a physical-device syscall bound. Source-file reads, seek/fsync behavior and physically slow disks are not modeled. No separate per-direction I/O call totals were captured in this first run, so it is a delayed-worker correctness proof rather than a measured read/write bandwidth result. It neither completes the separate10800s repetition nor proves physical HDR/NVIDIA qualification.

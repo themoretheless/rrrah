@@ -6,6 +6,9 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[features]
+qualification-slow-io = ["rrrah-cache/qualification-slow-io"]
+
 [dependencies]
 thiserror.workspace = true
 serde.workspace = true
