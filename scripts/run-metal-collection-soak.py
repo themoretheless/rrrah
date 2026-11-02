@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Monitor existing Metal collection or delayed-swap tests without hiding failures."""
+"""Monitor Metal, mixed real-worker or delayed-swap tests without hiding failures."""
 import argparse
+import ast
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -15,6 +17,7 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 TEST = 'long_lived_large_collection_cache_preserves_swap_and_metal_frames'
 SLOW_TEST = 'sustained_float_hdr_delayed_swap_pressure_cancel_and_retry'
+WORKER_TEST = 'folder_worker_qualification::real_worker_large_collection_pressure_soak'
 
 
 def save(path, value):
@@ -39,8 +42,42 @@ def progress(log, suite='metal'):
         text = stream.read().decode('utf-8', errors='replace')
     pattern = (r'long-lived collection (?:complete: )?cycles=(\d+); elapsed=([\d.]+)s' if suite == 'metal'
                else r'large float delayed (?:progress|swap): cycles=(\d+); (?:elapsed|seconds)=([\d.]+)')
+    if suite == 'worker-mixed':
+        pattern = r'large soak selections=(\d+);? seconds=([\d.]+)'
     rows = re.findall(pattern, text)
     return {'cycles': int(rows[-1][0]), 'test_elapsed_seconds': float(rows[-1][1])} if rows else {}
+
+
+def worker_evidence(text, seconds):
+    adapters = re.findall(r'^.*large soak adapter: (.+)$', text, re.MULTILINE)
+    finals = re.findall(r'^large real worker soak PASS: (.+)$', text, re.MULTILINE)
+    windows = re.findall(r'^dynamic prefetch windows=(.+) selections=(.+)$', text, re.MULTILINE)
+    if len(adapters) != 1 or not adapters[0].startswith('Metal ') or len(finals) != 1 or len(windows) != 1:
+        return False
+    try:
+        row = dict(re.findall(r'(\w+)=(\S+)', finals[0]))
+        expected = dict(sources=64, frame_bytes=16777216, fixed_pressure=67108864,
+                        root_limit=134217728, final=0)
+        if any(int(row[k]) != v for k, v in expected.items()):
+            return False
+        total = int(row['selections'])
+        elapsed = float(row['seconds'])
+        actual_windows = ast.literal_eval(windows[0][0])
+        counts = ast.literal_eval(windows[0][1])
+        expected_windows = [(0, 0), (3, 0), (0, 3), (1, 2), (2, 5),
+                            (0, 2**64-1), (2**64-1, 2**64-1)]
+        return (actual_windows == expected_windows and len(counts) == 7
+                and all(type(n) is int and n >= 16 for n in counts) and sum(counts) == total
+                and total >= 256 and math.isfinite(elapsed) and elapsed >= seconds
+                and 0 < int(row['root_peak']) <= 134217728
+                and 0 < int(row['largest_settled']) <= 100663296
+                and 0 < int(row['nearest_retained']) <= total - counts[0]
+                and int(row['farther_refused']) > 0 and row['dimensions'] == '1024x1024'
+                and all(row[k] == 'true' for k in ('prefetch', 'dynamic_window', 'mixed_ppm_tga_bmp'))
+                and 'swap_objects<=3 swap_bytes<=67108864' in finals[0]
+                and 'exact Metal SDR/HDR every selection' in finals[0])
+    except (KeyError, ValueError, TypeError, SyntaxError):
+        return False
 
 
 def main():
@@ -53,12 +90,15 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--scratch', type=Path, required=True)
     parser.add_argument('--seconds', type=int, default=3600)
-    parser.add_argument('--suite', choices=('metal', 'float-delayed'), default='metal')
+    parser.add_argument('--suite', choices=('metal', 'float-delayed', 'worker-mixed'), default='metal')
     parser.add_argument('--rss-limit-mib', type=int, default=12288)
     parser.add_argument('--sample-seconds', type=float, default=5)
     args = parser.parse_args()
     if not 10 <= args.seconds <= 86400 or args.rss_limit_mib <= 0 or not 0 < args.sample_seconds <= 60:
         parser.error('duration 10..86400, positive RSS limit, sample interval (0,60] required')
+    worker = args.suite == 'worker-mixed'
+    if worker and args.seconds < 60:
+        parser.error('worker duration must be at least 60 seconds')
     binary, output, scratch = (p.resolve() for p in (args.binary, args.output, args.scratch))
     if not binary.is_file() or not os.access(binary, os.X_OK):
         parser.error('test binary must exist and be executable')
@@ -68,12 +108,16 @@ def main():
     scratch.mkdir(parents=True, exist_ok=False)
     metal = args.suite == 'metal'
     env = dict(os.environ, TMPDIR=str(scratch))
-    if metal:
+    if worker:
+        env.update(RRRAH_GPU_BACKEND='metal', RRRAH_GPU_VENDOR='any', RRRAH_GPU_OPTIONAL='0',
+                   RRRAH_SOAK_METAL='1', RRRAH_SOAK_PREFETCH='1', RRRAH_SOAK_MIXED='1',
+                   RRRAH_SOAK_DYNAMIC_WINDOW='1', RRRAH_SOAK_SECONDS=str(args.seconds))
+    elif metal:
         env.update(RRRAH_GPU_BACKEND='metal', RRRAH_GPU_VENDOR='any', RRRAH_GPU_OPTIONAL='0',
                    RRRAH_METAL_COLLECTION_SECONDS=str(args.seconds), RRRAH_METAL_COLLECTION_FULL_HDR='1')
     else:
         env.update(RRRAH_STRESS_SECONDS=str(args.seconds), RRRAH_SLOW_SWAP_PROGRESS='1')
-    command = [str(binary), TEST if metal else SLOW_TEST,
+    command = [str(binary), WORKER_TEST if worker else TEST if metal else SLOW_TEST,
                '--exact', '--ignored', '--nocapture', '--test-threads=1']
     state = dict(status='starting', monitor_pid=os.getpid(), binary=str(binary), command=command,
                  binary_sha256=hashlib.sha256(binary.read_bytes()).hexdigest(),
@@ -92,9 +136,16 @@ def main():
                  allocator_environment={key: value for key, value in env.items()
                                         if key.startswith('Malloc')},
                  started_utc=datetime.now(timezone.utc).isoformat(), rss_samples=0)
+    if worker:
+        state.update(full_hdr_output=[63, 65], frames=64, dimensions=[1024, 1024],
+                     managed_root_limit=134217728, managed_queue_limit=16777216,
+                     swap_limit=67108864, fixed_pressure_bytes=67108864,
+                     restore_limit=33554432, io_delay_ms=None, max_io_request_bytes=None)
     sources = [ROOT / 'Cargo.lock', ROOT / ('crates/rrrah-app/tests/ttl_swap_metal.rs' if metal
                                          else 'crates/rrrah-cache/tests/sustained_swap.rs'),
                ROOT / 'crates/rrrah-gpu/tests/common/mod.rs']
+    if worker:
+        sources.extend((ROOT / 'crates/rrrah-app/src').rglob('*.rs'))
     for crate in ('rrrah-cache', 'rrrah-core', 'rrrah-gpu', 'rrrah-memory', 'rrrah-swap'):
         sources.extend((ROOT / 'crates' / crate / 'src').rglob('*.rs'))
     sources.extend((ROOT / 'crates/rrrah-gpu/shaders').glob('*.wgsl'))
@@ -154,7 +205,7 @@ def main():
             validators = runpy.run_path(str(ROOT / 'scripts/qualify-viewer-storage-gpu.py'))
             valid = (state['exit_code'] == 0 and not state.get('stop_reason')
                      and results == [('1', '0', '0')]
-                     and (validators['collection_evidence'](text, args.seconds, True, 1, 0) if metal
+                     and (worker_evidence(text, args.seconds) if worker else validators['collection_evidence'](text, args.seconds, True, 1, 0) if metal
                           else validators['large_float_storage_evidence'](text, args.seconds)))
         except Exception as error:
             state['validation_error'] = f'{type(error).__name__}: {error}'
