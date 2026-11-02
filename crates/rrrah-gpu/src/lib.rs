@@ -43,6 +43,8 @@ pub use demosaic_compute::{
     BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic,
     ResidentLinearBayer,
 };
+mod material_texture;
+pub use material_texture::{MaterialSampler, MaterialTexture, MaterialTextureError};
 mod model;
 pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
 
