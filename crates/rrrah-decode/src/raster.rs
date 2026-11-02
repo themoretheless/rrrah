@@ -42,6 +42,8 @@ pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 pub enum RasterDecodeError {
     #[error("invalid or unsupported BMP color: {0}")]
     InvalidBmpColor(&'static str),
+    #[error("invalid BMP pixel aspect: {0}")]
+    InvalidBmpAspect(&'static str),
     #[error("invalid or unsupported TGA extension metadata: {0}")]
     InvalidTgaAlpha(&'static str),
     #[error("invalid or unsupported TGA layout: {0}")]
@@ -1073,6 +1075,7 @@ fn decode_raster_bytes_inner(
     let pixel_aspect = png_color
         .pixel_aspect
         .or(exr_metadata.pixel_aspect)
+        .or(bmp_color.as_ref().and_then(|metadata| metadata.pixel_aspect))
         .or(tga_alpha.and_then(|metadata| metadata.pixel_aspect))
         .map(|aspect| {
             if orientation.to_exif() >= 5 {

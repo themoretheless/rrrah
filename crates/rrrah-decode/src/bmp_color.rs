@@ -6,6 +6,7 @@ pub(super) struct Metadata<'a> {
     pub profile: Option<&'a [u8]>,
     pub pixel_end: usize,
     pub color: RasterColorSpace,
+    pub pixel_aspect: Option<f32>,
 }
 fn bad(reason: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidBmpColor(reason)
@@ -26,7 +27,22 @@ pub(super) fn parse<'a>(bytes: &'a [u8], request: &DecodeRequest) -> Result<Meta
         profile: None,
         pixel_end: bytes.len(),
         color: RasterColorSpace::Srgb,
+        pixel_aspect: None,
     };
+    if matches!(size, 40 | 52 | 56 | 108 | 124) {
+        let x = number(38)? as i32;
+        let y = number(42)? as i32;
+        if x < 0 || y < 0 {
+            return Err(RasterDecodeError::InvalidBmpAspect(
+                "negative pixels-per-meter resolution",
+            ));
+        }
+        // A zero axis leaves the physical ratio undefined. Do not infer a
+        // square-pixel declaration from one known axis or from zero/zero.
+        if x != 0 && y != 0 {
+            result.pixel_aspect = Some(y as f32 / x as f32);
+        }
+    }
     if !matches!(size, 108 | 124) {
         return Ok(result); // Other header layouts remain the pixel decoder's responsibility.
     }
@@ -174,6 +190,50 @@ mod tests {
         assert!(metadata.profile.is_none());
         assert_eq!(metadata.color, RasterColorSpace::Srgb);
     }
+    #[test]
+    fn resolution_ratio_survives_native_and_prepared_bmp_headers() {
+        for header in [40u32, 52, 56, 108, 124] {
+            for (x, y, expected) in [
+                (3000i32, 6000i32, Some(2.0f32)),
+                (6000, 3000, Some(0.5)),
+                (3000, 3000, Some(1.)),
+                (0, 6000, None),
+                (3000, 0, None),
+                (0, 0, None),
+                (1, i32::MAX, Some(i32::MAX as f32)),
+                (i32::MAX, 1, Some(1. / i32::MAX as f32)),
+            ] {
+                let mut bytes = bitmap();
+                bytes[14..18].copy_from_slice(&header.to_le_bytes());
+                bytes[38..42].copy_from_slice(&x.to_le_bytes());
+                bytes[42..46].copy_from_slice(&y.to_le_bytes());
+                // Explicit sRGB avoids asking V4 to carry a V5-only ICC declaration.
+                bytes[70..74].copy_from_slice(&0x7352_4742u32.to_le_bytes());
+                let request = DecodeRequest::new("physical.bmp");
+                let raster = crate::raster::decode_raster_bytes(bytes, &request).unwrap();
+                assert_eq!(raster.pixel_aspect(), expected, "header={header} x={x} y={y}");
+                let prepared = crate::prepare_raster_for_display(&raster).unwrap();
+                assert_eq!(prepared.pixel_aspect(), expected);
+            }
+        }
+    }
+    #[test]
+    fn negative_resolution_refuses_before_profile_or_pixel_admission() {
+        for (x, y) in [(-1i32, 3000i32), (3000, -1), (i32::MIN, 0)] {
+            let root = rrrah_core::MemoryBudget::new(1024 * 1024);
+            let mut request = DecodeRequest::new("physical.bmp");
+            request.memory_budget = Some(root.clone());
+            let mut bytes = bitmap();
+            bytes[38..42].copy_from_slice(&x.to_le_bytes());
+            bytes[42..46].copy_from_slice(&y.to_le_bytes());
+            assert!(matches!(
+                crate::raster::decode_raster_bytes(bytes, &request),
+                Err(RasterDecodeError::InvalidBmpAspect(_))
+            ));
+            assert_eq!((root.used(), root.peak()), (0, 0));
+        }
+    }
+
     #[test]
     fn truncated_pixel_payload_cannot_borrow_icc_bytes() {
         let mut bytes = bitmap();

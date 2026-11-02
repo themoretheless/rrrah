@@ -1,5 +1,13 @@
 # Current coverage of the requested viewer scope
 
+BMP physical-pixel checkpoint (2026-11-02): Windows40/52/56/108/124-byte
+pixels-per-meter fields now determine native/prepared pixel aspect; zero axes
+remain undefined and negative values refuse before allocation.267 decoder
+tests and65 prefetch tests pass. Required M4 Max checks twelve origin/storage/
+aspect combinations through exact swap payloads, pressure/cancel/retry and
+SDR/HDR regression frames with final managed0. Calibrated BMP RGB and full-format
+qualification remain open. [Updated current evidence](research/bmp-v5-icc-2026-11-02/REPORT.md#pixels-per-meter-geometry).
+
 Sustained-worker repair candidate (2026-11-02): the diagnostic repetition failed
 at4228 with an explicit restore-memory refusal. A cancelled writer can retain
 restored pixels after logical eviction. Retained-prefetch now fences outstanding

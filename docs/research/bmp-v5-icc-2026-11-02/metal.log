@@ -14,17 +14,26 @@ help: use `'_` for type paths
     |                                                                 ++++
 
 warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
    Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
-    Finished `test` profile [optimized + debuginfo] target(s) in 43.05s
+    Finished `test` profile [optimized + debuginfo] target(s) in 27.69s
      Running tests/bmp_profile_metal.rs (target/debug/deps/bmp_profile_metal-c9bd1e0fa4421004)
 
 running 1 test
 test bmp_v5_icc_preserves_independent_linear_color_and_swap_metal_frames ... BMP V5 ICC adapter: Metal Apple M4 Max
-BMP V5 origin=top prepared=false: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
-BMP V5 origin=top prepared=true: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
-BMP V5 origin=bottom prepared=false: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
-BMP V5 origin=bottom prepared=true: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=top prepared=false aspect=None: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=top prepared=false aspect=Some(2.0): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=top prepared=false aspect=Some(0.5): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=top prepared=true aspect=None: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=top prepared=true aspect=Some(2.0): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=top prepared=true aspect=Some(0.5): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=bottom prepared=false aspect=None: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=bottom prepared=false aspect=Some(2.0): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=bottom prepared=false aspect=Some(0.5): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=bottom prepared=true aspect=None: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=bottom prepared=true aspect=Some(2.0): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
+BMP V5 origin=bottom prepared=true aspect=Some(0.5): LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0
 ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.23s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.95s
 

@@ -46,96 +46,118 @@ fn bmp_v5_icc_preserves_independent_linear_color_and_swap_metal_frames() {
     let profile = std::fs::read(fixtures.join("animation-linear-float.icc")).unwrap();
     for origin in ["top", "bottom"] {
         for prepared in [false, true] {
-            let root = MemoryBudget::new(1024 * 1024);
-            let queue = MemoryBudget::new(16384);
-            let mut request =
-                rrrah_decode::DecodeRequest::new(fixtures.join(format!("bmp-v5-linear-icc-{origin}.bmp")));
-            request.memory_budget = Some(root.clone());
-            let native = rrrah_decode::decode_raster(&request).unwrap();
-            assert_eq!(native.color_space(), &RasterColorSpace::Icc(profile.clone()));
-            let RasterPixels::Rgba8(p) = native.pixels() else {
-                panic!()
-            };
-            assert_eq!(&p[..], &expected_native);
-            let raster = if prepared {
-                rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(&native, Some(&root), || {
-                    false
-                })
-                .unwrap()
-            } else {
-                native.clone()
-            };
-            drop(native);
-            let check = |frame: &DecodedRaster| {
-                let display = rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(
-                    frame,
-                    Some(&root),
-                    || false,
-                )
-                .unwrap();
-                let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
-                    (display.pixels(), reference.pixels())
-                else {
+            for (x_ppm, y_ppm, aspect) in [
+                (0i32, 0i32, None),
+                (3000, 6000, Some(2.0f32)),
+                (6000, 3000, Some(0.5)),
+            ] {
+                let physical_reference = reference.clone().with_pixel_aspect(aspect).unwrap();
+                let physical_sdr = gpu.render_raster(&physical_reference, params, [31, 29]).pixels;
+                let physical_hdr = gpu.render_raster_half(&physical_reference, params, [31, 29]);
+                if aspect.is_some() {
+                    assert_ne!(physical_sdr, sdr, "control must distinguish physical geometry");
+                    assert_ne!(physical_hdr, hdr);
+                }
+                let root = MemoryBudget::new(1024 * 1024);
+                let queue = MemoryBudget::new(16384);
+                let source = tempfile::tempdir().unwrap();
+                let path = source.path().join("physical.bmp");
+                let mut bytes =
+                    std::fs::read(fixtures.join(format!("bmp-v5-linear-icc-{origin}.bmp"))).unwrap();
+                bytes[38..42].copy_from_slice(&x_ppm.to_le_bytes());
+                bytes[42..46].copy_from_slice(&y_ppm.to_le_bytes());
+                std::fs::write(&path, bytes).unwrap();
+                let mut request = rrrah_decode::DecodeRequest::new(path);
+                request.memory_budget = Some(root.clone());
+                let native = rrrah_decode::decode_raster(&request).unwrap();
+                assert_eq!(native.pixel_aspect(), aspect);
+                assert_eq!(native.color_space(), &RasterColorSpace::Icc(profile.clone()));
+                let RasterPixels::Rgba8(p) = native.pixels() else {
                     panic!()
                 };
-                for (&a, &e) in actual.iter().zip(expected.iter()) {
-                    assert!((a - e).abs() <= 2e-4, "{origin} prepared={prepared}: {a} != {e}");
-                }
-                for (a, e) in gpu
-                    .render_raster(&display, params, [31, 29])
-                    .pixels
-                    .iter()
-                    .zip(&sdr)
-                {
-                    assert!(a.abs_diff(*e) <= 1);
-                }
-                for (a, e) in gpu
-                    .render_raster_half(&display, params, [31, 29])
-                    .iter()
-                    .zip(&hdr)
-                {
-                    assert!(a.abs_diff(*e) <= 1, "half-float {a} != {e}");
-                }
-            };
-            check(&raster);
-            let mut expected_payload = Vec::new();
-            rrrah_cache::write_raster_payload(&mut expected_payload, &raster).unwrap();
-            let directory = tempfile::tempdir().unwrap();
-            let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
-                directory.path(),
-                rrrah_cache::ImageSwapConfig {
-                    limits: rrrah_cache::CacheLimits::bytes(65536),
-                    queue_bytes: 16384,
-                    queue_count: 1,
-                    restore_bytes: root.limit(),
-                },
-                queue.clone(),
-                root.clone(),
-            )
-            .unwrap();
-            let limits = rrrah_cache::CacheLimits::bytes(raster.capacity_bytes());
-            let mut ram = rrrah_cache::RasterRamCache::new(limits);
-            ram.enable_swap(swap);
-            assert!(ram.insert(1, raster));
-            assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
-            ram.swap().unwrap().wait_idle().unwrap();
-            assert_eq!((root.used(), queue.used()), (0, 0));
-            assert!(ram.set_limits(limits).unwrap().is_empty());
-            let pressure = root.try_reserve(root.limit()).unwrap();
-            assert!(ram.get_background_with_cancel(&1, || false).is_none());
-            drop(pressure);
-            assert!(ram.get_background_with_cancel(&1, || true).is_none());
-            let restored = ram.get_background_with_cancel(&1, || false).unwrap();
-            let mut actual_payload = Vec::new();
-            rrrah_cache::write_raster_payload(&mut actual_payload, &restored).unwrap();
-            assert_eq!(actual_payload, expected_payload);
-            check(&restored);
-            ram.swap().unwrap().shutdown();
-            drop((restored, ram));
-            assert_eq!((root.used(), queue.used()), (0, 0));
-            eprintln!(
-                "BMP V5 origin={origin} prepared={prepared}: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0"
-            );
+                assert_eq!(&p[..], &expected_native);
+                let raster = if prepared {
+                    rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(
+                        &native,
+                        Some(&root),
+                        || false,
+                    )
+                    .unwrap()
+                } else {
+                    native.clone()
+                };
+                drop(native);
+                let check = |frame: &DecodedRaster| {
+                    let display = rrrah_decode::prepare_raster_for_display_with_budget_and_cancel(
+                        frame,
+                        Some(&root),
+                        || false,
+                    )
+                    .unwrap();
+                    let (RasterPixels::Rgba32Float(actual), RasterPixels::Rgba32Float(expected)) =
+                        (display.pixels(), reference.pixels())
+                    else {
+                        panic!()
+                    };
+                    for (&a, &e) in actual.iter().zip(expected.iter()) {
+                        assert!((a - e).abs() <= 2e-4, "{origin} prepared={prepared}: {a} != {e}");
+                    }
+                    for (a, e) in gpu
+                        .render_raster(&display, params, [31, 29])
+                        .pixels
+                        .iter()
+                        .zip(&physical_sdr)
+                    {
+                        assert!(a.abs_diff(*e) <= 1);
+                    }
+                    for (a, e) in gpu
+                        .render_raster_half(&display, params, [31, 29])
+                        .iter()
+                        .zip(&physical_hdr)
+                    {
+                        assert!(a.abs_diff(*e) <= 1, "half-float {a} != {e}");
+                    }
+                };
+                check(&raster);
+                let mut expected_payload = Vec::new();
+                rrrah_cache::write_raster_payload(&mut expected_payload, &raster).unwrap();
+                let directory = tempfile::tempdir().unwrap();
+                let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+                    directory.path(),
+                    rrrah_cache::ImageSwapConfig {
+                        limits: rrrah_cache::CacheLimits::bytes(65536),
+                        queue_bytes: 16384,
+                        queue_count: 1,
+                        restore_bytes: root.limit(),
+                    },
+                    queue.clone(),
+                    root.clone(),
+                )
+                .unwrap();
+                let limits = rrrah_cache::CacheLimits::bytes(raster.capacity_bytes());
+                let mut ram = rrrah_cache::RasterRamCache::new(limits);
+                ram.enable_swap(swap);
+                assert!(ram.insert(1, raster));
+                assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+                ram.swap().unwrap().wait_idle().unwrap();
+                assert_eq!((root.used(), queue.used()), (0, 0));
+                assert!(ram.set_limits(limits).unwrap().is_empty());
+                let pressure = root.try_reserve(root.limit()).unwrap();
+                assert!(ram.get_background_with_cancel(&1, || false).is_none());
+                drop(pressure);
+                assert!(ram.get_background_with_cancel(&1, || true).is_none());
+                let restored = ram.get_background_with_cancel(&1, || false).unwrap();
+                let mut actual_payload = Vec::new();
+                rrrah_cache::write_raster_payload(&mut actual_payload, &restored).unwrap();
+                assert_eq!(actual_payload, expected_payload);
+                check(&restored);
+                ram.swap().unwrap().shutdown();
+                drop((restored, ram));
+                assert_eq!((root.used(), queue.used()), (0, 0));
+                eprintln!(
+                    "BMP V5 origin={origin} prepared={prepared} aspect={aspect:?}: LCMS color, exact native samples/payload, pressure/cancel/retry, Metal SDR/HDR, final=0"
+                );
+            }
         }
     }
 }
