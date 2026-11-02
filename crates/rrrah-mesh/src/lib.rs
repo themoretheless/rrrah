@@ -20,6 +20,7 @@ mod glb_material;
 mod glb_primitive;
 mod glb_scene;
 mod glb_transform;
+mod glb_vertex;
 
 mod off_swap;
 pub use off_swap::{OffSwapError, off_swap_payload_len, read_off_swap_payload, write_off_swap_payload};

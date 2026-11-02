@@ -468,6 +468,36 @@ The metadata override follows the primary
 [Khronos image rules](https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#file-extensions-and-media-types).
 No runtime LibRaw, FFmpeg or external viewer is used by this texture path.
 
+## Resolved local vertex streams for material rendering
+
+`GlbPrimitive::vertex_streams` resolves its actual declared/default material,
+NORMAL/TANGENT/COLOR_0 and material-selected TEXCOORD sets once. Its borrowed
+`GlbVertexStreams` samples indexed vertices or winding-preserving triangles
+without expanding whole meshes or reparsing JSON for each corner. Five texture
+roles retain separate UV bindings; roles sharing a set reuse both resolution
+and the sampled UV pair. Source indices, strip/fan winding, normalized and sparse
+accessor semantics stay delegated to the validated primitive/accessors.
+
+`GlbVertex` contains local position, optional normal/tangent, clamped linear
+vertex color (default white, VEC3 alpha defaults to one), and optional UV per
+material role. Missing normal/tangent stays explicit: no fabricated frame is
+installed. Instance transforms remain with GlbScenePrimitive; this layer does
+not apply them, generate derivative frames, light, draw, cache or publish GLB.
+
+- [Regression](vertex-stream-regression.log): 98 mesh tests passed, zero failures.
+- All 36 indexed producer BoxTextured corners agree with a separate Python
+  json/struct reference for source indices, positions, normals and UV0.
+- Authored material controls verify normal map UV1 versus four UV0 roles,
+  tangent handedness, vertex RGBA, missing attributes/unbound UV defaults,
+  invalid/missing UV sets, cancellation and recovery with a new generation.
+- Stream resolution/sampling leaves the document's managed used/peak credit
+  unchanged; after the document drops the root reaches zero. Corner values
+  are copied into small stack records; whole geometry remains borrowed.
+- [Production check](vertex-stream-check.log), formatting and diff checks pass.
+- Reference generator and source/reference hashes are pinned in sources.json
+  and tests/fixtures/glb/vertex-reference-manifest.json. Original model/reference
+  remains subject to the existing Cesium attribution, not a new CC0 asset.
+
 ## Required continuation
 
 1. Prepare/validate referenced geometry and whole-scene fitting bounds for the

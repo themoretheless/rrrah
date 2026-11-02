@@ -25,6 +25,13 @@ pub struct GlbPrimitive<'a> {
     material: Option<usize>,
 }
 impl<'a> GlbPrimitive<'a> {
+    pub fn vertex_streams(
+        self,
+        request: &DecodeRequest,
+    ) -> Result<crate::glb::GlbVertexStreams<'a>, GlbError> {
+        let material = self.document.material(self.material, request)?;
+        crate::glb::GlbVertexStreams::new(self, material, request)
+    }
     pub fn topology(self) -> GlbTopology {
         self.topology
     }

@@ -150,6 +150,7 @@ pub use crate::glb_material::{
 pub use crate::glb_primitive::{GlbPrimitive, GlbTopology};
 pub use crate::glb_scene::{GlbInstance, GlbScene, GlbScenePrimitive};
 pub use crate::glb_transform::GlbTransform;
+pub use crate::glb_vertex::{GlbVertex, GlbVertexStreams};
 
 /// Syntactically validated, admitted JSON document over an immutable GLB source.
 /// Scene/accessor semantics are not yet a decoded model.

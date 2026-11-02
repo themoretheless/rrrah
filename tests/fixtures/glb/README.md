@@ -77,3 +77,10 @@ and mark notice above. The generator is
 pins source/reference hashes. These prove selected raw pixel import and managed
 buffer lifetime, not complete codec scratch accounting, image filtering or GPU
 presentation. Input metadata is intentionally ignored under glTF interpretation.
+
+`BoxTextured-vertices.tsv` is a local indexed corner reference for all 36 producer
+corners, generated with Python json/struct by
+`scripts/generate-glb-vertex-reference.py`. It records triangle, corner, source
+index, position, normal and TEXCOORD_0. `vertex-reference-manifest.json` pins
+source/reference hashes. This derived model reference retains the original
+Cesium model attribution above. It qualifies attribute plumbing, not rendering.
