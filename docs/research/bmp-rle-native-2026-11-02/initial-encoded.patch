@@ -234,7 +234,7 @@
                      x += count;
                  }
              }
-@@ -374,73 +306,6 @@
+@@ -374,129 +306,6 @@
          }
      }
      #[test]
@@ -305,10 +305,66 @@
 -    }
 -
 -    #[test]
+-    fn rle4_encoded_counts_and_odd_absolute_tails_preserve_exact_spans() {
+-        let request = DecodeRequest::new("palette4.bmp");
+-        let mut table = [[0; 4]; 256];
+-        for (i, pixel) in table.iter_mut().enumerate() {
+-            *pixel = [i as u8, (i as u8) ^ 1, (i as u8).wrapping_mul(3), 255];
+-        }
+-        let mut decoder = Decoder {
+-            bytes: &[],
+-            palette: table,
+-            colors: 1,
+-            request: &request,
+-            at: 0,
+-            end: 0,
+-            width: 255,
+-            height: 1,
+-            bits: 4,
+-        };
+-        for colors in 1..=16 {
+-            decoder.colors = colors;
+-            for packed in 0..=255u8 {
+-                for count in 1..=255 {
+-                    let mut output = [0xa5u8; 1020];
+-                    let valid = usize::from(packed >> 4) < colors
+-                        && (count == 1 || usize::from(packed & 15) < colors);
+-                    let result = decoder.encoded(&mut output, 0, 0, count, packed);
+-                    assert_eq!(
+-                        result.is_ok(),
+-                        valid,
+-                        "colors={colors} packed={packed} count={count}"
+-                    );
+-                    if valid {
+-                        for (i, pixel) in output[..count * 4].chunks_exact(4).enumerate() {
+-                            let index = if i % 2 == 0 { packed >> 4 } else { packed & 15 };
+-                            assert_eq!(pixel, table[usize::from(index)]);
+-                        }
+-                    }
+-                    assert!(output[count * 4..].iter().all(|&v| v == 0xa5));
+-                }
+-            }
+-            for count in (3..=255).step_by(2) {
+-                for high in 0..16u8 {
+-                    let mut data = [0u8; 128];
+-                    data[count / 2] = high << 4 | 15;
+-                    let mut output = [0xa5u8; 1020];
+-                    let result = decoder.absolute(&mut output, 0, 0, count, &data);
+-                    assert_eq!(result.is_ok(), usize::from(high) < colors);
+-                    if result.is_ok() {
+-                        assert_eq!(&output[(count - 1) * 4..count * 4], &table[usize::from(high)]);
+-                    }
+-                    assert!(output[count * 4..].iter().all(|&v| v == 0xa5));
+-                }
+-            }
+-        }
+-    }
+-
+-    #[test]
      fn unused_rle4_low_nibble_is_not_a_palette_access() {
          let raster = crate::raster::decode_raster_bytes(
              bitmap(4, 1, 1, &[1, 0x1f, 0, 1]),
-@@ -474,79 +339,54 @@
+@@ -530,79 +339,54 @@
      #[ignore = "manual paired native versus legacy BMP RLE CPU decode timing"]
      fn paired_native_rle_decode_cpu() {
          for bits in [4, 8] {

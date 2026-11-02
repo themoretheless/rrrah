@@ -15,10 +15,10 @@ help: use `'_` for type paths
 
 warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
    Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
-    Finished `test` profile [optimized + debuginfo] target(s) in 1m 03s
+    Finished `test` profile [optimized + debuginfo] target(s) in 29.87s
      Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
 
-running 88 tests
+running 89 tests
 test cache_telemetry::tests::stale_prefetch_generation_cannot_overwrite_new_plan ... ok
 test decode_gate::tests::cancelled_prefetch_waiter_returns_none_while_permit_is_busy ... ok
 test decode_gate::tests::dropping_current_ticket_unblocks_prefetch ... ok
@@ -95,6 +95,7 @@ test gallery::tests::raw_prefetch_shutdown_joins_real_idle_worker ... ok
 test gallery::tests::raw_prefetch_window_is_bounded_at_both_gallery_edges ... ok
 test gallery::tests::virtual_maximum_collection_prefetch_stays_lazy_and_never_overflows ... ok
 test gpr_preload_tests::real_cr3_prefetch_leases_keep_nearest_in_both_directions ... ignored, manual original CR3 foreground prefetch priority qualification
+test gpr_preload_tests::real_cr3_prefetch_returns_first_ram_lease_under_pressure_and_ttl ... ignored, requires local EOS R8 original for retained warm RAW handoff
 test raster_swap_viewer_tests::apng_selected_frame_ttl_prefetch_preserves_metal_sdr_hdr ... ignored, manual actual Metal APNG nonzero TTL and decoder-blocked prefetch qualification
 test raster_swap_viewer_tests::apng_selected_frames_expire_and_prefetch_from_swap_without_decode ... ok
 test raster_swap_viewer_tests::ico_cur_selected_images_loader_cache_and_blocked_prefetch ... ok
@@ -108,5 +109,5 @@ test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_pref
 test raster_swap_viewer_tests::tiff_selected_pages_loader_cache_and_blocked_prefetch_metal ... ignored, actual Metal TIFF viewer selected-page cache/TTL/prefetch qualification
 test raster_swap_viewer_tests::wal_prefetch_replaces_palette_identity_while_old_lease_stays_immutable ... ok
 
-test result: ok. 66 passed; 0 failed; 22 ignored; 0 measured; 361 filtered out; finished in 11.85s
+test result: ok. 66 passed; 0 failed; 23 ignored; 0 measured; 361 filtered out; finished in 13.47s
 

@@ -1,5 +1,15 @@
 # Current coverage of the requested viewer scope
 
+Warm RAW handoff checkpoint (2026-11-02): resident sensor prefetch now returns
+its first lease directly. An original EOS R8 CR3 remains a shared sensor/metadata
+hit with the decode gate blocked and the managed root exhausted; its held lease
+survives TTL while new consumers correctly refuse expiry. Required-source1/0
+ignored, ordinary prefetch66/23 ignored and production check pass. RLE4 coverage
+also expands to over one million encoded combinations and32,512 odd absolute
+tails; full decoder275/9 ignored passes. The separate three-hour raster run is
+still pending. [RAW evidence](research/raw-warm-lease-2026-11-02/REPORT.md),
+[updated RLE evidence](research/bmp-rle-native-2026-11-02/REPORT.md).
+
 Owned BMP RLE checkpoint (2026-11-02): one-pass RLE4/RLE8 writes admitted RGBA
 without an RGB intermediate or command allocations. 20 authored sources agree
 with FFmpeg; 274 decoder tests and 66 prefetch tests pass. Required M4 Max checks

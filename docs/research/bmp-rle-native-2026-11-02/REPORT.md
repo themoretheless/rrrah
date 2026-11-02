@@ -27,7 +27,7 @@ ends, early bitmap ends and skipped regions. Every output byte independently
 matches FFmpeg. The generator records its actual FFmpeg version and fixture/output
 hashes in `tests/fixtures/raster/bmp-rle-reference.json`.
 
-The full decoder library passes **274 tests, 9 ignored**. Public file decoding
+The full decoder library passes **275 tests, 9 ignored**. Public file decoding
 needs exactly source bytes plus four output bytes per pixel in the managed
 budget; one byte less refuses with final usage zero. Fixed decoder metadata is
 outside that managed pixel/source measurement; this is not a total RSS bound.
@@ -37,6 +37,12 @@ initialization. Palette validation exhausts all 256 counts, all 256 index values
 and positions spanning words and tails; unused RLE4 low nibbles remain ignored.
 Cancellation after output admission refuses publication.
 
+The later RLE4 span matrix adds 1,044,480 encoded combinations (all 16 palette
+counts, 256 packed index bytes and run lengths 1–255), plus 32,512 odd absolute
+tail cases. It checks every emitted encoded pixel and leaves bytes beyond the
+requested span untouched. This is test-only coverage; production decoding is
+unchanged from the CPU-timed revision pinned below.
+
 Required Metal Apple M4 Max passes **40 native/prepared storage lifecycles**:
 20 independent sources, exact serialized restored payloads, exhausted-root
 refusal, cancellation and retry, independent sRGB-to-linear CPU references and
@@ -45,7 +51,7 @@ and queue zero. These are finite offscreen checks, not live display calibration.
 
 Evidence: [decoder](decode.log), [Metal](metal.log), [prefetch regression](prefetch.log),
 [production check](production-check.log), [source pins](sources.json).
-The prefetch group passes 66 tests (22 manual ignored), including the separate
+The latest prefetch group passes 66 tests (23 manual ignored), including the separate
 cold-memory recovery repair described in the sustained-worker report.
 
 ## Paired CPU decode timing
@@ -67,6 +73,9 @@ workspace/dependency optimization profiles, not a release build qualification.
 The estimator is `exp(mean(log(native_ns / legacy_ns)))`; reduction is one minus
 that ratio. The 5,000-resample paired bootstrap, deterministic seeds, raw-log hash
 and complete values are recorded in [timing.json](timing.json), with [raw pairs](cpu.log).
+Those CPU results are pinned to revision `e905cd7a7`; the later RLE4 exhaustive
+test adds no production decoder changes. The current decoder source hash and
+the timing revision's hash are recorded separately.
 No whole-viewer, photographic corpus or FPS gain is inferred.
 
 The first correct prototype was rejected for an approximately 8–9× encoded-mode

@@ -2485,11 +2485,11 @@ fn preload_raw_with_lease(
     if cancelled() {
         return Err("RAW prefetch cancelled".into());
     }
-    if ram.get_resident(&key).is_some() {
+    if let Some(lease) = ram.get_lease(&key) {
         if cancelled() {
             return Err("RAW prefetch cancelled".into());
         }
-        return Ok((true, ram.get_lease(&key)));
+        return Ok((true, Some(lease)));
     }
     // A swap index hint describes the logical sensor bytes without restoring
     // pixels. Unknown/cold objects retain the one-u16-sample lower bound.
@@ -17742,6 +17742,76 @@ mod gpr_preload_tests {
         assert_eq!(root.used(), 0);
         eprintln!(
             "RAW scoped prefetch: original CR3; both directions; count/bytes; failed neighbor; nearest retained; release admits farther; final=0"
+        );
+    }
+
+    #[test]
+    #[ignore = "requires local EOS R8 original for retained warm RAW handoff"]
+    fn real_cr3_prefetch_returns_first_ram_lease_under_pressure_and_ttl() {
+        let source = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/IMG_9043.CR3");
+        let root = rrrah_cache::MemoryBudget::new(512 * 1024 * 1024);
+        let mut request = DecodeRequest::new(source);
+        request.memory_budget = Some(root.clone());
+        let baseline = NativeRawDecoder.decode(&request).unwrap().mosaic;
+        let recipe = NativeRawDecoder.mosaic_recipe(&request).unwrap();
+        let key =
+            CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(&request.path).unwrap(), 0, recipe);
+        let weight = baseline.pixels.capacity_bytes();
+        let directory = tempfile::tempdir().unwrap();
+        let disk = DiskMosaicCache::with_max_bytes(directory.path().join("disk"), root.limit());
+        let mut ram = MosaicRamCache::with_limits(rrrah_cache::CacheLimits {
+            max_bytes: weight,
+            max_entries: Some(1),
+            ttl: Some(Duration::from_secs(1)),
+        });
+        assert!(ram.insert(key, baseline.clone()));
+        let gate = Arc::new(DecodeGate::new());
+        let ticket = gate.request_foreground();
+        let permit = ticket.acquire_decode(|| false).unwrap();
+        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        let received = std::thread::scope(|scope| {
+            let (done, completed) = std::sync::mpsc::channel();
+            let request_ref = &request;
+            let disk_ref = &disk;
+            let ram_ref = &mut ram;
+            let gate_ref = &gate;
+            scope.spawn(move || {
+                let _ = done.send(preload_raw_with_lease(
+                    request_ref,
+                    disk_ref,
+                    ram_ref,
+                    None,
+                    1,
+                    gate_ref,
+                ));
+            });
+            let result = completed.recv_timeout(Duration::from_secs(5));
+            // Unblock a broken cold fallback before joining, even on a timeout.
+            drop(pressure);
+            drop(permit);
+            drop(ticket);
+            result
+        })
+        .expect("warm RAW must not enter the blocked decode gate")
+        .unwrap();
+        assert!(received.0);
+        let lease = received.1.expect("the initial RAM hit must retain its lease");
+        assert!(lease.pixels.ptr_eq(&baseline.pixels));
+        assert_eq!(lease.metadata, baseline.metadata);
+        assert_eq!(&*lease.pixels, &*baseline.pixels);
+        std::thread::sleep(Duration::from_millis(1100));
+        assert!(ram.get_lease(&key).is_none(), "TTL still rejects new consumers");
+        assert_eq!(ram.visible(), None);
+        assert_eq!(root.used(), weight);
+        let other =
+            CacheKey::for_mosaic_recipe(&SourceFingerprint::from_path(&request.path).unwrap(), 1, recipe);
+        assert!(!ram.can_admit_key_by_count(&other));
+        drop(lease);
+        assert!(ram.can_admit_key_by_count(&other));
+        drop((ram, baseline));
+        assert_eq!(root.used(), 0);
+        eprintln!(
+            "RAW warm handoff: original CR3, blocked decoder and exhausted root bypassed; same sensor allocation and metadata; TTL new consumers refused; held lease protects; final=0"
         );
     }
 
