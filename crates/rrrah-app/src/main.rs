@@ -2664,10 +2664,13 @@ fn preload_raster_mode(
             };
             // Whole-file decoding needs at least the source allocation. Check after
             // waiting and after cache probes; a ready RAM frame needs no new buffer.
-            if !prefetch_source_fits(request) {
-                return Err(RasterLoadError::Message(
-                    "raster prefetch skipped: insufficient source memory headroom".into(),
-                ));
+            if let Some(budget) = &request.memory_budget
+                && let Ok(metadata) = std::fs::metadata(&request.path)
+                && metadata.len() > budget.available_bytes()
+            {
+                return Err(RasterLoadError::SourceHeadroom {
+                    recoverable: metadata.len() <= budget.limit(),
+                });
             }
             let result = load_raster_for_display_typed(request, window);
             drop(permit);
@@ -3068,11 +3071,37 @@ fn load_cached_raster_mode_resolving_key_policy_with_lease(
         }
         return Err("raster prefetch skipped: swap restore memory admission refused".into());
     }
+    let mut waited_for_cold_spills = false;
+    let retained_candidate = require_retention && skip_unretained_swap && key.is_some();
+    let cancelled = || {
+        request
+            .cancellation
+            .as_ref()
+            .is_some_and(GenerationToken::is_cancelled)
+    };
     let (raster, assumed) = loop {
+        if cancelled() {
+            return Err("raster load cancelled".into());
+        }
         match load() {
             Ok(result) => break result,
-            Err(error) if visible && error.retryable_memory_pressure() && cache.release_lru_unpinned() => {
-                continue;
+            Err(_) if cancelled() => return Err("raster load cancelled".into()),
+            Err(error) if (visible || retained_candidate) && error.retryable_memory_pressure() => {
+                if cache.release_lru_unpinned() {
+                    continue;
+                }
+                if retained_candidate
+                    && !waited_for_cold_spills
+                    && let Some(swap) = cache.swap()
+                {
+                    waited_for_cold_spills = true;
+                    if swap.stats().queued_bytes == 0
+                        || swap.wait_idle_with_cancel(cancelled).unwrap_or(false)
+                    {
+                        continue;
+                    }
+                }
+                return Err(RasterCacheLoadError::Message(error.to_string()));
             }
             Err(error) => return Err(RasterCacheLoadError::Message(error.to_string())),
         }
@@ -3109,6 +3138,7 @@ fn load_raster_for_display(
 
 #[derive(Debug)]
 enum RasterLoadError {
+    SourceHeadroom { recoverable: bool },
     Decode(rrrah_decode::RasterDecodeError),
     Color(rrrah_decode::RasterColorError),
     Message(String),
@@ -3121,6 +3151,9 @@ impl From<&str> for RasterLoadError {
 impl std::fmt::Display for RasterLoadError {
     fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Self::SourceHeadroom { .. } => {
+                formatter.write_str("raster prefetch skipped: insufficient source memory headroom")
+            }
             Self::Decode(error) => error.fmt(formatter),
             Self::Color(error) => error.fmt(formatter),
             Self::Message(message) => formatter.write_str(message),
@@ -3129,6 +3162,9 @@ impl std::fmt::Display for RasterLoadError {
 }
 impl RasterLoadError {
     fn retryable_memory_pressure(&self) -> bool {
+        if let Self::SourceHeadroom { recoverable } = self {
+            return *recoverable;
+        }
         let memory = match self {
             Self::Decode(rrrah_decode::RasterDecodeError::Eps(error)) => error.memory_error(),
             Self::Decode(rrrah_decode::RasterDecodeError::X3f(rrrah_decode::X3fError::Memory(error))) => {
@@ -11385,6 +11421,91 @@ mod foreground_loader_tests {
                 drop((retry, lease, cache));
                 assert_eq!(root.used(), 0);
             }
+        }
+    }
+
+    #[test]
+    fn retained_raster_prefetch_cold_pressure_reclaims_only_unprotected_frames() {
+        use rrrah_core::{DecodedRaster, RasterColorSpace, RasterPixels};
+        for mode in 0..3 {
+            let source = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/raster/associated-emission-rec709.exr");
+            let root = rrrah_core::MemoryBudget::new(32);
+            let generation = Arc::new(AtomicU64::new(1));
+            let mut request = DecodeRequest::new(source);
+            request.cancellation = Some(GenerationToken::new(generation.clone(), 1));
+            let mut selected_key = raster_display_key(&request, None).unwrap();
+            selected_key.6 = false;
+            let mut old_key = selected_key.clone();
+            old_key.4 = 1;
+            let mut candidate_key = selected_key.clone();
+            candidate_key.4 = 2;
+            let make = |count| -> Result<(DecodedRaster, bool), RasterLoadError> {
+                let pixels = root
+                    .try_buffer(count, 0.5f32)
+                    .map_err(|error| {
+                        RasterLoadError::Decode(rrrah_decode::RasterDecodeError::Source(
+                            rrrah_decode::DecodeError::Memory(error),
+                        ))
+                    })?
+                    .freeze();
+                Ok((
+                    DecodedRaster::new(
+                        (count / 4) as u32,
+                        1,
+                        RasterPixels::Rgba32Float(pixels.into()),
+                        RasterColorSpace::LinearSrgb,
+                    )
+                    .unwrap(),
+                    false,
+                ))
+            };
+            let mut cache = RasterDisplayCache::new(rrrah_cache::CacheLimits {
+                max_bytes: 32,
+                max_entries: Some(2),
+                ttl: None,
+            });
+            assert!(cache.insert_visible(selected_key.clone(), make(4).unwrap().0));
+            assert!(cache.insert(old_key.clone(), make(4).unwrap().0));
+            assert_eq!(root.used(), 32);
+            let mut attempts = 0;
+            let result = load_cached_raster_mode_resolving_key_policy_with_lease(
+                &request,
+                || Some(candidate_key),
+                &mut cache,
+                false,
+                true,
+                true,
+                true,
+                || {
+                    attempts += 1;
+                    if mode == 1 {
+                        generation.store(2, Ordering::Release);
+                    }
+                    make(if mode == 2 { 12 } else { 4 })
+                },
+            );
+            if mode == 0 {
+                let (frame, _, lease) = result.unwrap();
+                assert!(lease.is_some());
+                assert_eq!(attempts, 2);
+                assert!(cache.get_lease(&old_key).is_none());
+                drop((frame, lease));
+            } else {
+                assert!(result.is_err());
+                assert_eq!(
+                    attempts, 1,
+                    "cancelled/individually oversized candidates cannot reclaim"
+                );
+                assert!(cache.get_lease(&old_key).is_some());
+            }
+            assert!(
+                cache.get_lease(&selected_key).is_some(),
+                "selected frame must remain resident"
+            );
+            assert_eq!(root.used(), 32);
+            drop(cache);
+            assert_eq!(root.used(), 0);
         }
     }
 
