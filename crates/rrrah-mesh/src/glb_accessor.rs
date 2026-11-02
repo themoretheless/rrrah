@@ -173,8 +173,32 @@ pub struct GlbAccessor<'a> {
     component: GlbComponent,
     shape: GlbShape,
     normalized: bool,
+    base_view: Option<usize>,
+    explicit_stride: bool,
+    vertex_aligned: bool,
+    target: Option<usize>,
 }
 impl GlbAccessor<'_> {
+    pub(crate) fn validate_vertex(self) -> Result<(), GlbError> {
+        if self.component == GlbComponent::U32 || !self.vertex_aligned || self.target == Some(34963) {
+            return Err(GlbError::Invalid("vertex accessor usage/alignment"));
+        }
+        Ok(())
+    }
+    pub(crate) fn validate_indices(self) -> Result<(), GlbError> {
+        if self.shape != GlbShape::Scalar
+            || !self.component.unsigned()
+            || self.normalized
+            || self.explicit_stride
+            || self.target == Some(34962)
+        {
+            return Err(GlbError::Invalid("primitive index accessor usage"));
+        }
+        Ok(())
+    }
+    pub(crate) fn vertex_view(self) -> Option<(usize, bool)> {
+        self.base_view.map(|view| (view, self.explicit_stride))
+    }
     pub fn len(self) -> usize {
         self.count
     }
@@ -219,7 +243,7 @@ impl GlbAccessor<'_> {
         Ok(self.component(index, 0)? as u32)
     }
 }
-fn required<'a>(
+pub(crate) fn required<'a>(
     object: JsonValue<'a>,
     name: &str,
     request: &DecodeRequest,
@@ -228,7 +252,7 @@ fn required<'a>(
         .field(name, request)?
         .ok_or(GlbError::Invalid("missing accessor/buffer property"))
 }
-fn integer(value: JsonValue<'_>) -> Result<usize, GlbError> {
+pub(crate) fn integer(value: JsonValue<'_>) -> Result<usize, GlbError> {
     value
         .as_u64()
         .and_then(|v| usize::try_from(v).ok())
@@ -241,7 +265,7 @@ fn optional_integer(
 ) -> Result<Option<usize>, GlbError> {
     object.field(name, request)?.map(integer).transpose()
 }
-fn array_item<'a>(
+pub(crate) fn array_item<'a>(
     object: JsonValue<'a>,
     name: &str,
     index: usize,
@@ -371,9 +395,16 @@ impl GlbDocument {
         } else {
             component.size()
         };
+        let mut explicit_stride = false;
+        let mut target = None;
+        let mut vertex_aligned = true;
         let (base, stride) = if let Some(view) = base_view {
             let view = self.view(view, request)?;
             let stride = view.stride.unwrap_or(packed);
+            explicit_stride = view.stride.is_some();
+            target = view.target;
+            vertex_aligned =
+                offset.unwrap_or(0) % 4 == 0 && stride % 4 == 0 && (component.size() == 4 || explicit_stride);
             if stride < packed || stride % component.size() != 0 {
                 return Err(GlbError::Invalid("accessor stride"));
             }
@@ -470,6 +501,10 @@ impl GlbDocument {
             component,
             shape,
             normalized,
+            base_view,
+            explicit_stride,
+            vertex_aligned,
+            target,
         })
     }
 }

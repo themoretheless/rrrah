@@ -22,3 +22,12 @@ accessor layouts are not a rendered scene or complete glTF conformance claim.
 `accessor-invalid.tsv` has43 authored rejection contracts. `Box-accessors.tsv`
 is independent sample readback of the attributed original Box above, not another
 copy of the model. `accessor-manifest.json` pins counts and output hashes.
+
+`primitive-controls.glb` and its triangle/bounds TSV files are CC0 authored
+controls from `scripts/generate-glb-primitive-fixtures.py`. Nine meshes cover
+local triangle topology, sparse positions, source precision and fitting bounds;
+source duplicate-key override is intentional. `primitive-invalid.tsv` contains
+30 malformed contracts. `Box-triangles.tsv` independently reads the attributed
+original Box above in local coordinates, without applying its node transform.
+`primitive-manifest.json` pins output counts/hashes. None of these prove scene,
+material, skin, animation, GPU or window behavior.

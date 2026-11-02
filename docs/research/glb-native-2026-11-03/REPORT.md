@@ -1,7 +1,8 @@
-# Native GLB container, JSON and accessor checkpoint — 2026-11-03
+# Native GLB container, JSON, accessors and primitives — 2026-11-03
 
-This is the first layer toward native GLB/glTF scene loading. It does **not**
-register GLB/glTF in model discovery or claim geometry, viewing, materials,
+This implements native container/JSON/accessor and selected local-space triangle
+primitive decoding toward GLB/glTF scene loading. It does **not** register GLB/glTF
+in model discovery or claim scene transforms, viewing, material interpretation,
 cache/swap, Metal, HDR, first-frame timing or format qualification.
 The raster catalogue remains 94 implemented subsets, 6 pending, 0 fully qualified.
 
@@ -19,9 +20,9 @@ follows the last clone. Allocation/Arc bookkeeping and OS RSS are separate.
 native bounded JSON token tape, UTF-8/syntax validation and asset.version2.0 /
 minVersion2.0 checks. Nonempty extensionsRequired explicitly refuses until
 extension semantics are implemented. The new accessor layer checks requested embedded buffer/view layouts and BIN
-padding. Full scene/schema, usage-specific geometry validation, and agreement of
-min/max metadata with binary values remain incomplete. No decoded model is
-returned. Source JSON bytes and BIN padding remain exact.
+padding. The primitive layer additionally checks POSITION bounds, attribute and
+index usage. Full scene/schema validation remains incomplete. The common
+DecodedModel API is unchanged. Source JSON bytes and BIN padding remain exact.
 
 The parser first counts/validates tokens without heap allocation, then admits
 one exact fixed-token buffer and fills it in a second pass. Spans refer to the
@@ -48,7 +49,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
 
 ## Evidence
 
-- [Mesh tests](mesh-tests.log): 79 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
+- [Mesh tests](mesh-tests.log): 82 passed, 0 failed, 0 ignored. Container cases covering original framing, borrowed ranges/unknown chunks, all
   truncated prefixes, malformed order/alignment/length/version, chunk/JSON
   limits, cancellation, last-owner source credit, exact and one-byte-short
   admission, malformed-input cleanup.
@@ -75,7 +76,7 @@ The rules come from [Khronos glTF2 GLB specification](https://registry.khronos.o
   failures release source and token credit.
 - The numeric fixture generator initially produced invalid `000e-2`; Rust
   correctly refused. The generator now independently checks JSON grammar before
-  Decimal conversion and writes legal `0e-2`. Current79-test result includes the repaired controls.
+  Decimal conversion and writes legal `0e-2`. Current82-test result includes the repaired controls.
 - [Source pins](sources.json). No new dependency or lockfile changes.
 
 ## Borrowed embedded accessors
@@ -137,14 +138,79 @@ Current evidence:
   The sample oracles and malformed controls have distinct provenance in
   `tests/fixtures/glb/accessor-manifest.json`. Source hashes are pinned in `sources.json`.
 
+## Borrowed local triangle primitives
+
+`GlbDocument::primitive(mesh, primitive, request)` now validates a source-local
+triangle primitive and returns borrowed `GlbPrimitive` views. Indexed and
+nonindexed TRIANGLES, TRIANGLE_STRIP and TRIANGLE_FAN preserve source ordering,
+winding and degenerate triangles; no triangle vector or duplicate vertex array
+is allocated. Triangle lookup/iteration use the immutable validated accessors.
+Point/line modes, missing POSITION and morph targets explicitly refuse at this
+checkpoint. Node transforms/instancing, skins and animations are not applied.
+
+POSITION must be unnormalized float32 VEC3 with3-component min/max metadata.
+Values are read finitely and promoted exactly to float64; POSITION bounds are
+accumulated in that same validation pass rather than rereading every position.
+The already resolved POSITION accessor is reused. No throughput speedup is
+claimed without the forthcoming scene-to-presentation measurement. Declared bounds are
+interpreted in the accessor's float32 type and compared to actual complete
+POSITION bounds. The specification's implicit-zero/no-storage exception is
+retained. Geometric bounds separately include only referenced vertices, so an
+unused distant vertex does not distort fitting. Indices must be unnormalized
+unsigned scalars with proper view usage; every value must fit POSITION.count
+and must not be the component type's reserved maximum. Topology counts are
+checked before returning a primitive.
+
+Active attributes must have equal counts and supported core component/type
+combinations. Shared vertex views require explicit stride; small components and
+view targets obey vertex/index usage rules. Normal/tangent squared lengths use
+a1e-4 acceptance tolerance around1 without modifying source values; tangent W
+must be+1/-1. Weight components cannot be negative. Indexed semantic families
+must start at0 without gaps/leading zeroes. Custom underscore attributes remain
+available through borrowed accessors. Material references must resolve to an
+object; all source material/primitive JSON remains retained, but PBR/texture
+interpretation, color clamping at shading, combined skin weights and full
+metadata/schema conformance are still implementation/qualification work.
+
+Last decoded duplicate attribute names win, including escaped spellings. Raw
+attributes are capped at64 and each key at4096 source bytes, bounding the stack
+scratch and duplicate-name comparison. Aggregate attribute component validation
+is capped at128 million. Scans check cancellation every1024 elements. These are
+implementation limits; broad large-scene timing and OS memory are not qualified.
+
+Current proof in the82-test mesh run:
+
+- 12 original Box local triangles match independent Python struct index/position
+  reads. The source node matrix is deliberately not applied by this API.
+- 20 authored triangles across9 meshes match independent source/index references:
+  indexed/nonindexed triangles, strips/fans, sparse positions, translated float32
+  geometry, unused far vertices and a retained degenerate triangle. Analytic
+  signed areas separately verify clockwise strip / counterclockwise fan and
+  square footprints. These controls are not scene/material interoperability.
+- Source normals, tangents, two UV sets, color and a custom temperature attribute
+  remain accessible. The first authored attributes object intentionally contains
+  an invalid earlier POSITION reference followed by the valid escaped-name
+  override, checking last-value semantics without dropping original JSON.
+- 30 malformed contracts refuse without additional source/tape credit: index
+  range/restart (including U8 restart within a256-position range), topology,
+  attribute count/semantics/sets/limits/shared-view stride, non-unit normals,
+  nonfinite positions, declared bounds, missing material and unsupported modes.
+- Cancellation/new-generation retry and final-owner release pass. Repeated
+  primitive resolution/triangle iteration leaves managed usage and peak unchanged;
+  this is not an independent measurement of OS allocations or GPU performance.
+- All six primitive-generator artifacts regenerate byte-identically. Python
+  syntax, production check, Cargo formatting and diff checks pass. No dependency
+  or lockfile change. Existing JSON/accessor proofs are included in the same
+  current test log; old intermediate logs are replaced rather than duplicated.
+
 ## Required continuation
 
-1. Complete scene/schema and usage-specific accessor validation (including
-   source min/max), then assemble geometry while retaining indices, normals,
-   UVs and metadata without unchecked allocations. External/data URI resources
-   and compressed/quantized extensions remain unsupported.
-2. Scene selection, node transforms/instancing, triangle topology, explicit
-   unsupported extension/skin/animation boundaries, materials/textures.
+1. Scene selection and node hierarchy/transforms/instancing; retain the local
+   primitive geometry rather than flattening source metadata. Complete source
+   min/max/schema and usage rules beyond the selected contracts above.
+2. Materials/textures, skin/morph/animation handling and point/line geometry.
+   External/data URI resources and compressed/quantized extensions remain
+   unsupported; required extensions still explicitly refuse.
 3. Common model API, discovery, bounded ownership, cache identity and lossless
    swap; previous/next prefetch with TTL/size/count and cancellation/pressure.
 4. Original independent geometry/material references and actual Metal SDR/HDR

@@ -142,7 +142,8 @@ impl GlbSource {
 }
 
 pub use crate::glb_accessor::{GlbAccessor, GlbComponent, GlbShape, MAX_ACCESSOR_ELEMENTS};
-pub use crate::glb_json::{JsonArray, JsonKind, JsonValue};
+pub use crate::glb_json::{JsonArray, JsonKind, JsonObject, JsonValue};
+pub use crate::glb_primitive::{GlbPrimitive, GlbTopology};
 
 /// Syntactically validated, admitted JSON document over an immutable GLB source.
 /// Scene/accessor semantics are not yet a decoded model.

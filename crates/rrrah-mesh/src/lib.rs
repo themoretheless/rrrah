@@ -16,6 +16,7 @@ pub use rrrah_raw::{DecodeError, DecodeRequest, GenerationToken, bounded_io};
 pub mod glb;
 mod glb_accessor;
 mod glb_json;
+mod glb_primitive;
 
 mod off_swap;
 pub use off_swap::{OffSwapError, off_swap_payload_len, read_off_swap_payload, write_off_swap_payload};

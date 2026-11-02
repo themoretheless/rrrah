@@ -80,6 +80,19 @@ impl<'a> JsonValue<'a> {
             )
             .eq(expected.chars())
     }
+    /// Decoded Unicode scalar stream over the original source string.
+    pub fn string_chars(self) -> Option<impl Iterator<Item = char> + 'a> {
+        (self.kind() == JsonKind::String).then(|| {
+            let token = self.tokens[self.index];
+            StringChars::new(&self.bytes[token.start as usize + 1..token.end as usize - 1])
+        })
+    }
+    pub fn object(self) -> Option<JsonObject<'a>> {
+        (self.kind() == JsonKind::Object).then_some(JsonObject {
+            value: self,
+            next: self.index + 1,
+        })
+    }
     /// Exact mathematical unsigned integer, including decimal/exponent notation.
     /// Never passes through f64 (which would lose large integer indices).
     pub fn as_u64(self) -> Option<u64> {
@@ -204,6 +217,30 @@ fn exact_u64(bytes: &[u8]) -> Option<u64> {
         value = value.checked_mul(10)?;
     }
     Some(value)
+}
+
+#[derive(Debug)]
+pub struct JsonObject<'a> {
+    value: JsonValue<'a>,
+    next: usize,
+}
+impl<'a> Iterator for JsonObject<'a> {
+    type Item = (JsonValue<'a>, JsonValue<'a>);
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.next >= self.value.tokens[self.value.index].next as usize {
+            return None;
+        }
+        let key = JsonValue {
+            index: self.next,
+            ..self.value
+        };
+        let value = JsonValue {
+            index: self.next + 1,
+            ..self.value
+        };
+        self.next = self.value.tokens[self.next + 1].next as usize;
+        Some((key, value))
+    }
 }
 
 struct Parser<'a, 'b> {
