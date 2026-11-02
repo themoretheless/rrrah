@@ -1,0 +1,21 @@
+{
+  "scope": "Original four update test callbacks, original update/types/OpenRouter modules (other shared modules loaded but unused) and helper functions without environment/client initialization; Node VM transpilation; fake env/DB, assert adapter and inert schema proxy; original fetch stubs. No network, Deno typecheck or DB.",
+  "outcomes": [
+    {
+      "name": "update_thought: updates thought and returns id",
+      "passed": true
+    },
+    {
+      "name": "update_thought: not found returns isError",
+      "passed": true
+    },
+    {
+      "name": "update_thought: error returns isError",
+      "passed": true
+    },
+    {
+      "name": "update_thought: missing brain context returns error",
+      "passed": true
+    }
+  ]
+}

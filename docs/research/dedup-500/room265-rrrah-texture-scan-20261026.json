@@ -1,0 +1,57 @@
+{
+  "scope": "Current rrrah exact scan on25 real texture files across public and Blender folders; independent SHA256 candidate grouping plus direct bytes equality oracle, not perceptual or universal coverage",
+  "argv": [
+    "target/release/examples/scan_folder",
+    "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room",
+    "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures"
+  ],
+  "exit_code": 0,
+  "stdout": "Group 1: 2 files, 936202 bytes each\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/fourth_texture_set_day.webp\"\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/day/fourth_texture_set_day.webp\"\nGroup 2: 2 files, 1018088 bytes each\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/fourth_texture_set_night.webp\"\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/fourth_texture_set_night.webp\"\nGroup 3: 2 files, 341892 bytes each\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/second_texture_set_day.webp\"\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/day/second_texture_set_day.webp\"\nGroup 4: 2 files, 328332 bytes each\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/second_texture_set_night.webp\"\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/second_texture_set_night.webp\"\nGroup 5: 2 files, 551384 bytes each\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/third_texture_set_night.webp\"\n  \"docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/third_texture_set_night.webp\"\n",
+  "stderr": "Scan complete: 25 files observed, 5 duplicate groups, 566255831 bytes read, 0 diagnostics\n",
+  "files": 25,
+  "expected_groups": [
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/fourth_texture_set_day.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/day/fourth_texture_set_day.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/fourth_texture_set_night.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/fourth_texture_set_night.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/second_texture_set_day.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/day/second_texture_set_day.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/second_texture_set_night.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/second_texture_set_night.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/third_texture_set_night.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/third_texture_set_night.webp"
+    ]
+  ],
+  "actual_groups": [
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/fourth_texture_set_day.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/day/fourth_texture_set_day.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/fourth_texture_set_night.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/fourth_texture_set_night.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/second_texture_set_day.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/day/second_texture_set_day.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/second_texture_set_night.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/second_texture_set_night.webp"
+    ],
+    [
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/textures/third_texture_set_night.webp",
+      "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/textures/room/night/third_texture_set_night.webp"
+    ]
+  ],
+  "oracle_match": true
+}

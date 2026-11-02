@@ -1,0 +1,97 @@
+{
+  "binary_sha256": "360786aeb714af9e6a61d86f7f4c8d617168777aac4ed747b4cc8dba985bd4d2",
+  "rows": [
+    {
+      "left": "2414",
+      "right": "2414",
+      "exit_code": 0,
+      "seconds": 8.021695083007216,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/auto-explicit-bilinear-2414-2414-20261026.log",
+      "log_sha256": "e982515e4002e31ede5af884e87d429946da2e0433126e2f386deb5062c7067a",
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d"
+      },
+      "candidate": true,
+      "expected_candidate": true,
+      "managed_released": true,
+      "strict_agreement": [
+        0.9832642916666666,
+        0.9833510219031817
+      ],
+      "projected_agreement": [
+        0.9863411666666667,
+        0.9864285203537381
+      ],
+      "translation": [
+        11.99948550806444,
+        12.011869055086663
+      ]
+    },
+    {
+      "left": "2418",
+      "right": "2418",
+      "exit_code": 0,
+      "seconds": 7.738595874980092,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/auto-explicit-bilinear-2418-2418-20261026.log",
+      "log_sha256": "dc5c313ffc7138e5f33022c0115343ff5424eb092a500acf1c77e6b10168bd97",
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+      },
+      "candidate": true,
+      "expected_candidate": true,
+      "managed_released": true,
+      "strict_agreement": [
+        0.9070168333333334,
+        0.9071601052047826
+      ],
+      "projected_agreement": [
+        0.9517172916666666,
+        0.951994420508881
+      ],
+      "translation": [
+        12.00447829441438,
+        11.969126314899768
+      ]
+    },
+    {
+      "left": "2414",
+      "right": "2418",
+      "exit_code": 0,
+      "seconds": 3.864185250014998,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/auto-explicit-bilinear-2414-2418-20261026.log",
+      "log_sha256": "184772da752f55a1efb3bc26fb9e327e9faa73b6f709fbb52dee83b666b972c7",
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+      },
+      "candidate": false,
+      "expected_candidate": false,
+      "managed_released": true,
+      "geometry_absent": true
+    },
+    {
+      "left": "2418",
+      "right": "2414",
+      "exit_code": 0,
+      "seconds": 3.98024574998999,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/auto-explicit-bilinear-2418-2414-20261026.log",
+      "log_sha256": "5a0daa9319bddfefcda95d4fc2855cbde8282bd3ce5b940182ed3648975f0d68",
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d"
+      },
+      "candidate": false,
+      "expected_candidate": false,
+      "managed_released": true,
+      "geometry_absent": true
+    }
+  ],
+  "scope": "Automatic spatial geometry and white-anchored comparison with explicit Bilinear request recipe; two matching original Sony RAW/linear TIFF pairs and both cross-scene orders.",
+  "limitations": [
+    "Two scene negatives do not establish broad false-positive precision.",
+    "Same-development positive qualification does not establish arbitrary cross-development equality.",
+    "Candidate is similarity evidence, not byte equality."
+  ]
+}

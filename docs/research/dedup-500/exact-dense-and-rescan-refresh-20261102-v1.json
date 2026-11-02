@@ -1,0 +1,35 @@
+{
+  "checked_at_utc": "2026-11-02T00:24:45.538791+00:00",
+  "runs": [
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_large_files dense_large_files_distinguish_changes_outside_spaced_samples",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 3,
+      "test_seconds": 1.61
+    },
+    {
+      "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_repeated_metadata",
+      "exit_code": 0,
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "filtered": 0,
+      "test_seconds": 0.02
+    }
+  ],
+  "source_sha256_after_run": {
+    "crates/rrrah-dedup/src/exact.rs": "6aa6ca528c0a255b37ae2dc0729a22e9597c85ba26371e8e27641c52ba3236ca",
+    "crates/rrrah-dedup/tests/exact_large_files.rs": "9c0f47f9b2ea40ba964ce806425c38da33c3f80b4cb2f6c2832e7ac174ba60ac",
+    "crates/rrrah-dedup/tests/exact_repeated_metadata.rs": "c6d2e3662a6729114ca745869267c63aaf3f532a12364607014b6ac3ee8b9828"
+  },
+  "same_exact_source_as_98_pass_receipt": true,
+  "evidence": [
+    "Three 66MiB files: two copies and one byte change at 2MiB+17, both APIs and root orders preserve exactly copy pair. Complete dense content path exercised, not just sampled prefix.",
+    "Sizes 4,261,4096,65537: mutate same inode final byte then restore mtime/size; both compare directions and both scan APIs separate changed file while retaining healthy pair.",
+    "Both scan APIs rescan after rename, removal, path recreation and changed contents; old path/content equality not reused."
+  ],
+  "scope": "Existing tests freshly executed on macOS after directory least-depth fix. Three multi-GiB/TiB logical-length/cancellation cases filtered, not passed or qualified; no physical sparse allocation, full multi-GiB equality, RSS, Windows or decoder proof."
+}

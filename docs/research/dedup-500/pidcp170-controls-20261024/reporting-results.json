@@ -1,0 +1,24 @@
+{
+  "scope": "Original complete pipeline, telemetry and notifications modules; lifetime-stat and UI toast adapters as recorded; owned messages and footer observer, no real UI/provider/tokenizer measurement",
+  "authored_controls_run": 3,
+  "observations": [
+    {
+      "case": "short-answer growth reflected by negative character-estimate telemetry but zero cumulative savings footer",
+      "beforeEstimatedTokens": 12,
+      "afterEstimatedTokens": 30,
+      "summary": "this session: 1 calls, avg 30 tokens/call sent, -150% removed by dcp",
+      "footer": "DCP: ~0 saved"
+    },
+    {
+      "case": "off mode suppresses footer update",
+      "passed": true
+    },
+    {
+      "case": "detailed mode reports floored zero savings",
+      "notice": {
+        "text": "pi-dcp: 1 duplicate (~0 tokens)",
+        "level": "info"
+      }
+    }
+  ]
+}

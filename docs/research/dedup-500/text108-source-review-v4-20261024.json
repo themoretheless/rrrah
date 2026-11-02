@@ -1,0 +1,31 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v3-20261024.json",
+  "whole_repo_complete": false,
+  "new_read_lines": {
+    "path": "dedup_cpp/xxhash.h",
+    "start": 281,
+    "end": 700
+  },
+  "cumulative_header_read_lines": [
+    1,
+    700
+  ],
+  "header_total_lines": 7487,
+  "whole_header_read": false,
+  "new_runtime_tests": 0,
+  "findings": [
+    "Pinned bundled version0.8.3 confirmed via version macros; previous11case parity controls used this exact retained header.",
+    "XXH_INLINE_ALL makes implementation private and remaps identifiers, handling earlier ordinary include to avoid silently ignored inline mode. Source read, multiple-include build configurations not yet tested.",
+    "XXH_NAMESPACE provides symbol prefixes for exposing library hash APIs without cross-library symbol collisions; no namespace change adopted.",
+    "XXH32 statecopy requires nonNULL/nonoverlapping state objects and create/free ownership pairing documented. Invalid preconditions not executed."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "xxhash.h lines701..7487",
+    "pinned Abseil submodule",
+    "full Faiss/native pipeline"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

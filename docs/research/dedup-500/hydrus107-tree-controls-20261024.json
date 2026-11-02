@@ -1,0 +1,21 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "scope": "Unchanged complete Python tree and DB; real SQLite. Native matchHashBytes replaced by deterministic Hamming-derived similarity. Does not establish native VPDQ metric properties or recall.",
+  "controls": [
+    {
+      "control": "empty_tree_regeneration",
+      "observed": "IndexError",
+      "pass": true
+    },
+    {
+      "control": "shared_hash_maps_both_files",
+      "pass": true
+    },
+    {
+      "control": "tree_against_exhaustive_metric_oracle",
+      "queries": 20,
+      "pass": true
+    }
+  ],
+  "tree_sha256": "6514cbf37ecea88630985ea94b6c776e313b4bb5f9c1dccb4a4da2090c13c70e"
+}

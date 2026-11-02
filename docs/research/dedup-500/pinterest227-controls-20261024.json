@@ -1,0 +1,44 @@
+{
+  "repository": "EhsanShahbazii/Pinterest-Scraper",
+  "commit": "f4f81ea605a8d8d4cf999837bcbe51b066839f36",
+  "original_isolated_test_methods": 2,
+  "original_passed": true,
+  "authored_controls": [
+    {
+      "name": "same-batch equal URL different IDs retained",
+      "passed": true,
+      "observed": 2
+    },
+    {
+      "name": "persisted URL strips query and drops different resource",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "name": "valid non-object JSON raises uncaught error",
+      "passed": true,
+      "observed": "AttributeError"
+    },
+    {
+      "name": "two writers lose earlier persisted ID",
+      "passed": true,
+      "observed": [
+        "B"
+      ]
+    },
+    {
+      "name": "numeric persisted ID mismatches string ID",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "malformed JSON resets without completeness status",
+      "passed": true,
+      "observed": {
+        "pin_ids": [],
+        "enabled": true
+      }
+    }
+  ],
+  "scope": "AST original storage/dedupe classes and original TestStorageAndDedupe callbacks. Temporary files only, UI console stub. No downloader, scraper, browser, server or network run."
+}

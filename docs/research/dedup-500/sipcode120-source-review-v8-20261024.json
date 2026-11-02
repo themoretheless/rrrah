@@ -1,0 +1,55 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v7-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/signal-cache.ts",
+      "local": "pipeline-src_modules_proxy_signal-cache.ts",
+      "git_blob": "0043ad5c4e7d35b17a7f57e851ffc9765191ec14",
+      "sha256": "b8d0115e6f38843e0f454514ce2db3b9033349496891943d4bd0a8098eae6bcd",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/manifest/parseFile.ts",
+      "local": "pipeline-src_modules_manifest_parseFile.ts",
+      "git_blob": "46d00e1cfdad97754f8df4d01b4b0f775f3b9b17",
+      "sha256": "756c7c4cfb020b49e66320c186cc01bf122fd8b820e2684e783292856c78b137",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/commands/manifest.ts",
+      "local": "pipeline-src_commands_manifest.ts",
+      "git_blob": "f32d6f2d29e1551858dc5478bae1fad256176c1b",
+      "sha256": "44bbfaaffe0696697d8e3f779006b14e9a96b7bf457bdc283c8827d0399951be",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 17,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 91,
+  "new_original_tests_run": 0,
+  "authored_controls_total_distinct": 20,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "findings": [
+      "Bash rg -g filter parsedaspattern instead ofactualneedle;nativeGrep control correct",
+      "JSONL loaderaccepts missing tool/kind",
+      "Load returns200newest signals;physicalhistory still206entries"
+    ],
+    "scope": "Original signal cache renamedmts;owned realJSONL plus pure parser controls;not AST-read downstream integration",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/signal-owned-58bdNc"
+  },
+  "findings": [
+    "Reviewed manifest orchestrator reparses source withregex/nohash cache here;read failures continue silently anddo not createissues. Successfulwrite cantherefore representpartialparsedinputs;source-only notfullcommandrun.",
+    "parseFile astDisabled ignored,regex usedunconditionally;ASTcomments do not establishASTexecution.",
+    "Signal Bash option values canbe mistakenforsearchpattern;nativeGrep correct.",
+    "Signal loader minimal schema accepts missing tool/kind;return cap200 doesnot bound rawJSONL load or physicalfilegrowth."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

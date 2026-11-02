@@ -1,0 +1,23 @@
+app-a:
+  ✅ 1.6.0
+    used by:
+      - example > app-c: ^1.0.0
+  ⬆️ 1.5.0 → 1.6.0
+    used by:
+      - example: ^1.0.0
+
+utils:
+  ✅ 2.1.0
+    used by:
+      - example > app-b: ^2.0.0
+      - example > app-c > app-a: ^2.0.0
+  🗑️ 1.2.0
+    used by:
+      - example > app-a: ^1.0.0
+    removed after:
+      - app-a: 1.5.0 → 1.6.0
+
+2 duplicate packages in bun.lock.
+2 packages can be deduped.
+
+Run with --fix to apply available dedupes.

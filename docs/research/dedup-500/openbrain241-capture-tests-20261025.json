@@ -1,0 +1,25 @@
+{
+  "scope": "Original five capture test callbacks, original capture/auto-link/entities/insert/types/OpenRouter modules and helper functions without environment/client initialization; Node VM transpilation; fake env/DB, assert adapter and inert schema proxy; original fetch stubs. No network, Deno typecheck or DB.",
+  "outcomes": [
+    {
+      "name": "capture_thought: captures thought and returns id",
+      "passed": true
+    },
+    {
+      "name": "capture_thought: returns merged result when dedup matches",
+      "passed": true
+    },
+    {
+      "name": "capture_thought: error returns isError",
+      "passed": true
+    },
+    {
+      "name": "capture_thought: missing brain context returns error",
+      "passed": true
+    },
+    {
+      "name": "capture_thought: calls storeEntityBridges when entities are extracted",
+      "passed": true
+    }
+  ]
+}

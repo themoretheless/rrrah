@@ -1,0 +1,74 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v17-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/transcript/analyzers/duplicateReads.ts",
+      "local": "drift-src_modules_transcript_analyzers_duplicateReads.ts",
+      "git_blob": "241c98c58c2d4d567644b28a06576e1fccd6baf8",
+      "sha256": "e0c73eb012efc4c1a03562399932f7ede4da111c3288985e90ddaaf7ce44c7fc",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/transcript/analyzers/duplicateReads.test.ts",
+      "local": "drift-tests_modules_transcript_analyzers_duplicateReads.test.ts",
+      "git_blob": "ef56c85e335b2fabf80fa5969e92810ad06d6cc9",
+      "sha256": "5c1b1c1451de9ec0fee6771bd6893289260d1494e6244a9aa3aedf2aa2715462",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/transcript/parse.ts",
+      "local": "drift-src_modules_transcript_parse.ts",
+      "git_blob": "8cea31a3f34ef4c103f4c05ef0e6c2b8074835c2",
+      "sha256": "997a02f093c49e51741dd6f04275bd5ff86b851c50af251bd933a1e7800d6c49",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/transcript/schema.ts",
+      "local": "drift-src_modules_transcript_schema.ts",
+      "git_blob": "3ee5ee70fdf1f960129a1338d61c90a9d2d38b68",
+      "sha256": "f5d65ecad6880961648141b7c4af323e6a8c6dd922bec380e1ed38ef1705c3a2",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/transcripts/read-heavy.jsonl",
+      "local": "drift-tests_fixtures_transcripts_read-heavy.jsonl",
+      "git_blob": "2a12a02bd99d3ec26d53bee4b9812a22f0097864",
+      "sha256": "4dd898ceaca7adb55c79dc339e9c9a58353aa748fa163d415ad5ba8810e2b6f5",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/transcripts/minimal-2turn.jsonl",
+      "local": "drift-tests_fixtures_transcripts_minimal-2turn.jsonl",
+      "git_blob": "6e848e7a9f3429bb6406868f0b3efd18078a5910",
+      "sha256": "8a8ceadcec8d44e3b1eea8c3fe920e952f9a7931c1099b7a7e92893f10f95bab",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 54,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 177,
+    "numPassedTests": 177,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 3,
+  "authored_upstream_controls_total_distinct": 39,
+  "new_authored_controls": 3,
+  "owned_subset_cases_passed": 8,
+  "prior_owned_subset_cases": 5,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "dependencies": "Vitest2.1.9,Node22.23.4,zod3.23.8 matchesdeclared^3.23.8;isolatedsubsetnotfullproject",
+  "findings": [
+    "Distinctoffset/limit reads groupedbypath asduplicates andcharged50tokens;no contenthash/equalityinthisanalyzer.",
+    "One100tokenassistantturn with3repeatedRead callscharged300duplicatetokens;entiresessioninput200.",
+    "Negativeinput_tokens rejectedbyUsageSchema butpassesOtherEntrySchema fallbackandparsednegativewith0linesskipped.",
+    "Priorfreshhash livehook explicitlypassespartialreads;drift duplicatecount andlivehook policy notsamecontract."
+  ],
+  "runtime_scope": "Exactoriginalparser/schema/analyzer/path/result/error modules;ownedsyntheticJSONL plusoriginal2fixtures;noactualusersession/model orbillablecostclaim",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

@@ -1,0 +1,43 @@
+{
+  "repository": "binwiederhier/fsdup",
+  "commit": "beec68f05f916d05881a19a11cfb89366c4d728b",
+  "whole_files_read": [
+    {
+      "path": "chunker.go",
+      "local": "02-chunker.go",
+      "git_blob": "bc5f4c8779b8687219e0fd9933a493dfecf3c07f",
+      "sha256": "f51c46f33f6211927eb10744794dc08e8ef6bd80b6c1c75851722ec0c0eebd29",
+      "whole_text_reviewed": true
+    },
+    {
+      "path": "chunker_fixed.go",
+      "local": "03-chunker_fixed.go",
+      "git_blob": "ba3daca58071d420033093543ba5ca37989f026d",
+      "sha256": "e1180ee0218afeada9c7107aa36b7e9c8fe901d4a8e5f0f5bbcc2a381d403e37",
+      "whole_text_reviewed": true
+    },
+    {
+      "path": "chunker_gpt.go",
+      "local": "04-chunker_gpt.go",
+      "git_blob": "f33d03e193a096210061a6052123c1fc45392b86",
+      "sha256": "030a3cc5049c21e24d536238edf2c5e763c9995820bf58c86f1593e853e9ed27",
+      "whole_text_reviewed": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "tracked_blobs": 37,
+  "whole_repo_complete": false,
+  "original_upstream_tests_run": false,
+  "production_adoption": false,
+  "native_phash_asan": "deferred",
+  "review_scope_detail": "static-only;no Go runtime",
+  "authored_runtime_controls": 0,
+  "findings": [
+    "Fixed-chunk disk manifest uses BLAKE2b256;not pixel normalization.",
+    "Write worker reports errors over unbuffered errChan,main waits wg after closing writeChan without draining terminal errors:potential deadlock source-only.",
+    "WaitGroup.Add occurs inside spawned goroutine:race-sensitive lifecycle source-only.",
+    "No-breakpoint read failure panics instead of returning declared error.",
+    "GPT allocates entryCount*entrySize from header without reviewed local bounds;actual malformed-disk behavior not run."
+  ],
+  "execution_limit": "No native Go tests run;do not treat source hypotheses as runtime failures."
+}

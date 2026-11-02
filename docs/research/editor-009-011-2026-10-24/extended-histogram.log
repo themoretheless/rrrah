@@ -1,0 +1,27 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 26.12s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-72191398ce43797e)
+
+running 1 test
+test histogram::tests::odd_crops_extreme_values_and_repeated_navigation_metal ... EXTENDED_HISTOGRAM crops=3 repeats=36 exact_RGBY=true max_samples=65536 invalid_extents=4 credits_final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 78 filtered out; finished in 12.66s
+

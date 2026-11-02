@@ -1,0 +1,26 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2.55s
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-5a2e86754853fb58)
+
+running 1 test
+test split_comparison_reuses_resident_pixels_and_matches_both_reference_exposures ... split comparison adapter: Metal Apple M4 Max
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; finished in 2.16s
+

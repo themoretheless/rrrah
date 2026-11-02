@@ -1,0 +1,28 @@
+{
+  "repository": "astoria-d/super-duper-nes",
+  "commit": "620c109e416ec700af026bbc82f780b0e55b308b",
+  "source_sha256": "f139caecd5eed4d5032d94b3e955eb23b0fcd6dbaad2b5116692d42970f28d27",
+  "method": "Unchanged extracted bt_i2c_getchr body compiled with synthetic I2C/client/log stubs; no kernel module or device access",
+  "cases": [
+    {
+      "transfer_result": 1,
+      "payload": 255,
+      "returned": 255
+    },
+    {
+      "transfer_result": -5,
+      "returned": 255
+    },
+    {
+      "transfer_result": 0,
+      "returned": 255
+    },
+    {
+      "transfer_result": 1,
+      "payload": 42,
+      "returned": 42
+    }
+  ],
+  "exit_code": 0,
+  "finding": "Transfer error and zero completed messages return same byte as valid 0xff; error status is not represented in return type. Not hardware validation."
+}

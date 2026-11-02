@@ -1,0 +1,86 @@
+# alertly
+
+![Version: 0.7.4](https://img.shields.io/badge/Version-0.7.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.7.4](https://img.shields.io/badge/AppVersion-0.7.4-informational?style=flat-square)
+
+Webhook-to-Telegram bridge for Alertmanager and Kubewatch
+
+**Homepage:** <https://github.com/MaksimRudakov/alertly>
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| Maksim Rudakov |  | <https://github.com/MaksimRudakov> |
+
+## Source Code
+
+* <https://github.com/MaksimRudakov/alertly>
+
+## Values
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` | Pod affinity rules. |
+| config | object | see `values.yaml` | Alertly runtime configuration. Serialized verbatim into the ConfigMap mounted at `/etc/alertly/config.yaml`. |
+| config.alertmanager | object | `{"request_timeout":"10s","url":""}` | Alertmanager connection for the silence action. Required when updates.enabled=true. Auth is supplied via env: ALERTMANAGER_AUTH_USERNAME + _PASSWORD (basic) or ALERTMANAGER_AUTH_TOKEN (bearer). See `secret.values.alertmanager*` below. |
+| config.dedup | object | `{"enabled":true,"ttl":"1h"}` | In-process duplicate suppression. Drops a webhook delivery if the same (fingerprint, chat_id[:thread_id], status) was already delivered within `ttl`. Designed to absorb caller retries (typically Alertmanager re-sending a group when alertly delivered to Telegram but did not ACK in time). Per-pod cache — see `replicaCount` notes for multi-replica caveats. |
+| config.updates | object | `{"button_tracker_max":10000,"button_ttl":"8h","chat_allowlist":[],"commands":{"enabled":false,"status":{"pipeline":true,"pipeline_timeout":"4s","watchdog_alert":"Watchdog"}},"enabled":false,"label_cache_max":10000,"label_cache_ttl":"48h","poll_timeout":"30s","silence_durations":["1h","4h","24h"],"silence_matchers":[],"undo_window":"5m","user_allowlist":[]}` | Interactive callbacks (Telegram long polling) and Alertmanager silence integration. Keep disabled unless on-call needs in-chat silence buttons. |
+| config.updates.button_tracker_max | int | `10000` | Bound on the in-memory button/undo trackers (FIFO eviction of the oldest entry; an evicted button behaves like the restart case). |
+| config.updates.button_ttl | string | `"8h"` | How long silence buttons stay active on an alert message (2h..48h). After this window the sweeper removes the keyboard and late clicks are rejected. |
+| config.updates.chat_allowlist | list | `[]` | Chats allowed to trigger silence actions. Empty list = silence disabled. |
+| config.updates.commands | object | `{"enabled":false,"status":{"pipeline":true,"pipeline_timeout":"4s","watchdog_alert":"Watchdog"}}` | Read-only chat-ops commands (/status) over the same long-poll loop and allowlists. Register the command in BotFather (/setcommands) for autocompletion. |
+| config.updates.commands.status | object | `{"pipeline":true,"pipeline_timeout":"4s","watchdog_alert":"Watchdog"}` | /status reply tuning. `pipeline` adds AM health, alert counts, the Watchdog deadman check and last webhook/delivery timestamps — distinguishes "AM down" / "Prometheus down" / "genuinely quiet". `watchdog_alert`: always-firing alert name ("Watchdog" in kube-prometheus-stack), "" disables the check. |
+| config.updates.silence_durations | list | `["1h","4h","24h"]` | Silence durations presented as buttons. Each entry becomes one button. |
+| config.updates.silence_matchers | list | `[]` | Which alert labels become silence matchers. Empty = ALL labels (narrowest silence, only this exact alert instance). Listing labels, e.g. [alertname, namespace], silences sibling alerts too — use with care. |
+| config.updates.undo_window | string | `"5m"` | How long the "Undo silence" button stays after a silence is created (press deletes the silence via the AM API). 0 disables undo. Range 0..1h. |
+| config.updates.user_allowlist | list | `[]` | Optional user allowlist within allowlisted chats. Empty = any chat member. |
+| env | object | `{"LOG_LEVEL":"info"}` | Env vars passed to the container. Keys become env names, values are quoted as strings. |
+| extraEnv | list | `[]` | Extra env vars in full k8s EnvVar form (supports `valueFrom`). |
+| extraManifests | list | `[]` | Raw manifests rendered as-is. Use for resources the chart does not template natively (e.g. NetworkPolicy). For Prometheus scraping and disruption budgets prefer the native `metrics.serviceMonitor` and `podDisruptionBudget` blocks above. |
+| fullnameOverride | string | `""` | Override full release name. |
+| image.pullPolicy | string | `"IfNotPresent"` | Image pull policy. |
+| image.repository | string | `"ghcr.io/maksimrudakov/alertly"` | Container image repository. |
+| image.tag | string | `""` | Image tag. Overrides `Chart.AppVersion` when set. |
+| imagePullSecrets | list | `[]` | Pull secrets for private registries. |
+| ingress.annotations | object | `{}` | Ingress annotations (basic-auth, cert-manager, rate-limits, etc). |
+| ingress.className | string | `""` | IngressClass name. |
+| ingress.enabled | bool | `false` | Enable Ingress for the alertly webhook endpoint. |
+| ingress.hosts | list | `[{"host":"alertly.example.com","paths":[{"path":"/","pathType":"Prefix"}]}]` | Ingress host/path rules. |
+| ingress.tls | list | `[]` | Ingress TLS blocks. |
+| metrics.serviceMonitor.additionalLabels | object | `{}` | Extra labels on the ServiceMonitor (e.g. `release: kube-prometheus-stack` to match the operator's serviceMonitorSelector). |
+| metrics.serviceMonitor.enabled | bool | `false` | Create a ServiceMonitor for the Prometheus Operator. Requires the monitoring.coreos.com/v1 CRDs — rendering fails with a hint when the cluster does not expose them. |
+| metrics.serviceMonitor.honorLabels | bool | `false` | Keep target labels on collision with server-side labels. |
+| metrics.serviceMonitor.interval | string | `"30s"` | Scrape interval. |
+| metrics.serviceMonitor.metricRelabelings | list | `[]` | Metric relabelings applied to samples before ingestion. |
+| metrics.serviceMonitor.relabelings | list | `[]` | Relabelings applied to targets before scraping. |
+| metrics.serviceMonitor.scrapeTimeout | string | `""` | Scrape timeout. Empty = Prometheus default. |
+| nameOverride | string | `""` | Override chart name. |
+| nodeSelector | object | `{}` | Pod nodeSelector. |
+| podAnnotations | object | `{}` | Extra annotations for the pod. |
+| podDisruptionBudget.enabled | bool | `false` | Create a PodDisruptionBudget. Recommended setup for the default `replicaCount: 1`: `maxUnavailable: 0` protects the in-process dedup window (`config.dedup` is per-pod) from voluntary evictions — but with a single replica it also blocks node drain until manual intervention, hence disabled by default. Enable it when losing the dedup window on drain is worse for you than a stuck drain. |
+| podDisruptionBudget.maxUnavailable | int | `0` | Max pods that may be voluntarily evicted. Used when `minAvailable` is not set. |
+| podDisruptionBudget.minAvailable | string | `""` | Min pods that must stay available (int or percentage). Mutually exclusive with `maxUnavailable`; takes precedence when set. |
+| podLabels | object | `{}` | Extra labels for the pod. |
+| podSecurityContext | object | `{"fsGroup":65532,"runAsNonRoot":true,"seccompProfile":{"type":"RuntimeDefault"}}` | Pod-level security context. |
+| priorityClassName | string | `""` | Pod priorityClassName. |
+| probes.liveness | object | `{"failureThreshold":3,"httpGet":{"path":"/healthz","port":"http"},"initialDelaySeconds":5,"periodSeconds":10,"timeoutSeconds":2}` | Liveness probe. Matches unconditional `/healthz`. |
+| probes.readiness | object | `{"failureThreshold":3,"httpGet":{"path":"/readyz","port":"http"},"initialDelaySeconds":2,"periodSeconds":5,"timeoutSeconds":2}` | Readiness probe. `/readyz` flips unready on sustained 5xx from Telegram or during startup getMe. |
+| reloader.enabled | bool | `false` | Add `reloader.stakater.com/auto: "true"` annotation to the Deployment to auto-restart on ConfigMap/Secret content changes. Requires stakater/Reloader in the cluster. |
+| replicaCount | int | `1` | Number of alertly replicas. alertly is stateless and lightweight; 1 is the recommended default. The in-process dedup cache (config.dedup) is per-pod — with N>1 replicas behind a Service, a webhook and its retry can land on different pods and bypass dedup. If you must run multiple replicas, route webhooks with a path-based consistent hash on your Ingress (e.g. nginx `nginx.ingress.kubernetes.io/upstream-hash-by: "$request_uri"`). |
+| resources | object | `{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"10m","memory":"32Mi"}}` | CPU/memory requests and limits. |
+| secret.create | bool | `true` | Create the Secret with tokens provided in `secret.values`. WARNING — NOT for production; tokens end up in Helm history. For production set `create: false` and supply the Secret via external-secrets/sealed-secrets/vault. |
+| secret.existingSecret | string | `""` | Name of an existing Secret to use when `create: false`. Defaults to release fullname when empty. |
+| secret.keys | object | `{"alertmanagerPassword":"ALERTMANAGER_AUTH_PASSWORD","alertmanagerToken":"ALERTMANAGER_AUTH_TOKEN","alertmanagerUsername":"ALERTMANAGER_AUTH_USERNAME","botToken":"TELEGRAM_BOT_TOKEN","webhookAuth":"WEBHOOK_AUTH_TOKEN"}` | Key names inside the Secret. Must match the env vars alertly reads. Alertmanager keys are used only when `config.updates.enabled=true` AND the corresponding `secret.values.*` is set. |
+| secret.values | object | `{"alertmanagerPassword":"","alertmanagerToken":"","alertmanagerUsername":"","telegramBotToken":"","webhookAuthToken":""}` | Token values used only when `create: true`. Alertmanager fields are optional. |
+| securityContext | object | `{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true,"runAsGroup":65532,"runAsNonRoot":true,"runAsUser":65532}` | Container security context. Hardened defaults — read-only rootfs, non-root, all caps dropped. |
+| service.annotations | object | `{}` | Extra annotations for the Service. |
+| service.port | int | `8080` | Service port. |
+| service.type | string | `"ClusterIP"` | Service type. Default ClusterIP — Alertmanager and Kubewatch typically run in the same cluster. |
+| serviceAccount.annotations | object | `{}` | Annotations for the ServiceAccount. |
+| serviceAccount.automountServiceAccountToken | bool | `false` | Whether to mount the ServiceAccount token into the pod. alertly does not talk to the Kubernetes API. |
+| serviceAccount.create | bool | `true` | Create a ServiceAccount for the pod. |
+| serviceAccount.name | string | `""` | Use an existing ServiceAccount instead of creating one. Falls back to release fullname when empty and `create: true`. |
+| terminationGracePeriodSeconds | int | `30` | Grace period before SIGKILL. |
+| tolerations | list | `[]` | Pod tolerations. |
+| topologySpreadConstraints | list | `[]` | Pod topology spread constraints. |
+

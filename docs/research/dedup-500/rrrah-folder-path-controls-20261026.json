@@ -1,0 +1,32 @@
+{
+  "command_prefix": [
+    "cargo",
+    "+1.98.1",
+    "run",
+    "--offline",
+    "--release",
+    "-p",
+    "rrrah-dedup",
+    "--example",
+    "scan_folder",
+    "--"
+  ],
+  "controls": [
+    {
+      "case": "unicode_space_newline_and_empty",
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 0 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/папка с пробелами/empty one\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/папка с пробелами/empty two\"\nGroup 2: 2 files, 7 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/папка с пробелами/копия.bin\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/папка с пробелами/строка\\nвторая.bin\"\n",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.09s\n     Running `target/release/examples/scan_folder '/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/папка с пробелами'`\nScan complete: 4 files observed, 2 duplicate groups, 112 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "explicit_positional_separator",
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 1 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/--help/a\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/--help/b\"\n",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.11s\n     Running `target/release/examples/scan_folder -- /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-path-control-nq46wye3/--help`\nScan complete: 2 files observed, 1 duplicate groups, 16 bytes read, 0 diagnostics\n"
+    }
+  ],
+  "all_controls_passed": true,
+  "source_sha256": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0",
+  "scope": "Real CLI on authored temporary absolute paths; unicode/space/newline output escaping, empty-file group, explicit positional separator. Absolute --help basename does not test relative literal --help parsing.",
+  "fixture_cleanup": "TemporaryDirectory removed authored fixtures after execution"
+}

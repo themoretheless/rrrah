@@ -1,0 +1,54 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+error: 8 positional arguments in format string, but there are 6 arguments
+   --> crates/rrrah-app/src/first30_remaining.rs:168:91
+    |
+168 | ...   "FOREGROUND_PAIR producers={producers} control={control} pair={} mode={mode} iterations={} total_ns={total} p50_ns={} p95_ns={} lock_p50_ns={} lock_p95_ns={} hold_p50_ns={} hold_p95_ns={} la...
+    |                                                                     ^^                        ^^                         ^^        ^^             ^^             ^^             ^^             ^^
+169 | ...   pair - 3,
+    |       --------
+170 | ...   2000 * producers,
+    |       ----------------
+171 | ...   quantile(&wall, 50),
+    |       -------------------
+172 | ...   quantile(&wall, 95),
+    |       -------------------
+173 | ...   quantile(&waits, 50),
+    |       --------------------
+174 | ...   quantile(&waits, 95)
+    |       --------------------
+
+error[E0308]: mismatched types
+   --> crates/rrrah-app/src/first30_remaining.rs:133:33
+    |
+133 |   ...                   let (waits, holds) = PROBE.with(|p| {
+    |  ___________________________^^^^^^^^^^^^^^___-
+    | |                           |
+    | |                           expected `Vec<u128>`, found `(_, _)`
+134 | | ...                       let mut p = p.borrow_mut();
+135 | | ...                       p.active = false;
+136 | | ...                       std::mem::take(&mut p.waits)
+137 | | ...                   });
+    | |________________________- this expression has type `Vec<u128>`
+    |
+    = note: expected struct `Vec<u128>`
+                found tuple `(_, _)`
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `rrrah` (bin "rrrah" test) due to 2 previous errors

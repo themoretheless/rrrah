@@ -1,0 +1,93 @@
+{
+  "index": 210,
+  "repository": "mtcextendee/mautic-custom-deduplicate-bundle",
+  "commit": "8be9e30083afa3b5ab8da34d11b2dfd6e758a793",
+  "tracked_blob_count": 15,
+  "whole_file_reads": [
+    {
+      "path": "MauticCustomDeduplicateBundle.php",
+      "local": "docs/research/dedup-500/evidence/mtcextendee--mautic-custom-deduplicate-bundle/02-MauticCustomDeduplicateBundle.php",
+      "sha256": "5f462e5f4013a42bc92aea002be736fe1fbb03b0868afd60af29a51614243c8f",
+      "git_blob_sha1": "775a9867a7208d9fd13df68275df33d8dfd2f2dd"
+    },
+    {
+      "path": "Command/CustomDeduplicateCommand.php",
+      "local": "docs/research/dedup-500/evidence/mtcextendee--mautic-custom-deduplicate-bundle/03-CustomDeduplicateCommand.php",
+      "sha256": "3fd792eda08ed75b9376d54d565147e968243b5bdb861475fb7b651b92ec230a",
+      "git_blob_sha1": "c0399dbfcd185294cf4f7f919e0bd032af9386d2"
+    },
+    {
+      "path": "Controller/CustomDeduplicateController.php",
+      "local": "docs/research/dedup-500/evidence/mtcextendee--mautic-custom-deduplicate-bundle/04-CustomDeduplicateController.php",
+      "sha256": "d4dd0bc847e6bbb38d9d041575e6d4329f2fad3437393839edadb72c80f47f66",
+      "git_blob_sha1": "480f8e429dd2a3db41084fd06c0821c94f2ceb46"
+    },
+    {
+      "path": "Deduplicate/CustomDuplications.php",
+      "local": "docs/research/dedup-500/evidence/mtcextendee--mautic-custom-deduplicate-bundle/remaining-pinned/Deduplicate/CustomDuplications.php",
+      "sha256": "c3fc8b2d194e7319103905839f8fea798a17c74a6fe3d02a247a16790e77429b",
+      "git_blob_sha1": "c6823774792b59d5028d9747b42f31921e54d485"
+    },
+    {
+      "path": "Deduplicate/Fields.php",
+      "local": "docs/research/dedup-500/evidence/mtcextendee--mautic-custom-deduplicate-bundle/remaining-pinned/Deduplicate/Fields.php",
+      "sha256": "19ab475f5bf9dd0571075b10fc455170ddaab972eee4afd1c6501b26b5ac27ec",
+      "git_blob_sha1": "c0c7f6835527b789be6a423445f77a23dd8732fb"
+    },
+    {
+      "path": "Deduplicate/CommandExecution.php",
+      "local": "docs/research/dedup-500/evidence/mtcextendee--mautic-custom-deduplicate-bundle/remaining-pinned/Deduplicate/CommandExecution.php",
+      "sha256": "02cd366bb8d0d39f0d99803b3d32e253aa9382eb26e926eb689bd7c3de03dafa",
+      "git_blob_sha1": "fe88411e3f25c78698fb25f7a20e961d41b07a76"
+    }
+  ],
+  "whole_file_read_count": 6,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "tests_run": 0,
+  "php_on_path": null,
+  "findings": [
+    "Contact identity by configured field SQL conjunction; not file/image content dedup. Selected provided configured fields used, missing configured keys do not enforce full identity. Values not normalized here; DB collation influences equality. Query excludes empty/null matching fields, candidate entities ordered dateAdded DESC/id DESC; core ContactDeduper merge behavior external dependency unreviewed.",
+    "Fields.hasNotEmptyFieldsToSkip ignores actual value and checks settings skipFields indexed by input alias; getFieldsToSkip returns settings array for value iteration. Config representation must be traced through integration to qualify apparent mismatch. Source-only, no runtime claim.",
+    "Command delegates deduplicate to external Mautic ContactDeduper, lock/status inherited, optional merge direction. Disabled and already-running return0; no per-contact result/completeness contract here. Background command dispatch controller immediately reports launch, not completion; no process handle/status read or timeout shown. Never executed, no CRM/contact changes or notification sent."
+  ],
+  "remaining": [
+    {
+      "path": "Assets/img/icon.png",
+      "bytes": 17500
+    },
+    {
+      "path": "Config/config.php",
+      "bytes": 3810
+    },
+    {
+      "path": "EventListener/ButtonSubscriber.php",
+      "bytes": 3232
+    },
+    {
+      "path": "EventListener/CheckDeduplicateContactsListener.php",
+      "bytes": 1538
+    },
+    {
+      "path": "Integration/CustomDeduplicateIntegration.php",
+      "bytes": 2240
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 35147
+    },
+    {
+      "path": "README.md",
+      "bytes": 1723
+    },
+    {
+      "path": "Translations/en_US/messages.ini",
+      "bytes": 898
+    },
+    {
+      "path": "composer.json",
+      "bytes": 146
+    }
+  ]
+}

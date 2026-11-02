@@ -1,0 +1,41 @@
+{
+  "repository": "dedupeio/dedupe-geocoder",
+  "commit": "ed1506a36e1a153737adab51144911cbd3ab3112",
+  "whole_file_count": 3,
+  "tree_blob_count": 22,
+  "reviewed_whole_files": [
+    {
+      "path": "geocoder/deduper.py",
+      "sha256": "d029d32eaf01761278f80538e5531bb58289b20a120fde45e6f9f0c928bef033",
+      "git_blob_sha1": "4fed6e3321fcd6b4d28ff49da92728ffba48b837",
+      "whole_file_read": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "031677f370bbce3752e7fe7a7475e41b75e780b53eb810fc84a40c0455f35531",
+      "git_blob_sha1": "23202c479c73809bdf1d4259639accbac0134166",
+      "whole_file_read": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "050b7ee773ad206b2c75f2a3bbe9b24ca177e0364aafd34e830975a6d38d0a85",
+      "git_blob_sha1": "49757915e11fb519047566f6806e41df1220e38a",
+      "whole_file_read": true
+    }
+  ],
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "original_tests_run": 0,
+  "authored_controls_run": 3,
+  "controls": "docs/research/dedup-500/geocoder168-controls-20261024/results.json",
+  "runtime_scope": "Only unchanged original preProcess method AST-selected and run under Python3.15; no library import, external algorithm substitution, SQL, geocoder, training or user data access",
+  "findings": [
+    "Normalization is not idempotent: alpha newline space beta -> alpha two spaces beta -> alpha one space beta.",
+    "Case/outer whitespace intentionally merged; tabs not mapped to spaces.",
+    "Source: createMatchBlocksTable exposes primary_key argument but row iterator hardcodes row[id]. Not database-runtime verified.",
+    "Source: drawSample SELECT orders all canonical addresses randomly without LIMIT; sample_size passed downstream, not SQL. No workload/performance benchmark.",
+    "Address fuzzy matching and database block keys do not establish file or image equality."
+  ],
+  "remaining": "Other tracked files and full database/matching pipeline not reviewed/executed.",
+  "deferred": "pHash.org/ASAN unchanged"
+}

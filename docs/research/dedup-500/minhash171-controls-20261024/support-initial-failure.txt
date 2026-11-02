@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/minhash171-controls-20261024/support_controls.py", line 39, in <module>
+    assert all(row is not None and row and set(row)<=set(old) for old,row in zip(before,rows)), (mask,original,before,rows,weights)
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (9, [[0], [0, 1]], [[0], [0, 1]], [None, [1]], {1: 1})

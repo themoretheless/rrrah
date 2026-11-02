@@ -1,0 +1,103 @@
+{
+  "index": 252,
+  "repository": "titaniumtushar/burp-mcp-plus",
+  "commit": "4c0ed1e06726a812359797a3067888144532063b",
+  "tracked_blob_count": 17,
+  "whole_file_reads": [
+    {
+      "path": "src/burp_mcp_plus/dedup.py",
+      "local": "docs/research/dedup-500/evidence/titaniumtushar--burp-mcp-plus/02-dedup.py",
+      "sha256": "236064611ef6c274c1a7a10a084591020876aefb3ba4f9f7078fa71be7f6dac7",
+      "git_blob_sha1": "b7b3271a5f1a7bc14837d760ae78f1585f0b5bd2"
+    },
+    {
+      "path": "src/burp_mcp_plus/builder.py",
+      "local": "docs/research/dedup-500/evidence/titaniumtushar--burp-mcp-plus/06-builder.py",
+      "sha256": "11da643454ad4c5343c9d27898e9db967aff5ec74a44fc4b7d3267ceb8b5a4ad",
+      "git_blob_sha1": "005f7c64744254687908ff95922203b732f3c9bc"
+    },
+    {
+      "path": "tests/test_builder.py",
+      "local": "docs/research/dedup-500/evidence/titaniumtushar--burp-mcp-plus/07-test_builder.py",
+      "sha256": "0f017ab6802a04f677c502e18819522f17b3b60b3fdd18f70e337888473dcd88",
+      "git_blob_sha1": "62a61abcde717b4f13347d1abc1eb00ccc365f08"
+    }
+  ],
+  "whole_file_read_count": 3,
+  "remaining": [
+    {
+      "path": ".gitignore",
+      "bytes": 406
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1083
+    },
+    {
+      "path": "README.md",
+      "bytes": 15063
+    },
+    {
+      "path": "assets/architecture.svg",
+      "bytes": 4305
+    },
+    {
+      "path": "assets/logo.svg",
+      "bytes": 2646
+    },
+    {
+      "path": "burp-extension/deduped_history.py",
+      "bytes": 38060
+    },
+    {
+      "path": "examples/claude_desktop_config.json",
+      "bytes": 844
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1583
+    },
+    {
+      "path": "src/burp_mcp_plus/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "src/burp_mcp_plus/burp_client.py",
+      "bytes": 4079
+    },
+    {
+      "path": "src/burp_mcp_plus/jsfiles.py",
+      "bytes": 8001
+    },
+    {
+      "path": "src/burp_mcp_plus/server.py",
+      "bytes": 29905
+    },
+    {
+      "path": "tests/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "uv.lock",
+      "bytes": 127487
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "findings": [
+    {
+      "path": "src/burp_mcp_plus/dedup.py",
+      "confirmed": "Whole215lines read. Local exported HTTP text parser, not duplicate-file scanner. Unbounded whole file read/split and regex searches; replacement decoding loses byte identity. Delimiter strings inside request/response payload can split/truncate entries, no length framing or parse-completeness outcome. Metadata search scans approximate trailing region and can select prior response metadata. Registry name replaces existing source without collision warning, no sizebound/lock. Actual synthetic control limit0 returns1 because limit checked after append. host_path regex not standards URL parser; no network/client/history operations, no adoption.",
+      "controls": "docs/research/dedup-500/burp252-zero-limit-control-20261025.json"
+    },
+    {
+      "paths": [
+        "src/burp_mcp_plus/builder.py",
+        "tests/test_builder.py"
+      ],
+      "confirmed": "Both complete files read. All20original test bodies passed under stdlib pytest.raises adapter, not actual pytest runner. Builder normalizes CRLF globally including body, text UTF8 length differs arbitrary raw bytes; body discarded for configured methods, mutates request during build. IPv6 host formatting/partition unsupported, scheme not constrained HTTP, source scheme lost unless hint passed to target helper. Relevant lesson preserve original bytes and explicit identity policy; HTTP request construction not adopted into file dedup. No send/replay/network actions.",
+      "controls": "docs/research/dedup-500/burp252-builder-test-adapter-20261025.json"
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/burp252-source-review-v1-20261025.json"
+}

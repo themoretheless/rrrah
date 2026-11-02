@@ -1,0 +1,17 @@
+{
+  "method": "Original module AST minus pydantic import; BaseModel stand-in unused by graph methods; synthetic branch graph, no PLC runtime",
+  "observed": {
+    "contact_operands": [
+      "X",
+      "A",
+      "B"
+    ],
+    "generated_st": "IF (A) THEN\n    Y := TRUE;\nELSE\n    Y := FALSE;\nEND_IF;",
+    "parallel_groups": [
+      [
+        "a"
+      ]
+    ]
+  },
+  "original_tests_run": false
+}

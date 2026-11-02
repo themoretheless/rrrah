@@ -1,0 +1,49 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+   Compiling rrrah-develop v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-develop)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-core v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-core)
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 8m 46s
+     Running tests/w3c_png_conformance.rs (target/debug/deps/w3c_png_conformance-853b933ca5b87d1a)
+
+running 2 tests
+test external_w3c_hdr_png_native_codes_and_explicit_policy ... PNG-HLG-FancyColorBars-16bit-CICP-FR.png: all 2073600 RGB16 pixels exact against FFmpeg; CICP retained; explicit display policy accepted (independent linear oracle checked separately); final root=0
+PNG-HLG-FancyColorBars-16bit-CICP-NR.png: all 2073600 RGB16 pixels exact against FFmpeg; CICP retained; explicit display policy accepted (independent linear oracle checked separately); final root=0
+PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png: all 2073600 RGB16 pixels exact against FFmpeg; CICP retained; explicit display policy accepted (independent linear oracle checked separately); final root=0
+ok
+test external_w3c_linear_hdr_reference_swap_and_metal ... External W3C PNG adapter: Metal Apple M4 Max
+PNG-HLG-FancyColorBars-16bit-CICP-FR.png: all2073600 linear pixels match Decimal (max absolute 0.00000095367431640625); reference SDR<=1code/HDR<=0.2%; native bits+Metal exact after RAM/swap pressure/cancel/retry; root=0
+PNG-HLG-FancyColorBars-16bit-CICP-NR.png: all2073600 linear pixels match Decimal (max absolute 0.0000019073486328125); reference SDR<=1code/HDR<=0.2%; native bits+Metal exact after RAM/swap pressure/cancel/retry; root=0
+PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png: all2073600 linear pixels match Decimal (max absolute 0); reference SDR<=1code/HDR<=0.2%; native bits+Metal exact after RAM/swap pressure/cancel/retry; root=0
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 30.26s
+

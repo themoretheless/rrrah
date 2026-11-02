@@ -1,0 +1,106 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_samples.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_samples.rs
+@@ -580,14 +580,36 @@
+     let traced_cell = trace_replay_cell(&candidates, patches, pool, identities, origin, side, *work);
+     #[cfg(feature = "experimental-shared-partitions")]
+     if candidates.len() >= 128 {
+-        let triangles = candidates.iter().map(|candidate| {
++        let triangle = |candidate: &Candidate<'_>| {
+             let record = candidate.record;
+             let owner = cell_owner(record, patches, pool, identities, origin, side)
+                 .ok_or(super::PixelPartitionError::Conditioning)?;
+             let points = record.points.map(|p| Point::new((p.x-origin.x)/side, (p.y-origin.y)/side));
+             Ok((points, owner))
+-        });
+-        let result = super::ordered_pixel::integrate_disjoint_unit_mesh(triangles, admit, work, cancelled);
++        };
++        let result = (|| {
++            // Sorting puts every triangle of the highest source patch first.
++            // Certify only this complete cohort; a partial upper layer must
++            // never suppress the lower patches needed to fill its gaps.
++            let top = candidates[0].record.patch_index;
++            if candidates[candidates.len()-1].record.patch_index != top {
++                let mut end = 0;
++                for candidate in &candidates {
++                    if cancelled() { return Err(super::PixelPartitionError::Cancelled); }
++                    *work = work.checked_sub(1).ok_or(super::PixelPartitionError::Limit)?;
++                    if candidate.record.patch_index != top { break; }
++                    end += 1;
++                }
++                if let Some(integral) = super::ordered_pixel::integrate_full_unit_mesh(
++                    candidates[..end].iter().map(triangle), admit, work, cancelled,
++                )? {
++                    return Ok(Some(integral));
++                }
++            }
++            super::ordered_pixel::integrate_disjoint_unit_mesh(
++                candidates.iter().map(triangle), admit, work, cancelled,
++            )
++        })();
+         match result {
+             Ok(Some(integral)) => {
+                 trace_cost("certified", candidates.len(), 0, *work);
+@@ -1638,6 +1660,40 @@
+             "source={source_ticks} ranked={ranked_ticks}"
+         );
+         assert_eq!(used.load(Ordering::SeqCst), baseline_bytes);
++        #[cfg(feature = "experimental-shared-partitions")]
++        {
++            // Refuse each candidate/proof admission while the full source is
++            // retained; no partial integral or scratch credit may escape.
++            let calls = Cell::new(0);
++            let fail = Cell::new(usize::MAX);
++            let controlled = |bytes| {
++                calls.set(calls.get()+1);
++                if calls.get()==fail.get() { None } else { admit(bytes) }
++            };
++            let evaluate = |work: &mut usize| integrate_cell(&records,&refs,&pool,&[None,None],Point::ZERO,1.,0,2048,work,&||false,&controlled);
++            assert_eq!(evaluate(&mut 100_000_000),Some(ranked));
++            let count = calls.get();
++            for at in 1..=count {
++                calls.set(0);fail.set(at);
++                assert!(evaluate(&mut 100_000_000).is_none());
++                assert_eq!(used.load(Ordering::SeqCst),baseline_bytes);
++            }
++            fail.set(usize::MAX);
++            assert_eq!(evaluate(&mut 100_000_000),Some(ranked));
++            assert_eq!(used.load(Ordering::SeqCst),baseline_bytes);
++            eprintln!("TOP_COHORT full-cover admissions={count}; each refusal releases scratch; retry exact");
++        }
++        // A top layer covering only half the square must retain the lower
++        // layer. Constant colors give an independent exact integral of 1/2.
++        let lower = source(0.,1.,[0.75;3]);
++        let half_refs = [AdaptivePatchRef::Tensor(&lower),AdaptivePatchRef::Tensor(&cover)];
++        for record in &mut records.last_mut().unwrap().records {
++            assert_eq!(record.patch_index,1);
++            for point in &mut record.points { point.x *= 0.5; }
++        }
++        let partial = integrate_cell(&records,&half_refs,&pool,&[None,None],Point::ZERO,1.,0,2048,&mut 100_000_000,&||false,&admit).unwrap();
++        assert_eq!(partial,[1.,0.5,0.5,0.5,0.]);
++        assert_eq!(used.load(Ordering::SeqCst), baseline_bytes);
+         drop(records);
+         drop(credit);
+         drop(pool);
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -201,7 +201,7 @@
+ #[cfg(any(test, feature = "experimental-shared-partitions"))]
+ mod full_cell;
+ #[cfg(feature = "experimental-shared-partitions")]
+-pub(super) use full_cell::integrate_disjoint_unit_mesh;
++pub(super) use full_cell::{integrate_disjoint_unit_mesh, integrate_full_unit_mesh};
+ 
+ // Exact sign for represented finite coordinates. Fast ordinary determinants
+ // use a conservative filter; ambiguous/overflowing/subnormal cases sum six
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs
+@@ -53,8 +53,7 @@
+ ) -> Result<Option<[f64; 5]>> {
+     integrate_mesh(triangles, admit, work, cancelled, false)
+ }
+-#[cfg(test)]
+-fn integrate_full_unit_mesh(
++pub(crate) fn integrate_full_unit_mesh(
+     triangles: impl ExactSizeIterator<Item = Result<([Point; 3], PixelSourceOwner)>>,
+     admit: &Admitter<'_>,
+     work: &mut usize,

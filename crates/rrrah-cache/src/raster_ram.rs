@@ -97,42 +97,59 @@ impl<K: Clone + Eq + Hash + Send + 'static> RasterRamCache<K> {
     ) -> Option<DecodedRaster> {
         self.get_mode(key, false, cancelled)
     }
-    fn get_mode(
+    /// Background lookup preserving memory-admission errors for speculative callers.
+    /// Ready RAM hits still precede swap admission; cancellation returns no frame.
+    pub fn try_get_background_with_cancel(
+        &mut self,
+        key: &K,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<Option<DecodedRaster>, rrrah_memory::BufferError> {
+        self.try_get_mode(key, false, cancelled)
+    }
+    fn get_mode(&mut self, key: &K, visible: bool, cancelled: impl FnMut() -> bool) -> Option<DecodedRaster> {
+        self.try_get_mode(key, visible, cancelled).ok().flatten()
+    }
+    fn try_get_mode(
         &mut self,
         key: &K,
         visible: bool,
         mut cancelled: impl FnMut() -> bool,
-    ) -> Option<DecodedRaster> {
+    ) -> Result<Option<DecodedRaster>, rrrah_memory::BufferError> {
         if cancelled() {
-            return None;
+            return Ok(None);
         }
         self.spill_expired();
         if let Some(frame) = self.entries.get_cloned(key) {
-            return (!cancelled()).then_some(frame);
+            return Ok((!cancelled()).then_some(frame));
         }
         loop {
-            match self.swap.as_ref()?.try_get(key, &mut cancelled) {
+            let Some(swap) = self.swap.as_ref() else {
+                return Ok(None);
+            };
+            match swap.try_get(key, &mut cancelled) {
                 Ok(Some(frame)) => {
-                    // A generation can change after stream verification but
-                    // before RAM publication and visible-pin transfer.
                     if cancelled() {
-                        return None;
+                        return Ok(None);
                     }
                     if visible {
                         self.insert_visible(key.clone(), frame.clone());
                     } else {
                         self.insert(key.clone(), frame.clone());
                     }
-                    return Some(frame);
+                    return Ok(Some(frame));
                 }
-                Err(rrrah_memory::BufferError::Capacity { requested, limit, .. })
+                Err(error @ rrrah_memory::BufferError::Capacity { requested, limit, .. })
                     if visible && requested <= limit =>
                 {
-                    if cancelled() || !self.release_lru_unpinned() {
-                        return None;
+                    if cancelled() {
+                        return Ok(None);
+                    }
+                    if !self.release_lru_unpinned() {
+                        return Err(error);
                     }
                 }
-                _ => return None,
+                Err(error) => return if cancelled() { Ok(None) } else { Err(error) },
+                Ok(None) => return Ok(None),
             }
         }
     }
@@ -398,6 +415,72 @@ mod tests {
                 "RR0023_AB {{\"pair\":{pair},\"baseline_ns\":{baseline_ns},\"candidate_ns\":{candidate_ns},\"puts\":{COUNT}}}"
             );
         }
+    }
+    #[test]
+    fn typed_background_restore_distinguishes_miss_pressure_cancel_and_retry() {
+        let root = rrrah_core::MemoryBudget::new(128);
+        let directory = tempfile::tempdir().unwrap();
+        let swap = crate::RasterSwapCache::new_with_budgets(
+            directory.path(),
+            crate::ImageSwapConfig {
+                limits: CacheLimits::bytes(4096),
+                queue_bytes: 16,
+                queue_count: 1,
+                restore_bytes: 128,
+            },
+            rrrah_core::MemoryBudget::new(16),
+            root.clone(),
+        )
+        .unwrap();
+        swap.enqueue(1u8, raster().try_manage_pixels(&root).unwrap());
+        swap.wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        let mut cache = RasterRamCache::new(CacheLimits::bytes(16));
+        cache.enable_swap(swap);
+        assert!(
+            cache
+                .try_get_background_with_cancel(&2, || false)
+                .unwrap()
+                .is_none()
+        );
+        let pressure = root.try_reserve(128).unwrap();
+        assert!(matches!(
+            cache.try_get_background_with_cancel(&1, || false),
+            Err(rrrah_memory::BufferError::Capacity { .. })
+        ));
+        assert!(cache.get_background_with_cancel(&1, || false).is_none()); // Existing Option contract.
+        drop(pressure);
+        assert!(
+            cache
+                .try_get_background_with_cancel(&1, || root.used() > 0)
+                .unwrap()
+                .is_none()
+        );
+        assert_eq!(root.used(), 0);
+        let frame = cache
+            .try_get_background_with_cancel(&1, || false)
+            .unwrap()
+            .unwrap();
+        let RasterPixels::Rgba32Float(values) = frame.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(),
+            [-0.0f32, 0.125, 128., 1.].map(f32::to_bits)
+        );
+        let reads = cache.swap().unwrap().stats().reads;
+        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        let hit = cache
+            .try_get_background_with_cancel(&1, || false)
+            .unwrap()
+            .unwrap();
+        assert_eq!(cache.swap().unwrap().stats().reads, reads);
+        drop(hit);
+        drop(pressure);
+        assert_eq!(cache.swap().unwrap().stats().errors, 0);
+        drop(frame);
+        drop(cache);
+        assert_eq!(root.used(), 0);
     }
     #[test]
     fn cancellation_after_ram_hit_does_not_return_a_stale_owner() {
@@ -742,6 +825,96 @@ mod managed_policy_tests {
         .unwrap()
         .try_manage_pixels(budget)
         .unwrap()
+    }
+    #[test]
+    fn nonzero_ttl_tightening_swap_pressure_and_reverse_restore_preserve_lease() {
+        use std::time::Instant;
+        let root = MemoryBudget::new(512);
+        let directory = tempfile::tempdir().unwrap();
+        let swap = crate::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            crate::ImageSwapConfig {
+                limits: CacheLimits {
+                    max_bytes: 4096,
+                    max_entries: Some(1),
+                    ttl: None,
+                },
+                queue_bytes: 64,
+                queue_count: 1,
+                restore_bytes: 64,
+            },
+            MemoryBudget::new(64),
+            root.clone(),
+        )
+        .unwrap();
+        let mut cache = RasterRamCache::new(CacheLimits {
+            max_bytes: 128,
+            max_entries: Some(2),
+            ttl: Some(Duration::from_millis(100)),
+        });
+        cache.enable_swap(swap);
+        assert!(cache.insert_visible(1, managed(&root)));
+        assert!(cache.insert(2, managed(&root)));
+        let lease = cache.get_lease(&2).unwrap();
+        let tight = CacheLimits {
+            max_bytes: 64,
+            max_entries: Some(1),
+            ttl: None,
+        };
+        assert!(!cache.set_limits_and_spill(tight));
+        let deadline = Instant::now() + Duration::from_secs(2);
+        while cache.get_lease(&2).is_some() {
+            assert!(Instant::now() < deadline, "nonzero TTL did not expire");
+            std::thread::sleep(Duration::from_millis(1));
+        }
+        assert_eq!((cache.len(), cache.resident_bytes(), root.used()), (2, 128, 128));
+        assert!(!cache.can_admit_key_by_count(&3));
+        assert!(!cache.can_admit_key_by_minimum_weight(&3, 4));
+        assert_eq!(cache.spill_expired(), 0); // Both protections survive expiry.
+        cache.mark_visible(3);
+        assert_eq!(cache.spill_expired(), 1);
+        cache.swap().unwrap().wait_idle().unwrap();
+        assert_eq!((cache.len(), root.used()), (1, 64));
+        assert!(cache.set_limits_and_spill(tight));
+        let pressure = root.try_reserve(root.limit() - root.used()).unwrap();
+        assert!(cache.get_background_with_cancel(&1, || false).is_none());
+        assert_eq!(cache.resident_bytes(), 64);
+        drop(pressure);
+        let restored = cache.get_background_with_cancel(&1, || false).unwrap();
+        // A direct restore may be returned transiently when protected resident
+        // count/bytes refuse its RAM membership. It must not displace the lease.
+        assert_eq!((cache.len(), cache.resident_bytes()), (1, 64));
+        assert_eq!(root.used(), 64 + restored.capacity_bytes());
+        let expected = [
+            4.0f32.to_bits(),
+            (-0.0f32).to_bits(),
+            2.0f32.to_bits(),
+            1.0f32.to_bits(),
+        ];
+        for frame in [&*lease, &restored] {
+            let RasterPixels::Rgba32Float(pixels) = frame.pixels() else {
+                panic!()
+            };
+            assert_eq!(pixels.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), expected);
+        }
+        drop(restored);
+        drop(lease);
+        assert_eq!(cache.spill_expired(), 1);
+        cache.swap().unwrap().wait_idle().unwrap();
+        assert_eq!((cache.len(), root.used()), (0, 0));
+        let usage = cache.swap().unwrap().disk_usage().unwrap();
+        assert_eq!(usage.objects, 1);
+        assert!(usage.bytes <= 4096);
+        assert!(cache.get_background_with_cancel(&1, || false).is_none()); // Disk count-one victim.
+        let reverse = cache.get_background_with_cancel(&2, || false).unwrap();
+        let RasterPixels::Rgba32Float(values) = reverse.pixels() else {
+            panic!()
+        };
+        assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), expected);
+        assert_eq!(cache.swap().unwrap().stats().errors, 0);
+        drop(reverse);
+        drop(cache);
+        assert_eq!(root.used(), 0);
     }
     #[test]
     fn combined_limit_update_is_atomic_across_visible_pin_lease_and_ttl() {

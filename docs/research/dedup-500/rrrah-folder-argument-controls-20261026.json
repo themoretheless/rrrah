@@ -1,0 +1,36 @@
+{
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/scan_folder",
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "source_sha256": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0",
+  "controls": [
+    {
+      "case": "no_arguments",
+      "args": [],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "case": "help",
+      "args": [
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "Usage: scan_folder [--] FOLDER [FOLDER ...]\nFind byte-confirmed duplicate files recursively; never delete files.\nSymlinks are skipped. Limits: 1,000,000 entries and depth 256.\nExit: 0 complete, 1 incomplete scan, 2 missing folder argument.\n",
+      "stderr": ""
+    },
+    {
+      "case": "literal_help_folder",
+      "args": [
+        "--",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 7 bytes each\n  \"--help/a\"\n  \"--help/b\"\n",
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 112 bytes read, 0 diagnostics\n"
+    }
+  ],
+  "all_controls_passed": true,
+  "scope": "Current release example binary actual argument parsing in owned temporary cwd; no whole-library or cross-platform claim.",
+  "fixture_cleanup": "TemporaryDirectory removed fixtures"
+}

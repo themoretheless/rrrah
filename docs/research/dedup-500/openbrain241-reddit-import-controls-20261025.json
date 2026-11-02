@@ -1,0 +1,37 @@
+{
+  "scope": "Original import_saved_posts with offline fake dependencies and temporary CSV; no network, model, database, or user data",
+  "controls": [
+    {
+      "case": "capture returns isError true",
+      "stats": {
+        "total": 1,
+        "skipped": 0,
+        "captured": 1,
+        "failed": 0,
+        "not_found": 0,
+        "filtered": 0
+      },
+      "marked_processed": [
+        [
+          "t3_abc",
+          "reddit-export"
+        ]
+      ],
+      "confirmed": true
+    },
+    {
+      "case": "cached None prevents retry",
+      "stats": {
+        "total": 1,
+        "skipped": 0,
+        "captured": 0,
+        "failed": 0,
+        "not_found": 1,
+        "filtered": 0
+      },
+      "fetch_called": false,
+      "confirmed": true
+    }
+  ],
+  "original_full_suite_run": false
+}

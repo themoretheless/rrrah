@@ -1,0 +1,13 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test local_final_callback --test local_collection --test raw_selected",
+  "passed": 31,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-sensor-first-pair-tests-20261026.log",
+  "log_sha256": "66e21e9bd2a2a868042e6a70f4003bb4b0fdb0f5ed4827424a6d2760a4937d3f",
+  "local_scan_sha256": "bb65ea35e6f1c4a5309b50a9ebc795bb73d6ecb65cb26ce6e59f75c1b7391c88",
+  "scope": "Sensor-first scheduling for mixed raster-left/sensor-right pair decoding, retaining caller view order in ordinary/reflected local comparison. Existing collection, callback lifecycle, cancellation, raw-recipe/cache and pixel evidence regressions pass.",
+  "limitations": [
+    "No memory improvement claim from correctness tests.",
+    "Direct known-shift file adapter and other match families do not use this scheduling helper."
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "source": "docs/research/dedup-500/evidence/Bobby-cell-commits--open-brain-server/remaining-pinned/supabase/functions/_shared/dream-dedup.ts",
+  "execution": "Original TypeScript transpiled with TS5.9; VM imports mocked; no network or database access",
+  "injection": "perform_merge resolves {data:null,error:{message:injected merge failure}}",
+  "confirmed": "Delete is still called and result counts one successful auto merge despite merge RPC error",
+  "result": {
+    "scanned": 1,
+    "pairs_found": 1,
+    "auto_merged": 1,
+    "llm_confirmed": 0,
+    "llm_rejected": 0,
+    "llm_failed": 0,
+    "deleted": 1
+  },
+  "calls": [
+    {
+      "name": "find_dedup_candidates",
+      "args": {
+        "p_brain_id": "fixture-brain",
+        "days_back": 7,
+        "similarity_threshold": 0.92,
+        "max_candidates_per_thought": 5
+      }
+    },
+    {
+      "name": "perform_merge",
+      "args": {
+        "p_brain_id": "fixture-brain",
+        "p_id": "a",
+        "p_merge_entry": {
+          "source": "fixture",
+          "source_event_id": null,
+          "similarity": 0.99,
+          "content": "content b",
+          "timestamp": "2026-10-25T10:26:40.472Z",
+          "dream": true
+        }
+      }
+    },
+    {
+      "name": "from",
+      "table": "thoughts"
+    },
+    {
+      "name": "delete"
+    },
+    {
+      "name": "eq",
+      "column": "id",
+      "value": "b"
+    },
+    {
+      "name": "eq",
+      "column": "brain_id",
+      "value": "fixture-brain"
+    },
+    {
+      "name": "log_merge",
+      "args": {
+        "p_brain_id": "fixture-brain",
+        "p_survivor_id": "a",
+        "p_loser_id": "b",
+        "p_similarity": 0.99,
+        "p_merge_type": "auto",
+        "p_loser_content": "content b",
+        "p_loser_source": "fixture",
+        "p_loser_source_event_id": null
+      }
+    }
+  ]
+}

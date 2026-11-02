@@ -1,0 +1,46 @@
+# Project artifacts
+*.pyc
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Sensitive — NEVER commit
+*.cookies.json
+*cookies.json
+.threads_poster/
+cookies/
+sessions/
+*.session
+*token*.json
+
+# User data
+data/affiliate_links.md
+data/post_history.json
+data/*.db
+data/output/
+logs/
+tmp/
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Test artifacts
+/tmp/debug_*.png
+/tmp/threads_*.json
+/tmp/screenshot_*.png

@@ -1,0 +1,243 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1355,11 +1355,11 @@
+     {out.copy_from(old,start,end,work,cancelled)}
+ }
+ #[inline]
+-fn reusable_region_span(old:&StoredRegions<'_>,start:usize,cut:&Polygon,empty:bool,work:&mut usize,cancelled:&dyn Fn()->bool)->Result<Option<(usize,bool)>> {
++fn reusable_region_span(old:&StoredRegions<'_>,start:usize,cut:&Polygon,empty:bool,room:usize,work:&mut usize,cancelled:&dyn Fn()->bool)->Result<Option<(usize,bool)>> {
+     #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+-    {let _=(old,start,cut,empty,work,cancelled);Ok(None)}
++    {let _=(old,start,cut,empty,room,work,cancelled);Ok(None)}
+     #[cfg(any(test,feature="experimental-shared-partitions"))]
+-    {old.carry_span(start,cut,empty,work,cancelled)}
++    {old.carry_span(start,cut,empty,room,work,cancelled)}
+ }
+ fn restore_region_prefix(out:&mut StoredRegions<'_>,prefix:usize,previous:Option<Fragment>)->Result<()> {
+     #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+@@ -1859,7 +1859,7 @@
+         while old_index < self.regions.values.len() {
+             if BATCH && tail_matches_old {
+                 let room = next.maximum - next.values.len();
+-                let span=reusable_region_span(&self.regions,old_index,&triangle,incoming.values.is_empty(),work,cancelled)?;
++                let span=reusable_region_span(&self.regions,old_index,&triangle,incoming.values.is_empty(),room,work,cancelled)?;
+                 if let Some((end,true))=span {
+                     if end-old_index<=room {
+                         tick(work,cancelled)?;
+--- a/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
++++ b/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
+@@ -120,6 +120,7 @@
+     segments: AdmittedVec<'a, Segment>,
+     len: usize,
+     maximum: usize,
++    all_eligible: bool,
+ }
+ fn allocate_chunk(input: &[Fragment], capacity: usize, admit: &Admitter<'_>) -> Result<Arc<Chunk>> {
+     if input.is_empty() || capacity < input.len() || capacity > CHUNK_RECORDS {
+@@ -151,6 +152,7 @@
+             segments: AdmittedVec::new(admit, maximum),
+             len: 0,
+             maximum,
++            all_eligible: true,
+         }
+     }
+     fn check_len(&self, extra: usize) -> Result<usize> {
+@@ -165,12 +167,14 @@
+         }
+         let end = self.check_len(input.len())?;
+         let chunk = allocate_chunk(input, capacity, self.segments.admit)?;
++        let eligible = chunk.summary.eligible;
+         self.segments.push(Segment {
+             chunk,
+             start: 0,
+             len: input.len(),
+             end,
+         })?;
++        self.all_eligible &= eligible;
+         self.len = end;
+         Ok(())
+     }
+@@ -220,6 +224,7 @@
+                         last.len += 1;
+                         last.end += 1;
+                         self.len += 1;
++                        self.all_eligible &= item.has_area && item.no_merge_with_previous;
+                         return Ok(());
+                     }
+                 }
+@@ -241,6 +246,7 @@
+                 last.len += 1;
+                 last.end += 1;
+                 self.len += 1;
++                self.all_eligible &= item.has_area && item.no_merge_with_previous;
+                 return Ok(());
+             }
+         }
+@@ -265,6 +271,9 @@
+                 }
+             }
+         }
++        // A false hint can stay conservative after removing a bad tail.
++        // Empty storage starts a new eligible sequence without any allocation.
++        if self.len == 0 { self.all_eligible = true; }
+     }
+     fn append_range(
+         &mut self,
+@@ -292,6 +301,7 @@
+                 len: count,
+                 end,
+             })?;
++            self.all_eligible &= old.chunk.summary.eligible;
+             self.len = end;
+             cursor += count;
+             index += 1;
+@@ -493,12 +503,20 @@
+         start: usize,
+         cut: &super::Polygon,
+         empty: bool,
++        room: usize,
+         work: &mut usize,
+         cancelled: &dyn Fn() -> bool,
+     ) -> Result<Option<(usize, bool)>> {
+         let RegionValues::Shared(values) = &self.values else {
+             return Ok(None);
+         };
++        // The matching old prefix is already retained. With no incoming
++        // remainder and a proven nonmerging positive suffix, carry it at once.
++        // Require enough output room so a failed paint never pre-scans beyond
++        // the old single-segment overflow boundary.
++        if empty && values.all_eligible && start < values.len && values.len - start <= room {
++            return Ok(Some((values.len, true)));
++        }
+         let index = values.segments.values.partition_point(|s| s.end <= start);
+         let Some(segment) = values.segments.values.get(index) else { return Ok(None); };
+         Ok(Some((
+@@ -901,6 +919,59 @@
+             assert_eq!(f.bounds.axis,expected.axis);
+             assert_eq!(f.bounds.interval,expected.interval);
+         }
++    }
++    #[test]
++    fn empty_incoming_carries_whole_eligible_suffix_without_overflow_prescan() {
++        use std::cell::Cell;
++        let ledger=Ledger::new();let calls=Cell::new(0usize);let fail=Cell::new(usize::MAX);
++        let admit=|n| {calls.set(calls.get()+1);if calls.get()==fail.get(){None}else{ledger.reserve(n)}};
++        let mut source=mode_pixel(&admit,256,true);
++        for i in 0..128 {source.regions.sink_push(fragment(i)).unwrap();}
++        assert_summaries(&source);
++        let cut=super::super::Polygon::empty();
++        assert_eq!(source.regions.carry_span(3,&cut,true,125,&mut 100,&||false).unwrap(),Some((128,true)));
++        assert_eq!(source.regions.carry_span(3,&cut,true,124,&mut 100,&||false).unwrap(),Some((16,true)));
++        assert_eq!(source.regions.carry_span(128,&cut,true,256,&mut 100,&||false).unwrap(),None);
++        let copy=|work:&mut usize,cancelled:&dyn Fn()->bool| -> Result<RegionOutput<'_>> {
++            let mut out=source.regions.empty_like();
++            out.copy_from(&source.regions,0,3,work,cancelled)?;
++            let (end,eligible)=source.regions.carry_span(3,&cut,true,125,work,cancelled)?.unwrap();
++            assert!(eligible);tick(work,cancelled)?;
++            out.copy_from(&source.regions,3,end,work,cancelled)?;Ok(out)
++        };
++        let checks=Cell::new(0usize);calls.set(0);let mut work=10000;
++        let fast=copy(&mut work,&||{checks.set(checks.get()+1);false}).unwrap();
++        let cost=10000-work;let allocations=calls.get();
++        let mut slow=source.regions.empty_like();let mut slow_work=10000;
++        slow.copy_from(&source.regions,0,3,&mut slow_work,&||false).unwrap();
++        let mut cursor=3;
++        while cursor<128 {
++            let end=((cursor/16+1)*16).min(128);tick(&mut slow_work,&||false).unwrap();
++            slow.copy_from(&source.regions,cursor,end,&mut slow_work,&||false).unwrap();cursor=end;
++        }
++        assert!(cost<10000-slow_work);
++        for i in 0..128 {assert_fragment(&source.regions.values[i],&fast.values[i]);assert_fragment(&source.regions.values[i],&slow.values[i]);}
++        drop(fast);drop(slow);let baseline=ledger.used();
++        for at in 1..=allocations {calls.set(0);fail.set(at);assert!(matches!(copy(&mut 10000,&||false),Err(PixelPartitionError::Admission)));assert_eq!(ledger.used(),baseline);}
++        fail.set(usize::MAX);
++        for stop in 0..checks.get() {
++            let at=Cell::new(0usize);
++            assert!(matches!(copy(&mut 10000,&||{let now=at.get();at.set(now+1);now==stop}),Err(PixelPartitionError::Cancelled)));
++            assert_eq!(ledger.used(),baseline);
++        }
++        for mut quota in 0..cost {assert!(matches!(copy(&mut quota,&||false),Err(PixelPartitionError::Limit)));assert_eq!(ledger.used(),baseline);}
++        let retry=copy(&mut cost.clone(),&||false).unwrap();for i in 0..128 {assert_fragment(&source.regions.values[i],&retry.values[i]);}drop(retry);
++        assert_eq!(ledger.used(),baseline);
++        let RegionValues::Shared(payload)=&mut source.regions.values else {panic!()};
++        let view=payload.range(0..64,&mut 1000,&||false).unwrap();
++        payload.truncate(63);payload.push_fragment(fragment(999)).unwrap();assert!(payload.all_eligible);
++        assert_eq!(view.get(63).unwrap().owner.patch_index,63);assert_eq!(payload.get(63).unwrap().owner.patch_index,999);
++        let mut bad=fragment(1000);bad.no_merge_with_previous=false;payload.push_fragment(bad).unwrap();assert!(!payload.all_eligible);
++        payload.truncate(64);assert!(!payload.all_eligible); // conservative after removing bad tail
++        let recovered=payload.range(0..64,&mut 1000,&||false).unwrap();assert!(recovered.all_eligible);
++        payload.truncate(0);assert!(payload.all_eligible);payload.push_fragment(fragment(7)).unwrap();assert!(payload.all_eligible);
++        drop(view);drop(recovered);assert_summaries(&source);drop(source);assert_eq!(ledger.used(),0);
++        eprintln!("EMPTY_CARRY suffix125 chunks8 old_work={} new_work={cost}; admissions={allocations} cancellations={} quotas={cost}; exact fields/tags, room fallback, COW/truncate/retry; final=0",10000-slow_work,checks.get());
+     }
+     #[test]
+     fn subranges_and_tail_share_unchanged_payload_and_release_last_owner() {
+@@ -1816,7 +1887,7 @@
+         assert_eq!(
+             output
+                 .regions
+-                .carry_span(0, &cut, false, &mut 100, &|| false)
++                .carry_span(0, &cut, false, 4096, &mut 100, &|| false)
+                 .unwrap(),
+             Some((16, true))
+         );
+@@ -1920,6 +1991,49 @@
+                 100_000_000 - work
+             );
+         }
++    }
++    fn occluded_suffix_seed<'a>(admit: &'a Admitter<'a>) -> OrderedPixel<'a> {
++        let mut pixel=mode_pixel(admit,2048,true);
++        for i in 0..1024 {
++            let a=i as f64/1024.;let b=(i+1) as f64/1024.;
++            let owner=super::super::PixelSourceOwner {patch_index:i+1,sample_index:0,component_count:1,
++                u:[0.;3],v:[0.;3],components:[[0.25,0.,0.],[0.;3],[0.;3],[0.;3]]};
++            for points in [[kurbo::Point::new(a,0.),kurbo::Point::new(b,0.),kurbo::Point::new(b,1.)],
++                [kurbo::Point::new(a,0.),kurbo::Point::new(b,1.),kurbo::Point::new(a,1.)]] {
++                pixel.paint_triangle(points,owner,&mut 100_000_000,&||false).unwrap();
++            }
++        }
++        assert_eq!(pixel.fragments(),1024);pixel
++    }
++    #[test]
++    #[ignore = "manual closed-input CPU timing; input construction is excluded"]
++    fn occluded_suffix_fixed_work_cpu() {
++        use std::{hint::black_box,time::Instant};
++        let repetitions=std::env::var("RRRAH_CELL_CPU_REPETITIONS").ok().map(|s|s.parse::<usize>().unwrap()).unwrap_or(8);
++        assert!((1..=256).contains(&repetitions));
++        let admit=|_:usize|Some(Box::new(()) as Credit);
++        let owner=super::super::PixelSourceOwner {patch_index:0,sample_index:0,component_count:1,
++            u:[0.;3],v:[0.;3],components:[[0.75,0.,0.],[0.;3],[0.;3],[0.;3]]};
++        let points=[kurbo::Point::new(1./4096.,0.25),kurbo::Point::new(2./4096.,0.25),kurbo::Point::new(1./4096.,0.75)];
++        let mut elapsed_ns=0;let mut total_work=0;
++        for _ in 0..repetitions {
++            let mut pixel=occluded_suffix_seed(&admit);let mut work=100_000_000;
++            let start=Instant::now();
++            pixel.paint_triangle(black_box(points),black_box(owner),&mut work,&||false).unwrap();
++            elapsed_ns+=start.elapsed().as_nanos();total_work+=100_000_000-work;
++            assert_eq!(pixel.fragments(),1024);let mut area=0.;
++            pixel.visit(&mut 100_000_000,&||false,&mut |a,_,_,owner| {
++                assert!(owner.patch_index>0);assert_eq!(owner.components[0],[0.25,0.,0.]);area+=a;Ok(())
++            }).unwrap();assert_eq!(area,1.);black_box(pixel.fragments());
++        }
++        println!("DENSE_FIXED occluded1024 elapsed_ns={elapsed_ns} repetitions={repetitions} total_work={total_work}");
++    }
++    #[test]
++    fn native_occluded_seed_has_a_complete_eligible_suffix() {
++        let admit=|_:usize|Some(Box::new(()) as Credit);let pixel=occluded_suffix_seed(&admit);
++        let RegionValues::Shared(values)=&pixel.regions.values else {panic!()};
++        assert!(values.all_eligible);assert_summaries(&pixel);
++        assert_eq!(pixel.regions.carry_span(1,&super::super::Polygon::empty(),true,2047,&mut 100,&||false).unwrap(),Some((1024,true)));
+     }
+     #[test]
+     #[ignore = "manual fixed-input CPU timing; no page/display inference"]
+@@ -1971,6 +2085,9 @@
+     }
+     fn assert_summaries(pixel: &OrderedPixel<'_>) {
+         if let RegionValues::Shared(values) = &pixel.regions.values {
++            if values.all_eligible {
++                assert!(values.segments.values.iter().all(|s| s.chunk.summary.eligible));
++            }
+             for segment in &values.segments.values {
+                 let expected = ChunkSummary::from_values(&segment.chunk.values);
+                 assert_eq!(

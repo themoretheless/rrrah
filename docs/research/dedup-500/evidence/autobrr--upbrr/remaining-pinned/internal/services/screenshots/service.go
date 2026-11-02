@@ -1,0 +1,1950 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package screenshots
+
+import (
+	"bytes"
+	"context"
+	"crypto/sha256"
+	"errors"
+	"fmt"
+	"image"
+	_ "image/jpeg" // register JPEG decoder for imported tracker images
+	_ "image/png"  // register PNG decoder for screenshot metadata loading
+	"io/fs"
+	"net/url"
+	"os"
+	"path" //nolint:depguard // Extracts URL path components from screenshot URLs.
+	"path/filepath"
+	"slices"
+	"sort"
+	"strconv"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"time"
+
+	_ "golang.org/x/image/webp" // register WebP decoder for imported tracker images
+
+	"github.com/autobrr/upbrr/internal/config"
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	imagehost "github.com/autobrr/upbrr/internal/imagehosting/host"
+	"github.com/autobrr/upbrr/internal/logging"
+	pathutil "github.com/autobrr/upbrr/internal/pathing"
+	paths "github.com/autobrr/upbrr/internal/pathing/layout"
+	"github.com/autobrr/upbrr/internal/redaction"
+	"github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+// sqliteBusyAttempts bounds how often a repository call is retried while SQLite
+// reports the database busy or locked.
+const sqliteBusyAttempts = 3
+
+// Service plans, captures, previews, persists, and removes release screenshots
+// beneath a managed temporary root.
+type Service struct {
+	cfg      config.Config
+	logger   api.Logger
+	tmpRoot  string
+	runner   Runner
+	repo     repository
+	registry *trackers.Registry
+}
+
+type repository interface {
+	api.ScreenshotLifecycleRepository
+	SaveScreenshot(context.Context, api.PreparedMediaBinding, api.Screenshot) error
+	ListScreenshotsByPath(context.Context, api.PreparedMediaBinding) ([]api.Screenshot, error)
+	DeleteScreenshot(context.Context, api.PreparedMediaBinding, string) error
+	ListFinalSelections(context.Context, api.PreparedMediaBinding) ([]api.ScreenshotFinalSelection, error)
+	DeleteFinalSelection(context.Context, api.PreparedMediaBinding, string) error
+	ListTrackerMetadataByPath(context.Context, string) ([]api.TrackerMetadata, error)
+	SaveTrackerMetadata(context.Context, api.TrackerMetadata) error
+	GetTrackerTimestamp(context.Context, string) (time.Time, error)
+	SaveTrackerTimestamp(context.Context, api.TrackerTimestamp) error
+}
+
+// NewService returns a screenshot service without persistence. Nil logger and
+// runner values select [api.NopLogger] and the process-backed FFmpeg runner.
+func NewService(cfg config.Config, logger api.Logger, tmpRoot string, runner Runner) *Service {
+	if logger == nil {
+		logger = api.NopLogger{}
+	}
+	if runner == nil {
+		runner = commandRunner{}
+	}
+	return &Service{
+		cfg:     cfg,
+		logger:  logger,
+		tmpRoot: tmpRoot,
+		runner:  runner,
+	}
+}
+
+// NewServiceWithRepo returns a screenshot service that can reuse and persist
+// screenshot, final-selection, and tracker-image records through repo. When
+// supplied, the registry identifies trackers whose legacy images need verified
+// provenance before reuse.
+func NewServiceWithRepo(cfg config.Config, logger api.Logger, tmpRoot string, runner Runner, repo repository, registries ...*trackers.Registry) *Service {
+	if logger == nil {
+		logger = api.NopLogger{}
+	}
+	if runner == nil {
+		runner = commandRunner{}
+	}
+	service := &Service{
+		cfg:     cfg,
+		logger:  logger,
+		tmpRoot: tmpRoot,
+		runner:  runner,
+		repo:    repo,
+	}
+	if len(registries) > 0 {
+		service.registry = registries[0]
+	}
+	return service
+}
+
+// Plan derives frame suggestions from prepared timing data and excludes
+// matching managed screenshots already present on disk and in the repository.
+// A non-positive count falls back to the subject default and then config. When
+// timing is unavailable, the returned plan requests manual frames instead of
+// failing; stored tracker images are merged into final selections. For a
+// multi-disc subject, ordinary per-disc planning failures leave that disc empty
+// while usable discs remain; cancellation, deadlines, and frame corruption
+// still return an error.
+func (s *Service) Plan(ctx context.Context, meta api.ScreenshotSubject, count int) (api.ScreenshotPlan, error) {
+	view := *s
+	view.logger = logging.FromContext(ctx, s.logger)
+	s = &view
+
+	if s.repo != nil && !meta.MediaBinding.Valid() {
+		return api.ScreenshotPlan{}, internalerrors.ErrInvalidInput
+	}
+	discs := screenshotDiscs(meta)
+	if len(discs) == 0 {
+		return api.ScreenshotPlan{}, internalerrors.ErrInvalidInput
+	}
+	if count <= 0 {
+		count = meta.DefaultCount
+	}
+	if count <= 0 {
+		count = s.cfg.ScreenshotHandling.Screens
+	}
+	if count <= 0 {
+		return api.ScreenshotPlan{}, internalerrors.ErrInvalidInput
+	}
+	total := max(count, len(discs))
+	baseCount := total / len(discs)
+	remainder := total % len(discs)
+
+	plan := api.ScreenshotPlan{
+		MediaBinding:      meta.MediaBinding,
+		SourcePath:        meta.SourcePath,
+		DiscType:          meta.DiscType,
+		MetadataTimestamp: time.Now().UTC().Format(time.RFC3339),
+		Discs:             make([]api.ScreenshotDiscPlan, 0, len(discs)),
+	}
+	haveDiscPlan := false
+	for index, disc := range discs {
+		discCount := baseCount
+		if index < remainder {
+			discCount++
+		}
+		discPlan, err := s.planDisc(ctx, screenshotSubjectForDisc(meta, disc), discCount)
+		if err != nil {
+			if len(discs) == 1 {
+				return api.ScreenshotPlan{}, err
+			}
+			if ctx.Err() != nil || errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) ||
+				errors.Is(err, internalerrors.ErrFrameCorruption) {
+				return api.ScreenshotPlan{}, err
+			}
+			plan.Discs = append(plan.Discs, api.ScreenshotDiscPlan{
+				DiscID:   disc.ID,
+				DiscName: disc.Name,
+			})
+			continue
+		}
+		if !haveDiscPlan {
+			plan.DurationSeconds = discPlan.DurationSeconds
+			plan.FrameRate = discPlan.FrameRate
+			haveDiscPlan = true
+		}
+		plan.SuggestedSelections = append(plan.SuggestedSelections, discPlan.SuggestedSelections...)
+		plan.ExistingScreenshots = append(plan.ExistingScreenshots, discPlan.ExistingScreenshots...)
+		plan.FinalSelections = append(plan.FinalSelections, discPlan.FinalSelections...)
+		plan.PreviewImages = append(plan.PreviewImages, discPlan.PreviewImages...)
+		plan.RequiresManualFrames = plan.RequiresManualFrames || discPlan.RequiresManualFrames
+		plan.Discs = append(plan.Discs, api.ScreenshotDiscPlan{
+			DiscID:              disc.ID,
+			DiscName:            disc.Name,
+			DurationSeconds:     discPlan.DurationSeconds,
+			FrameRate:           discPlan.FrameRate,
+			SuggestedSelections: append([]api.ScreenshotSelection(nil), discPlan.SuggestedSelections...),
+		})
+	}
+	if tmpDir, _, err := paths.ReleaseTempDirFor(s.tmpRoot, meta.SourcePath, meta.Release); err == nil {
+		trackerRecords := s.loadTrackerMetadata(ctx, meta.SourcePath)
+		trackerLinks := buildTrackerImageLinks(trackerRecords, tmpDir, s.registry)
+		plan.TrackerImageLinks = trackerLinks
+		plan.FinalSelections = filterProtectedTrackerFinalSelections(plan.FinalSelections, trackerLinks, trackerRecords, s.registry)
+		plan.ExistingTrackerScreenshots = filterUnlinkedTrackerScreens(
+			listTrackerScreens(tmpDir, screenshotBaseName(meta)),
+			trackerLinks,
+			trackerRecords,
+			s.registry,
+		)
+		plan.FinalSelections = mergeTrackerImagesIntoFinalSelections(plan.FinalSelections, trackerLinks)
+	}
+	plan.FinalSelections = orderScreenshotImagesByDisc(plan.FinalSelections, discs)
+	return plan, nil
+}
+
+func (s *Service) planDisc(ctx context.Context, meta api.ScreenshotSubject, count int) (plan api.ScreenshotPlan, err error) {
+	defer func() {
+		if err != nil {
+			s.logger.Warnf("screenshots: planning blocked err=%s", redaction.RedactValue(err.Error(), nil))
+		}
+	}()
+
+	select {
+	case <-ctx.Done():
+		return api.ScreenshotPlan{}, fmt.Errorf("context canceled: %w", ctx.Err())
+	default:
+	}
+
+	plan = api.ScreenshotPlan{
+		MediaBinding: meta.MediaBinding,
+		SourcePath:   meta.SourcePath,
+		DiscType:     meta.DiscType,
+	}
+
+	if count <= 0 {
+		return api.ScreenshotPlan{}, internalerrors.ErrInvalidInput
+	}
+
+	info, err := resolveVideoInfo(ctx, meta, s.tmpRoot, s.logger)
+	if err != nil {
+		return api.ScreenshotPlan{}, err
+	}
+	plan.DurationSeconds = info.DurationSeconds
+	plan.FrameRate = info.FrameRate
+	plan.MetadataTimestamp = time.Now().UTC().Format(time.RFC3339)
+	s.logger.Debugf(
+		"screenshots: plan setup kind=%s disc=%s requested=%d manual_frames=%d duration_seconds=%.3f frame_rate=%.3f selected_path=%s",
+		screenshotSourceKind(meta),
+		screenshotLogField(meta.DiscType),
+		count,
+		len(meta.ManualFrames),
+		plan.DurationSeconds,
+		plan.FrameRate,
+		info.SourcePath,
+	)
+
+	manualSelections := buildManualFrameSelections(meta.ManualFrames, plan.FrameRate)
+	stampScreenshotSelections(manualSelections, meta.DiscID)
+	if len(manualSelections) == 0 && plan.DurationSeconds <= 0 && len(info.Segments) == 0 {
+		if cmd, resolveErr := resolveFFmpeg(); resolveErr != nil {
+			s.logger.Debugf(
+				"screenshots: duration fallback unavailable input=%s err=%s",
+				info.SourcePath,
+				redaction.RedactValue(resolveErr.Error(), nil),
+			)
+		} else if duration, probeErr := probeVideoDuration(ctx, s.runner, cmd, info.SourcePath); probeErr != nil {
+			if ctx.Err() != nil {
+				return api.ScreenshotPlan{}, fmt.Errorf("screenshots: duration fallback canceled: %w", ctx.Err())
+			}
+			if errors.Is(probeErr, internalerrors.ErrFrameCorruption) {
+				return api.ScreenshotPlan{}, probeErr
+			}
+			s.logger.Debugf(
+				"screenshots: duration fallback failed input=%s err=%s",
+				info.SourcePath,
+				redaction.RedactValue(probeErr.Error(), nil),
+			)
+		} else {
+			info.DurationSeconds = duration
+			plan.DurationSeconds = duration
+			s.logger.Debugf(
+				"screenshots: duration fallback resolved method=ffmpeg duration_seconds=%.3f input=%s",
+				duration,
+				info.SourcePath,
+			)
+		}
+	}
+	if len(manualSelections) == 0 && (plan.DurationSeconds <= 0 || plan.FrameRate <= 0) {
+		plan.RequiresManualFrames = true
+		s.logger.Debugf("screenshots: manual frames required reason=missing_timing duration_seconds=%.3f frame_rate=%.3f", plan.DurationSeconds, plan.FrameRate)
+		return plan, nil
+	}
+
+	total := count
+
+	tmpDir, _, err := paths.ReleaseTempDirFor(s.tmpRoot, meta.SourcePath, meta.Release)
+	if err != nil {
+		return api.ScreenshotPlan{}, fmt.Errorf("screenshots: %w", err)
+	}
+
+	baselineSelections := manualSelections
+	if len(baselineSelections) == 0 {
+		baselineSelections = buildScreenshotSelections(total, plan.DurationSeconds, plan.FrameRate, meta)
+	}
+	stampScreenshotSelections(baselineSelections, meta.DiscID)
+	base := screenshotBaseName(meta)
+	baselineByIndex := screenshotSelectionsByIndex(baselineSelections)
+
+	// Load existing screenshots from database that still exist on disk.
+	var missingIndexTimestamps []float64
+	var existingIndices map[int]struct{}
+	if s.repo != nil {
+		dbScreenshots, err := s.repo.ListScreenshotsByPath(ctx, meta.MediaBinding)
+		if err != nil {
+			s.logger.Debugf("screenshots: failed to load existing screenshots: %v", err)
+		} else {
+			existingIndices = make(map[int]struct{}, len(dbScreenshots))
+			kept := 0
+			for _, shot := range dbScreenshots {
+				if shot.DiscID != meta.DiscID {
+					continue
+				}
+				pathValue := strings.TrimSpace(shot.ImagePath)
+				if pathValue == "" || !isAllowedImageExt(pathValue) || !isPathWithinDir(tmpDir, pathValue) {
+					continue
+				}
+				if info, statErr := os.Stat(pathValue); statErr != nil || info.IsDir() {
+					continue
+				}
+				timestamp := shot.Timestamp
+				if timestamp <= 0 {
+					timestamp = parseScreenshotTimestamp(pathValue, base)
+				}
+				if index, ok := parseScreenshotIndexStrict(pathValue, base); ok {
+					if selection, found := baselineByIndex[index]; found && screenshotTimestampMatchesSelection(timestamp, selection, plan.FrameRate) {
+						existingIndices[index] = struct{}{}
+					}
+				} else {
+					missingIndexTimestamps = append(missingIndexTimestamps, timestamp)
+				}
+				kept++
+			}
+			s.logger.Debugf(
+				"screenshots: database inventory generation=%d disc=%s records=%d usable_files_for_disc=%d",
+				meta.MediaBinding.PreparedGeneration, meta.DiscID, len(dbScreenshots), kept,
+			)
+		}
+	}
+
+	if existingIndices == nil {
+		existingIndices = make(map[int]struct{})
+	}
+	if len(missingIndexTimestamps) > 0 && len(baselineSelections) > 0 {
+		slices.Sort(missingIndexTimestamps)
+		for _, existingTs := range missingIndexTimestamps {
+			bestIndex := -1
+			bestDiff := 0.0
+			for _, candidate := range baselineSelections {
+				if _, used := existingIndices[candidate.Index]; used {
+					continue
+				}
+				diff := abs(candidate.TimestampSeconds - existingTs)
+				if bestIndex < 0 || diff < bestDiff {
+					bestIndex = candidate.Index
+					bestDiff = diff
+				}
+			}
+			if bestIndex >= 0 {
+				if selection, found := baselineByIndex[bestIndex]; found && screenshotTimestampMatchesSelection(existingTs, selection, plan.FrameRate) {
+					existingIndices[bestIndex] = struct{}{}
+				}
+			}
+		}
+	}
+
+	var suggestions []api.ScreenshotSelection
+	if len(baselineSelections) > 0 {
+		suggestions = make([]api.ScreenshotSelection, 0, total)
+		for _, candidate := range baselineSelections {
+			if _, used := existingIndices[candidate.Index]; used {
+				continue
+			}
+			suggestions = append(suggestions, candidate)
+		}
+	}
+
+	plan.SuggestedSelections = suggestions
+
+	plan.ExistingScreenshots = filterScreenshotsMatchingSelections(listExistingScreens(tmpDir, base), baselineSelections, plan.FrameRate)
+	stampScreenshotImages(plan.ExistingScreenshots, meta.DiscID, meta.DiscName)
+	trackerRecords := s.loadTrackerMetadata(ctx, meta.SourcePath)
+	if meta.DiscID == "" {
+		plan.TrackerImageLinks = buildTrackerImageLinks(trackerRecords, tmpDir, s.registry)
+	}
+	plan.ExistingTrackerScreenshots = filterUnlinkedTrackerScreens(
+		listTrackerScreens(tmpDir, base),
+		plan.TrackerImageLinks,
+		trackerRecords,
+		s.registry,
+	)
+	stampScreenshotImages(plan.ExistingTrackerScreenshots, meta.DiscID, meta.DiscName)
+	plan.FinalSelections = filterScreenshotsMatchingSelections(s.loadFinalSelections(ctx, meta, tmpDir), baselineSelections, plan.FrameRate)
+
+	// Automatically include tracker images in final selections
+	plan.FinalSelections = mergeTrackerImagesIntoFinalSelections(plan.FinalSelections, plan.TrackerImageLinks)
+	s.logger.Tracef(
+		"screenshots: capture plan inventory baseline_frames=%d suggested_frames=%d matching_disk_images=%d tracker_links=%d unlinked_tracker_images=%d planned_final_images=%d",
+		len(baselineSelections),
+		len(plan.SuggestedSelections),
+		len(plan.ExistingScreenshots),
+		len(plan.TrackerImageLinks),
+		len(plan.ExistingTrackerScreenshots),
+		len(plan.FinalSelections),
+	)
+
+	return plan, nil
+}
+
+// Capture renders the requested frames into the prepared release's managed temp
+// directory and records each image with purpose. It returns successful images
+// plus per-selection failures. For a multi-disc subject, ordinary disc failures
+// do not discard images from other discs; cancellation, deadlines, and frame
+// corruption still return an error.
+func (s *Service) Capture(
+	ctx context.Context,
+	meta api.ScreenshotSubject,
+	selections []api.ScreenshotSelection,
+	purpose api.ScreenshotPurpose,
+) (api.ScreenshotResult, error) {
+	view := *s
+	view.logger = logging.FromContext(ctx, s.logger)
+	s = &view
+
+	if len(selections) == 0 || (s.repo != nil && purpose != api.ScreenshotPurposePreview && !meta.MediaBinding.Valid()) {
+		return api.ScreenshotResult{}, internalerrors.ErrInvalidInput
+	}
+	discs := screenshotDiscs(meta)
+	grouped := make(map[string][]api.ScreenshotSelection, len(discs))
+	for _, selection := range selections {
+		disc, ok := selectScreenshotDisc(discs, selection.DiscID)
+		if !ok {
+			return api.ScreenshotResult{}, internalerrors.ErrInvalidInput
+		}
+		selection.DiscID = disc.ID
+		grouped[disc.ID] = append(grouped[disc.ID], selection)
+	}
+
+	result := api.ScreenshotResult{SourcePath: meta.SourcePath, Purpose: purpose}
+	for _, disc := range discs {
+		discSelections := grouped[disc.ID]
+		if len(discSelections) == 0 {
+			continue
+		}
+		discResult, err := s.captureDisc(ctx, screenshotSubjectForDisc(meta, disc), discSelections, purpose)
+		if err != nil {
+			if ctx.Err() != nil || errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) ||
+				errors.Is(err, internalerrors.ErrFrameCorruption) {
+				return result, err
+			}
+			message := logging.SanitizeMessage(err.Error())
+			for _, selection := range discSelections {
+				result.Errors = append(result.Errors, api.ScreenshotError{
+					DiscID:  disc.ID,
+					Index:   selection.Index,
+					Message: message,
+				})
+			}
+			continue
+		}
+		result.Images = append(result.Images, discResult.Images...)
+		result.Errors = append(result.Errors, discResult.Errors...)
+		result.Tonemapped = result.Tonemapped || discResult.Tonemapped
+		result.UsedLibplacebo = result.UsedLibplacebo || discResult.UsedLibplacebo
+	}
+	return result, nil
+}
+
+func (s *Service) captureDisc(
+	ctx context.Context,
+	meta api.ScreenshotSubject,
+	selections []api.ScreenshotSelection,
+	purpose api.ScreenshotPurpose,
+) (result api.ScreenshotResult, err error) {
+	defer func() {
+		if err != nil {
+			s.logger.Warnf("screenshots: capture blocked err=%s", redaction.RedactValue(err.Error(), nil))
+		}
+	}()
+
+	select {
+	case <-ctx.Done():
+		return api.ScreenshotResult{}, fmt.Errorf("context canceled: %w", ctx.Err())
+	default:
+	}
+
+	if len(selections) == 0 {
+		return api.ScreenshotResult{}, internalerrors.ErrInvalidInput
+	}
+
+	info, err := resolveVideoInfo(ctx, meta, s.tmpRoot, s.logger)
+	if err != nil {
+		return api.ScreenshotResult{}, err
+	}
+
+	cmd, err := resolveFFmpeg()
+	if err != nil {
+		return api.ScreenshotResult{}, err
+	}
+	if err := resolveDVDVideoSegmentTimings(ctx, s.runner, cmd, info.Segments, info.DurationSeconds, s.logger); err != nil {
+		return api.ScreenshotResult{}, err
+	}
+
+	tmpDir, _, err := paths.ReleaseTempDirFor(s.tmpRoot, meta.SourcePath, meta.Release)
+	if err != nil {
+		return api.ScreenshotResult{}, fmt.Errorf("screenshots: %w", err)
+	}
+
+	result = api.ScreenshotResult{
+		SourcePath: meta.SourcePath,
+		Purpose:    purpose,
+	}
+
+	base := screenshotBaseName(meta)
+	tonemap := shouldTonemap(meta, s.cfg)
+	result.Tonemapped = tonemap
+
+	frameInfo := map[float64]frameInfoResult{}
+	if s.cfg.ScreenshotHandling.FrameOverlay {
+		for _, selection := range selections {
+			ts := selectionTimestamp(selection, info.FrameRate)
+			if ts <= 0 {
+				continue
+			}
+			if _, exists := frameInfo[ts]; exists {
+				continue
+			}
+			frameSourcePath, frameTimestamp := resolveSegmentTimestamp(info, ts)
+			infoResult, infoErr := getFrameInfo(ctx, s.runner, cmd, frameSourcePath, frameTimestamp)
+			if infoErr != nil {
+				s.logger.Debugf("screenshots: frame info failed: %v", infoErr)
+				continue
+			}
+			frameInfo[ts] = infoResult
+		}
+	}
+
+	type captureJob struct {
+		selection api.ScreenshotSelection
+		timestamp float64
+	}
+
+	captureErrors := make([]api.ScreenshotError, 0)
+	jobs := make([]captureJob, 0, len(selections))
+	for _, selection := range selections {
+		ts := selectionTimestamp(selection, info.FrameRate)
+		if ts <= 0 {
+			captureErrors = append(captureErrors, api.ScreenshotError{
+				DiscID:  meta.DiscID,
+				Index:   selection.Index,
+				Message: "invalid timestamp",
+			})
+			continue
+		}
+		jobs = append(jobs, captureJob{selection: selection, timestamp: ts})
+	}
+
+	if len(jobs) == 0 {
+		result.Errors = captureErrors
+		return result, nil
+	}
+	captureCtx, cancelCapture := context.WithCancel(ctx)
+	defer cancelCapture()
+
+	limit := len(jobs)
+	if s.cfg.ScreenshotHandling.FFmpegLimit {
+		if s.cfg.ScreenshotHandling.ProcessLimit > 0 {
+			limit = s.cfg.ScreenshotHandling.ProcessLimit
+		} else {
+			limit = 1
+		}
+	}
+	if limit <= 0 {
+		limit = 1
+	}
+	if limit > len(jobs) {
+		limit = len(jobs)
+	}
+	s.logger.Debugf(
+		"screenshots: capture setup kind=%s disc=%s purpose=%s selections=%d jobs=%d invalid=%d concurrency=%d frame_overlay=%t tonemap=%t libplacebo_requested=%t ffmpeg=%s",
+		screenshotSourceKind(meta),
+		screenshotLogField(meta.DiscType),
+		purpose,
+		len(selections),
+		len(jobs),
+		len(captureErrors),
+		limit,
+		s.cfg.ScreenshotHandling.FrameOverlay,
+		tonemap,
+		shouldUseLibplacebo(meta, s.cfg),
+		cmd,
+	)
+
+	jobCh := make(chan captureJob)
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	var usedLibplacebo atomic.Bool
+	var corruptionErr error
+	images := make([]api.ScreenshotImage, 0, len(jobs))
+
+	worker := func() {
+		defer wg.Done()
+		for job := range jobCh {
+			if captureCtx.Err() != nil {
+				return
+			}
+
+			selection := job.selection
+			ts := job.timestamp
+			outputName := buildScreenshotFilename(base, selection.Index, ts, purpose)
+			output := filepath.Join(tmpDir, outputName)
+			var usedLib bool
+			var captureErr error
+			for _, candidate := range resolveSegmentCandidates(info, ts) {
+				s.logger.Tracef(
+					"screenshots: capture queued index=%d timestamp_seconds=%.3f input_timestamp_seconds=%.3f segment=%d fallback=%d input=%s output=%s",
+					selection.Index,
+					ts,
+					candidate.Timestamp,
+					candidate.SegmentIndex,
+					candidate.FallbackIndex,
+					candidate.SourcePath,
+					output,
+				)
+				capture := captureRequest{
+					InputPath:     candidate.SourcePath,
+					OutputPath:    output,
+					Timestamp:     candidate.Timestamp,
+					FrameRate:     info.FrameRate,
+					Resolution:    meta.Release.Resolution,
+					UseLibplacebo: shouldUseLibplacebo(meta, s.cfg),
+					ToneMap:       tonemap,
+					Algorithm:     s.cfg.ScreenshotHandling.TonemapAlgorithm,
+					Desat:         s.cfg.ScreenshotHandling.Desat,
+					Compression:   s.cfg.ScreenshotHandling.FFmpegCompression,
+					FrameOverlay:  s.cfg.ScreenshotHandling.FrameOverlay,
+					OverlaySize:   s.cfg.ScreenshotHandling.OverlayTextSize,
+					FrameInfo:     frameInfo[ts],
+					SourceWidth:   info.Width,
+					SourceHeight:  info.Height,
+					WidthScale:    info.WidthScale,
+					HeightScale:   info.HeightScale,
+				}
+
+				usedLib, captureErr = captureFrame(captureCtx, s.runner, cmd, capture, s.logger)
+				if captureErr == nil {
+					break
+				}
+				if errors.Is(captureErr, internalerrors.ErrFrameCorruption) {
+					mu.Lock()
+					if corruptionErr == nil {
+						corruptionErr = captureErr
+					}
+					mu.Unlock()
+					cancelCapture()
+					break
+				}
+				s.logger.Debugf(
+					"screenshots: capture segment failed index=%d segment=%d fallback=%d err=%s",
+					selection.Index,
+					candidate.SegmentIndex,
+					candidate.FallbackIndex,
+					redaction.RedactValue(captureErr.Error(), nil),
+				)
+			}
+			if captureErr != nil {
+				if captureCtx.Err() != nil && ctx.Err() == nil {
+					return
+				}
+				s.logger.Warnf("screenshots: capture frame failed index=%d err=%s", selection.Index, redaction.RedactValue(captureErr.Error(), nil))
+				mu.Lock()
+				captureErrors = append(captureErrors, api.ScreenshotError{
+					DiscID:  meta.DiscID,
+					Index:   selection.Index,
+					Message: logging.SanitizeMessage(captureErr.Error()),
+				})
+				mu.Unlock()
+				continue
+			}
+
+			if usedLib {
+				usedLibplacebo.Store(true)
+			}
+
+			img := api.ScreenshotImage{
+				DiscID:           meta.DiscID,
+				DiscName:         meta.DiscName,
+				Index:            selection.Index,
+				TimestampSeconds: ts,
+				Path:             output,
+				Purpose:          purpose,
+			}
+			if stat, err := os.Stat(output); err == nil {
+				img.SizeBytes = stat.Size()
+			}
+			if f, err := os.Open(output); err == nil {
+				if cfg, _, err := image.DecodeConfig(f); err == nil {
+					img.Width = cfg.Width
+					img.Height = cfg.Height
+				}
+				_ = f.Close()
+			}
+
+			mu.Lock()
+			images = append(images, img)
+			mu.Unlock()
+			s.logger.Tracef(
+				"screenshots: capture completed index=%d timestamp_seconds=%.3f bytes=%d width=%d height=%d libplacebo=%t",
+				selection.Index,
+				ts,
+				img.SizeBytes,
+				img.Width,
+				img.Height,
+				usedLib,
+			)
+		}
+	}
+
+	wg.Add(limit)
+	for i := 0; i < limit; i++ {
+		go worker()
+	}
+
+	go func() {
+		defer close(jobCh)
+		for _, job := range jobs {
+			select {
+			case <-captureCtx.Done():
+				return
+			case jobCh <- job:
+			}
+		}
+	}()
+
+	wg.Wait()
+
+	if err := ctx.Err(); err != nil {
+		return result, fmt.Errorf("screenshots: generate canceled: %w", err)
+	}
+	if corruptionErr != nil {
+		return result, corruptionErr
+	}
+
+	sort.Slice(images, func(i, j int) bool { return images[i].Index < images[j].Index })
+	sort.Slice(captureErrors, func(i, j int) bool { return captureErrors[i].Index < captureErrors[j].Index })
+
+	result.Images = images
+	result.Errors = captureErrors
+	result.UsedLibplacebo = usedLibplacebo.Load()
+	s.logger.Debugf("screenshots: capture result images=%d errors=%d libplacebo_used=%t", len(result.Images), len(result.Errors), result.UsedLibplacebo)
+
+	if s.repo != nil && len(images) > 0 && purpose != api.ScreenshotPurposePreview {
+		for _, img := range images {
+			screenshot := api.Screenshot{
+				DiscID:      meta.DiscID,
+				ImagePath:   img.Path,
+				Timestamp:   img.TimestampSeconds,
+				FrameNumber: int(img.TimestampSeconds * info.FrameRate),
+				Width:       img.Width,
+				Height:      img.Height,
+				Purpose:     purpose,
+				CapturedAt:  time.Now().UTC(),
+			}
+			if err := s.repo.SaveScreenshot(ctx, meta.MediaBinding, screenshot); err != nil {
+				s.logger.Debugf("screenshots: failed to persist screenshot: %v", err)
+			}
+		}
+	}
+	return result, nil
+}
+
+// PreviewFrame captures one decodable, non-black PNG into memory without
+// persisting it. DVD inputs try the selected VOB segment followed by later
+// segments when a candidate yields no usable frame. When enabled for HDR/DV
+// inputs, it applies configured software tone mapping before returning.
+func (s *Service) PreviewFrame(
+	ctx context.Context,
+	meta api.ScreenshotSubject,
+	discID string,
+	timestampSeconds float64,
+) (api.ScreenshotPreview, error) {
+	disc, ok := selectScreenshotDisc(screenshotDiscs(meta), discID)
+	if !ok {
+		return api.ScreenshotPreview{}, internalerrors.ErrInvalidInput
+	}
+	return s.previewDisc(ctx, screenshotSubjectForDisc(meta, disc), timestampSeconds)
+}
+
+func (s *Service) previewDisc(
+	ctx context.Context,
+	meta api.ScreenshotSubject,
+	timestampSeconds float64,
+) (preview api.ScreenshotPreview, err error) {
+	defer func() {
+		if err != nil {
+			s.logger.Warnf("screenshots: preview blocked err=%s", redaction.RedactValue(err.Error(), nil))
+		}
+	}()
+
+	select {
+	case <-ctx.Done():
+		return api.ScreenshotPreview{}, fmt.Errorf("context canceled: %w", ctx.Err())
+	default:
+	}
+
+	if timestampSeconds < 0 {
+		return api.ScreenshotPreview{}, internalerrors.ErrInvalidInput
+	}
+
+	info, err := resolveVideoInfo(ctx, meta, s.tmpRoot, s.logger)
+	if err != nil {
+		return api.ScreenshotPreview{}, err
+	}
+
+	cmd, err := resolveFFmpeg()
+	if err != nil {
+		return api.ScreenshotPreview{}, err
+	}
+	if err := resolveDVDVideoSegmentTimings(ctx, s.runner, cmd, info.Segments, info.DurationSeconds, s.logger); err != nil {
+		return api.ScreenshotPreview{}, err
+	}
+	candidates := resolveSegmentCandidates(info, timestampSeconds)
+
+	s.logger.Debugf(
+		"screenshots: preview setup kind=%s disc=%s timestamp_seconds=%.3f candidates=%d selected_path=%s ffmpeg=%s",
+		screenshotSourceKind(meta),
+		screenshotLogField(meta.DiscType),
+		timestampSeconds,
+		len(candidates),
+		candidates[0].SourcePath,
+		cmd,
+	)
+	var payload []byte
+	for _, candidate := range candidates {
+		s.logger.Tracef(
+			"screenshots: preview queued timestamp_seconds=%.3f input_timestamp_seconds=%.3f segment=%d fallback=%d input=%s",
+			timestampSeconds,
+			candidate.Timestamp,
+			candidate.SegmentIndex,
+			candidate.FallbackIndex,
+			candidate.SourcePath,
+		)
+		payload, err = captureFrameBytes(ctx, s.runner, cmd, previewRequest{
+			InputPath: candidate.SourcePath,
+			Timestamp: candidate.Timestamp,
+			ToneMap:   shouldTonemap(meta, s.cfg),
+			Algorithm: s.cfg.ScreenshotHandling.TonemapAlgorithm,
+			Desat:     s.cfg.ScreenshotHandling.Desat,
+		}, s.logger)
+		if err == nil {
+			break
+		}
+		if errors.Is(err, internalerrors.ErrFrameCorruption) {
+			break
+		}
+		s.logger.Debugf(
+			"screenshots: preview segment failed segment=%d fallback=%d err=%s",
+			candidate.SegmentIndex,
+			candidate.FallbackIndex,
+			redaction.RedactValue(err.Error(), nil),
+		)
+	}
+	if err != nil {
+		return api.ScreenshotPreview{}, err
+	}
+
+	preview = api.ScreenshotPreview{
+		DiscID:           meta.DiscID,
+		DiscName:         meta.DiscName,
+		TimestampSeconds: timestampSeconds,
+		ImageBytes:       payload,
+		SizeBytes:        int64(len(payload)),
+	}
+	if cfg, _, err := image.DecodeConfig(bytes.NewReader(payload)); err == nil {
+		preview.Width = cfg.Width
+		preview.Height = cfg.Height
+	}
+
+	return preview, nil
+}
+
+// Delete removes an allowed image beneath the release's managed temp directory,
+// then cleans up its repository screenshot, upload, final-selection, and
+// tracker-image references. Cleanup covers every stored spelling that names the
+// removed file, so an accepted filesystem alias cannot delete the file while
+// leaving its records behind. Cleanup failures do not restore the local file,
+// but they are reported: a caller must be able to tell a complete delete from
+// one that left records behind, and calling Delete again converges because an
+// already-missing file is not an error.
+func (s *Service) Delete(ctx context.Context, meta api.ScreenshotSubject, imagePath string) error {
+	view := *s
+	view.logger = logging.FromContext(ctx, s.logger)
+	s = &view
+
+	select {
+	case <-ctx.Done():
+		return fmt.Errorf("context canceled: %w", ctx.Err())
+	default:
+	}
+	if s.repo != nil && !meta.MediaBinding.Valid() {
+		return internalerrors.ErrInvalidInput
+	}
+
+	trimmed := strings.TrimSpace(imagePath)
+	if trimmed == "" {
+		return internalerrors.ErrInvalidInput
+	}
+	if s.logger != nil {
+		s.logger.Tracef("screenshots: delete requested path=%s", trimmed)
+	}
+
+	tmpDir, _, err := paths.ReleaseTempDirFor(s.tmpRoot, meta.SourcePath, meta.Release)
+	if err != nil {
+		return fmt.Errorf("screenshots: %w", err)
+	}
+
+	absTarget, err := filepath.Abs(trimmed)
+	if err != nil {
+		return fmt.Errorf("screenshots: resolve delete target path: %w", err)
+	}
+	absTmp, err := filepath.Abs(tmpDir)
+	if err != nil {
+		return fmt.Errorf("screenshots: resolve temp path: %w", err)
+	}
+	if !isPathWithinDir(tmpDir, absTarget) {
+		return internalerrors.ErrInvalidInput
+	}
+	if s.logger != nil {
+		s.logger.Tracef("screenshots: delete resolved abs_target=%s tmp_dir=%s", absTarget, absTmp)
+	}
+
+	if !isAllowedImageExt(absTarget) {
+		return internalerrors.ErrInvalidInput
+	}
+
+	deleteTargets, cleanupErr := s.storedDeleteTargets(ctx, meta.MediaBinding, absTarget)
+	cleanupErrs := make([]error, 0, 1)
+	if cleanupErr != nil {
+		cleanupErrs = append(cleanupErrs, cleanupErr)
+	}
+
+	if err := os.Remove(absTarget); err != nil {
+		if !os.IsNotExist(err) {
+			return fmt.Errorf("screenshots: remove captured image: %w", err)
+		}
+		if s.logger != nil {
+			s.logger.Debugf("screenshots: image already missing: %s", absTarget)
+		}
+	} else if s.logger != nil {
+		s.logger.Tracef("screenshots: image deleted from disk: %s", absTarget)
+	}
+	confirmedTargets := deleteTargets[:1]
+	for _, target := range deleteTargets[1:] {
+		_, statErr := os.Stat(target)
+		switch {
+		case statErr == nil:
+			continue
+		case errors.Is(statErr, os.ErrNotExist):
+			confirmedTargets = append(confirmedTargets, target)
+		default:
+			cleanupErrs = append(cleanupErrs, fmt.Errorf("inspect stored delete target: %w", statErr))
+		}
+	}
+	deleteTargets = confirmedTargets
+
+	if s.repo != nil {
+		for _, target := range deleteTargets {
+			if s.logger != nil {
+				s.logger.Tracef("screenshots: deleting db records for %s", target)
+			}
+			if err := retrySQLiteBusy(ctx, func() error {
+				return s.repo.DeleteScreenshot(ctx, meta.MediaBinding, target)
+			}); err != nil {
+				s.logger.Warnf(
+					"screenshots: failed to delete screenshot record target=%s err=%s",
+					target,
+					redaction.RedactValue(err.Error(), nil),
+				)
+				cleanupErrs = append(cleanupErrs, fmt.Errorf("delete screenshot record: %w", err))
+			} else if s.logger != nil {
+				s.logger.Tracef("screenshots: deleted screenshot record for %s", target)
+			}
+			if err := retrySQLiteBusy(ctx, func() error {
+				return s.repo.DeleteFinalSelection(ctx, meta.MediaBinding, target)
+			}); err != nil {
+				s.logger.Warnf(
+					"screenshots: failed to delete final selection target=%s err=%s",
+					target,
+					redaction.RedactValue(err.Error(), nil),
+				)
+				cleanupErrs = append(cleanupErrs, fmt.Errorf("delete final selection: %w", err))
+			} else if s.logger != nil {
+				s.logger.Tracef("screenshots: deleted final selection for %s", target)
+			}
+		}
+		if err := s.removeTrackerImageReference(ctx, meta, tmpDir, absTarget); err != nil {
+			cleanupErrs = append(cleanupErrs, err)
+		}
+	}
+
+	if len(cleanupErrs) > 0 {
+		return fmt.Errorf("screenshots: delete cleanup incomplete: %w", errors.Join(cleanupErrs...))
+	}
+	return nil
+}
+
+// storedDeleteTargets returns every repository spelling that names absTarget on
+// this filesystem, starting with absTarget itself. Path validation accepts
+// filesystem aliases such as Windows case variants, but image-path columns
+// compare byte-for-byte, so cleanup keyed only on the caller's spelling can
+// remove the file and leave its screenshot, upload, and selection rows behind.
+// A failed lookup returns the targets resolved so far plus an error: cleanup can
+// still run, but it can no longer be claimed complete.
+func (s *Service) storedDeleteTargets(
+	ctx context.Context,
+	binding api.PreparedMediaBinding,
+	absTarget string,
+) ([]string, error) {
+	targets := []string{absTarget}
+	if s.repo == nil || !binding.Valid() {
+		return targets, nil
+	}
+	targetInfo, targetStatErr := os.Stat(absTarget)
+	addStored := func(stored string) {
+		stored = strings.TrimSpace(stored)
+		if stored == "" || slices.Contains(targets, stored) {
+			return
+		}
+		sameTarget := pathutil.SamePath(stored, absTarget)
+		if !sameTarget && targetStatErr == nil {
+			storedInfo, statErr := os.Stat(stored)
+			sameTarget = statErr == nil && os.SameFile(storedInfo, targetInfo)
+		}
+		if !sameTarget {
+			return
+		}
+		targets = append(targets, stored)
+		if s.logger != nil {
+			s.logger.Tracef("screenshots: delete alias resolved stored=%s requested=%s", stored, absTarget)
+		}
+	}
+	lookupErrs := make([]error, 0, 2)
+	var screenshots []api.Screenshot
+	if err := retrySQLiteBusy(ctx, func() error {
+		stored, err := s.repo.ListScreenshotsByPath(ctx, binding)
+		if err != nil {
+			return fmt.Errorf("load screenshot records: %w", err)
+		}
+		screenshots = stored
+		return nil
+	}); err != nil {
+		s.logger.Warnf("screenshots: failed to load screenshot records for delete err=%s", redaction.RedactValue(err.Error(), nil))
+		lookupErrs = append(lookupErrs, err)
+	}
+	for _, record := range screenshots {
+		addStored(record.ImagePath)
+	}
+	var selections []api.ScreenshotFinalSelection
+	if err := retrySQLiteBusy(ctx, func() error {
+		stored, err := s.repo.ListFinalSelections(ctx, binding)
+		if err != nil {
+			return fmt.Errorf("load final selections: %w", err)
+		}
+		selections = stored
+		return nil
+	}); err != nil {
+		s.logger.Warnf("screenshots: failed to load final selections for delete err=%s", redaction.RedactValue(err.Error(), nil))
+		lookupErrs = append(lookupErrs, err)
+	}
+	for _, selection := range selections {
+		addStored(selection.ImagePath)
+	}
+	if len(lookupErrs) > 0 {
+		return targets, errors.Join(lookupErrs...)
+	}
+	return targets, nil
+}
+
+// removeTrackerImageReference drops the deleted image from every stored tracker
+// image list for the release. A failure leaves a tracker pointing at an image
+// that no longer exists locally, so it is returned rather than only logged.
+func (s *Service) removeTrackerImageReference(
+	ctx context.Context,
+	meta api.ScreenshotSubject,
+	tmpDir string,
+	absTarget string,
+) error {
+	if s.repo == nil {
+		return nil
+	}
+	if strings.TrimSpace(tmpDir) == "" || strings.TrimSpace(absTarget) == "" {
+		return nil
+	}
+	updateErrs := make([]error, 0, 1)
+	var records []api.TrackerMetadata
+	if strings.TrimSpace(meta.SourcePath) != "" {
+		stored, err := s.repo.ListTrackerMetadataByPath(ctx, meta.SourcePath)
+		if err != nil {
+			s.logger.Warnf("screenshots: failed to load tracker metadata for delete err=%s", redaction.RedactValue(err.Error(), nil))
+			updateErrs = append(updateErrs, fmt.Errorf("load tracker metadata: %w", err))
+		} else if len(stored) > 0 {
+			records = stored
+			if s.logger != nil {
+				s.logger.Tracef("screenshots: using stored tracker metadata for delete records=%d", len(stored))
+			}
+		}
+	}
+	for _, record := range records {
+		if len(record.ImageURLs) == 0 {
+			continue
+		}
+		if s.logger != nil {
+			s.logger.Tracef("screenshots: scan tracker images tracker=%s urls=%d", strings.TrimSpace(record.Tracker), len(record.ImageURLs))
+		}
+		trackerDir := sanitizeFilename(strings.ToLower(strings.TrimSpace(record.Tracker)))
+		if trackerDir == "" {
+			trackerDir = "tracker"
+		}
+		filtered := make([]string, 0, len(record.ImageURLs))
+		removed := false
+		for idx, urlValue := range record.ImageURLs {
+			matched := false
+			for _, candidate := range trackerImageArtifactPaths(tmpDir, trackerDir, urlValue, idx) {
+				candidateAbs, err := filepath.Abs(candidate)
+				if err == nil && pathutil.SamePath(candidateAbs, absTarget) {
+					matched = true
+					break
+				}
+			}
+			if matched {
+				removed = true
+				if s.logger != nil {
+					s.logger.Tracef("screenshots: tracker image match tracker=%s file=%s", strings.TrimSpace(record.Tracker), absTarget)
+				}
+				continue
+			}
+			filtered = append(filtered, urlValue)
+		}
+		if !removed {
+			continue
+		}
+		record.ImageURLs = filtered
+		if strings.TrimSpace(record.SourcePath) == "" {
+			record.SourcePath = meta.SourcePath
+		}
+		if err := retrySQLiteBusy(ctx, func() error {
+			return s.repo.SaveTrackerTimestamp(ctx, api.TrackerTimestamp{
+				Tracker: trackers.TrackerImageDeletionKey(record), UpdatedAt: time.Now().UTC(),
+			})
+		}); err != nil {
+			s.logger.Warnf("screenshots: failed to record tracker image deletion tracker=%s err=%s",
+				strings.TrimSpace(record.Tracker), redaction.RedactValue(err.Error(), nil))
+			updateErrs = append(updateErrs, fmt.Errorf("record tracker image deletion: %w", err))
+			continue
+		}
+		if err := retrySQLiteBusy(ctx, func() error {
+			return s.repo.SaveTrackerMetadata(ctx, record)
+		}); err != nil {
+			s.logger.Warnf(
+				"screenshots: failed to update tracker metadata tracker=%s err=%s",
+				strings.TrimSpace(record.Tracker),
+				redaction.RedactValue(err.Error(), nil),
+			)
+			updateErrs = append(updateErrs, fmt.Errorf("update tracker metadata: %w", err))
+		} else if s.logger != nil {
+			s.logger.Tracef("screenshots: updated tracker metadata tracker=%s remaining=%d", strings.TrimSpace(record.Tracker), len(record.ImageURLs))
+		}
+	}
+	if len(updateErrs) > 0 {
+		return errors.Join(updateErrs...)
+	}
+	return nil
+}
+
+// loadTrackerMetadata withholds image URLs when a tracker's required asset
+// provenance is missing.
+func (s *Service) loadTrackerMetadata(ctx context.Context, sourcePath string) []api.TrackerMetadata {
+	if s.repo == nil || strings.TrimSpace(sourcePath) == "" {
+		return nil
+	}
+	records, err := s.repo.ListTrackerMetadataByPath(ctx, sourcePath)
+	if err != nil {
+		if s.logger != nil {
+			s.logger.Debugf("screenshots: failed to load tracker metadata: %v", err)
+		}
+		return nil
+	}
+	return trackers.FilterUnverifiedTrackerImages(ctx, s.repo, s.registry, records, s.logger)
+}
+
+// retrySQLiteBusy runs fn until it succeeds, fails for a reason other than a
+// busy or locked database, or exhausts sqliteBusyAttempts.
+func retrySQLiteBusy(ctx context.Context, fn func() error) error {
+	var lastErr error
+	for i := range sqliteBusyAttempts {
+		if err := ctx.Err(); err != nil {
+			return fmt.Errorf("screenshots: sqlite retry canceled: %w", err)
+		}
+		err := fn()
+		if err == nil {
+			return nil
+		}
+		lastErr = err
+		if !isSQLiteBusyError(err) {
+			return err
+		}
+		if ctx.Err() != nil {
+			return fmt.Errorf("context canceled: %w", ctx.Err())
+		}
+		time.Sleep(time.Duration(50*(i+1)) * time.Millisecond)
+	}
+	return lastErr
+}
+
+func isSQLiteBusyError(err error) bool {
+	return db.IsBusyError(err)
+}
+
+// SaveFinalSelections replaces normal final selections from images while
+// preserving manual and automatic disc-menu selections. Menu-purpose images in
+// the input are ignored rather than reclassified as normal screenshots.
+func (s *Service) SaveFinalSelections(ctx context.Context, meta api.ScreenshotSubject, images []api.ScreenshotImage) error {
+	view := *s
+	view.logger = logging.FromContext(ctx, s.logger)
+	s = &view
+
+	if s.repo == nil {
+		return nil
+	}
+	if !meta.MediaBinding.Valid() {
+		return internalerrors.ErrInvalidInput
+	}
+	select {
+	case <-ctx.Done():
+		return fmt.Errorf("context canceled: %w", ctx.Err())
+	default:
+	}
+
+	tmpDir, _, err := paths.ReleaseTempDirFor(s.tmpRoot, meta.SourcePath, meta.Release)
+	if err != nil {
+		return fmt.Errorf("screenshots: %w", err)
+	}
+
+	selections := make([]api.ScreenshotFinalSelection, 0, len(images))
+	for index, img := range images {
+		if img.Purpose == api.ScreenshotPurposeMenu {
+			continue
+		}
+		pathValue := strings.TrimSpace(img.Path)
+		if pathValue == "" {
+			return internalerrors.ErrInvalidInput
+		}
+		if !isAllowedImageExt(pathValue) {
+			return internalerrors.ErrInvalidInput
+		}
+		if !isPathWithinDir(tmpDir, pathValue) {
+			return internalerrors.ErrInvalidInput
+		}
+		selections = append(selections, api.ScreenshotFinalSelection{
+			DiscID:     img.DiscID,
+			ImagePath:  pathValue,
+			Order:      index,
+			Source:     selectionSourceLabel(img),
+			SelectedAt: time.Now().UTC(),
+		})
+	}
+	discOrder := screenshotDiscOrder(screenshotDiscs(meta))
+	sort.SliceStable(selections, func(left, right int) bool {
+		leftRank, leftFound := discOrder[selections[left].DiscID]
+		rightRank, rightFound := discOrder[selections[right].DiscID]
+		if leftFound != rightFound {
+			return leftFound
+		}
+		if leftRank != rightRank {
+			return leftRank < rightRank
+		}
+		return selections[left].Order < selections[right].Order
+	})
+	for index := range selections {
+		selections[index].Order = index
+	}
+
+	if err := s.repo.ReplaceNormalFinalSelections(ctx, meta.MediaBinding, selections); err != nil {
+		return fmt.Errorf("screenshots: replace normal final selections: %w", err)
+	}
+	return nil
+}
+
+func screenshotBaseName(meta api.ScreenshotSubject) string {
+	base := paths.ReleaseTempBaseFor(meta.SourcePath, meta.Release)
+	base = sanitizeFilename(base)
+	if discID := strings.TrimSpace(meta.DiscID); discID != "" {
+		return base + "-disc-" + sanitizeFilename(discID)
+	}
+	return base
+}
+
+func screenshotDiscs(meta api.ScreenshotSubject) []api.ScreenshotDiscSubject {
+	if len(meta.Discs) > 0 {
+		return append([]api.ScreenshotDiscSubject(nil), meta.Discs...)
+	}
+	return []api.ScreenshotDiscSubject{{
+		ID:                    strings.TrimSpace(meta.DiscID),
+		Name:                  strings.TrimSpace(meta.DiscName),
+		Type:                  strings.TrimSpace(meta.DiscType),
+		Root:                  firstScreenshotValue(meta.DiscRoot, meta.SourcePath),
+		VideoPath:             meta.VideoPath,
+		MediaInfoJSONPath:     meta.MediaInfoJSONPath,
+		SelectedBDMVPlaylists: append([]api.PlaylistInfo(nil), meta.SelectedBDMVPlaylists...),
+	}}
+}
+
+func screenshotSubjectForDisc(meta api.ScreenshotSubject, disc api.ScreenshotDiscSubject) api.ScreenshotSubject {
+	meta.DiscID = strings.TrimSpace(disc.ID)
+	meta.DiscName = strings.TrimSpace(disc.Name)
+	meta.DiscRoot = strings.TrimSpace(disc.Root)
+	meta.DiscType = firstScreenshotValue(disc.Type, meta.DiscType)
+	meta.VideoPath = strings.TrimSpace(disc.VideoPath)
+	meta.MediaInfoJSONPath = strings.TrimSpace(disc.MediaInfoJSONPath)
+	meta.SelectedBDMVPlaylists = append([]api.PlaylistInfo(nil), disc.SelectedBDMVPlaylists...)
+	meta.Discs = nil
+	return meta
+}
+
+func selectScreenshotDisc(discs []api.ScreenshotDiscSubject, discID string) (api.ScreenshotDiscSubject, bool) {
+	trimmed := strings.TrimSpace(discID)
+	if trimmed == "" {
+		if len(discs) == 1 {
+			return discs[0], true
+		}
+		return api.ScreenshotDiscSubject{}, false
+	}
+	for _, disc := range discs {
+		if disc.ID == trimmed {
+			return disc, true
+		}
+	}
+	return api.ScreenshotDiscSubject{}, false
+}
+
+func stampScreenshotSelections(selections []api.ScreenshotSelection, discID string) {
+	for index := range selections {
+		selections[index].DiscID = discID
+	}
+}
+
+func stampScreenshotImages(images []api.ScreenshotImage, discID string, discName string) {
+	for index := range images {
+		images[index].DiscID = discID
+		images[index].DiscName = discName
+	}
+}
+
+func screenshotDiscOrder(discs []api.ScreenshotDiscSubject) map[string]int {
+	order := make(map[string]int, len(discs))
+	for index, disc := range discs {
+		order[disc.ID] = index
+	}
+	return order
+}
+
+func orderScreenshotImagesByDisc(images []api.ScreenshotImage, discs []api.ScreenshotDiscSubject) []api.ScreenshotImage {
+	ordered := append([]api.ScreenshotImage(nil), images...)
+	discOrder := screenshotDiscOrder(discs)
+	sort.SliceStable(ordered, func(left, right int) bool {
+		leftRank, leftFound := discOrder[ordered[left].DiscID]
+		rightRank, rightFound := discOrder[ordered[right].DiscID]
+		if leftFound != rightFound {
+			return leftFound
+		}
+		if leftRank != rightRank {
+			return leftRank < rightRank
+		}
+		if ordered[left].Index != ordered[right].Index {
+			return ordered[left].Index < ordered[right].Index
+		}
+		return ordered[left].Path < ordered[right].Path
+	})
+	return ordered
+}
+
+func firstScreenshotValue(values ...string) string {
+	for _, value := range values {
+		if trimmed := strings.TrimSpace(value); trimmed != "" {
+			return trimmed
+		}
+	}
+	return ""
+}
+
+func selectionTimestamp(selection api.ScreenshotSelection, frameRate float64) float64 {
+	ts := selection.TimestampSeconds
+	if ts <= 0 && selection.Frame > 0 && frameRate > 0 {
+		ts = float64(selection.Frame) / frameRate
+	}
+	return ts
+}
+
+func screenshotSelectionsByIndex(selections []api.ScreenshotSelection) map[int]api.ScreenshotSelection {
+	byIndex := make(map[int]api.ScreenshotSelection, len(selections))
+	for _, selection := range selections {
+		byIndex[selection.Index] = selection
+	}
+	return byIndex
+}
+
+func screenshotTimestampMatchesSelection(timestamp float64, selection api.ScreenshotSelection, frameRate float64) bool {
+	expected := selectionTimestamp(selection, frameRate)
+	if timestamp <= 0 || expected <= 0 {
+		return false
+	}
+	tolerance := 0.5
+	if frameRate > 0 {
+		frameTolerance := 1 / frameRate
+		if frameTolerance > tolerance {
+			tolerance = frameTolerance
+		}
+	}
+	return abs(timestamp-expected) <= tolerance
+}
+
+func filterScreenshotsMatchingSelections(images []api.ScreenshotImage, selections []api.ScreenshotSelection, frameRate float64) []api.ScreenshotImage {
+	if len(images) == 0 || len(selections) == 0 {
+		return nil
+	}
+	byIndex := screenshotSelectionsByIndex(selections)
+	filtered := make([]api.ScreenshotImage, 0, len(images))
+	for _, image := range images {
+		selection, ok := byIndex[image.Index]
+		if !ok || !screenshotTimestampMatchesSelection(image.TimestampSeconds, selection, frameRate) {
+			continue
+		}
+		filtered = append(filtered, image)
+	}
+	return filtered
+}
+
+func listExistingScreens(tmpDir, base string) []api.ScreenshotImage {
+	pattern := filepath.Join(tmpDir, base+"-*.png")
+	matches, err := filepath.Glob(pattern)
+	if err != nil {
+		return nil
+	}
+
+	results := make([]api.ScreenshotImage, 0, len(matches))
+	for _, match := range matches {
+		name := strings.ToLower(filepath.Base(match))
+		if base != "" && strings.HasPrefix(name, strings.ToLower(base)+"-preview-") {
+			continue
+		}
+		if base != "" && strings.HasPrefix(name, strings.ToLower(base)+"-dvd-menu-") {
+			continue
+		}
+		stat, err := os.Stat(match)
+		if err != nil {
+			continue
+		}
+		ts := parseScreenshotTimestamp(match, base)
+		results = append(results, api.ScreenshotImage{
+			Index:            parseScreenshotIndex(match, base),
+			TimestampSeconds: ts,
+			Path:             match,
+			Purpose:          api.ScreenshotPurposeFinal,
+			SizeBytes:        stat.Size(),
+		})
+	}
+
+	sort.Slice(results, func(i, j int) bool {
+		left := results[i]
+		right := results[j]
+		if left.TimestampSeconds > 0 || right.TimestampSeconds > 0 {
+			if left.TimestampSeconds != right.TimestampSeconds {
+				return left.TimestampSeconds < right.TimestampSeconds
+			}
+		}
+		return left.Index < right.Index
+	})
+	return results
+}
+
+func listTrackerScreens(tmpDir, base string) []api.ScreenshotImage {
+	results := make([]api.ScreenshotImage, 0)
+	_ = filepath.WalkDir(tmpDir, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		if filepath.Dir(path) == tmpDir {
+			return nil
+		}
+		if !isAllowedImageExt(path) {
+			return nil
+		}
+		if base != "" {
+			fileName := filepath.Base(path)
+			if strings.HasPrefix(fileName, base+"-") && strings.HasSuffix(strings.ToLower(fileName), ".png") {
+				return nil
+			}
+		}
+		info, infoErr := entry.Info()
+		if infoErr != nil {
+			return nil
+		}
+		results = append(results, api.ScreenshotImage{
+			Path:      path,
+			Purpose:   api.ScreenshotPurposeFinal,
+			SizeBytes: info.Size(),
+		})
+		return nil
+	})
+
+	sort.Slice(results, func(i, j int) bool { return results[i].Path < results[j].Path })
+	return results
+}
+
+func (s *Service) loadFinalSelections(ctx context.Context, meta api.ScreenshotSubject, tmpDir string) []api.ScreenshotImage {
+	if s.repo == nil {
+		return nil
+	}
+	selections, err := s.repo.ListFinalSelections(ctx, meta.MediaBinding)
+	if err != nil {
+		s.logger.Debugf("screenshots: failed to load final selections: %v", err)
+		return nil
+	}
+	if len(selections) == 0 {
+		return nil
+	}
+	images := make([]api.ScreenshotImage, 0, len(selections))
+	for _, selection := range selections {
+		if selection.DiscID != meta.DiscID {
+			continue
+		}
+		pathValue := strings.TrimSpace(selection.ImagePath)
+		if pathValue == "" {
+			continue
+		}
+		if !isAllowedImageExt(pathValue) {
+			continue
+		}
+		if !isPathWithinDir(tmpDir, pathValue) {
+			continue
+		}
+		img, ok := buildScreenshotImage(pathValue, preservedScreenshotIndex(selection.Order))
+		if !ok {
+			continue
+		}
+		if api.IsDiscMenuSelectionSource(selection.Source) {
+			img.Purpose = api.ScreenshotPurposeMenu
+		} else {
+			img.Purpose = api.ScreenshotPurposeFinal
+		}
+		img.DiscID = selection.DiscID
+		img.DiscName = meta.DiscName
+		images = append(images, img)
+	}
+	sort.Slice(images, func(i, j int) bool { return images[i].Index < images[j].Index })
+	return images
+}
+
+func buildScreenshotImage(pathValue string, index int) (api.ScreenshotImage, bool) {
+	stat, err := os.Stat(pathValue)
+	if err != nil {
+		return api.ScreenshotImage{}, false
+	}
+	basePrefix := screenshotBaseFromFilename(pathValue)
+	ts := parseScreenshotTimestamp(pathValue, basePrefix)
+	img := api.ScreenshotImage{
+		Index:            index,
+		TimestampSeconds: ts,
+		Path:             pathValue,
+		Purpose:          api.ScreenshotPurposeFinal,
+		SizeBytes:        stat.Size(),
+	}
+	if f, err := os.Open(pathValue); err == nil {
+		if cfg, _, err := image.DecodeConfig(f); err == nil {
+			img.Width = cfg.Width
+			img.Height = cfg.Height
+		}
+		_ = f.Close()
+	}
+	return img, true
+}
+
+func isPathWithinDir(root string, target string) bool {
+	rootAbs, err := filepath.Abs(root)
+	if err != nil {
+		return false
+	}
+	targetAbs, err := filepath.Abs(target)
+	if err != nil {
+		return false
+	}
+	if pathutil.SamePath(rootAbs, targetAbs) {
+		return true
+	}
+	return pathutil.IsWithinRoot(rootAbs, targetAbs)
+}
+
+func selectionSourceLabel(img api.ScreenshotImage) string {
+	if img.TimestampSeconds > 0 {
+		return "generated"
+	}
+	return "existing"
+}
+
+func filterUnlinkedTrackerScreens(
+	images []api.ScreenshotImage,
+	links []api.ScreenshotLinkedImage,
+	records []api.TrackerMetadata,
+	registry *trackers.Registry,
+) []api.ScreenshotImage {
+	if len(images) == 0 {
+		return images
+	}
+	linked := make(map[string]struct{}, len(links))
+	for _, link := range links {
+		if strings.TrimSpace(link.Path) == "" {
+			continue
+		}
+		linked[link.Path] = struct{}{}
+	}
+	filtered := make([]api.ScreenshotImage, 0, len(images))
+	for _, img := range images {
+		if _, ok := linked[img.Path]; ok {
+			continue
+		}
+		if isProtectedTrackerArtifactPath(img.Path, records, registry) {
+			continue
+		}
+		filtered = append(filtered, img)
+	}
+	return filtered
+}
+
+func filterProtectedTrackerFinalSelections(
+	images []api.ScreenshotImage,
+	links []api.ScreenshotLinkedImage,
+	records []api.TrackerMetadata,
+	registry *trackers.Registry,
+) []api.ScreenshotImage {
+	filtered := make([]api.ScreenshotImage, 0, len(images))
+	for _, img := range images {
+		if isProtectedTrackerArtifactPath(img.Path, records, registry) && !slices.ContainsFunc(links, func(link api.ScreenshotLinkedImage) bool {
+			return pathutil.SamePath(link.Path, img.Path)
+		}) {
+			continue
+		}
+		filtered = append(filtered, img)
+	}
+	return filtered
+}
+
+func isProtectedTrackerArtifactPath(pathValue string, records []api.TrackerMetadata, registry *trackers.Registry) bool {
+	for _, record := range records {
+		if !trackers.LegacyImageAssetsNeedProvenance(registry, record.Tracker) {
+			continue
+		}
+		trackerDir := sanitizeFilename(strings.ToLower(strings.TrimSpace(record.Tracker)))
+		if strings.EqualFold(filepath.Base(filepath.Dir(pathValue)), trackerDir) {
+			return true
+		}
+	}
+	return false
+}
+
+func mergeTrackerImagesIntoFinalSelections(finalSelections []api.ScreenshotImage, trackerLinks []api.ScreenshotLinkedImage) []api.ScreenshotImage {
+	if len(trackerLinks) == 0 {
+		return reindexScreenshotImages(finalSelections)
+	}
+
+	// Build set of already selected paths
+	existingPaths := make(map[string]struct{}, len(finalSelections))
+	for _, img := range finalSelections {
+		existingPaths[img.Path] = struct{}{}
+	}
+
+	// Add tracker images that aren't already in final selections
+	merged := make([]api.ScreenshotImage, len(finalSelections), len(finalSelections)+len(trackerLinks))
+	copy(merged, finalSelections)
+
+	for _, link := range trackerLinks {
+		if strings.TrimSpace(link.Path) == "" {
+			continue
+		}
+		if _, exists := existingPaths[link.Path]; exists {
+			continue
+		}
+		img, ok := buildScreenshotImage(link.Path, len(merged))
+		if !ok {
+			continue
+		}
+		merged = append(merged, img)
+		existingPaths[link.Path] = struct{}{}
+	}
+
+	return reindexScreenshotImages(merged)
+}
+
+func reindexScreenshotImages(images []api.ScreenshotImage) []api.ScreenshotImage {
+	for idx := range images {
+		images[idx].Index = idx
+	}
+	return images
+}
+
+// buildTrackerImageLinks exposes comparison-safe saved images with decodable
+// local artifacts. Proxy records publish the direct source URL and host.
+func buildTrackerImageLinks(records []api.TrackerMetadata, tmpDir string, registry *trackers.Registry) []api.ScreenshotLinkedImage {
+	if strings.TrimSpace(tmpDir) == "" {
+		return nil
+	}
+	if len(records) == 0 {
+		return nil
+	}
+	results := make([]api.ScreenshotLinkedImage, 0)
+	for _, record := range records {
+		tracker := strings.TrimSpace(record.Tracker)
+		if tracker == "" {
+			continue
+		}
+		trackerDir := sanitizeFilename(strings.ToLower(tracker))
+		if trackerDir == "" {
+			trackerDir = "tracker"
+		}
+		allowedURLs := make(map[string]struct{})
+		for _, rawURL := range trackers.ComparisonSafeTrackerImageURLs(record, registry) {
+			allowedURLs[strings.TrimSpace(rawURL)] = struct{}{}
+		}
+		for index, rawURL := range record.ImageURLs {
+			trimmed := strings.TrimSpace(rawURL)
+			if trimmed == "" {
+				continue
+			}
+			if _, allowed := allowedURLs[trimmed]; !allowed {
+				continue
+			}
+			directURL := imagehost.DirectImageURL(trimmed)
+			if directURL == "" {
+				continue
+			}
+			for _, fullPath := range trackerImageArtifactPaths(tmpDir, trackerDir, trimmed, index) {
+				if validTrackerImageArtifact(fullPath) {
+					host := imagehost.ExtractHost(directURL)
+					results = append(results, api.ScreenshotLinkedImage{
+						Tracker:    tracker,
+						URL:        directURL,
+						PreviewURL: record.ImagePreviews[trimmed],
+						Path:       fullPath,
+						Host:       host,
+					})
+					break
+				}
+			}
+		}
+	}
+	return results
+}
+
+func validTrackerImageArtifact(pathValue string) bool {
+	file, err := os.Open(pathValue)
+	if err != nil {
+		return false
+	}
+	defer file.Close()
+	configuration, _, err := image.DecodeConfig(file)
+	return err == nil && configuration.Width > 0 && configuration.Height > 0
+}
+
+// ReusableTrackerImageLinks returns saved tracker images with decodable local
+// artifacts for the prepared source.
+func (s *Service) ReusableTrackerImageLinks(ctx context.Context, sourcePath string, release api.ReleaseInfo) ([]api.ScreenshotLinkedImage, error) {
+	view := *s
+	view.logger = logging.FromContext(ctx, s.logger)
+	s = &view
+
+	tmpDir, _, err := paths.ReleaseTempDirFor(s.tmpRoot, sourcePath, release)
+	if err != nil {
+		return nil, fmt.Errorf("screenshots: reusable tracker images: %w", err)
+	}
+	return buildTrackerImageLinks(s.loadTrackerMetadata(ctx, sourcePath), tmpDir, s.registry), nil
+}
+
+func buildTrackerImageFilename(rawURL string, index int) string {
+	legacy := legacyTrackerImageFilename(rawURL, index)
+	ext := path.Ext(legacy)
+	digest := sha256.Sum256([]byte(rawURL))
+	return fmt.Sprintf("%s_%x%s", strings.TrimSuffix(legacy, ext), digest[:6], ext)
+}
+
+// trackerImageArtifactPaths uses the direct source as the artifact key for
+// wsrv proxies, excluding older proxy-keyed thumbnails from reuse.
+func trackerImageArtifactPaths(tmpDir string, trackerDir string, rawURL string, index int) []string {
+	if imagehost.IsWsrvProxyURL(rawURL) {
+		rawURL = imagehost.DirectImageURL(rawURL)
+		if rawURL == "" {
+			return nil
+		}
+	}
+	dir := filepath.Join(tmpDir, trackerDir)
+	exact := filepath.Join(dir, buildTrackerImageFilename(rawURL, index))
+	paths := []string{exact}
+	prefix, suffix := hashedTrackerImageNameParts(rawURL)
+	matches, _ := filepath.Glob(filepath.Join(dir, prefix+"*"+suffix))
+	for _, match := range matches {
+		if match != exact && matchesHashedTrackerImageName(rawURL, filepath.Base(match)) {
+			paths = append(paths, match)
+		}
+	}
+	return append(paths, filepath.Join(dir, legacyTrackerImageFilename(rawURL, index)))
+}
+
+func hashedTrackerImageNameParts(rawURL string) (string, string) {
+	legacy := legacyTrackerImageFilename(rawURL, 0)
+	ext := path.Ext(legacy)
+	stem := strings.TrimSuffix(strings.TrimSuffix(legacy, ext), "_01")
+	digest := sha256.Sum256([]byte(rawURL))
+	return stem + "_", fmt.Sprintf("_%x%s", digest[:6], ext)
+}
+
+func matchesHashedTrackerImageName(rawURL string, fileName string) bool {
+	prefix, suffix := hashedTrackerImageNameParts(rawURL)
+	if !strings.HasPrefix(fileName, prefix) || !strings.HasSuffix(fileName, suffix) {
+		return false
+	}
+	indexText := strings.TrimSuffix(strings.TrimPrefix(fileName, prefix), suffix)
+	index, err := strconv.Atoi(indexText)
+	return err == nil && index > 0
+}
+
+func legacyTrackerImageFilename(rawURL string, index int) string {
+	parsed, err := url.Parse(rawURL)
+	base := ""
+	if err == nil {
+		base = path.Base(parsed.Path)
+	}
+	if base == "" || base == "." || base == "/" {
+		base = "image"
+	}
+	base = sanitizeFilename(base)
+	if !strings.Contains(base, ".") {
+		return fmt.Sprintf("%s_%02d", base, index+1)
+	}
+	parts := strings.Split(base, ".")
+	ext := parts[len(parts)-1]
+	return fmt.Sprintf("%s_%02d.%s", strings.TrimSuffix(base, "."+ext), index+1, ext)
+}
+
+func parseScreenshotIndex(path string, base string) int {
+	name := strings.TrimSuffix(filepath.Base(path), ".png")
+	if base != "" {
+		prefix := base + "-"
+		name = strings.TrimPrefix(name, prefix)
+	}
+	name = strings.TrimPrefix(name, "preview-")
+	parts := strings.SplitN(name, "-", 2)
+	if len(parts) == 0 {
+		return 0
+	}
+	parsed, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return 0
+	}
+	return parsed
+}
+
+func parseScreenshotIndexStrict(path string, base string) (int, bool) {
+	name := filepath.Base(path)
+	name = strings.TrimSuffix(name, filepath.Ext(name))
+	if base != "" {
+		prefix := base + "-"
+		if !strings.HasPrefix(name, prefix) {
+			return 0, false
+		}
+		name = strings.TrimPrefix(name, prefix)
+	}
+	name = strings.TrimPrefix(name, "preview-")
+	parts := strings.SplitN(name, "-", 2)
+	if len(parts) == 0 || parts[0] == "" {
+		return 0, false
+	}
+	for _, ch := range parts[0] {
+		if ch < '0' || ch > '9' {
+			return 0, false
+		}
+	}
+	parsed, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return 0, false
+	}
+	return parsed, true
+}
+
+func buildScreenshotFilename(base string, index int, timestampSeconds float64, purpose api.ScreenshotPurpose) string {
+	ms := max(int64(timestampSeconds*1000), 0)
+	stamp := fmt.Sprintf("ss_%08d", ms)
+	if purpose == api.ScreenshotPurposePreview {
+		return fmt.Sprintf("%s-preview-%02d-%s-%d.png", base, index, stamp, time.Now().UnixNano())
+	}
+	return fmt.Sprintf("%s-%02d-%s.png", base, index, stamp)
+}
+
+func parseScreenshotTimestamp(path string, base string) float64 {
+	name := filepath.Base(path)
+	name = strings.TrimSuffix(name, filepath.Ext(name))
+	if base != "" {
+		prefix := base + "-"
+		name = strings.TrimPrefix(name, prefix)
+	}
+	name = strings.TrimPrefix(name, "preview-")
+	parts := strings.SplitSeq(name, "-")
+	for part := range parts {
+		if !strings.HasPrefix(part, "ss_") {
+			continue
+		}
+		value := strings.TrimPrefix(part, "ss_")
+		if value == "" {
+			continue
+		}
+		parsed, err := strconv.ParseInt(value, 10, 64)
+		if err != nil {
+			continue
+		}
+		return float64(parsed) / 1000.0
+	}
+	return 0
+}
+
+func screenshotBaseFromFilename(path string) string {
+	name := filepath.Base(path)
+	name = strings.TrimSuffix(name, filepath.Ext(name))
+	if strings.Contains(name, "-preview-") {
+		return strings.SplitN(name, "-preview-", 2)[0]
+	}
+	if strings.Contains(name, "-") {
+		return strings.SplitN(name, "-", 2)[0]
+	}
+	return name
+}
+
+func isAllowedImageExt(path string) bool {
+	ext := strings.ToLower(filepath.Ext(path))
+	switch ext {
+	case ".png", ".jpg", ".jpeg", ".webp":
+		return true
+	default:
+		return false
+	}
+}

@@ -1,0 +1,38 @@
+{
+  "method": "Unchanged original C++ full CLI compiled, tiny synthetic FASTA; no prebuilt binary/wrapper execution/upstream suite",
+  "build_exit": 0,
+  "build_stderr": "",
+  "cases": [
+    {
+      "args": [
+        "--help"
+      ],
+      "exit": 255,
+      "stdout": "Usage: ./cli\n\t [options] <command> <input>\nOptions:\n    -h|--help \t\t\tshow this command-line help page\n    -o|--output <file> \t\tset output file path (default: STDOUT)\n    -s|--sorted \t\tinput already uniq and sorted (default: false)\n    -m|--max-missing <int> \tmax number of Ns allowed for each read (default: 9999)\n    -q|--min-baseQ <int> \tbases with lower baseQ will be converted to N (default: 0)\n    -t|--baseQ-shift <int> \tbaseQ value shifted from char (default: 33)\n    -f|--output-format <str> \toutput format [readID, sequence, fasta, dup2uniq, uniq2dup] (default: fasta)\nSupported <command>:\n    sortuniq \tjust uniq by sequence and sort by N, and output fasta\n    trie \tdeduplicate using trie algorithm\n    pairwise \tdeduplicate using pairwise algorithm\nSupported <input> format:\n    (automatically determined by <input>'s file extension)\n\t.fasta, .fa, .fastq, .fq\nOutput:  STDOUT  or  -o|--output <file>\n\tformat specified in -f|--output-format option\n    If set to dup2uniq, I will output 4-column tsv format: 1st-2nd columns are original readID and sequences, 3rd-4th columns are the mapped deduplicated readID and sequences.\n    If set to uniq2dup, I will output to STDOUT 5-column tsv format: 1st-2nd columns are deduplicated readID and sequences, 3rd column is frequency, 4th column is original readIDs concatenated by ',', 5th column is orignal sequences concatenated by ','.\n\nVersion: 0.1.1 (2024-03-12)\nAuthor: Adam Yongxin Ye & Jianqiao Hu @ BCH\n\n",
+      "stderr": "[STEP] parsing command-line arguments ... \t0.0000213s\n"
+    },
+    {
+      "args": [
+        "-o",
+        "missing-directory/out.fa",
+        "trie",
+        "small.fa"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": "[STEP] parsing command-line arguments ... \t0.0000072s\n  Current working directory = /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/triededup244-cpp-controls-20261025\n[ARG] command_choose = trie\n[ARG] input_filename = small.fa\n[OPT] sorted = 0\n[OPT] max_missing = 9999\n[OPT] baseQ_shift = 33\n[OPT] min_baseQ = 0\n[OPT] output_format = fasta\n[STEP] reading sequences in fasta ...\n[STEP] opening fasta file 'small.fa' ...\n[STEP-TIME] reading 1 sequences done. \t0.0000697s\n[STEP] uniq and sort by N ...\n[NOTE] Number of reads (raw) = 1\n[STEP] uniqueing and filtering out sequences with too many Ns ...\n \t0.0000026s\n[NOTE] Number of reads (filtered out too many Ns) = 1\n[STEP] sorting ...\n[STEP-TIME] uniq and sort done. \t0.0000088s\n[NOTE] Uniq and sort resulted in 1 unique reads.\n[STEP] deduplicating by trie ...\n[NOTE] Number of reads (after trie dedup) = 1\n[STEP-TIME] deduplication done. \t0.0000042s\n[NOTE] Deduplicating resulted in 1 unique reads.\n[STEP] output to missing-directory/out.fa ...\n[STEP-TIME] output done. \t0.0000156s\n[ALL-TIME] all done. \t0.0001402s\n"
+    },
+    {
+      "args": [
+        "-m",
+        "nonsense",
+        "trie",
+        "small.fa"
+      ],
+      "exit": 0,
+      "stdout": ">r\nAC\n",
+      "stderr": "[STEP] parsing command-line arguments ... \t0.0000067s\n  Current working directory = /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/triededup244-cpp-controls-20261025\n[ARG] command_choose = trie\n[ARG] input_filename = small.fa\n[OPT] sorted = 0\n[OPT] max_missing = 0\n[OPT] baseQ_shift = 33\n[OPT] min_baseQ = 0\n[OPT] output_format = fasta\n[STEP] reading sequences in fasta ...\n[STEP] opening fasta file 'small.fa' ...\n[STEP-TIME] reading 1 sequences done. \t0.0000309s\n[STEP] uniq and sort by N ...\n[NOTE] Number of reads (raw) = 1\n[STEP] uniqueing and filtering out sequences with too many Ns ...\n \t0.0000023s\n[NOTE] Number of reads (filtered out too many Ns) = 1\n[STEP] sorting ...\n[STEP-TIME] uniq and sort done. \t0.0000080s\n[NOTE] Uniq and sort resulted in 1 unique reads.\n[STEP] deduplicating by trie ...\n[NOTE] Number of reads (after trie dedup) = 1\n[STEP-TIME] deduplication done. \t0.0000045s\n[NOTE] Deduplicating resulted in 1 unique reads.\n[STEP] output to STDOUT ...\n[STEP-TIME] output done. \t0.0000112s\n[ALL-TIME] all done. \t0.0000942s\n"
+    }
+  ],
+  "upstream_tests_run": false
+}

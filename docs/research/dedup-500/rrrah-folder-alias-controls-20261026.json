@@ -1,0 +1,35 @@
+{
+  "command_prefix": [
+    "cargo",
+    "+1.98.1",
+    "run",
+    "--offline",
+    "--release",
+    "-p",
+    "rrrah-dedup",
+    "--example",
+    "scan_folder",
+    "--"
+  ],
+  "controls": [
+    {
+      "case": "single_root",
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 6656 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/hardlink.bin\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/nested/copy.bin\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/hardlink.bin\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/original.bin\"]\n",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.09s\n     Running `target/release/examples/scan_folder /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root`\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/nested/loop\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/symlink.bin\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 96256 bytes read, 2 diagnostics\n"
+    },
+    {
+      "case": "overlapping_roots",
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 6656 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/hardlink.bin\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/nested/copy.bin\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/hardlink.bin\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/original.bin\"]\n",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.09s\n     Running `target/release/examples/scan_folder /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/nested /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root`\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/nested/loop\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-control-bkx0wdbj/root/symlink.bin\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 96256 bytes read, 2 diagnostics\n"
+    }
+  ],
+  "all_controls_passed": true,
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d"
+  },
+  "scope": "Current host real CLI on authored temp fixtures: hardlink alias separated from independent byte copy, overlapping roots deduplicated, file symlink and directory loop skipped. Not other-platform or universal coverage.",
+  "fixture_cleanup": "TemporaryDirectory removed authored fixtures after execution"
+}

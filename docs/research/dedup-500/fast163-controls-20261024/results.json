@@ -1,0 +1,32 @@
+{
+  "scope": "Execute pinned original pure functions and two unchanged upstream test bodies.\n\nAST selection excludes dependency imports, CLI and plotting; no substitutes for\nexternal algorithms are supplied. This is not a full upstream suite.\n",
+  "source_sha256": "9b0f564dd0340dd0f95a0c33c296f3d16f34a9f6e5ea92b85f145ae847f5318f",
+  "original_test_bodies_run": 2,
+  "original_tests_successful": true,
+  "authored_controls": [
+    {
+      "case": "different token order and multiplicity",
+      "score": 100.0,
+      "expected": 100.0
+    },
+    {
+      "case": "unvalidated prefix weight exceeds documented score range",
+      "score": 140.0,
+      "expected": 140.0
+    },
+    {
+      "case": "default cosine case normalization is not byte identity",
+      "score": 100.0,
+      "expected": 100.0
+    }
+  ],
+  "not_executed": [
+    "full module imports",
+    "RapidFuzz",
+    "Jellyfish",
+    "sklearn",
+    "CLI",
+    "core dedupe pipeline",
+    "visualization"
+  ]
+}

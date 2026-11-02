@@ -1,0 +1,83 @@
+{
+  "scope": "Eleven original DB test bodies; original full dedupe/constants modules.\n\nLogger-module shim and explicit owned SQLite schema fixture replace application\ninit_db/migrations. No pytest fixture engine or full application schema tested.\n",
+  "original_test_bodies_run": 11,
+  "passed": 11,
+  "failed": 0,
+  "results": [
+    {
+      "name": "TestAssignNearDuplicateClusters.test_exact_phash_match_forms_cluster",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_idempotent",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_null_phash_excluded_from_clustering",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_phash_beyond_threshold_stays_separate",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_phash_within_threshold_forms_cluster",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_returns_count_of_clustered_photos",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_sidecar_photos_excluded",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_singleton_cluster_size_is_1",
+      "passed": true
+    },
+    {
+      "name": "TestAssignNearDuplicateClusters.test_three_way_cluster",
+      "passed": true
+    },
+    {
+      "name": "TestDuplicatesSmartAlbumUsesClusterSize.test_cluster_size_gt1_appears_in_duplicates",
+      "passed": true
+    },
+    {
+      "name": "TestDuplicatesSmartAlbumUsesClusterSize.test_singletons_excluded_from_duplicates",
+      "passed": true
+    }
+  ],
+  "authored_controls_passed": 2,
+  "observations": [
+    {
+      "case": "real_cluster_then_all_hashes_invalidated_leaves_stale_album",
+      "new_clustered_count": 0,
+      "album_count": 2,
+      "rows": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          2,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "case": "identical_hashes_a_day_apart_remain_singletons",
+      "clustered": 0,
+      "qualification": "Conflicts with test-module documentation saying no time constraint;production doc/code explicitly60second window. Not proof currentpolicy unintended."
+    }
+  ],
+  "source_sha256": {
+    "04-dedupe.py": "d38c1b34d206ce3149fa26e3cf8807d339139596cecca50ec6507279d023026d",
+    "remaining-pinned/tests/test_near_duplicate_clusters.py": "d455d636d5b4f9ad977591be6907330da022c4cff504faaf14a65a6f4947c8ae",
+    "remaining-pinned/bpp/constants.py": "5af28178a9ff5d1a39383c751d58562c08bd5114ae25d8ed7c7433119b8df59d"
+  },
+  "limits": "No original init_db/migrations,server/API/browser,real photo files,userdatabase or performance qualification."
+}

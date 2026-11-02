@@ -1,0 +1,11 @@
+{
+  "scope": "Actual original transpiled isolation/filtering helpers on synthetic strings only",
+  "authored_controls_passed": 3,
+  "observations": [
+    "Unescaped namespace concatenation collides for distinct baseUserId/agentId pairs containing delimiter",
+    "Noise classification before stripping lets metadata-wrapped ok survive as user content",
+    "Uppercase SUBAGENT recognized by isSubagentSession but not extracted by extractAgentId"
+  ],
+  "discarded_hypothesis": "Uppercase Agent prefix alone does not prevent lowercase subagent suffix extraction; initial assertion corrected",
+  "full_gateway_runtime_run": false
+}

@@ -1,0 +1,37 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 59s
+     Running unittests src/main.rs (target/debug/deps/rrrah-16127a5d050f7d92)
+
+running 1 test
+
+thread 'foreground_loader_tests::gamma_png_explicit_primaries_isolate_ram_swap_and_invalid_policy' (32702406) panicked at crates/rrrah-app/src/main.rs:7227:13:
+assertion `left == right` failed: selected=1: warm cache must respect explicit primaries
+  left: [1048576060, 912132334, 3052477032, 1056964736, 915105379, 1048576202, 3053817271, 1065353216, 917206387, 3055971639, 1048576269, 0, 1048576481, 1031798578, 1058013448, 1056964736]
+ right: [1050463242, 3157015318, 3147885053, 1056964736, 3177601715, 1048929099, 3164670154, 1065353216, 3055381978, 911945744, 1049400665, 0, 1049991299, 1029685125, 1058776095, 1056964736]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test foreground_loader_tests::gamma_png_explicit_primaries_isolate_ram_swap_and_invalid_policy ... FAILED
+
+failures:
+
+failures:
+    foreground_loader_tests::gamma_png_explicit_primaries_isolate_ram_swap_and_invalid_policy
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 381 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

@@ -1,0 +1,60 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.95s
+     Running unittests src/main.rs (target/debug/deps/rrrah-7624cd91891a6f1f)
+
+running 10 tests
+test folder_worker_qualification::real_worker_direction_reversal_cancels_blocked_prefetch ... real worker reversal: old index4 blocked at decode gate, cancelled without allocation; new selected2 precedes backward [1,0,3]; final=0
+ok
+test folder_worker_qualification::real_worker_metal_direction_reversal_cancels_blocked_prefetch ... reversal adapter: Metal Apple M4 Max
+real worker reversal: old index4 blocked at decode gate, cancelled without allocation; new selected2 precedes backward [1,0,3]; Metal SDR/HDR exact; final=0
+ok
+test folder_worker_qualification::real_worker_metal_frame_and_full_pressure_ram_hit_before_cover_metadata ... foreground cover adapter: Metal Apple M4 Max
+real foreground worker: native PNG/preparation/cache lease ready before blocked cover completion; full-root RAM reselect keeps same allocation and exact Metal SDR/HDR; final=0
+ok
+test folder_worker_qualification::real_worker_metal_prefetch_window_order_and_full_pressure_hits ... real prefetch adapter: Metal Apple M4 Max
+real prefetch Forward behind=1 ahead=2: exact completion order [4, 5, 2], full-root neighbour hits/Metal SDR/HDR, final=0
+real prefetch Backward behind=1 ahead=2: exact completion order [2, 1, 4], full-root neighbour hits/Metal SDR/HDR, final=0
+real prefetch Forward behind=2 ahead=0: exact completion order [2, 1], full-root neighbour hits/Metal SDR/HDR, final=0
+real prefetch Backward behind=0 ahead=2: exact completion order [2, 1], full-root neighbour hits/Metal SDR/HDR, final=0
+real prefetch Forward behind=0 ahead=0: exact completion order [], full-root neighbour hits/Metal SDR/HDR, final=0
+ok
+test folder_worker_qualification::real_worker_metal_repeated_navigation_has_bounded_memory_and_swap ... repeated navigation adapter: Metal Apple M4 Max
+real worker 512 mixed-codec directional selections: exact pixels and Metal SDR/HDR, RAM4096/root16384, swap <=2 objects/65536 bytes, final=0
+ok
+test folder_worker_qualification::real_worker_metal_swap_navigation_count_bytes_ttl_under_pressure ... swap navigation adapter: Metal Apple M4 Max
+real foreground A-B-A count: indexed spill published; native control refused exact remaining quota; restore pixels/metadata/Metal SDR/HDR exact; final=0
+real foreground A-B-A bytes: indexed spill published; native control refused exact remaining quota; restore pixels/metadata/Metal SDR/HDR exact; final=0
+real foreground A-B-A ttl: indexed spill published; native control refused exact remaining quota; restore pixels/metadata/Metal SDR/HDR exact; final=0
+ok
+test folder_worker_qualification::real_worker_prefetch_window_order_and_full_pressure_hits ... real prefetch Forward behind=1 ahead=2: exact completion order [4, 5, 2], full-root neighbour hits, final=0
+real prefetch Backward behind=1 ahead=2: exact completion order [2, 1, 4], full-root neighbour hits, final=0
+real prefetch Forward behind=2 ahead=0: exact completion order [2, 1], full-root neighbour hits, final=0
+real prefetch Backward behind=0 ahead=2: exact completion order [2, 1], full-root neighbour hits, final=0
+real prefetch Forward behind=0 ahead=0: exact completion order [], full-root neighbour hits, final=0
+ok
+test folder_worker_qualification::real_worker_ready_and_full_pressure_ram_hit_before_cover_metadata ... real foreground worker: native PNG/preparation/cache lease ready before blocked cover completion; full-root RAM reselect keeps same allocation; final=0
+ok
+test folder_worker_qualification::real_worker_repeated_navigation_has_bounded_memory_and_swap ... real worker 512 mixed-codec directional selections: exact pixels, RAM4096/root16384, swap <=2 objects/65536 bytes, final=0
+ok
+test folder_worker_qualification::real_worker_swap_navigation_count_bytes_ttl_under_pressure ... real foreground A-B-A count: indexed spill published; native control refused exact remaining quota; restore pixels/metadata exact; final=0
+real foreground A-B-A bytes: indexed spill published; native control refused exact remaining quota; restore pixels/metadata exact; final=0
+real foreground A-B-A ttl: indexed spill published; native control refused exact remaining quota; restore pixels/metadata exact; final=0
+ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 425 filtered out; finished in 14.52s
+

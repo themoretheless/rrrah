@@ -1,0 +1,84 @@
+{
+  "repository": "jchristn/WatsonDedupe",
+  "commit": "80274df8bc9cbd69c0851c8933f2d9a96dd5bee5",
+  "whole_files_read": [
+    {
+      "path": "src/DedupeLibrary/DedupeCallbacks.cs",
+      "local": "03-DedupeCallbacks.cs",
+      "git_blob": "0807b05ee01c6bae20b8ea0bde6be06591be74af",
+      "sha256": "0702485d88272d083aa94f409dcff9e054dc6723925734008caa2d8d9b59a904",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/DedupeLibrary/DedupeChunk.cs",
+      "local": "04-DedupeChunk.cs",
+      "git_blob": "8c57415cdbaa102fc693d3e0cfeb38dbc0c66a25",
+      "sha256": "a53a30492a9bfa4c210b8b0a9e3cf6fe89d7e92f0bf7d79d305acb70dd5a1633",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/DedupeLibrary/DedupeCommon.cs",
+      "local": "05-DedupeCommon.cs",
+      "git_blob": "780a16258d80a6b4b1eedfc09c437db9e9f4f63d",
+      "sha256": "821be811e4d88d5b5ed1353b7e4571202ef44ee9cdab8c4d21668ca79f2710c1",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 6,
+  "tracked_blobs": 69,
+  "whole_repo_complete": false,
+  "authored_controls_passed": 9,
+  "original_upstream_tests_run": false,
+  "controls": "watson132-controls-20261024/results.txt",
+  "scope": "Unchanged original DedupeCommon;native .NET10;owned MemoryStream and short-read adapter;EOF adapter throws after3 zero returns to bound execution;no full chunk store/database",
+  "findings": [
+    "Short reads overwrite previous bytes because read offset stays0 and read size is full target length.",
+    "Premature EOF causes repeated zero reads without progress;owned stream throws at third zero return to bound execution.",
+    "IsZeroBytes one-byte input with numBytes2 raises IndexOutOfRangeException due >= boundary.",
+    "Full-read positive and SHA256 abc known-answer positive pass.",
+    "Chunk mutable properties do not preserve constructor validation after mutation:source-only.",
+    "Main private ChunkStream uses defective ReadBytesFromStream for contentLength<=MinChunkSize:source integration traced,not executed whole library.",
+    "Read callback bytes not checked against chunk hash in stream or eager Get:stream behavior reproduced with explicit adapter.",
+    "WriteOrReplace deletes original before writing replacement:source-only,no transaction qualification.",
+    "garbageCollectionRequired initialized false and never set in Write:source-only rollback concern."
+  ],
+  "full_chunk_store_runtime_qualified": false,
+  "production_adoption": false,
+  "decision": "reference",
+  "native_phash_asan": "deferred",
+  "previous_audit": "watson132-source-review-v1-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/DedupeLibrary/DedupeStream.cs",
+      "local": "deep-DedupeStream.cs",
+      "git_blob": "348438408359e9f59ecc9ffd5e3d22a7ea12cbc0",
+      "sha256": "3e23cce5153aac69b19d2d59e0c5402c2869fa331eb2d50e712aeaee982d0303",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/DedupeLibrary/Chunk.cs",
+      "local": "deep-Chunk.cs",
+      "git_blob": "17febd4993c81d535b75e45a2a37a3e5ca88df65",
+      "sha256": "cc0a34ab243f3547aba97332e1ee296d4d5529c193f9450f240cfd1f98a45ca4",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/DedupeLibrary/DedupeLibrary.cs",
+      "local": "deep-DedupeLibrary.cs",
+      "git_blob": "d91c47d77294b55d14f4c4f1a9a30e54d1313e95",
+      "sha256": "2045cca56bcd3b1919f99386fe7bd452f6334db56db0ad70817dcf1f70e2a695",
+      "whole_text_read": true
+    }
+  ],
+  "new_stream_controls": {
+    "controls_passed": 4,
+    "scope": "Original full DedupeStream class;native .NET10;explicit metadata/database/callback DTO seams;no real DB,persistence or full library",
+    "findings": [
+      "Read destination offset8 on length4 stream returns0 at position0",
+      "Position=end accepted but Seek(end,Begin) rejected",
+      "Wrong callback bytes returned without hash verification",
+      "Healthy buffer read positive"
+    ]
+  },
+  "stream_harness": "watson132-stream-controls-20261024"
+}

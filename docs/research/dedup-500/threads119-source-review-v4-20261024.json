@@ -1,0 +1,93 @@
+{
+  "repository": "d4ncboz/threads-affiliate",
+  "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
+  "previous_audit": "docs/research/dedup-500/threads119-source-review-v3-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "templates/hooks_haircare.json",
+      "local": "remaining-templates_hooks_haircare.json",
+      "git_blob": "f6aff16b8a80daeec07f8709513c065256dd9182",
+      "sha256": "26b1beed5285620ff872c6c3b0d9f3061d568f3a1ce400416c9feb3991b18026",
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/hooks_makeup.json",
+      "local": "remaining-templates_hooks_makeup.json",
+      "git_blob": "76055bb26bb24a847fa53b93922b0107b12d2317",
+      "sha256": "7926418e785ffcd0d213770898132badc7ff67d3fd68a303cab210833ef3fce7",
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/hooks_parfum.json",
+      "local": "remaining-templates_hooks_parfum.json",
+      "git_blob": "7cbc2c4a6b2ff45484043c4ba3c79d6a6e76eb5e",
+      "sha256": "f82758156cdba2c8f7a308400d715c548ba795c0cc0b316d69a00cb4f6496fbe",
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/hooks_skincare.json",
+      "local": "remaining-templates_hooks_skincare.json",
+      "git_blob": "1ede2b61e2706741aa7140bd7a125ab146fa83f3",
+      "sha256": "d098bd9a25c2c48bae394b679375f68e6661cb5605658c16c423e860496ca98b",
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/post2_templates.json",
+      "local": "remaining-templates_post2_templates.json",
+      "git_blob": "dd990dd3559a4569944f157bceaf4d5976ae0709",
+      "sha256": "cd5050d9ae787e0fef32d3edcf782a74c2ca91060f47340cbee856460e815c24",
+      "whole_text_read": true
+    },
+    {
+      "path": "templates/post3_cta_templates.json",
+      "local": "remaining-templates_post3_cta_templates.json",
+      "git_blob": "f87ce347c1aa7bdea8b17d347d6db4d548066d34",
+      "sha256": "7f569a56cce92adadd733abee79890500d00373d5aa178bf09fa26de3c37f14a",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/02-database-setup.md",
+      "local": "remaining-docs_02-database-setup.md",
+      "git_blob": "da991efdb0bb8c5ee72fc538ba38f74ac6d591f9",
+      "sha256": "a99dc8e6362953830f3841c5de942880845e464b19816242566270d6a74d9980",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/05-customization.md",
+      "local": "remaining-docs_05-customization.md",
+      "git_blob": "65de24d45effd9b827c084a20b009a25611a09ec",
+      "sha256": "bf68ebfcdf005613059cc8aedf27df51661b448b94d8087bd3ca2e0da76ef5cb",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/06-troubleshooting.md",
+      "local": "remaining-docs_06-troubleshooting.md",
+      "git_blob": "3dc9c9023508a1c798a03652261bec1c0c7df2a1",
+      "sha256": "a6205df8124e5afc7ecf2e55de7271bab7eccfe1d061035d64059cbb684f878e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 25,
+  "tracked_blobs": 35,
+  "whole_repo_complete": false,
+  "original_test_functions_total_distinct": 6,
+  "authored_controls_total_distinct": 5,
+  "new_runtime_tests": 0,
+  "findings": [
+    {
+      "finding": "Database setup docs unpack next_unused into2 values although original returns3, and name reset_all_used although original method is reset_all.",
+      "evidence": "whole source/docs comparison;documentation discrepancy,not a new runtime case"
+    },
+    {
+      "finding": "Troubleshooting describes automatic typing fallback for link paste, but reviewed paste implementation retries clipboard and has no typing fallback.",
+      "evidence": "whole source/docs comparison;browser unqualified"
+    },
+    {
+      "finding": "Customization requests code changes for new categories/tone;existing template categories match4 generator categories. No native file fingerprint algorithm found in these9files.",
+      "evidence": "whole docs/template source inspection"
+    }
+  ],
+  "production_changes": false,
+  "remaining": "10blobs not whole-read:root docs,account/cookie/quickstart/ethics docs,llms files,cookie_manager and.gitignore",
+  "native_phash_asan": "deferred"
+}

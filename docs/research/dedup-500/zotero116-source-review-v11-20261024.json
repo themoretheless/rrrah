@@ -1,0 +1,67 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v10-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/duplicateDetector.test.mjs",
+      "local": "20-duplicateDetector.test.mjs",
+      "sha256": "f6f0385248844a632bcfd6467242c1a0b5ec8fc4614a0bd2e04d25b71d49728c",
+      "git_blob": "5443f356ca82a6df813dfe7489e271170c186bcd",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/setup/geckoMocks.js",
+      "local": "05-geckoMocks.js",
+      "sha256": "2370c43c475bf4cd7b88ecdf1e4dfc240170de987b0983e46ff1d128e127f4aa",
+      "git_blob": "0dcf60490ab6782b731a0f7a29ba07ed14110508",
+      "whole_text_read": true
+    },
+    {
+      "path": "vitest.config.mjs",
+      "local": "21-vitest.config.mjs",
+      "sha256": "6e9cc2f0062db55796afb66c0e5c90158850b08982436fa3e9c430aca0b88d7a",
+      "git_blob": "fbdeeecea30fb9a60355290a8c097f8386dfbf6e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 19,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "upstream_tests_passed": 59,
+    "upstream_test_counts": {
+      "duplicateDetector.test.mjs": 42,
+      "hashCache.test.mjs": 17
+    },
+    "new_authored_controls_passed": 1,
+    "total_authored_controls_distinct": 37,
+    "retained_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "scope": "Two original complete unchanged test files, original config/setup, three original runtime modules; isolated own package manifest with Vitest4.1.0, own freshly resolved dependency lock; not original full package lock or full suite/plugin.",
+    "installation": "Configured registry npm.pkg.github.com returned404; explicit public npm registry install succeeded with ignore-scripts. No global npm configuration changes.",
+    "probe_note": "Initial owned probe creation used wrong cwd path and ran zero tests; corrected, then stricter assertion verified exact not-a-constructor error; countone distinct authored control."
+  },
+  "findings": [
+    {
+      "finding": "All42 original detector cases and17 original cache cases pass. This does not cover same-stat altered bytes, loaded raw85 threshold, parent hash replacement or actual import policy found earlier.",
+      "evidence": "native original Vitest results"
+    },
+    {
+      "finding": "Original findByHash cache tests install Zotero.Search=vi.fn(()=>search). Under Vitest4.1.0 this arrow implementation is not constructable; original findByHash catches not-a-constructor and returnsnull after hash computation, so read-count assertion can pass without ever executing search.search. Owned probe confirms exact error and zero calls to search.search while expected one hash read passes.",
+      "evidence": "native authored Vitest control"
+    },
+    {
+      "finding": "Original ISBN case accepts030640615X by ignoring original check digit; asserts valid-format output rather than validating input check digit. This matches implementation behavior and is not a failing original test.",
+      "evidence": "whole test source read"
+    }
+  ],
+  "remaining": [
+    "81blobs not whole-read",
+    "Full suite, original dependency lock, actual Zotero and release unqualified",
+    "Root/dependency license coverage incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

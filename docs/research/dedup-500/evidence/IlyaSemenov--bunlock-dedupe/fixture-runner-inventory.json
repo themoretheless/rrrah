@@ -1,0 +1,266 @@
+{
+  "commit": "9e020bbbe6f2e6d282779fa2ed62446494e827e8",
+  "fixture_count": 36,
+  "branches": {
+    "dedupe": 20,
+    "update": 16,
+    "update_fix": 1,
+    "repair": 3
+  },
+  "rows": [
+    {
+      "fixture": "already-deduped-optional-peer-orphan",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "basic",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "complex",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "git-package-dependencies",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "invalid-resolution",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "monorepo-subpackages",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "multi-target",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "multiple-libs",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "nested-ancestor-resolution",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "nested-orphan-cleanup",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "nested-redundant-cleanup",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "optional-peer-orphan-cleanup",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "orphan-all-paths-rewritten",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "orphan-cannot-dedupe",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "overrides",
+      "dedupe": true,
+      "update": true,
+      "update_fix": true,
+      "repair": false
+    },
+    {
+      "fixture": "overrides-non-semver",
+      "dedupe": true,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "prerelease-ranges",
+      "dedupe": true,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "repair-conflicts",
+      "dedupe": false,
+      "update": false,
+      "update_fix": false,
+      "repair": true
+    },
+    {
+      "fixture": "repair-missing-dependencies",
+      "dedupe": false,
+      "update": false,
+      "update_fix": false,
+      "repair": true
+    },
+    {
+      "fixture": "repair-pinned-ranges",
+      "dedupe": false,
+      "update": false,
+      "update_fix": false,
+      "repair": true
+    },
+    {
+      "fixture": "scoped-requester-redundant-cleanup",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "transitive-orphan-cascade",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "transitive-orphan-cross-group",
+      "dedupe": true,
+      "update": false,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-drops-dep",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-intermediate",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-manual-required",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-mixed",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-multi-blocked",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-multi-key",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-no-candidates",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-no-suggestions",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-older-only",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-same-name-distinct-ranges",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-scoped",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-simple",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    },
+    {
+      "fixture": "update-skip-latest",
+      "dedupe": false,
+      "update": true,
+      "update_fix": false,
+      "repair": false
+    }
+  ],
+  "executed": false,
+  "scope": "Pinned tree file-presence gating only;fixture contents not credited read and callbacks not executed."
+}

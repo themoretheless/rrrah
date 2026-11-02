@@ -1,0 +1,12 @@
+{
+  "scope": "Original AST judge functions and prompt constants; fake completion responses, no SDK imports/network",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Positive synthetic CORRECT JSON returns1",
+    "Evidence containing literal JSON braces triggers KeyError during second prompt.format before fake completion call",
+    "Valid JSON array response causes AttributeError rather than handled parse failure",
+    "Category3 integer truncates gold at semicolon; string3 does not"
+  ],
+  "literal_brace_key_error": "'\"key\"'",
+  "full_suite_run": false
+}

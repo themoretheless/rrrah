@@ -1,0 +1,109 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v25-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/rewriters/cargo.ts",
+      "local": "registry-src_modules_proxy_rewriters_cargo.ts",
+      "git_blob": "265b2c6e4a915892ead52d54b1061f054dc52d77",
+      "sha256": "8ec5426723b1dbefa6ed27cd14d9e7882d5aaf9a2d159d1b092a9b3a25fa9b13",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/find.ts",
+      "local": "registry-src_modules_proxy_rewriters_find.ts",
+      "git_blob": "86837208ecb0a0d05acfe2569a99ff28be2cbfee",
+      "sha256": "3ecdbb17c017690db5d3126f7303da6a6fb0da43c964b58ecb17ccbd0bdad252",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/git.ts",
+      "local": "registry-src_modules_proxy_rewriters_git.ts",
+      "git_blob": "7f34399fc2a883f4324d04d23c46f6c9eb5d54c3",
+      "sha256": "abc794f8d6b3f0f211b06be2d025c6854c11a3d72d9ed1a919dcd6625fe4aa4a",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/grep.ts",
+      "local": "registry-src_modules_proxy_rewriters_grep.ts",
+      "git_blob": "422e471b190b9e791f419a83bc000c2ecb257d50",
+      "sha256": "48eec5784f0ee8ff206e2857ce1f012ef9634092da51eeb69eb3e5234231aec3",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/ls.ts",
+      "local": "registry-src_modules_proxy_rewriters_ls.ts",
+      "git_blob": "c5a8bd60b8921742dc717242cd71988e27be7d52",
+      "sha256": "6db61b3dfb938e90da15a6524f2d7167b03fe5579188f0bf3bda20a4fabecf24",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/npm.ts",
+      "local": "registry-src_modules_proxy_rewriters_npm.ts",
+      "git_blob": "2c184a6f0a903b585591b422d0d55e4578f6a717",
+      "sha256": "5347f02cbe3187da6b09c79f693093a5168de9482cc32801fd6792f99fedca32",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/tsc.ts",
+      "local": "registry-src_modules_proxy_rewriters_tsc.ts",
+      "git_blob": "38c011563ccfb85f881915fc31c8c796ea32ef29",
+      "sha256": "a827243b9b2ac4772ec4123454d3f90faa2bb68c9fdcb420d55c30cee89d0802",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/runRewriter.test.ts",
+      "local": "registry-tests_modules_proxy_runRewriter.test.ts",
+      "git_blob": "3bd03bac5b8964ecce990a7d09d4ac6c4b34577e",
+      "sha256": "a508c4231cf70fa66d00a845c399393ac5e4acbc446b7f4179e9f77dfa73618e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 92,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 289,
+    "numPassedTests": 289,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 4,
+  "authored_upstream_controls_total_distinct": 54,
+  "new_authored_controls": 1,
+  "requalified_prior_controls": 2,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "generated_full_result": {
+    "runtime": "v22.23.4",
+    "requalified_prior_controls": 2,
+    "new_distinct_controls": 1,
+    "first": {
+      "code": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":{\"file_path\":\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-vQrpI6/source.ts\",\"offset\":0,\"limit\":6}}}",
+      "stderr": ""
+    },
+    "second": {
+      "code": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":{\"file_path\":\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-vQrpI6/source.ts\",\"offset\":0,\"limit\":6}}}",
+      "stderr": ""
+    },
+    "malformed": {
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "statsFiles": 3,
+    "scope": "Originalgeneratedscript+nativeAST/signal/score+dedupchain;realownedsource,signals,stats;originalfullregistrywithallrewriters;child-onlyhomedirpatch;repeatedReadtrimmedagainbeforecache,notdenied;noactualClaudeReadtool",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-vQrpI6"
+  },
+  "findings": [
+    "Generatedchildscript nowloadsoriginalfullregistry/allrewriters aswellasnativeAST/signal/dedupchain;Grepinjectsheadlimit100,2Readsallowoffset0limit6,3statsfiles;malformedstdinquiet.",
+    "Onlyhome-directoryredirectisolateschildwrites;noAST/registryruntimefixturesusedbyimportedmodules.",
+    "ActualClaudehosttoolAPI/parameteracceptance notqualified;stdin/stdoutJSONroutingonly.",
+    "Remainingrewriterflags/outputcaps sourcewhole-read;actualCargo/npm/compiler commandsnotexecuted."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

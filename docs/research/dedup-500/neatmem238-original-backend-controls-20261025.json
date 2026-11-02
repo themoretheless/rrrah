@@ -1,0 +1,112 @@
+{
+  "scope": "Original backend-platform.test.ts callbacks transpiled unmodified; minimal Vitest assertions/mock fetch, synthetic AbortSignal, no SDK/server/network; transpilation is not typechecking",
+  "original_callbacks_passed": 26,
+  "results": [
+    {
+      "name": "uses the default message when none is provided",
+      "passed": true
+    },
+    {
+      "name": "accepts a custom message",
+      "passed": true
+    },
+    {
+      "name": "has name 'AuthError'",
+      "passed": true
+    },
+    {
+      "name": "is an instance of Error",
+      "passed": true
+    },
+    {
+      "name": "includes the path in the message",
+      "passed": true
+    },
+    {
+      "name": "has name 'NotFoundError'",
+      "passed": true
+    },
+    {
+      "name": "is an instance of Error",
+      "passed": true
+    },
+    {
+      "name": "includes both path and detail in the message",
+      "passed": true
+    },
+    {
+      "name": "has name 'APIError'",
+      "passed": true
+    },
+    {
+      "name": "is an instance of Error",
+      "passed": true
+    },
+    {
+      "name": "can be referenced as a type",
+      "passed": true
+    },
+    {
+      "name": "creates an instance with apiKey and baseUrl",
+      "passed": true
+    },
+    {
+      "name": "strips trailing slashes from baseUrl",
+      "passed": true
+    },
+    {
+      "name": "add() sends POST to /v1/memories/ with correct body structure",
+      "passed": true
+    },
+    {
+      "name": "add() passes messages directly when provided",
+      "passed": true
+    },
+    {
+      "name": "search() sends POST to /v2/memories/search/",
+      "passed": true
+    },
+    {
+      "name": "search() unwraps results from object envelope",
+      "passed": true
+    },
+    {
+      "name": "get() sends GET to /v1/memories/{id}/",
+      "passed": true
+    },
+    {
+      "name": "delete() with memoryId sends DELETE to /v1/memories/{id}/",
+      "passed": true
+    },
+    {
+      "name": "delete() with all=true sends DELETE to /v1/memories/ with scope params",
+      "passed": true
+    },
+    {
+      "name": "status() returns connected:true on successful ping",
+      "passed": true
+    },
+    {
+      "name": "status() returns connected:false on failure",
+      "passed": true
+    },
+    {
+      "name": "throws AuthError on 401",
+      "passed": true
+    },
+    {
+      "name": "throws NotFoundError on 404",
+      "passed": true
+    },
+    {
+      "name": "throws APIError on 400",
+      "passed": true
+    },
+    {
+      "name": "throws generic Error on other non-ok status",
+      "passed": true
+    }
+  ],
+  "full_vitest_suite_run": false,
+  "typecheck_performed": false
+}

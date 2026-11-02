@@ -1,0 +1,53 @@
+[
+  {
+    "name": "gpu-library",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-gpu",
+      "--lib",
+      "--",
+      "--test-threads=1"
+    ],
+    "code": 0,
+    "timed_out": false
+  },
+  {
+    "name": "model-worker",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--bin",
+      "rrrah",
+      "model_upload_worker::tests::",
+      "--",
+      "--ignored",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "code": 0,
+    "timed_out": false
+  },
+  {
+    "name": "idle-skip-final",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--bin",
+      "rrrah",
+      "first30_remaining::skipping_idle_poll_retains_completed_upload_credit_metal",
+      "--",
+      "--exact",
+      "--ignored",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "code": 0,
+    "timed_out": false
+  }
+]

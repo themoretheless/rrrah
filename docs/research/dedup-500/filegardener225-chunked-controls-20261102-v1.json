@@ -1,0 +1,21 @@
+{
+  "scope": "Original request_chunked method AST executed with inert sink, dict header stand-in and Python3 type aliases. No sockets/package import/live requests.",
+  "source": {
+    "path": "test_data/1dup/seconddir/requests/packages/urllib3/connection.py",
+    "local": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/urllib3/connection.py",
+    "sha256": "4029a47a5620b5b734e837c9b60b36da76bbf244532c24db2dbf8e4962dbb7e0",
+    "git_blob_sha1": "5ce0080480a6f82da6e3b459c8d831f8fcea8d99",
+    "read_method": "Entire shared source read in consecutive untruncated chunks for independently pinned byte-identical pair."
+  },
+  "input": [
+    "unicode e acute",
+    "empty bytes",
+    "Z byte"
+  ],
+  "wire_hex": "320d0ac3a90d0a310d0a5a0d0a300d0a0d0a",
+  "verified": "UTF8 byte length2 used for nonASCII text, empty element skipped, final zero chunk emitted.",
+  "limitations": [
+    "No actual HTTPHeaderDict or transport validation.",
+    "Transport framing is not file content identity or bounded decoder proof."
+  ]
+}

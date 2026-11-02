@@ -1,0 +1,41 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 31.76s
+     Running unittests src/main.rs (target/debug/deps/rrrah-ac3ba94d0e2ee339)
+
+running 1 test
+test gallery::tests::raw_invalid_selection_cancels_previous_plan_and_allows_fresh_resume ... FAILED
+
+failures:
+
+---- gallery::tests::raw_invalid_selection_cancels_previous_plan_and_allows_fresh_resume stdout ----
+
+thread 'gallery::tests::raw_invalid_selection_cancels_previous_plan_and_allows_fresh_resume' (14654777) panicked at crates/rrrah-app/src/gallery.rs:3301:13:
+empty=false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    gallery::tests::raw_invalid_selection_cancels_previous_plan_and_allows_fresh_resume
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 378 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

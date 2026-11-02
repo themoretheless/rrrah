@@ -1,0 +1,9 @@
+{
+  "scope": "Complete original SearchImagesTags module, actual owned temporary files; no decoding/model/UI.",
+  "cases": 3,
+  "findings": [
+    "Extension-only selection accepts invalid image bytes and does not recurse into nested directories. This is documented directory-listing scope, not image validation.",
+    "Two images sharing stem a map to same a.txt sidecar.",
+    "tag_files uses cached image list until image_files explicitly refreshes; tag_content refreshes sidecar mapping but not directory listing."
+  ]
+}

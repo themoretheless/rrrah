@@ -1,0 +1,67 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "scope": "Original arrange body, in-memory symlink/rename/directory recorders and candidate-order fixtures; no filesystem writes, actual mark conversion, database, native hash or Jest/app.",
+  "authored_controls": [
+    {
+      "name": "candidate order changes initial rename reason",
+      "passed": true,
+      "observed": {
+        "forward": [
+          [
+            "link",
+            "/virtual/a",
+            "candidate#1"
+          ],
+          [
+            "link",
+            "/virtual/b",
+            "candidate#2"
+          ],
+          [
+            "rename",
+            "TYPE_P_HASH_REJECT_DIFFERENT_MEAN"
+          ],
+          [
+            "dirs"
+          ]
+        ],
+        "reverse": [
+          [
+            "link",
+            "/virtual/b",
+            "candidate#1"
+          ],
+          [
+            "link",
+            "/virtual/a",
+            "candidate#2"
+          ],
+          [
+            "rename",
+            "TYPE_P_HASH_MATCH"
+          ],
+          [
+            "dirs"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "empty candidate list does no arrangement positive control",
+      "passed": true
+    },
+    {
+      "name": "null-hit row still selects rename and directory creation",
+      "passed": true,
+      "observed": [
+        [
+          "rename",
+          "TYPE_FILE_NAME_MATCH"
+        ],
+        [
+          "dirs"
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original ProcessService method bodies extracted via Flow AST. Every file operation, DB insertion, queue, lock and reporting function replaced by in-memory recorder/failure promise. No real deletion/move/database/remote service, full app or Jest.",
+  "authored_controls": [
+    {
+      "name": "replace deletes retained copy before failing replacement",
+      "passed": true,
+      "observed": [
+        "delete:/virtual/retained",
+        "move"
+      ]
+    },
+    {
+      "name": "transfer deletes retained copy before failing replacement",
+      "passed": true,
+      "observed": [
+        "delete:/virtual/retained",
+        "save"
+      ]
+    },
+    {
+      "name": "relocate inserts new destination before failed move",
+      "passed": true,
+      "observed": [
+        "insert",
+        "move"
+      ]
+    },
+    {
+      "name": "read lock released while returned processAction promise pending",
+      "passed": true,
+      "observed": [
+        "lock",
+        "action-start",
+        "unlock"
+      ]
+    },
+    {
+      "name": "returned regular-process rejection bypasses local catch",
+      "passed": true,
+      "observed": {
+        "fatalLogs": 0
+      }
+    }
+  ]
+}

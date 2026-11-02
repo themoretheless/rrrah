@@ -1,0 +1,22 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original pure client validators extracted via AST, exception type adapter; no HTTP/client construction. Acceptance at client boundary does not imply server acceptance.",
+  "authored_controls": [
+    {
+      "name": "NaN threshold accepted",
+      "passed": true
+    },
+    {
+      "name": "boolean threshold accepted",
+      "passed": true
+    },
+    {
+      "name": "zero top_k accepted by design",
+      "passed": true
+    },
+    {
+      "name": "filter key presence enough despite null value",
+      "passed": true
+    }
+  ]
+}

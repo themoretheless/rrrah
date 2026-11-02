@@ -1,0 +1,23 @@
+{
+  "seed": 267989,
+  "files": 80,
+  "expected_groups": 11,
+  "binary_sha256": "08965263ff191eec3199302820b0573e67ee6af60df0fcd0cba8a220ea0545b8",
+  "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+  "cases": [
+    {
+      "case": "single-root",
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n",
+      "exit_code": 0
+    },
+    {
+      "case": "overlapping-roots",
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n",
+      "exit_code": 0
+    }
+  ],
+  "contents_unchanged": true,
+  "scope": "Generated independent byte oracle on local macOS; does not qualify concurrent mutation, all file sizes or all platforms"
+}

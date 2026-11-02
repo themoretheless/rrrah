@@ -1,0 +1,38 @@
+{
+  "scope": "Original complete middleware and configuration; real ASP.NET DefaultHttpContext and .NET streams; two Jellyfin type seams; no Jellyfin server/media accessed",
+  "authoredControls": [
+    {
+      "name": "latest episode retained; surviving input order preserved",
+      "passed": true,
+      "evidence": [
+        "movie",
+        "new"
+      ]
+    },
+    {
+      "name": "unrelated path passthrough",
+      "passed": true,
+      "evidence": "byte-for-byte JSON passthrough"
+    },
+    {
+      "name": "malformed JSON fallback preserves payload",
+      "passed": true,
+      "evidence": "original bytes returned"
+    },
+    {
+      "name": "downstream exception swallowed and buffered bytes lost",
+      "passed": true,
+      "evidence": {
+        "outputLength": 0,
+        "exceptionPropagated": false
+      }
+    },
+    {
+      "name": "episode limit also permits duplicate movie records",
+      "passed": true,
+      "evidence": {
+        "retained": 2
+      }
+    }
+  ]
+}

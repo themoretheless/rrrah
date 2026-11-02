@@ -1,0 +1,29 @@
+{
+  "scope": "Original six dream-themes callbacks; original helpers without environment/client initialization; Node VM TypeScript transpilation and assert adapter; fake DB client. No Deno typechecking/full suite/network/DB.",
+  "outcomes": [
+    {
+      "name": "returns empty result when no themes exist",
+      "passed": true
+    },
+    {
+      "name": "populates junction and takes snapshot for themes",
+      "passed": true
+    },
+    {
+      "name": "skips centroid update when theme has zero new thoughts",
+      "passed": true
+    },
+    {
+      "name": "velocity uses raw count on first run (no prior snapshots)",
+      "passed": true
+    },
+    {
+      "name": "detects declining transition when velocity drops below 2 for 2+ weeks",
+      "passed": true
+    },
+    {
+      "name": "detects recovery from dormant to active",
+      "passed": true
+    }
+  ]
+}

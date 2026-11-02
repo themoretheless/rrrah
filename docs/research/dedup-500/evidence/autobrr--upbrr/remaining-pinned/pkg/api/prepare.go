@@ -1,0 +1,123 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+// PreparationIntent describes why preparation was requested. It may influence
+// reuse/progress decisions but never the canonical fact set.
+type PreparationIntent string
+
+const (
+	// PreparationIntentPreview prepares a release for metadata preview.
+	PreparationIntentPreview PreparationIntent = "preview"
+	// PreparationIntentDuplicateCheck prepares a release for duplicate checking.
+	PreparationIntentDuplicateCheck PreparationIntent = "duplicate_check"
+	// PreparationIntentMedia prepares a release for media work.
+	PreparationIntentMedia PreparationIntent = "media"
+	// PreparationIntentDescription prepares a release for description work.
+	PreparationIntentDescription PreparationIntent = "description"
+	// PreparationIntentDryRun prepares a release for tracker dry run.
+	PreparationIntentDryRun PreparationIntent = "dry_run"
+	// PreparationIntentUpload prepares a release for upload review or execution.
+	PreparationIntentUpload PreparationIntent = "upload"
+)
+
+// PrepareInput requests one canonical prepared-release generation.
+type PrepareInput struct {
+	SourcePath string
+	// VerifiedSource is private evidence from one explicit open or refresh. It
+	// never crosses a browser transport boundary and must not be reused there.
+	VerifiedSource *VerifiedInputSource `json:"-"`
+	Intent         PreparationIntent
+	// ExternalFreshness controls provider-fact reuse and whether a new input
+	// load may retry retained empty results. It is distinct from Force,
+	// which controls complete prepared-generation reuse.
+	ExternalFreshness ExternalFreshness
+	Instructions      ReleaseFactInstructions
+	Policy            PreparationPolicy
+	// Search contains fact-producing client search choices included in compatibility.
+	Search ClientSearchPolicy
+	// Controls contains one-shot permissions excluded from compatibility.
+	Controls PreparationControls
+	// MetadataRequirements is the tracker-ID-free union of selected metadata demands.
+	// It affects canonical collection but is not a reusable prepared-release fact.
+	MetadataRequirements MetadataRequirementSet `json:"-"`
+	Force                bool
+	// RequirePrepared rejects collection when no compatible prepared generation exists.
+	RequirePrepared bool
+}
+
+// ResolvedPreparationInput carries accepted source corrections between internal
+// preparation owners. It is never accepted as a transport request.
+type ResolvedPreparationInput struct {
+	Input             PrepareInput
+	Corrections       ReleaseCorrectionsSnapshot
+	SourceFingerprint string
+	// ExplicitFields identifies values supplied for this preparation, whose
+	// content bindings may be finalized after provider discovery.
+	ExplicitFields []CorrectionFieldRef
+}
+
+// StaleContentCorrectionsError asks the workflow to confirm individual saved
+// values after provider discovery establishes a different content identity.
+type StaleContentCorrectionsError struct {
+	Corrections    ReleaseCorrectionsSnapshot
+	CurrentBinding ContentBinding
+}
+
+func (e *StaleContentCorrectionsError) Error() string {
+	return "saved content corrections require confirmation for the current source identity"
+}
+
+func (e *StaleContentCorrectionsError) Unwrap() error { return ErrCorrectionConflict }
+
+// ReleaseFactInstructions contains caller intent that can change finalized
+// reusable release facts.
+type ReleaseFactInstructions struct {
+	Identity        ExternalIDOverrides
+	Category        *CanonicalCategory
+	ReleaseName     ReleaseNameOverrides
+	Metadata        MetadataOverrides
+	SourceLookup    string
+	BlurayReleaseID string
+	Playlist        PlaylistInstruction
+	// TrackerIDs maps normalized tracker names to caller-supplied source IDs.
+	TrackerIDs map[string]string
+}
+
+// PlaylistInstruction preserves tri-state playlist selection: Set=false means
+// no instruction, while Set=true with an empty selection is an explicit clear.
+type PlaylistInstruction struct {
+	Set      bool
+	Selected []string
+	UseAll   bool
+}
+
+// PreparationPolicy contains non-secret preparation behavior that can affect
+// canonical fact derivation and therefore participates in compatibility.
+type PreparationPolicy struct {
+	KeepFolder bool
+	// KeepImages preserves tracker-sourced images while collecting metadata evidence.
+	KeepImages bool
+	OnlyID     bool
+}
+
+// ClientSearchPolicy contains fact-producing torrent-client search choices.
+// These values participate in preparation compatibility.
+type ClientSearchPolicy struct {
+	// Skip disables torrent-client discovery for this preparation.
+	Skip bool
+	// Client optionally selects one configured client; nil uses normal client selection.
+	Client *string
+}
+
+// PreparationControls contains one-shot permissions and presentation choices.
+// These values never participate in preparation compatibility.
+type PreparationControls struct {
+	// Interaction determines whether preparation may request manual input.
+	Interaction InteractionMode
+	// ConfirmBDMVRescan permits replacing a partial cached Blu-ray analysis.
+	ConfirmBDMVRescan bool
+	// ForceRecheck forwards an explicit torrent-client hash recheck choice.
+	ForceRecheck *bool
+}

@@ -1,0 +1,48 @@
+{
+  "repository": "CoLRev-Environment/bib-dedupe",
+  "scope": "Original AST helper bodies. pd.isnull adapter supports only None/string fixtures used here. No pandas DataFrame merge, upstream tests or filesystem operations.",
+  "authored_controls": [
+    {
+      "name": "title leading empty retains empty despite valid value",
+      "passed": true,
+      "observed": [
+        "",
+        "Valid title"
+      ]
+    },
+    {
+      "name": "author leading empty retains empty despite valid value",
+      "passed": true,
+      "observed": [
+        "",
+        "Valid Author"
+      ]
+    },
+    {
+      "name": "container_title leading empty retains empty despite valid value",
+      "passed": true,
+      "observed": [
+        "",
+        "Valid Journal"
+      ]
+    },
+    {
+      "name": "pages leading empty retains empty despite valid value",
+      "passed": true,
+      "observed": [
+        "",
+        "1--5"
+      ]
+    },
+    {
+      "name": "title with two valid entries then empty raises",
+      "passed": true,
+      "observed": "IndexError"
+    },
+    {
+      "name": "origin union sorted positive control",
+      "passed": true,
+      "observed": "a;b;c"
+    }
+  ]
+}

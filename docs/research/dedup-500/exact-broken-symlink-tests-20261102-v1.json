@@ -1,0 +1,26 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--test",
+    "exact_files"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 89.91196637499525,
+  "platform": "macOS-26.7.2-arm64-arm-64bit-Mach-O",
+  "source_before": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "0259f98e82c3ce66d09a35ddafbf9eee60c53483ad9a6fe808a2e70a3775e852",
+    "crates/rrrah-dedup/src/exact.rs": "f0474ac1833d5371719d643138e0164b516b6d56c26a38cc155f191e23c322d4"
+  },
+  "source_after": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "0259f98e82c3ce66d09a35ddafbf9eee60c53483ad9a6fe808a2e70a3775e852",
+    "crates/rrrah-dedup/src/exact.rs": "f0474ac1833d5371719d643138e0164b516b6d56c26a38cc155f191e23c322d4"
+  },
+  "source_unchanged": true,
+  "output": "   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n    Finished `test` profile [optimized + debuginfo] target(s) in 1m 21s\n     Running tests/exact_files.rs (target/debug/deps/exact_files-f2fc6b3325e0c5aa)\n\nrunning 47 tests\ntest excess_root_admission_refuses_before_missing_source_io ... ok\ntest duplicate_root_admission_retains_boundary_and_fresh_retry ... ok\ntest cancellation_during_full_hash_is_bounded ... ok\ntest copies_empty_files_and_equal_size_negatives ... ok\ntest hardlink_aliases_and_followed_symlink_cycles ... ok\ntest atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok\ntest duplicate_zip_entry_names_do_not_replace_encoded_byte_identity ... ok\ntest ordinary_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok\ntest missing_input_and_overlap_do_not_lose_valid_results ... ok\ntest fifo_replacement_does_not_block_or_hide_healthy_copies ... ok\ntest physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files ... ok\ntest reordered_middle_blocks_with_identical_sampled_edges_are_not_copies ... ok\ntest restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok\ntest normalized_parent_names_do_not_merge_distinct_physical_paths ... ok\ntest hidden_directories_and_empty_files_remain_in_exact_partitions ... ok\ntest root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok\ntest matching_video_prefix_and_size_do_not_establish_exact_equality ... ok\ntest dangling_and_self_referential_symlinks_preserve_healthy_copy_groups ... ok\ntest repeated_exact_scan_rejects_stale_equality_after_rewrite_and_growth ... ok\ntest same_length_mutation_during_sample_is_detected ... ok\ntest same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok\ntest same_samples_different_middle_are_not_duplicates ... ok\ntest size_depth_and_entry_limits_are_visible ... ok\ntest path_delimiters_preserve_distinct_files_and_copy_partitions ... ok\ntest unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok\ntest paths_sharing_more_than_256_characters_preserve_copy_partitions ... ok\ntest selecting_one_directory_does_not_admit_sibling_prefix_matches ... ok\ntest unreadable_file_is_explicit_and_does_not_hide_healthy_copies ... ok\ntest sibling_roots_with_a_shared_name_prefix_keep_both_file_sets ... ok\ntest text_normalization_does_not_replace_encoded_byte_equality ... ok\ntest unix_socket_roots_and_entries_do_not_hide_regular_copies ... ok\ntest replacing_a_duplicate_with_a_hardlink_invalidates_its_old_observation ... ok\ntest shared_filename_suffixes_and_extensionless_names_preserve_content_partitions ... ok\ntest verified_scan_final_callback_cannot_publish_a_changed_earlier_member ... ok\ntest verified_scan_preserves_groups_and_observes_every_admitted_file ... ok\ntest service_style_names_remain_eligible_for_exact_content_matches ... ok\ntest unique_sizes_skip_payload_reads_without_weakening_verified_observations ... ok\ntest exact_content_partitions_ignore_extensions_and_check_unsampled_bytes ... ok\ntest stale_small_file_observations_reject_rewrite_and_disappearance ... ok\ntest late_exact_source_failures_preserve_healthy_members_and_other_groups ... ok\ntest verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok\ntest whitespace_path_names_preserve_all_authored_copy_partitions ... ok\ntest length_extension_zeroes_match_written_zeroes_but_not_a_middle_byte_change ... ok\ntest restored_modified_time_does_not_hide_same_inode_edit_during_scan ... ok\ntest nested_overlapping_roots_match_the_full_authored_partition ... ok\ntest block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes ... ok\ntest changing_any_member_does_not_hide_healthy_duplicates ... ok\n\ntest result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.80s\n\n",
+  "scope": "47 exact_files integration tests on current Unix host; added dangling/self-referential symlink cases across scan/scan_verified, follow=false/true, directory and both explicit root orders. Does not qualify Windows reparse points or concurrent link replacement."
+}

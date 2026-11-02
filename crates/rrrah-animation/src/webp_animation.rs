@@ -15,6 +15,11 @@ pub struct WebpImage {
     /// Zero means infinite; positive values are total plays.
     pub num_plays: u16,
 }
+#[cfg(test)]
+thread_local! {
+    static PREALLOCATE_FRAME_LIMIT: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    static INITIAL_FRAME_CAPACITY: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+}
 fn bad(s: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidWebpAnimation(s)
 }
@@ -85,6 +90,14 @@ pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<WebpImage, RasterDeco
     }
     let mut anim = None;
     let mut frames = Vec::new();
+    #[cfg(test)]
+    if PREALLOCATE_FRAME_LIMIT.with(std::cell::Cell::get) {
+        frames
+            .try_reserve_exact(4096)
+            .map_err(|_| RasterDecodeError::OutputTooLarge)?;
+    }
+    #[cfg(test)]
+    INITIAL_FRAME_CAPACITY.with(|capacity| capacity.set(frames.capacity()));
     let mut icc = None;
     for &(kind, data) in &cs[1..] {
         match kind {
@@ -250,6 +263,39 @@ mod tests {
     use super::*;
     fn root() -> std::path::PathBuf {
         std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster")
+    }
+    #[test]
+    fn frame_limit_preallocation_spends_heap_before_invalid_header_rejection() {
+        let original = std::fs::read(root().join("webp-animation-0.webp")).unwrap();
+        let mut bytes = original[..30].to_vec();
+        repair_size(&mut bytes);
+        let budget = rrrah_core::MemoryBudget::new(64);
+        let mut request = DecodeRequest::new("invalid-frame-index");
+        request.memory_budget = Some(budget.clone());
+        let selected = std::env::var("RRRAH_FRAME_ALLOCATION_VARIANT").ok();
+        let mut reference = None;
+        for candidate in [false, true] {
+            if selected.as_ref().is_some_and(|v| (v == "candidate") != candidate) {
+                continue;
+            }
+            PREALLOCATE_FRAME_LIMIT.with(|mode| mode.set(candidate));
+            let error = format!("{:?}", decode(&bytes, &request).unwrap_err());
+            if let Some(reference) = reference.as_ref() {
+                assert_eq!(&error, reference);
+            } else {
+                reference = Some(error);
+            }
+            let capacity = INITIAL_FRAME_CAPACITY.with(std::cell::Cell::get);
+            assert_eq!(capacity, if candidate { 4096 } else { 0 });
+            assert_eq!(budget.used(), 0);
+            eprintln!(
+                "RR51_EARLY_INVALID candidate={candidate} collection_allocations={} capacity={capacity} requested_bytes={} managed_peak={} final=0",
+                u8::from(candidate),
+                capacity * std::mem::size_of::<Frame<'_>>(),
+                budget.peak()
+            );
+        }
+        PREALLOCATE_FRAME_LIMIT.with(|mode| mode.set(false));
     }
     #[test]
     fn selected_linear_presentations_timing_and_disposal() {

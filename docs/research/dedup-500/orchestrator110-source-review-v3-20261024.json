@@ -1,0 +1,29 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v2-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "src/distributed/redis_dedup.rs",
+      "local": "04-redis_dedup.rs",
+      "git_blob": "4488f9b07a0c50c1dd504f7ba3ffd248775a792b",
+      "sha256": "41be5a39aa3e0543af4e79e7b92ea87f014730f493707de5fc2d79e97b9bfa4b",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "whole_repo_complete": false,
+  "new_runtime_tests": 0,
+  "findings": [
+    "Claim usesatomicSETNXEX, release Lua compares storednode_idthenDEL. Sourceonly,noliveRedisrun.",
+    "refresh usesunconditionalEXPIREwithoutownercheckandignoresinteger0result,returnsOkforabsentkey;possibleforeignleaseextensionnotruntimequalified.",
+    "Releasecomparesnode_idnotper-claimgeneration;expiredoldclaimandnewclaimonsamenodemayaliasownership. Sourcereasoningonly.",
+    "ttl_seconds accepts0withoutvalidation;serverresponsebehaviornotexecuted.",
+    "newvalidURLtestonlyconstructsclient,doesnotconnect. Refresh testdiscardsResultsoitsnameextendsTTLdoesnotproveactualextension.",
+    "Someoriginaltestsconditionalonclientopenandonefallbackprocess::exit(0)canterminatewholetestprocess;notexecutedhere.",
+    "Norequestsresultcachingpromisedbythismodule;claimduplicateonly,notwaitingfanout."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

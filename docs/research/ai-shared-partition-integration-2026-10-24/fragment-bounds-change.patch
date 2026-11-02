@@ -1,0 +1,315 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1170,14 +1170,82 @@
+         (0..self.len).map(|i| [self.points[i], self.points[(i + 1) % self.len]])
+     }
+ }
++#[cfg(feature = "experimental-shared-partitions")]
++#[derive(Clone, Copy)]
++struct FragmentBounds {
++    axis: [f64; 2],
++    interval: [f64; 2],
++}
++#[cfg(feature = "experimental-shared-partitions")]
++impl FragmentBounds {
++    const DISABLED: Self = Self { axis: [0.; 2], interval: [0.; 2] };
++    fn project(axis: [f64; 2], point: Point) -> Option<[f64; 2]> {
++        let x = axis[0] * point.x;
++        let y = axis[1] * point.y;
++        let low = (x.next_down() + y.next_down()).next_down();
++        let high = (x.next_up() + y.next_up()).next_up();
++        (low.is_finite() && high.is_finite()).then_some([low, high])
++    }
++    fn new(polygon: &Polygon) -> Self {
++        // Unknown supports keep the ordinary path and its canonical interning.
++        if polygon.incoming[..polygon.len].contains(&0) { return Self::DISABLED; }
++        let mut axis = [0.; 2];
++        let mut longest = 0.;
++        for [a, b] in polygon.edges() {
++            let d = b - a;
++            let length = d.x.abs().max(d.y.abs());
++            // Axis-aligned normals duplicate the preceding exact AABB test
++            // and cannot prove another separation after outward rounding.
++            if d.x != 0. && d.y != 0. && length.is_finite() && length > longest {
++                longest = length;
++                axis = [-d.y, d.x];
++            }
++        }
++        if axis == [0.; 2] { return Self::DISABLED; }
++        let mut interval = [f64::INFINITY, f64::NEG_INFINITY];
++        for point in &polygon.points[..polygon.len] {
++            let Some([low, high]) = Self::project(axis, *point) else { return Self::DISABLED; };
++            interval[0] = interval[0].min(low);
++            interval[1] = interval[1].max(high);
++        }
++        Self { axis, interval }
++    }
++    fn disjoint(&self, cut: &Polygon, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<bool> {
++        if self.axis == [0.; 2] || cut.len < 3 || cut.incoming[..cut.len].contains(&0) { return Ok(false); }
++        let mut interval = [f64::INFINITY, f64::NEG_INFINITY];
++        for point in &cut.points[..cut.len] {
++            tick(work, cancelled)?;
++            let Some([low, high]) = Self::project(self.axis, *point) else { return Ok(false); };
++            interval[0] = interval[0].min(low);
++            interval[1] = interval[1].max(high);
++        }
++        Ok(self.interval[1] < interval[0] || interval[1] < self.interval[0])
++    }
++}
+ #[derive(Clone, Copy)]
+ struct Fragment {
+     polygon: Polygon,
++    #[cfg(feature = "experimental-shared-partitions")]
++    bounds: FragmentBounds,
+     owner: PixelSourceOwner,
+     // Classification of the immutable represented polygon, including tags.
+     has_area: bool,
+     // True only when the previous published neighbor cannot merge with this.
+     no_merge_with_previous: bool,
++}
++impl Fragment {
++    fn new(polygon: Polygon, owner: PixelSourceOwner, has_area: bool, no_merge_with_previous: bool) -> Self {
++        Self::with_bounds(polygon,owner,has_area,no_merge_with_previous,
++            #[cfg(feature = "experimental-shared-partitions")] None)
++    }
++    fn with_bounds(polygon: Polygon, owner: PixelSourceOwner, has_area: bool, no_merge_with_previous: bool,
++        #[cfg(feature = "experimental-shared-partitions")] cached: Option<FragmentBounds>,
++    ) -> Self {
++        Self { polygon, owner, has_area, no_merge_with_previous,
++            #[cfg(feature = "experimental-shared-partitions")]
++            bounds: if has_area { cached.unwrap_or_else(|| FragmentBounds::new(&polygon)) } else { FragmentBounds::DISABLED },
++        }
++    }
+ }
+ struct AdmittedVec<'a, T> {
+     values: Vec<T>,
+@@ -1299,7 +1367,8 @@
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<()> {
+     if polygon.moments().is_some() {
+-        keep_positive(out, polygon, owner, work, cancelled)?;
++        keep_positive(out, polygon, owner, work, cancelled,
++            #[cfg(feature = "experimental-shared-partitions")] None)?;
+     }
+     Ok(())
+ }
+@@ -1314,12 +1383,14 @@
+     #[cfg(test)]
+     if RECHECK_RETAINED_CONTROL.with(|v| v.get()) {
+         if fragment.polygon.moments().is_some() {
+-            return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled);
++            return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled,
++                #[cfg(feature = "experimental-shared-partitions")] Some(fragment.bounds));
+         }
+         return Ok(false);
+     }
+     if fragment.has_area {
+-        return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled);
++        return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled,
++                #[cfg(feature = "experimental-shared-partitions")] Some(fragment.bounds));
+     }
+     Ok(false)
+ }
+@@ -1329,6 +1400,7 @@
+     owner: PixelSourceOwner,
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
++    #[cfg(feature = "experimental-shared-partitions")] cached_bounds: Option<FragmentBounds>,
+ ) -> Result<bool> {
+     let mut merged = false;
+     let no_merge_with_previous;
+@@ -1355,7 +1427,8 @@
+         merged = true;
+     }
+     let has_area = !merged || polygon.moments().is_some();
+-    out.sink_push(Fragment { polygon, owner, has_area, no_merge_with_previous })?;
++    out.sink_push(Fragment::with_bounds(polygon, owner, has_area, no_merge_with_previous,
++        #[cfg(feature = "experimental-shared-partitions")] if merged { None } else { cached_bounds }))?;
+     Ok(!merged)
+ }
+ // Emit convex pieces of `polygon \ cut`, returning the remaining intersection.
+@@ -1760,12 +1833,7 @@
+         let triangle = tagged;
+         let mut next = fresh_regions(&self.regions);
+         let mut incoming = AdmittedVec::new(admit, maximum);
+-        incoming.push(Fragment {
+-            polygon: triangle,
+-            owner,
+-            has_area: true, // tagged.moments() was checked above.
+-            no_merge_with_previous: true,
+-        })?;
++        incoming.push(Fragment::new(triangle, owner, true, true))?;
+         let mut old_index = 0;
+         let mut tail_matches_old = false;
+         while old_index < self.regions.values.len() {
+@@ -1808,7 +1876,10 @@
+             // Every remainder is contained in the clipped incoming triangle.
+             // Disjoint bounds therefore preserve this old region without
+             // rebuilding the incoming list or comparing source priorities.
+-            if !old.polygon.bounds_overlap(&triangle) {
++            let disjoint = !old.polygon.bounds_overlap(&triangle);
++            #[cfg(feature = "experimental-shared-partitions")]
++            let disjoint = disjoint || (BATCH && old.bounds.disjoint(&triangle, work, cancelled)?);
++            if disjoint {
+                 tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
+                 continue;
+             }
+@@ -1910,6 +1981,37 @@
+ #[cfg(test)]
+ mod exact_orientation_tests {
+     use super::*;
++    #[cfg(feature = "experimental-shared-partitions")]
++    #[test]
++    fn fragment_bounds_prune_diagonal_gaps_and_observe_every_query_failure() {
++        use std::cell::Cell;
++        let polygon = |shift:f64| {
++            let mut p=Polygon::empty();
++            for [x,y] in [[0.1,0.1+shift],[0.9,0.7+shift],[0.9,0.71+shift]] {
++                p.push_tagged(Point::new(x,y),1).unwrap();
++            }
++            p
++        };
++        let stored=polygon(0.);let cut=polygon(0.1);
++        assert!(stored.bounds_overlap(&cut));
++        let bounds=FragmentBounds::new(&stored);let checks=Cell::new(0);let mut work=100;
++        assert_eq!(bounds.disjoint(&cut,&mut work,&||{checks.set(checks.get()+1);false}),Ok(true));
++        let cost=100-work;
++        assert_eq!(bounds.disjoint(&stored,&mut 100,&||false),Ok(false));
++        for stop in 0..checks.get() {
++            let at=Cell::new(0);assert_eq!(bounds.disjoint(&cut,&mut 100,&||{let now=at.get();at.set(now+1);now==stop}),Err(PixelPartitionError::Cancelled));
++        }
++        for mut quota in 0..cost {assert_eq!(bounds.disjoint(&cut,&mut quota,&||false),Err(PixelPartitionError::Limit));}
++        assert_eq!(bounds.disjoint(&cut,&mut cost.clone(),&||false),Ok(true));
++        let mut unknown=stored;unknown.incoming[0]=0;
++        assert_eq!(FragmentBounds::new(&unknown).axis,[0.;2]);
++        assert_eq!(bounds.disjoint(&unknown,&mut 100,&||false),Ok(false));
++        let interval=FragmentBounds::project([1e308,-1e308],Point::new(f64::from_bits(1),f64::from_bits(1))).unwrap();
++        assert!(interval[0]<=0. && interval[1]>=0.);
++        assert!(FragmentBounds::project([f64::MAX,f64::MAX],Point::new(1.,1.)).is_none());
++        eprintln!("FRAGMENT_BOUNDS diagonal disjoint, overlap/unknown fallback; cancellations={} quotas={cost}; retry exact; inline bytes={}",checks.get(),size_of::<FragmentBounds>());
++    }
++
+     #[test]
+     fn exact_separation_requires_a_supporting_line_and_observes_every_failure() {
+         use std::cell::Cell;
+@@ -2068,7 +2170,7 @@
+         assert!(polygon.moments().is_none());
+         let owner = PixelSourceOwner { patch_index: 0, sample_index: 0, component_count: 1,
+             u: [0.;3], v: [0.;3], components: [[0.;3];4] };
+-        let fragment = Fragment { polygon, owner, has_area: false, no_merge_with_previous: false };
++        let fragment = Fragment::new(polygon, owner, false, false);
+         let mut out = AdmittedVec::new(&admit, 0);
+         let mut work = 0;
+         keep_existing(&mut out, &fragment, &mut work, &|| panic!("no tick on empty carry")).unwrap();
+@@ -2434,19 +2536,9 @@
+             p
+         };
+         let mut out = AdmittedVec::new(&admit, 16);
+-        out.push(Fragment {
+-            polygon: rect(0., 0.25),
+-            owner,
+-            has_area: true,
+-            no_merge_with_previous: false,
+-        })
++        out.push(Fragment::new(rect(0., 0.25), owner, true, false))
+         .unwrap();
+-        out.push(Fragment {
+-            polygon: rect(0.25, 0.5),
+-            owner,
+-            has_area: true,
+-            no_merge_with_previous: false,
+-        })
++        out.push(Fragment::new(rect(0.25, 0.5), owner, true, false))
+         .unwrap();
+         let first = out.values[0];
+         let saved = out.values[1];
+--- a/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
++++ b/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
+@@ -862,9 +862,7 @@
+         ] {
+             polygon.push(p).unwrap();
+         }
+-        Fragment {
+-            polygon,
+-            owner: super::super::PixelSourceOwner {
++        Fragment::new(polygon, super::super::PixelSourceOwner {
+                 patch_index: index,
+                 sample_index: index,
+                 component_count: 3,
+@@ -872,9 +870,8 @@
+                 v: [0., 0., 1.],
+                 components: [[x, 1., 0.], [0.5, 0., 0.], [0.25, 0., 0.], [0.; 3]],
+             },
+-            has_area: true,
+-            no_merge_with_previous: true,
+-        }
++            true, true,
++        )
+     }
+     fn assert_fragment(a: &Fragment, b: &Fragment) {
+         assert_eq!(a.owner, b.owner);
+@@ -897,6 +894,13 @@
+         );
+         assert_eq!(a.has_area, b.has_area);
+         assert_eq!(a.no_merge_with_previous, b.no_merge_with_previous);
++        #[cfg(feature = "experimental-shared-partitions")]
++        for f in [a,b] {
++            let expected = if f.has_area { super::super::FragmentBounds::new(&f.polygon) }
++                else { super::super::FragmentBounds::DISABLED };
++            assert_eq!(f.bounds.axis,expected.axis);
++            assert_eq!(f.bounds.interval,expected.interval);
++        }
+     }
+     #[test]
+     fn subranges_and_tail_share_unchanged_payload_and_release_last_owner() {
+@@ -1749,6 +1753,7 @@
+             // predicate; real LinePool bindings are covered by kernel replays.
+             for edge in 0..item.polygon.len { item.polygon.incoming[edge] = (i*3+edge+1) as u32; }
+             item.no_merge_with_previous = true;
++            item = Fragment::new(item.polygon,item.owner,item.has_area,item.no_merge_with_previous);
+             values.push(item);
+         }
+         let summary = ChunkSummary::from_values(&values);
+@@ -2683,6 +2688,10 @@
+         let mut shared = mode_pixel(&admit, 4096, true);
+         let mut flat_work = 100_000_000;
+         let mut shared_work = flat_work;
++        #[cfg(feature = "experimental-shared-partitions")]
++        let mut reference = mode_pixel(&admit,4096,false);
++        #[cfg(feature = "experimental-shared-partitions")]
++        let mut reference_work = flat_work;
+         let mut first_page_quota_crossing = [None, None];
+         for (index, &(patch_index, sample_index, component_count, points, fields)) in rows.iter().enumerate() {
+             let f = fields.map(|v| v.map(f64::from_bits));
+@@ -2700,6 +2709,14 @@
+                 assert_fragment(a, b);
+             }
+             assert_summaries(&shared);
++            #[cfg(feature = "experimental-shared-partitions")]
++            {
++                reference.paint_triangle_impl::<false>(points,owner,&mut reference_work,&||false).unwrap();
++                assert_eq!(reference.fragments(),flat.fragments(),"uncached paint {index}");
++                assert!(reference.lines.keys==flat.lines.keys && reference.lines.map==flat.lines.map);
++                assert_eq!(reference.lines.next,flat.lines.next);
++                for (a,b) in reference.regions.values.iter().zip(flat.regions.values.iter()) {assert_fragment(a,b);}
++            }
+             for (slot, work) in first_page_quota_crossing.iter_mut().zip([flat_work, shared_work]) {
+                 if slot.is_none() && 100_000_000 - work > page_remaining { *slot = Some(index); }
+             }
+@@ -2721,7 +2738,7 @@
+                 f.polygon.push(p).unwrap();
+             }
+             f.no_merge_with_previous = false;
+-            f
++            Fragment::new(f.polygon,f.owner,f.has_area,f.no_merge_with_previous)
+         };
+         for include_zero in [false, true] {
+             let mut flat = mode_pixel(&admit, 128, false);
+@@ -2734,6 +2751,7 @@
+                     let mut zero = fragment(10);
+                     zero.polygon = super::super::Polygon::empty();
+                     zero.has_area = false;
++                    zero = Fragment::new(zero.polygon,zero.owner,false,zero.no_merge_with_previous);
+                     pixel.regions.sink_push(zero).unwrap();
+                 }
+                 let mut second = rectangle(0.25, 0.5);

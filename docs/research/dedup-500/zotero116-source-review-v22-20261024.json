@@ -1,0 +1,73 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v21-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/mirrorExecutor_warnings.test.mjs",
+      "local": "37-mirrorExecutor_warnings.test.mjs",
+      "sha256": "74ee00aab76798c550047f1166adea291b879a61a9ff0efb3697335a938777e6",
+      "git_blob": "e972ca29a699742c1ad7cc0cba0165251581a96e",
+      "whole_text_read": true
+    }
+  ],
+  "partial_files_read": [
+    {
+      "path": "test/unit/mirrorExecutor.test.mjs",
+      "local": "36-mirrorExecutor.test.mjs",
+      "sha256": "a0bd5ec4030d8d305da4ec0ba0b2b89d3cc5896838fe9c24fb88790788a9d47a",
+      "git_blob": "5ef6712f9372743ef067ff172cfaef6137dfaa46",
+      "whole_text_read": false,
+      "read_ranges": [
+        [
+          1,
+          470
+        ]
+      ],
+      "scope": "Complete original file executed; onlyfirst470lines manually read"
+    }
+  ],
+  "whole_files_read_total": 40,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 76,
+    "new_original_counts": {
+      "mirrorExecutor.test.mjs": 70,
+      "mirrorExecutor_warnings.test.mjs": 6
+    },
+    "original_tests_total_distinct": 529,
+    "new_authored_controls_passed": 2,
+    "total_authored_controls_distinct": 55,
+    "original_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "shadow_harness": "docs/research/dedup-500/zotero116-shadow-rewrite-controls-20261024",
+    "scope": "Original executor tests complete unchanged, originalconfig/setup; upstream getFileHash/canonical/IOUtils mocks. Own native probe uses real original executor/store/factories, owned prefs/path and successful move recorder; no physical move or live Zotero."
+  },
+  "findings": [
+    {
+      "finding": "All70 original executor and6 warnings-integration tests pass. Complete executor testfile run doesnot mean whole manual source review of its68KB testfile.",
+      "evidence": "native original Vitest report"
+    },
+    {
+      "finding": "One attachment has canonical Old/p.pdf insertedfirst and later shadow Other/copy.pdf with sameattachmentkey. moveFolder Old->New returnsok; getByAttachmentKey resolveslatestshadow, so canonical recordOld/p.pdf remains while shadow canonical pointer becomesNew/p.pdf and noNew/p.pdf record exists.",
+      "evidence": "native original executor/store control with successful move recorder"
+    },
+    {
+      "finding": "Same moveFolder with only canonical record correctly rekeys Old/p.pdf toNew/p.pdf.",
+      "evidence": "native positive control"
+    },
+    {
+      "finding": "Original cross-FS tests injectEXDEV andENOSPC then check copy/remove calls. They do not establish actual Gecko filesystem overwrite/rollback/atomicity semantics; no platform collision behavior claim.",
+      "evidence": "partial original tests source review"
+    }
+  ],
+  "remaining": [
+    "60blobs not whole-read including remainder executor tests",
+    "Physical file move/collision/rollback semantics and actual Zotero unqualified",
+    "Baseline/index/preferences and remaining source/tests/licenses/release incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

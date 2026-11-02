@@ -1,0 +1,65 @@
+{
+  "repository": "WSH032/image-deduplicate-cluster-webui",
+  "commit": "02963057d5ae9368f8f481f44e2d30b7c63ed946",
+  "source_sha256": "909a2d747512a4e37bcd73b2cfb6d55b193b5f86e27c2a46e5a1f09181b77e11",
+  "read_scope": {
+    "path": "img_dedup_clust/deduplicate_fn.py",
+    "lines_read": [
+      1,
+      739
+    ],
+    "total_lines": 739,
+    "whole_file_read": true
+  },
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "original_tests_run": 0,
+  "authored_control_scenarios": 5,
+  "authored_control_cases": 28,
+  "control_source": "docs/research/dedup-500/webui197-controls-20261024/cluster_control.py",
+  "control_results": "docs/research/dedup-500/webui197-controls-20261024/cluster-control-results.json",
+  "runtime_scope": "Unchanged AST-extracted complete cluster_duplicates function, MyHasher adapter supplies synthetic symmetric graph. No actual image hashing/model/Gradio runtime.",
+  "findings": [
+    "First-overlap-only set merging does not merge all previously accumulated intersecting sets. Symmetric A-B-C-D chain yields overlapping output clusters in4/24 key insertion orders, single connected component in20/24.",
+    "Connected components of approximate similarity are not pairwise equality; even corrected union-find cannot establish exact image duplicates.",
+    "Source delegates hashing/CNN to imagededup; equality semantics require downstream algorithm review.",
+    "Mutable module globals hold selection, clusters, confirmed directory and duplicate map; upstream TODO explicitly notes multi-user interference. Concurrency not runtime tested.",
+    "Original selection function accepts negative parent/child indexes; synthetic -1/-1 selects last image D. Repeated index0 plans same image A twice. Recording operation stub only, no real removals.",
+    "Select-all deliberately includes every member. confirm_cluster has no retained-member guard; this is explicit manual feature, not evidence auto_select deletes all.",
+    "Selection indexes are resolved against mutable current global cluster_list without scan generation identity. Multi-session/stale-selection consequences not runtime verified.",
+    "Real unchanged cache_images_file retains stale same-name red thumbnail after owned source is replaced by blue PNG; reports no cache error. Filename-only cache validity lacks source identity/mtime/content verification.",
+    "operate_images_file logs per-file failures and returns no structured success/failure report; caller confirm_cluster unconditionally builds success message and resets state after return. Source inspection only; failure injection not yet run."
+  ],
+  "decision": "reject-cluster-merge-implementation; wrapper-reference-only",
+  "remaining": "5 whole text files read out of40 tracked blobs. Remaining sources/docs/notebooks/dependency versions and runtime need review; full application/original tests not run.",
+  "deferred": "Native pHash.org/ASAN remains skipped; Python wrapper inspection does not run that item.",
+  "previous_audit": "docs/research/dedup-500/webui197-source-controls-v2-20261024.json",
+  "selection_control_source": "docs/research/dedup-500/webui197-controls-20261024/selection_control.py",
+  "selection_control_results": "docs/research/dedup-500/webui197-controls-20261024/selection-control-results.json",
+  "additional_whole_file_reads": [
+    {
+      "path": "deduplicate_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/02-deduplicate_images.py",
+      "sha256": "7e7fcecdcb9eb716bf7454958d61626636c0f28cfe33320fbb8e1bf75968c64c"
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_js.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/04-deduplicate_js.py",
+      "sha256": "b5232d14bbe392638a17ddbf73d15d37cb2c24c8ec55daf9516b14141773f137"
+    },
+    {
+      "path": "run_deduplicate_images.ps1",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/05-run_deduplicate_images.ps1",
+      "sha256": "6a1b787514247687bd614d7977d211262765d7b97a071aac13f1c09c11e17046"
+    },
+    {
+      "path": "img_dedup_clust/tools/operate_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/operate_images.py",
+      "sha256": "18e62a0643e4c54c80d9c927d96c717e157728acc05d494b4bcc93267aa2239d"
+    }
+  ],
+  "tracked_blob_count": 40,
+  "whole_text_files_read": 5,
+  "cache_control_source": "docs/research/dedup-500/webui197-controls-20261024/cache_control.py",
+  "cache_control_results": "docs/research/dedup-500/webui197-controls-20261024/cache-control-results.json"
+}

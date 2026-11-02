@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/w3c-oracle-preflight-2026-10-22/control.py", line 24, in <module>
+    runpy.run_path(str(script), run_name='__main__')
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen runpy>", line 292, in run_path
+  File "<frozen runpy>", line 97, in _run_module_code
+  File "<frozen runpy>", line 87, in _run_code
+  File "/Users/themoretheless/Documents/Sources/rrrah/scripts/fetch-w3c-hdr-png-conformance.py", line 34, in <module>
+    subprocess.run(command, check=True)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0_1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0_1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.15/3.15.0_1/Frameworks/Python.framework/Versions/3.15/lib/python3.15/unittest/mock.py", line 1241, in _execute_mock_call
+    raise effect
+AssertionError: codec started before all sources were validated

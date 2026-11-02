@@ -1,0 +1,10 @@
+{
+  "scope": "Original index.ts transpiled VM, synthetic fs/provider/backend/timer/isolation imports; actual registerHooks callbacks; no gateway/network/user state",
+  "authored_controls_passed": 3,
+  "observations": [
+    "Cold-start broad recall duplicate IDs appended twice because existingIds not updated while appending",
+    "Successful recall still logs timeout when uncancelled timer later fires",
+    "Equal parsed snapshot length with changed content forwards nothing on second capture; progress tracks count only"
+  ],
+  "full_gateway_runtime_run": false
+}

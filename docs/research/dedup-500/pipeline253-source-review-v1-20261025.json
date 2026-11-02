@@ -1,0 +1,176 @@
+{
+  "index": 253,
+  "repository": "rushairer/go-pipeline",
+  "commit": "dee7994f4bd5fab96bf3ab514a3b9c83d472b30e",
+  "tracked_blob_count": 36,
+  "whole_file_reads": [
+    {
+      "path": "pipeline_deduplication.go",
+      "local": "docs/research/dedup-500/evidence/rushairer--go-pipeline/02-pipeline_deduplication.go",
+      "sha256": "322479d9f19f637d12cd72bc99e95dbdb11ad159c3bb4713c7922281fbcf86c7",
+      "git_blob_sha1": "a8f8fad6cf6fade9423395d1491eb35f0ca17caa"
+    },
+    {
+      "path": "config.go",
+      "local": "docs/research/dedup-500/evidence/rushairer--go-pipeline/03-config.go",
+      "sha256": "2f008e6512fd502f3b1424cf919023d044caca82275398aa32441462735e9a98",
+      "git_blob_sha1": "587ba5a8a533e19e5ac513bed5db2a56118d7f01"
+    },
+    {
+      "path": "doc.go",
+      "local": "docs/research/dedup-500/evidence/rushairer--go-pipeline/04-doc.go",
+      "sha256": "033f54a8892492071e3f39c700ad62488b3990c02cc7c110f25070a1970227e0",
+      "git_blob_sha1": "356814acf29a814a60bae0dd106cc455ed6129d0"
+    },
+    {
+      "path": "errors.go",
+      "local": "docs/research/dedup-500/evidence/rushairer--go-pipeline/06-errors.go",
+      "sha256": "997cde9661c7e15ee4cd1e37e26790fbedec125bd873f6b33f3ed83bc2e78c39",
+      "git_blob_sha1": "e1c8fcadd4b7da102394818b7cd4d7efa466372d"
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "whole_file_read_count": 4,
+  "remaining": [
+    {
+      "path": ".github/workflows/release.yml",
+      "bytes": 1137
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "bytes": 399
+    },
+    {
+      "path": ".vscode/settings.json",
+      "bytes": 33
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 4226
+    },
+    {
+      "path": "CONCURRENCY_CONTRACT.md",
+      "bytes": 8886
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1065
+    },
+    {
+      "path": "Makefile",
+      "bytes": 251
+    },
+    {
+      "path": "README.md",
+      "bytes": 69862
+    },
+    {
+      "path": "README_cn.md",
+      "bytes": 67712
+    },
+    {
+      "path": "example_test.go",
+      "bytes": 2096
+    },
+    {
+      "path": "examples/metrics_prometheus_example.go",
+      "bytes": 8713
+    },
+    {
+      "path": "go.mod",
+      "bytes": 52
+    },
+    {
+      "path": "go.sum",
+      "bytes": 0
+    },
+    {
+      "path": "interface.go",
+      "bytes": 4216
+    },
+    {
+      "path": "pipeline_cancel_drain_test.go",
+      "bytes": 8946
+    },
+    {
+      "path": "pipeline_concurrency_contract_test.go",
+      "bytes": 5169
+    },
+    {
+      "path": "pipeline_concurrency_test.go",
+      "bytes": 4177
+    },
+    {
+      "path": "pipeline_config_test.go",
+      "bytes": 2239
+    },
+    {
+      "path": "pipeline_deduplication_benchmark_test.go",
+      "bytes": 8309
+    },
+    {
+      "path": "pipeline_deduplication_test.go",
+      "bytes": 10278
+    },
+    {
+      "path": "pipeline_dynamic_tuning_test.go",
+      "bytes": 5289
+    },
+    {
+      "path": "pipeline_error_chan_test.go",
+      "bytes": 3982
+    },
+    {
+      "path": "pipeline_error_handling_test.go",
+      "bytes": 4771
+    },
+    {
+      "path": "pipeline_final_flush_timeout_test.go",
+      "bytes": 6658
+    },
+    {
+      "path": "pipeline_helper_api_test.go",
+      "bytes": 3159
+    },
+    {
+      "path": "pipeline_hooks_test.go",
+      "bytes": 7630
+    },
+    {
+      "path": "pipeline_impl.go",
+      "bytes": 18858
+    },
+    {
+      "path": "pipeline_memory_behavior_test.go",
+      "bytes": 5723
+    },
+    {
+      "path": "pipeline_race_stress_test.go",
+      "bytes": 6191
+    },
+    {
+      "path": "pipeline_standard.go",
+      "bytes": 3360
+    },
+    {
+      "path": "pipeline_standard_benchmark_test.go",
+      "bytes": 10239
+    },
+    {
+      "path": "pipeline_standard_test.go",
+      "bytes": 11709
+    }
+  ],
+  "findings": [
+    {
+      "paths": [
+        "errors.go",
+        "config.go",
+        "pipeline_deduplication.go",
+        "doc.go"
+      ],
+      "confirmed": "Four whole files read. Dedup is batch-local map keyed by caller GetKey string, last value wins and reset clears identity history; not full-stream/exact file dedup. Callback receives mutable map, ownership lifecycle pending implementation review. Config defaults MaxConcurrentFlushes0 unlimited and FinalFlushOnCloseTimeout0 unbounded, so bounded-buffer does not prove bounded total resource use. Doc explicitly states Done not join for asynchronous flushes, error events can drop, no per-item retry/exactlyonce guarantee; valuable explicit contract to preserve rather than misread as complete successful scan. No code adopted, Go tests not run yet."
+    }
+  ]
+}

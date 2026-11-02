@@ -1,0 +1,63 @@
+{
+  "name": "@neatmem/openclaw-neatmem",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "NeatMem memory backend for OpenClaw — local, controllable, mem0-compatible",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kanhaoning/NeatMem",
+    "directory": "openclaw"
+  },
+  "keywords": [
+    "openclaw",
+    "plugin",
+    "memory",
+    "neatmem",
+    "mem0-compatible",
+    "long-term-memory"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "openclaw.plugin.json",
+    "skills"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "0.34.47"
+  },
+  "openclaw": {
+    "extensions": [
+      "./dist/index.js"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.3.28",
+      "minGatewayVersion": ">=2026.3.28"
+    },
+    "build": {
+      "openclawVersion": "2026.4.1",
+      "pluginSdkVersion": "2026.4.1"
+    }
+  },
+  "install": {
+    "npmSpec": "@neatmem/openclaw-neatmem"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vitest": "^4.0.18"
+  }
+}

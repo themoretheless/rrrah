@@ -1,0 +1,1083 @@
+/**
+ * Duplicate Detection Module for Zotero Watch Folder Plugin
+ *
+ * Pre-import duplicate detection using DOI, ISBN, title similarity, and optional file hash.
+ * Prevents importing files that already exist in the Zotero library.
+ *
+ * Detection Methods:
+ * - DOI match: 100% confidence, low cost (indexed)
+ * - ISBN match: 100% confidence, low cost (indexed)
+ * - Title fuzzy match: Configurable confidence (85% default), medium cost (cache)
+ * - Content hash: 100% confidence, high cost (file read)
+ *
+ * @module duplicateDetector
+ */
+
+import { getPref, getFileHash } from './utils.mjs';
+import { hashFile as _hashFileCached } from './_hashCache.mjs';
+
+// Tag added to items imported despite being duplicates
+const DUPLICATE_TAG = '_duplicate';
+
+// Default title similarity threshold (85%)
+const DEFAULT_TITLE_THRESHOLD = 0.85;
+
+// Maximum cache size for title cache (LRU eviction)
+const MAX_TITLE_CACHE_SIZE = 10000;
+
+// The hash strategy is owned by `utils.getFileHash` (full-file SHA-256
+// in v2 — was first-1MB-only in v1). Old-version stamps (1MB hashes
+// from v1.x users upgrading to v2.1) will no longer match the new
+// hashes — affected users will see one round of false re-imports
+// before the new full-file hashes take over.
+
+/**
+ * Fallback batched Zotero.Items.getAsync (WP-A4): on Zotero builds where
+ * the array form throws or returns a non-array, fan out per-id with a
+ * Promise.all wave of CONCURRENCY. Returns an array of (item|null) in
+ * input order. Errors per-id resolve to null (matching the per-id
+ * try/catch pattern in the previous sequential implementation).
+ *
+ * @private
+ * @param {number[]} ids
+ * @param {number} concurrency
+ * @returns {Promise<Array<object|null>>}
+ */
+async function _batchGetItemsAsync(ids, concurrency = 8) {
+  const out = new Array(ids.length);
+  for (let i = 0; i < ids.length; i += concurrency) {
+    const wave = ids.slice(i, i + concurrency).map((id, j) =>
+      Zotero.Items.getAsync(id).then(
+        (v) => { out[i + j] = v; },
+        () => { out[i + j] = null; },
+      )
+    );
+    await Promise.all(wave);
+  }
+  return out;
+}
+
+/**
+ * Result from duplicate detection
+ * @typedef {Object} DuplicateResult
+ * @property {boolean} isDuplicate - Whether a duplicate was found
+ * @property {number} confidence - Confidence level (0.0 to 1.0)
+ * @property {string} reason - Human-readable reason for the match
+ * @property {Zotero.Item} [existingItem] - The existing item if duplicate found
+ */
+
+/**
+ * DuplicateDetector class
+ * Manages detection of duplicate items before import using multiple strategies
+ */
+export class DuplicateDetector {
+  constructor() {
+    /** @type {boolean} Whether duplicate checking is enabled */
+    this._enabled = true;
+
+    /** @type {boolean} Whether DOI matching is enabled */
+    this._matchDOI = true;
+
+    /** @type {boolean} Whether ISBN matching is enabled */
+    this._matchISBN = true;
+
+    /** @type {boolean} Whether title matching is enabled */
+    this._matchTitle = true;
+
+    /** @type {number} Title similarity threshold (0.0 to 1.0) */
+    this._titleThreshold = DEFAULT_TITLE_THRESHOLD;
+
+    /** @type {boolean} Whether content hash matching is enabled */
+    this._matchHash = false;
+
+    /** @type {Map<string, {title: string, itemID: number}>} Cache of normalized titles */
+    this._titleCache = new Map();
+
+    /** @type {boolean} Whether title cache is populated */
+    this._titleCacheReady = false;
+
+    /** @type {string|null} Zotero notifier ID for cache invalidation */
+    this._notifierID = null;
+
+    /** @type {boolean} Whether the detector has been initialized */
+    this._initialized = false;
+
+    /** @type {Promise<void>|null} In-flight or completed prewarm of the title cache. */
+    this._titleCachePrewarm = null;
+  }
+
+  /**
+   * Initialize the duplicate detector
+   * Loads preferences and registers notifier for cache invalidation
+   * @returns {Promise<void>}
+   */
+  async init() {
+    if (this._initialized) {
+      Zotero.debug('[WatchFolder] DuplicateDetector already initialized');
+      return;
+    }
+
+    try {
+      // Load preferences
+      this._loadPreferences();
+
+      // Register notifier to invalidate title cache when library changes
+      this._notifierID = Zotero.Notifier.registerObserver(
+        {
+          notify: async (event, type, ids, extraData) => {
+            await this._handleNotify(event, type, ids, extraData);
+          }
+        },
+        ['item'],
+        'watchFolder-duplicateDetector'
+      );
+
+      this._initialized = true;
+      Zotero.debug('[WatchFolder] DuplicateDetector initialized');
+
+      // WP-A3 (perf): kick off the title-cache prewarm in the background
+      // so the first import doesn't pay for the library scan inline.
+      // Only when title matching is actually enabled — otherwise we'd
+      // do the scan for nothing. Fire-and-forget; errors are swallowed
+      // inside prewarmTitleCache().
+      if (this._matchTitle) {
+        this.prewarmTitleCache();
+      }
+
+    } catch (error) {
+      Zotero.logError(error);
+      Zotero.debug(`[WatchFolder] DuplicateDetector initialization error: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Load preferences from Zotero prefs
+   * @private
+   */
+  _loadPreferences() {
+    this._enabled = getPref('duplicateCheck') !== false;
+    this._matchDOI = getPref('duplicateMatchDOI') !== false;
+    this._matchISBN = getPref('duplicateMatchISBN') !== false;
+    this._matchTitle = getPref('duplicateMatchTitle') !== false;
+    this._titleThreshold = getPref('duplicateTitleThreshold') || DEFAULT_TITLE_THRESHOLD;
+    this._matchHash = getPref('duplicateMatchHash') === true;
+
+    Zotero.debug(`[WatchFolder] DuplicateDetector prefs loaded: ` +
+      `enabled=${this._enabled}, DOI=${this._matchDOI}, ISBN=${this._matchISBN}, ` +
+      `title=${this._matchTitle} (threshold=${this._titleThreshold}), hash=${this._matchHash}`);
+  }
+
+  /**
+   * Handle Zotero notifier events for cache invalidation
+   * @param {string} event - Event type
+   * @param {string} type - Object type
+   * @param {number[]} ids - Affected item IDs
+   * @param {Object} extraData - Additional event data
+   * @private
+   */
+  async _handleNotify(event, type, ids, extraData) {
+    if (type !== 'item') return;
+
+    // Invalidate cache on add, modify, or delete
+    if (event === 'add' || event === 'modify' || event === 'delete' || event === 'trash') {
+      // For efficiency, just mark cache as needing refresh rather than rebuilding immediately
+      // The cache will be rebuilt on next title search
+      if (this._titleCacheReady) {
+        // For deletes, remove specific items from cache
+        if (event === 'delete' || event === 'trash') {
+          for (const id of ids) {
+            // Find and remove entries with this itemID
+            for (const [normalizedTitle, entry] of this._titleCache.entries()) {
+              if (entry.itemID === id) {
+                this._titleCache.delete(normalizedTitle);
+              }
+            }
+          }
+        } else if (event === 'add') {
+          // WP-A4 (perf): batch the getAsync call once with the array form
+          // instead of iterating sequentially. On Zotero builds where the
+          // array form is supported (current behavior on Z7/8/9) this is a
+          // single async call instead of N. Fall back to per-id if the
+          // array form throws (defensive).
+          let items;
+          try { items = await Zotero.Items.getAsync(ids); }
+          catch (_e) { items = null; }
+          if (!Array.isArray(items)) {
+            // Per-id fallback with Promise.all + cap 8.
+            items = await _batchGetItemsAsync(ids, 8);
+          }
+          for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            const item = items[i];
+            try {
+              if (item && item.isRegularItem() && !item.deleted) {
+                const title = item.getField('title');
+                if (title) {
+                  const normalizedTitle = this.normalizeTitle(title);
+                  if (normalizedTitle) {
+                    this._titleCache.set(normalizedTitle, {
+                      title: title,
+                      itemID: id
+                    });
+                    this._evictTitleCacheIfNeeded();
+                  }
+                }
+              }
+            } catch (e) {
+              // Item might have been deleted already, ignore
+            }
+          }
+        } else if (event === 'modify') {
+          // WP-A4 (perf): same batching pattern as the 'add' branch.
+          let items;
+          try { items = await Zotero.Items.getAsync(ids); }
+          catch (_e) { items = null; }
+          if (!Array.isArray(items)) {
+            items = await _batchGetItemsAsync(ids, 8);
+          }
+          for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            const item = items[i];
+            try {
+              if (item && item.isRegularItem() && !item.deleted) {
+                // Remove old entries for this item
+                for (const [normalizedTitle, entry] of this._titleCache.entries()) {
+                  if (entry.itemID === id) {
+                    this._titleCache.delete(normalizedTitle);
+                  }
+                }
+                // Add updated entry
+                const title = item.getField('title');
+                if (title) {
+                  const normalizedTitle = this.normalizeTitle(title);
+                  if (normalizedTitle) {
+                    this._titleCache.set(normalizedTitle, {
+                      title: title,
+                      itemID: id
+                    });
+                  }
+                }
+              }
+            } catch (e) {
+              // Item might have been deleted already, ignore
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Evict oldest entries from title cache if over max size
+   * @private
+   */
+  _evictTitleCacheIfNeeded() {
+    while (this._titleCache.size > MAX_TITLE_CACHE_SIZE) {
+      const oldestKey = this._titleCache.keys().next().value;
+      this._titleCache.delete(oldestKey);
+    }
+  }
+
+  /**
+   * Build the title cache from the library.
+   *
+   * WP-A3 (perf): batches of 500 are now issued in parallel waves of up
+   * to 3 (cap). On a 10k-item library this cuts the cache-build time by
+   * ~3x in the I/O-bound regime without overwhelming Zotero.Items.getAsync
+   * (which itself dispatches under-the-hood DB work — uncapped parallelism
+   * stacked async DB queries unproductively).
+   *
+   * @private
+   * @returns {Promise<void>}
+   */
+  async _buildTitleCache() {
+    if (this._titleCacheReady) {
+      return;
+    }
+
+    Zotero.debug('[WatchFolder] Building title cache...');
+    const startTime = Date.now();
+
+    try {
+      this._titleCache.clear();
+
+      // Get all regular items from the user library
+      const libraryID = Zotero.Libraries.userLibraryID;
+      const s = new Zotero.Search();
+      s.libraryID = libraryID;
+      s.addCondition('itemType', 'isNot', 'attachment');
+      s.addCondition('itemType', 'isNot', 'note');
+      s.addCondition('deleted', 'false');
+
+      const itemIDs = await s.search();
+
+      // WP-A3 (perf): batches of 500, dispatched in parallel waves of up
+      // to CONCURRENCY=3. Sequential await preserved the 500-batch
+      // boundary but serialised Zotero.Items.getAsync calls that
+      // could overlap profitably.
+      const batchSize = 500;
+      const CONCURRENCY = 3;
+      const batches = [];
+      for (let i = 0; i < itemIDs.length; i += batchSize) {
+        batches.push(itemIDs.slice(i, i + batchSize));
+      }
+
+      const processBatch = async (batchIDs) => {
+        const items = await Zotero.Items.getAsync(batchIDs);
+        for (const item of items) {
+          if (!item || item.deleted) continue;
+          const title = item.getField('title');
+          if (!title) continue;
+          const normalizedTitle = this.normalizeTitle(title);
+          if (!normalizedTitle) continue;
+          this._titleCache.set(normalizedTitle, {
+            title: title,
+            itemID: item.id,
+          });
+        }
+      };
+
+      for (let i = 0; i < batches.length; i += CONCURRENCY) {
+        const wave = batches.slice(i, i + CONCURRENCY).map(processBatch);
+        await Promise.all(wave);
+      }
+
+      this._titleCacheReady = true;
+      const elapsed = Date.now() - startTime;
+      Zotero.debug(`[WatchFolder] Title cache built: ${this._titleCache.size} titles in ${elapsed}ms`);
+
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] Error building title cache: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Kick off the title-cache build in the background. Safe to call
+   * repeatedly: if a build is already in flight, returns the existing
+   * promise. Errors are swallowed (logged + the promise resolves) so a
+   * background prewarm failure never bubbles up to an unrelated import.
+   *
+   * Consumers call `findByTitle` directly: when the cache isn't ready
+   * yet, `findByTitle` returns null instead of blocking on a fresh
+   * build. The import critical path stays fast; the next scan cycle
+   * benefits from the warmed cache.
+   *
+   * WP-A3 (perf): added so the duplicate-detector's library scan no
+   * longer pins the first import behind a multi-second cache build.
+   *
+   * @returns {Promise<void>}
+   */
+  prewarmTitleCache() {
+    if (this._titleCacheReady) return Promise.resolve();
+    if (this._titleCachePrewarm) return this._titleCachePrewarm;
+    this._titleCachePrewarm = this._buildTitleCache().catch((e) => {
+      Zotero.debug(`[WatchFolder] prewarmTitleCache failed: ${e?.message ?? e}`);
+      // Reset so a later, on-demand build can retry. Don't rethrow —
+      // the prewarm is fire-and-forget by design.
+      this._titleCachePrewarm = null;
+    });
+    return this._titleCachePrewarm;
+  }
+
+  /**
+   * Main duplicate detection method
+   * Checks metadata against the library using configured methods
+   *
+   * @param {Object} metadata - Metadata extracted from file
+   * @param {string} [metadata.DOI] - Document DOI
+   * @param {string} [metadata.ISBN] - Book ISBN
+   * @param {string} [metadata.title] - Document title
+   * @param {string} [filePath] - File path for hash-based detection
+   * @returns {Promise<DuplicateResult>} Detection result
+   */
+  /**
+   * v2 priority order (per spec §"Duplicate and collision rules" and
+   * updates_22_05_26.md):
+   *
+   *   1. Content hash — DEFINITIVE. Same content always = duplicate.
+   *      Promoted to first because hash never lies. Runs at every stage.
+   *   2. DOI / ISBN / Title — semantic matchers. Only run post-metadata
+   *      because pre-import we don't have these fields. A match here
+   *      without a hash match is a "possible duplicate reference":
+   *      import + tag `_needs-review` (the metadata retriever owns that
+   *      flow today; this method just reports the result).
+   *
+   * Filename collisions (same name, different hash) are NOT a duplicate
+   * signal in v2 — they're handled by the importer/renamer with a
+   * suffix-on-conflict policy, not here.
+   *
+   * @param {Object} metadata
+   * @param {string} [filePath]
+   * @param {{stage?: 'pre-import'|'post-metadata'}} [options]
+   * @returns {Promise<DuplicateResult>}
+   */
+  async checkDuplicate(metadata, filePath = null, options = {}) {
+    if (!this._enabled) {
+      return { isDuplicate: false, confidence: 0, reason: 'Duplicate checking disabled' };
+    }
+    if (!this._initialized) {
+      await this.init();
+    }
+
+    const hasMetadata = !!(metadata && (metadata.DOI || metadata.ISBN || metadata.title));
+    const stage = options.stage || (hasMetadata ? 'post-metadata' : 'pre-import');
+
+    try {
+      // 1. CONTENT HASH — definitive, runs at every stage.
+      if (this._matchHash && filePath) {
+        const hashResult = await this.findByHash(filePath);
+        if (hashResult) {
+          return {
+            isDuplicate: true,
+            confidence: 1.0,
+            reason: 'Content hash match',
+            existingItem: hashResult,
+          };
+        }
+      }
+
+      // 2-4. Metadata-based checks — only at post-metadata stage. At
+      //      pre-import we typically have no metadata yet; running them
+      //      anyway is a no-op but wastes time on the title cache build.
+      if (stage === 'post-metadata' && metadata) {
+        if (this._matchDOI && metadata.DOI) {
+          const doiResult = await this.findByDOI(metadata.DOI);
+          if (doiResult) {
+            return {
+              isDuplicate: true,
+              confidence: 1.0,
+              reason: `DOI match: ${metadata.DOI}`,
+              existingItem: doiResult,
+            };
+          }
+        }
+        if (this._matchISBN && metadata.ISBN) {
+          const isbnResult = await this.findByISBN(metadata.ISBN);
+          if (isbnResult) {
+            return {
+              isDuplicate: true,
+              confidence: 1.0,
+              reason: `ISBN match: ${metadata.ISBN}`,
+              existingItem: isbnResult,
+            };
+          }
+        }
+        if (this._matchTitle && metadata.title) {
+          const titleResult = await this.findByTitle(metadata.title);
+          if (titleResult) return titleResult;
+        }
+      }
+
+      return { isDuplicate: false, confidence: 0, reason: 'No duplicate found' };
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] Duplicate check error: ${error.message}`);
+      // On error, default to not-duplicate so imports aren't blocked.
+      return { isDuplicate: false, confidence: 0, reason: `Error during check: ${error.message}` };
+    }
+  }
+
+  /**
+   * Find an existing item by DOI
+   * @param {string} doi - The DOI to search for
+   * @returns {Promise<Zotero.Item|null>} Matching item or null
+   */
+  async findByDOI(doi) {
+    if (!doi) return null;
+
+    // Normalize DOI (remove URL prefix if present, lowercase)
+    let normalizedDOI = doi.trim().toLowerCase();
+    // Handle various DOI URL formats
+    normalizedDOI = normalizedDOI.replace(/^https?:\/\/(dx\.)?doi\.org\//i, '');
+    normalizedDOI = normalizedDOI.replace(/^doi:/i, '');
+
+    try {
+      const libraryID = Zotero.Libraries.userLibraryID;
+      const s = new Zotero.Search();
+      s.libraryID = libraryID;
+      s.addCondition('DOI', 'is', normalizedDOI);
+      s.addCondition('deleted', 'false');
+
+      const itemIDs = await s.search();
+
+      if (itemIDs && itemIDs.length > 0) {
+        const item = await Zotero.Items.getAsync(itemIDs[0]);
+        Zotero.debug(`[WatchFolder] Found existing item by DOI: ${normalizedDOI} -> ${item.id}`);
+        return item;
+      }
+
+      // Also try with "doi:" prefix as some items may store it that way
+      const s2 = new Zotero.Search();
+      s2.libraryID = libraryID;
+      s2.addCondition('DOI', 'is', `doi:${normalizedDOI}`);
+      s2.addCondition('deleted', 'false');
+
+      const itemIDs2 = await s2.search();
+
+      if (itemIDs2 && itemIDs2.length > 0) {
+        const item = await Zotero.Items.getAsync(itemIDs2[0]);
+        Zotero.debug(`[WatchFolder] Found existing item by DOI (prefixed): ${normalizedDOI} -> ${item.id}`);
+        return item;
+      }
+
+      return null;
+
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] DOI search error: ${error.message}`);
+      return null;
+    }
+  }
+
+  /**
+   * Find an existing item by ISBN
+   * Handles both ISBN-10 and ISBN-13 formats and converts between them
+   * @param {string} isbn - The ISBN to search for
+   * @returns {Promise<Zotero.Item|null>} Matching item or null
+   */
+  async findByISBN(isbn) {
+    if (!isbn) return null;
+
+    // Normalize ISBN (remove hyphens and spaces)
+    const normalizedISBN = isbn.replace(/[-\s]/g, '').trim().toUpperCase();
+
+    // Validate ISBN format
+    if (normalizedISBN.length !== 10 && normalizedISBN.length !== 13) {
+      Zotero.debug(`[WatchFolder] Invalid ISBN length: ${normalizedISBN.length}`);
+      return null;
+    }
+
+    // Build list of ISBN variants to search
+    const isbnVariants = [normalizedISBN];
+
+    // Convert between ISBN-10 and ISBN-13
+    if (normalizedISBN.length === 10) {
+      // Convert ISBN-10 to ISBN-13
+      const isbn13 = this._isbn10to13(normalizedISBN);
+      if (isbn13) {
+        isbnVariants.push(isbn13);
+      }
+    } else if (normalizedISBN.length === 13 && normalizedISBN.startsWith('978')) {
+      // Convert ISBN-13 to ISBN-10 (only possible for 978 prefix)
+      const isbn10 = this._isbn13to10(normalizedISBN);
+      if (isbn10) {
+        isbnVariants.push(isbn10);
+      }
+    }
+
+    try {
+      const libraryID = Zotero.Libraries.userLibraryID;
+
+      // Search for each ISBN variant
+      for (const isbnVariant of isbnVariants) {
+        const s = new Zotero.Search();
+        s.libraryID = libraryID;
+        s.addCondition('ISBN', 'is', isbnVariant);
+        s.addCondition('deleted', 'false');
+
+        const itemIDs = await s.search();
+
+        if (itemIDs && itemIDs.length > 0) {
+          const item = await Zotero.Items.getAsync(itemIDs[0]);
+          Zotero.debug(`[WatchFolder] Found existing item by ISBN: ${isbnVariant} -> ${item.id}`);
+          return item;
+        }
+
+        // Also try with common hyphenated formats
+        if (isbnVariant.length === 13) {
+          const formattedISBN = `${isbnVariant.slice(0, 3)}-${isbnVariant.slice(3)}`;
+          const s2 = new Zotero.Search();
+          s2.libraryID = libraryID;
+          s2.addCondition('ISBN', 'is', formattedISBN);
+          s2.addCondition('deleted', 'false');
+
+          const itemIDs2 = await s2.search();
+
+          if (itemIDs2 && itemIDs2.length > 0) {
+            const item = await Zotero.Items.getAsync(itemIDs2[0]);
+            Zotero.debug(`[WatchFolder] Found existing item by ISBN (formatted): ${formattedISBN} -> ${item.id}`);
+            return item;
+          }
+        }
+      }
+
+      return null;
+
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] ISBN search error: ${error.message}`);
+      return null;
+    }
+  }
+
+  /**
+   * Convert ISBN-10 to ISBN-13
+   * @param {string} isbn10 - ISBN-10 (10 characters, no hyphens)
+   * @returns {string|null} ISBN-13 or null if invalid
+   * @private
+   */
+  _isbn10to13(isbn10) {
+    if (!isbn10 || isbn10.length !== 10) return null;
+
+    // ISBN-13 = 978 + first 9 digits of ISBN-10 + new check digit
+    const base = '978' + isbn10.slice(0, 9);
+
+    // Calculate ISBN-13 check digit
+    let sum = 0;
+    for (let i = 0; i < 12; i++) {
+      const digit = parseInt(base[i], 10);
+      if (isNaN(digit)) return null;
+      sum += digit * (i % 2 === 0 ? 1 : 3);
+    }
+    const checkDigit = (10 - (sum % 10)) % 10;
+
+    return base + checkDigit.toString();
+  }
+
+  /**
+   * Convert ISBN-13 to ISBN-10 (only works for 978 prefix)
+   * @param {string} isbn13 - ISBN-13 (13 characters, no hyphens)
+   * @returns {string|null} ISBN-10 or null if invalid or not convertible
+   * @private
+   */
+  _isbn13to10(isbn13) {
+    if (!isbn13 || isbn13.length !== 13) return null;
+    if (!isbn13.startsWith('978')) return null; // Can only convert 978 prefix
+
+    // ISBN-10 = digits 4-12 of ISBN-13 + new check digit
+    const base = isbn13.slice(3, 12);
+
+    // Calculate ISBN-10 check digit
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      const digit = parseInt(base[i], 10);
+      if (isNaN(digit)) return null;
+      sum += digit * (10 - i);
+    }
+    const remainder = sum % 11;
+    const checkDigit = remainder === 0 ? '0' : (11 - remainder === 10 ? 'X' : (11 - remainder).toString());
+
+    return base + checkDigit;
+  }
+
+  /**
+   * Find an existing item by fuzzy title match
+   * @param {string} title - The title to search for
+   * @returns {Promise<DuplicateResult|null>} Duplicate result or null if no match
+   */
+  async findByTitle(title) {
+    if (!title || title.length < 5) return null; // Skip very short titles
+
+    try {
+      // WP-A3 (perf): the first findByTitle no longer blocks an import
+      // behind a multi-second library scan. Kick off a background
+      // prewarm and return null until it completes. The next import
+      // cycle sees a populated cache.
+      if (!this._titleCacheReady) {
+        this.prewarmTitleCache();
+        Zotero.debug('[WatchFolder] findByTitle: title cache not ready yet — returning null while prewarm proceeds');
+        return null;
+      }
+
+      const normalizedSearchTitle = this.normalizeTitle(title);
+      if (!normalizedSearchTitle || normalizedSearchTitle.length < 5) return null;
+
+      // First check for exact normalized match (fastest)
+      if (this._titleCache.has(normalizedSearchTitle)) {
+        const entry = this._titleCache.get(normalizedSearchTitle);
+        const item = await Zotero.Items.getAsync(entry.itemID);
+        if (item && !item.deleted) {
+          Zotero.debug(`[WatchFolder] Found exact title match: "${title}" -> ${item.id}`);
+          return {
+            isDuplicate: true,
+            confidence: 1.0,
+            reason: `Exact title match: "${entry.title}"`,
+            existingItem: item
+          };
+        }
+      }
+
+      // Then check for fuzzy matches
+      let bestMatch = null;
+      let bestSimilarity = 0;
+
+      for (const [normalizedTitle, entry] of this._titleCache.entries()) {
+        const similarity = this.calculateSimilarity(normalizedSearchTitle, normalizedTitle);
+
+        if (similarity >= this._titleThreshold && similarity > bestSimilarity) {
+          bestSimilarity = similarity;
+          bestMatch = entry;
+        }
+      }
+
+      if (bestMatch) {
+        const item = await Zotero.Items.getAsync(bestMatch.itemID);
+        if (item && !item.deleted) {
+          Zotero.debug(`[WatchFolder] Found fuzzy title match: "${title}" -> "${bestMatch.title}" ` +
+            `(${(bestSimilarity * 100).toFixed(1)}%) -> ${item.id}`);
+          return {
+            isDuplicate: true,
+            confidence: bestSimilarity,
+            reason: `Title similarity: "${bestMatch.title}" (${(bestSimilarity * 100).toFixed(1)}% match)`,
+            existingItem: item
+          };
+        }
+      }
+
+      return null;
+
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] Title search error: ${error.message}`);
+      return null;
+    }
+  }
+
+  /**
+   * Find an existing item by file content hash
+   * Uses first 64KB of file for quick hash calculation
+   * @param {string} filePath - Path to the file
+   * @returns {Promise<Zotero.Item|null>} Matching item or null
+   */
+  async findByHash(filePath) {
+    if (!filePath) return null;
+
+    try {
+      // WP-A1 (perf): route through the module-level (path, size, mtime)
+      // LRU cache. Falls through to utils.getFileHash on miss / unstattable
+      // files — same hash invariant (full-file SHA-256, HASH_VERSION=2).
+      const hash = await _hashFileCached(filePath);
+      if (!hash) {
+        Zotero.debug(`[WatchFolder] findByHash: getFileHash returned null for ${filePath}`);
+        return null;
+      }
+      Zotero.debug(`[WatchFolder] Calculated file hash: ${hash.substring(0, 16)}...`);
+
+      // Search for items with matching hash stored in Extra field
+      const libraryID = Zotero.Libraries.userLibraryID;
+      const s = new Zotero.Search();
+      s.libraryID = libraryID;
+      s.addCondition('extra', 'contains', `watchfolder-hash:${hash}`);
+      s.addCondition('deleted', 'false');
+
+      const itemIDs = await s.search();
+
+      if (itemIDs && itemIDs.length > 0) {
+        const item = await Zotero.Items.getAsync(itemIDs[0]);
+        Zotero.debug(`[WatchFolder] Found existing item by hash: ${hash.substring(0, 16)}... -> ${item.id}`);
+        return item;
+      }
+
+      return null;
+
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] Hash search error: ${error.message}`);
+      return null;
+    }
+  }
+
+  /**
+   * Calculate similarity between two strings using Levenshtein distance
+   * Returns a value between 0.0 (completely different) and 1.0 (identical)
+   * @param {string} str1 - First string
+   * @param {string} str2 - Second string
+   * @returns {number} Similarity score (0.0 to 1.0)
+   */
+  calculateSimilarity(str1, str2) {
+    if (!str1 || !str2) return 0;
+    if (str1 === str2) return 1;
+
+    const distance = this.levenshteinDistance(str1, str2);
+    const maxLength = Math.max(str1.length, str2.length);
+
+    if (maxLength === 0) return 1;
+
+    return 1 - (distance / maxLength);
+  }
+
+  /**
+   * Calculate Levenshtein distance between two strings
+   * Uses dynamic programming approach with space optimization
+   * @param {string} str1 - First string
+   * @param {string} str2 - Second string
+   * @returns {number} Edit distance
+   */
+  levenshteinDistance(str1, str2) {
+    const m = str1.length;
+    const n = str2.length;
+
+    // Handle empty strings
+    if (m === 0) return n;
+    if (n === 0) return m;
+
+    // Use two rows instead of full matrix for space efficiency
+    let prevRow = new Array(n + 1);
+    let currRow = new Array(n + 1);
+
+    // Initialize first row
+    for (let j = 0; j <= n; j++) {
+      prevRow[j] = j;
+    }
+
+    // Fill in the rest of the matrix
+    for (let i = 1; i <= m; i++) {
+      currRow[0] = i;
+
+      for (let j = 1; j <= n; j++) {
+        const cost = str1[i - 1] === str2[j - 1] ? 0 : 1;
+
+        currRow[j] = Math.min(
+          prevRow[j] + 1,      // deletion
+          currRow[j - 1] + 1,  // insertion
+          prevRow[j - 1] + cost // substitution
+        );
+      }
+
+      // Swap rows
+      [prevRow, currRow] = [currRow, prevRow];
+    }
+
+    return prevRow[n];
+  }
+
+  /**
+   * Normalize a title for comparison
+   * - Lowercase
+   * - Remove punctuation
+   * - Remove extra whitespace
+   * - Remove common stop words (optional)
+   * @param {string} title - Original title
+   * @returns {string} Normalized title
+   */
+  normalizeTitle(title) {
+    if (!title) return '';
+
+    let normalized = title
+      // Convert to lowercase
+      .toLowerCase()
+      // Replace punctuation with space (so 'foo:bar' becomes 'foo bar', not 'foobar')
+      .replace(/[^\p{L}\p{N}\s]/gu, ' ')
+      // Collapse multiple spaces
+      .replace(/\s+/g, ' ')
+      // Trim
+      .trim();
+
+    return normalized;
+  }
+
+  /**
+   * Store a content hash for an item (for future duplicate detection)
+   * Stores in the item's Extra field with a prefix
+   * @param {Zotero.Item} item - The Zotero item
+   * @param {string} filePath - Path to the attachment file
+   * @returns {Promise<boolean>} True if hash was stored
+   */
+  async storeContentHash(item, filePath) {
+    if (!item || !filePath) return false;
+
+    try {
+      // Single source of truth (utils.getFileHash). Stamps the same
+      // hash that findByHash + the tracking store will later look up.
+      const hash = await getFileHash(filePath);
+      if (!hash) {
+        Zotero.debug(`[WatchFolder] storeContentHash: getFileHash returned null for ${filePath}`);
+        return false;
+      }
+
+      // Get the parent item (if this is an attachment)
+      let targetItem = item;
+      if (item.isAttachment() && item.parentID) {
+        targetItem = await Zotero.Items.getAsync(item.parentID);
+      }
+
+      if (!targetItem) return false;
+
+      // Store in Extra field
+      let extra = targetItem.getField('extra') || '';
+
+      // Remove any existing watchfolder-hash
+      extra = extra.replace(/watchfolder-hash:[a-f0-9]+\n?/gi, '').trim();
+
+      // Add new hash
+      if (extra) {
+        extra = `${extra}\nwatchfolder-hash:${hash}`;
+      } else {
+        extra = `watchfolder-hash:${hash}`;
+      }
+
+      targetItem.setField('extra', extra);
+      await targetItem.saveTx();
+
+      Zotero.debug(`[WatchFolder] Stored content hash for item ${targetItem.id}`);
+      return true;
+
+    } catch (error) {
+      Zotero.debug(`[WatchFolder] Error storing content hash: ${error.message}`);
+      return false;
+    }
+  }
+
+  /**
+   * Handle duplicate according to configured action
+   * @param {Zotero.Item} item - The newly imported item (if imported)
+   * @param {DuplicateResult} duplicateResult - The detection result
+   * @returns {Promise<string>} Action taken ('skip', 'import', 'tagged')
+   */
+  async handleDuplicate(item, duplicateResult) {
+    const action = getPref('duplicateAction') || 'skip';
+
+    switch (action) {
+      case 'skip':
+        // Don't import - handled by caller before this method
+        return 'skip';
+
+      case 'import':
+        // Import anyway but add duplicate tag
+        if (item) {
+          try {
+            item.addTag(DUPLICATE_TAG);
+            await item.saveTx();
+            Zotero.debug(`[WatchFolder] Tagged imported duplicate: ${item.id}`);
+          } catch (error) {
+            Zotero.debug(`[WatchFolder] Error tagging duplicate: ${error.message}`);
+          }
+        }
+        return 'tagged';
+
+      case 'ask':
+        // For now, default to skip (future: implement prompt)
+        // This would require UI integration
+        return 'skip';
+
+      default:
+        return 'skip';
+    }
+  }
+
+  /**
+   * Update configuration from preferences
+   * Call when preferences change
+   */
+  updateConfig() {
+    this._loadPreferences();
+    Zotero.debug('[WatchFolder] DuplicateDetector config updated');
+  }
+
+  /**
+   * Invalidate the title cache (force rebuild on next search)
+   */
+  invalidateTitleCache() {
+    this._titleCache.clear();
+    this._titleCacheReady = false;
+    // WP-A3 (perf): clear the prewarm promise so a later prewarm/build
+    // will actually rebuild instead of returning a stale resolved promise.
+    this._titleCachePrewarm = null;
+    Zotero.debug('[WatchFolder] Title cache invalidated');
+  }
+
+  /**
+   * Get statistics about the detector
+   * @returns {Object} Statistics object
+   */
+  getStats() {
+    return {
+      enabled: this._enabled,
+      matchDOI: this._matchDOI,
+      matchISBN: this._matchISBN,
+      matchTitle: this._matchTitle,
+      matchHash: this._matchHash,
+      titleThreshold: this._titleThreshold,
+      titleCacheSize: this._titleCache.size,
+      titleCacheReady: this._titleCacheReady,
+      initialized: this._initialized
+    };
+  }
+
+  /**
+   * Clean up resources
+   * Call this when shutting down the plugin
+   */
+  destroy() {
+    // Unregister notifier
+    if (this._notifierID) {
+      Zotero.Notifier.unregisterObserver(this._notifierID);
+      this._notifierID = null;
+    }
+
+    // Clear cache
+    this._titleCache.clear();
+    this._titleCacheReady = false;
+    this._titleCachePrewarm = null;
+    this._initialized = false;
+
+    Zotero.debug('[WatchFolder] DuplicateDetector destroyed');
+  }
+}
+
+// Singleton instance
+let _instance = null;
+
+/**
+ * Get the singleton DuplicateDetector instance
+ * @returns {DuplicateDetector} The detector instance
+ */
+export function getDuplicateDetector() {
+  if (!_instance) {
+    _instance = new DuplicateDetector();
+  }
+  return _instance;
+}
+
+/**
+ * Reset the singleton (for testing)
+ */
+export function resetDuplicateDetector() {
+  if (_instance) {
+    _instance.destroy();
+    _instance = null;
+  }
+}
+
+/**
+ * Initialize and return the duplicate detector
+ * Convenience function for plugin startup
+ * @returns {Promise<DuplicateDetector>} The initialized detector
+ */
+export async function initDuplicateDetector() {
+  const detector = getDuplicateDetector();
+  await detector.init();
+  return detector;
+}
+
+/**
+ * Shutdown the duplicate detector
+ * Convenience function for plugin shutdown
+ */
+export function shutdownDuplicateDetector() {
+  if (_instance) {
+    _instance.destroy();
+    _instance = null;
+  }
+}
+
+/**
+ * Check for duplicates before import
+ * Main integration hook for watchFolder.mjs to call before importing a file
+ *
+ * @param {Object} metadata - Metadata extracted from file
+ * @param {string} [metadata.DOI] - Document DOI
+ * @param {string} [metadata.ISBN] - Book ISBN
+ * @param {string} [metadata.title] - Document title
+ * @param {string} [filePath] - File path for hash-based detection
+ * @returns {Promise<DuplicateResult>} Detection result
+ */
+export async function checkForDuplicate(metadata, filePath = null) {
+  const detector = getDuplicateDetector();
+
+  if (!detector._initialized) {
+    await detector.init();
+  }
+
+  return detector.checkDuplicate(metadata, filePath);
+}
+
+// Export the duplicate tag for use by other modules
+export { DUPLICATE_TAG };

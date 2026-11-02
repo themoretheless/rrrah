@@ -1,0 +1,11 @@
+{
+  "runtime": "v22.23.4",
+  "controls_passed": 3,
+  "findings": [
+    "Two distinct physical POSIX names normalize tosamekey;freshhash preventsfalsecontentmatch,but alternatingpaths overwriteeachother andmissunchangedreread",
+    "Two invalid session IDs map tosameunsafe-session cache;second session denied without itsown priorread",
+    "Valid distinct session IDs keep firstreads separate"
+  ],
+  "scope": "All original runtime modules,only import locations changed;real owned filesystem;invalid-session case is malformed-input boundary,not normal UUID session claim;no actual Claude tool execution",
+  "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/paths-owned-Gc6ElO"
+}

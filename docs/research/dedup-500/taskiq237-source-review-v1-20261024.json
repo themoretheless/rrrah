@@ -1,0 +1,127 @@
+{
+  "index": 237,
+  "repository": "d3vyce/taskiq-deduplication",
+  "commit": "c1f91bc5e1fbf5140a936bfa859d42eff42eb48e",
+  "tracked_blob_count": 23,
+  "whole_file_reads": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/00-README.md",
+      "sha256": "86e320b1417d55386d1b73c165653fd5e2b51019522eae80b48f7b08d24f0cad",
+      "git_blob_sha1": "e216095effc2fef6abeb1e4c36c9acf4723f878c"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/01-LICENSE",
+      "sha256": "5768c28c8f953c1faf7866362ad6f4b14e2f4ff4e575172267d94213df1b3281",
+      "git_blob_sha1": "79ece0b79f6ba4971b5591a1b793cf7fcecd4033"
+    },
+    {
+      "path": "src/taskiq_deduplication/__init__.py",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/02-__init__.py",
+      "sha256": "a929443d10b5ab44b82b561889737877c7d64e171a51f990b431fb2f743bd97a",
+      "git_blob_sha1": "e3a50da345cc136b662684d487c65cbd2b8eef2c"
+    },
+    {
+      "path": "src/taskiq_deduplication/middleware.py",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/03-middleware.py",
+      "sha256": "363a5c07ff51a8df170863d21567bce9b43068c6a9f41cbe47b334d71762f4c9",
+      "git_blob_sha1": "850382b2b19acaef6bae49a4a7bf819b3ea2b697"
+    },
+    {
+      "path": "src/taskiq_deduplication/utils.py",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/04-utils.py",
+      "sha256": "7a572d1ca85cc2716575227b6c5c0ecb4aa60f998df861fe375b27be8d7c5417",
+      "git_blob_sha1": "1fdeeb342aa7c95c45d5f61c9162073a1e52ad01"
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/05-__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "tests/conftest.py",
+      "local": "docs/research/dedup-500/evidence/d3vyce--taskiq-deduplication/06-conftest.py",
+      "sha256": "45b78ce25c6285c01cd316d48fb25186ddc92d9958355e25d6729b119edaec7a",
+      "git_blob_sha1": "d0da622da31e9fec070e7dcf4ac4f4e85da30061"
+    }
+  ],
+  "whole_file_read_count": 7,
+  "remaining": [
+    {
+      "path": ".github/dependabot.yml",
+      "bytes": 280
+    },
+    {
+      "path": ".github/workflows/build-release.yml",
+      "bytes": 549
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 3057
+    },
+    {
+      "path": ".github/workflows/docs.yml",
+      "bytes": 698
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 4686
+    },
+    {
+      "path": ".pre-commit-config.yaml",
+      "bytes": 979
+    },
+    {
+      "path": ".python-version",
+      "bytes": 5
+    },
+    {
+      "path": "docs/index.md",
+      "bytes": 3582
+    },
+    {
+      "path": "docs/overrides/main.html",
+      "bytes": 213
+    },
+    {
+      "path": "docs/reference.md",
+      "bytes": 291
+    },
+    {
+      "path": "docs/usage.md",
+      "bytes": 10253
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 2241
+    },
+    {
+      "path": "tests/test_integration.py",
+      "bytes": 3898
+    },
+    {
+      "path": "tests/test_middleware.py",
+      "bytes": 41493
+    },
+    {
+      "path": "uv.lock",
+      "bytes": 401770
+    },
+    {
+      "path": "zensical.toml",
+      "bytes": 2738
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "findings": [
+    "Task dispatch deduplication, not image/file equality; no production code adoption.",
+    "Ownership-checked Redis Lua release and refresh are useful reference patterns. Full SHA256 is truncated to 16 hex characters (64 bits); not a proof of byte equality.",
+    "pre_execute starts a heartbeat but does not acquire/reject a lock. After TTL expiry or lost ownership, heartbeat logs and stops; task execution is not fenced by this middleware. Static observation, not live Redis reproduction.",
+    "Partial-key mode excludes positional arguments and absent requested kwargs, with warnings; explicit keys intentionally bypass task-name fingerprinting.",
+    "parse_int_label accepts zero/negative and bool via int conversion; parse_list_label checks list container but not string element types. Source observations only.",
+    "real_redis fixture flushes localhost database 15 before/after integration tests; not executed. No Redis server, HTTP, broker, or external state mutated."
+  ]
+}

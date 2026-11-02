@@ -1,0 +1,26 @@
+{
+  "evidence": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-known-shift.log",
+  "sha256": "836641986496cbf2afbcdee3dd1b861e665cb4bc8689df7cdcdc81e9098131f4",
+  "bin_definition": [
+    "both samples within display range",
+    "native RAW outside range",
+    "remaining target out of range"
+  ],
+  "counts": [
+    23631818,
+    357695,
+    10487
+  ],
+  "strict_rejected": [
+    4236915,
+    354350,
+    9807
+  ],
+  "strict_rejection_fractions": [
+    0.17928857610531698,
+    0.9906484574847286,
+    0.9351578144369219
+  ],
+  "inference": "4.2million strict mismatches occur when both samples are in display range. Out-of-range/clipping alone cannot explain Sony rejection. Exact integer crop shift also retains large residual; next filtered control tests sensitivity to local reconstruction/color differences.",
+  "scope": "One known Sony pair diagnostic; no implementation change or general cause proof."
+}

@@ -1,0 +1,32 @@
+{
+  "controls_passed": 4,
+  "python": "3.14.9 (main, Oct 21 2026, 06:02:15) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "shapely": "2.1.2",
+  "scope": "Original two AST functions;real native Shapely;vpype list annotation substitute;no full plugin CLI or upstream test suite",
+  "results": [
+    {
+      "name": "identical_positive",
+      "kept_length": 10.0,
+      "removed_length": 10.0,
+      "mask_count": 2
+    },
+    {
+      "name": "reversed_positive",
+      "kept_length": 10.0,
+      "removed_length": 10.0,
+      "mask_count": 2
+    },
+    {
+      "name": "disjoint_positive",
+      "kept_length": 20.0,
+      "removed_length": 0,
+      "mask_count": 2
+    },
+    {
+      "name": "zero_tolerance_retains_identical_lines",
+      "kept_length": 20.0,
+      "removed_length": 0,
+      "mask_count": 2
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "source": "golang.org/x/image v0.30.0/testdata/video-001-paletted.tiff",
+  "source_sha256": "6ab3bbe26fda97294de50ebc00816bb2e2b99cb5e15853fdf44603c6efa19a47",
+  "oracle": "Pillow 8-bit RGBA, exact expansion *257; original ColorMap entries verified divisible by257",
+  "dimensions": [
+    150,
+    103
+  ],
+  "oracle_sha256": "0ee398bffdb3534d9e46fe4f793a9181ec6281455f8b4a0ca3dba91f10f84a0c",
+  "license": "BSD-3-Clause, tiff-palette-go-LICENSE.txt",
+  "invalid_control": "Go reader_test.go TestInvalidPaletteRef requires refusal"
+}

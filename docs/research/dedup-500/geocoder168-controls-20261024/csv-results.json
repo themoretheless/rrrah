@@ -1,0 +1,31 @@
+{
+  "scope": "Original CSV writer block and original leading next(f), owned fixtures only.\n\nThe database copy block is not executed; file remainder is measured instead.\nNo SQL/psycopg2/dedupe execution or original address data access.\n",
+  "source_sha256": "bb75998b75ebc735232c525d666896778374264bfb884e88c500c5502aeced88",
+  "authored_controls": [
+    {
+      "case": "two accepted matches loses first",
+      "written_csv": "1,101,0.9\r\n2,102,0.95\r\n",
+      "remaining_rows": [
+        [
+          "2",
+          "102",
+          "0.95"
+        ]
+      ],
+      "exception": null
+    },
+    {
+      "case": "one accepted match loses all",
+      "written_csv": "1,101,0.9\r\n",
+      "remaining_rows": [],
+      "exception": null
+    },
+    {
+      "case": "no accepted matches raises StopIteration",
+      "written_csv": "",
+      "remaining_rows": [],
+      "exception": "StopIteration"
+    }
+  ],
+  "original_tests_run": 0
+}

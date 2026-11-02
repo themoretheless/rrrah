@@ -1,0 +1,208 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package core
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+
+	"github.com/autobrr/upbrr/internal/releaseworkflow"
+	"github.com/autobrr/upbrr/internal/trackers"
+	dupechecking "github.com/autobrr/upbrr/internal/trackers/dupe"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+const (
+	workflowPrivateResourceKindDupes         = "upbrr/workflow-dupe-evidence/v1"
+	workflowPrivateResourceKindMedia         = "upbrr/workflow-media-artifacts/v1"
+	workflowPrivateResourceKindAudioAnalysis = "upbrr/workflow-audio-analysis/v1"
+)
+
+// persistedWorkflowDupeEvidence records the search contract alongside durable evidence.
+// The contract is checked before restoring the assessment for workflow continuation.
+type persistedWorkflowDupeEvidence struct {
+	SearchContract string               `json:"searchContract"`
+	Summary        api.DupeCheckSummary `json:"summary"`
+	Assessment     json.RawMessage      `json:"assessment"`
+	SkipRemote     *bool                `json:"skipRemote,omitempty"`
+}
+
+// MarshalPrivateResource encodes duplicate evidence with the current search contract.
+// It rejects a nil assessment instead of persisting an unusable snapshot.
+func (e workflowDupePrivateEvidence) MarshalPrivateResource() (string, []byte, error) {
+	if e.Assessment == nil {
+		return "", nil, errors.New("marshal workflow duplicate assessment: evidence is unavailable")
+	}
+	assessment, err := e.Assessment.MarshalBinary()
+	if err != nil {
+		return "", nil, fmt.Errorf("marshal workflow duplicate assessment: %w", err)
+	}
+	payload, err := json.Marshal(persistedWorkflowDupeEvidence{
+		SearchContract: trackers.DuplicateSearchContractID,
+		Summary:        e.Summary,
+		Assessment:     assessment,
+		SkipRemote:     e.SkipRemote,
+	})
+	if err != nil {
+		return "", nil, fmt.Errorf("marshal workflow duplicate evidence: %w", err)
+	}
+	return workflowPrivateResourceKindDupes, payload, nil
+}
+
+// decodeWorkflowDupePrivateEvidence restores only evidence for the current search contract.
+// Missing or mismatched contracts return [releaseworkflow.ErrPrivateResourceUnavailable]
+// so recovery can invalidate obsolete authority; malformed payloads return decoding errors.
+func decodeWorkflowDupePrivateEvidence(payload []byte) (any, error) {
+	var persisted persistedWorkflowDupeEvidence
+	if err := json.Unmarshal(payload, &persisted); err != nil {
+		return nil, fmt.Errorf("decode workflow duplicate evidence: %w", err)
+	}
+	if persisted.SearchContract != trackers.DuplicateSearchContractID {
+		return nil, releaseworkflow.ErrPrivateResourceUnavailable
+	}
+	assessment, err := dupechecking.UnmarshalAssessment(persisted.Assessment)
+	if err != nil {
+		return nil, fmt.Errorf("decode workflow duplicate assessment: %w", err)
+	}
+	return workflowDupePrivateEvidence{
+		Summary:    persisted.Summary,
+		Assessment: assessment,
+		SkipRemote: persisted.SkipRemote,
+	}, nil
+}
+
+type persistedWorkflowMediaArtifacts struct {
+	Screenshots       []api.ScreenshotImage                          `json:"screenshots,omitempty"`
+	DVDMenus          []api.DVDMenuCaptureImage                      `json:"dvdMenus,omitempty"`
+	ArtifactImages    map[api.PublicResourceID]api.ScreenshotImage   `json:"artifactImages,omitempty"`
+	HostedImages      map[api.PublicResourceID]api.UploadedImageLink `json:"hostedImages,omitempty"`
+	HostedSources     map[api.PublicResourceID]api.PublicResourceID  `json:"hostedSources,omitempty"`
+	ScreenshotSubject api.ScreenshotSubject                          `json:"screenshotSubject"`
+	DVDMenuSubject    api.DVDMenuSubject                             `json:"dvdMenuSubject"`
+	PendingDeletes    []persistedWorkflowMediaPendingDelete          `json:"pendingDeletes,omitempty"`
+}
+
+type persistedWorkflowMediaPendingDelete struct {
+	Kind                     api.MediaArtifactKind  `json:"kind"`
+	Path                     string                 `json:"path"`
+	SourcePath               string                 `json:"sourcePath,omitempty"`
+	PreparedMediaFingerprint string                 `json:"preparedMediaFingerprint,omitempty"`
+	PreparedGeneration       api.PreparedGeneration `json:"preparedGeneration,omitempty"`
+	Host                     string                 `json:"host,omitempty"`
+}
+
+func (a workflowMediaPrivateArtifacts) MarshalPrivateResource() (string, []byte, error) {
+	pending := a.pendingDeletes()
+	persistedPending := make([]persistedWorkflowMediaPendingDelete, 0, len(pending))
+	for _, deletion := range pending {
+		persistedPending = append(persistedPending, persistedWorkflowMediaPendingDelete{
+			Kind:                     deletion.kind,
+			Path:                     deletion.path,
+			SourcePath:               deletion.binding.SourcePath,
+			PreparedMediaFingerprint: deletion.binding.PreparedMediaFingerprint,
+			PreparedGeneration:       deletion.binding.PreparedGeneration,
+			Host:                     deletion.host,
+		})
+	}
+	payload, err := json.Marshal(persistedWorkflowMediaArtifacts{
+		Screenshots:       append([]api.ScreenshotImage(nil), a.Screenshots...),
+		DVDMenus:          append([]api.DVDMenuCaptureImage(nil), a.DVDMenus...),
+		ArtifactImages:    cloneScreenshotImageMap(a.ArtifactImages),
+		HostedImages:      cloneUploadedImageMap(a.HostedImages),
+		HostedSources:     cloneHostedSourceMap(a.HostedSources),
+		ScreenshotSubject: a.screenshotSubject,
+		DVDMenuSubject:    a.dvdMenuSubject,
+		PendingDeletes:    persistedPending,
+	})
+	if err != nil {
+		return "", nil, fmt.Errorf("marshal workflow media artifacts: %w", err)
+	}
+	return workflowPrivateResourceKindMedia, payload, nil
+}
+
+func decodeWorkflowMediaPrivateArtifacts(builder workflowMediaBuilder, payload []byte) (any, error) {
+	var persisted persistedWorkflowMediaArtifacts
+	if err := json.Unmarshal(payload, &persisted); err != nil {
+		return nil, fmt.Errorf("decode workflow media artifacts: %w", err)
+	}
+	pending := make([]workflowMediaPendingDelete, 0, len(persisted.PendingDeletes))
+	for _, deletion := range persisted.PendingDeletes {
+		if deletion.Kind == "" || deletion.Path == "" {
+			return nil, errors.New("workflow private media contains invalid pending deletion")
+		}
+		binding := api.PreparedMediaBinding{
+			SourcePath:               deletion.SourcePath,
+			PreparedMediaFingerprint: deletion.PreparedMediaFingerprint,
+			PreparedGeneration:       deletion.PreparedGeneration,
+		}
+		if deletion.Kind == api.MediaArtifactHostedImage && !binding.Valid() {
+			binding = persisted.ScreenshotSubject.MediaBinding
+			if !binding.Valid() {
+				binding = persisted.DVDMenuSubject.MediaBinding
+			}
+			if !binding.Valid() {
+				if builder.media != nil && builder.media.logger != nil {
+					builder.media.logger.Warnf(
+						"core: skipped legacy pending media deletion kind=%s reason=missing_prepared_binding",
+						deletion.Kind,
+					)
+				}
+				continue
+			}
+		}
+		pending = append(pending, workflowMediaPendingDelete{
+			kind:    deletion.Kind,
+			path:    deletion.Path,
+			binding: binding,
+			host:    deletion.Host,
+		})
+	}
+	var commitState *workflowMediaCommitState
+	if len(pending) > 0 {
+		commitState = &workflowMediaCommitState{pending: pending}
+	}
+	return workflowMediaPrivateArtifacts{
+		Screenshots:       append([]api.ScreenshotImage(nil), persisted.Screenshots...),
+		DVDMenus:          append([]api.DVDMenuCaptureImage(nil), persisted.DVDMenus...),
+		ArtifactImages:    cloneScreenshotImageMap(persisted.ArtifactImages),
+		HostedImages:      cloneUploadedImageMap(persisted.HostedImages),
+		HostedSources:     cloneHostedSourceMap(persisted.HostedSources),
+		screenshotService: builder.screenshots,
+		screenshotSubject: persisted.ScreenshotSubject,
+		dvdMenuService:    builder.dvdMenus,
+		dvdMenuSubject:    persisted.DVDMenuSubject,
+		hostedRepository:  builder.media.repo,
+		mediaReuse:        builder.media.mediaReuse,
+		commitState:       commitState,
+	}, nil
+}
+
+func workflowPrivateResourceCodecs(builder workflowMediaBuilder, audioBuilder workflowAudioAnalysisBuilder) []releaseworkflow.PrivateResourceCodec {
+	return []releaseworkflow.PrivateResourceCodec{
+		{
+			Kind:   workflowPrivateResourceKindDupes,
+			Decode: decodeWorkflowDupePrivateEvidence,
+			// Duplicate evidence owns no external resources. Expired legacy evidence
+			// can be deleted even though its search contract no longer permits reuse.
+			DecodeForRelease: func([]byte) (any, error) { return nil, nil },
+		},
+		{
+			Kind: workflowPrivateResourceKindMedia,
+			Decode: func(payload []byte) (any, error) {
+				return decodeWorkflowMediaPrivateArtifacts(builder, payload)
+			},
+		},
+		{
+			Kind:     workflowPrivateResourceKindAudioAnalysis,
+			NoExpiry: true,
+			Decode: func(payload []byte) (any, error) {
+				return decodeWorkflowAudioAnalysisResource(audioBuilder.root, payload)
+			},
+			DecodeForRelease: func(payload []byte) (any, error) {
+				return decodeWorkflowAudioAnalysisResourceForRelease(audioBuilder.root, payload)
+			},
+		},
+	}
+}

@@ -1,0 +1,9 @@
+{
+  "cases": 3,
+  "scope": "Original full module body in Node VM;imports replaced by DB/peer/audit fixtures, exports stripped. No real DB/network/Telegram.",
+  "findings": [
+    "Offline status fixture returned despite docstring requiring online;revoked excluded. Actual peer-state vocabulary/caller qualification pending.",
+    "Safe identifier42 roundtrips escaped peer id.",
+    "String identifier above2^53 rounds through Number;actual remote-id domain not established,not proven production failure."
+  ]
+}

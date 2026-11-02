@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+    "--verify-known-shift"
+  ],
+  "environment": {
+    "RRRAH_EXPECTED_SHIFT": "12,12",
+    "RRRAH_FIT_DISPLAY": "1",
+    "RRRAH_NATIVE_WHITE_ANCHOR": "1",
+    "RRRAH_DIAGNOSTIC_DEMOSAIC": "bilinear"
+  },
+  "binary_sha256": "e78a39186478987d86ff27403179ce255ce0a3c702c52b1999b8d9d999a7652a",
+  "demosaic": "bilinear",
+  "exit_code": 0,
+  "inputs_before": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+  },
+  "inputs_after": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+  },
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-linear-native-bilinear-20261026.log",
+  "log_sha256": "9ad840bc239251049609e429fad81d7733676ad1e6912e6ac97d4f81b465d029",
+  "managed_memory_released": true,
+  "scope": "Native development ablation, fixed geometry, same original reference; no default change or general camera qualification."
+}

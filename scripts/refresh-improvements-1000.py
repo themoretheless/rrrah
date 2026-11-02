@@ -28,11 +28,20 @@ for t in d['tasks']:
 for rel in d['source_sha256']:
     d['source_sha256'][rel] = hashlib.sha256((ROOT / rel).read_bytes()).hexdigest()
 p.write_text(json.dumps(d, ensure_ascii=False, indent=2)+'\n')
-md = ['# 1000 улучшений rrrah', '', f"Исходный аудит: {d['audit_date']}, база `{d['base_commit']}` плюс dirty checkout.", '', d['scope'], '', '## Выполнение первых 30', '', d['execution_snapshot_note'], '', '; '.join(f'{k}: {v}' for k,v in d['execution_summary'].items())+'.', '', '[Результаты и ограничения](research/first30-2026-10-14/REPORT.md). Статус исходного основания и execution.status независимы. partial не означает выполнение всего acceptance. Остальные 970 задач не квалифицированы повторно.', '', '## Методика исходного аудита', '']
+md = ['# 1000 улучшений rrrah', '', f"Исходный аудит: {d['audit_date']}, база `{d['base_commit']}` плюс dirty checkout.", '', d['scope'], '', '## Выполнение первых 30', '', d['execution_snapshot_note'], '', '; '.join(f'{k}: {v}' for k,v in d['execution_summary'].items())+'.', '', '[Результаты и ограничения](research/first30-2026-10-14/REPORT.md). Статус исходного основания и execution.status независимы. partial не означает выполнение всего acceptance. Записи без execution ещё не квалифицированы повторно.', '', '## Методика исходного аудита', '']
 md += ['- '+s for s in d['methodology']]
 md += ['', 'Машинный источник: [improvements-1000.json](improvements-1000.json). Исходные SHA сохранены в audit_source_sha256; текущие локации и SHA обновлены для навигации. Проверка: `python3 scripts/validate-improvements-1000.py --strict-snapshot`.', '', '## Первые 30 задач', '', '| ID | Задача | Приоритет | Объём | Выполнение |', '|---|---|---|---|---|']
 for t in d['tasks'][:30]:
     md.append(f"| [{t['id']}](#{t['id'].lower()}) | {t['title']} | {t['priority']} | {t['size']} | {t['execution']['status']} |")
+for batch in d.get('execution_batches', []):
+    md += ['', f"## {batch['name']}", '', batch['note'], '',
+           '; '.join(f'{k}: {v}' for k,v in batch['summary'].items())+'.', '',
+           f"[Результаты и ограничения]({Path(batch['report']).relative_to('docs').as_posix()}).", '',
+           '| ID | Задача | Выполнение |', '|---|---|---|']
+    by_id = {t['id']: t for t in d['tasks']}
+    for ident in batch['ids']:
+        t = by_id[ident]
+        md.append(f"| [{ident}](#{ident.lower()}) | {t['title']} | {t['execution']['status']} |")
 for sub in dict.fromkeys(t['subsystem'] for t in d['tasks']):
     md += ['', f'## {sub}', '']
     for t in d['tasks']:

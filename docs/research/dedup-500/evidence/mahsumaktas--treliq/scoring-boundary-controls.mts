@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { ScoringEngine } from './scoring-original-module.mts';
+import { createPRData } from './pr-factory-original.mts';
+const provider={name:'synthetic',async generateText(){return JSON.stringify({idea:Array(10).fill('false'),implementation:Array(5).fill('false'),noveltyBonus:0,risk:'low'})},async generateEmbedding(){return [1]}};
+const engine=new ScoringEngine(provider);
+const scored=await engine.score(createPRData({title:'feat: synthetic control'}));
+assert.equal(scored.ideaScore,80);assert.equal(scored.implementationScore,100);assert.equal(scored.totalScore,86);
+const heuristic=new ScoringEngine();const row=createPRData({title:'feat: identical controls'});
+const equal=await heuristic.scoreMany([ {...row,number:1},{...row,number:2},{...row,number:3} ]);
+assert.equal(new Set(equal.map(p=>p.totalScore)).size,1);assert.deepEqual(equal.map(p=>p.percentileRank),[0,50,100]);
+const malformed=new ScoringEngine({name:'synthetic',async generateText(){return '{}'},async generateEmbedding(){return [1]}});
+const empty=await malformed.score({...row,number:4});assert.equal(empty.ideaScore,0);assert.equal(empty.implementationScore,0);assert.equal(empty.totalScore,0);assert.equal(empty.llmReason,'');
+console.log(JSON.stringify({controls:3,passed:3,observations:['string false arrays yield idea80 implementation100 total86','equal total scores receive distinct percentile0/50/100','empty JSON object accepted as zero-valued model scoring without failure reason'],scope:'original scoring/intent/controller/fixture modules, import/logger adapters, synthetic provider; no actual model/GitHub'}));

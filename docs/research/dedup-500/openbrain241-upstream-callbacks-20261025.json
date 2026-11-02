@@ -1,0 +1,37 @@
+{
+  "scope": "Original 8 test callbacks and original helper functions after removing helper environment/client initialization; TypeScript transpiled in Node VM; assert adapter; LLM transport adapter routes to original test fetch stubs. No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "returns zeroed result when no candidates",
+      "passed": true
+    },
+    {
+      "name": "auto-merges pair at >= 0.95 similarity without LLM",
+      "passed": true
+    },
+    {
+      "name": "LLM-confirms pair in 0.92-0.95 range and merges",
+      "passed": true
+    },
+    {
+      "name": "LLM-rejects pair in 0.92-0.95 range — no merge",
+      "passed": true
+    },
+    {
+      "name": "LLM failure skips pair — fail-safe",
+      "passed": true
+    },
+    {
+      "name": "deduplicates symmetric pairs — processes A↔B only once",
+      "passed": true
+    },
+    {
+      "name": "skips pairs involving already-deleted thoughts",
+      "passed": true
+    },
+    {
+      "name": "RPC error on find_dedup_candidates returns zeroed result",
+      "passed": true
+    }
+  ]
+}

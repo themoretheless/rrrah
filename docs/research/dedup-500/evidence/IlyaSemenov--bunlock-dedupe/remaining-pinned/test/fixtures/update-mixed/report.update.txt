@@ -1,0 +1,25 @@
+blocked-lib:
+  ✅ 2.1.0
+    used by:
+      - myapp: ^2.0.0
+  🗑️ 1.5.0
+    used by:
+      - myapp > intermediary: ^1.0.0
+    removed after:
+      - intermediary: 1.0.0 → 1.1.0
+
+ready-lib:
+  ✅ 2.1.0
+    used by:
+      - myapp: ^2.0.0
+  ⬆️ 2.0.0 → 2.1.0
+    used by:
+      - myapp > plugin: ^2.0.0
+
+3 duplicate packages in bun.lock.
+1 package can be deduped.
+1 intermediate package can be updated to unlock deduplication.
+1 package cannot be deduped.
+
+Run with --fix to apply available dedupes.
+Run with --update --fix to update intermediate packages and apply dedupes.

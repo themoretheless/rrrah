@@ -1,0 +1,1959 @@
+{
+  "source_sha256": "d5e099a829b53b888193a7a00b32e8dd0ec189ca3aa7ed49bed66c92aab3c2ba",
+  "scope": "Every parsed package tuple inspected structurally;not line-by-line semantic read,installation,archive integrity verification or original Bun parser execution. String-aware trailing comma removal only.",
+  "top_keys": [
+    "lockfileVersion",
+    "configVersion",
+    "workspaces",
+    "packages"
+  ],
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "bunlock-dedupe",
+      "dependencies": {
+        "env-paths": "^4.0.0",
+        "json5": "^2.2.3",
+        "semver": "^7.7.4"
+      },
+      "devDependencies": {
+        "@biomejs/biome": "2.4.2",
+        "@changesets/cli": "^2.29.8",
+        "@tsconfig/bun": "^1.0.10",
+        "@types/bun": "^1.3.6",
+        "@types/node": "^24.10.13",
+        "@types/semver": "^7.7.1",
+        "@typescript/native-preview": "^7.0.0-dev.20260124.1",
+        "lefthook": "^2.1.1",
+        "tsdown": "^0.20.3",
+        "typescript": "^5.9.3"
+      }
+    }
+  },
+  "package_count": 200,
+  "tuple_slot_counts": {
+    "4": 200
+  },
+  "missing_integrity": [],
+  "packages": [
+    {
+      "key": "@babel/generator",
+      "spec": "@babel/generator@8.0.0-rc.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "1499b806d02555a1efd9f45c834be8e664ebf875bb15e7a9420a1555ccd1f581"
+    },
+    {
+      "key": "@babel/helper-string-parser",
+      "spec": "@babel/helper-string-parser@8.0.0-rc.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "7b5c828e8821a5f33878800e80d1278bdd0479242bb83e40153340387a438f6c"
+    },
+    {
+      "key": "@babel/helper-validator-identifier",
+      "spec": "@babel/helper-validator-identifier@8.0.0-rc.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "694c390f6b4036cf2fddd9800423e8a9c27acae4250ce8c822f831436274e162"
+    },
+    {
+      "key": "@babel/parser",
+      "spec": "@babel/parser@8.0.0-rc.1",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "26f16451c2a89198e9c70e11e3f33fbe566c83543371393a80d4e51f1ee0d7a2"
+    },
+    {
+      "key": "@babel/runtime",
+      "spec": "@babel/runtime@7.28.6",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "69a7660d0bf6f908ccd55dbc9f1e29dafac43b50d419d1da807ed8db05abc8b0"
+    },
+    {
+      "key": "@babel/types",
+      "spec": "@babel/types@8.0.0-rc.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "d195de59f755229a3b8e3442e298c4a41e9e2168eccaa5f390fa3859253360ae"
+    },
+    {
+      "key": "@biomejs/biome",
+      "spec": "@biomejs/biome@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "optionalDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "6a7a4cc6e99a81bb3f9e0f4debeac23304bfdd082662eed195a5caefc798ba34"
+    },
+    {
+      "key": "@biomejs/cli-darwin-arm64",
+      "spec": "@biomejs/cli-darwin-arm64@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "fec57a976bef59312f02b2d90cfe829db045fcc8ef31506e382a7274f154d11b"
+    },
+    {
+      "key": "@biomejs/cli-darwin-x64",
+      "spec": "@biomejs/cli-darwin-x64@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "a4ab87ff3f3e4db3205a1e6be588a9b55f343b70353a1cda2a0045fe784a033c"
+    },
+    {
+      "key": "@biomejs/cli-linux-arm64",
+      "spec": "@biomejs/cli-linux-arm64@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "252ae4066d5461c1a2b6ba00c88322a71bcfd0c200ea3c8db6fa79ecc6ec7d2f"
+    },
+    {
+      "key": "@biomejs/cli-linux-arm64-musl",
+      "spec": "@biomejs/cli-linux-arm64-musl@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "2f28783552417c8653a4aa04e5e9ce9e0f13028809182b333f01a8b0b768ba7c"
+    },
+    {
+      "key": "@biomejs/cli-linux-x64",
+      "spec": "@biomejs/cli-linux-x64@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "9273a90c637dc5063ed5b5332755d1c03b45b881ee5899381d0f6cd7410de26b"
+    },
+    {
+      "key": "@biomejs/cli-linux-x64-musl",
+      "spec": "@biomejs/cli-linux-x64-musl@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "0b848969778e23e0f6ee75e127758ae967c77781a5e60d1e5c4a41cae2781364"
+    },
+    {
+      "key": "@biomejs/cli-win32-arm64",
+      "spec": "@biomejs/cli-win32-arm64@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "150f9ad3b9c5a2114e394d9a91fcdde3af986de6a1e474f93839bd0f2ca12d31"
+    },
+    {
+      "key": "@biomejs/cli-win32-x64",
+      "spec": "@biomejs/cli-win32-x64@2.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "97e6114d270d33819927d899b5c71da4dc8fba9fe6e95dd534b9206698197931"
+    },
+    {
+      "key": "@changesets/apply-release-plan",
+      "spec": "@changesets/apply-release-plan@7.0.14",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "d35686272a9dbfed715a43db34f64c712628841ab4c20c2e41334d90cc5acac5"
+    },
+    {
+      "key": "@changesets/assemble-release-plan",
+      "spec": "@changesets/assemble-release-plan@6.0.9",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "7d82ff7aabd6e42e2f363a1e17a0f4e616f6e8c48e2538603e99763e51a686ad"
+    },
+    {
+      "key": "@changesets/changelog-git",
+      "spec": "@changesets/changelog-git@0.2.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "a5ac8b43d845e7183738c934859ca8cce089dc3136551f9c7cb2715435ccdb74"
+    },
+    {
+      "key": "@changesets/cli",
+      "spec": "@changesets/cli@2.29.8",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "fd4ca54eb50ccb3aebdd4de99f16ef69bb8de6ff35ae38191980eda63a19c131"
+    },
+    {
+      "key": "@changesets/config",
+      "spec": "@changesets/config@3.1.2",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "815b162b56b60cabcdda680bd4f460f20d41cbd5b79b8750e7d2f7435569383e"
+    },
+    {
+      "key": "@changesets/errors",
+      "spec": "@changesets/errors@0.2.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "18fcba6056a468748e466a1208f6861e0f18deeb1af44111d1d56a0fe0d2ba06"
+    },
+    {
+      "key": "@changesets/get-dependents-graph",
+      "spec": "@changesets/get-dependents-graph@2.1.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "ce00e3f768fc923e8926f4a856b7e91151a12d97e30103ade99a3a7e4c88a647"
+    },
+    {
+      "key": "@changesets/get-release-plan",
+      "spec": "@changesets/get-release-plan@4.0.14",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "c10141b03fdaee0d8c464d365269158953e550b89908f856f64abceda44d8950"
+    },
+    {
+      "key": "@changesets/get-version-range-type",
+      "spec": "@changesets/get-version-range-type@0.4.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "4650acfccf48a3fcae375f5063c0ce879dafbda9dbe154cf825131986d75d3ab"
+    },
+    {
+      "key": "@changesets/git",
+      "spec": "@changesets/git@3.0.4",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "17c068ceba7dda81b62aabee4cb95a2a30fa7f2c9ee01ad12df020617a4ab11a"
+    },
+    {
+      "key": "@changesets/logger",
+      "spec": "@changesets/logger@0.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "49b091ede680a556437f8bdc1b5ae48fca6f8af2f82815f2e0b36252bffd3597"
+    },
+    {
+      "key": "@changesets/parse",
+      "spec": "@changesets/parse@0.4.2",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "cda601d9541d3c2e175e01f7c43e21526353a90fb6f7bb488410fe91b436be7c"
+    },
+    {
+      "key": "@changesets/pre",
+      "spec": "@changesets/pre@2.0.2",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "2cc9883755ff0d5848fc2580607abfb39ebf322b09f8baeafcaf085b692a0860"
+    },
+    {
+      "key": "@changesets/read",
+      "spec": "@changesets/read@0.6.6",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "465b98ed9adfb8beaa9e537bd98c46e68624f12c8c280d27e779ffb46482ccf4"
+    },
+    {
+      "key": "@changesets/should-skip-package",
+      "spec": "@changesets/should-skip-package@0.1.2",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "66940d33ca97c2f7cfe2894570d443d39aed1971b80287ffe6786e9583ff8e4f"
+    },
+    {
+      "key": "@changesets/types",
+      "spec": "@changesets/types@6.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "1b07650af9c58178c209b014690a107df369870cb7b5f62c52e7432058ba56f3"
+    },
+    {
+      "key": "@changesets/write",
+      "spec": "@changesets/write@0.4.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "c2d18bdc520f2d34cf53572007d40d8b048d6af8c1689aab75a477a2c64babe9"
+    },
+    {
+      "key": "@emnapi/core",
+      "spec": "@emnapi/core@1.8.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "16ce642477f44a0d86bb8c0308e10e7b14d4f02a60e7b7cab6a0e9129c9dc868"
+    },
+    {
+      "key": "@emnapi/runtime",
+      "spec": "@emnapi/runtime@1.8.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "c9179a566cadd93e68f4633c2d48a8b46284f829fb7f0626ac98a0ae547b6f19"
+    },
+    {
+      "key": "@emnapi/wasi-threads",
+      "spec": "@emnapi/wasi-threads@1.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "f60eac9d11024ab598ff623ecc4d15ba5c835a3379e39b1c36a82bd703fdcfce"
+    },
+    {
+      "key": "@inquirer/external-editor",
+      "spec": "@inquirer/external-editor@1.0.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies",
+        "optionalPeers",
+        "peerDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "c47df1446903ec7779e5786779a497c45f6d5dbeb5f318db69a1b37edcdf9ba0"
+    },
+    {
+      "key": "@jridgewell/gen-mapping",
+      "spec": "@jridgewell/gen-mapping@0.3.13",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "ebfb42869a77d7a5af04d14bb7f436745953d0838fb33eb9bd2ce1b30559a796"
+    },
+    {
+      "key": "@jridgewell/resolve-uri",
+      "spec": "@jridgewell/resolve-uri@3.1.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "63b26d2e324e88a76a2d9cac5d21ede9492b319c7f7e4b9ae939d0ecbea32b16"
+    },
+    {
+      "key": "@jridgewell/sourcemap-codec",
+      "spec": "@jridgewell/sourcemap-codec@1.5.5",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "cd0a4bdf3c5f6949d2e177fcf8297420a7059b940938819c241a93d054945bc0"
+    },
+    {
+      "key": "@jridgewell/trace-mapping",
+      "spec": "@jridgewell/trace-mapping@0.3.31",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "bd5c777e7ddfa1643fdd139a79ce7329b63db98901d94b809aabd31603acfc72"
+    },
+    {
+      "key": "@manypkg/find-root",
+      "spec": "@manypkg/find-root@1.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "998a4d13f97a5635de52b90b1ecfca666d70ac4d53411ec894c0c32c97589b31"
+    },
+    {
+      "key": "@manypkg/get-packages",
+      "spec": "@manypkg/get-packages@1.1.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "21bdac226d557a5d4d4115c0a33a1eaf4efa0e0c20b39c065ba8e70e6b3f5af4"
+    },
+    {
+      "key": "@napi-rs/wasm-runtime",
+      "spec": "@napi-rs/wasm-runtime@1.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "fe70b9c380b6d2c9554bed2553d7d6e3ed0a1b9955b9904090fefc453caad8b3"
+    },
+    {
+      "key": "@nodelib/fs.scandir",
+      "spec": "@nodelib/fs.scandir@2.1.5",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "ba13e36316384ccb9e207d18b41ca52f4abc80b9f835d05e287c1c39435e3dc0"
+    },
+    {
+      "key": "@nodelib/fs.stat",
+      "spec": "@nodelib/fs.stat@2.0.5",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "8e30ebf38e43d8d1eb7d6903a518e476917d73102ac85ce981d4d0e0032363d4"
+    },
+    {
+      "key": "@nodelib/fs.walk",
+      "spec": "@nodelib/fs.walk@1.2.8",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "77f8124ac159e10ad10995d9a752d2c74748d2f3f99620883f909c61505f461b"
+    },
+    {
+      "key": "@oxc-project/types",
+      "spec": "@oxc-project/types@0.112.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "15ec7a162d4b194a170c13f91b875f385f8ab2c2999bacb3bd233840fef19451"
+    },
+    {
+      "key": "@quansync/fs",
+      "spec": "@quansync/fs@1.0.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "290d79150df75dba706151a42d4d1da985c2795593a7782dd67d23e00b2d3934"
+    },
+    {
+      "key": "@rolldown/binding-android-arm64",
+      "spec": "@rolldown/binding-android-arm64@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "4e50eadfb518eaada7b77e1ad31a94846d87d3654a215e6495331a86f7cc7a03"
+    },
+    {
+      "key": "@rolldown/binding-darwin-arm64",
+      "spec": "@rolldown/binding-darwin-arm64@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "e41aa05d9f0b6ebbb02d1dce33d82713bfcc74166a89a08e18543e5bd610f79c"
+    },
+    {
+      "key": "@rolldown/binding-darwin-x64",
+      "spec": "@rolldown/binding-darwin-x64@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "42308d61685b53151c7608a438e9091a6f6847d9becea4e6ea19a1cb31f01cc3"
+    },
+    {
+      "key": "@rolldown/binding-freebsd-x64",
+      "spec": "@rolldown/binding-freebsd-x64@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "ae7d772dbcfee5e58d6e254a2db5c0755be0a8b33e4d0fd5aa5559082d0b4c43"
+    },
+    {
+      "key": "@rolldown/binding-linux-arm-gnueabihf",
+      "spec": "@rolldown/binding-linux-arm-gnueabihf@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "8a96f5e86ac1725e382ac6ae33e534e2704d1a5ebf1f4229b50b87e9d6fc7da5"
+    },
+    {
+      "key": "@rolldown/binding-linux-arm64-gnu",
+      "spec": "@rolldown/binding-linux-arm64-gnu@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "15865d21c2d93a96eebb65bbaa3a32413154addb452d057b7b4aee922f95e825"
+    },
+    {
+      "key": "@rolldown/binding-linux-arm64-musl",
+      "spec": "@rolldown/binding-linux-arm64-musl@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "b30ecc56c6fe80e4fbc0ee27cff1863e69863afd7fbebc40b661327bc00f791b"
+    },
+    {
+      "key": "@rolldown/binding-linux-x64-gnu",
+      "spec": "@rolldown/binding-linux-x64-gnu@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "f1db8a12ca346e6dc36fd1a764f70b015e66532f657d9a079df5265464bb5260"
+    },
+    {
+      "key": "@rolldown/binding-linux-x64-musl",
+      "spec": "@rolldown/binding-linux-x64-musl@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "9e5d4dc6c36454b5e430b66361c1c99dde36bce659c712b992f0fe4df5bfe2c0"
+    },
+    {
+      "key": "@rolldown/binding-openharmony-arm64",
+      "spec": "@rolldown/binding-openharmony-arm64@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "864b04792bfb07326b52435b18e1f76c4e7e359c11bc3e14c71ac765cb0e3658"
+    },
+    {
+      "key": "@rolldown/binding-wasm32-wasi",
+      "spec": "@rolldown/binding-wasm32-wasi@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "1762943d8d719088e0fc2cb7cb4ac0c5542a2e9477da3362dc5e0cc574e0501c"
+    },
+    {
+      "key": "@rolldown/binding-win32-arm64-msvc",
+      "spec": "@rolldown/binding-win32-arm64-msvc@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "ea4ed97920c347d2c7e87e66fba6b532bd7b90f70121ab5595c3d04a8acdce29"
+    },
+    {
+      "key": "@rolldown/binding-win32-x64-msvc",
+      "spec": "@rolldown/binding-win32-x64-msvc@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "a3ed831c17be6b29f58586ddca2ac3c7fe98c3db06329d966324283ee7b896b9"
+    },
+    {
+      "key": "@rolldown/pluginutils",
+      "spec": "@rolldown/pluginutils@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "d1a470de22202f96825705491e2e6ee2aef6108bfb8ebc05b9e605610d571879"
+    },
+    {
+      "key": "@tsconfig/bun",
+      "spec": "@tsconfig/bun@1.0.10",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "c9b6554b10d2ac358ba5591d457e532cf1d00aa04d43d4bd95a0361d66655940"
+    },
+    {
+      "key": "@tybys/wasm-util",
+      "spec": "@tybys/wasm-util@0.10.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "26aaf50ccb8d73f5ae471e14fc3a4a5aec69e6fc51180a67ca92a9f80c930c17"
+    },
+    {
+      "key": "@types/bun",
+      "spec": "@types/bun@1.3.9",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "50a82781bd9f542e78ffa2ec0d8f74a98fff0fd515ca29162ff1db184007978a"
+    },
+    {
+      "key": "@types/estree",
+      "spec": "@types/estree@1.0.8",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "513ae122866126cdfb1352f4d7f0a09f3f05a69b4b9aaa1f259cc518e3202a5c"
+    },
+    {
+      "key": "@types/jsesc",
+      "spec": "@types/jsesc@2.5.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "04869ab3f6d271a65bcaf50b6c1c2b4163e00645d1228fcc00af1a503d2b9fba"
+    },
+    {
+      "key": "@types/node",
+      "spec": "@types/node@24.10.13",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "1669178bb203d684ba89ac61ef60daa8c8502e058f18653fbc4efecc0035d91e"
+    },
+    {
+      "key": "@types/semver",
+      "spec": "@types/semver@7.7.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "4e967cf8ebc2ee2c6d07152077d11a86ebba0894a2e6422624cad16442a8eb0e"
+    },
+    {
+      "key": "@typescript/native-preview",
+      "spec": "@typescript/native-preview@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "optionalDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "4cc98fc7c2357ce0350850d3929de8fc75f881bbcab76a3522f7e6b6247fddb0"
+    },
+    {
+      "key": "@typescript/native-preview-darwin-arm64",
+      "spec": "@typescript/native-preview-darwin-arm64@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "66b9e2ff7d527e38d601d2a27a85eda7f6f13c3711488c498921a8842f81fc31"
+    },
+    {
+      "key": "@typescript/native-preview-darwin-x64",
+      "spec": "@typescript/native-preview-darwin-x64@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "155b06fe830542757c38c975dd1afaa49cfccef5347e682c2b7bc5b94785c6c3"
+    },
+    {
+      "key": "@typescript/native-preview-linux-arm",
+      "spec": "@typescript/native-preview-linux-arm@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "63cc851504a4c1a6e92e24ec2e7db8ab4f0fd41549dbaa89fe2a6afb39836f5d"
+    },
+    {
+      "key": "@typescript/native-preview-linux-arm64",
+      "spec": "@typescript/native-preview-linux-arm64@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "3b59d2ba0c3aac9747ae422914c0ed9f5f3f7c37180b4d665e8cfd1ee1a91c47"
+    },
+    {
+      "key": "@typescript/native-preview-linux-x64",
+      "spec": "@typescript/native-preview-linux-x64@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "f4e7f9a9de077c811d2d40bcb7344c68c251e977dc758bab01ace31545e69837"
+    },
+    {
+      "key": "@typescript/native-preview-win32-arm64",
+      "spec": "@typescript/native-preview-win32-arm64@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "0dd9b646a3ddd0a1a90b7a380057b03ab8ff1e87dff13a093b089d10c984d559"
+    },
+    {
+      "key": "@typescript/native-preview-win32-x64",
+      "spec": "@typescript/native-preview-win32-x64@7.0.0-dev.20260220.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "a25c47bd4688b12d57767592115c14d02366aa5368360f0e7578fc551cd6434d"
+    },
+    {
+      "key": "ansi-colors",
+      "spec": "ansi-colors@4.1.3",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "2f5e3440c8e9fdfce9e12eb631259e5a246edfe5d193f2f1821ad9061767fa87"
+    },
+    {
+      "key": "ansi-regex",
+      "spec": "ansi-regex@5.0.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "1975a3f3585dafc5330287fdd047848fe54f3fc9a7b1c23d1b476b06a89b2484"
+    },
+    {
+      "key": "ansis",
+      "spec": "ansis@4.2.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "00e484d947fe938ec797239e1cdb420206f0930148684c9038d87c445137ddfe"
+    },
+    {
+      "key": "argparse",
+      "spec": "argparse@2.0.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "5dccaf7db0e2711e7760080e43af1edff135dd17fca0f4961f5fce90ae1f1296"
+    },
+    {
+      "key": "array-union",
+      "spec": "array-union@2.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "4c46f9097ef63e855ef471f08005514b6f6d2b7ae6a951cd5c8988f4d4f794a2"
+    },
+    {
+      "key": "ast-kit",
+      "spec": "ast-kit@3.0.0-beta.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "f2e0315d6ab9e4834891376c01000defa2ce9c39faa7cd1b0f03d985cae2d857"
+    },
+    {
+      "key": "better-path-resolve",
+      "spec": "better-path-resolve@1.0.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "09764750627ce3a9885a2922f1660558c3289d2cc7ec054991d4a96e15badbfb"
+    },
+    {
+      "key": "birpc",
+      "spec": "birpc@4.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "950a39167c6b184dbf0c0b4336b1e17304995ec3322c92ce3778e86a81e51d7e"
+    },
+    {
+      "key": "braces",
+      "spec": "braces@3.0.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "c45573c6a8893c723773b17af4ceddd9ebd6229f5ac673684e9bdf33f88f5956"
+    },
+    {
+      "key": "bun-types",
+      "spec": "bun-types@1.3.9",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "ca4bd0fc4a702625d5e8c494ca8085b92678a9488d394400374e73469a0c0214"
+    },
+    {
+      "key": "cac",
+      "spec": "cac@6.7.14",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "ecc1220302a690e4da9aeb1949609ed29f18d96fc41d5e03ecf962bc19392380"
+    },
+    {
+      "key": "chardet",
+      "spec": "chardet@2.1.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "10ce33de2d0d7c7b49ff773b287ba58f27ca557ec4f60106fb10fa3e828f0d19"
+    },
+    {
+      "key": "ci-info",
+      "spec": "ci-info@3.9.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "f37746d871bc7cf8dbfd40c22d66ae466436bca6aca61504b0c59fd86abaa885"
+    },
+    {
+      "key": "cross-spawn",
+      "spec": "cross-spawn@7.0.6",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "829880d23b177a2065d205d332630276321718343d7d0325bdf814e18e92c44a"
+    },
+    {
+      "key": "defu",
+      "spec": "defu@6.1.4",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "96272b5de4ae3a2603a06cba5bb3c5c5a4a3b6bc495d21612294336aeb81d70e"
+    },
+    {
+      "key": "detect-indent",
+      "spec": "detect-indent@6.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "fbc49d8ce03440b8013c51f75c271efef18ddbc476aeb3658749ae34788146e2"
+    },
+    {
+      "key": "dir-glob",
+      "spec": "dir-glob@3.0.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "04578776d730e4443183069a181a034f8f8d01c5c5f869f2ed8482ce58fcaa33"
+    },
+    {
+      "key": "dts-resolver",
+      "spec": "dts-resolver@2.1.3",
+      "slots": 4,
+      "metadata_fields": [
+        "optionalPeers",
+        "peerDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "3d26db2d76faca83c84f39b62ddc7488cacbb64f1292fdfb0653141285235085"
+    },
+    {
+      "key": "empathic",
+      "spec": "empathic@2.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "1ce5159275f51ecbc0d8a5a7d0691776f396b786ce391b82c6bcba337d8f16b3"
+    },
+    {
+      "key": "enquirer",
+      "spec": "enquirer@2.4.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "d1d3726facae0a664ded458d695297233eaa13299b1feb80abf239b13299707f"
+    },
+    {
+      "key": "env-paths",
+      "spec": "env-paths@4.0.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "64145a7335a0cb35c2a86e06bcecd4214cbc6dd11bbdd9ad68f895c677f083b6"
+    },
+    {
+      "key": "esprima",
+      "spec": "esprima@4.0.1",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "6204196e06fb03db77026c562290af87c4b28e19375a53a3b24cb20c3fb9cadc"
+    },
+    {
+      "key": "estree-walker",
+      "spec": "estree-walker@3.0.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "28b099c90c922a47c182b8b1cb0ee3a20af5ea701083f349bdbeed90dbe58924"
+    },
+    {
+      "key": "extendable-error",
+      "spec": "extendable-error@0.1.7",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "7a65500461d5733526306e39467f7a3f9c6a20eac603fcb536aee6105a63ff42"
+    },
+    {
+      "key": "fast-glob",
+      "spec": "fast-glob@3.3.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "43f5e3ab6845c44f14eeecca0a7902ec42e5e18d393904d75d973e121aa0a368"
+    },
+    {
+      "key": "fastq",
+      "spec": "fastq@1.20.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "4dd08e2d7f52757324c1eb5f3e2757510033f38e589c086b63156cd234d7c2a8"
+    },
+    {
+      "key": "fdir",
+      "spec": "fdir@6.5.0",
+      "slots": 4,
+      "metadata_fields": [
+        "optionalPeers",
+        "peerDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "6fb87197dc47e4c7955622aa10bf0585a5736775f7cd519d47ae58bc559f9b19"
+    },
+    {
+      "key": "fill-range",
+      "spec": "fill-range@7.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "4754f07d3f94393928cd5b2166c9ea7ec604539d4218f48e8f4673faaa5d1bd1"
+    },
+    {
+      "key": "find-up",
+      "spec": "find-up@4.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "face5c2c2ad4cea85ce850d536740e21a1467892d05156bb4297d3d3dce0cd38"
+    },
+    {
+      "key": "fs-extra",
+      "spec": "fs-extra@7.0.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "2e9870be308fb2abb94101f833f7aed20fa7b2608411785796e759038ad2e28d"
+    },
+    {
+      "key": "get-tsconfig",
+      "spec": "get-tsconfig@4.13.6",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "f825689ba1d520c67f69d724c033f5a6195cc4eb0d05d38998520f00a114452d"
+    },
+    {
+      "key": "glob-parent",
+      "spec": "glob-parent@5.1.2",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "4e0c10175b4113aaed3eef5bd26a8cac9cccf77f440cd9d504bf3c3fd88ca4c1"
+    },
+    {
+      "key": "globby",
+      "spec": "globby@11.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "4ba9e0937366829c21a82161f9006bfa89e6b6226ead3fb233c636fbd8ea0bcd"
+    },
+    {
+      "key": "graceful-fs",
+      "spec": "graceful-fs@4.2.11",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "629bd05fada268b4574959491a3a9feab6ef7dd1502b83bcb533f8702d47c62a"
+    },
+    {
+      "key": "hookable",
+      "spec": "hookable@6.0.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "396e0fb4e6ffc6e73548dbccd9508de7ea4468c352db5094741508da395e4fd7"
+    },
+    {
+      "key": "human-id",
+      "spec": "human-id@4.1.3",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "7eb2f43ab6bb718c758ca68ae7d83d9440aaf0709748a0e95715860878a8d9df"
+    },
+    {
+      "key": "iconv-lite",
+      "spec": "iconv-lite@0.7.2",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "10091279032194d5621f4d11b120e11802552c21abb1dcd6e6c7c1a09ab51139"
+    },
+    {
+      "key": "ignore",
+      "spec": "ignore@5.3.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "650fb617f1149393c93fb0f209684f2b11b64093d6b5bbd99f15ee33b2d3c13c"
+    },
+    {
+      "key": "import-without-cache",
+      "spec": "import-without-cache@0.2.5",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "8018b8015ec71675d033bac943b8521dc4f3983449a2cf42d905f5c07897dc1b"
+    },
+    {
+      "key": "is-extglob",
+      "spec": "is-extglob@2.1.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "f6025afe8c601c70e8a072abcd2b2b316ec53cfaa4ca4044e13c7a6f1d71c616"
+    },
+    {
+      "key": "is-glob",
+      "spec": "is-glob@4.0.3",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "db84b9a23a2f91b9c5f5e11abeb22c11576713432ae25a5d49d7534a46ea96e4"
+    },
+    {
+      "key": "is-number",
+      "spec": "is-number@7.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "9c1a522a64152c63c721acaf1bd75152ec25f9c023cd951091ef05dc634433d9"
+    },
+    {
+      "key": "is-safe-filename",
+      "spec": "is-safe-filename@0.1.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "1fa169837a6a251760e8284d61ab354e30158e9775323a3b53115cfdea091263"
+    },
+    {
+      "key": "is-subdir",
+      "spec": "is-subdir@1.2.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "ab2cf43b88e84f11bdc240904351c48af90ef11bacb0386b9a48e20ca3841126"
+    },
+    {
+      "key": "is-windows",
+      "spec": "is-windows@1.0.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "8008219200af8626d64fd8d124957f311c2b73fecf8ea5a77e1644930eb61179"
+    },
+    {
+      "key": "isexe",
+      "spec": "isexe@2.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "b24a07a6e2584ac766ef37ab91ffeabfe1cef7075c9a8b41adb748a7872b342a"
+    },
+    {
+      "key": "js-yaml",
+      "spec": "js-yaml@4.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "a3d4237dcaab33a22e03a607a5fa03762c8e97b2918553f60c47cb09085171d8"
+    },
+    {
+      "key": "jsesc",
+      "spec": "jsesc@3.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "c167d1960e84c506a3a09513c5d87a2655394725fe0e379d65041081a5303276"
+    },
+    {
+      "key": "json5",
+      "spec": "json5@2.2.3",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "6434c09ac09dad5de9a76af17f03f6fb1ccedc14fe706b4e96a11427b54dba78"
+    },
+    {
+      "key": "jsonfile",
+      "spec": "jsonfile@4.0.0",
+      "slots": 4,
+      "metadata_fields": [
+        "optionalDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "8595f04a3d18941c25e27fc6405f740e57329956966e3c9b928dc9ae3da0951c"
+    },
+    {
+      "key": "lefthook",
+      "spec": "lefthook@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "optionalDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "0fbfb9dcdece97f5c423f5081b5b4bbfbca4308019f1f0f1889e0400cdd2344c"
+    },
+    {
+      "key": "lefthook-darwin-arm64",
+      "spec": "lefthook-darwin-arm64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "f1a455e7388bf390e32b0516cc45e32edeb9ae3abf6cf704f2b258235b913a3b"
+    },
+    {
+      "key": "lefthook-darwin-x64",
+      "spec": "lefthook-darwin-x64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "60ef5e8feb7d4577cab92e707c0abd72fb4b629aab36ba40ebd9d5608b8311bf"
+    },
+    {
+      "key": "lefthook-freebsd-arm64",
+      "spec": "lefthook-freebsd-arm64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "3d35373f299340ed9a1ddc294bf148c0e458178b8b57362ecc9792b77d798dec"
+    },
+    {
+      "key": "lefthook-freebsd-x64",
+      "spec": "lefthook-freebsd-x64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "9c9e89b615c05d25fcd94e39deb98a00f27449fb627037d3d8b8e070ed03f060"
+    },
+    {
+      "key": "lefthook-linux-arm64",
+      "spec": "lefthook-linux-arm64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "db90637997cb0236e268d945415e92c6c73acffac18781a199ff061036923800"
+    },
+    {
+      "key": "lefthook-linux-x64",
+      "spec": "lefthook-linux-x64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "38b19e585fd40177e9828f41d3fdd907c67108f127fecf48fbbfc367ac29832c"
+    },
+    {
+      "key": "lefthook-openbsd-arm64",
+      "spec": "lefthook-openbsd-arm64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "937b5a8a20e650865bcb58ef567f3eeae0da0b427875398f12ab5a8eb2997709"
+    },
+    {
+      "key": "lefthook-openbsd-x64",
+      "spec": "lefthook-openbsd-x64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "44c86608a715c6d1505cefd476de44276486c2e01948742a5cfdb1acf7eadcfc"
+    },
+    {
+      "key": "lefthook-windows-arm64",
+      "spec": "lefthook-windows-arm64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "3b551a49451a0bc5b92d860433c905f0936d93a1b8291d0d0b4274f1064f8b49"
+    },
+    {
+      "key": "lefthook-windows-x64",
+      "spec": "lefthook-windows-x64@2.1.1",
+      "slots": 4,
+      "metadata_fields": [
+        "cpu",
+        "os"
+      ],
+      "integrity_present": true,
+      "sha256": "db01ee0a215067d070c5486a45bfb9b7a7bd8da4bd7a2e9abb60a9ac6b4f4077"
+    },
+    {
+      "key": "locate-path",
+      "spec": "locate-path@5.0.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "6e658b24cd5a99b5c24d2fc2a9e7da25e212f9e96e99a0ce2a89a7bc191dce05"
+    },
+    {
+      "key": "lodash.startcase",
+      "spec": "lodash.startcase@4.4.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "8baff2f162ea254b070e4c84e8e96d1eee3778dfd09104a8783cc1faa93526c8"
+    },
+    {
+      "key": "merge2",
+      "spec": "merge2@1.4.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "c0853d4c8c951410a8cd6cc0f6b43c732bb1c8d7a02ac1e0a4466ead076bd62b"
+    },
+    {
+      "key": "micromatch",
+      "spec": "micromatch@4.0.8",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "201c222cc4cb51b8e5678df4a2ca0cbf220ca9dd00ad627f8a460fe71a99ad32"
+    },
+    {
+      "key": "mri",
+      "spec": "mri@1.2.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "f7371b82613c9d59174fcc822009fb1b3b2c45ad2accd4ab07718584d240a5a0"
+    },
+    {
+      "key": "obug",
+      "spec": "obug@2.1.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "10310555a845a2a7692f26bfb2861db4e25f50a8efb3e0363a67dce94c5cfad0"
+    },
+    {
+      "key": "outdent",
+      "spec": "outdent@0.5.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "fbf8956e1e1964b516cc492233231fa00ae9165609a720aa5b51498fa3970db6"
+    },
+    {
+      "key": "p-filter",
+      "spec": "p-filter@2.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "a2f3f418beae75e590afb5cf7f9e946a9c08ed45e6259ea173b12e1bc5f95b86"
+    },
+    {
+      "key": "p-limit",
+      "spec": "p-limit@2.3.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "86329737100d88fe93aeac706754522f0b239ee135079b6837acbd4d7e470b39"
+    },
+    {
+      "key": "p-locate",
+      "spec": "p-locate@4.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "c39a57281c8456acad447e1ed9471c93afdb2fb23c157934dcc47e958c5fd800"
+    },
+    {
+      "key": "p-map",
+      "spec": "p-map@2.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "e6a0647467a9c5396828f3eb2cc56e9556afe550604825aa0b3a463f09575da0"
+    },
+    {
+      "key": "p-try",
+      "spec": "p-try@2.2.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "a80019949f6e1ae93fd50ffc16772541e14852682e3e1a4d26e327e061a49f5d"
+    },
+    {
+      "key": "package-manager-detector",
+      "spec": "package-manager-detector@0.2.11",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "d33f829f138e02f1b265383dedcb94b9972723530f8c0645b4721026b6466103"
+    },
+    {
+      "key": "path-exists",
+      "spec": "path-exists@4.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "15f7f475e30cdb412152161d4658eb093d320d7de91177fde397551fd726503a"
+    },
+    {
+      "key": "path-key",
+      "spec": "path-key@3.1.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "b7008ef807d0eaab6cfdca91136d202a4bb734ff8f2aa38bfa838d63b05aaa2a"
+    },
+    {
+      "key": "path-type",
+      "spec": "path-type@4.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "63ceed3e170070cc604e1e4d9a50d0477eeb2fbea68815f65b2afc75eb9a09cb"
+    },
+    {
+      "key": "pathe",
+      "spec": "pathe@2.0.3",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "0f733be6345a882f3353692963f2500cacbc6d05dbcd451936457bc7b2673803"
+    },
+    {
+      "key": "picocolors",
+      "spec": "picocolors@1.1.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "fd44cc34611d1ccf60328cd5142197712ae3050c2b3a6df73477b6bff6c8f266"
+    },
+    {
+      "key": "picomatch",
+      "spec": "picomatch@4.0.3",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "6ee9f434e71bd113486081975927be1c63848fe2374aadb1103572db303fa6c6"
+    },
+    {
+      "key": "pify",
+      "spec": "pify@4.0.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "2b6743d1eab717456de217cc2d9b9a62b5741bd69ab7962f95468e8b66f28805"
+    },
+    {
+      "key": "prettier",
+      "spec": "prettier@2.8.8",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "fd37afc1b2e863954301163cf6d92861c1f1f018926f3dc56a1863b2050ef0f3"
+    },
+    {
+      "key": "quansync",
+      "spec": "quansync@0.2.11",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "b89c3d2d5de02daad148215704260be9ca5de29bdcd41ece403ef92c7bdb7b44"
+    },
+    {
+      "key": "queue-microtask",
+      "spec": "queue-microtask@1.2.3",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "bc98608b96f6c941e9f5470cb7b6811b95dd0a0fdfa185993f6cf561cdafb38d"
+    },
+    {
+      "key": "read-yaml-file",
+      "spec": "read-yaml-file@1.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "983d4b5f8c8cbf3ab2a34fceb4d6bd7088d4ed46ec75f3a04a3ddfd9c7456a9d"
+    },
+    {
+      "key": "resolve-from",
+      "spec": "resolve-from@5.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "a466ee4a69a42b2142d8f156debf9513c6a555af413eeffa1927dade92e2655e"
+    },
+    {
+      "key": "resolve-pkg-maps",
+      "spec": "resolve-pkg-maps@1.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "bf10548e7312af5bbeb6d976e3157f30dc689ea79f9cb62e77add568f1adaae9"
+    },
+    {
+      "key": "reusify",
+      "spec": "reusify@1.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "57e81d1a70b0b163bd08f6ae43530fe787be694a2ac879f30026f145f76afbb7"
+    },
+    {
+      "key": "rolldown",
+      "spec": "rolldown@1.0.0-rc.3",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies",
+        "optionalDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "4833f99daea551e49f09cb14c0fdacaa44c82687c4753d916f8f299b00619f33"
+    },
+    {
+      "key": "rolldown-plugin-dts",
+      "spec": "rolldown-plugin-dts@0.22.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies",
+        "optionalPeers",
+        "peerDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "241dc167822109c64a8c3d433e3242d537d6f96c70376913684933663ac8d271"
+    },
+    {
+      "key": "run-parallel",
+      "spec": "run-parallel@1.2.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "3bff7874266e9737ca080aa57e933cdfd1a27a5bd56355964bb86c94ef8d2b5a"
+    },
+    {
+      "key": "safer-buffer",
+      "spec": "safer-buffer@2.1.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "1e17f5324e0957e3e3bd9161a3d3d33b7c26b29abdbe5de5cef773c1fc3ac9b4"
+    },
+    {
+      "key": "semver",
+      "spec": "semver@7.7.4",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "cd869d2f00789c90edc0e43be3e9b333117005fddfd1dfa9bfe5a2f3ca15ac3c"
+    },
+    {
+      "key": "shebang-command",
+      "spec": "shebang-command@2.0.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "f8fec85df16fd34f71afb0f9802ab842dbb712e7df421894e39a783e7c6f1bcd"
+    },
+    {
+      "key": "shebang-regex",
+      "spec": "shebang-regex@3.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "3aaa388746481d08f833355155aaef96f6989be11e0e267e30b577973d2516a4"
+    },
+    {
+      "key": "signal-exit",
+      "spec": "signal-exit@4.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "43e188dc981d635da5a3ddbe5b5e30270ab82bda9ff8653b040f05130c052d8f"
+    },
+    {
+      "key": "slash",
+      "spec": "slash@3.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "4b0a46b8c373e3588617184c078082cd285dd8efb9bf8a8150249f2c5cb1e318"
+    },
+    {
+      "key": "spawndamnit",
+      "spec": "spawndamnit@3.0.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "e26942a92a26b35f2b5b5f3633f961f9b92e4d1f91b9794fb9bea2fb2484d8f5"
+    },
+    {
+      "key": "sprintf-js",
+      "spec": "sprintf-js@1.0.3",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "9a71cdbecfd83d516602508f3a331e0b8d6b20518315c49cfc8850332d14cf71"
+    },
+    {
+      "key": "strip-ansi",
+      "spec": "strip-ansi@6.0.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "a0b3a8ebd483cc4e60f74f53873eb828be5cb218ef1264d82b11bb27769765bc"
+    },
+    {
+      "key": "strip-bom",
+      "spec": "strip-bom@3.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "2296d91db000c6614a35e9b5a358436a25ef638c21bb6c8ba27b17d9834f50e7"
+    },
+    {
+      "key": "term-size",
+      "spec": "term-size@2.2.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "9a88a8be049603bcd811fe2dc1b6e009a020e65bbf3931caaf7071ebb2a3013c"
+    },
+    {
+      "key": "tinyexec",
+      "spec": "tinyexec@1.0.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "f03e74621c25b4bc582a7d409a43d40b4ef160d9af89306cc4949dcca7aca0e2"
+    },
+    {
+      "key": "tinyglobby",
+      "spec": "tinyglobby@0.2.15",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "a701e4d1f7bafb81361ff63b01df250aa6f481fa0fa6e87161fcc7a6e75b8107"
+    },
+    {
+      "key": "to-regex-range",
+      "spec": "to-regex-range@5.0.1",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "0cd21f43751f0671a30916360f8da9ef10ff586c48ca0376cb43147ab440d26f"
+    },
+    {
+      "key": "tree-kill",
+      "spec": "tree-kill@1.2.2",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "5d53ecac7ed16cc23f2717621d7143575571ab190a18a97d10a68e90dc2bc968"
+    },
+    {
+      "key": "tsdown",
+      "spec": "tsdown@0.20.3",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies",
+        "optionalPeers",
+        "peerDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "242ffde951cc19e334669f02756c0820628871863d3ef4dc42938978f8b0e50f"
+    },
+    {
+      "key": "tslib",
+      "spec": "tslib@2.8.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "7d344efe13a9c2e613f6f688d913df5d0039998a40a898a5ad143bfcda357693"
+    },
+    {
+      "key": "typescript",
+      "spec": "typescript@5.9.3",
+      "slots": 4,
+      "metadata_fields": [
+        "bin"
+      ],
+      "integrity_present": true,
+      "sha256": "ee4929f58fc720af1d4320716bee1304dfe738c84ebc0533eb3b765c20aab415"
+    },
+    {
+      "key": "unconfig-core",
+      "spec": "unconfig-core@7.5.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "230a782766e4ba4a0ea78256e63a61bc46daa190c297cd1a0ad3d7fba628e64e"
+    },
+    {
+      "key": "undici-types",
+      "spec": "undici-types@7.16.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "e1ae3c3e79848ba1a182905ed80783f2a113a76951a0713401f56d72c15a7683"
+    },
+    {
+      "key": "universalify",
+      "spec": "universalify@0.1.2",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "a1fa663b85db43eb225df7516f40cb19355b0361e5e6d4af2f77334878c53a5e"
+    },
+    {
+      "key": "unrun",
+      "spec": "unrun@0.2.27",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies",
+        "optionalPeers",
+        "peerDependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "cb791827910f86926073ace7fa848f7fd01bc4154643ff2b1697fb1cad4ef178"
+    },
+    {
+      "key": "which",
+      "spec": "which@2.0.2",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "b6861cafbd633cedb71186ec83e2b7178d0c7f9386d5eae3090a0ffd4625e60e"
+    },
+    {
+      "key": "@manypkg/find-root/@types/node",
+      "spec": "@types/node@12.20.55",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "d74192bb1504ff2a90300f883c97c63ec4fe26f472110c75411259010b083b7a"
+    },
+    {
+      "key": "@manypkg/find-root/fs-extra",
+      "spec": "fs-extra@8.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "aa6d919348f3e7e728181be120c27a9a0829ccde7923b503a666e973b3f84250"
+    },
+    {
+      "key": "@manypkg/get-packages/@changesets/types",
+      "spec": "@changesets/types@4.1.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "9fc805b96b66cf6db06e7dd2fda06358c648debeb63d64bd7e2244d76a8bca6d"
+    },
+    {
+      "key": "@manypkg/get-packages/fs-extra",
+      "spec": "fs-extra@8.1.0",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "aa6d919348f3e7e728181be120c27a9a0829ccde7923b503a666e973b3f84250"
+    },
+    {
+      "key": "@quansync/fs/quansync",
+      "spec": "quansync@1.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "8fd2f2a640b613b4bb87231a4b9ec8678cd2ddddbef4f05121faebd832750516"
+    },
+    {
+      "key": "micromatch/picomatch",
+      "spec": "picomatch@2.3.1",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "bf7db3a8ef73d77d1a322e5ca6bab0d96a6c1c162e2459211db809c6348705f9"
+    },
+    {
+      "key": "read-yaml-file/js-yaml",
+      "spec": "js-yaml@3.14.2",
+      "slots": 4,
+      "metadata_fields": [
+        "bin",
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "b319ea53fa5e34d7dd379e15b8bdb7e78ad3766fa29105df66034095fe611d60"
+    },
+    {
+      "key": "unconfig-core/quansync",
+      "spec": "quansync@1.0.0",
+      "slots": 4,
+      "metadata_fields": [],
+      "integrity_present": true,
+      "sha256": "8fd2f2a640b613b4bb87231a4b9ec8678cd2ddddbef4f05121faebd832750516"
+    },
+    {
+      "key": "read-yaml-file/js-yaml/argparse",
+      "spec": "argparse@1.0.10",
+      "slots": 4,
+      "metadata_fields": [
+        "dependencies"
+      ],
+      "integrity_present": true,
+      "sha256": "8f8baa7533a51ed5c447d0def7f08a8bee44541abf12ac915a57ac8881ef5bf0"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test local_final_callback",
+  "passed": 5,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/white-anchor-local-edit-20261026.log",
+  "log_sha256": "2bcfd46292dfb6727eeb46b8bbf45c6b825f455394a9f77159188d94095a5571",
+  "test_source_sha256": "014dc8d534d0ada291af8beaa2ea26a9e276309bc2132b155211309e0b7e6112",
+  "new_control": "Authored 128x128 textured BMP; identical control, 8x8 edit retained as similarity with strict differences, 64x64 edit rejected with geometry present and projected forward matched fraction below 0.9. Managed memory released after every case.",
+  "limitations": [
+    "Finite synthetic controls do not qualify broad false-positive precision.",
+    "Small edits may remain similarity candidates by declared policy; never byte equality."
+  ]
+}

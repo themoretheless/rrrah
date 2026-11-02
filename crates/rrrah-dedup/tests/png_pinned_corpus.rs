@@ -6,6 +6,37 @@ use rrrah_dedup::decode::decode_selected_frame;
 
 #[test]
 #[ignore = "requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS"]
+fn pinned_invalid_png_corpus_is_rejected_without_retaining_memory() {
+    let directory = std::path::PathBuf::from(std::env::var_os("RRR_PNG_CORPUS").expect("RRR_PNG_CORPUS"));
+    let budget = MemoryBudget::new(64 * 1024 * 1024);
+    let mut accepted = Vec::new();
+    let mut paths: Vec<_> = std::fs::read_dir(directory)
+        .unwrap()
+        .map(|entry| entry.unwrap().path())
+        .filter(|path| {
+            path.extension().is_some_and(|extension| extension == "png")
+                && path.file_name().unwrap().to_string_lossy().starts_with('x')
+        })
+        .collect();
+    paths.sort();
+    assert_eq!(paths.len(), 14, "expected the pinned invalid PNG corpus");
+    for path in paths {
+        let mut request = DecodeRequest::new(&path);
+        request.png_assumed_rgb_primaries = Some([0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290]);
+        match decode_selected_frame(&request, 1_000_000, &budget, || false) {
+            Ok(frame) => {
+                accepted.push(path.file_name().unwrap().to_string_lossy().into_owned());
+                drop(frame);
+            }
+            Err(error) => eprintln!("invalid PNG rejected {}: {error}", path.display()),
+        }
+        assert_eq!(budget.used(), 0, "{} retained memory", path.display());
+    }
+    assert!(accepted.is_empty(), "invalid PNG files accepted: {accepted:?}");
+}
+
+#[test]
+#[ignore = "requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS"]
 fn pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels() {
     let directory = std::path::PathBuf::from(std::env::var_os("RRR_PNG_CORPUS").expect("RRR_PNG_CORPUS"));
     let request = |path: &std::path::Path| {

@@ -7,6 +7,7 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+fax = "=0.2.7"
 zune-jpeg = "=0.5.15"
 zune-core = "=0.5.3"
 jpegxr = "=0.3.1"
@@ -45,3 +46,6 @@ harness = false
 
 [lints]
 workspace = true
+
+[features]
+experimental-shared-partitions = ["rrrah-vector/experimental-shared-partitions"]

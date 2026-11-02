@@ -1,0 +1,34 @@
+{
+  "exit_code": 1,
+  "seconds": 24.71298079198459,
+  "binary_sha256": "c0e6218e9a11f5743ed7e1e3750b62e550f46e3ba3e01b8c6fc6a79a6671583f",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+  },
+  "missing_path": "/tmp/rrrah-dedup-absent-source-20261026.raw",
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-mixed-missing-source-20261026.log",
+  "log_sha256": "8efe065d6acf22f3b4f2f4f5931ce7db69cee9ae63577b2bed4dc5de9d1695c0",
+  "inputs_stable": true,
+  "binary_stable": true,
+  "candidates": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "missing_file_isolated": true,
+  "healthy_pairs_retained": true,
+  "managed_released": true,
+  "scope": "Four healthy Sony files plus one nonexistent path: healthy candidate pairs retained, source_issues identifies missing input ID 5, no pair/decode errors, incomplete search exit 1.",
+  "limitations": [
+    "One missing path, not all IO failure kinds or races.",
+    "Finite two-scene collection does not establish general recall or precision."
+  ]
+}

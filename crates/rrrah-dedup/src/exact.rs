@@ -366,6 +366,21 @@ fn collect(
     cancel: &impl Fn() -> bool,
     report: &mut Report,
 ) -> Vec<Entry> {
+    collect_with_directory_reader(roots, options, cancel, report, |path| {
+        Ok(fs::read_dir(path)?.map(|entry| entry.map(|entry| entry.file_name())))
+    })
+}
+
+fn collect_with_directory_reader<I>(
+    roots: &[PathBuf],
+    options: &Options,
+    cancel: &impl Fn() -> bool,
+    report: &mut Report,
+    mut read_directory: impl FnMut(&Path) -> io::Result<I>,
+) -> Vec<Entry>
+where
+    I: Iterator<Item = io::Result<std::ffi::OsString>>,
+{
     // Admit root bookkeeping before cloning paths or opening any source. A root
     // list beyond the traversal limit is refused as a whole; duplicates do not
     // consume extra entries. Borrow roots while building the bounded index.
@@ -389,7 +404,7 @@ fn collect(
         .rev()
         .map(|path| (path.clone(), 0_usize))
         .collect();
-    let mut directories = BTreeSet::new();
+    let mut directories = BTreeMap::new();
     let mut files: BTreeMap<Identity, Entry> = BTreeMap::new();
     let mut visited = 0_usize;
     while let Some((path, depth)) = stack.pop() {
@@ -417,19 +432,38 @@ fn collect(
             let metadata = fs::metadata(&canonical)?;
             let stamp = Stamp::new(&metadata, &canonical)?;
             if metadata.is_dir() {
-                if !directories.insert(stamp.identity) {
+                // A later explicit root can reach this directory at a smaller
+                // depth and therefore admit descendants previously over budget.
+                // Equal or deeper revisits still terminate symlink cycles.
+                if directories
+                    .get(&stamp.identity)
+                    .is_some_and(|previous| *previous <= depth)
+                {
                     return Ok(());
                 }
+                directories.insert(stamp.identity, depth);
                 let mut children = BTreeSet::new();
-                for child in fs::read_dir(&canonical)? {
+                for child in read_directory(&canonical)? {
                     check(cancel)?;
                     if visited.saturating_add(stack.len()).saturating_add(children.len())
                         >= options.max_entries
                     {
                         issue(report, &path, IssueKind::Limit);
-                        return Ok(());
+                        // Keep the children already admitted within the bound.
+                        // Only the remaining directory entries are omitted.
+                        break;
                     }
-                    children.insert(path.join(child?.file_name()));
+                    match child {
+                        Ok(name) => {
+                            children.insert(path.join(name));
+                        }
+                        Err(error) => {
+                            // A partial directory listing still contains usable
+                            // entries. Preserve them and report the omission.
+                            record(report, &path, Failure::Io(error));
+                            break;
+                        }
+                    }
                 }
                 stack.extend(children.into_iter().rev().map(|child| (child, depth + 1)));
             } else if metadata.is_file() {
@@ -569,6 +603,23 @@ fn scan_observed(
     let mut digests: BTreeMap<(u64, [u8; 32]), Vec<usize>> = BTreeMap::new();
     let mut observed_content = BTreeMap::new();
     for (bytes, candidates) in sizes.into_iter().filter(|(_, indices)| indices.len() > 1) {
+        if verify_all {
+            // These full-content observations already precede candidate
+            // selection. Reuse them only for bucketing; byte confirmation and
+            // both final source-validation passes still run below.
+            for index in candidates {
+                if let Err(failure) = check(&cancel) {
+                    record(&mut report, &entries[index].path, failure);
+                    return report;
+                }
+                let digest = baseline[&index];
+                digests
+                    .entry((bytes, digest_identity(digest)))
+                    .or_default()
+                    .push(index);
+            }
+            continue;
+        }
         let mut samples: BTreeMap<[u8; 32], Vec<usize>> = BTreeMap::new();
         for index in candidates {
             match hash(&entries[index], true, &cancel, &mut report.bytes_read) {
@@ -597,6 +648,9 @@ fn scan_observed(
             }
         }
     }
+    // Verified scans already own these observations in baseline; do not build
+    // a second per-file digest map merely for group confirmation.
+    let group_observations = if verify_all { &baseline } else { &observed_content };
     for ((bytes, digest), indices) in digests.into_iter().filter(|(_, indices)| indices.len() > 1) {
         let mut verified: Vec<Vec<usize>> = Vec::new();
         for index in indices {
@@ -619,7 +673,7 @@ fn scan_observed(
                             let representative = group[0];
                             if content_unchanged(
                                 &entries[representative],
-                                observed_content[&representative],
+                                group_observations[&representative],
                                 &cancel,
                                 &mut report,
                             ) {
@@ -655,7 +709,7 @@ fn scan_observed(
         admit_verified_groups(
             &entries,
             verified,
-            &observed_content,
+            group_observations,
             (bytes, digest),
             &cancel,
             &mut report,
@@ -1114,6 +1168,49 @@ mod collision_tests {
     use super::*;
 
     #[test]
+    fn directory_iteration_error_preserves_admitted_children() {
+        let root = tempfile::tempdir().unwrap();
+        let paths = ["a", "b"].map(|name| root.path().join(name));
+        for path in &paths {
+            fs::write(path, b"retained despite directory iteration failure").unwrap();
+        }
+        let mut report = Report::default();
+        let entries = collect_with_directory_reader(
+            &[root.path().to_path_buf()],
+            &Options::default(),
+            &|| false,
+            &mut report,
+            |_| {
+                Ok(vec![
+                    Ok(std::ffi::OsString::from("b")),
+                    Ok(std::ffi::OsString::from("a")),
+                    Err(io::Error::other("injected directory iteration failure")),
+                ]
+                .into_iter())
+            },
+        );
+        assert_eq!(entries.len(), 2);
+        assert_eq!(report.files_observed, 2);
+        assert!(!report.complete());
+        assert!(!report.cancelled);
+        assert_eq!(report.issues.len(), 1);
+        assert!(
+            matches!(&report.issues[0].kind, IssueKind::Io(message) if message.contains("injected directory iteration failure"))
+        );
+        assert_eq!(
+            entries.iter().map(|entry| &entry.path).collect::<Vec<_>>(),
+            paths.iter().collect::<Vec<_>>()
+        );
+        assert!(equal(&entries[0], &entries[1], &|| false, &mut report.bytes_read).unwrap());
+        for path in &paths {
+            assert_eq!(
+                fs::read(path).unwrap(),
+                b"retained despite directory iteration failure"
+            );
+        }
+    }
+
+    #[test]
     fn formerly_empty_entries_are_reopened_before_hash_or_equality() {
         let root = tempfile::tempdir().unwrap();
         let paths = ["a", "b", "healthy-a", "healthy-b"].map(|name| root.path().join(name));
@@ -1422,8 +1519,6 @@ mod collision_tests {
                 paths.push(path);
             }
         }
-        let report = scan_with_digest(&paths, &Options::default(), || false, |_| [0; 32]);
-        assert!(report.complete(), "{report:?}");
         let mut expected = Vec::new();
         expected.push(
             ["a", "b", "c", "d", "e"]
@@ -1440,16 +1535,43 @@ mod collision_tests {
             }
         }
         expected.sort();
-        assert_eq!(
-            report
-                .groups
-                .iter()
-                .map(|group| group.paths.clone())
-                .collect::<Vec<_>>(),
-            expected
-        );
-        assert!(report.groups.iter().all(|group| group.digest == [0; 32]));
-        assert!(report.bytes_read > 5 * (BLOCK * 2 + 1) as u64);
+        for verify_all in [false, true] {
+            let report = scan_observed(
+                &paths,
+                &Options::default(),
+                || false,
+                |_| [0; 32],
+                verify_all,
+                None,
+            );
+            assert!(report.complete(), "{report:?}");
+            assert_eq!(
+                report
+                    .groups
+                    .iter()
+                    .map(|group| group.paths.clone())
+                    .collect::<Vec<_>>(),
+                expected
+            );
+            assert!(report.groups.iter().all(|group| group.digest == [0; 32]));
+            assert!(report.bytes_read > 5 * (BLOCK * 2 + 1) as u64);
+        }
+    }
+
+    #[test]
+    fn verified_observations_do_not_repeat_candidate_hash_reads() {
+        let root = tempfile::tempdir().unwrap();
+        let length = BLOCK * 2 + 1;
+        let paths = [root.path().join("a"), root.path().join("b")];
+        fs::write(&paths[0], vec![1; length]).unwrap();
+        fs::write(&paths[1], vec![2; length]).unwrap();
+        let report = scan_verified(&paths, &Options::default(), || false);
+        assert!(report.complete(), "{report:?}");
+        assert!(report.groups.is_empty());
+        assert_eq!(report.files_observed, 2);
+        // Initial full observations and two final validations; no sampled or
+        // second candidate-hash reads for already observed contents.
+        assert_eq!(report.bytes_read, 6 * length as u64);
     }
 }
 

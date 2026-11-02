@@ -1,0 +1,493 @@
+[
+  {
+    "id": "RR-0031",
+    "path": "crates/rrrah-texture/src/pvr.rs",
+    "symbol": "decode",
+    "line": 167,
+    "sha256": "ca88de731b0a9ff0208a644b25940e3a839bb7b2206f46cec774db45b1816138",
+    "source_context": "159:         records += 1;\n160:     }\n161:     let mut metadata_credit = request\n162:         .memory_budget\n163:         .as_ref()\n164:         .map(|budget| budget.try_reserve((records * std::mem::size_of::<PvrMetadata>()) as u64))\n165:         .transpose()\n166:         .map_err(crate::DecodeError::Memory)?;\n167:     let mut metadata = Vec::new();\n168:     metadata\n169:         .try_reserve_exact(records)\n170:         .map_err(|_| RasterDecodeError::OutputTooLarge)?;\n171:     if let Some(credit) = &mut metadata_credit {\n172:         credit\n173:             .ensure_bytes((metadata.capacity() * std::mem::size_of::<PvrMetadata>()) as u64)\n174:             .map_err(crate::DecodeError::Memory)?;\n175:     }\n176:     let mut at = 52;\n177:     let mut flips = [false; 2];\n178:     let mut orientation_seen = false;\n179:     let mut types_seen = false;\n180:     let descriptor = format.to_le_bytes();\n181:     let names = &descriptor[..4];\n182:     let bits = &descriptor[4..];\n183:     let channels = names.iter().position(|v| *v == 0).unwrap_or(4);\n184:     while at < start {\n185:         request.check_cancelled()?;\n186:         if start - at < 12 {\n187:             return Err(bad(\"truncated metadata record\"));\n188:         }\n189:         let fourcc = word(at).to_le_bytes();\n190:         let key = word(at + 4);\n191:         let len = word(at + 8) as usize;\n192:         at += 12;\n193:         let end = at\n194:             .checked_add(len)\n195:             .filter(|v| *v <= start)\n196:             .ok_or_else(|| bad(\"metadata exceeds declared block\"))?;\n197:         let data = &b[at..end];\n198:         at = end;\n199:         if &fourcc[..3] == b\"PVR\" {",
+    "execution": {
+      "status": "rejected",
+      "result": "PVR сначала считает metadata records, затем try_reserve_exact(records); reservation корректируется по фактической capacity. Повторный рост этой коллекции отсутствует; возвращаемые metadata принадлежат результату.",
+      "logs": [
+        "texture-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0032",
+    "path": "crates/rrrah-vector/src/wmf.rs",
+    "symbol": "decode",
+    "line": 61,
+    "sha256": "557f6c8604d671413dd65077e0bda0310e9b9b0d0ded054351f5f866287e7e13",
+    "source_context": "53:         || u16at(38) != 0\n54:     {\n55:         return Err(bad(\"metafile header/size\"));\n56:     }\n57:     let count = u16at(32) as usize;\n58:     if count > 4096 {\n59:         return Err(bad(\"object count limit\"));\n60:     }\n61:     let mut objects = vec![None; count];\n62:     let mut pen = Object::Pen(\"#000000\".into(), 0.);\n63:     let mut brush = Object::Brush(\"#ffffff\".into());\n64:     let mut pen_index = None;\n65:     let mut brush_index = None;\n66:     let mut window = bounds;\n67:     let mut viewport = [0., 0., width, height];\n68:     let mut point = [0., 0.];\n69:     let mut fill_rule = \"evenodd\";\n70:     let mut saved = Vec::new();\n71:     let mut at = 40;\n72:     let mut maximum = 0;\n73:     let mut ended = false;\n74:     let mut svg = format!(\"<svg xmlns=\\\"http://www.w3.org/2000/svg\\\" width=\\\"{width}\\\" height=\\\"{height}\\\">\");\n75:     for _ in 0..65536 {\n76:         request.check_cancelled()?;\n77:         if at + 6 > b.len() {\n78:             return Err(bad(\"truncated record\"));\n79:         }\n80:         let words = u32at(at);\n81:         if words < 3 || words > u32at(34) {\n82:             return Err(bad(\"record size/max record\"));\n83:         }\n84:         maximum = maximum.max(words);\n85:         let end = at\n86:             .checked_add(words.checked_mul(2).ok_or_else(|| bad(\"record overflow\"))?)\n87:             .filter(|&n| n <= b.len())\n88:             .ok_or_else(|| bad(\"record bounds\"))?;\n89:         let kind = u16at(at + 4);\n90:         let data = &b[at + 6..end];\n91:         let p = |n| i16::from_le_bytes(data[n..n + 2].try_into().unwrap()) as f64;\n92:         let word = |n| u16::from_le_bytes(data[n..n + 2].try_into().unwrap());\n93:         let map = |x: f64, y: f64| {",
+    "execution": {
+      "status": "rejected",
+      "result": "WMF object table уже создаётся vec![None; count] после ограничения count≤4096. Предлагаемое точное резервирование дублирует действующий путь; смена владельца/pool потребовала бы отдельной API-гипотезы.",
+      "logs": [
+        "wmf-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0033",
+    "path": "crates/rrrah-mesh/src/ply.rs",
+    "symbol": "decode_bytes_budgeted",
+    "line": 470,
+    "sha256": "2acb94ae46395b7f7256a746f0839a8a60689590cf9aa72bc4425a96172732a9",
+    "source_context": "462:                     if !count.is_integer() {\n463:                         return Err(PlyDecodeError::Invalid(\"non-integer count type\"));\n464:                     }\n465:                     let value = PlyType::parse(\n466:                         tokens\n467:                             .next()\n468:                             .ok_or(PlyDecodeError::Invalid(\"missing list type\"))?,\n469:                     )?;\n470:                     let mut offsets = Vec::new();\n471:                     #[cfg(test)]\n472:                     let initial = if PREALLOCATE_LIST_OFFSETS.with(std::cell::Cell::get) { element.count.saturating_add(1) } else { 1 };\n473:                     #[cfg(not(test))]\n474:                     let initial = 1;\n475:                     reserve_storage(&mut offsets, initial, &mut budget)?;\n476:                     offsets.push(0);\n477:                     PlyValues::List {\n478:                         count_type: count,\n479:                         offsets,\n480:                         values: PlyScalars::new(value),\n481:                     }\n482:                 } else {\n483:                     PlyValues::Scalar(PlyScalars::new(PlyType::parse(kind)?))\n484:                 };\n485:                 let name = tokens\n486:                     .next()\n487:                     .ok_or(PlyDecodeError::Invalid(\"missing property name\"))?;\n488:                 if tokens.next().is_some() || element.properties.iter().any(|v| v.name == name) {\n489:                     return Err(PlyDecodeError::Invalid(\"duplicate or malformed property\"));\n490:                 }\n491:                 let name = owned_header_string(name, &mut budget)?;\n492:                 header_push(&mut element.properties, PlyProperty { name, values }, &mut budget)?;\n493:             }\n494:             Some(\"end_header\") => {\n495:                 if tokens.next().is_some() || !has_format {\n496:                     return Err(PlyDecodeError::Invalid(\"invalid end_header\"));\n497:                 }\n498:                 break;\n499:             }\n500:             _ => return Err(PlyDecodeError::Unsupported(\"header statement\")),\n501:         }\n502:     }",
+    "execution": {
+      "status": "rejected",
+      "result": "Проверен кандидат reserve(element.count+1) для PLY list offsets. На усечённом теле с объявлением 1 000 000 элементов пик managed bytes вырос 1151→4001151 при одинаковом отказе и final=0. Текущий постепенный рост оставлен.",
+      "logs": [
+        "mesh-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0034",
+    "path": "scripts/qualify-x3f-sd10.py",
+    "symbol": "main",
+    "line": 85,
+    "sha256": "68445dd980dedbf833a83035767b92ce214955357aecdf7844a34aa4ea3decef",
+    "source_context": "77:     logs = []\n78: \n79:     def run(command, env=None):\n80:         return run_logged(command, logs, args.timeout, env)\n81: \n82:     report = {'source_sha256': SOURCE_SHA, 'status': 'running',\n83:               'excluded_camera_checks': ['sigma_sd14_native_sensor_matches_full_independent_unpack'],\n84:               'scope': 'Pinned SD10 sensor/CAMF and managed processing arithmetic through chroma filtering for explicit identity and legacy Foveon targets',\n85:               'remaining': ['Independent complete converter output unless --dcraw-source is supplied',\n86:                             'Physical display and HDR qualification', 'Other X3F variants']}\n87:     try:\n88:         with artifact_workspace(args.artifacts_dir) as scratch:\n89:             scratch = Path(scratch)\n90:             report['artifact_workspace'] = {'path': str(scratch), 'preserved': args.artifacts_dir is not None}\n91:             for helper in ['x3f-channel-oracle', 'x3f-camf-oracle']:\n92:                 run(['c++', '-std=c++17', '-DUSE_X3FTOOLS', ROOT/'scripts'/f'{helper}.cpp',\n93:                      f'-I{args.libraw_root}', archive, f'-L{args.library_dir}', '-llcms2', '-lz',\n94:                      '-o', scratch/helper])\n95:             sensor, camf = scratch/'sensor.u16le', scratch/'camf.bin'\n96:             output = run([scratch/'x3f-channel-oracle', args.source, sensor])\n97:             if '0.22.2-Release' not in output or 'X3FTOOLS=1' not in output:\n98:                 raise RuntimeError('Unexpected LibRaw oracle version or disabled X3F support')\n99:             run([scratch/'x3f-camf-oracle', args.source, camf])\n100:             for helper in ['x3f-black-row-reference', 'x3f-black-smoothing-reference', 'x3f-sensor-reference', 'x3f-badpixel-reference', 'x3f-red-reference', 'x3f-highlights-reference', 'x3f-curves-reference', 'x3f-hue-reference', 'x3f-transform-reference', 'x3f-pixel-transform-reference', 'x3f-chroma-reference']:\n101:                 run(['c++', '-std=c++17', '-O2', '-ffp-contract=off',\n102:                      ROOT/'scripts'/f'{helper}.cpp', '-o', scratch/helper])\n103:             black, smooth, scene = (scratch/name for name in ['black.f32le','smooth.f32le','scene.f32le'])\n104:             run([scratch/'x3f-black-row-reference', sensor, camf, black])\n105:             run([scratch/'x3f-black-smoothing-reference', black, smooth])\n106:             run([scratch/'x3f-black-smoothing-reference', black, scene, sensor])\n107:             corrected = scratch/'corrected.i32le'\n108:             run([scratch/'x3f-sensor-reference', sensor, camf, scene, corrected])\n109:             repaired=scratch/'repaired.i32le'\n110:             run([scratch/'x3f-badpixel-reference', corrected, camf, repaired])\n111:             red=scratch/'red.i32le'\n112:             run([scratch/'x3f-red-reference', repaired, red])\n113:             highlights=scratch/'highlights.i32le'\n114:             run([scratch/'x3f-highlights-reference', red, camf, highlights])\n115:             curves=scratch/'curves.bin'\n116:             run([scratch/'x3f-curves-reference', camf, curves])\n117:             hue=scratch/'hue.i32le'",
+    "execution": {
+      "status": "verified",
+      "result": "Все внешние команды X3F qualification переведены на общий watchdog дерева процессов. Добавлен --timeout (по умолчанию 1800 с на команду), запрещены неположительные/NaN/Inf. Проверены успешный exit, exit=7 со stderr и зависший SIGTERM-resistant потомок; timeout не считается успехом.",
+      "logs": [
+        "python-regressions.log",
+        "x3f-help.log"
+      ],
+      "remaining": "Проверен локальный POSIX watchdog и CLI. Полный camera/oracle/Metal прогон X3F и Windows process cleanup этим изменением повторно не квалифицированы; настройки VoiceOver не менялись."
+    }
+  },
+  {
+    "id": "RR-0035",
+    "path": "crates/rrrah-develop/src/raster.rs",
+    "symbol": "to_linear_srgb_with_budget_and_cancel",
+    "line": 771,
+    "sha256": "5e6d6e9df1856a052a6361c5fd9d7a3213e90fedd3c993401e524d22e7f5740c",
+    "source_context": "763:             .map(|b| {\n764:                 b.try_reserve(\n765:                     (count as u64)\n766:                         .checked_mul(4)\n767:                         .ok_or(rrrah_memory::BufferError::Overflow)?,\n768:                 )\n769:             })\n770:             .transpose()?;\n771:         let mut output = Vec::new();\n772:         output\n773:             .try_reserve_exact(count)\n774:             .map_err(|_| RasterError::Allocation)?;\n775:         // Amortize transfer evaluation for large integer images. Scratch is\n776:         // optional: tight budgets retain the scalar path and its admission.\n777:         let table_reservation =\n778:             if encoded && !bt709 && count >= 4 * 65536 && matches!(&self.pixels, RasterPixels::Rgba16(_)) {\n779:                 match budget {\n780:                     Some(b) => b.try_reserve(65536 * 4).ok(),\n781:                     None => None,\n782:                 }\n783:             } else {\n784:                 None\n785:             };\n786:         let mut table16 = Vec::new();\n787:         if encoded\n788:             && !bt709\n789:             && count >= 4 * 65536\n790:             && matches!(&self.pixels, RasterPixels::Rgba16(_))\n791:             && (budget.is_none() || table_reservation.is_some())\n792:             && table16.try_reserve_exact(65536).is_ok()\n793:         {\n794:             for sample in 0..=u16::MAX {\n795:                 if sample.is_multiple_of(4096) && cancel() {\n796:                     return Err(RasterError::Cancelled);\n797:                 }\n798:                 table16.push(srgb_linear(f32::from(sample) / 65535.0));\n799:             }\n800:         }\n801:         let mut convert = |rgba: [f32; 4]| -> Result<(), RasterError> {\n802:             if rgba.iter().any(|value| !value.is_finite()) {\n803:                 return Err(RasterError::NonFiniteSample);",
+    "execution": {
+      "status": "rejected",
+      "result": "Выход linear sRGB уже имеет try_reserve_exact(count), фактическую capacity и credit; LUT ограничен и допускает scalar fallback. Выходной Vec удерживается raster, а не является временным scratch.",
+      "logs": [
+        "develop-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0036",
+    "path": "crates/rrrah-scientific/src/dicom.rs",
+    "symbol": "decode",
+    "line": 70,
+    "sha256": "cf9fd74875cbd55de0779084c4c97e93b3d3572eb76d7da33d8fc7b9a6732c16",
+    "source_context": "62: #[path = \"dicom_implicit_tags.rs\"]\n63: mod implicit_tags;\n64: #[path = \"dicom_palette.rs\"]\n65: mod palette;\n66: #[path = \"dicom_rgb.rs\"]\n67: mod rgb;\n68: #[path = \"dicom_sequences.rs\"]\n69: mod sequences;\n70: // Only fields interpreted by the scalar decoder get a concrete VR here.\n71: // Other recognized scalar metadata/private values are skipped as opaque bytes.\n72: fn implicit_vr(tag: u32) -> Option<&'static [u8]> {\n73:     Some(match tag {\n74:         0x00280010 | 0x00280011 | 0x00280002 | 0x00280100 | 0x00280101 | 0x00280102 | 0x00280103\n75:         | 0x00280006 => b\"US\",\n76:         0x00281052 | 0x00281053 | 0x00280030 | 0x00181164 | 0x00182010 => b\"DS\",\n77:         0x00280004 | 0x00282002 => b\"CS\",\n78:         0x00282000 => b\"OB\",\n79:         0x00280008 | 0x00280034 => b\"IS\",\n80:         0x7fe00010 | 0x00281201..=0x00281203 | 0x00281221..=0x00281223 => b\"OW\",\n81:         0x7fe00008 => b\"OF\",\n82:         0x7fe00009 => b\"OD\",\n83:         _ if tag >> 16 == 0xfffe => b\"SQ\",\n84:         _ if (tag >> 16) & 1 != 0 => b\"UN\",\n85:         _ if implicit_tags::SEQUENCES.binary_search(&tag).is_ok() => b\"SQ\",\n86:         _ if implicit_tags::KNOWN.binary_search(&tag).is_ok() || tag & 0xffff == 0 => b\"UN\",\n87:         _ => {\n88:             let &(_, _, sequence) = implicit_tags::REPEATERS\n89:                 .iter()\n90:                 .find(|&&(mask, value, _)| tag & mask == value)?;\n91:             if sequence { b\"SQ\" } else { b\"UN\" }\n92:         }\n93:     })\n94: }\n95: fn bad(s: &'static str) -> RasterDecodeError {\n96:     RasterDecodeError::InvalidDicom(s)\n97: }\n98: pub fn has_magic(b: &[u8]) -> bool {\n99:     b.get(128..132) == Some(b\"DICM\")\n100: }\n101: fn text(b: &[u8]) -> Result<&str, RasterDecodeError> {\n102:     std::str::from_utf8(b)",
+    "execution": {
+      "status": "verified",
+      "result": "Убрано BTreeSet всех DICOM tags: строгий порядок проверяет previous, четыре обязательных meta tag — битовая маска. Совпадают ошибки/пиксели и бюджет. Две серии по 10 чередующихся пар: total ratio 0.132/0.128 при A/A≈1; malloc 54140→1190 за 300 декодирований в отдельном allocation probe.",
+      "logs": [
+        "scientific-tests.log",
+        "dicom-pairs-1.log",
+        "dicom-pairs-2.log",
+        "dicom-summary.json",
+        "dicom-allocation-results.json"
+      ],
+      "remaining": "Выигрыш относится к CPU full-decode корпусу с 0/64/4096 private tags и малым pixel payload, не ко всем DICOM/просмотрщику. Managed peak=96 B, per-process RSS измерен отдельно. API, допустимые форматы и pixel output сохранены; физический HDR не проверялся."
+    }
+  },
+  {
+    "id": "RR-0037",
+    "path": "crates/rrrah-vfx/src/dpx.rs",
+    "symbol": "decode",
+    "line": 111,
+    "sha256": "70b4fc4d9ffcc1362e007b3b73aeec355d79cdcf10791dbd2551813942cd9048",
+    "source_context": "103:             .memory_budget\n104:             .as_ref()\n105:             .map(|budget| budget.try_reserve(bytes))\n106:             .transpose()\n107:             .map_err(crate::DecodeError::Memory)\n108:     };\n109:     let output_reservation = admit(output_bytes)?;\n110:     let count = w as usize * h as usize * 4;\n111:     let mut out = Vec::new();\n112:     let mut out8 = Vec::new();\n113:     if bits == 8 {\n114:         out8.try_reserve_exact(count)\n115:             .map_err(|_| RasterDecodeError::OutputTooLarge)?;\n116:         out8.resize(count, 0u8);\n117:     } else {\n118:         out.try_reserve_exact(count)\n119:             .map_err(|_| RasterDecodeError::OutputTooLarge)?;\n120:         out.resize(count, 0u16);\n121:     }\n122:     let max = (1u32 << bits) - 1;\n123:     for y in 0..h as usize {\n124:         request.check_cancelled()?;\n125:         let r = &b[start + y * stride..start + y * stride + row];\n126:         if bits == 8 && orient == 0 {\n127:             let target = &mut out8[y * w as usize * 4..(y + 1) * w as usize * 4];\n128:             for (block, destination) in target.chunks_mut(4096 * 4).enumerate() {\n129:                 request.check_cancelled()?;\n130:                 let first = block * 4096 * channels;\n131:                 let source = &r[first..first + destination.len() / 4 * channels];\n132:                 match descriptor {\n133:                     51 => destination.copy_from_slice(source),\n134:                     50 => {\n135:                         for (rgb, rgba) in source.chunks_exact(3).zip(destination.chunks_exact_mut(4)) {\n136:                             rgba.copy_from_slice(&[rgb[0], rgb[1], rgb[2], 255]);\n137:                         }\n138:                     }\n139:                     52 => {\n140:                         for (abgr, rgba) in source.chunks_exact(4).zip(destination.chunks_exact_mut(4)) {\n141:                             rgba.copy_from_slice(&[abgr[3], abgr[2], abgr[1], abgr[0]]);\n142:                         }\n143:                     }",
+    "execution": {
+      "status": "rejected",
+      "result": "Обе DPX output ветви уже заранее резервируют полное количество samples и учитывают capacity в credit. Коллекция становится владельцем выходных пикселей; повторного роста отмеченного Vec нет.",
+      "logs": [
+        "vfx-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0038",
+    "path": "crates/rrrah-decode/src/mng.rs",
+    "symbol": "decode",
+    "line": 57,
+    "sha256": "9771bf38f8b5b5673c92abb1cc7764c23adf02a73d4f6598783c114af4475937",
+    "source_context": "49: }\n50: pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<MngImage, RasterDecodeError> {\n51:     request.check_cancelled()?;\n52:     if !has_magic(bytes) {\n53:         return Err(bad(\"signature\"));\n54:     }\n55:     let mut at = 8usize;\n56:     let mut header = None;\n57:     let mut frames = Vec::new();\n58:     #[cfg(test)]\n59:     if PREALLOCATE_FRAME_LIMIT.with(std::cell::Cell::get) {\n60:         frames.try_reserve_exact(4096).map_err(|_| RasterDecodeError::OutputTooLarge)?;\n61:     }\n62:     #[cfg(test)]\n63:     INITIAL_FRAME_CAPACITY.with(|capacity| capacity.set(frames.capacity()));\n64:     let mut frame_start = None;\n65:     let mut idat = false;\n66:     let mut globals: [Option<std::ops::Range<usize>>; 4] = Default::default();\n67:     let mut local_color = false;\n68:     let mut frame_colors = globals.clone();\n69:     let mut frame_dimensions = [0; 2];\n70:     let mut sixteen = false;\n71:     let mut alpha = false;\n72:     let mut simple = false;\n73:     let mut global_palette = None;\n74:     let mut global_transparency = None;\n75:     let mut palette = None;\n76:     let mut transparency = None;\n77:     let mut empty_palette = None;\n78:     let mut local_transparency = false;\n79:     let mut intrapixel = false;\n80:     let mut ended = false;\n81:     for _ in 0..65536 {\n82:         request.check_cancelled()?;\n83:         let h = bytes\n84:             .get(at..at.checked_add(8).ok_or_else(|| bad(\"chunk overflow\"))?)\n85:             .ok_or_else(|| bad(\"truncated chunk\"))?;\n86:         let n = u32::from_be_bytes(h[..4].try_into().unwrap()) as usize;\n87:         let end = at\n88:             .checked_add(n)\n89:             .and_then(|n| n.checked_add(12))",
+    "execution": {
+      "status": "rejected",
+      "result": "MNG: предварительный reserve 4096 кадров на одном 8-byte signature выделяет 819200 B вместо 0, хотя header отвергается одинаково. Managed counters=0 не покрывают этот heap. Сохранён отрицательный regression и отдельные allocation/RSS пробы.",
+      "logs": [
+        "mng-tests.log",
+        "mng-allocation-results.json"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0039",
+    "path": "crates/rrrah-texture/src/ktx.rs",
+    "symbol": "decode",
+    "line": 61,
+    "sha256": "1fe0dd84e4829fd6917e1e8ebbc9c950751bfc50a017b5da5ed42616c014561a",
+    "source_context": "53:         let b = self.take(4)?.try_into().unwrap();\n54:         Ok(if be {\n55:             u32::from_be_bytes(b)\n56:         } else {\n57:             u32::from_le_bytes(b)\n58:         })\n59:     }\n60: }\n61: pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {\n62:     request.check_cancelled()?;\n63:     if !has_magic(bytes) {\n64:         return Err(bad(\"signature\"));\n65:     }\n66:     let be = match bytes.get(12..16) {\n67:         Some([4, 3, 2, 1]) => true,\n68:         Some([1, 2, 3, 4]) => false,\n69:         _ => return Err(bad(\"endianness marker\")),\n70:     };\n71:     let mut r = Input { b: bytes, at: 16, be };\n72:     let ty = r.word()?;\n73:     let size = r.word()? as usize;\n74:     let format = r.word()?;\n75:     let internal = r.word()?;\n76:     let base = r.word()?;\n77:     let width = r.word()? as usize;\n78:     let height = r.word()? as usize;\n79:     if r.word()? != 0 || r.word()? != 0 || r.word()? != 1 {\n80:         return Err(bad(\"volume, array or cubemap selection pending\"));\n81:     }\n82:     let levels = r.word()?.max(1) as usize;\n83:     let metadata = r.word()? as usize;\n84:     if width == 0\n85:         || height == 0\n86:         || width > 65536\n87:         || height > 65536\n88:         || levels > usize::BITS as usize\n89:         || levels > (usize::BITS - width.max(height).leading_zeros()) as usize\n90:     {\n91:         return Err(bad(\"dimensions or mip count\"));\n92:     }\n93:     if metadata > 4 * 1024 * 1024 {",
+    "execution": {
+      "status": "rejected",
+      "result": "KTX заранее вычисляет output/level sizes, резервирует выход точно и проверяет бюджет. Указанный decode anchor не доказывает временный growing scratch; новое предварительное резервирование повторяет существующее.",
+      "logs": [
+        "texture-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0040",
+    "path": "crates/rrrah-layered/src/psd.rs",
+    "symbol": "decode",
+    "line": 212,
+    "sha256": "fc58f8eb2e721a02ea0050ae32481597fa71dfa936f489d052bef9f4b73b7a42",
+    "source_context": "204:                 }\n205:             }\n206:         }\n207:     }\n208:     check()?;\n209:     Ok(())\n210: }\n211: \n212: pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {\n213:     request.check_cancelled()?;\n214:     let mut r = Reader { b: bytes, at: 0 };\n215:     if r.take(4)? != b\"8BPS\" {\n216:         return Err(bad(\"signature\"));\n217:     }\n218:     let version = r.word()?;\n219:     if !matches!(version, 1 | 2) || r.take(6)? != [0; 6] {\n220:         return Err(bad(\"version or reserved bytes\"));\n221:     }\n222:     let large = version == 2;\n223:     let channels = r.word()? as usize;\n224:     let height = r.long()?;\n225:     let width = r.long()?;\n226:     let depth = r.word()?;\n227:     let mode = r.word()?;\n228:     let colors = match mode {\n229:         1 => 1,\n230:         3 => 3,\n231:         _ => return Err(bad(\"color mode unsupported\")),\n232:     };\n233:     if channels < colors\n234:         || channels > 56\n235:         || !matches!(depth, 8 | 16 | 32)\n236:         || width == 0\n237:         || height == 0\n238:         || width > 65536\n239:         || height > 65536\n240:     {\n241:         return Err(bad(\"dimensions, channels or depth\"));\n242:     }\n243:     let sample = usize::from(depth / 8);\n244:     let pixels = width as usize * height as usize;",
+    "execution": {
+      "status": "rejected",
+      "result": "PSD raw planes заимствованы из входа; compressed planes выделяются по известному total, RGBA output сразу получает pixels*4 capacity. Эти выделения удерживают данные результата, не независимый повторно используемый scratch.",
+      "logs": [
+        "layered-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0041",
+    "path": "crates/rrrah-dedup/src/model_banks.rs",
+    "symbol": "search_model_banks_pixel_selected",
+    "line": 355,
+    "sha256": "df12d8b8ac0cdd58f7e522eaf12fa27a33361aa1cf779303b94a786699aaa82f",
+    "source_context": "347:         latch.set(v);\n348:         v\n349:     };\n350:     if stopped() {\n351:         return Err(ModelTileError::Cancelled);\n352:     }\n353:     validate_model_bank_pixel_policy(policy, recipes, maximum_calibration_pixel_reads, budget)?;\n354:     let _slots_credit = budget.try_reserve(25 * std::mem::size_of::<Option<ModelPointBank>>() as u64)?;\n355:     let mut slots = Vec::new();\n356:     slots\n357:         .try_reserve_exact(25)\n358:         .map_err(|_| ModelComparisonError::Geometry(GeometryError::Budget))?;\n359:     if slots.capacity() > 25 {\n360:         return Err(ModelTileError::Work);\n361:     }\n362:     slots.resize_with(25, || None::<ModelPointBank>);\n363:     let result = (|| {\n364:         let p = policy.comparison;\n365:         let model = ContentSnapshot::read(weights, p.max_model_bytes, &stopped)?;\n366:         let l = prepare_file(left, None, p.decode, p.input, budget, &stopped)\n367:             .map_err(ModelComparisonError::Left)?;\n368:         let r = prepare_file(right, None, p.decode, p.input, budget, &stopped)\n369:             .map_err(ModelComparisonError::Right)?;\n370:         let verify = |checkpoint: &dyn Fn() -> bool| -> Result<(), ModelTileError> {\n371:             l.verify_source(checkpoint).map_err(ModelComparisonError::Left)?;\n372:             r.verify_source(checkpoint).map_err(ModelComparisonError::Right)?;\n373:             model.verify(checkpoint)?;\n374:             Ok(())\n375:         };\n376:         verify(&stopped)?;\n377:         let ld = l.original_dimensions();\n378:         let rd = r.original_dimensions();\n379:         let mut pairs = [([0u32; 4], [0u32; 4]); 25];\n380:         let mut pair_count = 0;\n381:         if maximum_calibration_pixel_reads.is_some() {\n382:             let width = ld[0] / 2;\n383:             let height = ld[1] / 2;\n384:             if width == 0 || height == 0 {\n385:                 return Err(ModelComparisonError::Policy.into());\n386:             }\n387:             for y in [0, ld[1] / 4, ld[1] / 2] {",
+    "execution": {
+      "status": "rejected",
+      "result": "Pixel-selected model banks используют фиксированные 25 slots и предварительно рассчитанные/допущенные размеры. Повторный рост отмеченного массива отсутствует; перераспределение кредитов не даёт доказанного выигрыша.",
+      "logs": [
+        "dedup-decode-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0042",
+    "path": "crates/rrrah-dedup/src/gradient.rs",
+    "symbol": "match_gradients_selected_with_scratch",
+    "line": 1144,
+    "sha256": "77fdc18e635ae557c01ef78d1932f1c558bebd6a8d264cc8e1bf81cf088b889b",
+    "source_context": "1136:     }\n1137:     if left.is_empty() || right.is_empty() {\n1138:         if cancel() {\n1139:             return Err(LocalError::Cancelled);\n1140:         }\n1141:         return Ok(Vec::new());\n1142:     }\n1143:     let allocate = |len| {\n1144:         let mut v = Vec::new();\n1145:         v.try_reserve_exact(len).map_err(|_| LocalError::Budget)?;\n1146:         v.resize(len, (f64::INFINITY, f64::INFINITY, usize::MAX));\n1147:         Ok::<_, LocalError>(v)\n1148:     };\n1149:     let mut forward = allocate(left.len())?;\n1150:     let mut reverse = allocate(right.len())?;\n1151:     let mut distance_cache = distance_cache_pairs(left.len(), right.len(), distinct_radius_squared.is_some())\n1152:         .and_then(|pairs| make_cache(pairs).filter(|values| values.len() == pairs));\n1153:     let contained = distinct_radius_squared.is_some_and(|radius| {\n1154:         bounds\n1155:             .iter()\n1156:             .any(|(low, high)| (high[0] - low[0]).powi(2) + (high[1] - low[1]).powi(2) <= radius)\n1157:     });\n1158:     let mut runners = runner_entries\n1159:         .filter(|_| !contained)\n1160:         .and_then(|entries| make_runners(entries).filter(|values| values.len() == entries));\n1161:     let update_runner = |best: &mut (f64, f64, usize), runner: &mut (usize, bool), distance: f64, index| {\n1162:         if distance < best.0 {\n1163:             runner.0 = best.2;\n1164:             *best = (distance, best.0, index);\n1165:         } else if distance < best.1 {\n1166:             best.1 = distance;\n1167:             runner.0 = index;\n1168:         }\n1169:     };\n1170:     let update = |best: &mut (f64, f64, usize), distance, index| {\n1171:         if distance < best.0 {\n1172:             *best = (distance, best.0, index);\n1173:         } else {\n1174:             best.1 = best.1.min(distance);\n1175:         }\n1176:     };",
+    "execution": {
+      "status": "rejected",
+      "result": "Gradient matcher получает явный scratch budget, заранее выделяет forward/reverse, учитывает distance/runners. Наличие Vec::new само по себе не доказывает рост: границы и capacity заданы до заполнения.",
+      "logs": [
+        "dedup-gradient-tests.log",
+        "dedup-decode-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0043",
+    "path": "crates/rrrah-dedup/src/anchor_rank.rs",
+    "symbol": "compare_anchor_rank",
+    "line": 141,
+    "sha256": "fef4a82a5a07aa061e910d314f194e0343523f58c2fbf447b0b6471ab224bb8d",
+    "source_context": "133:         || reads > p.rank.maximum_pixel_reads\n134:     {\n135:         return Err(LocalRankError::Budget);\n136:     }\n137:     let inverse = model.inverse().map_err(|_| LocalRankError::Invalid)?;\n138:     let bytes = n.checked_mul(16).ok_or(LocalRankError::Budget)?;\n139:     let ac = budget.try_reserve(bytes).map_err(|_| LocalRankError::Budget)?;\n140:     let bc = budget.try_reserve(bytes).map_err(|_| LocalRankError::Budget)?;\n141:     let mut aw = Vec::new();\n142:     let mut bw = Vec::new();\n143:     let mut source_bounds = None::<[u32; 4]>;\n144:     let mut target_bounds = None::<[u32; 4]>;\n145:     aw.try_reserve_exact(points.len())\n146:         .map_err(|_| LocalRankError::Budget)?;\n147:     bw.try_reserve_exact(points.len())\n148:         .map_err(|_| LocalRankError::Budget)?;\n149:     for (i, point) in points.iter().enumerate() {\n150:         if cancel() {\n151:             return Err(LocalRankError::Cancelled);\n152:         }\n153:         for (xy, d) in [\n154:             (point.source, source.dimensions()),\n155:             (point.target, target.dimensions()),\n156:         ] {\n157:             if xy.iter().any(|v| !v.is_finite() || *v < 0.)\n158:                 || xy[0] >= f64::from(d.0)\n159:                 || xy[1] >= f64::from(d.1)\n160:             {\n161:                 return Err(LocalRankError::Invalid);\n162:             }\n163:         }\n164:         for prior in &points[..i] {\n165:             if cancel() {\n166:                 return Err(LocalRankError::Cancelled);\n167:             }\n168:             if distance(prior.source, point.source) <= p.minimum_point_separation\n169:                 || distance(prior.target, point.target) <= p.minimum_point_separation\n170:             {\n171:                 return Err(LocalRankError::Invalid);\n172:             }\n173:         }",
+    "execution": {
+      "status": "rejected",
+      "result": "Anchor-rank aw/bw резервируются по числу points; их reservations переходят в сохраняемое evidence. Пул потребовал бы изменить владельца результата, точное резервирование уже реализовано.",
+      "logs": [
+        "dedup-decode-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0044",
+    "path": "crates/rrrah-animation/src/jng.rs",
+    "symbol": "decode",
+    "line": 236,
+    "sha256": "49a415d5e117ce09d7d8c2cabea31a1d099dc20456d773577c19240673a068b7",
+    "source_context": "228:         if d.dimensions() != (w, h) || d.color_type() != image::ColorType::L8 {\n229:             return Err(bad(\"JPEG alpha dimensions/channels\"));\n230:         }\n231:         Some(DynamicImage::from_decoder(d)?)\n232:     };\n233:     // Color declarations belong to the outer container, independently of alpha.\n234:     let mut z = flate2::write::ZlibEncoder::new(Vec::new(), flate2::Compression::fast());\n235:     let gray = matches!(hdr[8], 8 | 12);\n236:     z.write_all(if gray { &[0, 0][..] } else { &[0, 0, 0, 0][..] })\n237:         .map_err(|_| bad(\"color carrier compression\"))?;\n238:     let compressed = z.finish().map_err(|_| bad(\"color carrier compression\"))?;\n239:     let carrier = png(1, 1, 8, if gray { 0 } else { 2 }, 0, &[&compressed]);\n240:     let mut metadata = carrier[..33].to_vec();\n241:     for (kind, data) in color_chunks {\n242:         chunk(&mut metadata, kind, data);\n243:     }\n244:     metadata.extend_from_slice(&carrier[33..]);\n245:     let declaration = crate::png_color::declaration_for_request(&metadata, request)?;\n246:     let mut d = PngDecoder::new(Cursor::new(metadata))?;\n247:     let icc = d.icc_profile()?;\n248:     let color = if declaration.override_icc {\n249:         declaration.color.unwrap_or(RasterColorSpace::Unspecified)\n250:     } else {\n251:         icc.map(RasterColorSpace::Icc)\n252:             .or(declaration.color)\n253:             .unwrap_or(RasterColorSpace::Unspecified)\n254:     };\n255:     request.check_cancelled()?;\n256:     let pixels = if has_alpha && hdr[12] == 16 {\n257:         let a = alpha_image.unwrap().into_luma16().into_raw();\n258:         let mut out = Vec::with_capacity(w as usize * h as usize * 4);\n259:         for (i, (rgb, a)) in rgb.chunks_exact(3).zip(a).enumerate() {\n260:             if i % 65536 == 0 {\n261:                 request.check_cancelled()?;\n262:             }\n263:             out.extend_from_slice(&[\n264:                 u16::from(rgb[0]) * 257,\n265:                 u16::from(rgb[1]) * 257,\n266:                 u16::from(rgb[2]) * 257,\n267:                 a,\n268:             ]);",
+    "execution": {
+      "status": "rejected",
+      "result": "JNG z.write_all пишет 2/4 байта локального metadata carrier 1×1 в память через ZlibEncoder. Файловый backend здесь отсутствует; объединение disk I/O и cold/warm benchmark к отмеченному вызову неприменимы.",
+      "logs": [
+        "animation-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0045",
+    "path": "crates/rrrah-mesh/src/ply_swap.rs",
+    "symbol": "read_ply_swap_payload",
+    "line": 475,
+    "sha256": "4da492ef2b318381a3da932a069a0ee3d116450ff5bc75ef565645ec3ada205d",
+    "source_context": "467: /// supplies checksum verification, cancellation and the exact payload length.\n468: pub fn read_ply_swap_payload(\n469:     reader: &mut impl std::io::Read,\n470:     bytes: u64,\n471:     budget: &rrrah_core::MemoryBudget,\n472: ) -> RestoreResult<crate::ModelBuffer<PlyMesh>> {\n473:     let mut r = reader.take(bytes);\n474:     let mut magic = [0; 8];\n475:     r.read_exact(&mut magic)?;\n476:     if &magic != b\"RRPLY001\" {\n477:         return Err(bad());\n478:     }\n479:     let encoding = match read_tag(&mut r)? {\n480:         0 => PlyEncoding::Ascii,\n481:         1 => PlyEncoding::LittleEndian,\n482:         2 => PlyEncoding::BigEndian,\n483:         _ => return Err(bad()),\n484:     };\n485:     let vertex_element = read_size(&mut r)?;\n486:     let mut position_properties = [0; 3];\n487:     for p in &mut position_properties {\n488:         *p = read_size(&mut r)?;\n489:     }\n490:     let mut credit = budget.try_reserve(size_of::<PlyMesh>() as u64)?;\n491:     let mut read_strings = |r: &mut std::io::Take<_>| -> RestoreResult<Vec<String>> {\n492:         let n = read_count(r, 8)?;\n493:         let mut values = reserve(n, &mut credit)?;\n494:         for _ in 0..n {\n495:             values.push(read_text(r, &mut credit)?);\n496:         }\n497:         Ok(values)\n498:     };\n499:     let comments = read_strings(&mut r)?;\n500:     let object_info = read_strings(&mut r)?;\n501:     let n = read_count(&mut r, 24)?;\n502:     if n > 128 {\n503:         return Err(bad());\n504:     }\n505:     let mut property_count = 0_usize;\n506:     let mut elements = reserve(n, &mut credit)?;\n507:     for _ in 0..n {",
+    "execution": {
+      "status": "rejected",
+      "result": "PLY swap уже читает scalar blocks по 16 KiB. Дополнительный BufReader повышает managed peak 2900→19284 B и не проходит прежний tight budget. Проверены roundtrip, framing NEXT, короткие/Interrupted чтения, усечение, отмена, corrupt magic; final=0.",
+      "logs": [
+        "mesh-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0046",
+    "path": "crates/rrrah-raw/src/camtiff/cr2.rs",
+    "symbol": "decode_pixels",
+    "line": 367,
+    "sha256": "d99b9afe392c5ffcf6679b6c7d84eb551de8dd13a901408bf11e03fa6fe647f2",
+    "source_context": "359:                 FORMAT,\n360:                 format!(\"lossless JPEG height {jpeg_height} does not match ImageLength {height_usize}\"),\n361:             ));\n362:         }\n363:         let total = width_usize\n364:             .checked_mul(height_usize)\n365:             .ok_or(DecodeError::DimensionOverflow)?;\n366: \n367:         let mut pixels = Vec::new();\n368:         pixels\n369:             .try_reserve_exact(total)\n370:             .map_err(|_| camera_error(FORMAT, format!(\"could not allocate {total} output samples\")))?;\n371:         pixels.resize(total, 0);\n372: \n373:         match slices {\n374:             Some((count, slice_width, last_width)) if count >= 1 => {\n375:                 let slice_width = usize_from_u64(slice_width, \"CR2Slice width\")?;\n376:                 let last_width = usize_from_u64(last_width, \"CR2Slice last width\")?;\n377:                 if slice_width == 0 || last_width == 0 {\n378:                     return Err(camera_error(FORMAT, \"CR2Slice declares a zero-width slice\"));\n379:                 }\n380:                 let count = usize_from_u64(count, \"CR2Slice count\")?;\n381:                 let expected_width = count\n382:                     .checked_mul(slice_width)\n383:                     .and_then(|full| full.checked_add(last_width))\n384:                     .ok_or_else(|| {\n385:                         camera_error(FORMAT, \"arithmetic overflow computing slice layout width\")\n386:                     })?;\n387:                 if expected_width != width_usize || jpeg_width != width_usize {\n388:                     return Err(camera_error(\n389:                         FORMAT,\n390:                         format!(\n391:                             \"slice layout ({count} x {slice_width} + {last_width} = {expected_width}) and JPEG width {jpeg_width} do not match ImageWidth {width_usize}\"\n392:                         ),\n393:                     ));\n394:                 }\n395:                 let slice_span = slice_width\n396:                     .checked_mul(height_usize)\n397:                     .ok_or_else(|| camera_error(FORMAT, \"arithmetic overflow computing slice sample span\"))?;\n398:                 for (stream_index, &sample) in image.samples.iter().enumerate() {\n399:                     if stream_index.is_multiple_of(65_536) && cancelled() {",
+    "execution": {
+      "status": "rejected",
+      "result": "CR2 decode_pixels заранее резервирует total и передаёт выделение в sensor raster с credit. Отмеченный Vec — выход, а не забытый growing scratch; предлагаемое exact reserve уже есть.",
+      "logs": [
+        "cr2-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0047",
+    "path": "crates/rrrah-dedup/src/local_collection.rs",
+    "symbol": "scan_gradient_collection_with_confirmation_selected",
+    "line": 2769,
+    "sha256": "84f9a32e1ceb67e12a16bc6dc43292ffd8dd39a5c5e5eb2c500fb7ba2fa25e65",
+    "source_context": "2761:             let bytes = count\n2762:                 .checked_mul(\n2763:                     std::mem::size_of::<(u64, crate::gradient::GradientDescriptor)>()\n2764:                         + std::mem::size_of::<u64>(),\n2765:                 )\n2766:                 .and_then(|n| u64::try_from(n).ok())\n2767:                 .ok_or(ScanError::Budget)?;\n2768:             let mut retained = budget.try_reserve(bytes).map_err(|_| ScanError::Budget)?;\n2769:             let mut entries = Vec::new();\n2770:             let mut owners = Vec::new();\n2771:             entries.try_reserve_exact(count).map_err(|_| ScanError::Budget)?;\n2772:             owners.try_reserve_exact(count).map_err(|_| ScanError::Budget)?;\n2773:             let actual_bytes = entries\n2774:                 .capacity()\n2775:                 .checked_mul(std::mem::size_of::<(u64, crate::gradient::GradientDescriptor)>())\n2776:                 .and_then(|n| {\n2777:                     owners\n2778:                         .capacity()\n2779:                         .checked_mul(std::mem::size_of::<u64>())\n2780:                         .and_then(|m| n.checked_add(m))\n2781:                 })\n2782:                 .and_then(|n| u64::try_from(n).ok())\n2783:                 .ok_or(ScanError::Budget)?;\n2784:             retained\n2785:                 .ensure_bytes(actual_bytes)\n2786:                 .map_err(|_| ScanError::Budget)?;\n2787:             let (files, mut insufficient, _insufficient_credit) =\n2788:                 gradient_file_id_scratch(features, budget, &cancel)?;\n2789:             for &id in files.iter() {\n2790:                 if features[&id].len() < p.local.geometry.min_inliers {\n2791:                     insufficient.try_reserve_exact(1).map_err(|_| ScanError::Budget)?;\n2792:                     insufficient.push(id);\n2793:                 }\n2794:                 for feature in features[&id].iter() {\n2795:                     if cancel() {\n2796:                         return Err(ScanError::Cancelled);\n2797:                     }\n2798:                     let entry = u64::try_from(entries.len()).map_err(|_| ScanError::Budget)?;\n2799:                     entries.push((entry, feature.descriptor));\n2800:                     owners.push(id);\n2801:                 }",
+    "execution": {
+      "status": "rejected",
+      "result": "Gradient collection заранее резервирует entries и owners по числу файлов и принимает фактическую capacity в бюджет. Время жизни owners требуется для сохранения результатов; общий пул не является локальной заменой Vec.",
+      "logs": [
+        "dedup-decode-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0048",
+    "path": "crates/rrrah-scientific/src/fits.rs",
+    "symbol": "decode",
+    "line": 407,
+    "sha256": "fdfb46905533a492e652c2009e5a312a764307c7db6a32c7ac6b9791f300a5f4",
+    "source_context": "399:         *v\n400:     };\n401:     let value = text.parse::<f64>().map_err(|_| bad(\"invalid scaling keyword\"))?;\n402:     if !value.is_finite() {\n403:         return Err(bad(\"nonfinite scaling\"));\n404:     }\n405:     Ok(value)\n406: }\n407: pub fn decode_fits(request: &DecodeRequest) -> Result<FitsImage, RasterDecodeError> {\n408:     request.check_cancelled()?;\n409:     decode(&read_bounded(request)?, request)\n410: }\n411: pub fn decode_raster(b: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {\n412:     decode(b, request)?.raster(Some(request))\n413: }\n414: pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<FitsImage, RasterDecodeError> {\n415:     request.check_cancelled()?;\n416:     if !has_magic(b) || b.len() % 2880 != 0 {\n417:         return Err(bad(\"missing signature or incomplete FITS record\"));\n418:     }\n419:     let mut at = 0;\n420:     let mut hdu = 0;\n421:     let mut total = 0usize;\n422:     let mut selected = None;\n423:     while at < b.len() {\n424:         request.check_cancelled()?;\n425:         if hdu >= 65536 {\n426:             return Err(bad(\"too many HDUs\"));\n427:         }\n428:         let header = parse_header(b, at, Some(request))?;\n429:         let key = |i: usize| {\n430:             header\n431:                 .cards\n432:                 .get(i)\n433:                 .map(|c| std::str::from_utf8(&c[..8]).unwrap().trim_end())\n434:         };\n435:         let image = if hdu == 0 {\n436:             if key(0) != Some(\"SIMPLE\") || header.fields.get(\"SIMPLE\").copied() != Some(\"T\") {\n437:                 return Err(bad(\"primary SIMPLE must be true\"));\n438:             }\n439:             true",
+    "execution": {
+      "status": "rejected",
+      "result": "decode_fits — ограниченная read/decode обёртка. parse_header делает count pass, заимствует cards из bytes и резервирует budget buffer(count); metadata упорядочены. Предположение о неизвестном growing temporary не подтверждено.",
+      "logs": [
+        "scientific-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0049",
+    "path": "crates/rrrah-app/src/gallery.rs",
+    "symbol": "with_budget",
+    "line": 323,
+    "sha256": "65f3653f77d7c3fe5d9b8a37d874c7f13d88b22c3e8e469e6869a15c7951791f",
+    "source_context": "315:                 .name(\"rrrah-raw-prefetch\".into())\n316:                 .spawn(move || {\n317:                     let cache = rrrah_cache::DiskMosaicCache::with_max_bytes(cache_root, limits.max_bytes)\n318:                         .with_max_entries(limits.max_entries)\n319:                         .with_ttl(limits.ttl);\n320:                     while let Ok(command) = commands.recv() {\n321:                         let token = GenerationToken::new(Arc::clone(&worker_generation), command.generation)\n322:                             .combine(&worker_lifetime);\n323:                         let mut protected = Vec::new();\n324:                         #[cfg(test)]\n325:                         if let Some((eager, observer)) = &capacity_probe {\n326:                             if *eager { protected.try_reserve_exact(command.paths.len()).unwrap(); }\n327:                             observer.send((command.paths.len(), protected.capacity(), std::mem::size_of::<CacheKey>())).unwrap();\n328:                         }\n329:                         let mut protected_keys = std::collections::HashSet::new();\n330:                         let mut checked_paths = std::collections::HashSet::new();\n331:                         // Do not let the lower-priority tail of this plan evict\n332:                         // the neighbours we just warmed in a count-limited cache.\n333:                         for path in command.paths {\n334:                             // Count limits constrain retained neighbours, not attempts.\n335:                             // A missing/failed closest file must not consume the slot\n336:                             // intended for the next usable neighbour.\n337:                             if protected.len() >= limits.max_entries.unwrap_or(usize::MAX) {\n338:                                 break;\n339:                             }\n340:                             worker_telemetry.set_prefetch_phase(command.generation, PrefetchPhase::Checking);\n341:                             while worker_state.load(Ordering::Acquire) & RAW_PREFETCH_FOREGROUND != 0 {\n342:                                 if token.is_cancelled() {\n343:                                     break;\n344:                                 }\n345:                                 thread::sleep(Duration::from_millis(10));\n346:                             }\n347:                             if token.is_cancelled() {\n348:                                 break;\n349:                             }\n350:                             // Avoid hashing a large identical path again within one plan.\n351:                             // Separate paths still resolve content identity independently.\n352:                             if !checked_paths.insert(path.clone()) {\n353:                                 worker_telemetry.record_prefetch_skipped(command.generation);\n354:                                 continue;\n355:                             }",
+    "execution": {
+      "status": "rejected",
+      "result": "Prefetch protected содержит CacheKey, не pixel leases. При cache count limit=0 текущий worker прерывается до первого push. Eager reserve плана 4096 путей выделяет 131072 B вместо 0; managed final=0 в обеих ветках. Кандидат отклонён.",
+      "logs": [
+        "gallery-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0050",
+    "path": "crates/rrrah-animation/src/raster_color.rs",
+    "symbol": "prepare_raster_for_display_with_budget_and_cancel",
+    "line": 148,
+    "sha256": "99bf87f927d88f978da899b20fddc7be3d7b6ebcfc40df561a073228af89169f",
+    "source_context": "140:         // generic parametric evaluator clips negative operands; an empty ICC\n141:         // curve selects the mathematically equivalent identity matrix path.\n142:         if linear_curve(curve) {\n143:             *curve = Some(ToneReprCurve::Lut(Vec::new()));\n144:             continue;\n145:         }\n146:         if let Some(ToneReprCurve::Lut(values)) = curve {\n147:             if values.len() == 1 {\n148:                 *curve = Some(ToneReprCurve::Parametric(vec![f32::from(values[0]) / 256.0]));\n149:             }\n150:         }\n151:     }\n152:     let mut destination = ColorProfile::new_srgb();\n153:     rrrah_vector::icc_colorimetry::set_rgb_colorimetry(\n154:         &mut destination,\n155:         [0.64, 0.33, 0.30, 0.60, 0.15, 0.06, 0.3127, 0.3290],\n156:     )\n157:     .expect(\"standard sRGB chromaticities are valid\");\n158:     let linear = ToneReprCurve::Parametric(vec![1.0]);\n159:     destination.red_trc = Some(linear.clone());\n160:     destination.green_trc = Some(linear.clone());\n161:     destination.blue_trc = Some(linear);\n162:     destination.cicp = None;\n163:     let options = TransformOptions {\n164:         rendering_intent: moxcms::RenderingIntent::RelativeColorimetric,\n165:         prefer_fixed_point: false,\n166:         allow_use_cicp_transfer: false,\n167:         allow_extended_range_rgb_xyz: true,\n168:         ..TransformOptions::default()\n169:     };\n170:     let transform = profile\n171:         .create_transform_f64(\n172:             if gray { Layout::Gray } else { Layout::Rgb },\n173:             &destination,\n174:             Layout::Rgb,\n175:             options,\n176:         )\n177:         .map_err(|e| RasterColorError::Icc(e.to_string()))?;\n178:     check()?;\n179:     let reservation = budget\n180:         .map(|b| b.try_reserve(count as u64 * 4))",
+    "execution": {
+      "status": "rejected",
+      "result": "Одноэлементный Vec gamma/TRC передаётся во владеющий ICC profile, не растёт в цикле; gamma=1 использует пустую identity кривую. Предложенное повторное использование scratch не сохраняет эту семантику владения.",
+      "logs": [
+        "animation-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0051",
+    "path": "crates/rrrah-animation/src/webp_animation.rs",
+    "symbol": "decode",
+    "line": 92,
+    "sha256": "ef2df3128ad4787c75dd99829c1f158c698f45c6652f63950886cd04c599fea5",
+    "source_context": "84:     if first.0 != b\"VP8X\" || first.1.len() != 10 {\n85:         return Err(bad(\"VP8X header\"));\n86:     }\n87:     let (w, h) = (u24(&first.1[4..7]) + 1, u24(&first.1[7..10]) + 1);\n88:     if u64::from(w) * u64::from(h) * 16 * 4 > MAX_RASTER_BYTES {\n89:         return Err(RasterDecodeError::OutputTooLarge);\n90:     }\n91:     let mut anim = None;\n92:     let mut frames = Vec::new();\n93:     #[cfg(test)]\n94:     if PREALLOCATE_FRAME_LIMIT.with(std::cell::Cell::get) {\n95:         frames.try_reserve_exact(4096).map_err(|_| RasterDecodeError::OutputTooLarge)?;\n96:     }\n97:     #[cfg(test)]\n98:     INITIAL_FRAME_CAPACITY.with(|capacity| capacity.set(frames.capacity()));\n99:     let mut icc = None;\n100:     for &(kind, data) in &cs[1..] {\n101:         match kind {\n102:             b\"VP8X\" => return Err(bad(\"duplicate VP8X\")),\n103:             b\"ICCP\" => {\n104:                 if icc.is_some() || anim.is_some() {\n105:                     return Err(bad(\"ICC order/duplicate\"));\n106:                 }\n107:                 icc = Some(data);\n108:             }\n109:             b\"ANIM\" => {\n110:                 if anim.is_some() || data.len() != 6 || !frames.is_empty() {\n111:                     return Err(bad(\"ANIM order/size\"));\n112:                 }\n113:                 anim = Some(data);\n114:             }\n115:             b\"ANMF\" => {\n116:                 if anim.is_none() || data.len() < 16 || frames.len() >= 4096 {\n117:                     return Err(bad(\"ANMF order/size/count\"));\n118:                 }\n119:                 let f = Frame {\n120:                     x: u24(&data[..3]) * 2,\n121:                     y: u24(&data[3..6]) * 2,\n122:                     w: u24(&data[6..9]) + 1,\n123:                     h: u24(&data[9..12]) + 1,\n124:                     delay: u24(&data[12..15]),",
+    "execution": {
+      "status": "rejected",
+      "result": "WebP: eager reserve 4096 frames выделяет 163840 B до отказа на неполном VP8X input; текущая capacity=0 и та же ошибка. Managed counters не видят это выделение. Сохранены regression и отдельные allocation/RSS пробы.",
+      "logs": [
+        "animation-tests.log",
+        "webp-allocation-results.json"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0052",
+    "path": "crates/rrrah-dedup/src/anchor_rank_file.rs",
+    "symbol": "search_anchor_rank_opposite_files_selected",
+    "line": 1132,
+    "sha256": "94c6e4101501c98fb23a1ffa83d750d52f443a0068c2f6de9a95e4aef652700b",
+    "source_context": "1124:                     .map(|g| g.transform.inverse())\n1125:                     .transpose()\n1126:                     .map_err(|_| LocalRankError::Invalid)?;\n1127:                 (proposal.correspondences, transform, None)\n1128:             };\n1129:             if proposal_points.len() > policy.maximum_swapped_points {\n1130:                 return Err(LocalRankError::Budget.into());\n1131:             }\n1132:             let mut swapped = Vec::new();\n1133:             swapped\n1134:                 .try_reserve_exact(proposal_points.len())\n1135:                 .map_err(|_| LocalRankError::Budget)?;\n1136:             for point in proposal_points.iter() {\n1137:                 if cancelled() {\n1138:                     return Err(AnchorRankFileError::Cancelled);\n1139:                 }\n1140:                 swapped.push(Correspondence {\n1141:                     source: point.target,\n1142:                     target: point.source,\n1143:                 });\n1144:             }\n1145:             if swapped.capacity() > policy.maximum_swapped_points {\n1146:                 return Err(LocalRankError::Budget.into());\n1147:             }\n1148:             let points = credit.try_adopt(swapped).map_err(|_| LocalRankError::Budget)?;\n1149:             drop(proposal_points);\n1150:             let transform = if let Some(joint) = joint {\n1151:                 let (source, target) = dimensions.expect(\"joint extraction dimensions\");\n1152:                 crate::geometry::verify_projective_sampled_joint_for_domains(\n1153:                     &points,\n1154:                     joint,\n1155:                     phase.search.gradient.search.sampling,\n1156:                     source,\n1157:                     target,\n1158:                     &cancelled,\n1159:                 )\n1160:                 .map_err(crate::local_scan::LocalFileError::from)?\n1161:                 .map(|g| g.transform)\n1162:             } else {\n1163:                 legacy_transform\n1164:             };",
+    "execution": {
+      "status": "rejected",
+      "result": "Anchor-rank opposite swapped points заранее резервируются по точному числу proposals; reservation переносится в retained evidence. Исходный набор освобождается после передачи; локальный growing scratch не обнаружен.",
+      "logs": [
+        "dedup-decode-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0053",
+    "path": "crates/rrrah-mesh/src/obj_swap.rs",
+    "symbol": "read_obj_swap_payload",
+    "line": 537,
+    "sha256": "3472049a125471e5c6d49f08ed26e0d2d09ac951c5ac7f8c769ec88cd70882a6",
+    "source_context": "529: /// native storage. Integrity and cancellation are provided by the swap store.\n530: pub fn read_obj_swap_payload(\n531:     reader: &mut impl std::io::Read,\n532:     bytes: u64,\n533:     budget: &rrrah_core::MemoryBudget,\n534: ) -> RestoreResult<crate::ModelBuffer<ObjMesh>> {\n535:     let mut r = reader.take(bytes);\n536:     let mut magic = [0; 8];\n537:     r.read_exact(&mut magic)?;\n538:     if &magic != b\"RROBJ001\" {\n539:         return Err(bad());\n540:     }\n541:     let mut credit = budget.try_reserve(size_of::<ObjMesh>() as u64)?;\n542:     let positions: Vec<[f32; 4]> = read_arrays(&mut r, &mut credit)?;\n543:     let texcoords = read_arrays(&mut r, &mut credit)?;\n544:     let normals = read_arrays(&mut r, &mut credit)?;\n545:     let count = read_count(&mut r, 14)?;\n546:     let mut corners = reserve(count, &mut credit)?;\n547:     read_records(&mut r, count, 14, |record| {\n548:         let position = u32::from_le_bytes(record[..4].try_into().map_err(|_| bad())?);\n549:         let mut attributes = &record[4..];\n550:         let texcoord = read_optional(&mut attributes)?;\n551:         let normal = read_optional(&mut attributes)?;\n552:         if usize::try_from(position).map_err(|_| bad())? >= positions.len()\n553:             || texcoord.is_some_and(|i| usize::try_from(i).map_or(true, |i| i >= texcoords.len()))\n554:             || normal.is_some_and(|i| usize::try_from(i).map_or(true, |i| i >= normals.len()))\n555:         {\n556:             return Err(bad());\n557:         }\n558:         corners.push(crate::ObjCorner {\n559:             position,\n560:             texcoord,\n561:             normal,\n562:         });\n563:         Ok(())\n564:     })?;\n565:     let count = read_count(&mut r, 16)?;\n566:     let mut triangles = reserve(count, &mut credit)?;\n567:     read_records(&mut r, count, 16, |raw| {\n568:         let mut record = [0_u32; 4];\n569:         for (index, bytes) in record.iter_mut().zip(raw.chunks_exact(4)) {",
+    "execution": {
+      "status": "rejected",
+      "result": "OBJ swap уже объединяет scalar/record чтения блоками 16 KiB. Дополнительный BufReader повышает managed peak 1039→17423 B и нарушает прежний tight admission; негативные streaming/cancel/framing сценарии проходят без него.",
+      "logs": [
+        "mesh-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0054",
+    "path": "crates/rrrah-develop/src/thumbnail.rs",
+    "symbol": "develop_with_cancel",
+    "line": 145,
+    "sha256": "b8146028545ffb3dc158446e46fa7dcd1d1d5edb127802e386f527ea5e2a0c7f",
+    "source_context": "137:         let do_work = || loop {\n138:             if is_cancelled.load(Ordering::Relaxed) {\n139:                 break;\n140:             }\n141:             let idx = next.fetch_add(1, Ordering::Relaxed);\n142:             if idx >= num_chunks {\n143:                 break;\n144:             }\n145:             let mut guard = slots[idx].lock().unwrap();\n146:             let chunk = guard.take().unwrap();\n147:             let start_y = (idx * chunk_rows) as u32;\n148:             let end_y = ((idx + 1) * chunk_rows).min(out_h as usize) as u32;\n149:             for y in start_y..end_y {\n150:                 let row_in_chunk = (y - start_y) as usize;\n151:                 render_thumbnail_row(\n152:                     metadata,\n153:                     cfa,\n154:                     crop,\n155:                     out_w,\n156:                     out_h,\n157:                     matrix,\n158:                     &sample,\n159:                     &sensor_sample,\n160:                     y,\n161:                     &mut chunk[row_in_chunk * row_bytes..(row_in_chunk + 1) * row_bytes],\n162:                 );\n163:             }\n164:         };\n165: \n166:         std::thread::scope(|scope| {\n167:             let shared_worker = &do_work;\n168:             for worker_index in 1..workers {\n169:                 let _ = std::thread::Builder::new()\n170:                     .name(format!(\"rrrah-thumb-{worker_index}\"))\n171:                     .spawn_scoped(scope, shared_worker);\n172:             }\n173:             loop {\n174:                 if cancelled() {\n175:                     is_cancelled.store(true, Ordering::Relaxed);\n176:                     break;\n177:                 }",
+    "execution": {
+      "status": "rejected",
+      "result": "slots создаются заново внутри develop_with_cancel; AtomicUsize.fetch_add выдаёт каждому worker уникальный idx. Каждый mutex принадлежит одному worker, конкурирующие вызовы имеют разные slots. Удержание lock не создаёт предполагаемую очередь между запросами.",
+      "logs": [
+        "develop-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0055",
+    "path": "scripts/bench-report.py",
+    "symbol": "main",
+    "line": 301,
+    "sha256": "fd068bab67999cecfb1d15e905baa570439c66b9d1b5c96f1894b99f541dfbfe",
+    "source_context": "293:     for key, samples in sorted(grouped.items()):\n294:         samples.sort(key=lambda item: item[0])\n295:         warmups = samples[: args.warmup]\n296:         values = [value for _, value in samples[args.warmup :]]\n297:         if not values:\n298:             continue\n299:         metrics = sample_metrics(values, bootstrap_samples=args.bootstrap, seed=args.seed)\n300:         if args.exclude_outliers and metrics.get(\"n_used\", len(values)) < len(values):\n301:             # The unfiltered metrics remain available under ``all_samples``.\n302:             outlier_indices = set(robust_outliers(values))\n303:             all_metrics = copy.deepcopy(metrics)\n304:             metrics = sample_metrics(\n305:                 [v for i, v in enumerate(values) if i not in outlier_indices],\n306:                 bootstrap_samples=args.bootstrap,\n307:                 seed=args.seed,\n308:             )\n309:             metrics[\"all_samples\"] = all_metrics\n310:         row: dict[str, Any] = dict(zip(fields, key))\n311:         row.update(metrics)\n312:         row[\"warmup_discarded\"] = len(warmups)\n313:         row[\"samples_ms\"] = values\n314:         row[\"warnings\"] = []\n315:         if len(values) < 30 and str(row.get(\"mode\", \"\")).lower() not in {\"export\", \"batch-export\"}:\n316:             row[\"warnings\"].append(\"n<30: latency CI is exploratory\")\n317:         if len(values) < 10:\n318:             row[\"warnings\"].append(\"n<10: do not use for release gate\")\n319:         groups.append(row)\n320: \n321:     # Compare modes within a fixture against the no-persistent-cache series.\n322:     # The legacy CSV called this ``cold-no-cache``; retain both spellings while\n323:     # keeping the newer name honest about OS page-cache state.\n324:     for fixture in sorted({group[\"fixture\"] for group in groups}):\n325:         baseline = next(\n326:             (\n327:                 g\n328:                 for g in groups\n329:                 if g[\"fixture\"] == fixture\n330:                 and g[\"mode\"] in {\"cold-no-cache\", \"no-persistent-cache\"}\n331:             ),\n332:             None,\n333:         )",
+    "execution": {
+      "status": "verified",
+      "result": "JSON отчёт публикуется через уникальный tempfile в том же каталоге, flush/fsync и os.replace; прежний mode сохраняется. POSIX flock сериализует writers с deadline 5 с и позволяет следующему writer удалить собственные orphan temp. Реальные SIGKILL до/после replace и конкурентный читатель не видят частичный JSON.",
+      "logs": [
+        "python-regressions.log",
+        "bench-report-existing-tests.log"
+      ],
+      "remaining": "Квалифицирован локальный POSIX/macOS filesystem. SIGKILL может оставить tempfile до следующей публикации; постоянный .lock намеренно сохраняется. Нет заявления о power-loss durability, NFS, Windows или несогласованных сторонних writers. CLI/report schema сохранены."
+    }
+  },
+  {
+    "id": "RR-0056",
+    "path": "crates/rrrah-cache/src/swap.rs",
+    "symbol": "new_with_budgets",
+    "line": 289,
+    "sha256": "46a20f4ba55b9ac29be7bd2bbc857d2582c32392793977b0ee8fa23363b439f1",
+    "source_context": "281:                     if worker_cancel.load(Ordering::Acquire) {\n282:                         break;\n283:                     }\n284:                     let command = if config.limits.ttl.is_some() {\n285:                         // A busy command stream must not keep resetting TTL\n286:                         // maintenance. In particular, barriers do not touch LRU.\n287:                         let now = std::time::Instant::now();\n288:                         if now >= next_maintenance {\n289:                             if let Ok(mut index) = worker_index.lock() {\n290:                                 index.prune_expired();\n291:                             }\n292:                             next_maintenance = now + maintenance_period;\n293:                         }\n294:                         let wait = next_maintenance.saturating_duration_since(std::time::Instant::now());\n295:                         match commands.recv_timeout(wait) {\n296:                             Ok(command) => command,\n297:                             Err(mpsc::RecvTimeoutError::Timeout) => continue,\n298:                             Err(mpsc::RecvTimeoutError::Disconnected) => break,\n299:                         }\n300:                     } else {\n301:                         match commands.recv() {\n302:                             Ok(command) => command,\n303:                             Err(_) => break,\n304:                         }\n305:                     };\n306:                     match command {\n307:                         Command::Barrier(done) => {\n308:                             let _ = done.send(());\n309:                         }\n310:                         Command::Spill(key, mosaic, _reservation, generation, _pending) => {\n311:                             let cancelled = || {\n312:                                 worker_cancel.load(Ordering::Acquire)\n313:                                     || worker_generation.load(Ordering::Acquire) != generation\n314:                             };\n315:                             if cancelled() {\n316:                                 worker_counters.dropped.fetch_add(1, Ordering::Relaxed);\n317:                                 continue;\n318:                             }\n319:                             let result = (|| -> Result<(), Box<dyn std::error::Error>> {\n320:                                 let bytes = mosaic.payload_len()?;\n321:                                 if bytes > config.limits.max_bytes || config.limits.max_entries == Some(0) {",
+    "execution": {
+      "status": "partial",
+      "result": "Подтверждён unlink swap payload внутри TTL index mutex. Реальные файлы, A/A и A/B при 1/2/4 читателях: p95 wait ratio 0.033/0.027/0.046 при drain+drop после unlock. Этот кандидат не внедрён: дополнительный Vec всех expired payloads не допущен бюджетом, а cleanup tails нестабильны. Held handles остаются читаемыми; quota возвращается в 0.",
+      "logs": [
+        "cache-swap-tests.log",
+        "swap-ttl-pairs.log",
+        "swap-ttl-summary.json"
+      ],
+      "remaining": "Нужен ограниченный по памяти протокол извлечения/удаления expired payloads и повторные парные замеры с большими TTL batches, конкурирующими put/get, отменой и admission gates. Малый синхронизированный benchmark не квалифицирует production worker или общее ускорение. Production TTL путь пока сохранён."
+    }
+  },
+  {
+    "id": "RR-0057",
+    "path": "crates/rrrah-vector/src/pdf.rs",
+    "symbol": "decode",
+    "line": 170,
+    "sha256": "ef05ad1e0acf8c9352e75b41650f711b1a9c09c6c9f3e6e303079e5373d02472",
+    "source_context": "162:             curve_cancellation\n163:                 .as_ref()\n164:                 .is_some_and(crate::GenerationToken::is_cancelled)\n165:         })),\n166:         fill_curve_admission: Some(Arc::new(move |bytes| {\n167:             match curve_budget.try_reserve(bytes as u64) {\n168:                 Ok(guard) => Some(Box::new(guard) as Box<dyn std::any::Any + Send + Sync>),\n169:                 Err(error) => {\n170:                     *curve_error.lock().unwrap() = Some(error);\n171:                     None\n172:                 }\n173:             }\n174:         })),\n175:         warning_sink: Arc::new(move |warning| {\n176:             use hayro::hayro_interpret::InterpreterWarning;\n177:             let flag = match warning {\n178:                 InterpreterWarning::UnsupportedFont => 1,\n179:                 InterpreterWarning::ImageDecodeFailure => 2,\n180:                 InterpreterWarning::FillCurveLimit => 4,\n181:                 InterpreterWarning::ShadingDecodeFailure => 8,\n182:             };\n183:             warnings.fetch_or(flag, Ordering::Relaxed);\n184:         }),\n185:         ..Default::default()\n186:     };\n187:     let mut render_cache = hayro::RenderCache::new();\n188:     render_cache.shading_cancelled = settings.fill_curve_cancelled.clone();\n189:     render_cache.shading_admission = settings.fill_curve_admission.clone();\n190:     let shading_warning = settings.warning_sink.clone();\n191:     render_cache.shading_failed = Some(Arc::new(move || {\n192:         shading_warning(hayro::hayro_interpret::InterpreterWarning::ShadingDecodeFailure)\n193:     }));\n194:     let pixmap = hayro::render(\n195:         page,\n196:         &render_cache,\n197:         &settings,\n198:         &hayro::RenderSettings {\n199:             width: Some(width),\n200:             height: Some(height),\n201:             x_scale: unit,\n202:             y_scale: unit,",
+    "execution": {
+      "status": "rejected",
+      "result": "curve_error mutex создаётся на один PDF decode; lock выполняет только присвоение ошибки budget callback. В нормальной ветке lock не берётся, независимые decode не делят mutex. Гипотеза длинной общей критической секции не подтверждена.",
+      "logs": [
+        "pdf-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0058",
+    "path": "crates/rrrah-decode/src/heif.rs",
+    "symbol": "decode",
+    "line": 181,
+    "sha256": "d2b29a3a18d4a7488d873bdafe328ce0e8c84a8c4dc1878105ed1eb5d57a91fe",
+    "source_context": "173:     let pixels = if high {\n174:         let depth = image\n175:             .bits_per_pixel(Channel::Interleaved)\n176:             .ok_or_else(|| invalid(\"missing sample depth\"))?;\n177:         if !(9..=16).contains(&depth) || plane.storage_bits_per_pixel != 64 {\n178:             return Err(invalid(\"unexpected 16-bit RGBA storage\"));\n179:         }\n180:         let maximum = (1u32 << depth) - 1;\n181:         let mut out = Vec::with_capacity(width as usize * height as usize * 4);\n182:         for row in plane.data.chunks_exact(plane.stride).take(height as usize) {\n183:             request.check_cancelled()?;\n184:             for value in row[..row_bytes].chunks_exact(2) {\n185:                 let value = u32::from(u16::from_be_bytes([value[0], value[1]]));\n186:                 if value > maximum {\n187:                     return Err(invalid(\"sample exceeds declared depth\"));\n188:                 }\n189:                 out.push(((value * 65535 + maximum / 2) / maximum) as u16);\n190:             }\n191:         }\n192:         RasterPixels::Rgba16(if let Some(reservation) = output_reservation {\n193:             reservation\n194:                 .try_adopt(out)\n195:                 .map_err(crate::DecodeError::Memory)?\n196:                 .into()\n197:         } else {\n198:             Arc::new(out).into()\n199:         })\n200:     } else {\n201:         if plane.storage_bits_per_pixel != 32 || plane.bits_per_pixel != 8 {\n202:             return Err(invalid(\"unexpected 8-bit RGBA storage\"));\n203:         }\n204:         let mut out = Vec::with_capacity(width as usize * height as usize * 4);\n205:         for row in plane.data.chunks_exact(plane.stride).take(height as usize) {\n206:             request.check_cancelled()?;\n207:             out.extend_from_slice(&row[..row_bytes]);\n208:         }\n209:         RasterPixels::Rgba8(if let Some(reservation) = output_reservation {\n210:             reservation\n211:                 .try_adopt(out)\n212:                 .map_err(crate::DecodeError::Memory)?\n213:                 .into()",
+    "execution": {
+      "status": "rejected",
+      "result": "HEIF RGBA output уже создаётся with_capacity(width*height*4) после проверки размера и reservation. Выход удерживает pixel storage; точное резервирование не новое изменение. Нативные libheif tests выполнены на этой машине.",
+      "logs": [
+        "heif-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0059",
+    "path": "crates/rrrah-texture/src/sti.rs",
+    "symbol": "decode",
+    "line": 88,
+    "sha256": "a6d73c700122cf0f34f03fcc19ad4b039058717953c8c8af85c2730afdb05d9c",
+    "source_context": "80:     let source = &b[data_start + offset..data_start + offset + length];\n81:     let samples = width * height * 4;\n82:     let credit = request\n83:         .memory_budget\n84:         .as_ref()\n85:         .map(|m| m.try_reserve(samples as u64))\n86:         .transpose()\n87:         .map_err(DecodeError::Memory)?;\n88:     let mut output = Vec::new();\n89:     output\n90:         .try_reserve_exact(samples)\n91:         .map_err(|e| DecodeError::Memory(rrrah_core::BufferError::Allocate(e)))?;\n92:     output.resize(samples, 0u8);\n93:     let write = |out: &mut [u8], index: u8| -> Result<(), RasterDecodeError> {\n94:         let color = palette\n95:             .get(index as usize * 3..index as usize * 3 + 3)\n96:             .ok_or_else(|| bad(\"palette index\"))?;\n97:         out[..3].copy_from_slice(color);\n98:         out[3] = if flags & 1 != 0 && index as usize == u32at(12) {\n99:             0\n100:         } else {\n101:             255\n102:         };\n103:         Ok(())\n104:     };\n105:     if compressed {\n106:         let mut at = 0;\n107:         for y in 0..height {\n108:             request.check_cancelled()?;\n109:             let mut x = 0;\n110:             loop {\n111:                 let control = *source.get(at).ok_or_else(|| bad(\"truncated ETRLE\"))?;\n112:                 at += 1;\n113:                 if control == 0 {\n114:                     if x != width {\n115:                         return Err(bad(\"short ETRLE row\"));\n116:                     }\n117:                     break;\n118:                 }\n119:                 let run = (control & 127) as usize;\n120:                 if run == 0 || run > width - x {",
+    "execution": {
+      "status": "rejected",
+      "result": "STI заранее резервирует samples, reconciles capacity и credit; выход удерживается raster. Отмеченный Vec::new не означает повторных аллокаций.",
+      "logs": [
+        "texture-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  },
+  {
+    "id": "RR-0060",
+    "path": "crates/rrrah-develop/src/raster.rs",
+    "symbol": "hdr_to_linear_srgb",
+    "line": 298,
+    "sha256": "5e6d6e9df1856a052a6361c5fd9d7a3213e90fedd3c993401e524d22e7f5740c",
+    "source_context": "290:             .map(|b| {\n291:                 b.try_reserve(\n292:                     (count as u64)\n293:                         .checked_mul(4)\n294:                         .ok_or(rrrah_memory::BufferError::Overflow)?,\n295:                 )\n296:             })\n297:             .transpose()?;\n298:         let mut output = Vec::new();\n299:         output\n300:             .try_reserve_exact(count)\n301:             .map_err(|_| RasterError::Allocation)?;\n302:         // Exact integer PQ results avoid millions of repeated powers. Scratch is\n303:         // optional: constrained callers retain the scalar path and its output budget.\n304:         let expand_code = |value: f64| {\n305:             if narrow_rgb {\n306:                 let (maximum, scale) = match &self.pixels {\n307:                     RasterPixels::Rgba8(_) => (255., 1.),\n308:                     RasterPixels::Rgba16(_) => (65535., 256.),\n309:                     RasterPixels::Rgba32Float(_) => unreachable!(),\n310:                 };\n311:                 ((value * maximum).round() - 16. * scale) / (219. * scale)\n312:             } else {\n313:                 value\n314:             }\n315:         };\n316:         let pq = |value: f64| {\n317:             let value = expand_code(value);\n318:             let sign = if narrow_rgb { value.signum() } else { 1. };\n319:             let p = value.abs().powf(32.0 / 2523.0);\n320:             let linear =\n321:                 ((p - 107.0 / 128.0).max(0.0) / (2413.0 / 128.0 - 2392.0 / 128.0 * p)).powf(8192.0 / 1305.0);\n322:             sign * linear * 10000.0 / f64::from(reference_white_nits)\n323:         };\n324:         let entries = if hlg.is_none() && count >= 4 * 65536 {\n325:             match &self.pixels {\n326:                 RasterPixels::Rgba8(_) => 256,\n327:                 RasterPixels::Rgba16(_) => 65536,\n328:                 RasterPixels::Rgba32Float(_) => 0,\n329:             }\n330:         } else {",
+    "execution": {
+      "status": "rejected",
+      "result": "HDR CPU conversion заранее резервирует output(count). PQ LUT ограничен бюджетом, scalar fallback сохраняет работоспособность при тесном бюджете. Повторное exact reserve уже реализовано; тесты не требуют физического HDR дисплея.",
+      "logs": [
+        "develop-tests.log"
+      ],
+      "remaining": "Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным."
+    }
+  }
+]

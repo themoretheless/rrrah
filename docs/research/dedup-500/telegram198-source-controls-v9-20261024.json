@@ -1,0 +1,137 @@
+{
+  "repository": "botnick/telegram-media-downloader",
+  "commit": "5162cff1474ac2f3d0fb109bc1b6156d214cd33b",
+  "whole_file_reads": [
+    {
+      "path": "src/core/ai/dbscan.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/03-dbscan.js",
+      "sha256": "dcdfec7f6c995cdedae28c501cacb5a2884a93968f0b889af4ce833b739ff168"
+    },
+    {
+      "path": "src/core/gocore/hash.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/07-hash.js",
+      "sha256": "999ee048aab1e8a7515f50401aea6d45382f0495d698aaa541af6e9a42c7f2cf"
+    },
+    {
+      "path": "src/core/cluster/dedup.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/06-dedup.js",
+      "sha256": "987243b8c20a0495661816c8b0a9afbf0ef1f627dfff4cf8f821c9c9169954a9"
+    },
+    {
+      "path": "tests/contract/dedup.contract.test.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/08-dedup.contract.test.js",
+      "sha256": "62d640edf159823fd59a5196ced7055d4b82de27ced60009cd1ad2be03e0d125"
+    },
+    {
+      "path": "src/core/dedup.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/02-dedup.js",
+      "sha256": "3d9cc9c8a340e224a3c457e4f60d314bac9eee9bf51c3f3e7e750434f1c97ae9"
+    },
+    {
+      "path": "src/core/checksum.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/checksum.js",
+      "sha256": "52925e7a9cc19930faec6754273dde94be253c39e3204033a706fb5aa9c0dd24"
+    },
+    {
+      "path": "src/core/cluster/peers.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/cluster/peers.js",
+      "sha256": "d14135d0cd56fc536ac396c5f686a599e3657af20be572f0e24ac1eadc880686"
+    },
+    {
+      "path": "tests/ai/dbscan.test.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/tests/ai/dbscan.test.js",
+      "sha256": "cd51b5e676816b078b4707f53381cfec6123940f18eba3b43261d48d0cf04540"
+    }
+  ],
+  "original_tests_run": 13,
+  "authored_controls": 14,
+  "control_source": "docs/research/dedup-500/telegram198-controls-20261024/dbscan-control.mjs",
+  "results": "docs/research/dedup-500/telegram198-controls-20261024/dbscan-control-results.json",
+  "scope": "Actual unchanged complete ESM module,Node numeric synthetic vectors only. No real faces,download,Telegram,DB/model.",
+  "findings": [
+    "Documented nonstandard noise-to-border behavior reproduces insertion-order membership difference.",
+    "Chain endpoints1.5 apart share cluster at eps0.8,minPts2;density connectivity is not pairwise duplicate equality.",
+    "Offline peer fixture passes lookup despite online-only docstring;actual peer-status domain/callers unqualified.",
+    "clusterRefPath coerces remoteId to Number;above2^53 rounds,actual id domain pending.",
+    "Hash wrapper streams whole file only for outside-core path error;unavailable core errors propagate. No actual core/hash runtime tested.",
+    "Complete contract test file read,9 it bodies identified;not executed and snapshot harness assertions not yet reviewed.",
+    "Actual owned hardlink and symlink aliases of same inode produce distinct fileKey values;implementation uses normalized path rather than inode/realpath identity. Downstream deletion/reclaim behavior not executed.",
+    "Catch-up scan selects only NULL hashes and stored positive sizes;no in-function source metadata revalidation before reuse/update. Other invalidation code still unreviewed,so no global stale-hash claim.",
+    "Already-aborted scan still emits final done progress with processed total;static finding not runtime tested.",
+    "Already-aborted original findDuplicates reproduced with DB adapters:zero page/hash calls yet final done processed3/total3 and scanned3. UI/caller interpretation still unreviewed.",
+    "Peer registry explicitly implements markOffline with status offline and passes status through toPublic;prior offline fixture uses real domain value. Lookup still only excludes revoked;DB lookup SQL/caller may add filtering and remains unreviewed.",
+    "Checksum helper has explicit algorithm/version/hex validator and dynamic GoCore import;no inode/mtime/source generation contract in helper itself.",
+    "DB findClusterByHash SQL applies only hash/optional size and LIMIT5,no peer status filter. Combined with lookup only rejecting revoked,offline hit is not excluded downstream by SQL.",
+    "Downloader callsite prefers first nonoffline hit but explicitly falls back hits[0];then attempts local unlink and records clusterref. Offline fallback is explicit implementation behavior despite online-only lookup docstring. No real download/unlink/network performed.",
+    "DB LIMIT5 before peer-status filtering can hide other eligible matches beyond first5;SQL/callsite static finding only,not runtime scenario.",
+    "Exact SQL template executed on actual in-memory SQLite six-row fixture:5 revoked-peer catalog rows occupy LIMIT5,existing online sixth row not returned. Combined original lookup then filters all5 out. No ORDER BY guarantees;fixture demonstrates possible missed eligible copy,not universal DB order.",
+    "Original hash wrapper with client outside-error adapter uses actual fs stream/crypto:empty and1048577-byte binary match reference SHA256;missing path ENOENT and unavailable-core error propagate. Actual GoCore service remains untested.",
+    "Original DBSCAN test file explicitly prioritizes exact parity with old nonstandard noise behavior.2 pure original tests pass:empty input and2000-point queue/time-bound case. Does not prove improvement or standard DBSCAN semantics.",
+    "Expanded original test execution to13/16 unique DBSCAN cases:5 labels+5 cluster/byte-centroid comparisons,dimension mismatch,queue bound,empty input pass using actual original wrappers.3 off-thread tests require real GoCore and remain unrun."
+  ],
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "remaining": "Other tracked source/tests/media and runtime qualification remain.",
+  "decision": "numeric-reference-only-no-adoption",
+  "previous_audit": "docs/research/dedup-500/telegram198-source-controls-v8-20261024.json",
+  "cluster_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/cluster-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/cluster-control-results.json",
+    "cases": 3
+  },
+  "filekey_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/filekey-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/filekey-control-results.json",
+    "cases": 2
+  },
+  "abort_control": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/abort-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/abort-control-results.json",
+    "cases": 1
+  },
+  "partial_source_reads": [
+    {
+      "path": "src/core/db.js",
+      "lines_read": [
+        3880,
+        3960
+      ],
+      "sha256": "5af9027c08e2f5c3a353a18903e9015b15476610af5231649c871cc9fabdbdf1",
+      "whole_file_read": false
+    },
+    {
+      "path": "src/core/downloader.js",
+      "lines_read": [
+        1011,
+        1052
+      ],
+      "sha256": "0807ad502bf3603713a6cfe15a163c46e68c657bf7fb54f396506b71eecb7944",
+      "whole_file_read": false
+    },
+    {
+      "path": "src/core/ai/faces.js",
+      "lines_read": [
+        175,
+        310
+      ],
+      "whole_file_read": false,
+      "sha256": "8bf7172364f106bea36e78ed50b41b09a50ef0e680165d1811b57168a8b6a7e0"
+    }
+  ],
+  "catalog_limit_control": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/catalog-limit-control.py",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/catalog-limit-results.json",
+    "cases": 1
+  },
+  "hash_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/hash-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/hash-control-results.json",
+    "cases": 4
+  },
+  "original_tests_passed": 13,
+  "original_pure_tests": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/original-inprocess-tests.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/original-inprocess-test-results.json",
+    "scope": "13 unique original test callbacks,including prior2;unchanged actual dbscan module and extracted in-process faces wrappers. VM registration/expect adapters;3 GoCore-dependent cases remain unrun. No double count."
+  }
+}

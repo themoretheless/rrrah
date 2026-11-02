@@ -1,0 +1,49 @@
+{
+  "checked_at_utc": "2026-11-02T00:10:25.045023+00:00",
+  "source_review": "docs/research/dedup-500/upbrr267-source-review-v1222-20261102.json",
+  "native_sources": {
+    "crates/rrrah-dedup/src/exact.rs": "f0474ac1833d5371719d643138e0164b516b6d56c26a38cc155f191e23c322d4",
+    "crates/rrrah-dedup/tests/exact_files.rs": "0259f98e82c3ce66d09a35ddafbf9eee60c53483ad9a6fe808a2e70a3775e852"
+  },
+  "short_read_receipt": "docs/research/dedup-500/exact-short-read-refresh-20261102-v1.json",
+  "short_read_receipt_still_applies": true,
+  "crosswalk": [
+    {
+      "upstream": "internal/torrentclient/linking.go",
+      "risk": "Independent short reads compared by count",
+      "native": "read_exact_cancelled accumulates complete blocks; four focused tests passed in retained receipt",
+      "status": "focused runtime evidence"
+    },
+    {
+      "upstream": "internal/dvdvideo/graph/graph.go",
+      "risk": "Control-layout heuristic ignores background pixels",
+      "native": "exact scan groups hash candidates then calls equal for full byte comparison; no controls/name heuristic in exact path",
+      "status": "current source inspection"
+    },
+    {
+      "upstream": "internal/imagehosting/service.go",
+      "risk": "Lexical path and extension admission do not prove physical or content identity",
+      "native": "Entry stamps physical identity, regular-file metadata, canonical path; open validates descriptor/path and Unix O_NONBLOCK/O_NOFOLLOW",
+      "status": "source inspection; cross-platform runtime not refreshed"
+    },
+    {
+      "upstream": "internal/releaseworkflow/active_input.go",
+      "risk": "Bounded initial samples do not prove equality",
+      "native": "sample only candidate filter; full digest and byte comparison plus publication observation pass remain",
+      "status": "current source inspection"
+    },
+    {
+      "upstream": "internal/externalidentity/resolver.go",
+      "risk": "Provider identity and metadata may match different physical files",
+      "native": "exact grouping uses observed physical entries and bytes rather than provider identifiers",
+      "status": "current source inspection"
+    }
+  ],
+  "remaining_gaps": [
+    "No atomic filesystem snapshot guarantee against unrestricted concurrent writers",
+    "Windows filesystem/runtime qualification remains separate",
+    "Visual/RAW/ICC/HDR/container precision and resource coverage not established by exact source inspection",
+    "All 500 repository review still incomplete"
+  ],
+  "scope": "Crosswalk from fully read pinned upstream source to current native implementation. No new test execution, no all-case completion claim."
+}

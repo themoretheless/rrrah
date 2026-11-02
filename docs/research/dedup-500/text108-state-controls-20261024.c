@@ -1,0 +1,5 @@
+#define XXH_INLINE_ALL
+#include "xxhash.h"
+#include <assert.h>
+#include <stdio.h>
+int main(void){unsigned char b[4097];for(size_t i=0;i<sizeof b;i++)b[i]=(unsigned char)(i*37+11);size_t sizes[]={0,1,3,16,17,128,129,240,241,1024,4097};for(size_t i=0;i<11;i++){size_t n=sizes[i],half=n/2;XXH3_state_t *s=XXH3_createState(),*copy=XXH3_createState();assert(s&&copy);assert(XXH3_128bits_reset_withSeed(s,123)==XXH_OK);assert(XXH3_128bits_update(s,b,half)==XXH_OK);assert(XXH128_isEqual(XXH3_128bits_digest(s),XXH3_128bits_withSeed(b,half,123)));XXH3_copyState(copy,s);assert(XXH3_128bits_update(s,b+half,n-half)==XXH_OK);assert(XXH3_128bits_update(copy,b+half,n-half)==XXH_OK);XXH128_hash_t h=XXH3_128bits_withSeed(b,n,123);assert(XXH128_isEqual(h,XXH3_128bits_digest(s)));assert(XXH128_isEqual(h,XXH3_128bits_digest(copy)));XXH128_canonical_t c;XXH128_canonicalFromHash(&c,h);assert(XXH128_isEqual(h,XXH128_hashFromCanonical(&c)));XXH3_freeState(s);XXH3_freeState(copy);}puts("11 seeded128 digest-resume/copy/canonical cases passed");}

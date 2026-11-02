@@ -1,0 +1,35 @@
+{
+  "method": "Unmodified four original function AST bodies, isolated Python3 stdlib; temporary fixture files only; no CLI/import/deletion commands executed",
+  "original_test_suite_run": false,
+  "source_sha256": "f6e30a6681f6bbf0291425ef29fdf906e68922b82849be77f7bd16c51cf94571",
+  "controls": [
+    {
+      "name": "Healthy equal small files match",
+      "passed": true
+    },
+    {
+      "name": "Healthy equal-size different small files reject",
+      "passed": true
+    },
+    {
+      "name": "Cached size3 compares only prefix and accepts grown candidate",
+      "passed": true
+    },
+    {
+      "name": "Two missing small files falsely match with nonfatal errors",
+      "passed": true
+    },
+    {
+      "name": "Empty healthy source and missing candidate falsely match with nonfatal errors",
+      "passed": true
+    },
+    {
+      "name": "Short second first4k read returns false rather than raising",
+      "passed": true
+    },
+    {
+      "name": "Equal4096prefix different suffix rejected by MD5",
+      "passed": true
+    }
+  ]
+}

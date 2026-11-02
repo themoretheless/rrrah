@@ -1,0 +1,55 @@
+
+running 2 tests
+test gradient::batch_tests::real_photo_matcher_timing ... real_matcher pair=0:0 features=1142:1142 radius=None batched=false matches=1142 seconds=0.081297208
+real_matcher pair=0:0 features=1142:1142 radius=None batched=true matches=1142 seconds=0.037407750
+real_matcher pair=0:0 features=1142:1142 radius=None batched=true matches=1142 seconds=0.036908375
+real_matcher pair=0:0 features=1142:1142 radius=None batched=false matches=1142 seconds=0.077425750
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=false matches=1142 seconds=0.159098625
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=true matches=1142 seconds=0.074631958
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=true matches=1142 seconds=0.078924375
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) batched=false matches=1142 seconds=0.162481000
+real_matcher pair=0:1 features=1142:1421 radius=None batched=false matches=9 seconds=0.101285917
+real_matcher pair=0:1 features=1142:1421 radius=None batched=true matches=9 seconds=0.045726916
+real_matcher pair=0:1 features=1142:1421 radius=None batched=true matches=9 seconds=0.046382625
+real_matcher pair=0:1 features=1142:1421 radius=None batched=false matches=9 seconds=0.100955333
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=false matches=10 seconds=0.198245292
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=true matches=10 seconds=0.088633625
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=true matches=10 seconds=0.101830959
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) batched=false matches=10 seconds=0.195695125
+real_matcher pair=0:2 features=1142:1476 radius=None batched=false matches=5 seconds=0.106343416
+real_matcher pair=0:2 features=1142:1476 radius=None batched=true matches=5 seconds=0.046802958
+real_matcher pair=0:2 features=1142:1476 radius=None batched=true matches=5 seconds=0.047741375
+real_matcher pair=0:2 features=1142:1476 radius=None batched=false matches=5 seconds=0.106188458
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=false matches=5 seconds=0.207740541
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=true matches=5 seconds=0.094506291
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=true matches=5 seconds=0.095355250
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) batched=false matches=5 seconds=0.205609083
+ok
+test gradient::matching_tests::real_photo_matcher_timing ... real_matcher pair=0:0 features=1142:1142 radius=None bounded=false matches=1142 seconds=0.078376375
+real_matcher pair=0:0 features=1142:1142 radius=None bounded=true matches=1142 seconds=0.076130125
+real_matcher pair=0:0 features=1142:1142 radius=None bounded=true matches=1142 seconds=0.079801625
+real_matcher pair=0:0 features=1142:1142 radius=None bounded=false matches=1142 seconds=0.083263375
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) bounded=false matches=1142 seconds=0.161331916
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) bounded=true matches=1142 seconds=0.140348833
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) bounded=true matches=1142 seconds=0.150826750
+real_matcher pair=0:0 features=1142:1142 radius=Some(64.0) bounded=false matches=1142 seconds=0.161819375
+real_matcher pair=0:1 features=1142:1421 radius=None bounded=false matches=9 seconds=0.099397750
+real_matcher pair=0:1 features=1142:1421 radius=None bounded=true matches=9 seconds=0.127942875
+real_matcher pair=0:1 features=1142:1421 radius=None bounded=true matches=9 seconds=0.130971583
+real_matcher pair=0:1 features=1142:1421 radius=None bounded=false matches=9 seconds=0.099630083
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) bounded=false matches=10 seconds=0.207296959
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) bounded=true matches=10 seconds=0.751634792
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) bounded=true matches=10 seconds=1.052878542
+real_matcher pair=0:1 features=1142:1421 radius=Some(64.0) bounded=false matches=10 seconds=0.565867166
+real_matcher pair=0:2 features=1142:1476 radius=None bounded=false matches=5 seconds=0.291404292
+real_matcher pair=0:2 features=1142:1476 radius=None bounded=true matches=5 seconds=0.275255875
+real_matcher pair=0:2 features=1142:1476 radius=None bounded=true matches=5 seconds=0.446669583
+real_matcher pair=0:2 features=1142:1476 radius=None bounded=false matches=5 seconds=0.187329208
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) bounded=false matches=5 seconds=0.209786042
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) bounded=true matches=5 seconds=0.249167333
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) bounded=true matches=5 seconds=0.250428750
+real_matcher pair=0:2 features=1142:1476 radius=Some(64.0) bounded=false matches=5 seconds=0.196863292
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 134 filtered out; finished in 12.55s
+

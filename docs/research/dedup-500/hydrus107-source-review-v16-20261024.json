@@ -1,0 +1,31 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v15-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/hydrus_api/__init__.py",
+      "local": "73-api.py",
+      "git_blob": "00e8b0047eb62ec2e03cd9a3e863de2f721634c3",
+      "sha256": "d715dacc82e327e9c627c993759ed939a3f443d23afa5246a6430f5c5b76338e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 73,
+  "remaining_without_whole_review": 4,
+  "whole_repo_complete": false,
+  "new_authored_controls": 3,
+  "authored_controls_total": 28,
+  "runtime_report": "docs/research/dedup-500/hydrus107-api-controls-20261024.json",
+  "findings": [
+    "Complete1339line bundled API5.1.0/Client.VERSION70 read.",
+    "JSON request without access key and without explicit headers raises KeyError(headers) before session request; reproduced with recording requests replacement. Normal authenticated JSON control passed.",
+    "get_file sets stream=True and no timeout; dedup FileHasher accesses response.content, loading whole input. No measured memory or timeout run.",
+    "Client owns/accepts requests.Session but has no explicit close/context lifecycle methods. Resource behavior not measured.",
+    "No yield_chunks call in this API module; earlier nonpositive helper finding not shown reachable in dedup pipeline.",
+    "get_services returns raw JSON; utility mapping compatibility remains unqualified."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

@@ -1,0 +1,70 @@
+{
+  "repository": "lindameng-0/laconic",
+  "commit": "832ff90fd63a8659483f66a2f0bb3348fcda7990",
+  "whole_files_read": [
+    {
+      "path": "laconic/exceptions.py",
+      "git_blob": "8c47305b41916ad46ff15ba5c5c240a03f42d9d6",
+      "sha256": "d37497768252f2354b2cafdd805d67cbd5090e14858eef75b06f9d163a141c1f",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_dedup.py",
+      "git_blob": "893015684a8c6054dba8743407578e9b112b4d2b",
+      "sha256": "521e524672e45dccf9c4e610ed838c02bd4dded9124c29f60a65d13cf2d704cf",
+      "whole_text_read": true
+    },
+    {
+      "path": "laconic/tokenizers/base.py",
+      "git_blob": "25485e038d7b858511e659e0374ea2a4d9a4a7f5",
+      "sha256": "6b4a938f41717a9677fa7111fa098b1bcea6ffde872c9419652310e78ec9a568",
+      "whole_text_read": true
+    },
+    {
+      "path": "laconic/tokenizers/heuristic.py",
+      "git_blob": "6ede43841b5b526435324bbddee30a44d3e21dfa",
+      "sha256": "81650005d217f1a6ca9d39f6f6deb048e774fb5c4169354f4a97d98743442635",
+      "whole_text_read": true
+    },
+    {
+      "path": "laconic/compress/segments.py",
+      "git_blob": "cbcd7e9a5e08ee6cf7e12967f4ed8d7c676ebe58",
+      "sha256": "10cc519141a2ab91d66365b17b87e3a37bc99897a695701441973065448cbae3",
+      "whole_text_read": true
+    },
+    {
+      "path": "laconic/dedup/store.py",
+      "git_blob": "7ec8e242742ead76979a376c2bed85744c7f0d97",
+      "sha256": "a24ee6390b11ed29095723d4d7b27b3b6948b7ac5eee63422042fe9767360805",
+      "whole_text_read": true
+    },
+    {
+      "path": "laconic/dedup/session.py",
+      "git_blob": "86f82bca6702dc07c27ea190dc3e18ac7a5638bf",
+      "sha256": "161c1b4e4a2bd2f2626f48cdd0c3be82552145b228170e70bec4493f9cedc923",
+      "whole_text_read": true
+    },
+    {
+      "path": "laconic/dedup/__init__.py",
+      "git_blob": "946670b3e9f80cd0650e267b1fb049534e1d9e6b",
+      "sha256": "67d6cfcac9245e8f0f60e5e3584665c1869d210e1dd43daa37cead1ff096d223",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "tracked_blobs": 90,
+  "whole_repo_complete": false,
+  "original_test_bodies_passed": 12,
+  "authored_controls_passed": 3,
+  "controls": "laconic156-controls-20261024",
+  "scope": "Unchanged original session/store/segments/counter/exception modules;12 original test function bodies replayed with actual HeuristicCounter;namespaceinit bypass explicit,not fullpytest/CLI suite;owned synthetic strings only",
+  "full_session_control_scope": "Original fullSessionDedup/store/segments/HeuristicCounter graph;actual40bit SHA256collision between long owned text blocks;no actualLLM/provider/server/tool installs",
+  "findings": [
+    "Actual SHA256 prefix40bit collision overwrites original text under samehandle;rehydration returns other content.",
+    "Store accepts arbitrary handleprefix with same digest.",
+    "Two distinct sufficiently long blocks produce identical references;secondprocess overwrites store and earlier reference rehydrates secondblock."
+  ],
+  "initial_attempt": "Initial long-prefix bounded2M search found no collision;retained negative result,not evidence against collision.Then alternate owned prefixes with1.2M searchcap each found actualcollision and fullsession control passed.",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

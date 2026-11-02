@@ -1,0 +1,41 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v5-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "scripts/mcp_dedup_test.sh",
+      "local": "05-mcp_dedup_test.sh",
+      "git_blob": "6929541804cd16815e7af60c9594734dd6be67f1",
+      "sha256": "4158c348ab462bbcd1fa4a9e3db5ca821d1a770e3cee6733df298d9b6d7a2078",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/tui/widgets/dedup.rs",
+      "local": "07-dedup.rs",
+      "git_blob": "155d2162c32e71fb39270026eec38aa27c657a30",
+      "sha256": "284d2ddd63be07579c22df0b87eee3a10bc68babb91d4f30ebdd958af5295d68",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "593ff969c8067cf200ad4365cc3164cfd8f3669c",
+      "sha256": "fb39ba2bf742117476aa78301357fdc86aff3a993da50bde0eed357253ff6a37",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "whole_repo_complete": false,
+  "runtime_report": "docs/research/dedup-500/orchestrator110-script-controls-20261024.json",
+  "new_authored_script_controls": 1,
+  "findings": [
+    "Originalscriptwithfailingownedbinaryandemptyoutputreturns0andTestComplete;noassertiondedupstats/backendcallcount. Timeout/sleeprecordingreplacements,notliveMCP.",
+    "Script||trueignoresbackend/timeoutfailures,missingresponseprintsnotfoundwithoutfailing.",
+    "TUIwidgetformatsApp-providedcountersonly;its5testscovernumberformattingnotdedupaccuracyandnotrunhere.",
+    "RootMIT2025contributorsfullyread;dependencylicensesnotyetqualified;noproductionadoption."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

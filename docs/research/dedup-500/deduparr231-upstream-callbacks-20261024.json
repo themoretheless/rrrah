@@ -1,0 +1,220 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original test method bodies and standalone disk module; pytest fixture injection replaced with fresh service and temporary directory per method. Original fixture decorators removed, package conftest and full pytest suite not run. No external services.",
+  "callbacks": 42,
+  "passed": 42,
+  "failed": 0,
+  "results": [
+    {
+      "name": "TestIsSampleFile.test_sample_in_filename",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_sample_in_directory",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_trailer_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_preview_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_rarbg_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_sample_with_separators",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_normal_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestIsSampleFile.test_empty_path",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_is_video_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_normalize_filename_basic",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_normalize_filename_quality_markers",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_normalize_filename_audio_codecs",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_normalize_filename_language_tags",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_normalize_filename_release_group",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_normalize_filename_case_sensitivity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_extract_year",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_extract_episode_info_s01e01_format",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_extract_episode_info_1x01_format",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_extract_episode_info_season_episode_format",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_extract_episode_info_no_match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_are_hardlinks_same_inode",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_are_hardlinks_different_inodes",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_are_hardlinks_nonexistent_files",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_scan_directory_empty",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_scan_directory_with_videos",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_scan_directory_excludes_samples",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_scan_directory_recursive",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_group_by_normalized_name_movies",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_group_by_normalized_name_episodes",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_process_groups_removes_hardlinked_groups",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_process_groups_keeps_true_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_process_groups_mixed_hardlinks_and_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_filter_hardlinks_keeps_true_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_filter_hardlinks_mixed_hardlinks_and_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_find_duplicate_movies_empty_directory",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_find_duplicate_movies_no_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_find_duplicate_movies_with_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_find_duplicate_movies_nonexistent_directory",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_find_duplicate_episodes_with_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_disk_file_info_structure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_case_sensitivity_different_directories",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "TestDiskScanService.test_complex_quality_markers_removed",
+      "passed": true,
+      "error": null
+    }
+  ]
+}

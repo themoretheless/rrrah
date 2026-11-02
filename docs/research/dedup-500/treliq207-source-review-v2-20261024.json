@@ -1,0 +1,28 @@
+{
+  "index": 207,
+  "repository": "mahsumaktas/treliq",
+  "commit": "754d487cc4fbaa2ed41a59abd416938904133a10",
+  "whole_file_reads": [
+    {
+      "path": "src/core/dedup.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/02-dedup.ts",
+      "sha256": "c80cfb6898bab6d907f12a0d107cea0bb60d9398a8a9af50407fdcf91f62c4a5"
+    }
+  ],
+  "whole_file_read_count": 1,
+  "tracked_blob_count": 105,
+  "tests_run": 0,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Whole335-line dedup engine read. relatedThreshold controls edges;duplicateThreshold stored but unused in this file. Union-find forms transitive connected components,not all-pairs similarity;average only accepted edges,not all member pairs. No file/image content equality.",
+    "Embedding batch assigns results without dimension/count/finite validation;short batch can omit items while marking batchDone. Cosine loops first vector length only,zero norm returns0,dimension mismatch may NaN/asymmetric;not runtime reproduced. Items mutated embedding/duplicateGroup;numeric number alone identifies PR/issue,caller uniqueness must be checked.",
+    "Optional LLM verifies only20 largest clusters;parse/network failure keeps originals without verified flag. Subgroup membership accepts duplicates/overlap and may leave omitted items stale duplicateGroup;no executed counterexample yet. VectorStore connect asynchronous not awaited before large-set use;implementation pending.",
+    "Three authored controls executed original class body with dependency adapters:chain endpoints cosine0.5 appear together under0.8 edge threshold;short successful batch silently omits item without fallback;LLM subgroup excludes item3 but leaves its duplicateGroup0. No actual provider/vectorstore/concurrency qualification;two harness setup failures corrected before successful execution."
+  ],
+  "remaining": "Other source/tests/assets,real providers/LanceDB and runtime unreviewed.",
+  "previous_audit": "docs/research/dedup-500/treliq207-source-review-v1-20261024.json",
+  "authored_controls_run": 3,
+  "controls": "docs/research/dedup-500/evidence/mahsumaktas--treliq/dedup-boundary-control-results.json"
+}

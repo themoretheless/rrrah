@@ -241,6 +241,94 @@ mod tests {
     }
 
     #[test]
+    fn staged_file_every_budget_refusal_releases_credit_and_retries() {
+        let path = std::env::temp_dir().join(format!("rrrah-eps-budget-{}.eps", std::process::id()));
+        std::fs::write(&path, CODE).unwrap();
+        let request = DecodeRequest::new(&path);
+        let policy = EpsRasterColorPolicy::DeviceGrayRgbAsSrgb;
+        let root = MemoryBudget::new(100_000);
+        let reference = decode_eps_file_document(&request, 1., policy, limits(), &root).unwrap();
+        let peak = root.peak();
+        let RasterPixels::Rgba8(expected) = reference.pixels() else {
+            panic!()
+        };
+        let mut refusals = 0;
+        for limit in 0..=peak {
+            let budget = MemoryBudget::new(limit);
+            match decode_eps_file_document(&request, 1., policy, limits(), &budget) {
+                Ok(output) => {
+                    let RasterPixels::Rgba8(actual) = output.pixels() else {
+                        panic!()
+                    };
+                    assert_eq!(&actual[..], &expected[..]);
+                    assert_eq!(budget.used(), 64);
+                }
+                Err(error) => {
+                    assert!(error.memory_error().is_some(), "limit={limit}: {error:?}");
+                    refusals += 1;
+                }
+            }
+            assert_eq!(budget.used(), 0, "limit={limit}");
+            assert!(budget.peak() <= limit);
+        }
+        assert!(refusals > 0);
+        let retried = decode_eps_file_document(&request, 1., policy, limits(), &root).unwrap();
+        let RasterPixels::Rgba8(actual) = retried.pixels() else {
+            panic!()
+        };
+        assert_eq!(&actual[..], &expected[..]);
+        drop(retried);
+        drop(reference);
+        assert_eq!(root.used(), 0);
+        std::fs::remove_file(path).unwrap();
+        eprintln!(
+            "EPS staged file: {} byte-exact budgets, {refusals} typed refusals, exact retry, final root=0",
+            peak + 1
+        );
+    }
+
+    #[test]
+    fn staged_document_every_cancellation_checkpoint_releases_credit_and_retries() {
+        let policy = EpsRasterColorPolicy::DeviceGrayRgbAsSrgb;
+        let budget = MemoryBudget::new(100_000);
+        let mut checkpoints = 0;
+        let reference = decode_eps_document(CODE, 1., policy, limits(), &budget, || {
+            checkpoints += 1;
+            false
+        })
+        .unwrap();
+        let RasterPixels::Rgba8(expected) = reference.pixels() else {
+            panic!()
+        };
+        for stop in 1..=checkpoints {
+            let root = MemoryBudget::new(100_000);
+            let mut calls = 0;
+            let output = decode_eps_document(CODE, 1., policy, limits(), &root, || {
+                calls += 1;
+                calls >= stop
+            });
+            let error = output.unwrap_err();
+            assert!(
+                error.to_string().contains("cancel"),
+                "checkpoint={stop}: {error:?}"
+            );
+            assert_eq!(root.used(), 0, "checkpoint={stop}");
+            let retry = decode_eps_document(CODE, 1., policy, limits(), &root, || false).unwrap();
+            let RasterPixels::Rgba8(actual) = retry.pixels() else {
+                panic!()
+            };
+            assert_eq!(&actual[..], &expected[..]);
+            drop(retry);
+            assert_eq!(root.used(), 0);
+        }
+        drop(reference);
+        assert_eq!(budget.used(), 0);
+        eprintln!(
+            "EPS staged document: {checkpoints} cancellation checkpoints, exact retries, final roots=0"
+        );
+    }
+
+    #[test]
     fn bounded_file_source_cap_and_retained_output_share_root() {
         let path = std::env::temp_dir().join(format!(
             "rrrah-eps-import-{}-{}.eps",

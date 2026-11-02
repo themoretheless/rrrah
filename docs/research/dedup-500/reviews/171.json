@@ -2,7 +2,7 @@
   "index": 171,
   "repository": "icodywu/minhash-dedup",
   "commit": "aa5825b2f3fa1f100e477370cd212f02f30bf755",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All37pinnedtextfiles whollyread;all67originaltests pass,0skip;28authoredcontrols. No trackedimages. RealSlurm/S3/corpus/performance unqualified.",
   "decision": "reference",
   "finding": "Bucket-feasible MinHash selection explicitly differs from connected-component grouping; useful false-transitivity lesson.",
   "available_source_evidence": [
@@ -50,7 +50,7 @@
   "license_metadata": "Apache-2.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 7,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,11 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/minhash171-complete-source-review-20261024.json",
+  "authored_controls_run": 28,
+  "full_repository_read": true,
+  "upstream_test_scope": "13analysis+12partition+6pipeline+18support+11checkpoints+6elastic+1chain=67uniqueoriginaltestbodies,0skip. Actualoriginalpackage/local/memoryfsspec/NumPy/Numba. Launcher test intentionally uses upstream shell scheduler/conda mocks;driver test uses original submission tail after site-specific exports. No realSlurm/S3.",
+  "original_tests_run": 67,
+  "source_review_complete": true
 }

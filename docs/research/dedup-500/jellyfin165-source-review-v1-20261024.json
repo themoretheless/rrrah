@@ -1,0 +1,59 @@
+{
+  "repository": "SloMR/jellyfin-plugin-dedupe-continue-watching",
+  "commit": "373cab0f7602e2d24047bed641114835e140abc5",
+  "whole_file_count": 5,
+  "tree_blob_count": 16,
+  "reviewed_whole_files": [
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/Middleware/DedupMiddleware.cs",
+      "sha256": "c63fc7d4a3fd8fa1dab5ca1b0bc1024fa8ef9c3f19cd3404d3bb41469de41cb7",
+      "git_blob_sha1": "4cceaaef590cf2aa7255faf2c611698aa0143af0",
+      "whole_file_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/Plugin.cs",
+      "sha256": "dc9bb9b7aff2141d92b38c7e77190e570a3b9b54ff23f313942019d7d57677d3",
+      "git_blob_sha1": "d0b20f9edf31fb5e350f83459746f0eeadc09a64",
+      "whole_file_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/PluginServiceRegistrator.cs",
+      "sha256": "6cd6e7da088a2fb8682401748127defb1ece8d6f710d3b0944f0438760b358fb",
+      "git_blob_sha1": "8b0b1f3a455a7ee71c3d1c7988e1499ed0d93efe",
+      "whole_file_read": true
+    },
+    {
+      "path": "build.ps1",
+      "sha256": "d232bc015ce88784c47e621ec1ccee5cbb51422c9ff571bd54d5a93f3765df7a",
+      "git_blob_sha1": "e7540c5dfaba96397687d54f90b651f79c26e04b",
+      "whole_file_read": true
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/Configuration/PluginConfiguration.cs",
+      "sha256": "7c9bd2949571452d91f9cc0147403b97be197dca98b6c62acc727b6205908592",
+      "git_blob_sha1": "35027f8aa8a824fe0ac3b0bdaf0f9615c0852cfa",
+      "whole_file_read": true
+    }
+  ],
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "source_scope": "Five pinned source/build files wholly read. README/license/image and other tracked files not wholly reviewed in this audit.",
+  "original_tests_run": 0,
+  "authored_controls_run": 5,
+  "runtime_scope": "Original complete middleware and configuration; real ASP.NET DefaultHttpContext and .NET streams; two Jellyfin type seams; no Jellyfin server/media accessed",
+  "controls": "docs/research/dedup-500/jellyfin165-controls-20261024/results.txt",
+  "findings": [
+    "Original complete middleware: downstream handler writes owned bytes then throws; InvokeAsync swallows exception and returns zero bytes.",
+    "DeduplicateMovies=true and MaxEpisodesPerSeries=2 retains two same-Id movies: common group cap applies to movie records too.",
+    "Latest episode selection and surviving input ordering pass.",
+    "Unrelated request path and malformed JSON preserve owned input bytes.",
+    "Grouping by SeriesId or movie Id is metadata presentation policy, not media-content equality."
+  ],
+  "not_qualified": [
+    "real Jellyfin server lifecycle",
+    "video content matching",
+    "network/compression integration",
+    "all tracked repository artifacts"
+  ],
+  "deferred": "pHash.org/ASAN unchanged"
+}

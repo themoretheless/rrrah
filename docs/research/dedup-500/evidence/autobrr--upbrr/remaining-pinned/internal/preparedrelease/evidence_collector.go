@@ -1,0 +1,423 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package preparedrelease
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"strings"
+	"sync"
+
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	"github.com/autobrr/upbrr/internal/externalidentity"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+// EvidencePipeline is the single private collection port owned by canonical
+// preparation. Ordering and intermediate mutable evidence stay behind it.
+type EvidencePipeline interface {
+	CollectPreparationEvidence(context.Context, preparationstate.Request) (preparationstate.State, error)
+}
+
+type privateResourcesPipeline interface {
+	HydratePrivateResources(context.Context, preparationstate.Request) (preparationstate.State, error)
+}
+
+// EvidenceCollector adapts the existing evidence pipeline to canonical grouped
+// facts while canonical identity/persistence ownership moves out of metadata.
+// It also supplies the resulting provider candidate to externalidentity.
+type EvidenceCollector struct {
+	pipeline EvidencePipeline
+	mu       sync.Mutex
+	pending  map[string]externalidentity.CandidateEvidence
+}
+
+// NewEvidenceCollector requires a collection pipeline and owns the one-use,
+// per-source candidate handoff consumed during canonical identity resolution.
+func NewEvidenceCollector(pipeline EvidencePipeline) (*EvidenceCollector, error) {
+	if pipeline == nil {
+		return nil, errors.New("prepared release: metadata evidence pipeline is required")
+	}
+	return &EvidenceCollector{
+		pipeline: pipeline,
+		pending:  make(map[string]externalidentity.CandidateEvidence),
+	}, nil
+}
+
+// Collect runs the canonical evidence sequence without identity persistence and
+// maps its result into non-aliased fact groups.
+func (c *EvidenceCollector) Collect(
+	ctx context.Context,
+	request preparationstate.Request,
+) (CollectedFacts, error) {
+	if c == nil || c.pipeline == nil {
+		return CollectedFacts{}, errors.New("prepared release: evidence collector is not initialized")
+	}
+	meta, err := c.pipeline.CollectPreparationEvidence(ctx, request)
+	if err != nil {
+		return CollectedFacts{}, fmt.Errorf("prepared release: collect preparation evidence: %w", err)
+	}
+	if canonicalSourceKey(meta.SourcePath) != canonicalSourceKey(request.Manifest.SourcePath) {
+		return CollectedFacts{}, fmt.Errorf("prepared release: collected source differs from manifest: %w", internalerrors.ErrInvalidInput)
+	}
+	meta.ProviderMetadata = cloneCollectedProviderMetadata(meta.ProviderMetadata)
+	if err := applyBlurayFactInstruction(&meta, request.Input.Instructions.BlurayReleaseID); err != nil {
+		return CollectedFacts{}, err
+	}
+
+	candidate := externalidentity.CandidateEvidence{
+		Identity:   cloneCollectedIdentity(meta.Identity),
+		Metadata:   cloneCollectedProviderMetadata(meta.ProviderMetadata),
+		Candidates: cloneCollectedCandidates(meta.ExternalIdentityCandidates),
+	}
+	candidate.Identity.SourcePath = request.Manifest.SourcePath
+	candidate.Metadata.SourcePath = request.Manifest.SourcePath
+	c.mu.Lock()
+	c.pending[canonicalSourceKey(request.Manifest.SourcePath)] = candidate
+	c.mu.Unlock()
+
+	return mapCollectedFacts(meta), nil
+}
+
+// HydratePrivateResources delegates restart-only reconstruction of local
+// preparation artifacts without rerunning canonical identity resolution.
+func (c *EvidenceCollector) HydratePrivateResources(
+	ctx context.Context,
+	request preparationstate.Request,
+) (CollectedResources, error) {
+	if c == nil || c.pipeline == nil {
+		return CollectedResources{}, errors.New("prepared release: evidence collector is not initialized")
+	}
+	pipeline, ok := c.pipeline.(privateResourcesPipeline)
+	if !ok {
+		return CollectedResources{}, errors.New("prepared release: metadata pipeline cannot hydrate private resources")
+	}
+	state, err := pipeline.HydratePrivateResources(ctx, request)
+	if err != nil {
+		return CollectedResources{}, fmt.Errorf("prepared release: hydrate private resources: %w", err)
+	}
+	if canonicalSourceKey(state.SourcePath) != canonicalSourceKey(request.Manifest.SourcePath) {
+		return CollectedResources{}, fmt.Errorf("prepared release: hydrated source differs from manifest: %w", internalerrors.ErrInvalidInput)
+	}
+	return collectedResources(state), nil
+}
+
+func applyBlurayFactInstruction(meta *preparationstate.State, releaseID string) error {
+	releaseID = strings.TrimSpace(releaseID)
+	if releaseID == "" {
+		return nil
+	}
+	if meta == nil || meta.ProviderMetadata.Bluray == nil || !meta.ProviderMetadata.Bluray.SelectCandidate(releaseID, false, "manual") {
+		return fmt.Errorf("prepared release: Blu-ray candidate %q: %w", releaseID, internalerrors.ErrNotFound)
+	}
+	candidate := meta.ProviderMetadata.Bluray.SelectedCandidate()
+	if candidate == nil {
+		return fmt.Errorf("prepared release: Blu-ray candidate %q: %w", releaseID, internalerrors.ErrNotFound)
+	}
+	if region := strings.TrimSpace(candidate.Region); region != "" {
+		meta.Region = region
+		meta.Release.Region = region
+	}
+	if publisher := strings.TrimSpace(candidate.Publisher); publisher != "" {
+		meta.Distributor = strings.ToUpper(publisher)
+	}
+	return nil
+}
+
+// ResolveIdentityCandidate supplies and consumes the provider candidate built
+// by the immediately preceding source-scoped collection.
+func (c *EvidenceCollector) ResolveIdentityCandidate(
+	_ context.Context,
+	request externalidentity.Request,
+) (externalidentity.CandidateEvidence, error) {
+	if c == nil {
+		return externalidentity.CandidateEvidence{}, internalerrors.ErrNotFound
+	}
+	key := canonicalSourceKey(request.SourcePath)
+	c.mu.Lock()
+	candidate, ok := c.pending[key]
+	if ok {
+		delete(c.pending, key)
+	}
+	c.mu.Unlock()
+	if !ok {
+		return externalidentity.CandidateEvidence{}, internalerrors.ErrNotFound
+	}
+	return candidate, nil
+}
+
+func mapCollectedFacts(meta preparationstate.State) CollectedFacts {
+	resolved := meta.ResolvedNaming
+	effective := meta.EffectiveMetadata
+	namingStatus := api.NamingStatusComplete
+	if len(meta.ReleaseNameMissing) > 0 {
+		namingStatus = api.NamingStatusIncomplete
+	}
+	missing := make([]api.NamingRequirement, 0, len(meta.ReleaseNameMissing))
+	for _, value := range meta.ReleaseNameMissing {
+		if value = strings.TrimSpace(value); value != "" {
+			missing = append(missing, api.NamingRequirement(value))
+		}
+	}
+	assessments := meta.ReleaseAssessments()
+	assessments.Naming = api.NamingAssessment{Status: namingStatus, Missing: missing}
+	diagnostics := make([]api.PreparationDiagnostic, 0, len(meta.LookupWarnings))
+	for _, warning := range meta.LookupWarnings {
+		if warning = strings.TrimSpace(warning); warning != "" {
+			diagnostics = append(diagnostics, api.PreparationDiagnostic{
+				Code:     "source_lookup_warning",
+				Severity: api.DiagnosticSeverityWarning,
+				Message:  warning,
+			})
+		}
+	}
+	return CollectedFacts{
+		NamingCategory: resolved.Category,
+		Naming: api.NamingFacts{
+			Filename:                 meta.Filename,
+			ReleaseName:              meta.ReleaseName,
+			NameWithoutTag:           meta.ReleaseNameNoTag,
+			CleanName:                meta.ReleaseNameClean,
+			NamePresentation:         meta.ReleaseNamePresentation,
+			GeneratedName:            meta.GeneratedName.Clone(),
+			GeneratedReleaseNames:    meta.GeneratedReleaseNames,
+			Tag:                      meta.Tag,
+			Type:                     resolved.Type,
+			Artist:                   meta.Release.Artist,
+			Title:                    resolved.Title,
+			Subtitle:                 meta.Release.Subtitle,
+			AlternateTitle:           resolved.AlternateTitle,
+			OriginalTitle:            effective.OriginalTitle,
+			Genres:                   append([]string(nil), effective.Genres...),
+			TitleProvenance:          effective.TitleProvenance,
+			AlternateTitleProvenance: effective.AlternateTitleProvenance,
+			OriginalTitleProvenance:  effective.OriginalTitleProvenance,
+			GenresProvenance:         effective.GenresProvenance,
+			YearProvenance:           effective.YearProvenance,
+			Year:                     resolved.Year,
+			Month:                    meta.Release.Month,
+			Day:                      meta.Release.Day,
+			Version:                  meta.Release.Version,
+			Source:                   resolved.Source,
+			Resolution:               resolved.Resolution,
+			Codecs:                   append([]string(nil), meta.Release.Codec...),
+			Audio:                    append([]string(nil), meta.Release.Audio...),
+			HDR:                      append([]string(nil), meta.Release.HDR...),
+			Extension:                meta.Release.Ext,
+			Languages:                append([]string(nil), meta.Release.Language...),
+			Site:                     meta.Release.Site,
+			Genre:                    resolved.Genre,
+			Channels:                 meta.Channels,
+			Collection:               meta.Release.Collection,
+			Region:                   meta.Region,
+			Size:                     meta.Release.Size,
+			Group:                    strings.TrimPrefix(strings.TrimSpace(meta.Tag), "-"),
+			Disc:                     meta.Release.Disc,
+			EditionSet:               meta.EditionSet,
+			Cuts:                     singletonFact(meta.Cut),
+			Presentations:            singletonFact(meta.Presentation),
+			Editions:                 singletonFact(meta.Edition),
+			Other:                    append([]string(nil), meta.Release.Other...),
+			Scene:                    meta.Scene,
+			SceneName:                meta.SceneName,
+			Personal:                 meta.PersonalRelease,
+		},
+		Episode: api.EpisodeFacts{
+			Season:            meta.SeasonInt,
+			Episode:           meta.EpisodeInt,
+			SeasonLabel:       meta.SeasonStr,
+			EpisodeLabel:      meta.EpisodeStr,
+			DailyDate:         meta.DailyEpisodeDate,
+			Pack:              meta.TVPack,
+			Title:             resolved.EpisodeTitle,
+			Overview:          meta.EpisodeOverview,
+			Year:              meta.EpisodeYear,
+			AiredDate:         meta.TVDBAiredDate,
+			AirDays:           append([]string(nil), meta.TVDBAirsDays...),
+			AirTime:           meta.TVDBAirsTime,
+			AirTimezone:       meta.TVDBAirsTimezone,
+			AirTimezoneSource: meta.TVDBAirsTimezoneSource,
+			DateMatched:       meta.TMDBDateMatch,
+		},
+		Media: api.MediaFacts{
+			AudioLanguages:                       append([]string(nil), meta.AudioLanguages...),
+			SubtitleLanguages:                    append([]string(nil), meta.SubtitleLanguages...),
+			TrackAudioLanguages:                  append([]string(nil), meta.TrackAudioLanguages...),
+			TrackSubtitleLanguages:               append([]string(nil), meta.TrackSubtitleLanguages...),
+			Tracks:                               cloneCollectedMediaTracks(meta.MediaTracks),
+			PrimaryAudioTrackID:                  meta.PrimaryAudioTrackID,
+			TrackCoverageComplete:                meta.TrackCoverageComplete,
+			AudioLanguagesProvenance:             meta.AudioLanguagesProvenance,
+			SubtitleLanguagesProvenance:          meta.SubtitleLanguagesProvenance,
+			HardcodedSubs:                        meta.HardcodedSubs,
+			HardcodedSubtitleLanguages:           append([]string(nil), meta.HardcodedSubtitleLanguages...),
+			HardcodedSubtitleCoverage:            append([]api.SubtitleLanguageCoverage(nil), meta.HardcodedSubtitleCoverage...),
+			HardcodedSubsProvenance:              meta.HardcodedSubsProvenance,
+			HardcodedSubtitleLanguagesProvenance: meta.HardcodedSubtitleLanguagesProvenance,
+			OriginalLanguage:                     effective.OriginalLanguage,
+			OriginalLanguageProvenance:           effective.OriginalLanguageProvenance,
+			DistributorProvenance:                effective.DistributorProvenance,
+			Container:                            meta.Container,
+			Audio:                                meta.Audio,
+			Channels:                             meta.Channels,
+			Commentary:                           meta.HasCommentary,
+			ThreeD:                               meta.Is3D,
+			Source:                               resolved.Source,
+			Type:                                 resolved.Type,
+			UHD:                                  meta.UHD,
+			HDR:                                  meta.HDR,
+			HDRFacts:                             meta.HDRFacts,
+			Distributor:                          meta.Distributor,
+			Region:                               meta.Region,
+			VideoCodec:                           meta.VideoCodec,
+			VideoEncode:                          meta.VideoEncode,
+			HasEncodeSettings:                    meta.HasEncodeSettings,
+			BitDepth:                             meta.BitDepth,
+			EditionSet:                           meta.EditionSet,
+			Cut:                                  meta.Cut,
+			Presentation:                         meta.Presentation,
+			Edition:                              meta.Edition,
+			Repack:                               meta.Repack,
+			WebDV:                                meta.WebDV,
+			StreamOptimized:                      meta.StreamOptimized,
+			Service:                              meta.Service,
+			ServiceLongName:                      meta.ServiceLongName,
+			MediaInfoUniqueID:                    meta.MediaInfoUniqueID,
+			Anime:                                meta.Anime,
+		},
+		Disc:        collectedDiscFacts(meta),
+		Assessments: assessments,
+		Identity: externalidentity.ResolutionIntent{
+			Title:   resolved.Title,
+			Year:    resolved.Year,
+			Season:  meta.SeasonInt,
+			Episode: meta.EpisodeInt,
+		},
+		Diagnostics: diagnostics,
+		Resources:   collectedResources(meta),
+	}
+}
+
+func cloneCollectedMediaTracks(value []api.MediaTrackFacts) []api.MediaTrackFacts {
+	cloned := make([]api.MediaTrackFacts, len(value))
+	for index, track := range value {
+		cloned[index] = track
+		cloned[index].DetectedLanguages = append([]string(nil), track.DetectedLanguages...)
+		cloned[index].Languages = append([]string(nil), track.Languages...)
+	}
+	return cloned
+}
+
+func singletonFact(value string) []string {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return nil
+	}
+	return []string{value}
+}
+
+func collectedResources(meta preparationstate.State) CollectedResources {
+	return CollectedResources{
+		SourcePath:            firstCollectedSourcePath(meta.Paths),
+		VideoPath:             meta.VideoPath,
+		FileList:              append([]string(nil), meta.FileList...),
+		MediaInfoJSONPath:     meta.MediaInfoJSONPath,
+		MediaInfoTextPath:     meta.MediaInfoTextPath,
+		DVDIFOPath:            meta.DVDIFOPath,
+		DVDVOBPath:            meta.DVDVOBPath,
+		DVDVOBMediaInfoJSON:   meta.DVDVOBMediaInfoJSON,
+		DVDVOBMediaInfoText:   meta.DVDVOBMediaInfoText,
+		SceneNFOPath:          meta.SceneNFOPath,
+		DescriptionTemplate:   meta.DescriptionTemplate,
+		SelectedBDMVPlaylists: clonePlaylists(meta.SelectedBDMVPlaylists),
+		Discs:                 cloneDiscResources(meta.Discs),
+		ClientEvidence:        preparationstate.CloneClientEvidenceSnapshot(meta.ClientEvidence),
+	}
+}
+
+func firstCollectedSourcePath(paths []string) string {
+	for _, sourcePath := range paths {
+		if sourcePath = strings.TrimSpace(sourcePath); sourcePath != "" {
+			return sourcePath
+		}
+	}
+	return ""
+}
+
+func collectedDiscFacts(meta preparationstate.State) api.DiscFacts {
+	facts := api.DiscFacts{Type: meta.DiscType}
+	for _, resource := range meta.Discs {
+		item := api.DiscItemFacts{
+			ID:              resource.ID,
+			Name:            resource.Name,
+			Type:            resource.Type,
+			DurationSeconds: resource.DurationSeconds,
+			DVDVOBSet:       resource.DVDVOBSet,
+		}
+		reportsByID := make(map[string]preparationstate.DiscReportResource, len(resource.Reports))
+		for _, report := range resource.Reports {
+			reportsByID[report.Playlist.ID] = report
+		}
+		for _, playlist := range resource.SelectedPlaylists {
+			report := reportsByID[playlist.ID]
+			item.Reports = append(item.Reports, api.DiscReportFacts{
+				Playlist: playlist,
+				Summary:  strings.TrimSpace(report.Summary),
+			})
+			facts.PlaylistCount++
+		}
+		if len(item.Reports) > 0 {
+			primary := 0
+			for i := 1; i < len(item.Reports); i++ {
+				if item.Reports[i].Playlist.Score > item.Reports[primary].Playlist.Score {
+					primary = i
+				}
+			}
+			item.DurationSeconds = item.Reports[primary].Playlist.Duration
+		}
+		facts.Items = append(facts.Items, item)
+	}
+	facts.PrimaryDiscID, facts.PrimaryReportID, facts.DurationSeconds, facts.DVDVOBSet = facts.CanonicalPrimary()
+	facts.Summary = facts.AggregateSummary()
+	return facts
+}
+
+func cloneCollectedIdentity(value api.ExternalIdentity) api.ExternalIdentity {
+	return value
+}
+
+func cloneCollectedProviderMetadata(value api.SourceScopedMetadata) api.SourceScopedMetadata {
+	cloned, err := cloneWithJSON(value)
+	if err != nil {
+		panic(err)
+	}
+	return cloned
+}
+
+func cloneCollectedCandidates(value []api.ExternalIdentityCandidate) []api.ExternalIdentityCandidate {
+	cloned, err := cloneWithJSON(value)
+	if err != nil {
+		panic(err)
+	}
+	return cloned
+}
+
+func clonePlaylists(value []api.PlaylistInfo) []api.PlaylistInfo {
+	cloned, err := cloneWithJSON(value)
+	if err != nil {
+		panic(err)
+	}
+	return cloned
+}
+
+func cloneDiscResources(value []preparationstate.DiscResource) []preparationstate.DiscResource {
+	cloned, err := cloneWithJSON(value)
+	if err != nil {
+		panic(err)
+	}
+	return cloned
+}

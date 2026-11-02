@@ -40,6 +40,8 @@ pub struct LocalFilePolicy {
 pub enum LocalComparisonMode {
     Strict,
     Photometric(PhotometricPolicy),
+    /// Unit-white anchored fitting with strict evidence retained.
+    WhiteAnchoredDisplay(PhotometricPolicy),
     RangePhotometric {
         photometric: PhotometricPolicy,
         range: crate::warp::FitSampleRange,
@@ -72,7 +74,7 @@ pub(crate) fn validate_search(policy: LocalSearchPolicy) -> Result<(), ScanError
     validate(policy.local).map_err(|_| ScanError::InvalidPolicy)?;
     match policy.comparison {
         LocalComparisonMode::Strict => {}
-        LocalComparisonMode::Photometric(p) => {
+        LocalComparisonMode::Photometric(p) | LocalComparisonMode::WhiteAnchoredDisplay(p) => {
             crate::warp::validate_photometric_policy(p).map_err(|_| ScanError::InvalidPolicy)?;
         }
         LocalComparisonMode::RangePhotometric { photometric, range }
@@ -311,7 +313,7 @@ fn compare_local_files_impl(
         left,
         right,
         policy,
-        (photometric_policy, filter_policy, None, false),
+        (photometric_policy, filter_policy, None, false, false),
         None,
         budget,
         cancel,
@@ -322,23 +324,34 @@ type ComparisonSignals = (
     Option<(ColorFilterPolicy, crate::warp::PhotometricFitMode)>,
     Option<crate::warp::FitSampleRange>,
     bool,
+    bool, // white-anchored fit
 );
 
 fn comparison_signals(mode: LocalComparisonMode) -> ComparisonSignals {
     match mode {
-        LocalComparisonMode::Strict => (None, None, None, false),
-        LocalComparisonMode::Photometric(p) => (Some(p), None, None, false),
+        LocalComparisonMode::Strict => (None, None, None, false, false),
+        LocalComparisonMode::Photometric(p) => (Some(p), None, None, false, false),
         LocalComparisonMode::RangePhotometric { photometric, range } => {
-            (Some(photometric), None, Some(range), false)
+            (Some(photometric), None, Some(range), false, false)
         }
         LocalComparisonMode::DisplayProjection { photometric, range } => {
-            (Some(photometric), None, Some(range), true)
+            (Some(photometric), None, Some(range), true, false)
         }
+        LocalComparisonMode::WhiteAnchoredDisplay(p) => (
+            Some(p),
+            None,
+            Some(crate::warp::FitSampleRange {
+                minimum: 0.0,
+                maximum: 1.0,
+            }),
+            true,
+            true,
+        ),
         LocalComparisonMode::Filtered {
             photometric,
             filter,
             fit,
-        } => (Some(photometric), Some((filter, fit)), None, false),
+        } => (Some(photometric), Some((filter, fit)), None, false, false),
     }
 }
 
@@ -452,7 +465,7 @@ fn validate_selected_policy(
     policy: LocalFilePolicy,
     signals: ComparisonSignals,
 ) -> Result<(), LocalFileError> {
-    let (photometric_policy, filter_policy, fit_range, _) = signals;
+    let (photometric_policy, filter_policy, fit_range, _, _) = signals;
     if let Some(range) = fit_range {
         crate::warp::validate_fit_range(range)?;
     }
@@ -475,7 +488,12 @@ fn verify_selected_photometric(
     let policy = signals.0.ok_or(WarpError::Invalid)?;
     let range = signals.2;
     let display_projection = signals.3;
-    if display_projection {
+    if signals.4 {
+        crate::warp::verify_photometric_white_anchored_display_projection(
+            source, target, transform, policy, cancel,
+        )
+        .map(|value| value.projected.evidence)
+    } else if display_projection {
         let range = range.ok_or(WarpError::Invalid)?;
         crate::warp::verify_photometric_display_projection(source, target, transform, policy, range, cancel)
             .map(|value| value.projected.evidence)
@@ -488,6 +506,33 @@ fn verify_selected_photometric(
         verify_photometric_bidirectional(source, target, transform, policy, cancel)
     }
 }
+/// Experimental automatic geometry plus white-anchored display confirmation.
+/// Preserves strict residuals, source guards and caller coverage/match thresholds.
+/// Returned candidates are visual evidence, never exact identity.
+#[allow(clippy::too_many_arguments)]
+pub fn compare_local_files_white_anchored(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    policy: LocalFilePolicy,
+    photometric: PhotometricPolicy,
+    spatial: Option<SpatialFeaturePolicy>,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<LocalFileEvidence, LocalFileError> {
+    if let Some(grid) = spatial {
+        validate_spatial(grid, policy.extract.max_features)?;
+    }
+    compare_local_files_selected(
+        left,
+        right,
+        policy,
+        comparison_signals(LocalComparisonMode::WhiteAnchoredDisplay(photometric)),
+        spatial,
+        budget,
+        cancel,
+    )
+}
+
 fn compare_local_files_selected(
     left: &DecodeRequest,
     right: &DecodeRequest,
@@ -546,7 +591,7 @@ pub fn compare_local_files_projective(
         left,
         right,
         policy,
-        (None, None, None, false),
+        (None, None, None, false, false),
         None,
         budget,
         cancel,
@@ -636,6 +681,37 @@ fn compare_local_file_views_with_extractor<T>(
         verify,
     )
 }
+// Develop sensor scratch before retaining the raster peer. Return values retain
+// caller order, so geometry, fitting direction and reported evidence are unchanged.
+// Header routing is only a scheduling hint: errors fall back to normal decoding.
+fn decode_pair_bounded(
+    left: &DecodeRequest,
+    right: &DecodeRequest,
+    limits: AnimationBudget,
+    budget: &MemoryBudget,
+    cancel: impl Fn() -> bool,
+) -> Result<(crate::raster::NormalizedRaster, crate::raster::NormalizedRaster), CachedError> {
+    if cancel() {
+        return Err(CachedError::Pixels(crate::pixels::PixelError::Cancelled));
+    }
+    let sensor_first = matches!(
+        rrrah_decode::image_source_kind(right),
+        Ok(rrrah_decode::ImageSourceKind::Sensor)
+    ) && matches!(
+        rrrah_decode::image_source_kind(left),
+        Ok(rrrah_decode::ImageSourceKind::Raster)
+    );
+    if sensor_first {
+        let b = decode_selected_frame_bounded(right, limits, budget, &cancel)?;
+        let a = decode_selected_frame_bounded(left, limits, budget, &cancel)?;
+        Ok((a, b))
+    } else {
+        let a = decode_selected_frame_bounded(left, limits, budget, &cancel)?;
+        let b = decode_selected_frame_bounded(right, limits, budget, &cancel)?;
+        Ok((a, b))
+    }
+}
+
 #[allow(clippy::too_many_arguments)] // Share source/dependency and sticky-cancellation guards across descriptors.
 fn compare_local_file_views_with_matcher<T, F>(
     left: &DecodeRequest,
@@ -658,22 +734,22 @@ fn compare_local_file_views_with_matcher<T, F>(
 ) -> Result<T, LocalFileError> {
     validate_selected_policy(policy, signals)?;
     let latch = Cell::new(false);
+    let request_cancelled = || {
+        [left, right].iter().any(|r| {
+            r.cancellation
+                .as_ref()
+                .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
+        })
+    };
     let cancelled = || {
-        let value = latch.get()
-            || cancel()
-            || [left, right].iter().any(|r| {
-                r.cancellation
-                    .as_ref()
-                    .is_some_and(rrrah_decode::GenerationToken::is_cancelled)
-            });
+        let value = latch.get() || cancel() || request_cancelled();
         latch.set(value);
         value
     };
     let result = (|| {
         let first = ContentSnapshot::read(&left.path, policy.decode.max_file_bytes, cancelled)?;
         let second = ContentSnapshot::read(&right.path, policy.decode.max_file_bytes, cancelled)?;
-        let a = decode_selected_frame_bounded(left, policy.decode, budget, cancelled)?;
-        let b = decode_selected_frame_bounded(right, policy.decode, budget, cancelled)?;
+        let (a, b) = decode_pair_bounded(left, right, policy.decode, budget, cancelled)?;
         let av = a
             .view(cancelled)
             .map_err(crate::decode::FileError::from)
@@ -688,12 +764,20 @@ fn compare_local_file_views_with_matcher<T, F>(
         let evidence = verify(&av, &bv, matches, &cancelled)?;
         first.verify(cancelled)?;
         second.verify(cancelled)?;
+        // A user callback can edit either file; no user calls follow this guard.
+        if cancelled() {
+            return Err(LocalFileError::Cancelled);
+        }
+        let passive_cancel = || latch.get() || request_cancelled();
+        first.verify(&passive_cancel)?;
+        second.verify(&passive_cancel)?;
         Ok(evidence)
     })();
-    if cancelled() {
-        Err(LocalFileError::Cancelled)
-    } else {
-        result
+    match result {
+        Ok(evidence) if !latch.get() && !request_cancelled() => Ok(evidence),
+        Ok(_) => Err(LocalFileError::Cancelled),
+        Err(_) if cancelled() => Err(LocalFileError::Cancelled),
+        Err(error) => Err(error),
     }
 }
 #[derive(Debug)]
@@ -732,6 +816,11 @@ fn verify_selected_filter(
             crate::warp::PhotometricFitMode::RejectOutsidePolicy => {
                 verify_filtered_photometric_with_color(source, target, transform, policy, filter, &cancel)
             }
+            crate::warp::PhotometricFitMode::WhiteAnchoredLeastSquares => {
+                crate::warp::verify_filtered_photometric_white_anchored(
+                    source, target, transform, policy, filter, &cancel,
+                )
+            }
             crate::warp::PhotometricFitMode::ConstrainedLeastSquares => {
                 crate::warp::verify_filtered_photometric_constrained(
                     source, target, transform, policy, filter, &cancel,
@@ -750,6 +839,32 @@ fn confirm_local_models(
     signals: ComparisonSignals,
     cancel: impl Fn() -> bool,
 ) -> Result<LocalFileEvidence, LocalFileError> {
+    confirm_local_models_with_fit(
+        source,
+        target,
+        correspondences,
+        models,
+        policy,
+        signals,
+        cancel,
+        |transform, cancel| verify_selected_photometric(source, target, transform, signals, cancel),
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn confirm_local_models_with_fit(
+    source: &crate::linear::LinearRgbaView<'_>,
+    target: &crate::linear::LinearRgbaView<'_>,
+    correspondences: Vec<Correspondence>,
+    models: [Option<GeometryEvidence>; 2],
+    policy: LocalFilePolicy,
+    signals: ComparisonSignals,
+    cancel: impl Fn() -> bool,
+    fit: impl Fn(
+        crate::geometry::Transform,
+        &dyn Fn() -> bool,
+    ) -> Result<BidirectionalPhotometricEvidence, WarpError>,
+) -> Result<LocalFileEvidence, LocalFileError> {
     let mut geometry = None;
     let mut pixels = None;
     let mut photometric = None;
@@ -761,10 +876,7 @@ fn confirm_local_models(
     // accepted residuals refer to the returned model and original decoded views.
     for model in models.into_iter().rev().flatten() {
         let strict = verify_bidirectional(source, target, model.transform, policy.pixels, &cancel)?;
-        let fit_result = signals
-            .0
-            .map(|_| verify_selected_photometric(source, target, model.transform, signals, &cancel))
-            .transpose();
+        let fit_result = signals.0.map(|_| fit(model.transform, &cancel)).transpose();
         let mut auxiliary_failure = None;
         let fitted = match fit_result {
             Ok(value) => value,
@@ -1214,7 +1326,7 @@ pub(crate) fn compare_reflected_local_files_selected(
         right,
         policy,
         spatial,
-        (photometric_policy, None, None, false),
+        (photometric_policy, None, None, false, false),
         budget,
         cancel,
     )
@@ -1229,7 +1341,7 @@ pub(crate) fn compare_reflected_local_files_with_signals(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<ReflectedLocalFileEvidence, LocalFileError> {
-    let (photometric_policy, filter_policy, fit_range, _) = signals;
+    let (photometric_policy, filter_policy, fit_range, _, _) = signals;
     validate(policy)?;
     if let Some(range) = fit_range {
         crate::warp::validate_fit_range(range)?;
@@ -1260,8 +1372,7 @@ pub(crate) fn compare_reflected_local_files_with_signals(
     let result = (|| {
         let first = ContentSnapshot::read(&left.path, policy.decode.max_file_bytes, cancelled)?;
         let second = ContentSnapshot::read(&right.path, policy.decode.max_file_bytes, cancelled)?;
-        let a = decode_selected_frame_bounded(left, policy.decode, budget, cancelled)?;
-        let b = decode_selected_frame_bounded(right, policy.decode, budget, cancelled)?;
+        let (a, b) = decode_pair_bounded(left, right, policy.decode, budget, cancelled)?;
         let av = a
             .view(cancelled)
             .map_err(crate::decode::FileError::from)
@@ -1317,7 +1428,7 @@ fn confirm_reflected_models(
         correspondences,
         models,
         policy,
-        (photometric_policy, None, None, false),
+        (photometric_policy, None, None, false, false),
         cancel,
     )
 }
@@ -1329,12 +1440,17 @@ fn verify_reflected_filter(
     signals: ReflectedSignals,
     cancel: impl Fn() -> bool,
 ) -> Result<Option<FilteredPhotometricEvidence>, WarpError> {
-    let (photometric_policy, filter_policy, _, _) = signals;
+    let (photometric_policy, filter_policy, _, _, _) = signals;
     photometric_policy
         .zip(filter_policy)
         .map(|(fit, (filter, mode))| match mode {
             crate::warp::PhotometricFitMode::RejectOutsidePolicy => {
                 crate::warp::verify_reflected_filtered_photometric(
+                    source, target, transform, fit, filter, &cancel,
+                )
+            }
+            crate::warp::PhotometricFitMode::WhiteAnchoredLeastSquares => {
+                crate::warp::verify_reflected_filtered_photometric_white_anchored(
                     source, target, transform, fit, filter, &cancel,
                 )
             }
@@ -1357,7 +1473,7 @@ fn confirm_reflected_models_with_signals(
     signals: ReflectedSignals,
     cancel: impl Fn() -> bool,
 ) -> Result<ReflectedLocalFileEvidence, LocalFileError> {
-    let (photometric_policy, filter_policy, fit_range, _) = signals;
+    let (photometric_policy, filter_policy, fit_range, _, _) = signals;
     let mut geometry = None;
     let mut pixels = None;
     let mut photometric = None;
@@ -1379,7 +1495,12 @@ fn confirm_reflected_models_with_signals(
         let fitted_result = photometric_policy
             .map(|fit| {
                 let transform = model.similarity.transform;
-                if signals.3 {
+                if signals.4 {
+                    crate::warp::verify_reflected_photometric_white_anchored_display_projection(
+                        source, target, transform, fit, &cancel,
+                    )
+                    .map(|value| value.projected.evidence)
+                } else if signals.3 {
                     crate::warp::verify_reflected_photometric_display_projection(
                         source,
                         target,
@@ -1763,6 +1884,7 @@ mod reflected_model_confirmation_tests {
                 Some((filter, crate::warp::PhotometricFitMode::RejectOutsidePolicy)),
                 None,
                 false,
+                false,
             ),
             || false,
         )
@@ -1801,9 +1923,9 @@ mod reflected_model_confirmation_tests {
             maximum: 1.,
         };
         for signals in [
-            (Some(fit), None, None, false),
-            (Some(fit), None, Some(range), false),
-            (Some(fit), None, Some(range), true),
+            (Some(fit), None, None, false, false),
+            (Some(fit), None, Some(range), false, false),
+            (Some(fit), None, Some(range), true, false),
         ] {
             let result = confirm_local_models(
                 &source,
@@ -1823,7 +1945,7 @@ mod reflected_model_confirmation_tests {
             assert!(result.photometric_failure.is_none() && result.filtered.is_none());
         }
         let checks = Cell::new(0);
-        let signals = (Some(fit), None, Some(range), true);
+        let signals = (Some(fit), None, Some(range), true, false);
         let expected = confirm_local_models(
             &source,
             &target,
@@ -1882,7 +2004,7 @@ mod reflected_model_confirmation_tests {
                 Vec::new(),
                 [Some(good), Some(bad)],
                 policy,
-                (Some(too_small), None, None, false),
+                (Some(too_small), None, None, false, false),
                 || false
             ),
             Err(LocalFileError::Pixels(WarpError::Budget))
@@ -1906,7 +2028,7 @@ mod reflected_model_confirmation_tests {
                 Vec::new(),
                 [Some(model(31.)), Some(model(10.))],
                 policy,
-                (Some(fit), None, Some(range), display),
+                (Some(fit), None, Some(range), display, false),
                 || false,
             )
             .unwrap();
@@ -2097,7 +2219,7 @@ fn compare_projective_registered_selected(
         left,
         right,
         policy,
-        (None, None, None, false),
+        (None, None, None, false, false),
         spatial,
         budget,
         cancel,
@@ -2307,7 +2429,7 @@ pub fn compare_local_files_projective_photometric(
         left,
         right,
         p.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         p.spatial,
         budget,
         cancel,
@@ -2687,7 +2809,7 @@ fn compare_gradient_pyramid_selected<T>(
         left,
         right,
         p.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         budget,
         cancel,
         |view, cancel| {
@@ -2837,7 +2959,7 @@ pub fn compare_local_files_projective_pyramid_photometric(
         left,
         right,
         p,
-        (None, None, None, false),
+        (None, None, None, false, false),
         budget,
         cancel,
         |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
@@ -2897,7 +3019,7 @@ pub fn compare_local_files_projective_pyramid_filter_portfolio(
         left,
         right,
         p.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         budget,
         cancel,
         |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
@@ -3067,7 +3189,7 @@ fn compare_projective_pyramid_region_domains(
         left,
         right,
         p.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         budget,
         cancel,
         |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
@@ -3278,7 +3400,7 @@ pub fn compare_local_files_projective_portfolio(
         left,
         right,
         policy.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         policy.spatial,
         budget,
         cancel,
@@ -3358,7 +3480,7 @@ pub(crate) fn validate_projective_portfolio_file_policy(
             return Err(GeometryError::Budget.into());
         }
     }
-    validate_selected_policy(policy.local, (None, None, None, false))?;
+    validate_selected_policy(policy.local, (None, None, None, false, false))?;
     Ok(())
 }
 
@@ -3735,7 +3857,7 @@ fn compare_local_files_projective_complementary_gradient_portfolio_inner(
         left,
         right,
         p.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         budget,
         cancel,
         |view, cancel| crate::pyramid::extract_oriented_pyramid_managed(view, pyramid, budget, cancel),
@@ -3958,7 +4080,7 @@ fn compare_region_grid_transform(
         left,
         right,
         policy.search.local,
-        (None, None, None, false),
+        (None, None, None, false, false),
         budget,
         cancel,
         |_, cancel| {

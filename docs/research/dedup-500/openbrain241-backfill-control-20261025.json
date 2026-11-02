@@ -1,0 +1,6 @@
+{
+  "scope": "Original run_backfill with mocked batch RPC and no-op sleep; no HTTP/env secrets/DB",
+  "identical_no_progress_batches": 3,
+  "confirmed": "Global remainder labeled true orphans after repeated newest batch; repeated processed counts reported complete",
+  "output": "=== BACKFILL CONNECTIONS (batch_size=50) ===\n\n  Batch 1: 50 thoughts \u2192 0 connections  (remaining: 100)\n  Batch 2: 50 thoughts \u2192 0 connections  (remaining: 100)\n  Batch 3: 50 thoughts \u2192 0 connections  (remaining: 100)\n\n  Stopping: 100 thoughts have no matches above 0.75 threshold (true orphans)\n\n=== COMPLETE \u2014 150 thoughts processed, 0 connections created ===\n"
+}

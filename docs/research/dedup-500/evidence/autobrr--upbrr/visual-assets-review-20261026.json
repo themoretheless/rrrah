@@ -1,0 +1,88 @@
+{
+  "commit": "9566623c314b3b17caa9fa3668a6496f0574720d",
+  "assets": [
+    {
+      "path": "documentation/static/img/favicon.ico",
+      "frames": [
+        [
+          16,
+          16
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          48,
+          48
+        ]
+      ],
+      "all_frames_viewed_via_exact_embedded_png_extraction": true
+    },
+    {
+      "path": "documentation/static/img/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "viewed_directly": true
+    },
+    {
+      "path": "webui/public/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "viewed_directly": true
+    },
+    {
+      "path": "webui/public/favicon-16x16.png",
+      "width": 16,
+      "height": 16,
+      "viewed_directly": true
+    },
+    {
+      "path": "webui/public/favicon-32x32.png",
+      "width": 32,
+      "height": 32,
+      "viewed_directly": true
+    },
+    {
+      "path": "webui/public/favicon.ico",
+      "frames": [
+        [
+          16,
+          16
+        ],
+        [
+          32,
+          32
+        ],
+        [
+          48,
+          48
+        ]
+      ],
+      "all_frames_viewed_via_exact_embedded_png_extraction": true
+    },
+    {
+      "path": "webui/public/icon-192.png",
+      "width": 192,
+      "height": 192,
+      "viewed_directly": true
+    },
+    {
+      "path": "webui/public/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "viewed_directly": true
+    }
+  ],
+  "visual_observation": "All directly viewed PNGs and all six ICO embedded frames depict the same pale green running rabbit logo with green outline, eye and left-side motion strokes. Small icons lose fine detail. These are application branding assets, not an image-comparison corpus.",
+  "identity_observations": [
+    "Both ICO files are byte-identical.",
+    "Both 512px PNG files are byte-identical.",
+    "ICO 16px/32px PNG payloads match corresponding standalone PNG files byte-for-byte."
+  ],
+  "ico_frame_manifest": "docs/research/dedup-500/evidence/autobrr--upbrr/ico-frame-extracts-20261026/manifest.json",
+  "limitations": [
+    "ICO direct viewer rejected the container; all embedded PNG frames were extracted as exact byte ranges and individually viewed.",
+    "Visual source-asset review does not prove rrrah decoder support, duplicate-detection recall or browser rendering."
+  ]
+}

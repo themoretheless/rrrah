@@ -1,0 +1,38 @@
+{
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff",
+    "--verify-known-shift"
+  ],
+  "environment": {
+    "RRRAH_EXPECTED_SHIFT": "12,12",
+    "RRRAH_FIT_DISPLAY": "1"
+  },
+  "exit_code": 0,
+  "binary_sha256": "b2072e08a43b29dcb2bd268235aff8748eb4b2f3466cddab2379171f658e666c",
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-known-display.log",
+  "log_sha256": "d9db310ba5318b5ac73e6d6a8941e664ce4650cb4dcb362b71d3a2d7e146fc37",
+  "matched_pixels": [
+    "22365932",
+    "21297488",
+    "21472020",
+    "21472020",
+    "21472020",
+    "21472020"
+  ],
+  "compared_pixels": [
+    "24000000",
+    "24000000",
+    "24000000",
+    "24000000",
+    "24000000",
+    "24000000"
+  ],
+  "scope": "Fixed geometry display diagnostic; no production acceptance or policy change.",
+  "display_matched_fraction": [
+    0.9319138333333333,
+    0.8873953333333333
+  ],
+  "interpretation": "Fixed integer geometry still yields reverse display agreement below 90%; estimated transform error alone does not explain the rejection. Development or residual-fit differences remain unresolved."
+}

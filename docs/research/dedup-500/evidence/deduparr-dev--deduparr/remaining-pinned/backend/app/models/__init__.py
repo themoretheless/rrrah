@@ -1,0 +1,18 @@
+"""
+Database models for Deduparr
+"""
+
+from app.models.config import Config
+from app.models.duplicate import DuplicateSet, DuplicateFile, DuplicateStatus, MediaType
+from app.models.history import DeletionHistory
+from app.models.scoring_rule import ScoringRule
+
+__all__ = [
+    "Config",
+    "DuplicateSet",
+    "DuplicateFile",
+    "DuplicateStatus",
+    "MediaType",
+    "DeletionHistory",
+    "ScoringRule",
+]

@@ -2,8 +2,8 @@
   "index": 170,
   "repository": "Davidcreador/pi-dcp",
   "commit": "848689ad96a5f2d615aac4d9d28367a2307d1549",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
+  "review_scope": "All71 tracked artifacts inspected:69 whole text files,1 PNG viewed,1 lock structurally traversed260 records; complete own-source review, runtime partial with94 original test bodies and46 authored controls; full SDK/host/provider/dependency sources not qualified",
+  "decision": "reference-only-no-production-adoption",
   "finding": "Tool-read overlap pruning and path validation; in-flight/context dedup only, no image algorithm.",
   "available_source_evidence": [
     {
@@ -50,7 +50,7 @@
   "license_metadata": "AGPL-3.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 18,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,13 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/pidcp170-own-source-inspection-complete-20261024.json",
+  "full_repository_read": false,
+  "authored_controls_run": 46,
+  "upstream_test_scope": "87 unique original test bodies exercised. New10 selection/benchmark cases: raw original fixture4pass6fail; canonical-path fixture adapter10pass. Prior77 scopes preserved in previous audits; no full Pi/SDK/live service qualification. Additional7 unchanged original lifecycle bodies pass in generated subset omitting actual SDK read test/import; canonical fixture adapter retained. Original94 distinct test bodies exercised, not all original files/imports/host.",
+  "original_tests_run": 94,
+  "complete_source_review": "docs/research/dedup-500/pidcp170-own-source-inspection-complete-20261024.json",
+  "source_review_complete": true,
+  "full_repository_inspection": true
 }

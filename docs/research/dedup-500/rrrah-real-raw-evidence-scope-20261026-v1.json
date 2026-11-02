@@ -1,0 +1,59 @@
+{
+  "prior_evidence": "docs/research/dedup-independent-raw-raster-qualification.json",
+  "prior_evidence_sha256": "644f19acee2db90a0f18c3b310e6f4a51fd7944336f7b81ef4e57ec0582a2e52",
+  "scope": "Independent full-resolution LibRaw rendered TIFF versus native RAW development global fingerprint evidence; no pixel/local duplicate decision",
+  "current_probe_sha256": "b4bbb3fe691d3eb78c18db514f440961ec7bcc23f8bcbfaa4e32d0f95d350785",
+  "historical_probe_source_sha256": "e182b849b6cbcfc9248fb619d8e09f64c33dedaa070777d5f0b74db02842a0b5",
+  "historical_cases": [
+    {
+      "filename": "830.dng",
+      "global_distance": 60,
+      "raw_dimensions": [
+        4288,
+        2848
+      ],
+      "raster_dimensions": [
+        4309,
+        2868
+      ]
+    },
+    {
+      "filename": "898.nef",
+      "global_distance": 20,
+      "raw_dimensions": [
+        6032,
+        4032
+      ],
+      "raster_dimensions": [
+        6032,
+        4032
+      ]
+    },
+    {
+      "filename": "1084.orf",
+      "global_distance": 32,
+      "raw_dimensions": [
+        4608,
+        3456
+      ],
+      "raster_dimensions": [
+        4640,
+        3472
+      ]
+    },
+    {
+      "filename": "1294.cr2",
+      "global_distance": 106,
+      "raw_dimensions": [
+        6000,
+        4000
+      ],
+      "raster_dimensions": [
+        6024,
+        4020
+      ]
+    }
+  ],
+  "decision": "Historical decoded/global fingerprint success is not same-source duplicate confirmation. Do not rerun global-only probe as full qualification or widen threshold to mask CR2 gap. Locate current spatial/pixel recipe and pinned RAW/TIFF fixture paths before real refresh.",
+  "runtime_rerun_performed": false
+}

@@ -1,0 +1,374 @@
+{
+  "scope": "Fixed dense1236 CPU kernel in supplied release test binaries; no page/display/GPU inference",
+  "timing": "Native Instant interval, excluding process startup; six baseline AA controls interspersed with sixteen alternating AB pairs",
+  "platform": "macOS-26.7.2-arm64-arm-64bit-Mach-O",
+  "repetitions": 8,
+  "complete": true,
+  "executables": {
+    "before": {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-triangle-aabb-after-cpu-tests-20261102",
+      "sha256": "a73eaaa867b4ae85adebf6b17b147111df659642117991464c12107cca8fba86"
+    },
+    "after": {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-containment-priority-after-cpu-tests-20261102",
+      "sha256": "652ead0b037b2ee309afa10cfdc39781f81a3356aecd3d69fda5acbcb9978f62"
+    }
+  },
+  "calls": [
+    {
+      "variant": "before",
+      "phase": "warmup",
+      "pair": 0,
+      "elapsed_ns": 329577000,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "warmup",
+      "pair": 0,
+      "elapsed_ns": 322822375,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 0,
+      "elapsed_ns": 383969667,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 0,
+      "elapsed_ns": 365336042,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 0,
+      "elapsed_ns": 328314542,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 0,
+      "elapsed_ns": 306478917,
+      "total_work": 10140096
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 1,
+      "elapsed_ns": 306529875,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 1,
+      "elapsed_ns": 368826833,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 2,
+      "elapsed_ns": 354045125,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 2,
+      "elapsed_ns": 328967500,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 1,
+      "elapsed_ns": 335506917,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 1,
+      "elapsed_ns": 295616708,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 3,
+      "elapsed_ns": 315426833,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 3,
+      "elapsed_ns": 315837417,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 4,
+      "elapsed_ns": 318942458,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 4,
+      "elapsed_ns": 344223709,
+      "total_work": 10140096
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 5,
+      "elapsed_ns": 397328709,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 5,
+      "elapsed_ns": 325695458,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 2,
+      "elapsed_ns": 336875292,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 2,
+      "elapsed_ns": 282714834,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 6,
+      "elapsed_ns": 287538250,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 6,
+      "elapsed_ns": 304329000,
+      "total_work": 10140096
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 7,
+      "elapsed_ns": 295861708,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 7,
+      "elapsed_ns": 333151417,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 8,
+      "elapsed_ns": 303046917,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 8,
+      "elapsed_ns": 301728250,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 3,
+      "elapsed_ns": 381808208,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 3,
+      "elapsed_ns": 303906459,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 9,
+      "elapsed_ns": 282878167,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 9,
+      "elapsed_ns": 293415416,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 10,
+      "elapsed_ns": 317791709,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 10,
+      "elapsed_ns": 325780125,
+      "total_work": 10140096
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 11,
+      "elapsed_ns": 273812250,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 11,
+      "elapsed_ns": 327709375,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 4,
+      "elapsed_ns": 295653917,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 4,
+      "elapsed_ns": 280433791,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 12,
+      "elapsed_ns": 295320291,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 12,
+      "elapsed_ns": 295187125,
+      "total_work": 10140096
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 13,
+      "elapsed_ns": 280731542,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 13,
+      "elapsed_ns": 287668083,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 14,
+      "elapsed_ns": 292068708,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 14,
+      "elapsed_ns": 282497667,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 5,
+      "elapsed_ns": 277399209,
+      "total_work": 10182072
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 5,
+      "elapsed_ns": 293734750,
+      "total_work": 10182072
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 15,
+      "elapsed_ns": 281196625,
+      "total_work": 10140096
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 15,
+      "elapsed_ns": 267393625,
+      "total_work": 10182072
+    }
+  ],
+  "analysis": {
+    "scope": "Local optimized-test-build elapsed CPU-kernel time; no page/display/GPU claim",
+    "estimator": "Mean paired percentage reduction; deterministic percentile bootstrap, 20000 resamples",
+    "workloads": {
+      "dense1236": {
+        "control": {
+          "pairs": 6,
+          "mean_percent_reduction": 8.74703849333148,
+          "median_percent_reduction": 8.518743726183342,
+          "bootstrap_mean_95_interval": [
+            1.4511246491786582,
+            15.402390994223445
+          ],
+          "first_median_ns": 336191104.5,
+          "second_median_ns": 294675729.0
+        },
+        "candidate": {
+          "pairs": 16,
+          "mean_percent_reduction": 1.5448858697765757,
+          "median_percent_reduction": 1.4232182160351452,
+          "bootstrap_mean_95_interval": [
+            -3.161966190796175,
+            5.976159355436718
+          ],
+          "first_median_ns": 316814563.0,
+          "second_median_ns": 303028625.0
+        }
+      }
+    }
+  },
+  "supports_local_speedup": false,
+  "gate": "Candidate interval strictly positive; AA interval contains zero and its absolute envelope is below candidate lower bound",
+  "log_sha256": "7ee66c24f86d4952a819adc1335642ca35eca022cb008a30ffabd41f65b5a986"
+}

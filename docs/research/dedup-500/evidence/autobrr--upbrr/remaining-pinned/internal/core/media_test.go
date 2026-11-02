@@ -1,0 +1,1052 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package core
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/imagehosting"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+type imageHostCall struct {
+	host     string
+	fallback bool
+	paths    []string
+}
+
+func TestReuseOnlyImageTargetsKeepEachHostsSavedImages(t *testing.T) {
+	t.Parallel()
+	images := []api.ScreenshotImage{
+		{Path: filepath.Join(t.TempDir(), "a.png"), Purpose: api.ScreenshotPurposeFinal},
+		{Path: filepath.Join(t.TempDir(), "b.png"), Purpose: api.ScreenshotPurposeFinal},
+	}
+	links := []api.UploadedImageLink{
+		{
+			ImagePath:  images[0].Path,
+			Host:       "pixhost",
+			UsageScope: "global",
+			RawURL:     "https://pixhost.cc/a.png",
+		},
+		{
+			ImagePath:  images[1].Path,
+			Host:       "imgbb",
+			UsageScope: "global",
+			RawURL:     "https://i.ibb.co/b.png",
+		},
+	}
+	module := &mediaModule{logger: api.NopLogger{}}
+	result, err := module.uploadImagesToTargetsWithFallback(t.Context(), api.UploadSubject{}, "", nil,
+		[]trackers.ImageUploadTarget{
+			{
+				Host:       "pixhost",
+				UsageScope: "global",
+				Trackers:   []string{"AITHER"},
+				ReuseOnly:  true,
+			},
+			{
+				Host:       "imgbb",
+				UsageScope: "global",
+				Trackers:   []string{"BHD"},
+				ReuseOnly:  true,
+			},
+		}, images, links, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Attempts) != 2 || len(result.Attempts[0].Links) != 1 || len(result.Attempts[1].Links) != 1 ||
+		result.Attempts[0].Links[0].RawURL != links[0].RawURL || result.Attempts[1].Links[0].RawURL != links[1].RawURL {
+		t.Fatalf("saved host attempts = %#v", result.Attempts)
+	}
+}
+
+func TestSavedHostUploadsAdditionalSelectedImage(t *testing.T) {
+	t.Parallel()
+	root := t.TempDir()
+	images := []api.ScreenshotImage{
+		{Path: filepath.Join(root, "saved.png"), Purpose: api.ScreenshotPurposeFinal},
+		{Path: filepath.Join(root, "new.png"), Purpose: api.ScreenshotPurposeFinal},
+	}
+	saved := api.UploadedImageLink{
+		ImagePath:  images[0].Path,
+		Host:       "pixhost",
+		UsageScope: "global",
+		RawURL:     "https://pixhost.cc/saved.png",
+	}
+	release := make(chan struct{})
+	service := &barrierImageHostingService{
+		entered:   make(chan imageHostCall, 1),
+		behaviors: map[string]imageHostBehavior{"pixhost": {release: release}},
+	}
+	module := &mediaModule{images: service, logger: api.NopLogger{}}
+	done := make(chan imageUploadCallResult, 1)
+	go func() {
+		result, err := module.uploadImagesToTargetsWithFallback(t.Context(), api.UploadSubject{}, "", nil,
+			[]trackers.ImageUploadTarget{{
+				Host:       "pixhost",
+				UsageScope: "global",
+				Trackers:   []string{"AITHER"},
+			}},
+			images, []api.UploadedImageLink{saved}, nil)
+		done <- imageUploadCallResult{result: result, err: err}
+	}()
+	call := receiveImageHostCall(t, service.entered)
+	if call.host != "pixhost" || !slices.Equal(call.paths, []string{images[1].Path}) {
+		t.Fatalf("additional image upload = %#v", call)
+	}
+	close(release)
+	result := receiveImageUploadCallResult(t, done)
+	if result.err != nil || len(result.result.Attempts) != 1 || len(result.result.Attempts[0].Links) != 2 ||
+		result.result.Attempts[0].Links[0].RawURL != saved.RawURL {
+		t.Fatalf("saved plus new upload = %#v err=%v", result.result, result.err)
+	}
+}
+
+type imageHostBehavior struct {
+	release <-chan struct{}
+	err     error
+}
+
+type imageUploadCallResult struct {
+	result api.UploadImagesResult
+	err    error
+}
+
+type mediaLogEntry struct {
+	level   string
+	message string
+}
+
+type recordingMediaLogger struct {
+	mu      sync.Mutex
+	entries []mediaLogEntry
+}
+
+func (l *recordingMediaLogger) record(level string, format string, args ...any) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.entries = append(l.entries, mediaLogEntry{level: level, message: fmt.Sprintf(format, args...)})
+}
+
+func (l *recordingMediaLogger) Tracef(format string, args ...any) {
+	l.record("TRACE", format, args...)
+}
+
+func (l *recordingMediaLogger) Debugf(format string, args ...any) {
+	l.record("DEBUG", format, args...)
+}
+
+func (l *recordingMediaLogger) Infof(format string, args ...any) {
+	l.record("INFO", format, args...)
+}
+
+func (l *recordingMediaLogger) Warnf(format string, args ...any) {
+	l.record("WARN", format, args...)
+}
+
+func (l *recordingMediaLogger) Errorf(format string, args ...any) {
+	l.record("ERROR", format, args...)
+}
+
+func (l *recordingMediaLogger) countLevelContaining(level string, value string) int {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	count := 0
+	for _, entry := range l.entries {
+		if entry.level == level && strings.Contains(entry.message, value) {
+			count++
+		}
+	}
+	return count
+}
+
+type barrierImageHostingService struct {
+	entered   chan imageHostCall
+	behaviors map[string]imageHostBehavior
+}
+
+func (*barrierImageHostingService) ListCandidates(context.Context, api.ImageHostingSubject) ([]api.ScreenshotImage, error) {
+	return nil, nil
+}
+
+func (s *barrierImageHostingService) Upload(
+	ctx context.Context,
+	_ api.ImageHostingSubject,
+	host string,
+	usageScope string,
+	images []api.ScreenshotImage,
+) ([]api.UploadedImageLink, error) {
+	target, _ := api.ImageUploadProgressTargetFromContext(ctx)
+	paths := make([]string, 0, len(images))
+	for _, image := range images {
+		paths = append(paths, image.Path)
+	}
+	s.entered <- imageHostCall{
+		host:     host,
+		fallback: target.Fallback,
+		paths:    paths,
+	}
+	behavior := s.behaviors[host]
+	select {
+	case <-behavior.release:
+	case <-ctx.Done():
+		return nil, fmt.Errorf("context canceled: %w", ctx.Err())
+	}
+	links := make([]api.UploadedImageLink, 0, len(images))
+	for _, image := range images {
+		links = append(links, api.UploadedImageLink{
+			ImagePath:  image.Path,
+			Host:       host,
+			UsageScope: usageScope,
+			RawURL:     "https://images.example.invalid/" + host,
+		})
+	}
+	return links, behavior.err
+}
+
+func TestUploadImagesFallbackStartsBeforeUnrelatedPrimaryCompletes(t *testing.T) {
+	t.Parallel()
+
+	registry := mediaImageHostRegistry(t)
+	releases := map[string]chan struct{}{
+		"pixhost":   make(chan struct{}),
+		"onlyimage": make(chan struct{}),
+		"imgbb":     make(chan struct{}),
+		"ptscreens": make(chan struct{}),
+	}
+	service := &barrierImageHostingService{
+		entered: make(chan imageHostCall, 4),
+		behaviors: map[string]imageHostBehavior{
+			"pixhost":   {release: releases["pixhost"], err: errors.New("pixhost failed")},
+			"onlyimage": {release: releases["onlyimage"], err: errors.New("onlyimage failed")},
+			"imgbb":     {release: releases["imgbb"]},
+			"ptscreens": {release: releases["ptscreens"]},
+		},
+	}
+	logger := &recordingMediaLogger{}
+	module := &mediaModule{
+		cfg: config.Config{ImageHosting: config.ImageHostingConfig{
+			Host1: "pixhost",
+			Host2: "onlyimage",
+			Host3: "imgbb",
+			Host4: "ptscreens",
+		}},
+		images:   service,
+		logger:   logger,
+		registry: registry,
+	}
+	resolvedFallbacks, err := module.resolveFallbackImageUploadTargets(
+		"pixhost",
+		[]string{"ONE", "TWO"},
+		[]string{"pixhost", "onlyimage"},
+		api.UploadSubject{},
+	)
+	if err != nil {
+		t.Fatalf("resolve fallback targets: %v", err)
+	}
+	if got := uploadTargetHosts(resolvedFallbacks); !slices.Equal(got, []string{"imgbb", "ptscreens"}) {
+		t.Fatalf("resolved fallback hosts = %v, targets=%#v", got, resolvedFallbacks)
+	}
+	done := make(chan imageUploadCallResult, 1)
+	go func() {
+		result, err := module.uploadImagesToTargetsWithFallback(
+			context.Background(),
+			api.UploadSubject{SourcePath: "C:\\media\\Example.Release.2026.mkv"},
+			"",
+			nil,
+			[]trackers.ImageUploadTarget{
+				{
+					Host:       "pixhost",
+					UsageScope: "global",
+					Trackers:   []string{"ONE"},
+				},
+				{
+					Host:       "onlyimage",
+					UsageScope: "global",
+					Trackers:   []string{"TWO"},
+				},
+			},
+			[]api.ScreenshotImage{{Path: "screen.png"}},
+			nil,
+			nil,
+		)
+		done <- imageUploadCallResult{result: result, err: err}
+	}()
+
+	primary := []imageHostCall{
+		receiveImageHostCall(t, service.entered),
+		receiveImageHostCall(t, service.entered),
+	}
+	if got := sortedCallHosts(primary); !slices.Equal(got, []string{"onlyimage", "pixhost"}) {
+		t.Fatalf("primary hosts = %v", got)
+	}
+	close(releases["pixhost"])
+	firstFallback := receiveImageHostCall(t, service.entered)
+	if firstFallback.host != "imgbb" || !firstFallback.fallback {
+		t.Fatalf("first fallback = %#v, want imgbb before onlyimage completes", firstFallback)
+	}
+	close(releases["onlyimage"])
+	secondFallback := receiveImageHostCall(t, service.entered)
+	if secondFallback.host != "ptscreens" || !secondFallback.fallback {
+		t.Fatalf("second fallback = %#v", secondFallback)
+	}
+	close(releases["ptscreens"])
+	close(releases["imgbb"])
+	callResult := receiveImageUploadCallResult(t, done)
+	if callResult.err != nil {
+		t.Fatalf("upload images with fallback: %v", callResult.err)
+	}
+	result := callResult.result
+	if len(result.Failures) != 0 || len(result.Links) != 4 {
+		t.Fatalf("fallback result = %#v", result)
+	}
+	if !slices.Equal(result.FailedHosts, []string{"onlyimage", "pixhost"}) {
+		t.Fatalf("failed hosts = %v", result.FailedHosts)
+	}
+	if len(result.Attempts) != 4 {
+		t.Fatalf("host attempts = %#v", result.Attempts)
+	}
+	failedAttempts, fallbackAttempts := 0, 0
+	for _, attempt := range result.Attempts {
+		if attempt.Failure != nil {
+			failedAttempts++
+		}
+		if attempt.Fallback {
+			fallbackAttempts++
+		}
+	}
+	if failedAttempts != 2 || fallbackAttempts != 2 {
+		t.Fatalf("host attempt accounting failed=%d fallback=%d attempts=%#v", failedAttempts, fallbackAttempts, result.Attempts)
+	}
+	if logger.countLevelContaining("INFO", "starting image upload fallback") != 2 {
+		t.Fatal("expected fallback decisions at info level")
+	}
+	if logger.countLevelContaining("WARN", "starting image upload fallback") != 0 {
+		t.Fatal("recovering fallback decisions must not log at warning level")
+	}
+}
+
+func TestUploadImagesUnknownOutcomeStopsFallbackAndPartialAcceptance(t *testing.T) {
+	t.Parallel()
+
+	release := make(chan struct{})
+	close(release)
+	unknown := api.NewOperationError(api.OperationFailure{
+		Code:      api.OperationFailureUnknownOutcome,
+		Operation: api.OperationKindImageHosting,
+		Message:   "Synthetic uncertain image upload.",
+		Recovery:  api.OperationRecoveryConfirm,
+	}, errors.New("synthetic uncertain upload"))
+	service := &barrierImageHostingService{
+		entered: make(chan imageHostCall, 2),
+		behaviors: map[string]imageHostBehavior{
+			"pixhost": {release: release, err: unknown},
+			"imgbb":   {release: release},
+		},
+	}
+	module := &mediaModule{
+		cfg: config.Config{
+			ImageHosting:       config.ImageHostingConfig{Host1: "pixhost", Host2: "imgbb"},
+			ScreenshotHandling: config.ScreenshotHandlingConfig{MinSuccessfulUploads: 1},
+		},
+		images:   service,
+		logger:   &recordingMediaLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+	_, err := module.uploadImagesToTargetsWithFallback(
+		t.Context(),
+		api.UploadSubject{SourcePath: "Example.Release.2026.mkv"},
+		"pixhost",
+		nil,
+		[]trackers.ImageUploadTarget{{
+			Host:       "pixhost",
+			UsageScope: "global",
+			Trackers:   []string{"ONE"},
+		}},
+		[]api.ScreenshotImage{{Path: "screen.png"}},
+		nil,
+		nil,
+	)
+	failure, ok := api.AsOperationFailure(err)
+	if !ok || failure.Code != api.OperationFailureUnknownOutcome {
+		t.Fatalf("unknown upload outcome = %v, failure = %#v", err, failure)
+	}
+	if len(service.entered) != 1 {
+		t.Fatalf("uncertain upload launched fallback: calls=%d", len(service.entered))
+	}
+}
+
+func TestUploadImagesExplicitHostDoesNotFallback(t *testing.T) {
+	t.Parallel()
+
+	release := make(chan struct{})
+	close(release)
+	service := &barrierImageHostingService{
+		entered: make(chan imageHostCall, 2),
+		behaviors: map[string]imageHostBehavior{
+			"pixhost": {release: release, err: errors.New("synthetic upload failure")},
+			"imgbb":   {release: release},
+		},
+	}
+	module := &mediaModule{
+		cfg:      config.Config{ImageHosting: config.ImageHostingConfig{Host1: "pixhost", Host2: "imgbb"}},
+		images:   service,
+		logger:   &recordingMediaLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+	result, err := module.uploadImagesToTargetsWithFallback(
+		t.Context(),
+		api.UploadSubject{SourcePath: "Example.Release.2026.mkv"},
+		"pixhost",
+		nil,
+		[]trackers.ImageUploadTarget{{
+			Host:       "pixhost",
+			UsageScope: "global",
+			Trackers:   []string{"ONE"},
+		}},
+		[]api.ScreenshotImage{{Path: "screen.png"}},
+		nil,
+		nil,
+	)
+	if err != nil {
+		t.Fatalf("explicit host upload: %v", err)
+	}
+	if len(service.entered) != 1 || len(result.Attempts) != 1 || result.Attempts[0].Host != "pixhost" || result.Attempts[0].Failure == nil {
+		t.Fatalf("explicit host fallback result = %#v, calls=%d", result, len(service.entered))
+	}
+}
+
+func TestUploadImagesReusesPermittedFallbackBeforePrimaryAndUploadsDistinctHost(t *testing.T) {
+	t.Parallel()
+
+	images := []api.ScreenshotImage{{Path: "screen-one.png"}, {Path: "screen-two.png"}}
+	release := make(chan struct{})
+	close(release)
+	service := &barrierImageHostingService{
+		entered: make(chan imageHostCall, 2),
+		behaviors: map[string]imageHostBehavior{
+			"onlyimage": {release: release},
+		},
+	}
+	module := &mediaModule{
+		cfg: config.Config{ImageHosting: config.ImageHostingConfig{
+			Host1: "pixhost",
+			Host2: "imgbb",
+			Host3: "onlyimage",
+		}},
+		images:   service,
+		logger:   &recordingMediaLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+	result, err := module.uploadImagesToTargetsWithFallback(
+		t.Context(),
+		api.UploadSubject{SourcePath: "Example.Release.2026.mkv"},
+		"",
+		nil,
+		[]trackers.ImageUploadTarget{
+			{
+				Host:       "pixhost",
+				UsageScope: "global",
+				Trackers:   []string{"ONE"},
+			},
+			{
+				Host:       "onlyimage",
+				UsageScope: "global",
+				Trackers:   []string{"TWO"},
+			},
+		},
+		images,
+		reusedImageLinks(images, trackers.ImageUploadTarget{Host: "imgbb", UsageScope: "global"}),
+		nil,
+	)
+	if err != nil {
+		t.Fatalf("upload images: %v", err)
+	}
+	if len(result.Failures) != 0 || len(result.Attempts) != 2 || result.Attempts[0].Host != "imgbb" ||
+		!result.Attempts[0].Fallback || len(result.Attempts[0].Links) != len(images) || result.Attempts[1].Host != "onlyimage" {
+		t.Fatalf("upload result = %#v", result)
+	}
+	call := receiveImageHostCall(t, service.entered)
+	if call.host != "onlyimage" || call.fallback || !slices.Equal(call.paths, []string{"screen-one.png", "screen-two.png"}) {
+		t.Fatalf("external host calls = %#v", call)
+	}
+	select {
+	case call := <-service.entered:
+		t.Fatalf("unexpected retained or primary upload = %#v", call)
+	default:
+	}
+}
+
+func TestUploadImagesRealServiceUnknownOutcomeStopsFallbackAndPartialAcceptance(t *testing.T) {
+	for _, minimum := range []int{1, 2} {
+		t.Run(fmt.Sprintf("minimum_%d", minimum), func(t *testing.T) {
+			var requests atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, _ *http.Request) {
+				if requests.Add(1) == 1 {
+					_, _ = response.Write([]byte(`{"link":"https://images.example.invalid/success.png"}`))
+					return
+				}
+				_, _ = response.Write([]byte("{"))
+			}))
+			defer server.Close()
+
+			dir := t.TempDir()
+			images := []api.ScreenshotImage{
+				{Path: filepath.Join(dir, "screen-01.png")},
+				{Path: filepath.Join(dir, "screen-02.png")},
+			}
+			for _, image := range images {
+				if err := os.WriteFile(image.Path, []byte("synthetic image"), 0o600); err != nil {
+					t.Fatalf("write image: %v", err)
+				}
+			}
+			cfg := config.Config{
+				ImageHosting: config.ImageHostingConfig{
+					Host1:        "sharex",
+					Host2:        "imgbb",
+					ShareXURL:    server.URL,
+					ShareXAPIKey: "synthetic-key",
+				},
+				ScreenshotHandling: config.ScreenshotHandlingConfig{MaxConcurrentUploads: 1, MinSuccessfulUploads: minimum},
+			}
+			registry := mediaImageHostRegistry(t)
+			service, err := imagehosting.NewLiveTestServiceWithRegistry(
+				cfg, nil, nil, registry, "synthetic-run", filepath.Join(dir, "images.jsonl"), len(images),
+			)
+			if err != nil {
+				t.Fatalf("create live image service: %v", err)
+			}
+			logger := &recordingMediaLogger{}
+			module := &mediaModule{
+				cfg:      cfg,
+				images:   service,
+				logger:   logger,
+				registry: registry,
+			}
+			_, err = module.uploadImagesToTargetsWithFallback(
+				t.Context(),
+				api.UploadSubject{
+					SourcePath: filepath.Join(dir, "Example.Release.2026.mkv"),
+					MediaBinding: api.PreparedMediaBinding{
+						SourcePath:               filepath.Join(dir, "Example.Release.2026.mkv"),
+						PreparedGeneration:       1,
+						PreparedMediaFingerprint: "test-prepared-media",
+					},
+				},
+				"sharex",
+				nil,
+				[]trackers.ImageUploadTarget{{
+					Host:       "sharex",
+					UsageScope: "global",
+					Trackers:   []string{"ONE"},
+				}},
+				images,
+				nil,
+				nil,
+			)
+			failure, ok := api.AsOperationFailure(err)
+			if !ok || failure.Code != api.OperationFailureUnknownOutcome {
+				t.Fatalf("real service unknown upload = %v, failure = %#v", err, failure)
+			}
+			if logger.countLevelContaining("INFO", "starting image upload fallback") != 0 {
+				t.Fatal("real service unknown upload launched fallback")
+			}
+			if requests.Load() != int32(len(images)) {
+				t.Fatalf("sharex requests = %d, want %d", requests.Load(), len(images))
+			}
+		})
+	}
+}
+
+func TestResolveImageUploadTargetsUsesExactWorkflowTrackerSelection(t *testing.T) {
+	t.Parallel()
+
+	registry := mediaImageHostRegistry(t)
+	if err := registry.RegisterDescriptor(trackers.Descriptor{
+		Name:              "LST",
+		Definition:        mediaImageHostDefinition("LST"),
+		Family:            trackers.FamilyUnit3D,
+		BaseURL:           "https://lst.example.invalid",
+		UploadContentMode: trackers.UploadContentModeScreenshots,
+		ImageHost: &trackers.ImageHostPolicy{
+			ConditionalHost:        "lostimg",
+			OwnedHosts:             []string{"lostimg"},
+			EnableWithImageHosting: true,
+		},
+	}); err != nil {
+		t.Fatalf("register LST: %v", err)
+	}
+	module := &mediaModule{
+		cfg: config.Config{ImageHosting: config.ImageHostingConfig{
+			Host1:          "imgbb",
+			LostimgEnabled: true,
+			LostimgAPI:     "secret",
+		}},
+		logger:   api.NopLogger{},
+		registry: registry,
+	}
+
+	for _, test := range []struct {
+		name    string
+		subject api.UploadSubject
+	}{
+		{
+			name: "legacy removal",
+			subject: api.UploadSubject{
+				TrackersRemove: []string{"LST"},
+			},
+		},
+		{
+			name: "prepared client match",
+			subject: api.UploadSubject{
+				MatchedTrackers: []string{"LST"},
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			targets, err := module.resolveImageUploadTargets(t.Context(), []string{"ONE", "LST"}, test.subject, "", nil)
+			if err != nil {
+				t.Fatalf("resolve image upload targets: %v", err)
+			}
+			if got := uploadTargetHosts(targets); !slices.Equal(got, []string{"imgbb", "lostimg"}) {
+				t.Fatalf("resolved hosts = %v, targets=%#v", got, targets)
+			}
+			if len(targets) != 2 || targets[1].Host != "lostimg" ||
+				targets[1].UsageScope != "tracker:LST" || !slices.Equal(targets[1].Trackers, []string{"LST"}) {
+				t.Fatalf("LST target = %#v, targets=%#v", targets[1], targets)
+			}
+		})
+	}
+}
+
+func TestResolveImageUploadTargetsHonorsExplicitHost(t *testing.T) {
+	t.Parallel()
+
+	module := &mediaModule{
+		cfg: config.Config{
+			ImageHosting: config.ImageHostingConfig{Host1: "imgbb"},
+			Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"ONE": {ImageHost: "pixhost"},
+			}},
+		},
+		logger:   api.NopLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+
+	targets, err := module.resolveImageUploadTargets(t.Context(), []string{"ONE"}, api.UploadSubject{}, "imgbb", nil)
+	if err != nil {
+		t.Fatalf("resolve explicit image host: %v", err)
+	}
+	if got := uploadTargetHosts(targets); !slices.Equal(got, []string{"imgbb"}) {
+		t.Fatalf("explicit image host targets = %v, targets=%#v", got, targets)
+	}
+
+	targets, err = module.resolveImageUploadTargets(t.Context(), []string{"ONE"}, api.UploadSubject{}, "", nil)
+	if err != nil {
+		t.Fatalf("resolve planned image host: %v", err)
+	}
+	if got := uploadTargetHosts(targets); !slices.Equal(got, []string{"pixhost"}) {
+		t.Fatalf("planned image host targets = %v, targets=%#v", got, targets)
+	}
+
+	if _, err := module.resolveImageUploadTargets(t.Context(), []string{"ONE"}, api.UploadSubject{}, "sharex", nil); err == nil {
+		t.Fatal("unconfigured explicit image host accepted")
+	}
+}
+
+type mediaImageHostDefinition string
+
+func (d mediaImageHostDefinition) Name() string { return string(d) }
+
+func (mediaImageHostDefinition) Prepare(context.Context, trackers.PreparationInput) (trackers.TrackerPlan, *trackers.PreparationFailure) {
+	return trackers.TrackerPlan{}, nil
+}
+
+func mediaImageHostRegistry(t *testing.T) *trackers.Registry {
+	t.Helper()
+	registry := trackers.NewRegistry()
+	for _, item := range []struct {
+		name  string
+		hosts []string
+	}{
+		{name: "ONE", hosts: []string{"pixhost", "imgbb", "sharex"}},
+		{name: "TWO", hosts: []string{"onlyimage", "ptscreens"}},
+	} {
+		err := registry.RegisterDescriptor(trackers.Descriptor{
+			Name:              item.name,
+			Definition:        mediaImageHostDefinition(item.name),
+			Family:            trackers.FamilyStandalone,
+			BaseURL:           "https://" + strings.ToLower(item.name) + ".example.invalid",
+			UploadContentMode: trackers.UploadContentModeScreenshots,
+			ImageHost:         &trackers.ImageHostPolicy{AllowedHosts: item.hosts},
+		})
+		if err != nil {
+			t.Fatalf("register %s: %v", item.name, err)
+		}
+	}
+	return registry
+}
+
+func receiveImageHostCall(t *testing.T, calls <-chan imageHostCall) imageHostCall {
+	t.Helper()
+	select {
+	case call := <-calls:
+		return call
+	case <-time.After(10 * time.Second):
+		t.Fatal("timed out waiting for image-host call")
+		return imageHostCall{}
+	}
+}
+
+func receiveImageUploadCallResult(t *testing.T, results <-chan imageUploadCallResult) imageUploadCallResult {
+	t.Helper()
+	select {
+	case result := <-results:
+		return result
+	case <-time.After(10 * time.Second):
+		t.Fatal("timed out waiting for image upload result")
+		return imageUploadCallResult{}
+	}
+}
+
+func sortedCallHosts(calls []imageHostCall) []string {
+	hosts := make([]string, 0, len(calls))
+	for _, call := range calls {
+		hosts = append(hosts, call.host)
+	}
+	slices.Sort(hosts)
+	return hosts
+}
+
+// reusableImageRepository reports images a previous run already published, so
+// the reuse branch of uploadImagesToTarget can be exercised. Only the uploaded
+// image lookup carries behavior; the rest satisfies the interface.
+type reusableImageRepository struct {
+	mediaRepository
+	links []api.UploadedImageLink
+}
+
+func (r *reusableImageRepository) ListUploadedImagesByPath(context.Context, api.PreparedMediaBinding) ([]api.UploadedImageLink, error) {
+	return slices.Clone(r.links), nil
+}
+
+// reusedImageLinks builds host records that uploadedImagesByPathForTarget
+// matches back to the given images.
+func reusedImageLinks(images []api.ScreenshotImage, target trackers.ImageUploadTarget) []api.UploadedImageLink {
+	links := make([]api.UploadedImageLink, 0, len(images))
+	for _, image := range images {
+		links = append(links, api.UploadedImageLink{
+			ImagePath:  image.Path,
+			Host:       target.Host,
+			UsageScope: target.UsageScope,
+			RawURL:     "https://images.example.invalid/reused",
+		})
+	}
+	return links
+}
+
+// partialImageHostingService publishes a fixed number of images, optionally
+// reporting success despite missing links.
+type partialImageHostingService struct {
+	published     int
+	failHost      string
+	silentPartial bool
+}
+
+func (*partialImageHostingService) ListCandidates(context.Context, api.ImageHostingSubject) ([]api.ScreenshotImage, error) {
+	return nil, nil
+}
+
+func (s *partialImageHostingService) Upload(
+	_ context.Context,
+	_ api.ImageHostingSubject,
+	host string,
+	usageScope string,
+	images []api.ScreenshotImage,
+) ([]api.UploadedImageLink, error) {
+	published := min(s.published, len(images))
+	if s.failHost != "" && host != s.failHost {
+		published = len(images)
+	}
+	links := make([]api.UploadedImageLink, 0, published)
+	for _, image := range images[:published] {
+		links = append(links, api.UploadedImageLink{
+			ImagePath:  image.Path,
+			Purpose:    image.Purpose,
+			Host:       host,
+			UsageScope: usageScope,
+			RawURL:     "https://images.example.invalid/" + host,
+		})
+	}
+	if published == len(images) {
+		return links, nil
+	}
+	if s.silentPartial {
+		return links, nil
+	}
+	return links, fmt.Errorf("image hosting: %d of %d uploads failed", len(images)-published, len(images))
+}
+
+func TestAudioAnalysisIncompleteHostBatchReportsFailedProgress(t *testing.T) {
+	t.Parallel()
+	images := []api.ScreenshotImage{
+		{Path: "audio-1.png", Purpose: api.ScreenshotPurposeAudioAnalysis},
+		{Path: "audio-2.png", Purpose: api.ScreenshotPurposeAudioAnalysis},
+	}
+	module := &mediaModule{
+		images:   &partialImageHostingService{published: 1, silentPartial: true},
+		logger:   &recordingMediaLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+	var updates []api.ImageUploadProgressUpdate
+	ctx := api.WithImageUploadProgressReporter(t.Context(), func(update api.ImageUploadProgressUpdate) {
+		updates = append(updates, update)
+	})
+	links, err := module.uploadImagesToTarget(ctx, api.UploadSubject{}, trackers.ImageUploadTarget{
+		Host:       "pixhost",
+		UsageScope: "global",
+		Trackers:   []string{"ONE"},
+	}, images, nil, nil, false)
+	if err == nil || !strings.Contains(err.Error(), "audio analysis image upload is incomplete") || len(links) != 1 {
+		t.Fatalf("incomplete audio upload: links=%#v err=%v", links, err)
+	}
+	if len(updates) == 0 {
+		t.Fatal("incomplete audio upload emitted no progress")
+	}
+	terminal := updates[len(updates)-1]
+	if terminal.Status != api.ImageUploadProgressFailed || terminal.Completed != 2 || terminal.Succeeded != 1 || terminal.Failed != 1 {
+		t.Fatalf("incomplete audio upload terminal progress = %#v", terminal)
+	}
+}
+
+func TestAudioAnalysisRequiresCompleteHostBatchAndFallsBack(t *testing.T) {
+	t.Parallel()
+	images := []api.ScreenshotImage{
+		{Path: "audio-1.png", Purpose: api.ScreenshotPurposeAudioAnalysis},
+		{Path: "audio-2.png", Purpose: api.ScreenshotPurposeAudioAnalysis},
+		{Path: "audio-3.png", Purpose: api.ScreenshotPurposeAudioAnalysis},
+	}
+	module := &mediaModule{
+		cfg: config.Config{
+			ImageHosting:       config.ImageHostingConfig{Host1: "pixhost", Host2: "imgbb"},
+			ScreenshotHandling: config.ScreenshotHandlingConfig{MinSuccessfulUploads: 2},
+		},
+		images:   &partialImageHostingService{published: 2, failHost: "pixhost"},
+		logger:   &recordingMediaLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+	result, err := module.uploadImagesToTargetsWithFallback(t.Context(), api.UploadSubject{}, "", nil,
+		[]trackers.ImageUploadTarget{{
+			Host:       "pixhost",
+			UsageScope: "global",
+			Trackers:   []string{"ONE"},
+		}}, images, nil, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Attempts) != 2 || result.Attempts[0].Failure == nil || result.Attempts[1].Failure != nil ||
+		result.Attempts[1].Host != "imgbb" || len(result.Attempts[1].Links) != len(images) || len(result.Failures) != 0 {
+		t.Fatalf("incomplete audio batch was accepted or fallback failed: %#v", result)
+	}
+}
+
+func TestUploadImagesAcceptsPartialHostBatchAtConfiguredMinimum(t *testing.T) {
+	t.Parallel()
+
+	images := make([]api.ScreenshotImage, 0, 6)
+	for index := range 6 {
+		images = append(images, api.ScreenshotImage{Path: fmt.Sprintf("screen%d.png", index)})
+	}
+	target := trackers.ImageUploadTarget{
+		Host:       "pixhost",
+		UsageScope: "global",
+		Trackers:   []string{"ONE"},
+	}
+
+	for _, testCase := range []struct {
+		name        string
+		minimum     int
+		published   int
+		reused      int
+		wantLinks   int
+		wantFailure bool
+	}{
+		{
+			name:      "above minimum",
+			minimum:   3,
+			published: 5,
+			wantLinks: 5,
+		},
+		{
+			name:      "at minimum",
+			minimum:   3,
+			published: 3,
+			wantLinks: 3,
+		},
+		{
+			name:        "below minimum",
+			minimum:     3,
+			published:   2,
+			wantFailure: true,
+		},
+		{
+			name:        "allowance disabled",
+			minimum:     0,
+			published:   5,
+			wantFailure: true,
+		},
+		{
+			name:        "minimum above requested",
+			minimum:     8,
+			published:   5,
+			wantFailure: true,
+		},
+		// Reuse counts toward the floor: the host publishes fewer images than
+		// the floor on its own, so this only passes when the allowance is
+		// applied where reused links are visible.
+		{
+			name:      "reuse completes the minimum",
+			minimum:   3,
+			published: 2,
+			reused:    2,
+			wantLinks: 4,
+		},
+		{
+			name:        "reuse still short of the minimum",
+			minimum:     5,
+			published:   2,
+			reused:      2,
+			wantFailure: true,
+		},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+
+			var repo mediaRepository
+			if testCase.reused > 0 {
+				repo = &reusableImageRepository{links: reusedImageLinks(images[:testCase.reused], target)}
+			}
+			module := &mediaModule{
+				cfg: config.Config{
+					ImageHosting:       config.ImageHostingConfig{Host1: "pixhost"},
+					ScreenshotHandling: config.ScreenshotHandlingConfig{MinSuccessfulUploads: testCase.minimum},
+				},
+				images:   &partialImageHostingService{published: testCase.published},
+				repo:     repo,
+				logger:   &recordingMediaLogger{},
+				registry: mediaImageHostRegistry(t),
+			}
+			var progressUpdates []api.ImageUploadProgressUpdate
+			ctx := api.WithImageUploadProgressReporter(context.Background(), func(update api.ImageUploadProgressUpdate) {
+				progressUpdates = append(progressUpdates, update)
+			})
+			result, err := module.uploadImagesToTargetsWithFallback(
+				ctx,
+				api.UploadSubject{SourcePath: "Example.Release.2026.mkv"},
+				"",
+				nil,
+				[]trackers.ImageUploadTarget{target},
+				images,
+				nil,
+				nil,
+			)
+			if err != nil {
+				t.Fatalf("upload images: %v", err)
+			}
+			if testCase.wantFailure {
+				if len(result.Failures) != 1 || !slices.Equal(result.Failures[0].Trackers, []string{"ONE"}) {
+					t.Fatalf("expected a tracker-scoped failure, got %#v", result.Failures)
+				}
+				if !slices.Contains(result.FailedHosts, "pixhost") {
+					t.Fatalf("expected pixhost to be marked failed, got %v", result.FailedHosts)
+				}
+				return
+			}
+			if len(result.Failures) != 0 {
+				t.Fatalf("partial batch above the minimum must not report a failure: %#v", result.Failures)
+			}
+			if len(result.FailedHosts) != 0 {
+				t.Fatalf("partial batch above the minimum must not mark the host failed: %v", result.FailedHosts)
+			}
+			if len(result.Links) != testCase.wantLinks {
+				t.Fatalf("published links = %d, want %d", len(result.Links), testCase.wantLinks)
+			}
+			if len(result.Attempts) != 1 || result.Attempts[0].Failure != nil {
+				t.Fatalf("attempt results = %#v", result.Attempts)
+			}
+			if len(progressUpdates) == 0 {
+				t.Fatal("accepted partial batch emitted no progress")
+			}
+			terminal := progressUpdates[len(progressUpdates)-1]
+			wantFailed := len(images) - testCase.reused - testCase.published
+			if terminal.Status != api.ImageUploadProgressFailed || terminal.Completed != len(images) ||
+				terminal.Succeeded != testCase.published || terminal.Reused != testCase.reused || terminal.Failed != wantFailed {
+				t.Fatalf("accepted partial terminal progress = %#v", terminal)
+			}
+		})
+	}
+}
+
+func TestUploadImagesPreservesSourceOrderAcrossRetainedAndNewLinks(t *testing.T) {
+	t.Parallel()
+
+	images := []api.ScreenshotImage{{Path: "screen-one.png"}, {Path: "screen-two.png"}, {Path: "screen-three.png"}}
+	release := make(chan struct{})
+	close(release)
+	service := &barrierImageHostingService{
+		entered: make(chan imageHostCall, 1),
+		behaviors: map[string]imageHostBehavior{
+			"pixhost": {release: release},
+		},
+	}
+	target := trackers.ImageUploadTarget{
+		Host:       "pixhost",
+		UsageScope: "global",
+		Trackers:   []string{"ONE"},
+	}
+	module := &mediaModule{
+		cfg:      config.Config{ImageHosting: config.ImageHostingConfig{Host1: "pixhost"}},
+		images:   service,
+		logger:   &recordingMediaLogger{},
+		registry: mediaImageHostRegistry(t),
+	}
+	result, err := module.uploadImagesToTargetsWithFallback(
+		t.Context(),
+		api.UploadSubject{SourcePath: "Example.Release.2026.mkv"},
+		"pixhost",
+		nil,
+		[]trackers.ImageUploadTarget{target},
+		images,
+		reusedImageLinks([]api.ScreenshotImage{images[0], images[2]}, target),
+		nil,
+	)
+	if err != nil {
+		t.Fatalf("upload images: %v", err)
+	}
+	call := receiveImageHostCall(t, service.entered)
+	if !slices.Equal(call.paths, []string{"screen-two.png"}) {
+		t.Fatalf("missing upload paths = %v", call.paths)
+	}
+	if len(result.Links) != len(images) || !slices.EqualFunc(result.Links, images, func(link api.UploadedImageLink, image api.ScreenshotImage) bool {
+		return link.ImagePath == image.Path
+	}) {
+		t.Fatalf("ordered image links = %#v", result.Links)
+	}
+}

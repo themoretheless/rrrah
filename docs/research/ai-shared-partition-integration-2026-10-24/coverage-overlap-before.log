@@ -1,0 +1,18 @@
+running 1 test
+test encode::ordered_pixel::shared_fragment_store::tests::captured_coverage_cell_stays_inside_unit_partition ... first overlap shared=false paint=97 source_patch=58 regions=100,59 area=0.00001084457795462252
+region 100 patch=58 points=[(0.7429182938756317, 0.7710802947697135), (0.7429182938756531, 0.7710802947697127), (1.0, 0.7627957030342566), (1.0, 0.7628800698149046)] tags=[111, 114, 105, 5]
+region 59 patch=58 points=[(0.7429182938756348, 0.7710802947697134), (0.7429182938756438, 0.7710802947697131), (0.7429182938756531, 0.7710802947697127), (1.0, 0.7627957030342566), (1.0, 0.7628800698149046), (0.7894728002127639, 0.7695953294239496)] tags=[182, 111, 114, 105, 5, 111]
+
+thread 'encode::ordered_pixel::shared_fragment_store::tests::captured_coverage_cell_stays_inside_unit_partition' (5024732) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/shared_fragment_store.rs:1855:29:
+partition overlap
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    encode::ordered_pixel::shared_fragment_store::tests::captured_coverage_cell_stays_inside_unit_partition
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 185 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,128 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+*.log
+
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# Node.js / Frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+dist/
+dist-ssr/
+*.local
+
+# Test/build artifacts
+*-test.css
+force-build.css
+test-output.css
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Docker
+docker-compose.override.yml
+
+# Config (user-specific)
+config/*.yml
+config/*.yaml
+config/*.json
+config/.encryption_key
+!config/*.example.*
+!config/*.sample.*
+
+# Data directory (encryption keys, etc.)
+data/
+
+# Logs
+logs/
+*.log
+
+# Testing
+.pytest_cache/
+coverage/
+.nyc_output/
+
+# Build artifacts
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.dll
+*.dylib
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+data/
+postgres-data/
+media/
+
+# Docker development artifact - manifest.json gets synced from container volume mount
+# The real manifest.json is in the root directory
+backend/manifest.json
+
+# Playwright E2E
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/e2e/.tmp/

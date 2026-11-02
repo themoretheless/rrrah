@@ -1,0 +1,330 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+import (
+	"errors"
+	"testing"
+)
+
+func TestDiscFactsAggregateSummaryPreservesSingleReport(t *testing.T) {
+	t.Parallel()
+
+	facts := DiscFacts{Items: []DiscItemFacts{{
+		ID:   "disc-one",
+		Name: "Disc 1",
+		Reports: []DiscReportFacts{{
+			Playlist: PlaylistInfo{ID: "00001.MPLS", File: "00001.MPLS"},
+			Summary:  "\nBDINFO ONE\n",
+		}},
+	}}}
+	if got := facts.AggregateSummary(); got != "BDINFO ONE" {
+		t.Fatalf("aggregate summary = %q", got)
+	}
+}
+
+func TestDiscFactsAggregateSummaryUsesStableSafeHeadings(t *testing.T) {
+	t.Parallel()
+
+	facts := DiscFacts{Items: []DiscItemFacts{
+		{
+			ID:   "disc-one",
+			Name: "Disc\n1",
+			Reports: []DiscReportFacts{
+				{Playlist: PlaylistInfo{ID: "one", File: "00001.MPLS"}, Summary: "BDINFO ONE"},
+				{Playlist: PlaylistInfo{ID: "two", File: "00002.MPLS"}, Summary: "BDINFO TWO"},
+			},
+		},
+		{
+			ID:   "disc-two",
+			Name: "Disc 2",
+			Reports: []DiscReportFacts{{
+				Playlist: PlaylistInfo{ID: "three", File: "00001.MPLS\r\n"},
+				Summary:  "BDINFO THREE",
+			}},
+		},
+	}}
+	want := "Disc 1 — 00001.MPLS\nBDINFO ONE\n\n" +
+		"Disc 1 — 00002.MPLS\nBDINFO TWO\n\n" +
+		"Disc 2 — 00001.MPLS\nBDINFO THREE"
+	if got := facts.AggregateSummary(); got != want {
+		t.Fatalf("aggregate summary = %q, want %q", got, want)
+	}
+}
+
+func TestAggregateDVDVOBMediaInfoPreservesSingleDisc(t *testing.T) {
+	t.Parallel()
+
+	discs := []DiscEvidenceResource{{
+		ID:                  "disc-one",
+		Name:                "Disc 1",
+		Type:                "DVD",
+		DVDVOBMediaInfoText: "\nVOB INFO ONE\n",
+	}}
+	if got := AggregateDVDVOBMediaInfo(discs, "fallback"); got != "VOB INFO ONE" {
+		t.Fatalf("DVD VOB aggregate = %q", got)
+	}
+}
+
+func TestAggregateDVDVOBMediaInfoUsesStableSafeHeadings(t *testing.T) {
+	t.Parallel()
+
+	discs := []DiscEvidenceResource{
+		{
+			ID:                  "disc-one",
+			Name:                "Disc\n1",
+			Type:                "DVD",
+			DVDVOBMediaInfoText: "VOB INFO ONE",
+		},
+		{
+			ID:                  "disc-two",
+			Name:                "Disc 2",
+			Type:                "DVD",
+			DVDVOBMediaInfoText: "VOB INFO TWO",
+		},
+	}
+	want := "Disc 1\nVOB INFO ONE\n\nDisc 2\nVOB INFO TWO"
+	if got := AggregateDVDVOBMediaInfo(discs, "fallback"); got != want {
+		t.Fatalf("DVD VOB aggregate = %q, want %q", got, want)
+	}
+}
+
+func TestDiscFactsCanonicalPrimaryUsesFirstDiscAndHighestScore(t *testing.T) {
+	t.Parallel()
+
+	facts := DiscFacts{Items: []DiscItemFacts{
+		{
+			ID: "disc-one",
+			Reports: []DiscReportFacts{
+				{Playlist: PlaylistInfo{
+					ID:       "lower",
+					Duration: 100,
+					Score:    10,
+				}},
+				{Playlist: PlaylistInfo{
+					ID:       "higher",
+					Duration: 200,
+					Score:    20,
+				}},
+				{Playlist: PlaylistInfo{
+					ID:       "equal-later",
+					Duration: 300,
+					Score:    20,
+				}},
+			},
+		},
+		{ID: "disc-two", Reports: []DiscReportFacts{{Playlist: PlaylistInfo{ID: "later", Score: 100}}}},
+	}}
+	discID, reportID, duration, vobSet := facts.CanonicalPrimary()
+	if discID != "disc-one" || reportID != "higher" || duration != 200 || vobSet != "" {
+		t.Fatalf("canonical primary = %q/%q/%.0f/%q", discID, reportID, duration, vobSet)
+	}
+}
+
+func TestPreparedReleaseCloneDetachesCollections(t *testing.T) {
+	source := PreparedRelease{
+		Source: SourceManifest{
+			SourcePath: "Example.Release.2026.1080p-GRP.mkv",
+			Entries: []SourceManifestEntry{
+				{
+					Path: "Example.Release.2026.1080p-GRP.mkv",
+					Type: SourceEntryTypeFile,
+					Size: 42,
+				},
+			},
+		},
+		Naming: NamingFacts{
+			Cuts:          []string{"Extended"},
+			Presentations: []string{"Open Matte"},
+			Codecs:        []string{"H.264"},
+			GeneratedReleaseNames: GeneratedReleaseNameVariants{
+				IncludeEpisodeTitle: ReleaseNameVariant{
+					Name: "Example.Show.S01E02.Example.Episode.1080p.WEB-DL-GRP",
+				},
+				OmitEpisodeTitle: ReleaseNameVariant{
+					Name: "Example.Show.S01E02.1080p.WEB-DL-GRP",
+				},
+			},
+		},
+		ProviderMetadata: SourceScopedMetadata{
+			TMDB: &TMDBMetadata{LocalizedTitles: map[string]string{"en": "Example Release 2026"}},
+			TVDB: &TVDBMetadata{
+				TVDBID: 987650001,
+				Name:   "Example Series",
+				NameDisambiguation: TVDBNameDisambiguation{
+					CanonicalName: "Example Series",
+					SeriesYear:    2026,
+					Status:        MetadataEvidenceStatusPartial,
+					Source:        "tvdb_v4_search_unpaged",
+				},
+			},
+			ProviderAvailability: []ProviderAvailabilityEvidence{{
+				Provider: IdentityProviderTMDB,
+				Status:   ProviderAvailabilityStatusNotFound,
+				Source:   "tmdb_find/v1",
+			}},
+		},
+		Assessments: ReleaseAssessments{
+			Naming: NamingAssessment{Status: NamingStatusIncomplete, Missing: []NamingRequirement{"year"}},
+		},
+	}
+
+	cloned, err := source.Clone()
+	if err != nil {
+		t.Fatalf("clone: %v", err)
+	}
+	cloned.Source.Entries[0].Path = "changed.mkv"
+	cloned.Naming.Cuts[0] = "changed"
+	cloned.Naming.Presentations[0] = "changed"
+	cloned.Naming.Codecs[0] = "changed"
+	cloned.Naming.GeneratedReleaseNames.IncludeEpisodeTitle.Name = "changed"
+	cloned.ProviderMetadata.TMDB.LocalizedTitles["en"] = "changed"
+	cloned.ProviderMetadata.TVDB.NameDisambiguation.CanonicalName = "changed"
+	cloned.ProviderMetadata.ProviderAvailability[0].Source = "changed"
+	cloned.Assessments.Naming.Missing[0] = "changed"
+
+	if source.Source.Entries[0].Path == cloned.Source.Entries[0].Path {
+		t.Fatal("source entries share storage")
+	}
+	if source.Naming.Cuts[0] == cloned.Naming.Cuts[0] || source.Naming.Presentations[0] == cloned.Naming.Presentations[0] {
+		t.Fatal("naming edition categories share storage")
+	}
+	if source.Naming.Codecs[0] == cloned.Naming.Codecs[0] {
+		t.Fatal("naming codecs share storage")
+	}
+	if source.Naming.GeneratedReleaseNames.IncludeEpisodeTitle.Name == cloned.Naming.GeneratedReleaseNames.IncludeEpisodeTitle.Name {
+		t.Fatal("generated release-name variants were not cloned")
+	}
+	if source.ProviderMetadata.TMDB.LocalizedTitles["en"] == cloned.ProviderMetadata.TMDB.LocalizedTitles["en"] {
+		t.Fatal("provider metadata shares storage")
+	}
+	if source.ProviderMetadata.TVDB.NameDisambiguation.CanonicalName == cloned.ProviderMetadata.TVDB.NameDisambiguation.CanonicalName {
+		t.Fatal("TVDB disambiguation shares storage")
+	}
+	if source.ProviderMetadata.ProviderAvailability[0].Source == cloned.ProviderMetadata.ProviderAvailability[0].Source {
+		t.Fatal("provider availability shares storage")
+	}
+	if source.Assessments.Naming.Missing[0] == cloned.Assessments.Naming.Missing[0] {
+		t.Fatal("naming assessment shares storage")
+	}
+}
+
+func TestExternalIdentityRequirementsUseCanonicalFieldsOnly(t *testing.T) {
+	identity := ExternalIdentity{
+		TMDBID:   123456,
+		Category: CanonicalCategoryMovie,
+	}
+
+	id, err := identity.RequireProviderID(IdentityProviderTMDB)
+	if err != nil || id != 123456 {
+		t.Fatalf("TMDB requirement = (%d, %v)", id, err)
+	}
+	category, err := identity.RequireCategory()
+	if err != nil || category != CanonicalCategoryMovie {
+		t.Fatalf("category requirement = (%q, %v)", category, err)
+	}
+
+	_, err = identity.RequireProviderID(IdentityProviderIMDB)
+	assertMissingRequirement(t, err, RequirementKindProviderID, IdentityProviderIMDB)
+	_, err = (ExternalIdentity{Category: CanonicalCategoryUnknown}).RequireCategory()
+	assertMissingRequirement(t, err, RequirementKindCategory, "")
+	_, err = (ExternalIdentity{Category: "documentary"}).RequireCategory()
+	assertMissingRequirement(t, err, RequirementKindCategory, "")
+}
+
+func TestIdentityDependenciesUseComparableValueTypes(t *testing.T) {
+	want := IdentityDependencySet{
+		TMDB:   IdentityDependency{ID: 100, IMDBID: 200},
+		IMDB:   IdentityDependency{ID: 200, TMDBID: 100},
+		TVDB:   IdentityDependency{ID: 300},
+		TVmaze: IdentityDependency{ID: 400, TVDBID: 300},
+		MAL:    IdentityDependency{ID: 500, TMDBID: 100},
+	}
+	identity := ExternalIdentity{Dependencies: want}
+	if identity.Dependencies != want {
+		t.Fatalf("identity dependencies = %#v, want %#v", identity.Dependencies, want)
+	}
+}
+
+func TestNormalizeCanonicalCategory(t *testing.T) {
+	tests := map[string]CanonicalCategory{
+		"":        CanonicalCategoryUnknown,
+		"unknown": CanonicalCategoryUnknown,
+		"MOVIE":   CanonicalCategoryMovie,
+		"film":    CanonicalCategoryMovie,
+		"TV":      CanonicalCategoryTV,
+		"episode": CanonicalCategoryTV,
+	}
+	for input, want := range tests {
+		got, err := NormalizeCanonicalCategory(input)
+		if err != nil || got != want {
+			t.Fatalf("NormalizeCanonicalCategory(%q) = (%q, %v), want %q", input, got, err, want)
+		}
+	}
+	if _, err := NormalizeCanonicalCategory("unsupported"); err == nil {
+		t.Fatal("unsupported category succeeded")
+	}
+}
+
+func TestSourceScopedMetadataIsCurrentFor(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		metadata   SourceScopedMetadata
+		sourcePath string
+		identity   ExternalIdentity
+		want       bool
+	}{
+		{
+			name:       "matching source and generation",
+			metadata:   SourceScopedMetadata{SourcePath: `C:\media\Example.Release.2026.mkv`, Generation: 3},
+			sourcePath: `c:\MEDIA\Example.Release.2026.mkv`,
+			identity:   ExternalIdentity{SourcePath: `C:\media\Example.Release.2026.mkv`, Generation: 3},
+			want:       true,
+		},
+		{
+			name:       "legacy unscoped metadata",
+			sourcePath: `C:\media\Example.Release.2026.mkv`,
+			want:       true,
+		},
+		{
+			name:       "stale metadata source",
+			metadata:   SourceScopedMetadata{SourcePath: `C:\media\Old.Release.mkv`, Generation: 3},
+			sourcePath: `C:\media\Example.Release.2026.mkv`,
+			identity:   ExternalIdentity{SourcePath: `C:\media\Example.Release.2026.mkv`, Generation: 3},
+		},
+		{
+			name:       "stale identity source",
+			metadata:   SourceScopedMetadata{SourcePath: `C:\media\Example.Release.2026.mkv`, Generation: 3},
+			sourcePath: `C:\media\Example.Release.2026.mkv`,
+			identity:   ExternalIdentity{SourcePath: `C:\media\Old.Release.mkv`, Generation: 3},
+		},
+		{
+			name:       "stale generation",
+			metadata:   SourceScopedMetadata{SourcePath: `C:\media\Example.Release.2026.mkv`, Generation: 2},
+			sourcePath: `C:\media\Example.Release.2026.mkv`,
+			identity:   ExternalIdentity{SourcePath: `C:\media\Example.Release.2026.mkv`, Generation: 3},
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+			if got := test.metadata.IsCurrentFor(test.sourcePath, test.identity); got != test.want {
+				t.Fatalf("IsCurrentFor() = %t, want %t", got, test.want)
+			}
+		})
+	}
+}
+
+func assertMissingRequirement(t *testing.T, err error, requirement RequirementKind, provider IdentityProvider) {
+	t.Helper()
+	var missing *MissingRequirementError
+	if !errors.As(err, &missing) {
+		t.Fatalf("error = %v, want MissingRequirementError", err)
+	}
+	if missing.Requirement != requirement || missing.Provider != provider {
+		t.Fatalf("missing requirement = %#v", missing)
+	}
+}

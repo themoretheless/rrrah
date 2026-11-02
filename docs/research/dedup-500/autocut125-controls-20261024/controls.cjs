@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict');const fs=require('node:fs');const core=require('./extension/js/core.js');
+const clip={name:'owned',mediaPath:'/synthetic.mov',start:0,end:10,inPoint:0,speed:1};
+const malformed=core.parseSilenceDetect('silence_start: .\nsilence_end: 2');assert(Number.isNaN(malformed[0].start));const plan=core.planCuts([clip],{'/synthetic.mov':malformed},{padding:0});assert(Number.isNaN(plan.ranges[0][0]));
+const invalidSpeed=core.planCuts([{...clip,speed:NaN}],{'/synthetic.mov':[{start:1,end:2}]},{padding:0});assert.equal(invalidSpeed.analyzedClips,1);assert.equal(invalidSpeed.warnings.length,0);
+const positive=core.planCuts([clip],{'/synthetic.mov':[{start:1,end:2}]},{padding:0});assert.deepEqual(positive.ranges,[[1,2]]);
+const skipped=core.planCuts([{...clip,speed:2}],{'/synthetic.mov':[{start:1,end:2}]},{padding:0});assert.equal(skipped.analyzedClips,0);assert.equal(skipped.warnings.length,1);
+const panel=fs.readFileSync('docs/research/dedup-500/evidence/rafcopy--auto-cut-agent/04-main.js','utf8');const start=panel.indexOf('function analysisPaths(clips) {');const end=panel.indexOf('\n\tfunction fillTrackPickers',start);assert(start>=0&&end>start);const paths=new Function('core','trackTarget',panel.slice(start,end)+'\nreturn analysisPaths;')(core,()=>({}));
+const c=p=>({...clip,mediaPath:p,trackType:'video',trackIndex:0});
+assert.deepEqual(paths([c('constructor'),c('toString'),c('__proto__')]),[]);
+assert.deepEqual(paths([c('/owned/a.mov'),c('/owned/b.mov')]),['/owned/a.mov','/owned/b.mov']);
+assert.deepEqual(paths([c('/owned/a.mov'),c('/owned/a.mov')]),['/owned/a.mov']);
+const result={controls_passed:7,scope:'Original core module,synthetic text/clip records;no FFmpeg,Premiere,LLM or media files',findings:['Malformed numeric silence dot becomes NaN and survives plan without frame snapping.','NaN speed bypasses nonunit-speed rejection.','Healthy range mapping and finite2x-speed rejection pass.','Original analysisPaths skips constructor,toString,__proto__ via inherited object keys;ordinary distinct paths and repeated-path controls pass.'],runtime:process.version};fs.writeFileSync(__dirname+'/controls-results.json',JSON.stringify(result,null,2)+'\n');console.log(result);

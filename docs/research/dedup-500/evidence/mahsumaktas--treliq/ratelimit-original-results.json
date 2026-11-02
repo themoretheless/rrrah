@@ -1,0 +1,57 @@
+{
+  "tests": [
+    {
+      "name": "parses rate limit headers correctly",
+      "passed": true
+    },
+    {
+      "name": "handles missing headers gracefully",
+      "passed": true
+    },
+    {
+      "name": "handles undefined headers",
+      "passed": true
+    },
+    {
+      "name": "returns true when remaining < 500",
+      "passed": true
+    },
+    {
+      "name": "returns false when remaining >= 500",
+      "passed": true
+    },
+    {
+      "name": "returns false when remaining is 0",
+      "passed": true
+    },
+    {
+      "name": "returns true when remaining <= 100",
+      "passed": true
+    },
+    {
+      "name": "returns false when remaining > 100",
+      "passed": true
+    },
+    {
+      "name": "calculates usage percentage correctly",
+      "passed": true
+    },
+    {
+      "name": "handles zero limit correctly",
+      "passed": true
+    },
+    {
+      "name": "returns all status fields",
+      "passed": true
+    },
+    {
+      "name": "resolves immediately when remaining > 100",
+      "passed": true
+    },
+    {
+      "name": "waits when remaining <= 100",
+      "passed": true
+    }
+  ],
+  "scope": "Original callbacks unchanged,Node registration/assert adapter,inert logger,actual timers;not Jest/full SDK."
+}

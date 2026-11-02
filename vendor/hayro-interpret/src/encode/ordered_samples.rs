@@ -9,6 +9,26 @@ type Credit = Box<dyn std::any::Any + Send + Sync>;
 // Split dense cells before quadratic partition work consumes the shared quota.
 const WORKING_FRAGMENTS: usize = 512;
 const MAX_LEAF_FRAGMENTS: usize = 4096;
+// Bound abandoned first-pass work; dense integration retains its full limits.
+#[cfg(feature = "experimental-shared-partitions")]
+const INITIAL_PIXEL_WORK: usize = 65_536;
+#[cfg(feature = "experimental-shared-partitions")]
+fn paint_initial(
+    pixel: &mut OrderedPixel<'_>,
+    points: [Point; 3],
+    owner: PixelSourceOwner,
+    work: &mut usize,
+    remaining: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+) -> Result<(), super::PixelPartitionError> {
+    let allowance = (*work).min(*remaining);
+    let mut local = allowance;
+    let result = pixel.paint_triangle(points, owner, &mut local, cancelled);
+    let spent = allowance - local;
+    *work -= spent;
+    *remaining -= spent;
+    result
+}
 
 struct ParamPool {
     index: hashbrown::HashMap<u64, u16, rustc_hash::FxBuildHasher>,
@@ -89,6 +109,7 @@ impl Record {
     }
 }
 
+const RECORD_BLOCK_CAPACITY: usize = 128;
 struct Block {
     bounds: Rect,
     records: Vec<Record>,
@@ -114,10 +135,10 @@ fn push_record(
             }
             *outer_credit = Some(next);
         }
-        let credit = admit(128usize.checked_mul(size_of::<Record>())?)?;
+        let credit = admit(RECORD_BLOCK_CAPACITY.checked_mul(size_of::<Record>())?)?;
         let mut records = Vec::new();
-        records.try_reserve_exact(128).ok()?;
-        if records.capacity() > 128 {
+        records.try_reserve_exact(RECORD_BLOCK_CAPACITY).ok()?;
+        if records.capacity() > RECORD_BLOCK_CAPACITY {
             return None;
         }
         blocks.push(Block {
@@ -137,6 +158,160 @@ fn push_record(
     Some(())
 }
 
+#[cfg(feature = "experimental-shared-partitions")]
+struct PatchSpan {
+    first: usize,
+    end: usize,
+    bounds: Rect,
+}
+#[cfg(feature = "experimental-shared-partitions")]
+struct InitialPatchSpans {
+    values: Vec<PatchSpan>,
+    credit: Option<Credit>,
+    records: usize,
+    last_patch: Option<u32>,
+    ordered: bool,
+}
+#[cfg(feature = "experimental-shared-partitions")]
+impl InitialPatchSpans {
+    fn new() -> Self {
+        Self {
+            values: Vec::new(),
+            credit: None,
+            records: 0,
+            last_patch: None,
+            ordered: true,
+        }
+    }
+    fn push(&mut self, record: &Record, admit: &dyn Fn(usize) -> Option<Credit>) -> Option<()> {
+        let end = self.records.checked_add(1)?;
+        if !self.ordered {
+            self.records = end;
+            return Some(());
+        }
+        if self.last_patch.is_some_and(|last| last > record.patch_index) {
+            // An unexpected source order uses the original traversal. Release
+            // the optional index before processing any tile.
+            self.values = Vec::new();
+            self.credit = None;
+            self.ordered = false;
+            self.records = end;
+            return Some(());
+        }
+        let bounds = Rect::from_points(record.points[0], record.points[1]).union_pt(record.points[2]);
+        if self.last_patch == Some(record.patch_index) {
+            let last = self.values.last_mut()?;
+            last.end = end;
+            last.bounds = last.bounds.union(bounds);
+        } else {
+            if self.values.len() == self.values.capacity() {
+                let capacity = self.values.capacity().checked_mul(2)?.max(4);
+                let next = admit(capacity.checked_mul(size_of::<PatchSpan>())?)?;
+                self.values.try_reserve_exact(capacity - self.values.len()).ok()?;
+                if self.values.capacity() > capacity {
+                    return None;
+                }
+                self.credit = Some(next);
+            }
+            self.values.push(PatchSpan {
+                first: self.records,
+                end,
+                bounds,
+            });
+        }
+        self.last_patch = Some(record.patch_index);
+        self.records = end;
+        Some(())
+    }
+}
+#[cfg(feature = "experimental-shared-partitions")]
+struct InitialPatchBlocks<'a> {
+    blocks: &'a [Block],
+    spans: &'a InitialPatchSpans,
+    tile: Rect,
+    next_span: usize,
+    flat_block: usize,
+    cursor: usize,
+    end: usize,
+}
+#[cfg(feature = "experimental-shared-partitions")]
+impl<'a> InitialPatchBlocks<'a> {
+    fn new(blocks: &'a [Block], spans: &'a InitialPatchSpans, tile: Rect) -> Self {
+        Self {
+            blocks,
+            spans,
+            tile,
+            next_span: spans.values.len(),
+            flat_block: 0,
+            cursor: 0,
+            end: 0,
+        }
+    }
+    fn next(
+        &mut self,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<Option<&'a [Record]>, super::PixelPartitionError> {
+        let scan = |work: &mut usize| {
+            if cancelled() {
+                return Err(super::PixelPartitionError::Cancelled);
+            }
+            *work = work.checked_sub(1).ok_or(super::PixelPartitionError::Limit)?;
+            Ok(())
+        };
+        let intersects = |bounds: Rect| {
+            let overlap = bounds.intersect(self.tile);
+            overlap.width() > 0. && overlap.height() > 0.
+        };
+        loop {
+            if !self.spans.ordered {
+                let Some(block) = self.blocks.get(self.flat_block) else {
+                    return Ok(None);
+                };
+                scan(work)?;
+                self.flat_block += 1;
+                if !intersects(block.bounds) {
+                    continue;
+                }
+                return Ok(Some(&block.records));
+            }
+            if self.cursor == self.end {
+                if self.next_span == 0 {
+                    return Ok(None);
+                }
+                scan(work)?;
+                self.next_span -= 1;
+                let span = &self.spans.values[self.next_span];
+                if !intersects(span.bounds) {
+                    continue;
+                }
+                self.cursor = span.first;
+                self.end = span.end;
+            }
+            scan(work)?;
+            let index = self.cursor / RECORD_BLOCK_CAPACITY;
+            let offset = self.cursor % RECORD_BLOCK_CAPACITY;
+            let block = self
+                .blocks
+                .get(index)
+                .ok_or(super::PixelPartitionError::Invalid)?;
+            let base = index * RECORD_BLOCK_CAPACITY;
+            let end = (self.end - base).min(block.records.len());
+            if end <= offset {
+                return Err(super::PixelPartitionError::Invalid);
+            }
+            let records = block
+                .records
+                .get(offset..end)
+                .ok_or(super::PixelPartitionError::Invalid)?;
+            self.cursor = base + end;
+            if !intersects(block.bounds) {
+                continue;
+            }
+            return Ok(Some(records));
+        }
+    }
+}
 fn add_integral(sum: &mut [f64; 5], correction: &mut [f64; 5], value: [f64; 5]) {
     for k in 0..5 {
         let y = value[k] - correction[k];
@@ -213,50 +388,7 @@ fn sort_candidates(
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
 ) -> Option<()> {
-    fn compare(
-        a: &Candidate<'_>,
-        b: &Candidate<'_>,
-        work: &mut usize,
-        cancelled: &dyn Fn() -> bool,
-    ) -> Option<std::cmp::Ordering> {
-        if cancelled() {
-            return None;
-        }
-        *work = work.checked_sub(1)?;
-        Some(a.compare(b))
-    }
-    fn sift(
-        values: &mut [Candidate<'_>],
-        mut root: usize,
-        end: usize,
-        work: &mut usize,
-        cancelled: &dyn Fn() -> bool,
-    ) -> Option<()> {
-        while root * 2 + 1 < end {
-            let mut child = root * 2 + 1;
-            if child + 1 < end && compare(&values[child], &values[child + 1], work, cancelled)?.is_lt() {
-                child += 1;
-            }
-            if !compare(&values[root], &values[child], work, cancelled)?.is_lt() {
-                break;
-            }
-            values.swap(root, child);
-            root = child;
-        }
-        Some(())
-    }
-    if cancelled() {
-        return None;
-    }
-    *work = work.checked_sub(1)?;
-    for start in (0..values.len() / 2).rev() {
-        sift(values, start, values.len(), work, cancelled)?;
-    }
-    for end in (1..values.len()).rev() {
-        values.swap(0, end);
-        sift(values, 0, end, work, cancelled)?;
-    }
-    Some(())
+    super::ordered_pixel::sort_by(values, work, cancelled, Candidate::compare).ok()
 }
 fn cell_owner(
     record: &Record,
@@ -319,6 +451,54 @@ fn trace_dense_regions(
     );
 }
 
+// Exact-input diagnostics for one selected cell, available only in opt-in builds.
+// Configure once at process start as RRRAH_TRACE_ORDERED_CELL=x,y,side,
+// or capture all descendant cells with RRRAH_TRACE_ORDERED_WINDOW=x,y,side.
+#[cfg(feature = "experimental-shared-partitions")]
+fn trace_replay_cell(
+    candidates: &[Candidate<'_>],
+    patches: &[AdaptivePatchRef<'_>],
+    pool: &ParamPool,
+    identities: &[Option<PatchParameterIdentity>],
+    origin: Point,
+    side: f64,
+    work: usize,
+) -> bool {
+    static TARGET: std::sync::OnceLock<Option<(bool, [u64; 3])>> = std::sync::OnceLock::new();
+    let target = TARGET.get_or_init(|| {
+        let (window, text) = match std::env::var("RRRAH_TRACE_ORDERED_CELL") {
+            Ok(text) => (false, text),
+            Err(_) => (true, std::env::var("RRRAH_TRACE_ORDERED_WINDOW").ok()?),
+        };
+        let mut parts = text.split(',');
+        let values = std::array::from_fn(|_| parts.next()?.parse::<f64>().ok().filter(|v| v.is_finite()).map(f64::to_bits));
+        if parts.next().is_some() { return None; }
+        let [Some(x), Some(y), Some(side)] = values else { return None; };
+        if f64::from_bits(side) <= 0. { return None; }
+        Some((window, [x, y, side]))
+    });
+    let Some((window, bits)) = target else { return false; };
+    let frame = [origin.x.to_bits(), origin.y.to_bits(), side.to_bits()];
+    let matches = if *window {
+        let [x, y, width] = bits.map(f64::from_bits);
+        origin.x >= x && origin.y >= y && origin.x + side <= x + width && origin.y + side <= y + width
+    } else { *bits == frame };
+    if !matches { return false; }
+    eprintln!("ORDERED_CELL_BEGIN bits={frame:?} candidates={} work={work}", candidates.len());
+    for candidate in candidates {
+        let record = candidate.record;
+        let Some(owner) = cell_owner(record, patches, pool, identities, origin, side) else {
+            eprintln!("ORDERED_CELL_INVALID_OWNER");
+            return false;
+        };
+        let points = record.points.map(|p| [(p.x-origin.x)/side, (p.y-origin.y)/side].map(f64::to_bits));
+        let fields = [owner.u, owner.v, owner.components[0], owner.components[1], owner.components[2], owner.components[3]].map(|f| f.map(f64::to_bits));
+        eprintln!("ORDERED_CELL_ROW ({}, {}, {}, {:?}, {:?})", owner.patch_index, owner.sample_index, owner.component_count, points, fields);
+    }
+    eprintln!("ORDERED_CELL_END");
+    true
+}
+
 // Integrals are in original device-pixel area. Each local partition owns the
 // same source priorities; only its coordinate frame and clipping square change.
 fn integrate_cell(
@@ -334,6 +514,8 @@ fn integrate_cell(
     cancelled: &dyn Fn() -> bool,
     admit: &dyn Fn(usize) -> Option<Credit>,
 ) -> Option<[f64; 5]> {
+    #[cfg(feature = "experimental-shared-partitions")]
+    let gather_start = *work;
     let mut pixel = OrderedPixel::new(admit, fragment_limit);
     let rect = Rect::new(origin.x, origin.y, origin.x + side, origin.y + side);
     let mut candidate_credit: Option<Credit> = None;
@@ -378,7 +560,53 @@ fn integrate_cell(
             });
         }
     }
+    #[cfg(feature = "experimental-shared-partitions")]
+    let sort_start = *work;
     sort_candidates(&mut candidates, work, cancelled)?;
+    #[cfg(feature = "experimental-shared-partitions")]
+    let trace_cost = {
+        static THRESHOLD: std::sync::OnceLock<Option<usize>> = std::sync::OnceLock::new();
+        let threshold = *THRESHOLD.get_or_init(|| std::env::var("RRRAH_TRACE_ORDERED_COST").ok()?.parse::<usize>().ok().filter(|v| *v > 0));
+        let paint_start = *work;
+        let count = candidates.len();
+        move |status: &str, processed: usize, fragments: usize, left: usize| {
+            let total = gather_start - left;
+            if threshold.is_some_and(|minimum| total >= minimum) {
+                eprintln!("ORDERED_CELL_COST origin={origin:?} side={side} depth={depth} limit={fragment_limit} candidates={count} processed={processed} fragments={fragments} status={status} gather={} sort={} paint={} total={total} left={left}", gather_start-sort_start, sort_start-paint_start, paint_start-left);
+            }
+        }
+    };
+    #[cfg(feature = "experimental-shared-partitions")]
+    let traced_cell = trace_replay_cell(&candidates, patches, pool, identities, origin, side, *work);
+    #[cfg(feature = "experimental-shared-partitions")]
+    if candidates.len() >= 128 {
+        let triangles = candidates.iter().map(|candidate| {
+            let record = candidate.record;
+            let owner = cell_owner(record, patches, pool, identities, origin, side)
+                .ok_or(super::PixelPartitionError::Conditioning)?;
+            let points = record.points.map(|p| Point::new((p.x-origin.x)/side, (p.y-origin.y)/side));
+            Ok((points, owner))
+        });
+        let result = super::ordered_pixel::integrate_disjoint_unit_mesh(triangles, admit, work, cancelled);
+        match result {
+            Ok(Some(integral)) => {
+                trace_cost("certified", candidates.len(), 0, *work);
+                let sum = integral.map(|value| value * side * side);
+                if traced_cell {
+                    eprintln!("ORDERED_CELL_RESULT bits={:?} integral={sum:?}", [origin.x.to_bits(), origin.y.to_bits(), side.to_bits()]);
+                }
+                return Some(sum);
+            }
+            Ok(None) => {}
+            Err(error) => {
+                trace_cost("certificate_refusal", 0, 0, *work);
+                if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
+                    eprintln!("DENSE_CELL_CERTIFICATE origin={origin:?} side={side} refusal={error:?} work={work}");
+                }
+                return None;
+            }
+        }
+    }
     // The center key orders work only. Exact UV comparisons still select the
     // owner at each overlap. Identical UV fields share a key, with original
     // ordinal preserving the existing tie behavior (including signed zero).
@@ -394,6 +622,8 @@ fn integrate_cell(
         match pixel.paint_triangle(local, owner, work, cancelled) {
             Ok(()) => {}
             Err(super::PixelPartitionError::Limit) if *work > 0 => {
+                #[cfg(feature = "experimental-shared-partitions")]
+                trace_cost("subdivide", index, pixel.fragments(), *work);
                 if depth >= 8
                     && fragment_limit == MAX_LEAF_FRAGMENTS
                     && std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some()
@@ -435,6 +665,8 @@ fn integrate_cell(
                 );
             }
             Err(error) => {
+                #[cfg(feature = "experimental-shared-partitions")]
+                trace_cost("refused", index, pixel.fragments(), *work);
                 if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
                     if depth >= 8 || *work == 0 {
                         trace_dense_regions(&pixel, origin, side, candidates.len(), index);
@@ -445,6 +677,8 @@ fn integrate_cell(
             }
         }
     }
+    #[cfg(feature = "experimental-shared-partitions")]
+    trace_cost("painted", candidates.len(), pixel.fragments(), *work);
     drop(candidates);
     drop(candidate_credit);
     let mut sum = [0.; 5];
@@ -474,6 +708,10 @@ fn integrate_cell(
             }
         })
         .ok()?;
+    #[cfg(feature = "experimental-shared-partitions")]
+    if traced_cell {
+        eprintln!("ORDERED_CELL_RESULT bits={:?} integral={sum:?}", [origin.x.to_bits(), origin.y.to_bits(), side.to_bits()]);
+    }
     Some(sum)
 }
 
@@ -513,6 +751,8 @@ pub(super) fn sample_patches(
     let mut parameters_pool = ParamPool::new();
     let mut record_credit = None;
     let mut records: Vec<Block> = Vec::new();
+    #[cfg(feature = "experimental-shared-partitions")]
+    let mut patch_spans = InitialPatchSpans::new();
     let mut extent = Rect::new(f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY);
     let clip = bounds
         .filter(|r| {
@@ -574,6 +814,8 @@ pub(super) fn sample_patches(
                     return Err(AdaptivePatchError::Invalid);
                 }
             }
+            #[cfg(feature = "experimental-shared-partitions")]
+            patch_spans.push(&record, admit).ok_or(AdaptivePatchError::Admission)?;
             push_record(&mut records, &mut record_credit, record, admit)
                 .ok_or(AdaptivePatchError::Admission)?;
             Ok(())
@@ -588,6 +830,10 @@ pub(super) fn sample_patches(
     let mut guard = None;
     let mut map = MeshMap::default();
     let mut work = 100_000_000usize;
+    #[cfg(feature = "experimental-shared-partitions")]
+    let mut stage_work = [0usize; 4]; // scans, initial paint, visits, dense retries
+    #[cfg(feature = "experimental-shared-partitions")]
+    let mut initial_work = [0usize; 4]; // abandoned work, visited work, abandoned pixels, visited pixels
     // The closure keeps every budget-phase return observable in opt-in traces.
     let computed = (|| -> Option<()> {
         let x0 = extent.x0.floor() as u16;
@@ -602,23 +848,40 @@ pub(super) fn sample_patches(
                 let mut pixels: [OrderedPixel<'_>; 16] =
                     std::array::from_fn(|_| OrderedPixel::new(admit, WORKING_FRAGMENTS));
                 let mut dense = [false; 16];
+                #[cfg(feature = "experimental-shared-partitions")]
+                let mut initial_remaining = [INITIAL_PIXEL_WORK; 16];
                 let tile = Rect::new(
                     tx as f64,
                     ty as f64,
                     (u32::from(tx) + 4).min(u32::from(x1)) as f64,
                     (u32::from(ty) + 4).min(u32::from(y1)) as f64,
                 );
-                for block in &records {
-                    if cancelled() {
-                        return None;
-                    }
-                    work = work.checked_sub(1)?;
-                    let overlap = block.bounds.intersect(tile);
-                    if overlap.width() <= 0. || overlap.height() <= 0. {
-                        continue;
-                    }
-                    for record in &block.records {
+                #[cfg(feature = "experimental-shared-partitions")]
+                let mut initial_blocks = InitialPatchBlocks::new(&records, &patch_spans, tile);
+                #[cfg(not(feature = "experimental-shared-partitions"))]
+                let mut initial_blocks = records.iter();
+                loop {
+                    #[cfg(feature = "experimental-shared-partitions")]
+                    let block_records = {
+                        let scan_start = work;
+                        let next = initial_blocks.next(&mut work, cancelled);
+                        stage_work[0] += scan_start - work;
+                        let Some(records) = next.ok()? else { break; };
+                        records
+                    };
+                    #[cfg(not(feature = "experimental-shared-partitions"))]
+                    let block_records = {
+                        let Some(block) = initial_blocks.next() else { break; };
+                        if cancelled() { return None; }
                         work = work.checked_sub(1)?;
+                        let overlap = block.bounds.intersect(tile);
+                        if overlap.width() <= 0. || overlap.height() <= 0. { continue; }
+                        &block.records[..]
+                    };
+                    for record in block_records {
+                        work = work.checked_sub(1)?;
+                        #[cfg(feature = "experimental-shared-partitions")]
+                        { stage_work[0] += 1; }
                         if cancelled() {
                             return None;
                         }
@@ -647,11 +910,24 @@ pub(super) fn sample_patches(
                                     identity.apply(&mut owner, origin).ok()?;
                                 }
                                 let local = points.map(|p| Point::new(p.x - origin.x, p.y - origin.y));
-                                match pixels[slot].paint_triangle(local, owner, &mut work, cancelled) {
+                                #[cfg(feature = "experimental-shared-partitions")]
+                                let paint_start = work;
+                                #[cfg(feature = "experimental-shared-partitions")]
+                                let painted = paint_initial(&mut pixels[slot], local, owner, &mut work, &mut initial_remaining[slot], cancelled);
+                                #[cfg(not(feature = "experimental-shared-partitions"))]
+                                let painted = pixels[slot].paint_triangle(local, owner, &mut work, cancelled);
+                                #[cfg(feature = "experimental-shared-partitions")]
+                                { stage_work[1] += paint_start - work; }
+                                match painted {
                                     Ok(()) => {}
                                     Err(super::PixelPartitionError::Limit) if work > 0 => {
                                         pixels[slot] = OrderedPixel::new(admit, WORKING_FRAGMENTS);
                                         dense[slot] = true;
+                                        #[cfg(feature = "experimental-shared-partitions")]
+                                        {
+                                            initial_work[0] += INITIAL_PIXEL_WORK - initial_remaining[slot];
+                                            initial_work[2] += 1;
+                                        }
                                         if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
                                             eprintln!("ORDERED_SAMPLE_SUBDIVIDE pixel={x},{y} work={work}");
                                         }
@@ -667,7 +943,9 @@ pub(super) fn sample_patches(
                         let pixel = &pixels[usize::from(y - ty) * 4 + usize::from(x - tx)];
                         let mut sum = [0.; 4];
                         let mut coverage = 0.;
-                        pixel
+                        #[cfg(feature = "experimental-shared-partitions")]
+                        let visit_start = work;
+                        let visited = pixel
                             .visit(&mut work, cancelled, &mut |area, center, _, owner| {
                                 let values = owner
                                     .evaluate(center)
@@ -677,9 +955,18 @@ pub(super) fn sample_patches(
                                 }
                                 coverage += area;
                                 Ok(())
-                            })
-                            .ok()?;
+                            });
+                        #[cfg(feature = "experimental-shared-partitions")]
+                        { stage_work[2] += visit_start - work; }
+                        visited.ok()?;
+                        #[cfg(feature = "experimental-shared-partitions")]
+                        if !dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
+                            initial_work[1] += INITIAL_PIXEL_WORK - initial_remaining[usize::from(y - ty) * 4 + usize::from(x - tx)];
+                            initial_work[3] += 1;
+                        }
                         if dense[usize::from(y - ty) * 4 + usize::from(x - tx)] {
+                            #[cfg(feature = "experimental-shared-partitions")]
+                            let dense_start = work;
                             let value = integrate_children(
                                 &records,
                                 patches,
@@ -692,7 +979,10 @@ pub(super) fn sample_patches(
                                 &mut work,
                                 cancelled,
                                 admit,
-                            )?;
+                            );
+                            #[cfg(feature = "experimental-shared-partitions")]
+                            { stage_work[3] += dense_start - work; }
+                            let value = value?;
                             coverage = value[0];
                             sum.copy_from_slice(&value[1..]);
                         }
@@ -733,6 +1023,14 @@ pub(super) fn sample_patches(
     drop(records);
     drop(record_credit);
     let complete = computed.is_some() && !cancelled();
+    #[cfg(feature = "experimental-shared-partitions")]
+    if std::env::var_os("RRRAH_TRACE_ORDERED_COST").is_some() {
+        eprintln!("ORDERED_STAGE_COST patches={} scans={} initial_paint={} initial_visit={} dense={} total={} left={work}", patches.len(),stage_work[0],stage_work[1],stage_work[2],stage_work[3],stage_work.iter().sum::<usize>());
+        // Work on an in-progress tile remains pending when a later phase refuses.
+        // Visited means its partition was used, not that the whole page completed.
+        let pending = stage_work[1] - initial_work[0] - initial_work[1];
+        eprintln!("ORDERED_INITIAL_COST patches={} abandoned={} visited={} pending={pending} total={} abandoned_pixels={} visited_pixels={}", patches.len(),initial_work[0],initial_work[1],stage_work[1],initial_work[2],initial_work[3]);
+    }
     if std::env::var_os("RRRAH_TRACE_NATIVE_REPLAY_EVENT").is_some() {
         eprintln!(
             "ORDERED_SAMPLE_OUTCOME patches={} complete={} work_spent={} work_left={work}",
@@ -776,6 +1074,362 @@ mod tests {
             control_points,
             colors: std::array::from_fn(|_| color.into_iter().collect()),
         }
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    fn indexed_record(index: usize, patch: u32) -> Record {
+        Record {
+            points: [
+                Point::new(index as f64, 0.),
+                Point::new(index as f64 + 0.5, 0.),
+                Point::new(index as f64, 1.),
+            ],
+            parameters: [[0; 2]; 3],
+            patch_index: patch,
+        }
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    fn indexed_walk(
+        blocks: &[Block],
+        spans: &InitialPatchSpans,
+        tile: Rect,
+        work: &mut usize,
+        cancelled: &dyn Fn() -> bool,
+    ) -> Result<Vec<usize>, super::super::PixelPartitionError> {
+        let mut traversal = InitialPatchBlocks::new(blocks, spans, tile);
+        let mut output = Vec::new();
+        while let Some(records) = traversal.next(work, cancelled)? {
+            for record in records {
+                let b = Rect::from_points(record.points[0], record.points[1])
+                    .union_pt(record.points[2])
+                    .intersect(tile);
+                if b.width() > 0. && b.height() > 0. {
+                    output.push(record.points[0].x as usize);
+                }
+            }
+        }
+        Ok(output)
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    #[test]
+    fn priority_spans_preserve_patch_local_order_cross_block_boundaries_and_fallback() {
+        let admit = |_: usize| Some(Box::new(()) as Credit);
+        let mut blocks = Vec::new();
+        let mut credit = None;
+        let mut spans = InitialPatchSpans::new();
+        let mut indices = Vec::new();
+        for (patch, count) in [130, 2, 260, 1].into_iter().enumerate() {
+            for _ in 0..count {
+                let index = indices.len();
+                let record = indexed_record(index, patch as u32);
+                spans.push(&record, &admit).unwrap();
+                push_record(&mut blocks, &mut credit, record, &admit).unwrap();
+                indices.push((patch, index));
+            }
+        }
+        indices.sort_by_key(|&(patch, index)| (std::cmp::Reverse(patch), index));
+        let expected = indices.into_iter().map(|(_, index)| index).collect::<Vec<_>>();
+        assert!(spans.ordered);
+        assert_eq!(spans.values.len(), 4);
+        assert_eq!(
+            indexed_walk(
+                &blocks,
+                &spans,
+                Rect::new(-1., -1., 1000., 2.),
+                &mut 10000,
+                &|| false
+            )
+            .unwrap(),
+            expected
+        );
+        assert_eq!(
+            indexed_walk(
+                &blocks,
+                &spans,
+                Rect::new(0.25, -1., 1.25, 2.),
+                &mut 10000,
+                &|| false
+            )
+            .unwrap(),
+            vec![0, 1]
+        );
+        let mut blocks = Vec::new();
+        let mut credit = None;
+        let mut spans = InitialPatchSpans::new();
+        for (index, patch) in [1, 0, 1].into_iter().enumerate() {
+            let record = indexed_record(index, patch);
+            spans.push(&record, &admit).unwrap();
+            push_record(&mut blocks, &mut credit, record, &admit).unwrap();
+        }
+        assert!(!spans.ordered && spans.values.is_empty() && spans.credit.is_none());
+        assert_eq!(
+            indexed_walk(
+                &blocks,
+                &spans,
+                Rect::new(-1., -1., 1000., 2.),
+                &mut 10000,
+                &|| false
+            )
+            .unwrap(),
+            vec![0, 1, 2]
+        );
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    #[test]
+    fn priority_spans_cancel_and_charge_every_scan_without_changing_sources() {
+        let admit = |_: usize| Some(Box::new(()) as Credit);
+        let mut blocks = Vec::new();
+        let mut credit = None;
+        let mut spans = InitialPatchSpans::new();
+        for index in 0..393 {
+            let patch = if index < 130 {
+                0
+            } else if index < 132 {
+                1
+            } else if index < 392 {
+                2
+            } else {
+                3
+            };
+            let record = indexed_record(index, patch);
+            spans.push(&record, &admit).unwrap();
+            push_record(&mut blocks, &mut credit, record, &admit).unwrap();
+        }
+        let tile = Rect::new(-1., -1., 1000., 2.);
+        let checks = Cell::new(0);
+        let mut work = 10000;
+        let expected = indexed_walk(&blocks, &spans, tile, &mut work, &|| {
+            checks.set(checks.get() + 1);
+            false
+        })
+        .unwrap();
+        let cost = 10000 - work;
+        assert!(cost >= spans.values.len() + blocks.len());
+        for stop in 0..checks.get() {
+            let at = Cell::new(0);
+            assert!(matches!(
+                indexed_walk(&blocks, &spans, tile, &mut 10000, &|| {
+                    let now = at.get();
+                    at.set(now + 1);
+                    now == stop
+                }),
+                Err(super::super::PixelPartitionError::Cancelled)
+            ));
+        }
+        for mut quota in 0..cost {
+            assert!(matches!(
+                indexed_walk(&blocks, &spans, tile, &mut quota, &|| false),
+                Err(super::super::PixelPartitionError::Limit)
+            ));
+        }
+        assert_eq!(
+            indexed_walk(&blocks, &spans, tile, &mut cost.clone(), &|| false).unwrap(),
+            expected
+        );
+        assert_eq!(blocks.iter().map(|b| b.records.len()).sum::<usize>(), 393);
+        assert_eq!(spans.records, 393);
+        eprintln!(
+            "PRIORITY_SPANS scans={cost} cancellations={} all short quotas; cross-block source order preserved",
+            checks.get()
+        );
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    #[test]
+    fn priority_spans_admit_replacements_before_growth_and_release_on_fallback() {
+        let used = Arc::new(AtomicUsize::new(0));
+        let calls = Cell::new(0);
+        let fail = Cell::new(0);
+        let limit = Cell::new(usize::MAX);
+        let admit = |bytes| {
+            calls.set(calls.get() + 1);
+            if calls.get() == fail.get()
+                || used
+                    .load(Ordering::SeqCst)
+                    .checked_add(bytes)
+                    .is_none_or(|sum| sum > limit.get())
+            {
+                return None;
+            }
+            used.fetch_add(bytes, Ordering::SeqCst);
+            Some(Box::new(Reservation(used.clone(), bytes)) as Credit)
+        };
+        let build = || -> Option<()> {
+            let mut index = InitialPatchSpans::new();
+            for patch in 0..18 {
+                index.push(&indexed_record(patch, patch as u32), &admit)?;
+            }
+            assert_eq!(index.values.len(), 18);
+            assert_eq!(index.records, 18);
+            Some(())
+        };
+        build().unwrap();
+        let allocations = calls.get();
+        assert_eq!(used.load(Ordering::SeqCst), 0);
+        for stop in 1..=allocations {
+            calls.set(0);
+            fail.set(stop);
+            assert!(build().is_none());
+            assert_eq!(used.load(Ordering::SeqCst), 0);
+        }
+        fail.set(0);
+        let mut index = InitialPatchSpans::new();
+        for patch in 0..4 {
+            index.push(&indexed_record(patch, patch as u32), &admit).unwrap();
+        }
+        let before = used.load(Ordering::SeqCst);
+        limit.set(before);
+        assert!(index.push(&indexed_record(4, 4), &admit).is_none());
+        assert_eq!(index.records, 4);
+        assert_eq!(index.values.len(), 4);
+        assert_eq!(used.load(Ordering::SeqCst), before);
+        limit.set(usize::MAX);
+        index.push(&indexed_record(4, 4), &admit).unwrap();
+        assert_eq!(index.records, 5);
+        index.push(&indexed_record(5, 0), &admit).unwrap();
+        assert!(!index.ordered);
+        assert_eq!(used.load(Ordering::SeqCst), 0);
+        index.push(&indexed_record(6, 99), &admit).unwrap();
+        assert_eq!(used.load(Ordering::SeqCst), 0);
+        drop(index);
+        build().unwrap();
+        assert_eq!(used.load(Ordering::SeqCst), 0);
+        eprintln!(
+            "PRIORITY_SPANS admissions={allocations} growth refusal preserves index; unexpected source order releases index; retry exact; final=0"
+        );
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    #[test]
+    fn initial_paint_quota_conserves_global_work_and_preserves_failed_pixel() {
+        let deny = Cell::new(false);
+        let admit = |_: usize| {
+            if deny.get() {
+                None
+            } else {
+                Some(Box::new(()) as Credit)
+            }
+        };
+        let points = [Point::ZERO, Point::new(1., 0.), Point::new(0., 1.)];
+        let source = |patch_index, color| PixelSourceOwner {
+            patch_index,
+            sample_index: 0,
+            component_count: 1,
+            u: [0.; 3],
+            v: [0.; 3],
+            components: [[color, 0., 0.], [0.; 3], [0.; 3], [0.; 3]],
+        };
+        let base = || {
+            let mut pixel = OrderedPixel::new(&admit, 512);
+            pixel
+                .paint_triangle(points, source(0, 0.2), &mut 1_000_000, &|| false)
+                .unwrap();
+            pixel
+        };
+        let snapshot = |pixel: &OrderedPixel<'_>| {
+            let mut values = Vec::new();
+            pixel
+                .visit(&mut 1_000_000, &|| false, &mut |area, center, polygon, owner| {
+                    values.push((area.to_bits(), center, polygon.to_vec(), *owner));
+                    Ok(())
+                })
+                .unwrap();
+            values
+        };
+        let mut pixel = base();
+        let mut work = 1_000_000;
+        let mut remaining = 1_000_000;
+        paint_initial(
+            &mut pixel,
+            points,
+            source(1, 0.8),
+            &mut work,
+            &mut remaining,
+            &|| false,
+        )
+        .unwrap();
+        let cost = 1_000_000 - work;
+        assert!(cost > 1);
+        assert_eq!(work, remaining);
+        let expected = snapshot(&pixel);
+        for quota in 0..=cost {
+            let mut pixel = base();
+            let before = snapshot(&pixel);
+            let mut work = 1_000_000;
+            let mut remaining = quota;
+            let result = paint_initial(
+                &mut pixel,
+                points,
+                source(1, 0.8),
+                &mut work,
+                &mut remaining,
+                &|| false,
+            );
+            let spent = 1_000_000 - work;
+            assert_eq!(remaining, quota - spent);
+            assert!(spent <= quota);
+            if quota < cost {
+                assert_eq!(result, Err(super::super::PixelPartitionError::Limit));
+                assert_eq!(snapshot(&pixel), before);
+            } else {
+                result.unwrap();
+                assert_eq!(snapshot(&pixel), expected);
+            }
+        }
+        for quota in [0, cost / 2, cost - 1, cost] {
+            let mut pixel = base();
+            let before = snapshot(&pixel);
+            let mut work = quota;
+            let mut remaining = 1_000_000;
+            let result = paint_initial(
+                &mut pixel,
+                points,
+                source(1, 0.8),
+                &mut work,
+                &mut remaining,
+                &|| false,
+            );
+            assert_eq!(remaining, 1_000_000 - (quota - work));
+            if quota < cost {
+                assert_eq!(result, Err(super::super::PixelPartitionError::Limit));
+                assert_eq!(work, 0);
+                assert_eq!(snapshot(&pixel), before);
+            } else {
+                result.unwrap();
+                assert_eq!(snapshot(&pixel), expected);
+            }
+        }
+        let mut pixel = base();
+        let before = snapshot(&pixel);
+        let mut work = 1_000_000;
+        let mut remaining = 1_000_000;
+        assert_eq!(
+            paint_initial(
+                &mut pixel,
+                points,
+                source(1, 0.8),
+                &mut work,
+                &mut remaining,
+                &|| true
+            ),
+            Err(super::super::PixelPartitionError::Cancelled)
+        );
+        assert_eq!((work, remaining), (1_000_000, 1_000_000));
+        assert_eq!(snapshot(&pixel), before);
+        deny.set(true);
+        assert_eq!(
+            paint_initial(
+                &mut pixel,
+                points,
+                source(1, 0.8),
+                &mut work,
+                &mut remaining,
+                &|| false
+            ),
+            Err(super::super::PixelPartitionError::Admission)
+        );
+        assert_eq!(work, remaining);
+        assert_eq!(snapshot(&pixel), before);
+        eprintln!(
+            "initial quota cost={cost}; all short local quotas, global exhaustion, cancellation/admission conserve work and retain pixel"
+        );
     }
     #[test]
     fn ranked_candidates_match_total_order_preserve_ties_and_cancel_every_comparison() {

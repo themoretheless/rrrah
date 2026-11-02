@@ -35,6 +35,18 @@ pub struct SourceFingerprint {
 
 impl SourceFingerprint {
     pub fn from_path(path: impl AsRef<Path>) -> Result<Self, CacheError> {
+        Self::from_path_with_cancel(path, || false)
+    }
+
+    /// Same frozen fingerprint stream, with cancellation before filesystem work
+    /// and between at most 16 KiB read requests. An active OS read may still block.
+    pub fn from_path_with_cancel(
+        path: impl AsRef<Path>,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<Self, CacheError> {
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         let path = path.as_ref();
         let metadata = fs::metadata(path).map_err(|source| CacheError::Io {
             path: path.to_owned(),
@@ -49,6 +61,9 @@ impl SourceFingerprint {
             .ok()
             .and_then(|time| time.duration_since(SystemTime::UNIX_EPOCH).ok())
             .map_or(0, |duration| duration.as_nanos());
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
         let mut file = File::open(path).map_err(|source| CacheError::Io {
             path: path.to_owned(),
             source,
@@ -60,15 +75,15 @@ impl SourceFingerprint {
         // while retaining the frozen offset/sample hash stream exactly.
         let contiguous = if file_size > SAMPLE_BYTES && file_size <= 2 * SAMPLE_BYTES {
             let mut bytes = vec![0u8; file_size as usize];
-            file.read_exact(&mut bytes).map_err(|source| CacheError::Io {
-                path: path.to_owned(),
-                source,
-            })?;
+            read_fingerprint_bytes(&mut file, &mut bytes, path, &mut cancelled)?;
             Some(bytes)
         } else {
             None
         };
         for offset in sample_offsets(file_size) {
+            if cancelled() {
+                return Err(CacheError::Cancelled);
+            }
             hasher.update(&offset.to_le_bytes());
             let remaining = file_size.saturating_sub(offset).min(SAMPLE_BYTES);
             let sample_len = usize::try_from(remaining).map_err(|_| CacheError::SizeOverflow)?;
@@ -82,11 +97,11 @@ impl SourceFingerprint {
                     source,
                 })?;
             let mut sample = vec![0_u8; sample_len];
-            file.read_exact(&mut sample).map_err(|source| CacheError::Io {
-                path: path.to_owned(),
-                source,
-            })?;
+            read_fingerprint_bytes(&mut file, &mut sample, path, &mut cancelled)?;
             hasher.update(&sample);
+        }
+        if cancelled() {
+            return Err(CacheError::Cancelled);
         }
         Ok(Self {
             file_size,
@@ -94,6 +109,24 @@ impl SourceFingerprint {
             sampled_blake3: *hasher.finalize().as_bytes(),
         })
     }
+}
+
+fn read_fingerprint_bytes(
+    file: &mut File,
+    bytes: &mut [u8],
+    path: &Path,
+    cancelled: &mut impl FnMut() -> bool,
+) -> Result<(), CacheError> {
+    for chunk in bytes.chunks_mut(16 * 1024) {
+        if cancelled() {
+            return Err(CacheError::Cancelled);
+        }
+        file.read_exact(chunk).map_err(|source| CacheError::Io {
+            path: path.to_owned(),
+            source,
+        })?;
+    }
+    Ok(())
 }
 
 fn sample_offsets(file_size: u64) -> Vec<u64> {
@@ -1499,6 +1532,45 @@ mod tests {
             cache.load(key),
             Err(super::CacheError::Corrupt("file length does not match header"))
         ));
+    }
+
+    #[test]
+    fn fingerprint_cancellation_precedes_open_and_preserves_every_size_branch() {
+        let dir = tempfile::tempdir().unwrap();
+        assert!(matches!(
+            SourceFingerprint::from_path_with_cancel(dir.path().join("missing"), || true),
+            Err(CacheError::Cancelled)
+        ));
+        for size in [0, 1, 65536, 65537, 131072, 131073, 262144] {
+            let path = dir.path().join(format!("{size}.raw"));
+            std::fs::write(&path, (0..size).map(|i| (i % 251) as u8).collect::<Vec<_>>()).unwrap();
+            let expected = SourceFingerprint::from_path(&path).unwrap();
+            let mut checkpoints = 0;
+            let fresh = SourceFingerprint::from_path_with_cancel(&path, || {
+                checkpoints += 1;
+                false
+            })
+            .unwrap();
+            assert_eq!(fresh, expected);
+            for stop in 1..=checkpoints {
+                let mut calls = 0;
+                assert!(
+                    matches!(
+                        SourceFingerprint::from_path_with_cancel(&path, || {
+                            calls += 1;
+                            calls == stop
+                        }),
+                        Err(CacheError::Cancelled)
+                    ),
+                    "size={size}, stop={stop}"
+                );
+                assert_eq!(calls, stop);
+            }
+            assert_eq!(
+                SourceFingerprint::from_path_with_cancel(&path, || false).unwrap(),
+                expected
+            );
+        }
     }
 
     #[test]

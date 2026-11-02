@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: pin references bind original body, arguments and selected branch
+ok 1 - pin references bind original body, arguments and selected branch
+  ---
+  duration_ms: 1.010417
+  type: 'test'
+  ...
+# Subtest: pin/release replay is reason-specific and fails closed on corrupt or foreign state
+ok 2 - pin/release replay is reason-specific and fails closed on corrupt or foreign state
+  ---
+  duration_ms: 0.970125
+  type: 'test'
+  ...
+# Subtest: pin authority survives a compaction entry and disappears only on its branch release
+ok 3 - pin authority survives a compaction entry and disappears only on its branch release
+  ---
+  duration_ms: 0.229333
+  type: 'test'
+  ...
+# Subtest: recovery distinguishes present, archived, corrupted and over-budget results
+ok 4 - recovery distinguishes present, archived, corrupted and over-budget results
+  ---
+  duration_ms: 36.368708
+  type: 'test'
+  ...
+# Subtest: shared protection beats duplicate removal, stored compression and errored-input purge
+ok 5 - shared protection beats duplicate removal, stored compression and errored-input purge
+  ---
+  duration_ms: 1.847208
+  type: 'test'
+  ...
+# Subtest: a suspended legacy compression also protects its targets from dedup and purge
+ok 6 - a suspended legacy compression also protects its targets from dedup and purge
+  ---
+  duration_ms: 0.354208
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 186.344833

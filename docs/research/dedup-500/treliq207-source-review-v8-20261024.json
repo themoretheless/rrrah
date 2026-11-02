@@ -1,0 +1,103 @@
+{
+  "index": 207,
+  "repository": "mahsumaktas/treliq",
+  "commit": "754d487cc4fbaa2ed41a59abd416938904133a10",
+  "whole_file_reads": [
+    {
+      "path": "src/core/dedup.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/02-dedup.ts",
+      "sha256": "c80cfb6898bab6d907f12a0d107cea0bb60d9398a8a9af50407fdcf91f62c4a5"
+    },
+    {
+      "path": "test/unit/dedup-verification.test.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/05-dedup-verification.test.ts",
+      "sha256": "57cba86f07d981729e3c093c46342f29c9346d0bbe8989dd0bddff92c2e0a67a"
+    },
+    {
+      "path": "test/unit/dedup.test.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/06-dedup.test.ts",
+      "sha256": "a3ca1a554c645759066568dd025a0002366bd871a59a5486af370da8541e0fde"
+    },
+    {
+      "path": "src/core/vectorstore.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/remaining-pinned/src/core/vectorstore.ts",
+      "sha256": "8e45540dbfc7b8dc2df6434def0e4cdf71e168a908a50994bda0a3f779ec0c58"
+    },
+    {
+      "path": "src/core/concurrency.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/remaining-pinned/src/core/concurrency.ts",
+      "sha256": "0fb936ec14f8c2d0e6e5ca6534ec68c6d9737ff2c2dabe48b6190b5cf044fa9d"
+    },
+    {
+      "path": "test/unit/concurrency.test.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/remaining-pinned/test/unit/concurrency.test.ts",
+      "sha256": "74a2d952600992c9578b680b4bdb1f251b7243c8973f04adc7ac190aa94d209e"
+    },
+    {
+      "path": "src/core/issue-scanner.ts",
+      "local": "docs/research/dedup-500/evidence/mahsumaktas--treliq/03-issue-scanner.ts",
+      "sha256": "af0bde1b5145f4fa7cf2d5cc28df9cea07bc9f99bd73f8432db4870800f2a1f1"
+    }
+  ],
+  "whole_file_read_count": 7,
+  "tracked_blob_count": 105,
+  "tests_run": 0,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Whole335-line dedup engine read. relatedThreshold controls edges;duplicateThreshold stored but unused in this file. Union-find forms transitive connected components,not all-pairs similarity;average only accepted edges,not all member pairs. No file/image content equality.",
+    "Embedding batch assigns results without dimension/count/finite validation;short batch can omit items while marking batchDone. Cosine loops first vector length only,zero norm returns0,dimension mismatch may NaN/asymmetric;not runtime reproduced. Items mutated embedding/duplicateGroup;numeric number alone identifies PR/issue,caller uniqueness must be checked.",
+    "Optional LLM verifies only20 largest clusters;parse/network failure keeps originals without verified flag. Subgroup membership accepts duplicates/overlap and may leave omitted items stale duplicateGroup;no executed counterexample yet. VectorStore connect asynchronous not awaited before large-set use;implementation pending.",
+    "Three authored controls executed original class body with dependency adapters:chain endpoints cosine0.5 appear together under0.8 edge threshold;short successful batch silently omits item without fallback;LLM subgroup excludes item3 but leaves its duplicateGroup0. No actual provider/vectorstore/concurrency qualification;two harness setup failures corrected before successful execution.",
+    "Both dedup unit test files whole-read:6verification+11core/cross-type cases,not executed. Subgroup test checks returned members but never cleared duplicateGroup of excluded singleton,so reproduced stale-label issue passes its stated assertions. Batch tests cover full response/rejection,not successful short response. Failure test expects18 calls due real controller retry;current adapter controls explicitly do not qualify retries. No transitive endpoint threshold/NaN/dimension mismatch or duplicate numeric ID cases in these files.",
+    "VectorStore whole-read. No normalization or exact cosine rerank;uses1-distance/2 assuming normalized vectors,missing distance defaults0=>similarity1. Two original-class adapter controls confirm transformation behavior with synthetic rows (collinear unequal-length vectors supplied L2sq4 reject;absent distance accepts1). Actual LanceDB metric behavior not tested.",
+    "findAllPairs queries limit20 per record incl self,no pagination or completeness check;cannot promise every above-threshold pair. No explicit ANN index creation visible,so source comment O(nlogn) unqualified. upsert drops shared table then creates,not transactional replacement;failure/concurrent readers untested. close merely nulls reference,not observed explicit database close.",
+    "Concurrency whole module read/executed unchanged:3 deterministic controls pass. Retry2 means3attempts;finally release. throttle configured1 increases to2;with4running+queued,throttle2 followed by completion starts replacement unconditionally,retains4running despite new max2. release does not recheck cap. Retry sleep holds slot,queue unbounded,noAbortSignal/deadline/config validation. Real network/adaptive caller impact unqualified.",
+    "Nine original concurrency callbacks whole-read and executed unchanged via Node registration/assert adapter against unchanged controller,real timers:9pass. Static cap,retry exhaustion,FIFO covered. Adaptive tests inspect numeric getter only,never running tasks while throttling;thus reproduced queue cap issue not contradicted by passing suite. One batching test checks only6starts/6ends,not actual batch overlap or elapsed timing. No Jest/full app qualification.",
+    "Issue scanner wholly read161 lines. REST fallback stops when current page contains zero real issues after filtering PRs,even when full page contains PRs and later pages could contain issues;potential truncated recall needs execution. GraphQL failure discards partial accumulated result and restarts REST;REST configured15sec request timeout,GraphQL config here only headers. max defaults500,no explicit truncation/completion indicator in returned array;empty/no duplicates cannot imply all repository issues scanned. Links keyed numeric issue number within configured repo;not evidence collision across separate repos because caller not yet read.",
+    "Pagination omission now executed:original IssueScanner class body with inert constructors/log and synthetic REST adapter,max2,first full page2PR rows,next page issue3;returns empty and requests only page1. Confirms source defect for this page shape,not actual GitHub account behavior. No tokens/network/scoring used."
+  ],
+  "remaining": "Other source/tests/assets,real providers/LanceDB and runtime unreviewed.",
+  "previous_audit": "docs/research/dedup-500/treliq207-source-review-v7-20261024.json",
+  "authored_controls_run": 9,
+  "controls": "docs/research/dedup-500/evidence/mahsumaktas--treliq/dedup-boundary-control-results.json",
+  "original_test_inventory": [
+    {
+      "path": "test/unit/dedup-verification.test.ts",
+      "tests": [
+        "dissolves cluster when LLM says not duplicate",
+        "keeps cluster and updates bestPR from LLM recommendation",
+        "splits cluster into subgroups",
+        "skips verification when verifyWithLLM is false",
+        "falls back to score-based best when LLM best selection fails",
+        "handles verification LLM failure gracefully"
+      ],
+      "count": 6,
+      "tests_run": 0
+    },
+    {
+      "path": "test/unit/dedup.test.ts",
+      "tests": [
+        "returns empty clusters for fewer than 2 PRs",
+        "clusters semantically similar PRs and picks highest score as best",
+        "handles individual embedding failures gracefully",
+        "uses batch embedding when provider supports it",
+        "falls back to parallel individual embedding when batch not supported",
+        "falls back to parallel when batch fails",
+        "sets type to \"pr\" for PR-only clusters",
+        "detects similar PR and issue as mixed cluster",
+        "handles issue-only items",
+        "clusters two similar issues as issue-type cluster",
+        "itemToText handles items without changedFiles (issues)"
+      ],
+      "count": 11,
+      "tests_run": 0
+    }
+  ],
+  "vectorstore_controls": "docs/research/dedup-500/evidence/mahsumaktas--treliq/vectorstore-distance-controls.json",
+  "concurrency_controls": "docs/research/dedup-500/evidence/mahsumaktas--treliq/concurrency-control-results.json",
+  "original_tests_run": 9,
+  "concurrency_original_results": "docs/research/dedup-500/evidence/mahsumaktas--treliq/concurrency-original-results.json",
+  "issue_pagination_control": "docs/research/dedup-500/evidence/mahsumaktas--treliq/issue-pagination-control-results.json"
+}

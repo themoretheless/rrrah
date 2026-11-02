@@ -1,0 +1,13 @@
+[graph]
+all-features = true
+
+[advisories]
+ignore = [
+    # bincode 1.3.3, unmaintained, transitive dep from Solana crates
+    # Advisory: https://rustsec.org/advisories/RUSTSEC-2025-0141
+    "RUSTSEC-2025-0141",
+
+    # time 0.3.44, fix (0.3.47) requires rustc 1.88+, only build dep via vergen
+    # Advisory: https://rustsec.org/advisories/RUSTSEC-2026-0009
+    "RUSTSEC-2026-0009",
+]

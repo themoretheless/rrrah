@@ -1,0 +1,152 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package metadata
+
+import (
+	"bytes"
+	_ "embed"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/fs"
+	"os"
+	"path/filepath"
+	"strings"
+
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+//go:embed default_tags.json
+var defaultTagOverrides []byte
+
+type tagOverrideEntry struct {
+	Type            string     `json:"type"`
+	Source          string     `json:"source"`
+	InName          string     `json:"in_name"`
+	Template        string     `json:"template"`
+	PersonalRelease boolString `json:"personalrelease"`
+}
+
+type boolString struct {
+	Value bool
+	Set   bool
+}
+
+func (b *boolString) UnmarshalJSON(data []byte) error {
+	if b == nil {
+		return errors.New("personalrelease: nil receiver")
+	}
+	if bytes.Equal(data, []byte("null")) {
+		return nil
+	}
+	var value bool
+	if err := json.Unmarshal(data, &value); err == nil {
+		b.Value = value
+		b.Set = true
+		return nil
+	}
+	var strValue string
+	if err := json.Unmarshal(data, &strValue); err == nil {
+		b.Value = strings.EqualFold(strings.TrimSpace(strValue), "true")
+		b.Set = true
+		return nil
+	}
+	return errors.New("personalrelease: invalid value")
+}
+
+// ApplyTagOverrides resolves a release tag and its optional naming overrides
+// from tagsPath. An empty path or missing file is a no-op; read and JSON errors
+// preserve currentTag. In-name and explicit-tag matches are case-sensitive.
+func ApplyTagOverrides(path, currentTag, tagsPath string) (string, *api.TagOverride, error) {
+	if strings.TrimSpace(tagsPath) == "" {
+		return currentTag, nil, nil
+	}
+
+	data, err := os.ReadFile(tagsPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return currentTag, nil, nil
+		}
+		return currentTag, nil, fmt.Errorf("metadata: read tag overrides: %w", err)
+	}
+
+	entries := map[string]tagOverrideEntry{}
+	if err := json.Unmarshal(data, &entries); err != nil {
+		return currentTag, nil, fmt.Errorf("metadata: unmarshal tag overrides: %w", err)
+	}
+
+	effectiveTag := currentTag
+	for key, entry := range entries {
+		if entry.InName == key && strings.Contains(path, key) {
+			effectiveTag = "-" + key
+			break
+		}
+	}
+
+	if effectiveTag == "" {
+		return currentTag, nil, nil
+	}
+
+	for key, entry := range entries {
+		if strings.TrimPrefix(effectiveTag, "-") != key {
+			continue
+		}
+		override := api.TagOverride{
+			Type:            strings.TrimSpace(entry.Type),
+			Source:          strings.TrimSpace(entry.Source),
+			Template:        strings.TrimSpace(entry.Template),
+			PersonalRelease: entry.PersonalRelease.Value,
+		}
+		if !entry.PersonalRelease.Set {
+			override.PersonalRelease = false
+		}
+		return effectiveTag, &override, nil
+	}
+
+	return effectiveTag, nil, nil
+}
+
+// EnsureDefaultTagOverrides creates the bundled tag overrides beside the
+// configured database when no user-managed file exists.
+func EnsureDefaultTagOverrides(dbPath string) (string, error) {
+	return ensureDefaultTagOverrides(dbPath, defaultTagOverrides)
+}
+
+func ensureDefaultTagOverrides(dbPath string, defaults []byte) (string, error) {
+	tagsPath, err := tagOverridesPath(dbPath)
+	if err != nil {
+		return "", fmt.Errorf("metadata: resolve default tag overrides path: %w", err)
+	}
+
+	file, err := os.CreateTemp(filepath.Dir(tagsPath), ".tags-*.tmp")
+	if err != nil {
+		return "", fmt.Errorf("metadata: create temporary default tag overrides: %w", err)
+	}
+	tempPath := file.Name()
+	defer func() {
+		_ = os.Remove(tempPath)
+	}()
+
+	if _, err := file.Write(defaults); err != nil {
+		_ = file.Close()
+		return "", fmt.Errorf("metadata: write temporary default tag overrides: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return "", fmt.Errorf("metadata: close temporary default tag overrides: %w", err)
+	}
+
+	if err := os.Link(tempPath, tagsPath); errors.Is(err, fs.ErrExist) {
+		info, statErr := os.Stat(tagsPath)
+		if statErr != nil {
+			return "", fmt.Errorf("metadata: inspect existing tag overrides: %w", statErr)
+		}
+		if !info.Mode().IsRegular() {
+			return "", fmt.Errorf("metadata: existing tag overrides path is not a regular file: %s", tagsPath)
+		}
+		return tagsPath, nil
+	} else if err != nil {
+		return "", fmt.Errorf("metadata: publish default tag overrides: %w", err)
+	}
+	return tagsPath, nil
+}

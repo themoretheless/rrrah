@@ -1,0 +1,65 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original helper functions, actual source client classes with _request replaced by recorder, extracted torrent matching method with in-memory candidates. Candidate adapter isolates second independent await defect. No HTTP, torrent commands, imports/moves or filesystem mutations executed.",
+  "authored_controls": [
+    {
+      "name": "RadarrClient manual import camelCase arguments rejected before request",
+      "passed": true,
+      "observed": {
+        "result": false,
+        "requests": 0
+      }
+    },
+    {
+      "name": "SonarrClient manual import camelCase arguments rejected before request",
+      "passed": true,
+      "observed": {
+        "result": false,
+        "requests": 0
+      }
+    },
+    {
+      "name": "after candidate adapter command coroutine is never awaited",
+      "passed": true,
+      "observed": {
+        "result": false,
+        "created": 1,
+        "requests": 0
+      }
+    },
+    {
+      "name": "path update uses wrong data keyword for actual client",
+      "passed": true,
+      "observed": {
+        "error": "TypeError: RadarrClient.update_movie() got an unexpected keyword argument 'data'",
+        "requests": [
+          [
+            "GET",
+            "/movie/1"
+          ],
+          [
+            "GET",
+            "/rootfolder"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "earlier basename match wins over later exact path",
+      "passed": true,
+      "observed": [
+        "wrong",
+        2
+      ]
+    },
+    {
+      "name": "same candidates reversed change selected torrent",
+      "passed": true,
+      "observed": [
+        "right",
+        2
+      ]
+    }
+  ]
+}

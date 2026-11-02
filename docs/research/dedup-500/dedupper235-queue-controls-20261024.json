@@ -1,0 +1,26 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original QueueHelper.waitOperationWaitPromises body extracted via Flow AST and real JavaScript controlled promises in-memory. No filesystem, database, lock or full Jest/app execution.",
+  "authored_controls": [
+    {
+      "name": "operation appended during wait removed without being awaited",
+      "passed": true,
+      "observed": {
+        "lateOperationSettled": false,
+        "trackedAfterWait": 0
+      }
+    },
+    {
+      "name": "stable successful batch drained positive control",
+      "passed": true
+    },
+    {
+      "name": "rejected promise retained and poisons subsequent waits",
+      "passed": true,
+      "observed": {
+        "trackedAfterFailure": 1
+      }
+    }
+  ]
+}

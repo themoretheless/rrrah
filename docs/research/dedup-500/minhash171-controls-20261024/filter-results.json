@@ -1,0 +1,13 @@
+{
+  "scope": "Complete original FilterStage, owned removal files; no cluster metadata files.\n\nStage/folder/log/stat labels are adapters. Metadata tuple reader deliberately\nraises if called: cluster-metadata loading is not qualified by these controls.\n",
+  "source_sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+  "authored_controls_run": 4,
+  "original_tests_run": 0,
+  "observations": [
+    "missing removal and metadata files pass all documents unchanged",
+    "sorted removal IDs1,2 keep0,3 and set unknown-cluster metadata",
+    "unsorted removal IDs2,1 silently retain requested ID1; Stage3 writes sorted IDs, so malformed-boundary behavior only",
+    "truncated first removal record raises struct.error"
+  ],
+  "truncated_error": "unpack requires a buffer of 4 bytes"
+}

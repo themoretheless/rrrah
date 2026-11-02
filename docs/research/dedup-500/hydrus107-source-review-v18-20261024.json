@@ -1,0 +1,34 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v17-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "build_files/windows/icon.ico",
+      "local": "74-icon.ico",
+      "git_blob": "d7ac7c75733f54df5f69f40eac9057b9b97c5f2e",
+      "sha256": "8ce8266f237c09c223aab8f3003576347367164f621d9fc9a9144c452592db54",
+      "whole_visual_review": true
+    },
+    {
+      "path": "docs/img/hvd_high_level_diagram.drawio.svg",
+      "local": "75-diagram.svg",
+      "git_blob": "fe78fe258fee15e1b1c645a5b9800ad154130a8f",
+      "sha256": "f185e2d2e97ee13ea8a35fda53725369c0f2b682bdc41edcfead6ac638dc7f36",
+      "whole_visual_review": true
+    }
+  ],
+  "whole_files_read_total": 76,
+  "remaining_without_whole_review": 1,
+  "whole_repo_complete": false,
+  "new_authored_controls": 0,
+  "authored_controls_total": 28,
+  "findings": [
+    "ICO contains one256x25632bit image; decoded with macOS sips and visually inspected: black lowercasehvd onwhite.",
+    "SVG whole rendered via QuickLook1800px and inspected: Hydrus->video->perceptualhasher->database->dupefinder->similarIDs->Hydrus, VPDQbackend loop and searchcache. Diagram agrees with broad read code architecture, not correctness/runtime proof. Embedded DrawIO/XML not separately whole-text reviewed.",
+    "Only uv.lock remains without whole review in main77blob tree; external media/native dependencies remain separate qualification gaps."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

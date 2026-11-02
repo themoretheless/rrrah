@@ -1,0 +1,18 @@
+{
+  "scope": "Whole unchanged API module with requests module replaced by recording session/types; no network calls.",
+  "controls": [
+    {
+      "name": "json_without_access_key_or_explicit_headers",
+      "observed": "KeyError(headers) before request",
+      "pass": true
+    },
+    {
+      "name": "json_with_access_key_serializes",
+      "pass": true
+    },
+    {
+      "name": "get_file_requests_stream_without_timeout",
+      "pass": true
+    }
+  ]
+}

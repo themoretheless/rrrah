@@ -1,0 +1,46 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "scope": "Original AST bodies, in-memory SQL-expression evaluator and row fixtures; no SQLAlchemy, database, HTTP, deletion or full upstream test execution.",
+  "authored_controls": [
+    {
+      "name": "all stages",
+      "passed": true,
+      "is_complete": true,
+      "aggregate": {
+        "total": 1,
+        "successful": 1,
+        "failed": 0
+      }
+    },
+    {
+      "name": "optional services absent",
+      "passed": true,
+      "is_complete": true,
+      "aggregate": {
+        "total": 1,
+        "successful": 0,
+        "failed": 1
+      }
+    },
+    {
+      "name": "optional service warning",
+      "passed": true,
+      "is_complete": true,
+      "aggregate": {
+        "total": 1,
+        "successful": 0,
+        "failed": 1
+      }
+    },
+    {
+      "name": "critical error",
+      "passed": true,
+      "is_complete": false,
+      "aggregate": {
+        "total": 1,
+        "successful": 0,
+        "failed": 1
+      }
+    }
+  ]
+}

@@ -1012,4 +1012,16 @@ fn indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges
     );
     assert_eq!(retry.result.result.grouping.groups, vec![vec![0, 1, 2]]);
     assert_eq!(budget.used(), 0);
+    let explicit_retry =
+        scan_indexed_presentation_roots(&roots, &traversal, mode, policy, &budget, || false).unwrap();
+    assert_eq!(explicit_retry.candidate_pairs, 3);
+    assert!(explicit_retry.preparation_issues.is_empty());
+    assert!(explicit_retry.result.result.comparisons.issues.is_empty());
+    assert!(explicit_retry.result.result.comparisons.different.is_empty());
+    assert_eq!(
+        explicit_retry.result.result.comparisons.equal,
+        vec![(0, 1), (0, 2), (1, 2)]
+    );
+    assert_eq!(explicit_retry.result.result.grouping.groups, vec![vec![0, 1, 2]]);
+    assert_eq!(budget.used(), 0);
 }

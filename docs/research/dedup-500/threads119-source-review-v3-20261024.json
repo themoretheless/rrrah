@@ -1,0 +1,77 @@
+{
+  "repository": "d4ncboz/threads-affiliate",
+  "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
+  "previous_audit": "docs/research/dedup-500/threads119-source-review-v2-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "threads_poster/poster.py",
+      "local": "next-threads_poster_poster.py",
+      "git_blob": "dfe6e451d8aa22c31a076b48f41c93bd99bddb57",
+      "sha256": "e0c5cefa56c1ae57e1fde4566071d85165cae2a61a94a1427fc5af84012c7605",
+      "whole_text_read": true
+    },
+    {
+      "path": "schemas/post-result.schema.json",
+      "local": "next-schemas_post-result.schema.json",
+      "git_blob": "970fae6516ab6e776fff3dc124a931bc2dc63bd4",
+      "sha256": "8999bb300449866b0d7728f2ae92d78d05e16e8ed052ae4778e6336c97d4b7b2",
+      "whole_text_read": true
+    },
+    {
+      "path": "schemas/hooks.schema.json",
+      "local": "next-schemas_hooks.schema.json",
+      "git_blob": "f44376b7eef0c9ada272a1e67033d0233c3107ea",
+      "sha256": "9adf9b9bd0a9c09dc36ec017d96ece62d47ca5e798681504a43e5aa33e1e2ce4",
+      "whole_text_read": true
+    },
+    {
+      "path": "examples/single_post.py",
+      "local": "next-examples_single_post.py",
+      "git_blob": "7bcf89ab7c123e867516fd91d68456a07f2de07e",
+      "sha256": "1f4876eb7766e03e5365bb9120fa3273e9f4290e9d7727745ae92d2c9f0dc7ec",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "ccfc433c76a8786dc087f24b27aed34ae7011afb",
+      "sha256": "80342b619cc07793b4e7f81059158fa78e329e006c3b7421f67059ee2c1aa598",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/__init__.py",
+      "local": "05-__init__.py",
+      "git_blob": "8fce8ecab733c039982ce45c1b066ac2b2d0642c",
+      "sha256": "8a67a2808885908370666e7db087061c8f496aa7375e53ec8206c4b2893fa890",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 16,
+  "tracked_blobs": 35,
+  "whole_repo_complete": false,
+  "original_test_functions_total_distinct": 6,
+  "authored_controls_total_distinct": 5,
+  "new_controls": 2,
+  "findings": [
+    {
+      "finding": "Interleaved load-append-save can erase another completed record; serial control preserves both.",
+      "evidence": "original methods, owned local files, deterministic injected scheduling;not process stress test"
+    },
+    {
+      "finding": "After submit click, profile navigation exception yields success=false. CLI only records on success=true, leaving potentially submitted operation unrecorded.",
+      "evidence": "source-only;no remote post attempted or confirmed"
+    },
+    {
+      "finding": "No username or unmatched verification text still returns success=true after click;profile URL is not a specific verified post URL.",
+      "evidence": "source-only;no live platform claim"
+    },
+    {
+      "finding": "Root MIT license whole-read. No source adopted.",
+      "evidence": "pinned source"
+    }
+  ],
+  "harness": "docs/research/dedup-500/threads119-controls-20261024",
+  "remaining": "19 blobs not whole-read;browser/cookie/platform runtime unqualified",
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

@@ -2,7 +2,7 @@
   "index": 257,
   "repository": "CZ-NIC/deduplidog",
   "commit": "3a227d995043f6dc91cd7182deecd6fa8e9e08a3",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All40trackedblobs assessed:29wholetext,2archive inventories,7images viewed,2videos decoded/probed plus firstframe viewed. Archived code not fully read; no upstream suite run",
   "decision": "reference",
   "finding": "Scattered-directory duplicate finder with dry-run command rendering/tests; GPL and confirmation semantics need deeper checks.",
   "available_source_evidence": [
@@ -58,7 +58,7 @@
     }
   ],
   "license_metadata": "GPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root GPLv3 text fully read, pyproject declares GPL-3.0-or-later; no production source adoption",
   "tests_detected": 4,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -84,5 +84,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/deduplidog257-source-review-v11-20261025.json",
+  "complete_source_review": "docs/research/dedup-500/deduplidog257-source-review-v11-20261025.json"
 }

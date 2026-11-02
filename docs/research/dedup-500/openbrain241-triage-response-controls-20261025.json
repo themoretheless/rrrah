@@ -1,0 +1,32 @@
+{
+  "scope": "AST-extracted original triage function; fake HTTP200, clock, API key supplier; no config/network/model",
+  "malformed_json": {
+    "prediction": {
+      "summary": "sample",
+      "category": "learning",
+      "actionability": "low",
+      "key_topics": [],
+      "tools_mentioned": [],
+      "urls": []
+    },
+    "meta": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "latency_ms": 0
+    }
+  },
+  "wrong_types": {
+    "prediction": {
+      "summary": 123,
+      "category": "invalid",
+      "actionability": null,
+      "key_topics": "not-array"
+    },
+    "meta": {
+      "prompt_tokens": 10,
+      "completion_tokens": 0,
+      "latency_ms": 0
+    }
+  },
+  "fake_requests": 2
+}

@@ -1,0 +1,61 @@
+{
+  "repository": "huggingface/dataset-dedupe-estimator",
+  "commit": "e71ddd403005e1110733d902919032a028ce5adb",
+  "whole_files_read": [
+    {
+      "path": "src/fileutils.rs",
+      "local": "02-fileutils.rs",
+      "git_blob": "f8a79cf88fb2e9fc36f7e171b68c99f6bb78173f",
+      "sha256": "fe83de35efc0182160481110b2d5674dcac2113baa09dc0ddd10a632e244e5a4",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "03-lib.rs",
+      "git_blob": "b9642da8a652c3198f20e2007e8974e2f86c94a0",
+      "sha256": "8046476b66d4a6af89b018a1585ce75edbf4addab88e9e2e0ed90040048cb49e",
+      "whole_text_read": true
+    },
+    {
+      "path": "de/tests/test_cli.py",
+      "local": "06-test_cli.py",
+      "git_blob": "3dba6027f7a773c7b6759247b2bde6cf381003f0",
+      "sha256": "a0157f57cbf9bedcc63f24d1dc55e8715528636812a6c0f8d6f0c6e7bec2e9d3",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/store.rs",
+      "local": "deep-store.rs",
+      "git_blob": "c597f3391d3e4ebcc631a865dee36a763e822cd2",
+      "sha256": "3f5db132c91f841a93e2b792d317957150cf6527912957e1be137a59a2498800",
+      "whole_text_read": true
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "deep-Cargo.toml",
+      "git_blob": "48d05a714ba9294c59bf11b59f7d01e69fc76482",
+      "sha256": "cfe03e7f4f0d214cc2dfaa4a89285ac535f10da24279813076b4916e5e95fddc",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 5,
+  "tracked_blobs": 585,
+  "whole_repo_complete": false,
+  "original_upstream_tests_run": false,
+  "authored_controls_passed": 5,
+  "controls": "estimator142-controls-20261024/results.txt",
+  "scope": "Original full store implementation;removed onlyPyO3 import/derive;native gearhash0.1.3,lz4_flex0.11.3,rayon1.10.0,xxhash-rust0.8.15;no Arrow/Parquet/Python binding or xet pipeline execution",
+  "findings": [
+    "2MiB constantzero stream creates one2097152byte chunk despite declaredMAX_LEN131072;sourceTODO reproduced.",
+    "Empty stream produces onezero-sized chunk with compressed overhead.",
+    "Repeated abc chunk counts total6/unique3.",
+    "Interrupted Read error propagated,not retried.",
+    "137byte fragmented reads preserve hashes/stats versus whole reads for one262144byte fixture.",
+    "HashMap uses xxh3u64 as sole key and overwrites chunk metadata;no byte-confirmation logic in reviewedstore.",
+    "rewrite creates/truncates destination before validating compression;source-only,not executed."
+  ],
+  "dependency_setup": "Fresh exact resolution rejected yankedlz4_flex0.11.3;reused pinned upstream Cargo.lock to retain exact resolved version.Original lock acquired/Gitverified,notwhole-read.",
+  "decision": "reference",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

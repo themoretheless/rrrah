@@ -1,0 +1,74 @@
+{
+  "ffmpeg_version": "ffmpeg version 9.0.2 Copyright (c) 2000-2026 the FFmpeg developers",
+  "files": [
+    {
+      "name": "PNG-HLG-FancyColorBars-16bit-CICP-FR.png",
+      "url": "https://lists.w3.org/Archives/Public/public-png/2023Dec/att-0031/PNG-HLG-FancyColorBars-16bit-CICP-FR.png",
+      "source_sha256": "26617b8ce1f3cea8df91200ad5fd86bde11cde6d94cefa84a988c3e4d3b3bb2a",
+      "source_bytes": 133077,
+      "oracle_sha256": "06a592d176bfabb3c3f140f59a92788c0c2d5507e610868b2ca5ce1726ed50c8",
+      "oracle_bytes": 12441600,
+      "command": [
+        "ffmpeg",
+        "-v",
+        "error",
+        "-i",
+        "/Users/themoretheless/.codex/tmp/rrrah-w3c-png-conformance/PNG-HLG-FancyColorBars-16bit-CICP-FR.png",
+        "-frames:v",
+        "1",
+        "-pix_fmt",
+        "rgb48le",
+        "-f",
+        "rawvideo",
+        "-y",
+        "/Users/themoretheless/.codex/tmp/rrrah-w3c-png-conformance/PNG-HLG-FancyColorBars-16bit-CICP-FR.png.rgb48le"
+      ]
+    },
+    {
+      "name": "PNG-HLG-FancyColorBars-16bit-CICP-NR.png",
+      "url": "https://lists.w3.org/Archives/Public/public-png/2023Dec/att-0031/PNG-HLG-FancyColorBars-16bit-CICP-NR.png",
+      "source_sha256": "480bf843742c2d966bbab039fac7a6d4104c874ed1ae73613aca1b81fe2a4ded",
+      "source_bytes": 140083,
+      "oracle_sha256": "dc5945c7c2d961f4010d8b332559b3bcfa97bdfb939d7257320eebdd412c42c6",
+      "oracle_bytes": 12441600,
+      "command": [
+        "ffmpeg",
+        "-v",
+        "error",
+        "-i",
+        "/Users/themoretheless/.codex/tmp/rrrah-w3c-png-conformance/PNG-HLG-FancyColorBars-16bit-CICP-NR.png",
+        "-frames:v",
+        "1",
+        "-pix_fmt",
+        "rgb48le",
+        "-f",
+        "rawvideo",
+        "-y",
+        "/Users/themoretheless/.codex/tmp/rrrah-w3c-png-conformance/PNG-HLG-FancyColorBars-16bit-CICP-NR.png.rgb48le"
+      ]
+    },
+    {
+      "name": "PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png",
+      "url": "https://lists.w3.org/Archives/Public/public-png/2023Dec/att-0031/PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png",
+      "source_sha256": "ac31eb3552c1bafc28b29bc9d0d50723582ef911c4ea293495eb5320b2db4dac",
+      "source_bytes": 92223,
+      "oracle_sha256": "ffdc7c733956102d6d80cdedf38934e4f5a728f64d0d5f62e5f61be894a42ac6",
+      "oracle_bytes": 12441600,
+      "command": [
+        "ffmpeg",
+        "-v",
+        "error",
+        "-i",
+        "/Users/themoretheless/.codex/tmp/rrrah-w3c-png-conformance/PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png",
+        "-frames:v",
+        "1",
+        "-pix_fmt",
+        "rgb48le",
+        "-f",
+        "rawvideo",
+        "-y",
+        "/Users/themoretheless/.codex/tmp/rrrah-w3c-png-conformance/PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png.rgb48le"
+      ]
+    }
+  ]
+}

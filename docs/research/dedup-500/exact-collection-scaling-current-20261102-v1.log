@@ -1,0 +1,33 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 2m 08s
+     Running tests/projected_portfolio.rs (target/debug/deps/projected_portfolio-c16efdbe837a859c)
+
+running 1 test
+RRRAH_EXACT_SCALING {"files":8,"families":1,"pairs":28,"exact_pairs":28,"file_bytes":1048576,"analytical_source_bytes":209715200,"elapsed_ns":[90641917, 92747125, 100344792],"managed_peak":13696}
+RRRAH_EXACT_SCALING {"files":32,"families":1,"pairs":496,"exact_pairs":496,"file_bytes":1048576,"analytical_source_bytes":3254779904,"elapsed_ns":[1284393917, 1403806041, 1303387625],"managed_peak":189952}
+RRRAH_EXACT_SCALING {"files":64,"families":1,"pairs":2016,"exact_pairs":2016,"file_bytes":1048576,"analytical_source_bytes":12952010752,"elapsed_ns":[5080351709, 5059314750, 4999981833],"managed_peak":740352}
+test exact_collection_scaling_latency_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 25 filtered out; finished in 19.51s
+

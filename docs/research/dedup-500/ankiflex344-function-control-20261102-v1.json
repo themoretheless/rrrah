@@ -1,0 +1,36 @@
+{
+  "method": "Original AST function executed; synthetic checksum/DB/field adapters; no Anki installation or host DB accessed",
+  "cases": [
+    {
+      "case": "checksum_collision",
+      "result": [
+        false,
+        null
+      ]
+    },
+    {
+      "case": "different_key",
+      "result": [
+        false,
+        null
+      ]
+    },
+    {
+      "case": "ignored_nonkey",
+      "result": [
+        2,
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "case": "empty_first",
+      "result": [
+        1,
+        null
+      ]
+    }
+  ]
+}

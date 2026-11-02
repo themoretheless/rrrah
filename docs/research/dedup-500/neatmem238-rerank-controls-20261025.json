@@ -1,0 +1,11 @@
+{
+  "scope": "Original AST rerank helpers with fake completion and fake HTTP; no network/providers/model loading",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Two different IDs with equal memory text selected by LLM collapse to one; removed second appears in neither kept nor dropped",
+    "Explicit empty relevant array falls back to retaining all candidates",
+    "Duplicate API index0 accepted when result count matches: overwrites score0 and leaves score1 initialized0",
+    "Negative API index-1 accepted as Python final list position"
+  ],
+  "upstream_suite_run": false
+}

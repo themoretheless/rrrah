@@ -1,0 +1,480 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+import type {
+  ExternalIDOverrides,
+  ImageUploadProgressUpdate,
+  MetadataPreview,
+  OperationFailure,
+  PlaylistInfo,
+  PrepareInput,
+  PreparedRelease,
+  ReleaseNameOverrides,
+  ReleaseRef,
+  ScreenshotPlan,
+  ScreenshotPurpose,
+  ScreenshotSelection,
+  TrackerPreview,
+  UploadImageHostFailure,
+} from "../types";
+import type {
+  AudioAnalysisResult,
+  AudioAnalysisResourceLimits,
+  AudioAnalysisSelectionMode,
+  AudioAnalysisVariant,
+  MediaTrackFacts,
+  CorrectionConfirmation,
+  CorrectionFieldRef,
+  DupeAssessment,
+  DupeDecision,
+  DescriptionInstructions,
+  DescriptionSet,
+  InputReadinessSnapshot,
+  MediaArtifactSet,
+  MediaCaptureInstructions,
+  MetadataOverrides,
+  ReleaseCorrectionsSnapshot,
+  RequiredAction,
+  ReleaseWorkflowCurrent,
+  TrackerLaneOutcome,
+  SubmissionExclusion,
+  TrackerPreflightAssessment,
+  TrackerReleaseProjectionSet,
+  TrackerReleaseProjection,
+  TrackerProjectionInstructions,
+  UploadDryRunResult,
+  UploadResult,
+  WorkflowOperationItem,
+} from "../api/generated/release-workflow";
+
+export type ReleaseRoute =
+  | "input"
+  | "trackerData"
+  | "audioAnalysis"
+  | "duplicates"
+  | "screenshots"
+  | "menuImages"
+  | "uploadedImages"
+  | "descriptions"
+  | "upload";
+
+export type RouteAccess = Readonly<{ available: boolean; reason: string; reasonCode?: string }>;
+export type FacetStatus = "idle" | "running" | "ready" | "error";
+
+/** Lifecycle of one correlation-scoped canonical preparation attempt. */
+export type PreparationStatus =
+  | "idle"
+  | "running"
+  | "awaiting_input"
+  | "ready"
+  | "error"
+  | "cancelled";
+
+/** Advisory byte progress for the source verification performed by an explicit input open. */
+export type SourceVerificationProgress = Readonly<{
+  correlationID: string;
+  completedBytes: number;
+  totalBytes: number;
+  message: string;
+  status: "running" | "completed" | "failed";
+}>;
+
+/** Blu-ray playlist discovery and selection lifecycle within preparation. */
+export type PlaylistStatus =
+  | "idle"
+  | "discovering"
+  | "awaiting_selection"
+  | "processing"
+  | "complete"
+  | "error"
+  | "cancelled";
+
+export type PreparationIntent = Readonly<{
+  sourceLookupURL: string;
+  identity: Readonly<ExternalIDOverrides>;
+  metadata: Readonly<MetadataOverrides>;
+  releaseName: Readonly<ReleaseNameOverrides>;
+  playlist: Readonly<{ Set: boolean; Selected: readonly string[]; UseAll: boolean }>;
+  /** Manual drafts; absent keys display resolved IDs, while empty values clear the input and are omitted on submission. */
+  trackerSourceIDs: Readonly<Record<string, string>>;
+  policy: Readonly<{ keepFolder: boolean; keepImages: boolean; onlyID: boolean }>;
+  search: Readonly<{ skip: boolean; client: string }>;
+}>;
+
+export type UploadRunOptions = Readonly<{
+  noSeed: boolean;
+  runLogLevel: string;
+}>;
+
+export type IdentityFacet = Readonly<{
+  view: Readonly<{
+    sessionRevision: number;
+    sourcePath: string;
+    release: ReleaseRef | null;
+    preview: MetadataPreview | null;
+  }>;
+}>;
+
+export type NavigationFacet = Readonly<{
+  view: Readonly<{ access: Readonly<Record<ReleaseRoute, RouteAccess>> }>;
+  open(route: ReleaseRoute): boolean;
+}>;
+
+/** Source selection, canonical preparation, progress, and prerequisite controls. */
+export type InputFacet = Readonly<{
+  view: Readonly<{
+    sourceDraft: string;
+    selectedSource: string;
+    status: PreparationStatus;
+    error: string;
+    failure: OperationFailure | null;
+    /** Last accepted server slot; its revision fences open and close requests across tabs. */
+    activeInput: Readonly<{
+      state: string;
+      revision: number;
+      inputID: string;
+      sourceVersion: string;
+      recoveryWorkflowIDs: readonly string[];
+    }>;
+    sourceVerification: SourceVerificationProgress | null;
+    preparationDirty: boolean;
+    correctionDirty: boolean;
+    intent: PreparationIntent;
+    corrections: ReleaseCorrectionsSnapshot | null;
+    /** Saved content corrections awaiting review, including before a release exists. */
+    correctionReview: CorrectionConfirmation | null;
+    /** Manual fields changed locally but not yet applied by metadata refresh. */
+    valueFields: readonly CorrectionFieldRef[];
+    resetFields: readonly CorrectionFieldRef[];
+    confirmFields: readonly CorrectionFieldRef[];
+    trackerInputAnswers: Readonly<Record<string, Readonly<Record<string, string | null>>>>;
+    selectedTrackers: readonly string[];
+    preview: MetadataPreview | null;
+    release: PreparedRelease | null;
+    readiness: InputReadinessSnapshot | null;
+    trackerData: readonly TrackerPreview[];
+    source: Readonly<{ discCount: number; discType: string }>;
+    playlist: Readonly<{
+      status: PlaylistStatus;
+      required: boolean;
+      candidates: readonly PlaylistInfo[];
+      selected: readonly string[];
+      useAll: boolean;
+      error: string;
+    }>;
+  }>;
+  updateSourceDraft(value: string): void;
+  selectSource(value: string): void;
+  changeSourceLookupURL(value: string): void;
+  changeIdentity(value: Readonly<ExternalIDOverrides>): void;
+  changeMetadata(value: Readonly<MetadataOverrides>): void;
+  changeReleaseName(value: Readonly<ReleaseNameOverrides>): void;
+  /** Queues removal of saved intent; the next preparation derives the field again. */
+  resetCorrection(field: CorrectionFieldRef): void;
+  /** Queues revision-bound confirmation of a saved content correction. */
+  confirmCorrection(field: CorrectionFieldRef): void;
+  /** Queues a tracker-local answer; null explicitly restores Auto. */
+  changeTrackerInputAnswer(tracker: string, key: string, value: string | null): void;
+  /** Updates a source ID draft; clearing does not prevent discovery from finding an ID on the next preparation. */
+  changeTrackerSourceID(tracker: string, value: string): void;
+  changePreparationPolicy(value: PreparationIntent["policy"]): void;
+  changeClientSearch(value: PreparationIntent["search"]): void;
+  chooseTrackers(trackers: readonly string[]): void;
+  choosePlaylists(playlists: readonly string[], useAll: boolean): void;
+  confirmPlaylists(): Promise<boolean>;
+  cancelPlaylistSelection(): void;
+  /** Aborts local preparation/workflow requests; this does not close the durable active input. */
+  cancelPreparation(): void;
+  prepareSource(sourcePath: string, intent: PreparationIntent): Promise<boolean>;
+  /** Reports an accepted open or refresh, including a pause for correction or playlist review. */
+  openSource(sourcePath: string): Promise<boolean>;
+  /** Claims a listed legacy workflow for reconciliation only while the input slot is empty. */
+  recoverLegacyWorkflow(workflowID: string): Promise<boolean>;
+  /** Aborts local work and requests a revision-checked close; false includes rejection or cancellation. */
+  close(): Promise<boolean>;
+  resetSource(sourcePath: string, intent: PreparationIntent): Promise<boolean>;
+  prepare(): Promise<boolean>;
+  reset(): Promise<boolean>;
+  confirmBDMVRescan(): Promise<boolean>;
+  selectCandidate(releaseID: string): Promise<boolean>;
+}>;
+
+/** Duplicate-check commands, naming review, and exact workflow-owned tracker outcomes. */
+export type DuplicatesFacet = Readonly<{
+  view: Readonly<{
+    status: FacetStatus;
+    assessment?: DupeAssessment | null;
+    projections?: TrackerReleaseProjectionSet | null;
+    preflight?: TrackerPreflightAssessment | null;
+    completed: number;
+    total: number;
+    ignoredTrackers: readonly string[];
+    selectedTrackers: readonly string[];
+    questionnaires: readonly Pick<
+      TrackerReleaseProjection,
+      "trackerId" | "displayName" | "questionnaire" | "questionnaireAnswers"
+    >[];
+    /** Late-only fields from the exact current tracker preparation report. */
+    preparationQuestionnaires: DuplicatesFacet["view"]["questionnaires"];
+    questionnaireStatus: FacetStatus;
+    questionnaireError: string;
+    questionnaireAnswers: Readonly<Record<string, Readonly<Record<string, string>>>>;
+    /** Local edits differ from the exact reviewed tracker answers. */
+    questionnaireDirty: boolean;
+    /** Local tracker-name edits keyed by normalized tracker ID. */
+    releaseNameOverrides: Readonly<Record<string, string>>;
+    error: string;
+  }>;
+  run(): Promise<boolean>;
+  cancel(): Promise<boolean>;
+  chooseTrackers(trackers: readonly string[]): void;
+  /** Discover questions from prepared facts without preflight or external tracker requests. */
+  refreshQuestionnaires(): Promise<boolean>;
+  answerQuestionnaire(tracker: string, key: string, value: string): void;
+  /** Apply tracker answers and refresh their required questions without uploading or starting a duplicate search. */
+  applyQuestionnaireAnswers(): Promise<boolean>;
+  /** Stores a tracker-name edit locally without resolving its backend action. */
+  confirmReleaseName(tracker: string, value: string): void;
+  /** Resolves or reopens the backend naming action using the current local edit. */
+  acknowledgeReleaseName(tracker: string, acknowledged: boolean): Promise<boolean>;
+  /** Acknowledges or revokes the current exact tracker warnings through backend authority. */
+  acknowledgeRules(tracker: string, acknowledged: boolean): Promise<boolean>;
+  setIgnored(tracker: string, ignored: boolean): void;
+}>;
+
+/** Screenshot planning, generation, preview, removal, ordering, and final selection state. */
+export type ScreenshotsFacet = Readonly<{
+  view: Readonly<{
+    revision: number;
+    status: FacetStatus;
+    plan: ScreenshotPlan | null;
+    artifacts?: MediaArtifactSet | null;
+    workflowMode?: boolean;
+    selections: readonly ScreenshotSelection[];
+    finalSelectionArtifactIDs: readonly string[];
+    previewImage: string;
+    staleReason: string;
+    mutationBlockedReason: string;
+    error: string;
+  }>;
+  load(): Promise<boolean>;
+  changeSelection(
+    index: number,
+    value: Partial<Pick<ScreenshotSelection, "TimestampSeconds" | "Frame">>,
+  ): void;
+  generate(
+    purpose: ScreenshotPurpose,
+    selections?: readonly ScreenshotSelection[],
+  ): Promise<boolean>;
+  previewFrame(discID: string, timestampSeconds: number): Promise<boolean>;
+  remove(artifactID: string): Promise<boolean>;
+  removeMany(artifactIDs: readonly string[]): Promise<boolean>;
+  selectFinal(artifactID: string, selected: boolean): Promise<boolean>;
+  reorderFinal(fromIndex: number, toIndex: number): Promise<boolean>;
+  saveFinal(): Promise<boolean>;
+  selectArtifact(artifactID: string, selected: boolean): Promise<boolean>;
+  deleteArtifacts(artifactIDs: readonly string[]): Promise<boolean>;
+  readImage(artifactID: string): Promise<string>;
+}>;
+
+/** Exact prepared-resource selection submitted for one audio-analysis attempt. */
+export type AudioAnalysisGenerateInput = Readonly<{
+  resourceID: string;
+  selection: AudioAnalysisSelectionMode;
+  trackIDs: readonly string[];
+  variants: readonly AudioAnalysisVariant[];
+  resourceLimits?: AudioAnalysisResourceLimits;
+}>;
+
+/** Optional exact-generation analysis state and backend-owned operation intents. */
+export type AudioAnalysisFacet = Readonly<{
+  view: Readonly<{
+    available: boolean;
+    /** Persisted user intent; it may be true before a result exists. */
+    enabled: boolean;
+    status: FacetStatus;
+    releaseGeneration: number;
+    sourceLabel: string;
+    sourceContext: string;
+    primaryTrackID: string;
+    tracks: readonly MediaTrackFacts[];
+    /** The current retained attempt, including successful work from partial runs. */
+    result: AudioAnalysisResult | null;
+    completed: number;
+    total: number;
+    operationItems: readonly WorkflowOperationItem[];
+    mutationBlockedReason: string;
+    error: string;
+  }>;
+  generate(input: AudioAnalysisGenerateInput): Promise<boolean>;
+  /** Reuses the retained attempt's selection, variants, and resource limits. */
+  retry(): Promise<boolean>;
+  cancel(): Promise<boolean>;
+  /** Cancels active work first, then clears the current analysis reference. */
+  disable(): Promise<boolean>;
+  /** Builds the authenticated URL for an artifact in the current attempt. */
+  artifactURL(artifactID: string): string;
+}>;
+
+export type MediaImageView = Readonly<{
+  artifactID: string;
+  discID?: string;
+  discName?: string;
+  index: number;
+  timestampSeconds: number;
+  purpose: ScreenshotPurpose;
+  width: number;
+  height: number;
+  sizeBytes: number;
+}>;
+
+export type MenuImagePreview = Readonly<{ image: MediaImageView; contentURL: string }>;
+export type UploadedImageCandidate = Readonly<{
+  image: MediaImageView;
+  contentURL: string;
+}>;
+export type HostedImageView = Readonly<{
+  artifactID: string;
+  host: string;
+  url: string;
+  sizeBytes: number;
+  uploadedAt: string;
+}>;
+
+export type MenuImagesFacet = Readonly<{
+  view: Readonly<{
+    revision: number;
+    status: FacetStatus;
+    images: readonly MenuImagePreview[];
+    artifacts?: MediaArtifactSet | null;
+    staleReason: string;
+    error: string;
+  }>;
+  load(): Promise<boolean>;
+  importFiles(files: readonly File[]): Promise<boolean>;
+  capture(): Promise<boolean>;
+  cancelCapture(): void;
+  remove(artifactID: string): Promise<boolean>;
+}>;
+
+/** Correlated absolute host-attempt snapshots for one image upload command. */
+export type ImageUploadProgress = Readonly<{
+  correlationID: string;
+  attempts: readonly ImageUploadProgressUpdate[];
+}>;
+
+/** Image-host candidate selection, upload progress, results, and removal state. */
+export type UploadedImagesFacet = Readonly<{
+  view: Readonly<{
+    revision: number;
+    status: FacetStatus;
+    candidates: readonly UploadedImageCandidate[];
+    uploaded: readonly HostedImageView[];
+    selectedArtifactIDs: readonly string[];
+    failures: readonly UploadImageHostFailure[];
+    progress: ImageUploadProgress;
+    staleReason: string;
+    error: string;
+  }>;
+  load(): Promise<boolean>;
+  select(artifactID: string, selected: boolean): void;
+  selectAll(selected: boolean): void;
+  upload(): Promise<boolean>;
+  remove(artifactID: string, host: string): Promise<boolean>;
+}>;
+
+export type DescriptionsFacet = Readonly<{
+  view: Readonly<{
+    revision: number;
+    status: FacetStatus;
+    artifact?: DescriptionSet | null;
+    rawByGroup: Readonly<Record<string, string>>;
+    renderedByGroup: Readonly<Record<string, string>>;
+    dirtyGroups: readonly string[];
+    staleReason: string;
+    notice: string;
+    error: string;
+  }>;
+  load(): Promise<boolean>;
+  edit(groupKey: string, raw: string): void;
+  render(groupKey: string): Promise<boolean>;
+  save(groupKey: string): Promise<boolean>;
+  reset(groupKey: string): Promise<boolean>;
+}>;
+
+export type UploadFacet = Readonly<{
+  view: Readonly<{
+    revision: number;
+    selectedTrackers: readonly string[];
+    projections: TrackerReleaseProjectionSet | null;
+    ignoredDupesFor: readonly string[];
+    /** Local edits differ from the exact reviewed tracker answers. */
+    questionnaireDirty: boolean;
+    /** A workflow command currently owns execution, so another action cannot start. */
+    workflowBusy: boolean;
+    options: UploadRunOptions;
+    /** Whether the owning process enforces live-testing restrictions. */
+    liveTest: boolean;
+    /** Requires loaded runtime information and no live-test policy; workflow gates still apply. */
+    mutationsAllowed: boolean;
+    dryRunStatus: FacetStatus;
+    uploadStatus: FacetStatus;
+    dryRunResult: UploadDryRunResult | null;
+    result: UploadResult | null;
+    /** Backend-owned per-tracker downstream decision; never derived in views. */
+    trackerOutcomes: readonly TrackerLaneOutcome[];
+    /** Backend evidence for tracker lanes excluded because submission was already recorded. */
+    submissionExclusions: readonly SubmissionExclusion[];
+    error: string;
+  }>;
+  chooseTrackers(trackers: readonly string[]): void;
+  changeOptions(options: Partial<UploadRunOptions>): void;
+  runDryRun(): Promise<boolean>;
+  start(): Promise<boolean>;
+  cancel(): Promise<boolean>;
+  retry(): Promise<boolean>;
+  retryClientInjection(): Promise<boolean>;
+}>;
+
+/** Authoritative backend workflow state and intent-only transition methods. */
+export type WorkflowFacet = Readonly<{
+  view: Readonly<{
+    status: FacetStatus;
+    current: ReleaseWorkflowCurrent | null;
+    error: string;
+    failure: OperationFailure | null;
+  }>;
+  reload(): Promise<boolean>;
+  begin(input: PrepareInput): Promise<boolean>;
+  project(
+    trackers: readonly string[],
+    instructions?: Readonly<Record<string, TrackerProjectionInstructions>>,
+  ): Promise<boolean>;
+  preflight(): Promise<boolean>;
+  checkDuplicates(skipRemote?: boolean): Promise<boolean>;
+  decideDuplicates(decisions: Readonly<Record<string, DupeDecision>>): Promise<boolean>;
+  captureMedia(instructions: MediaCaptureInstructions): Promise<boolean>;
+  generateDescriptions(instructions: DescriptionInstructions): Promise<boolean>;
+  dryRunUploads(): Promise<boolean>;
+  executeUploads(): Promise<boolean>;
+  /** Resolves a supported upload action and resumes the workflow. */
+  confirmAction(action: RequiredAction, confirmed?: boolean): Promise<boolean>;
+  retryFailedUploads(): Promise<boolean>;
+  retryClientInjections(): Promise<boolean>;
+  invalidateTrackers(trackerIDs: readonly string[], reason: string): Promise<boolean>;
+}>;
+
+/** Sole public active-release workflow interface. */
+export type ReleaseSession = Readonly<{
+  workflow: WorkflowFacet;
+  identity: IdentityFacet;
+  navigation: NavigationFacet;
+  input: InputFacet;
+  duplicates: DuplicatesFacet;
+  audioAnalysis: AudioAnalysisFacet;
+  screenshots: ScreenshotsFacet;
+  menuImages: MenuImagesFacet;
+  uploadedImages: UploadedImagesFacet;
+  descriptions: DescriptionsFacet;
+  upload: UploadFacet;
+}>;

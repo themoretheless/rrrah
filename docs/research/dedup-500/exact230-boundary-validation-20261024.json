@@ -1,0 +1,35 @@
+{
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-exact198-target cargo +1.98.1 test -p rrrah-dedup --test exact_files --offline",
+  "date": "2026-10-24",
+  "exit_code": 0,
+  "tests_passed": 44,
+  "failed": 0,
+  "ignored": 0,
+  "test_execution_seconds": 1.13,
+  "test_source": "crates/rrrah-dedup/tests/exact_files.rs",
+  "test_source_sha256": "76910f82adb01575a079d28cce83bd05373f0a1f1a19b36848b0a89e7ff794dd",
+  "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+  "boundary_matrix": {
+    "lengths": 15,
+    "physical_files": 60,
+    "apis": [
+      "scan",
+      "scan_verified"
+    ],
+    "input_orders": 2,
+    "added_lengths": [
+      1500,
+      2047,
+      2048,
+      2049,
+      1048577,
+      1572864,
+      2097151
+    ]
+  },
+  "boundary_scope": "Finite exact-file regression matrix. Existing core implementation unchanged. Not universal case coverage, benchmark or cross-platform proof.",
+  "research_refs": [
+    "dedupr230-controls-20261024.json",
+    "pinterest227-job-controls-20261024.json"
+  ]
+}

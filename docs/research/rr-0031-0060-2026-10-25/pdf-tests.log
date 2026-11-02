@@ -1,0 +1,141 @@
+warning: constant `PNG_SIGNATURE` is never used
+  --> vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.44s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_vector-14d3b109a0c844ed)
+
+running 47 tests
+test pdf::direct_shading_background_tests::direct_sh_ignores_background_and_preserves_fractional_alpha ... ok
+test pdf::overlap_patch_tests::folded_tensor_pattern_preserves_background_in_partial_pixels ... ok
+test pdf::overlap_patch_tests::folded_tensor_uses_projected_union_not_multiplicity ... ok
+test pdf::overlap_patch_tests::later_coincident_tensor_patch_covers_earlier_color ... ok
+test pdf::overlap_patch_tests::partial_tensor_overlap_uses_later_patch_color ... ok
+test pdf::precise_fill_tests::compact_adaptive_parabola_preserves_geometry_within_eight_mib ... ok
+test pdf::precise_fill_tests::coons_depth_limit_refuses_incomplete_render_and_allows_retry ... ok
+test pdf::precise_fill_tests::cubic_fill_matches_independent_parabola_pixel_integral ... ok
+test pdf::precise_fill_tests::curve_cancellation_at_every_checkpoint_releases_shared_credit ... ok
+test pdf::precise_fill_tests::curved_coons_matches_independent_parabolic_pixel_areas ... ok
+test pdf::precise_fill_tests::curved_tensor_matches_independent_parabolic_pixel_areas ... ok
+test pdf::precise_fill_tests::excessive_fill_precision_refuses_without_retaining_managed_credit ... ok
+test pdf::precise_fill_tests::precise_curve_storage_obeys_exact_shared_budget ... ok
+test pdf::precise_fill_tests::shading_texture_obeys_exact_shared_budget_and_releases_credit ... ok
+test pdf::precise_fill_tests::tensor_depth_limit_refuses_incomplete_render_and_allows_retry ... ok
+test pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization ... ok
+test pdf::precise_fill_tests::upstream_coons_function_matches_independent_interior_integrals ... ignored, requires pinned external Serenity Coons source; RRRAH_COONS_CORPUS
+test pdf::shading_context_cache_tests::shared_shading_keeps_background_context_in_both_draw_orders ... ok
+test pdf::soft_mask_isolation_tests::luminosity_soft_mask_bands_preserve_alpha_and_managed_ownership ... ok
+test pdf::tensor_background_coverage_tests::fractional_tensor_edges_mix_with_declared_background ... ok
+test pdf::tensor_center_tests::planar_tensor_samples_pixel_centers_with_bounded_color_error ... ok
+test pdf::tensor_fractional_coverage_tests::fractional_tensor_edges_match_exact_rectangle_area ... ok
+test pdf::tensor_patch_alignment_tests::two_bit_flags_preserve_shared_edge_like_eight_bit_flags ... ok
+test pdf::tensor_triangle_geometry_tests::inflated_patch_triangles_have_consistent_bounds_and_vertex_colors ... ok
+test pdf::tests::corrupt_embedded_image_refuses_incomplete_render_and_releases_credit ... ok
+test pdf::tests::device_cmyk_float_fills_match_independent_littlecms ... ok
+test pdf::tests::device_cmyk_hybrid_matches_full_domain_independent_oracle ... ok
+test pdf::tests::embedded_cmyk8_image_matches_full_domain_littlecms ... ok
+test pdf::tests::embedded_cmyk_jpeg_app14_decode_inversion_matches_independent_oracle ... ok
+test pdf::tests::embedded_ycck_jpeg_app14_matches_independent_oracle ... ok
+test pdf::tests::fractional_page_extents_keep_partial_edge_pixels ... ok
+test pdf::tests::half_alpha_red_is_straight_and_matches_poppler_white_composite ... ok
+test pdf::tests::independent_image_transfer_channels_match_public_decode ... ok
+test pdf::tests::invalid_and_excessive_user_units_refuse_without_retained_credit ... ok
+test pdf::tests::malformed_invoked_form_geometry_refuses_without_output_reservation ... ok
+test pdf::tests::malformed_source_and_source_admission_release_credit ... ok
+test pdf::tests::missing_invoked_object_refuses_in_page_and_inherited_form ... ok
+test pdf::tests::missing_selected_font_refuses_in_page_and_inherited_form_before_render ... ok
+test pdf::tests::nested_form_fonts_inherit_resources_and_cycles_refuse ... ok
+test pdf::tests::nonlinear_image_transfer_preserves_all_byte_values_through_public_decode ... ok
+test pdf::tests::page_rotation_preserves_extent_and_matches_poppler ... ok
+test pdf::tests::page_user_unit_scales_geometry_and_pixels ... ok
+test pdf::tests::renderer_overflow_extents_are_rejected_before_output_allocation ... ok
+test pdf::tests::selected_pages_match_authored_samples_and_release_budget ... ok
+test pdf::tests::unresolved_type0_font_refuses_instead_of_helvetica_substitution ... ok
+test pdf::tests::unsupported_invoked_object_kind_refuses_without_rendering ... ok
+test pdf::tests::unsupported_selected_font_refuses_before_render_allocation ... ok
+
+successes:
+
+---- pdf::precise_fill_tests::compact_adaptive_parabola_preserves_geometry_within_eight_mib stdout ----
+COMPACT_PARABOLA triangles=35584 peak=7315552 retained=3700736
+
+---- pdf::precise_fill_tests::curved_coons_matches_independent_parabolic_pixel_areas stdout ----
+CURVED_COONS_ANALYTIC pixels=2048 peak=4886709 retained=8192
+
+---- pdf::precise_fill_tests::curved_tensor_matches_independent_parabolic_pixel_areas stdout ----
+CURVED_TENSOR_ANALYTIC pixels=2048 peak=4886741 retained=8192
+
+
+successes:
+    pdf::direct_shading_background_tests::direct_sh_ignores_background_and_preserves_fractional_alpha
+    pdf::overlap_patch_tests::folded_tensor_pattern_preserves_background_in_partial_pixels
+    pdf::overlap_patch_tests::folded_tensor_uses_projected_union_not_multiplicity
+    pdf::overlap_patch_tests::later_coincident_tensor_patch_covers_earlier_color
+    pdf::overlap_patch_tests::partial_tensor_overlap_uses_later_patch_color
+    pdf::precise_fill_tests::compact_adaptive_parabola_preserves_geometry_within_eight_mib
+    pdf::precise_fill_tests::coons_depth_limit_refuses_incomplete_render_and_allows_retry
+    pdf::precise_fill_tests::cubic_fill_matches_independent_parabola_pixel_integral
+    pdf::precise_fill_tests::curve_cancellation_at_every_checkpoint_releases_shared_credit
+    pdf::precise_fill_tests::curved_coons_matches_independent_parabolic_pixel_areas
+    pdf::precise_fill_tests::curved_tensor_matches_independent_parabolic_pixel_areas
+    pdf::precise_fill_tests::excessive_fill_precision_refuses_without_retaining_managed_credit
+    pdf::precise_fill_tests::precise_curve_storage_obeys_exact_shared_budget
+    pdf::precise_fill_tests::shading_texture_obeys_exact_shared_budget_and_releases_credit
+    pdf::precise_fill_tests::tensor_depth_limit_refuses_incomplete_render_and_allows_retry
+    pdf::precise_fill_tests::tensor_triangle_storage_is_admitted_before_materialization
+    pdf::shading_context_cache_tests::shared_shading_keeps_background_context_in_both_draw_orders
+    pdf::soft_mask_isolation_tests::luminosity_soft_mask_bands_preserve_alpha_and_managed_ownership
+    pdf::tensor_background_coverage_tests::fractional_tensor_edges_mix_with_declared_background
+    pdf::tensor_center_tests::planar_tensor_samples_pixel_centers_with_bounded_color_error
+    pdf::tensor_fractional_coverage_tests::fractional_tensor_edges_match_exact_rectangle_area
+    pdf::tensor_patch_alignment_tests::two_bit_flags_preserve_shared_edge_like_eight_bit_flags
+    pdf::tensor_triangle_geometry_tests::inflated_patch_triangles_have_consistent_bounds_and_vertex_colors
+    pdf::tests::corrupt_embedded_image_refuses_incomplete_render_and_releases_credit
+    pdf::tests::device_cmyk_float_fills_match_independent_littlecms
+    pdf::tests::device_cmyk_hybrid_matches_full_domain_independent_oracle
+    pdf::tests::embedded_cmyk8_image_matches_full_domain_littlecms
+    pdf::tests::embedded_cmyk_jpeg_app14_decode_inversion_matches_independent_oracle
+    pdf::tests::embedded_ycck_jpeg_app14_matches_independent_oracle
+    pdf::tests::fractional_page_extents_keep_partial_edge_pixels
+    pdf::tests::half_alpha_red_is_straight_and_matches_poppler_white_composite
+    pdf::tests::independent_image_transfer_channels_match_public_decode
+    pdf::tests::invalid_and_excessive_user_units_refuse_without_retained_credit
+    pdf::tests::malformed_invoked_form_geometry_refuses_without_output_reservation
+    pdf::tests::malformed_source_and_source_admission_release_credit
+    pdf::tests::missing_invoked_object_refuses_in_page_and_inherited_form
+    pdf::tests::missing_selected_font_refuses_in_page_and_inherited_form_before_render
+    pdf::tests::nested_form_fonts_inherit_resources_and_cycles_refuse
+    pdf::tests::nonlinear_image_transfer_preserves_all_byte_values_through_public_decode
+    pdf::tests::page_rotation_preserves_extent_and_matches_poppler
+    pdf::tests::page_user_unit_scales_geometry_and_pixels
+    pdf::tests::renderer_overflow_extents_are_rejected_before_output_allocation
+    pdf::tests::selected_pages_match_authored_samples_and_release_budget
+    pdf::tests::unresolved_type0_font_refuses_instead_of_helvetica_substitution
+    pdf::tests::unsupported_invoked_object_kind_refuses_without_rendering
+    pdf::tests::unsupported_selected_font_refuses_before_render_allocation
+
+test result: ok. 46 passed; 0 failed; 1 ignored; 0 measured; 220 filtered out; finished in 2.67s
+

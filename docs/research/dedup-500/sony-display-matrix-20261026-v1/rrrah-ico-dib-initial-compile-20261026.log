@@ -1,0 +1,30 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+error[E0624]: method `pixel` is private
+  --> crates/rrrah-dedup/tests/ico_dib.rs:59:36
+   |
+59 |                     let pixel=view.pixel(x,y).unwrap().map(f32::from_bits);
+   |                                    ^^^^^ private method
+   |
+  ::: crates/rrrah-dedup/src/linear.rs:44:5
+   |
+44 |     pub(crate) fn pixel(&self, x: u32, y: u32) -> Option<[u32; 4]> {
+   |     -------------------------------------------------------------- private method defined here
+
+For more information about this error, try `rustc --explain E0624`.
+error: could not compile `rrrah-dedup` (test "ico_dib") due to 1 previous error

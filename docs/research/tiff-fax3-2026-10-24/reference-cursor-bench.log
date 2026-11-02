@@ -1,0 +1,57 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.17s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 2 tests
+test raster::tiff_fax::cursor_decode_benchmark::native_group4_cursor_alternating_benchmark ... FAX_NATIVE pair=0 cursor=false ns=84134166 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=0 cursor=true ns=32306542 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=1 cursor=true ns=32148000 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=1 cursor=false ns=81682583 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=2 cursor=false ns=82355375 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=2 cursor=true ns=32571708 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=3 cursor=true ns=32747750 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=3 cursor=false ns=81804083 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=4 cursor=false ns=82276750 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=4 cursor=true ns=33231958 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=5 cursor=true ns=32548666 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=5 cursor=false ns=81491416 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=6 cursor=false ns=80568542 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=6 cursor=true ns=32185000 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=7 cursor=true ns=32770125 decodes=16 source=1025x129 checksum=8462400 final=0
+FAX_NATIVE pair=7 cursor=false ns=82191542 decodes=16 source=1025x129 checksum=8462400 final=0
+ok
+test raster::tiff_fax::mixed::tests::dense_group4_reference_cursor_alternating_benchmark ... FAX_CURSOR pair=0 cursor=false ns=68467292 rows=2064 checksum=1085302800
+FAX_CURSOR pair=0 cursor=true ns=19093417 rows=2064 checksum=1085302800
+FAX_CURSOR pair=1 cursor=true ns=19119333 rows=2064 checksum=1085302800
+FAX_CURSOR pair=1 cursor=false ns=68332792 rows=2064 checksum=1085302800
+FAX_CURSOR pair=2 cursor=false ns=68247917 rows=2064 checksum=1085302800
+FAX_CURSOR pair=2 cursor=true ns=19161917 rows=2064 checksum=1085302800
+FAX_CURSOR pair=3 cursor=true ns=19338250 rows=2064 checksum=1085302800
+FAX_CURSOR pair=3 cursor=false ns=68326792 rows=2064 checksum=1085302800
+FAX_CURSOR pair=4 cursor=false ns=68407209 rows=2064 checksum=1085302800
+FAX_CURSOR pair=4 cursor=true ns=19192750 rows=2064 checksum=1085302800
+FAX_CURSOR pair=5 cursor=true ns=19059416 rows=2064 checksum=1085302800
+FAX_CURSOR pair=5 cursor=false ns=69301291 rows=2064 checksum=1085302800
+FAX_CURSOR pair=6 cursor=false ns=68628958 rows=2064 checksum=1085302800
+FAX_CURSOR pair=6 cursor=true ns=19139333 rows=2064 checksum=1085302800
+FAX_CURSOR pair=7 cursor=true ns=19334541 rows=2064 checksum=1085302800
+FAX_CURSOR pair=7 cursor=false ns=68643750 rows=2064 checksum=1085302800
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 255 filtered out; finished in 1.67s
+

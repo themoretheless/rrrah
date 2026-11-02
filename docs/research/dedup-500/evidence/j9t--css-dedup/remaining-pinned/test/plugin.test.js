@@ -1,0 +1,92 @@
+import { describe, test } from 'node:test';
+import assert from 'node:assert';
+import postcss from 'postcss';
+import cssdedup from '../src/plugin.js';
+
+// The merged-rule shape several tests assert on
+const RE_MERGED_AB = /\.a,\s*\.b\s*{\s*color: red;\s*}/;
+
+describe('Plugin: Analysis', () => {
+  test('Warns about a duplicate declaration', async () => {
+    const result = await postcss([cssdedup()]).process('.a { color: red; }\n.b { color: red; }\n', { from: undefined });
+    const warnings = result.warnings();
+    assert.strictEqual(warnings.length, 1);
+    assert.match(warnings[0].text, /Duplicate declaration `color: #ff0000`/);
+  });
+
+  test('Does not touch the CSS in report mode', async () => {
+    const input = '.a { color: red; }\n.b { color: red; }\n';
+    const result = await postcss([cssdedup()]).process(input, { from: undefined });
+    assert.strictEqual(result.css, input);
+  });
+
+  test('Warns about a redundant same-rule declaration', async () => {
+    const result = await postcss([cssdedup()]).process('.a { color: red; color: red; }', { from: undefined });
+    assert.ok(result.warnings().some(w => /Redundant declaration/.test(w.text)));
+  });
+
+  test('Warns about a selector written more than once in one scope', async () => {
+    const result = await postcss([cssdedup()]).process('.a { color: red; }\n.a { margin: 0; }\n', { from: undefined });
+    assert.ok(result.warnings().some(w => /Selector `\.a` written 2 times/.test(w.text)));
+  });
+});
+
+describe('Plugin: Dedup', () => {
+  test('Merges a duplicate declaration in place', async () => {
+    const result = await postcss([cssdedup({ fix: true })]).process('.a { color: red; }\n.b { color: red; }\n', { from: undefined });
+    assert.match(result.css, RE_MERGED_AB);
+  });
+
+  test('Warns about a skipped (unsafe) merge', async () => {
+    const result = await postcss([cssdedup({ fix: true })]).process('.a { color: red; }\n.b { color: blue; }\n.c { color: red; }\n', { from: undefined });
+    assert.strictEqual(result.warnings().length, 1);
+    assert.match(result.warnings()[0].text, /left unmerged/);
+  });
+
+  test('`savingsOnly: true` leaves the CSS untouched when consolidation would grow it, and warns', async () => {
+    const input = '.very-long-selector-name-one { color: red; font-weight: bold; }\n.b { color: red; }\n';
+    const result = await postcss([cssdedup({ fix: true, savingsOnly: true })]).process(input, { from: undefined });
+    assert.strictEqual(result.css, input);
+    assert.ok(result.warnings().some(warning => /1 merge withheld \(`savingsOnly`\): applying it would make the style sheet \d+ bytes bigger/.test(warning.text)));
+  });
+
+  test('`savingsOnly: true` still applies a shrinking consolidation', async () => {
+    const result = await postcss([cssdedup({ fix: true, savingsOnly: true })]).process('.a { color: red; }\n.b { color: red; }\n', { from: undefined });
+    assert.match(result.css, RE_MERGED_AB);
+    assert.strictEqual(result.warnings().length, 0);
+  });
+
+  test('Applies aggressive merges with `aggressive: true`', async () => {
+    const result = await postcss([cssdedup({ fix: true, aggressive: true })]).process('.a { color: hsl(0 0% 100%); }\n.b { color: #fff; }\n', { from: undefined });
+    assert.match(result.css, /\.a,\s*\.b\s*{\s*color: #fff;\s*}/);
+  });
+});
+
+describe('Plugin: PostCSS integration', () => {
+  test('Exposes the `postcss: true` marker PostCSS requires to accept the plugin', () => {
+    assert.strictEqual(cssdedup.postcss, true);
+  });
+
+  test('A later plugin in the same pipeline sees the deduped output', async () => {
+    let ruleCountSeen;
+    const collector = () => ({
+      postcssPlugin: 'collector',
+      OnceExit(root) {
+        ruleCountSeen = root.nodes.length;
+      },
+    });
+    collector.postcss = true;
+
+    const result = await postcss([cssdedup({ fix: true }), collector()]).process('.a { color: red; }\n.b { color: red; }\n', { from: undefined });
+    assert.strictEqual(ruleCountSeen, 1);
+    assert.match(result.css, RE_MERGED_AB);
+  });
+
+  test('Fix mode is idempotent: A second pass over its own output finds nothing to warn about', async () => {
+    const input = '.a { color: red; }\n.b { color: red; }\n';
+    const first = await postcss([cssdedup({ fix: true })]).process(input, { from: undefined });
+    const second = await postcss([cssdedup()]).process(first.css, { from: undefined });
+    assert.strictEqual(second.warnings().length, 0);
+    assert.strictEqual(second.css, first.css);
+  });
+});

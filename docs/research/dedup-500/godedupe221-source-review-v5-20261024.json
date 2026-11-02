@@ -1,0 +1,781 @@
+{
+  "index": 221,
+  "repository": "alexgQQ/dedupe",
+  "commit": "7f2b3d411e4919010c1af41821aa041835358f40",
+  "tracked_blob_count": 65,
+  "whole_file_reads": [
+    {
+      "path": "dedupe.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/02-dedupe.go",
+      "sha256": "064083a3f78d4a7885936b1c452d5a2a8c8a7b6daf26f4a71c63a2643b660092",
+      "git_blob_sha1": "f2599a7ccbe8327546d88bed94f1b635a2bf6218"
+    },
+    {
+      "path": "hash/hash.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/03-hash.go",
+      "sha256": "f5a7a5bcb5fc6724adc914e73d59b39a23e5adc19333194e261ba98b05073a99",
+      "git_blob_sha1": "0faf1b8c79ecc3bee5401a4f101c353667aeb9ce"
+    },
+    {
+      "path": "hash/hash_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/05-hash_test.go",
+      "sha256": "519e682abdab7721dc8a2206432665e8baf4e4759f988d35fc725d88b6ce0f10",
+      "git_blob_sha1": "053b6ebf7437bbd3011c289e547fda72666423aa"
+    },
+    {
+      "path": "vptree/vptree.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/vptree.go",
+      "sha256": "f0a05267c804ce5a6996cd3789dcbd221455190d6eb15c67a186e17f4f635a05",
+      "git_blob_sha1": "66a27e9b41b068b05a18ae8825cdb55f6a4303d4"
+    },
+    {
+      "path": "vptree/queue.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/queue.go",
+      "sha256": "3a1c664e2e27307c1477cce0e51fd1325c62e3b43cfbb849d9ae869e9651e34e",
+      "git_blob_sha1": "d19ea1566b05f7ff85dff835164c4974ebe4be22"
+    },
+    {
+      "path": "utils/file.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/utils/file.go",
+      "sha256": "c0557f7c39110bd90e7520a24fdf177e38bf22dd1f079c8b64f2d047a644bbd2",
+      "git_blob_sha1": "944f4f3d521158cf8b94b0c19139ea1fe16d59dd"
+    },
+    {
+      "path": "cmd/dedupe/main.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/04-main.go",
+      "sha256": "30521b9a6fcd0c8cbabe1ecccd1301be3a86288f572110f392fbfdc6b8b617f9",
+      "git_blob_sha1": "9c0e8269f8e156e8a844c7254f2919a5240e22b2"
+    },
+    {
+      "path": "vptree/vptree_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/vptree_test.go",
+      "sha256": "8c9db9223c693859259699c14916b626252b5b5f180292a1c757727ab47f87ce",
+      "git_blob_sha1": "1b449d1ba0ba6c2931d4a0e50b31983a1b248d15"
+    },
+    {
+      "path": "vptree/queue_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/queue_test.go",
+      "sha256": "4dc75e99d12f806fb1f47a79669e8d50d610da2c51ddd956632c93401f0d4168",
+      "git_blob_sha1": "01ebada3aec114054fac5d7b4db659204a2c18ff"
+    },
+    {
+      "path": "utils/file_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/utils/file_test.go",
+      "sha256": "bff209792bb27d4d83c5823a32f782f4af96269cee4ad2cfea99b0b1b2a5d776",
+      "git_blob_sha1": "015ae57d8bb2a9e0034fb2b230fbdffb27e81f0e"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/00-README.md",
+      "sha256": "01c726dfe2548b6743b0eb39636fcc849d3e1a634fb4256d637514a1f6639906",
+      "git_blob_sha1": "95cfa6d788646393a5c45b3fba5917a3bfd08d68"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/01-LICENSE",
+      "sha256": "e08f00cb2a20682ba7ad91e9105da35fa993994cf50deb58df53ee0268bb4171",
+      "git_blob_sha1": "121496ffea523c749d024c9e78edb16c69ef62e8"
+    },
+    {
+      "path": "go.mod",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/go.mod",
+      "sha256": "42c91936241cfb830db11a7f30a19ab44b377d1d0a363316160a40280f409474",
+      "git_blob_sha1": "330b7567b2d9f74dd38bec2d50b62db3b330ea32"
+    },
+    {
+      "path": "go.sum",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/go.sum",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "Makefile",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/Makefile",
+      "sha256": "2a311d59a31d6c5f9d86c8b18f4fcfff95170996cda29c384da16633e0f36132",
+      "git_blob_sha1": "2e69d21b94311964797ef1e138284f1d09b90486"
+    },
+    {
+      "path": ".github/workflows/builds.yml",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/.github/workflows/builds.yml",
+      "sha256": "eac4eb73f0609f5900f5c5789dea5341f607472ec1b9ab125a374c2cb75d5099",
+      "git_blob_sha1": "da068d7f4ff72a5a3f7e100597b5515a12880aa3"
+    },
+    {
+      "path": ".github/CODEOWNERS",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/.github/CODEOWNERS",
+      "sha256": "cd61e1575ac861db17a47386ce230b71945085f234c3b6840e4436f4f991487a",
+      "git_blob_sha1": "af3fd8af0cac2909fe7b287b3f50a663c70d3848"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/.gitignore",
+      "sha256": "a1c292a9cdf6a257dd4b55332dbce4ea68335108e0557ca8e33ed3c62ab0a31f",
+      "git_blob_sha1": "b21f484dc682628342651e3e7d4a53be995138dc"
+    },
+    {
+      "path": "utils/version.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/utils/version.go",
+      "sha256": "00a1014bcc200d678c2e72e3cffa57db240dbadb664ae9e8fe2346bfe1ea3133",
+      "git_blob_sha1": "eea644f2fc8ea94eb1833201cdce2f0a1989fcae"
+    }
+  ],
+  "whole_file_read_count": 19,
+  "original_tests_source_read": 9,
+  "original_tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "findings": [
+    "Worker count GOMAXPROCS-2 can become zero/nonpositive, leaving nonempty work channel with no consumers. Static source finding, not reproduced.",
+    "Error accumulator goroutine is not joined before returning err; result collection completion alone does not synchronize accumulator completion.",
+    "Duplicates skips previously selected roots but does not filter found members already used in other groups; overlap/count semantics require tree inspection and runtime validation.",
+    "DCT uses coefficient coordinates1..8 in both axes, not usual0..7block with only DC excluded; distinct preprocessing contract.",
+    "Perceptual thresholds10/22 heuristics, comments admit nonduplicates at18..20. No calibration proof.",
+    "Six hash tests cover five Hamming properties/examples and uniform-white dHash; no DCT fixture or image accuracy test.",
+    "No Go execution, production changes or image viewing yet."
+  ],
+  "remaining": [
+    {
+      "path": "utils/resize.go",
+      "bytes": 19347
+    },
+    {
+      "path": "utils/resize_test.go",
+      "bytes": 6234
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/godedupe221-source-review-v4-20261024.json",
+  "tree_io_review": {
+    "execution": false,
+    "observations": [
+      "Within uses strict distance<radius; zero threshold excludes even identical hashes. Max-heap emits farthest-first, not closest-first.",
+      "Tree build partitions around distance to arbitrary midpoint item, not median-selected distance; no guaranteed balancing. Identical hashes can create deeply skewed recursion.",
+      "File IDs assigned under mutex in worker completion order; randomized tree roots and grouping traversal can affect reproducibility.",
+      "FindImages discards WalkDir returned error; missing/inaccessible traversal can look like empty/partial success.",
+      "Extension matching case-sensitive jpg/jpeg/png; GIF decoder registered but scanner excludes.gif.",
+      "CopyFiles creates hard links, not independent copies; MoveFiles uses basename destination without explicit overwrite prevention or preflight. Functions reviewed, never executed.",
+      "No byte comparison, source identity/mutation check, cancellation or image dimension budget visible in these helpers."
+    ]
+  },
+  "cli_tests_review": {
+    "execution": false,
+    "observations": [
+      "VPtree test compares2568bit values to exhaustive strict-radius reference for one random target/threshold; useful finite oracle, no run performed.",
+      "No original mutation/overlapping-group/cancellation tests in reviewed3additional test files.",
+      "Compare-mode result group excludes target; delete branch keeps first matched result and deletes only remaining matches when deleteAll false. Thus survivor choice does not simply mean preserve target and remove all matches.",
+      "delete-all flag alone does not enter delete branch, which is gated on delete flag.",
+      "CLI continues to mutation phase even when dedup returned an error and some groups; no source revalidation or byte confirmation. Source-only observation; no mutation executed.",
+      "stdin splits paths on spaces and ignores Scanner.Err; output Flush error not checked.",
+      "quiet/output redirect opens os.DevNull read-only using os.Open, while subsequent writes errors ignored.",
+      "Invalid hash option logs and falls backDCT rather than failing; zero/negative threshold ignored."
+    ]
+  },
+  "docs_build_review": {
+    "executed": false,
+    "observations": [
+      "Manifest Go1.23 and empty go.sum indicate no external module dependencies; this does not establish runtime correctness.",
+      "README defines duplicate as visually similar and explicitly excludes major crop/flip/inversion/full rotation, so not universal file equality.",
+      "README development example uses -t flag absent from reviewed CLI.",
+      "Release workflow builds via make build only, not make test; no packaged runtime or race gate.",
+      "make test repeats5times but has no race flag.",
+      "Root MIT2025AlexGrand read; resize source provenance still pending.",
+      "44tracked test images remain unviewed; README embeds not credited from Markdown text alone."
+    ]
+  },
+  "visual_reviews": [
+    {
+      "path": "testimages/06d8ab52-f423-4507-8555-ca105db9e820.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/06d8ab52-f423-4507-8555-ca105db9e820.jpg",
+      "sha256": "29f10bb597460e4d5a76c609774959dbf461614e696cf7e9eb03b2aa5fab204c",
+      "git_blob_sha1": "e0c4f35a6b77d08eb04e9515a412461579cbc5ae",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 1
+    },
+    {
+      "path": "testimages/17be544c-8296-46b1-a981-6ea6a5a508d1.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/17be544c-8296-46b1-a981-6ea6a5a508d1.jpg",
+      "sha256": "5d4674254e19a019bc2a71db5f1e36135cf9defee48d32503b6965fa8a327895",
+      "git_blob_sha1": "10f0e741fcd3083efc6fd370f322c10db62bddfa",
+      "dimensions": [
+        720,
+        405
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 2
+    },
+    {
+      "path": "testimages/2ff44cfe-bc96-49cc-8ad2-dc1631393a6a.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/2ff44cfe-bc96-49cc-8ad2-dc1631393a6a.jpg",
+      "sha256": "2e544148467b9fcb6698b14a3a56951dbc232596037853908a5e26681a5bcb2b",
+      "git_blob_sha1": "4257cb7c64b44a0228e6434d22aeb67570942858",
+      "dimensions": [
+        640,
+        360
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 3
+    },
+    {
+      "path": "testimages/346170b4-3d4b-48e4-ad20-05148fdfa709.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/346170b4-3d4b-48e4-ad20-05148fdfa709.jpg",
+      "sha256": "ac19568506a985f2f87a7c6cd78618f5ec19ef19cf8fafb23a754b6cfa4cf754",
+      "git_blob_sha1": "50c26d0f4e131796e48aaf66620eec90942dae0d",
+      "dimensions": [
+        540,
+        304
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 4
+    },
+    {
+      "path": "testimages/3850626a-cc11-4a08-88df-20e00cfc6bbd.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/3850626a-cc11-4a08-88df-20e00cfc6bbd.jpeg",
+      "sha256": "f41855d7b733e1ccf128421f076883779118022bb757d7f752bc462fdbc7caea",
+      "git_blob_sha1": "73b975f4d6ce8b892cee15ac04327a986b8bc675",
+      "dimensions": [
+        720,
+        405
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 5
+    },
+    {
+      "path": "testimages/3a0de73a-66ed-4020-bed5-4015bcf35f83.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/3a0de73a-66ed-4020-bed5-4015bcf35f83.jpg",
+      "sha256": "99973557ffbcc8b1485f33935ab3d1875febf6070bf5b1a210482cc34e0a133d",
+      "git_blob_sha1": "86632b0b7e787ad20b62f701f4929c4684c32764",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 6
+    },
+    {
+      "path": "testimages/4ddbaff9-005d-49da-978b-46009e87bc36.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/4ddbaff9-005d-49da-978b-46009e87bc36.jpeg",
+      "sha256": "333326bd4154c2df23babcf8af31cd78383fa73e34a24c1f6f12ac179f74b8ab",
+      "git_blob_sha1": "3330bc0d7dd431da0d4c0ae7b0d218bbd9d61cb0",
+      "dimensions": [
+        480,
+        255
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 7
+    },
+    {
+      "path": "testimages/4e3a8f9b-9778-4ba0-b257-95f2cfe7a232.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/4e3a8f9b-9778-4ba0-b257-95f2cfe7a232.jpg",
+      "sha256": "74d6328d2d168dbfeb3f4b5120768f16a7617946fd108eb78028e9a4b110a9d7",
+      "git_blob_sha1": "357b43d82921296c662e74c12daa91b72f838d01",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 8
+    },
+    {
+      "path": "testimages/5f57a082-a7fb-4cf1-bbba-68ba03f9437a.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/5f57a082-a7fb-4cf1-bbba-68ba03f9437a.jpeg",
+      "sha256": "05183ac9951fb7ac3329711c1bec14f2cac3be647c4a6697947fa68fd4d8f0e6",
+      "git_blob_sha1": "6ad664f20947df958ecc06d22b3a4064557c4d4a",
+      "dimensions": [
+        480,
+        300
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 9
+    },
+    {
+      "path": "testimages/6495e3ec-150d-4ec6-bc0f-beeb67291b11.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/6495e3ec-150d-4ec6-bc0f-beeb67291b11.jpeg",
+      "sha256": "19497766a6bec6dc33ba409211b264c43409e67c12bbe7acdc10f234704d9d1b",
+      "git_blob_sha1": "9eaf70ff95321d1365562b4f3615e41de77ea8ff",
+      "dimensions": [
+        720,
+        401
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 10
+    },
+    {
+      "path": "testimages/656d02a1-9116-4743-8a7b-148629f46b1e.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/656d02a1-9116-4743-8a7b-148629f46b1e.jpeg",
+      "sha256": "542e0c2470e3773d58276ca736b8cce09da3849c6b2c635892297ebe1395b062",
+      "git_blob_sha1": "89a4898d3798cb6dfc4525c97f296acbe2b86958",
+      "dimensions": [
+        480,
+        300
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 11
+    },
+    {
+      "path": "testimages/76b06f16-949a-4154-9ce9-90494e92c853.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/76b06f16-949a-4154-9ce9-90494e92c853.jpeg",
+      "sha256": "907f414089d966311fc36e0687485444c9273d5fe74498d42eea674eaca901bb",
+      "git_blob_sha1": "a2a1fc8f7263ab9d4a338dd4fa441e0ba43d3231",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 1,
+      "ordinal": 12
+    },
+    {
+      "path": "testimages/87242e81-e02a-42d5-9c5c-30352f9c61a3.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/87242e81-e02a-42d5-9c5c-30352f9c61a3.jpeg",
+      "sha256": "ac97e2d92aa77cfb3670de806a225c1ae0bf040ef02f3a1f14335c4ee7908ee1",
+      "git_blob_sha1": "bfc5a667ed2f3e88305ac7975ee43ee47386b641",
+      "dimensions": [
+        455,
+        256
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 13
+    },
+    {
+      "path": "testimages/90c6f0b4-baae-448a-a7e7-33a9b60645e3.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/90c6f0b4-baae-448a-a7e7-33a9b60645e3.jpg",
+      "sha256": "37f74c056468dd9c1d322382c9e3af1f1a557a5a12b050803d7a69d71f7da819",
+      "git_blob_sha1": "38970a4951a93e97c9fe38ec1c281a4d0f6c6506",
+      "dimensions": [
+        720,
+        405
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 14
+    },
+    {
+      "path": "testimages/9453cf8c-251d-492c-87b2-4320c701fcd7.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/9453cf8c-251d-492c-87b2-4320c701fcd7.jpeg",
+      "sha256": "fe5a05194b21c39c8382cfc5c8ed68376b453be3ca51efe1d242877a28dabd0b",
+      "git_blob_sha1": "5577ff1696daf27cf82954ddb37c9ac26185ed03",
+      "dimensions": [
+        400,
+        250
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 15
+    },
+    {
+      "path": "testimages/9d478e30-a8e7-45fd-bc14-79ecfbdb4581.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/9d478e30-a8e7-45fd-bc14-79ecfbdb4581.jpeg",
+      "sha256": "2a9e034e1f85cafd68cae8fa345d72db500d9e0078bdabd798c792804c1615a6",
+      "git_blob_sha1": "0eec581e339c6eb2b84532dbc7ea7d5cb22e0468",
+      "dimensions": [
+        640,
+        400
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 16
+    },
+    {
+      "path": "testimages/a2c7342f-e793-4df0-919e-b3634d2f9861.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/a2c7342f-e793-4df0-919e-b3634d2f9861.jpeg",
+      "sha256": "edfa7cb5dad6ae772c3bb35bc1973653d3f3c82cd3a848b7535aeae67a5aea02",
+      "git_blob_sha1": "e1758af1cb7dde38165d2b5a98ad1ba943dbedc4",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 17
+    },
+    {
+      "path": "testimages/a455e0ac-d2fc-415d-8840-dcebf1aef85e.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/a455e0ac-d2fc-415d-8840-dcebf1aef85e.jpg",
+      "sha256": "5d4674254e19a019bc2a71db5f1e36135cf9defee48d32503b6965fa8a327895",
+      "git_blob_sha1": "10f0e741fcd3083efc6fd370f322c10db62bddfa",
+      "dimensions": [
+        720,
+        405
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 18
+    },
+    {
+      "path": "testimages/a572db63-d361-4635-8d94-009aea9f9b43.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/a572db63-d361-4635-8d94-009aea9f9b43.jpeg",
+      "sha256": "ade4a7ffae8466edec7981aef54f2377fd184d2c63100f07407fb47f378ec89f",
+      "git_blob_sha1": "58100036f0dea50b4ffc65f6adcde1b4b6b80344",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 19
+    },
+    {
+      "path": "testimages/abbee063-3963-47ad-be61-0bba171eb8ab.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/abbee063-3963-47ad-be61-0bba171eb8ab.jpg",
+      "sha256": "b5a48afb05b0c2220abf2f68bf7f46d8727518a99aa390d6b438da87290825fe",
+      "git_blob_sha1": "e4c1eeb2ea520bf0338333a3ae33262811722396",
+      "dimensions": [
+        480,
+        300
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 20
+    },
+    {
+      "path": "testimages/adbfc484-fb8a-47b5-91a0-169a85d4fcc3.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/adbfc484-fb8a-47b5-91a0-169a85d4fcc3.jpg",
+      "sha256": "5925c4f2b6df336ebd7e7dfd2c9455712df8160b4d2e611c3376ec9afef18e8c",
+      "git_blob_sha1": "daa2d80513153c2d677d3c5b91cc21d504198d69",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 21
+    },
+    {
+      "path": "testimages/ba3685e6-50ad-40a6-9c91-634ef5cde7d5.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/ba3685e6-50ad-40a6-9c91-634ef5cde7d5.jpg",
+      "sha256": "50855013b24d5ae1c6684fc8dde9c7f732a479bf498e985c9ce635156df8f2c2",
+      "git_blob_sha1": "d6116a90f1f6f9507ab81a489f52b0dacf14f845",
+      "dimensions": [
+        640,
+        425
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 22
+    },
+    {
+      "path": "testimages/bd827ddc-24d6-4468-861f-eeb3715486ca.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/bd827ddc-24d6-4468-861f-eeb3715486ca.jpg",
+      "sha256": "4f297878fdbeae3f32d568b3f5340d290cce58bc9e684d5836943fcd0d4a6537",
+      "git_blob_sha1": "baa427d6cab747046637ff5719cfba02950b7032",
+      "dimensions": [
+        720,
+        405
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 23
+    },
+    {
+      "path": "testimages/c2484942-ad52-4789-bbc1-455ede5b2c9d.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/c2484942-ad52-4789-bbc1-455ede5b2c9d.jpg",
+      "sha256": "69602758190a6f7a897a50823263fdad526f677c6055ab65d2bcd2cf9979ee26",
+      "git_blob_sha1": "36b2deb3e746b206127bb68faa6a064fadd3f411",
+      "dimensions": [
+        720,
+        301
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 2,
+      "ordinal": 24
+    },
+    {
+      "path": "testimages/c315ebe5-e19e-47c9-b30e-3591c143794a.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/c315ebe5-e19e-47c9-b30e-3591c143794a.jpeg",
+      "sha256": "aa99a4ed8408ece4e1a24828b4507a46c61ddcea1f0b7a144460c4782fb365d3",
+      "git_blob_sha1": "076f35e5f301a113ad0c442c0cd4cb97687768d8",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 25
+    },
+    {
+      "path": "testimages/c449116d-59e9-434d-9ff0-1719771be4ed.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/c449116d-59e9-434d-9ff0-1719771be4ed.jpg",
+      "sha256": "f40944d508769e13cb288fc2e279ebef4ab4a96fcad098ebf884d4325bacd4a9",
+      "git_blob_sha1": "7935db5aaed5645c714d86eb8caa624b761bf470",
+      "dimensions": [
+        621,
+        350
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 26
+    },
+    {
+      "path": "testimages/cats/cat-dark.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-dark.jpg",
+      "sha256": "1db95121867f0b5eafe1b51f6da6fb049cda732866fc7b06dfca2a1847cc1e40",
+      "git_blob_sha1": "6e1693c5a5a59fe7fc9570bc39f9679cc52f316b",
+      "dimensions": [
+        352,
+        232
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 27
+    },
+    {
+      "path": "testimages/cats/cat-distorted.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-distorted.jpg",
+      "sha256": "1ff6a1b6784ea8bcfb10d1d60f157a1dc9934f8c03e1ec83f2d82987e5aa13bb",
+      "git_blob_sha1": "82a7258456b1e5ebc974bfd98d1173259963cdb5",
+      "dimensions": [
+        352,
+        232
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 28
+    },
+    {
+      "path": "testimages/cats/cat-greyscale.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-greyscale.jpg",
+      "sha256": "3fa110e78c5529c0c92127fdc6c7a69bf89d852cb5a3d52d6478bd53f680bfa8",
+      "git_blob_sha1": "709069625bef08f0a75f2cc0dfcc5b95c60e9454",
+      "dimensions": [
+        352,
+        232
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 29
+    },
+    {
+      "path": "testimages/cats/cat-inverted.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-inverted.jpg",
+      "sha256": "02079656b6ea8efb911309f51b48f4ca11c383773b1fbf62146def9821d21843",
+      "git_blob_sha1": "5a52a45226637c24ffd75cf94a9d6a9c9dc6bb0f",
+      "dimensions": [
+        357,
+        236
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 30
+    },
+    {
+      "path": "testimages/cats/cat-on-couch.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-on-couch.jpg",
+      "sha256": "b6a8474ea7c5de2ee13fca89cf6d84c42e4a063f6dd383f8016ab9b6044ca198",
+      "git_blob_sha1": "50ac9965573effd26e85cd37acb771dbdd0f3e76",
+      "dimensions": [
+        531,
+        299
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 31
+    },
+    {
+      "path": "testimages/cats/cat-saturated.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-saturated.jpg",
+      "sha256": "3238b5bd3b02b46dcaa2fa73fc2be9fb41187473b2663bf98af8b7783e9b62b6",
+      "git_blob_sha1": "fec04f79a3aa3fc8d0bf33b90dfe70ca9eda864a",
+      "dimensions": [
+        352,
+        232
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 32
+    },
+    {
+      "path": "testimages/cats/cat-shrink.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-shrink.jpg",
+      "sha256": "2e98c225cc7d22c4a160516addb138575fe0f32e03b153472ad0b1458424b674",
+      "git_blob_sha1": "c56166866d87194708eb079ea465baf42b9ef4d4",
+      "dimensions": [
+        176,
+        116
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 33
+    },
+    {
+      "path": "testimages/cats/cat-skewed.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-skewed.jpg",
+      "sha256": "13ee6c5b342ac6dade7a3268092de4031d2a9849ace5dd1c03f5de60e460f603",
+      "git_blob_sha1": "5e693c3d9da09845c9efc679b992834478dbe585",
+      "dimensions": [
+        352,
+        232
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 34
+    },
+    {
+      "path": "testimages/cats/cat-upscaled.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat-upscaled.jpg",
+      "sha256": "1b883d062e072750a730685f4f59ed0abafc9f14fe75102a80912dae65ae30ed",
+      "git_blob_sha1": "66c9e09be3904343df8096b361a8134904583077",
+      "dimensions": [
+        528,
+        348
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 35
+    },
+    {
+      "path": "testimages/cats/cat.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/cat.jpg",
+      "sha256": "b01d09bdb1f684647688dd4a8577dda7a2c0a444ce20ee053a7d3685d883023f",
+      "git_blob_sha1": "ffcb8bd6ee5dc361f5ff2d069b32f11b359b76ff",
+      "dimensions": [
+        352,
+        232
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 3,
+      "ordinal": 36
+    },
+    {
+      "path": "testimages/cats/copy-of-kitten.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/copy-of-kitten.jpg",
+      "sha256": "10286b91f3f67e5cd53fdb55dafb5036feaf4014760617ac4fd651ac3dd2f14a",
+      "git_blob_sha1": "15ac76553a2f1115460329ae7da97ae2d347f8f4",
+      "dimensions": [
+        512,
+        338
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 37
+    },
+    {
+      "path": "testimages/cats/kitten-looking-up.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/kitten-looking-up.jpg",
+      "sha256": "3ffbb7250288c42354561d4dd5c17711fad2cadc7561fbf66c6fd0a9d72d45de",
+      "git_blob_sha1": "c5077fb5061c5a88ef833cc5347d8bd022f065ff",
+      "dimensions": [
+        512,
+        288
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 38
+    },
+    {
+      "path": "testimages/cats/kitten-resized.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/kitten-resized.jpg",
+      "sha256": "4eb3c0b7b0b01989eff2c4d82587280755c9fce40c6fafe532c91beaafcdd04d",
+      "git_blob_sha1": "c37b59ca2bd5e92b7a05f023d0f23b2aa1850d6c",
+      "dimensions": [
+        200,
+        132
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 39
+    },
+    {
+      "path": "testimages/cats/kitten.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/cats/kitten.jpg",
+      "sha256": "10286b91f3f67e5cd53fdb55dafb5036feaf4014760617ac4fd651ac3dd2f14a",
+      "git_blob_sha1": "15ac76553a2f1115460329ae7da97ae2d347f8f4",
+      "dimensions": [
+        512,
+        338
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 40
+    },
+    {
+      "path": "testimages/d4737782-7010-4fd5-a12b-d2fadd6637b3.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/d4737782-7010-4fd5-a12b-d2fadd6637b3.jpeg",
+      "sha256": "68f9ae7e767e67d0180bccbacce4556636f076d2a65194f4338291aa04d42192",
+      "git_blob_sha1": "d9ed1b38f2eb05c31ff01ecaa1f8817018269f59",
+      "dimensions": [
+        640,
+        360
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 41
+    },
+    {
+      "path": "testimages/ddce8825-7fd4-4552-86b1-6e559eae7d2b.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/ddce8825-7fd4-4552-86b1-6e559eae7d2b.jpg",
+      "sha256": "cc34a9b9b60041c7e954cbfb1529ec6e599e6afb324b1c6bcd3fbf58ba60b129",
+      "git_blob_sha1": "6160eba8c69ad5daecded438eccd70d3a3422c4d",
+      "dimensions": [
+        720,
+        405
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 42
+    },
+    {
+      "path": "testimages/e945ded0-0d6d-49cc-bd9b-df1d5b3e555d.jpeg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/e945ded0-0d6d-49cc-bd9b-df1d5b3e555d.jpeg",
+      "sha256": "e939334c9ed334c27ff56a7782e15f89fccc3ff920a2a582ca96799ff479a6b7",
+      "git_blob_sha1": "8c61ef0a1284e7dc2f2ca4f2cbca8e0f7fb9e78b",
+      "dimensions": [
+        480,
+        256
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 43
+    },
+    {
+      "path": "testimages/fe87ff2c-ae4a-432f-9fea-2f970e6f37d8.jpg",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/testimages/fe87ff2c-ae4a-432f-9fea-2f970e6f37d8.jpg",
+      "sha256": "5925c4f2b6df336ebd7e7dfd2c9455712df8160b4d2e611c3376ec9afef18e8c",
+      "git_blob_sha1": "daa2d80513153c2d677d3c5b91cc21d504198d69",
+      "dimensions": [
+        480,
+        270
+      ],
+      "visual_method": "Complete image fitted in numbered contact sheet, tools.view_image inspected",
+      "sheet": 4,
+      "ordinal": 44
+    }
+  ],
+  "image_findings": {
+    "all44viewed": true,
+    "byte_identical_groups": [
+      [
+        "testimages/17be544c-8296-46b1-a981-6ea6a5a508d1.jpg",
+        "testimages/a455e0ac-d2fc-415d-8840-dcebf1aef85e.jpg"
+      ],
+      [
+        "testimages/adbfc484-fb8a-47b5-91a0-169a85d4fcc3.jpg",
+        "testimages/fe87ff2c-ae4a-432f-9fea-2f970e6f37d8.jpg"
+      ],
+      [
+        "testimages/cats/copy-of-kitten.jpg",
+        "testimages/cats/kitten.jpg"
+      ]
+    ],
+    "observations": [
+      "Corpus includes transformed cat portraits, resized kitten, unrelated cat pose, wallpapers with recolorings/crops and repeated scenes.",
+      "Named cat-inverted looks similar in thumbnail; filename alone is not proof of inversion or transform provenance.",
+      "Visual resemblance does not establish threshold accuracy; all44images reviewed without running original hash implementation.",
+      "Exact byte groups computed from SHA256 for inventory only; broader perceptual relation not equated with equality."
+    ]
+  }
+}

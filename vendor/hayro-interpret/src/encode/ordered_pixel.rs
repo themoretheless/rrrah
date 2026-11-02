@@ -158,6 +158,51 @@ fn tick(work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<()> {
     Ok(())
 }
 
+// Allocation-free sorting with a continuing allowance and cancellation.
+pub(super) fn sort_by<T>(
+    values: &mut [T],
+    work: &mut usize,
+    cancelled: &dyn Fn() -> bool,
+    order: impl Fn(&T, &T) -> std::cmp::Ordering,
+) -> Result<()> {
+    fn sift<T>(
+        values: &mut [T],
+        mut root: usize,
+        end: usize,
+        compare: &mut impl FnMut(&T, &T) -> Result<std::cmp::Ordering>,
+    ) -> Result<()> {
+        while root * 2 + 1 < end {
+            let mut child = root * 2 + 1;
+            if child + 1 < end && compare(&values[child], &values[child + 1])?.is_lt() {
+                child += 1;
+            }
+            if !compare(&values[root], &values[child])?.is_lt() {
+                break;
+            }
+            values.swap(root, child);
+            root = child;
+        }
+        Ok(())
+    }
+    tick(work, cancelled)?;
+    let mut compare = |a: &T, b: &T| {
+        tick(work, cancelled)?;
+        Ok(order(a, b))
+    };
+    for start in (0..values.len() / 2).rev() {
+        sift(values, start, values.len(), &mut compare)?;
+    }
+    for end in (1..values.len()).rev() {
+        values.swap(0, end);
+        sift(values, 0, end, &mut compare)?;
+    }
+    Ok(())
+}
+#[cfg(any(test, feature = "experimental-shared-partitions"))]
+mod full_cell;
+#[cfg(feature = "experimental-shared-partitions")]
+pub(super) use full_cell::integrate_disjoint_unit_mesh;
+
 // Exact sign for represented finite coordinates. Fast ordinary determinants
 // use a conservative filter; ambiguous/overflowing/subnormal cases sum six
 // dyadic products in fixed storage (no allocator or geometric epsilon).
@@ -391,6 +436,56 @@ impl LineKey {
             snap,
         ))
     }
+    // Conservative arithmetic filter for the represented original support.
+    // This certifies a witness sign; it never erases a geometric area.
+    fn evaluation_roundoff(self, p: Point) -> f64 {
+        let magnitude = match self {
+            Self::Edge(bits) => {
+                let v = bits.map(f64::from_bits);
+                let d = Point::new(v[2] - v[0], v[3] - v[1]);
+                let q = Point::new(p.x - v[0], p.y - v[1]);
+                (d.x * q.y).abs() + (d.y * q.x).abs()
+            }
+            Self::Field(bits) => {
+                let f = bits.map(f64::from_bits);
+                f[0].abs() + (f[1] * p.x).abs() + (f[2] * p.y).abs()
+            }
+            Self::Axis(axis, bits) => (if axis == 0 { p.x } else { p.y }).abs() + f64::from_bits(bits).abs(),
+        };
+        64. * f64::EPSILON * magnitude + 64. * f64::from_bits(1)
+    }
+    // Include the bounded summation/division error of a vertex mean.
+    fn mean_roundoff(self, mean: Point, absolute_mean: Point) -> f64 {
+        let (input_magnitude, slope) = match self {
+            Self::Edge(bits) => {
+                let v = bits.map(f64::from_bits);
+                let x = (v[3] - v[1]).abs();
+                let y = (v[2] - v[0]).abs();
+                (x * absolute_mean.x + y * absolute_mean.y, x + y)
+            }
+            Self::Field(bits) => {
+                let f = bits.map(f64::from_bits);
+                (
+                    f[1].abs() * absolute_mean.x + f[2].abs() * absolute_mean.y,
+                    f[1].abs() + f[2].abs(),
+                )
+            }
+            Self::Axis(axis, _) => (
+                if axis == 0 {
+                    absolute_mean.x
+                } else {
+                    absolute_mean.y
+                },
+                1.,
+            ),
+        };
+        // Division can underflow the coordinate mean even with finite steep
+        // supports. Scale the absolute input error by the support gradient.
+        self.evaluation_roundoff(mean)
+            + 64. * f64::EPSILON * input_magnitude
+            + (64. * f64::from_bits(1)) * slope
+            + 64. * f64::from_bits(1)
+    }
     fn field(mut f: [f64; 3]) -> Result<Self> {
         if f.iter().any(|v| !v.is_finite()) {
             return Err(PixelPartitionError::Invalid);
@@ -409,6 +504,8 @@ impl LineKey {
 }
 type LineMap = hashbrown::HashMap<LineKey, u32, rustc_hash::FxBuildHasher>;
 struct LinePool<'a> {
+    #[cfg(test)]
+    identity: usize,
     map: LineMap,
     keys: Vec<LineKey>,
     credit: Option<Credit>,
@@ -424,6 +521,8 @@ struct LineTransaction<'p, 'a> {
 impl<'a> LinePool<'a> {
     fn new(admit: &'a Admitter<'a>) -> Self {
         Self {
+            #[cfg(test)]
+            identity: shared_fragment_store::next_pool_id(),
             map: Default::default(),
             keys: Vec::new(),
             credit: None,
@@ -704,6 +803,48 @@ impl Polygon {
             return None;
         }
         Some((area.abs() * 0.5, centroid))
+    }
+    // An edge is a separator only if every represented cut vertex lies
+    // on one side and every subject vertex lies on the other. This remains
+    // conservative for a rounded reflex/self-crossing corner: an unsupported
+    // edge is ignored. Exact orientation uses no area or distance tolerance.
+    fn separates(&self, other: &Self, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<bool> {
+        for _ in 0..self.len {
+            tick(work, cancelled)?;
+        }
+        let mut hull = *self;
+        hull.incoming.fill(0);
+        let hull = hull.convex_hull();
+        for [a, b] in hull.edges() {
+            let mut direction = 0;
+            let mut supporting = true;
+            for &point in &self.points[..self.len] {
+                tick(work, cancelled)?;
+                let sign = orientation(a, b, point);
+                if sign != 0 {
+                    if direction != 0 && direction != sign {
+                        supporting = false;
+                        break;
+                    }
+                    direction = sign;
+                }
+            }
+            if !supporting || direction == 0 {
+                continue;
+            }
+            let mut separated = true;
+            for &point in &other.points[..other.len] {
+                tick(work, cancelled)?;
+                if orientation(a, b, point) == direction {
+                    separated = false;
+                    break;
+                }
+            }
+            if separated {
+                return Ok(true);
+            }
+        }
+        Ok(false)
     }
     fn contains(&self, other: &Self, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<bool> {
         for [a, b] in self.edges() {
@@ -1010,33 +1151,109 @@ impl Polygon {
         None
     }
 
+    fn bounds(&self) -> [f64; 4] {
+        let mut bounds = [f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY];
+        for p in &self.points[..self.len] {
+            bounds[0] = bounds[0].min(p.x);
+            bounds[1] = bounds[1].min(p.y);
+            bounds[2] = bounds[2].max(p.x);
+            bounds[3] = bounds[3].max(p.y);
+        }
+        bounds
+    }
     fn bounds_overlap(&self, other: &Self) -> bool {
-        let bounds = |polygon: &Self| {
-            let mut b = [f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY];
-            for p in &polygon.points[..polygon.len] {
-                b[0] = b[0].min(p.x);
-                b[1] = b[1].min(p.y);
-                b[2] = b[2].max(p.x);
-                b[3] = b[3].max(p.y);
-            }
-            b
-        };
-        let a = bounds(self);
-        let b = bounds(other);
+        self.bounds_overlap_rect(other.bounds())
+    }
+    fn bounds_overlap_rect(&self, b: [f64; 4]) -> bool {
+        let a = self.bounds();
         a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+    }
+    #[cfg(feature = "experimental-shared-partitions")]
+    fn bounds_contain(&self, other: &Self) -> bool {
+        let a = self.bounds();
+        let b = other.bounds();
+        a[0] <= b[0] && a[1] <= b[1] && a[2] >= b[2] && a[3] >= b[3]
     }
     fn edges(&self) -> impl Iterator<Item = [Point; 2]> + '_ {
         (0..self.len).map(|i| [self.points[i], self.points[(i + 1) % self.len]])
     }
 }
+#[cfg(feature = "experimental-shared-partitions")]
+#[derive(Clone, Copy)]
+struct FragmentBounds {
+    axis: [f64; 2],
+    interval: [f64; 2],
+}
+#[cfg(feature = "experimental-shared-partitions")]
+impl FragmentBounds {
+    const DISABLED: Self = Self { axis: [0.; 2], interval: [0.; 2] };
+    fn project(axis: [f64; 2], point: Point) -> Option<[f64; 2]> {
+        let x = axis[0] * point.x;
+        let y = axis[1] * point.y;
+        let low = (x.next_down() + y.next_down()).next_down();
+        let high = (x.next_up() + y.next_up()).next_up();
+        (low.is_finite() && high.is_finite()).then_some([low, high])
+    }
+    fn new(polygon: &Polygon) -> Self {
+        // Unknown supports keep the ordinary path and its canonical interning.
+        if polygon.incoming[..polygon.len].contains(&0) { return Self::DISABLED; }
+        let mut axis = [0.; 2];
+        let mut longest = 0.;
+        for [a, b] in polygon.edges() {
+            let d = b - a;
+            let length = d.x.abs().max(d.y.abs());
+            // Axis-aligned normals duplicate the preceding exact AABB test
+            // and cannot prove another separation after outward rounding.
+            if d.x != 0. && d.y != 0. && length.is_finite() && length > longest {
+                longest = length;
+                axis = [-d.y, d.x];
+            }
+        }
+        if axis == [0.; 2] { return Self::DISABLED; }
+        let mut interval = [f64::INFINITY, f64::NEG_INFINITY];
+        for point in &polygon.points[..polygon.len] {
+            let Some([low, high]) = Self::project(axis, *point) else { return Self::DISABLED; };
+            interval[0] = interval[0].min(low);
+            interval[1] = interval[1].max(high);
+        }
+        Self { axis, interval }
+    }
+    fn disjoint(&self, cut: &Polygon, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<bool> {
+        if self.axis == [0.; 2] || cut.len < 3 || cut.incoming[..cut.len].contains(&0) { return Ok(false); }
+        let mut interval = [f64::INFINITY, f64::NEG_INFINITY];
+        for point in &cut.points[..cut.len] {
+            tick(work, cancelled)?;
+            let Some([low, high]) = Self::project(self.axis, *point) else { return Ok(false); };
+            interval[0] = interval[0].min(low);
+            interval[1] = interval[1].max(high);
+        }
+        Ok(self.interval[1] < interval[0] || interval[1] < self.interval[0])
+    }
+}
 #[derive(Clone, Copy)]
 struct Fragment {
     polygon: Polygon,
+    #[cfg(feature = "experimental-shared-partitions")]
+    bounds: FragmentBounds,
     owner: PixelSourceOwner,
     // Classification of the immutable represented polygon, including tags.
     has_area: bool,
     // True only when the previous published neighbor cannot merge with this.
     no_merge_with_previous: bool,
+}
+impl Fragment {
+    fn new(polygon: Polygon, owner: PixelSourceOwner, has_area: bool, no_merge_with_previous: bool) -> Self {
+        Self::with_bounds(polygon,owner,has_area,no_merge_with_previous,
+            #[cfg(feature = "experimental-shared-partitions")] None)
+    }
+    fn with_bounds(polygon: Polygon, owner: PixelSourceOwner, has_area: bool, no_merge_with_previous: bool,
+        #[cfg(feature = "experimental-shared-partitions")] cached: Option<FragmentBounds>,
+    ) -> Self {
+        Self { polygon, owner, has_area, no_merge_with_previous,
+            #[cfg(feature = "experimental-shared-partitions")]
+            bounds: if has_area { cached.unwrap_or_else(|| FragmentBounds::new(&polygon)) } else { FragmentBounds::DISABLED },
+        }
+    }
 }
 struct AdmittedVec<'a, T> {
     values: Vec<T>,
@@ -1107,22 +1324,66 @@ impl<'a, T> AdmittedVec<'a, T> {
         Ok(())
     }
 }
+trait FragmentSink {
+    fn sink_len(&self)->usize;
+    fn sink_last(&self)->Option<&Fragment>;
+    fn sink_pop(&mut self);
+    fn sink_push(&mut self,item:Fragment)->Result<()>;
+    fn sink_floor(&self)->usize;
+}
+impl FragmentSink for AdmittedVec<'_,Fragment> {
+    fn sink_len(&self)->usize {self.values.len()}
+    fn sink_last(&self)->Option<&Fragment> {self.values.last()}
+    fn sink_pop(&mut self) {self.values.pop();}
+    fn sink_push(&mut self,item:Fragment)->Result<()> {self.push(item)}
+    fn sink_floor(&self)->usize {self.merge_floor}
+}
+#[cfg(not(any(test,feature="experimental-shared-partitions")))]
+type StoredRegions<'a>=AdmittedVec<'a,Fragment>;
+#[cfg(any(test,feature="experimental-shared-partitions"))]
+type StoredRegions<'a>=shared_fragment_store::RegionOutput<'a>;
+fn fresh_regions<'a>(old:&StoredRegions<'a>)->StoredRegions<'a> {
+    #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+    {AdmittedVec::new(old.admit,old.maximum)}
+    #[cfg(any(test,feature="experimental-shared-partitions"))]
+    {old.empty_like()}
+}
+fn carry_regions<'a>(out:&mut StoredRegions<'a>,old:&StoredRegions<'a>,start:usize,end:usize,work:&mut usize,cancelled:&dyn Fn()->bool)->Result<()> {
+    #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+    {out.extend_copy(&old.values[start..end],work,cancelled)}
+    #[cfg(any(test,feature="experimental-shared-partitions"))]
+    {out.copy_from(old,start,end,work,cancelled)}
+}
+#[inline]
+fn reusable_region_span(old:&StoredRegions<'_>,start:usize,cut:&Polygon,empty:bool,room:usize,work:&mut usize,cancelled:&dyn Fn()->bool)->Result<Option<(usize,bool)>> {
+    #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+    {let _=(old,start,cut,empty,room,work,cancelled);Ok(None)}
+    #[cfg(any(test,feature="experimental-shared-partitions"))]
+    {old.carry_span(start,cut,empty,room,work,cancelled)}
+}
+fn restore_region_prefix(out:&mut StoredRegions<'_>,prefix:usize,previous:Option<Fragment>)->Result<()> {
+    #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+    {out.values.truncate(prefix);if let Some(previous)=previous {out.values[prefix-1]=previous;}Ok(())}
+    #[cfg(any(test,feature="experimental-shared-partitions"))]
+    {out.restore_prefix(prefix,previous)}
+}
 fn keep(
-    out: &mut AdmittedVec<'_, Fragment>,
+    out: &mut impl FragmentSink,
     polygon: Polygon,
     owner: PixelSourceOwner,
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
 ) -> Result<()> {
     if polygon.moments().is_some() {
-        keep_positive(out, polygon, owner, work, cancelled)?;
+        keep_positive(out, polygon, owner, work, cancelled,
+            #[cfg(feature = "experimental-shared-partitions")] None)?;
     }
     Ok(())
 }
 // Reuse the publication-time area classification. Immutable coordinates and
 // support IDs preserve it, including any degenerate result of a merge.
 fn keep_existing(
-    out: &mut AdmittedVec<'_, Fragment>,
+    out: &mut impl FragmentSink,
     fragment: &Fragment,
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
@@ -1130,31 +1391,34 @@ fn keep_existing(
     #[cfg(test)]
     if RECHECK_RETAINED_CONTROL.with(|v| v.get()) {
         if fragment.polygon.moments().is_some() {
-            return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled);
+            return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled,
+                #[cfg(feature = "experimental-shared-partitions")] Some(fragment.bounds));
         }
         return Ok(false);
     }
     if fragment.has_area {
-        return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled);
+        return keep_positive(out, fragment.polygon, fragment.owner, work, cancelled,
+                #[cfg(feature = "experimental-shared-partitions")] Some(fragment.bounds));
     }
     Ok(false)
 }
 fn keep_positive(
-    out: &mut AdmittedVec<'_, Fragment>,
+    out: &mut impl FragmentSink,
     mut polygon: Polygon,
     owner: PixelSourceOwner,
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
+    #[cfg(feature = "experimental-shared-partitions")] cached_bounds: Option<FragmentBounds>,
 ) -> Result<bool> {
     let mut merged = false;
     let no_merge_with_previous;
     loop {
         tick(work, cancelled)?;
-        if out.values.len() <= out.merge_floor {
-            no_merge_with_previous = out.values.is_empty();
+        if out.sink_len() <= out.sink_floor() {
+            no_merge_with_previous = out.sink_len()==0;
             break;
         }
-        let Some(previous) = out.values.last() else {
+        let Some(previous) = out.sink_last() else {
             no_merge_with_previous = true;
             break;
         };
@@ -1166,12 +1430,13 @@ fn keep_positive(
             no_merge_with_previous = true;
             break;
         };
-        out.values.pop();
+        out.sink_pop();
         polygon = joined;
         merged = true;
     }
     let has_area = !merged || polygon.moments().is_some();
-    out.push(Fragment { polygon, owner, has_area, no_merge_with_previous })?;
+    out.sink_push(Fragment::with_bounds(polygon, owner, has_area, no_merge_with_previous,
+        #[cfg(feature = "experimental-shared-partitions")] if merged { None } else { cached_bounds }))?;
     Ok(!merged)
 }
 // Emit convex pieces of `polygon \ cut`, returning the remaining intersection.
@@ -1179,21 +1444,44 @@ fn subtract(
     polygon: Polygon,
     cut: &Polygon,
     owner: PixelSourceOwner,
-    out: &mut AdmittedVec<'_, Fragment>,
+    out: &mut impl FragmentSink,
     lines: &mut LineTransaction<'_, '_>,
     work: &mut usize,
     cancelled: &dyn Fn() -> bool,
 ) -> Result<Polygon> {
     tick(work, cancelled)?;
-    if !polygon.bounds_overlap(cut) {
+    let a_bounds = polygon.bounds();
+    let cut_bounds = cut.bounds();
+    if !(a_bounds[0] < cut_bounds[2]
+        && cut_bounds[0] < a_bounds[2]
+        && a_bounds[1] < cut_bounds[3]
+        && cut_bounds[1] < a_bounds[3])
+    {
         keep(out, polygon, owner, work, cancelled)?;
         return Ok(Polygon::empty());
     }
+    // A bounded convex combination gives an interior orientation probe even
+    // when a rounded corner has only one occurrence of its original support.
+    let mut mean = Point::ZERO;
+    let mut absolute_mean = Point::ZERO;
+    for point in &cut.points[..cut.len] {
+        mean.x += point.x;
+        mean.y += point.y;
+        absolute_mean.x += point.x.abs();
+        absolute_mean.y += point.y.abs();
+    }
+    if cut.len > 0 {
+        mean.x /= cut.len as f64;
+        mean.y /= cut.len as f64;
+        absolute_mean.x /= cut.len as f64;
+        absolute_mean.y /= cut.len as f64;
+    }
     let mut inside = polygon;
+    let mut checked_separation = false;
     // A convex cut has at most VERTICES edges. Delay publishing outside
     // pieces: if a later edge proves the intersection empty, the original
     // polygon must be retained whole instead of an artificial subdivision.
-    let mut outside = [Polygon::empty(); VERTICES];
+    let mut outside = [Polygon::empty(); VERTICES + 4];
     let mut count = 0;
     for (index, [a, b]) in cut.edges().enumerate() {
         tick(work, cancelled)?;
@@ -1213,7 +1501,113 @@ fn subtract(
             continue;
         }
         let (edge, snap) = key.evaluator(a, b)?;
-        let (removed, retained) = inside.subtraction_split(edge, snap, id, work, cancelled)?;
+        // A rounded corner can reverse a local segment of its original
+        // support. The mean detects a clear interior contradiction even when
+        // that ID occurs only once. Confirm it with nonincident witnesses;
+        // ambiguous tiny fragments retain the established clipping path.
+        let repeated = known != 0
+            && cut.incoming[..cut.len]
+                .iter()
+                .filter(|line| **line == known)
+                .count()
+                > 1;
+        let mut direction = 0i8;
+        let mut conflicting = false;
+        let probe = edge(mean);
+        let probe_error = key.mean_roundoff(mean, absolute_mean);
+        let reversed_probe =
+            known != 0 && probe.is_finite() && probe_error.is_finite() && probe < -probe_error;
+        if repeated || reversed_probe {
+            for vertex in 0..cut.len {
+                tick(work, cancelled)?;
+                if cut.on_line(vertex, id) {
+                    continue;
+                }
+                let point = cut.points[vertex];
+                let v = edge(point);
+                let error = key.evaluation_roundoff(point);
+                if !v.is_finite() || !error.is_finite() {
+                    conflicting = true;
+                    break;
+                }
+                if v.abs() <= error {
+                    continue;
+                }
+                let sign = if v > 0. { 1 } else { -1 };
+                if direction != 0 && direction != sign {
+                    conflicting = true;
+                    break;
+                }
+                direction = sign;
+            }
+        }
+        // A very thin rounded cut can carry the same support in opposite
+        // directions without a reliable interior witness. Its symbolic
+        // half-planes must not erase a geometrically separate subject.
+        if repeated && !checked_separation {
+            checked_separation = true;
+            if cut.separates(&polygon, work, cancelled)? {
+                keep(out, polygon, owner, work, cancelled)?;
+                return Ok(Polygon::empty());
+            }
+        }
+        let reverse = direction < 0 && !conflicting;
+        let (removed, retained) = inside.subtraction_split(
+            |p| if reverse { -edge(p) } else { edge(p) },
+            snap,
+            id,
+            work,
+            cancelled,
+        )?;
+        outside[count] = removed;
+        count += 1;
+        inside = retained;
+        if inside.moments().is_none() {
+            keep(out, polygon, owner, work, cancelled)?;
+            return Ok(Polygon::empty());
+        }
+    }
+    // Rounded descendants can retain nearly coincident original supports.
+    // Their half-planes may describe a much larger set than the finite cut.
+    // A cut is necessarily inside its represented coordinate bounds. Restore
+    // that constraint before publishing any outside pieces; never discard a
+    // positive-area subject merely because an inherited support extrapolates.
+    for (axis, bound, positive) in [
+        (0, cut_bounds[0], true),
+        (0, cut_bounds[2], false),
+        (1, cut_bounds[1], true),
+        (1, cut_bounds[3], false),
+    ] {
+        let mut needs_clip = false;
+        for point in &inside.points[..inside.len] {
+            tick(work, cancelled)?;
+            let coordinate = if axis == 0 { point.x } else { point.y };
+            if if positive {
+                coordinate < bound
+            } else {
+                coordinate > bound
+            } {
+                needs_clip = true;
+                break;
+            }
+        }
+        if !needs_clip {
+            continue;
+        }
+        let sign = if positive { 1. } else { -1. };
+        let line = if axis == 0 {
+            [-sign * bound, sign, 0.]
+        } else {
+            [-sign * bound, 0., sign]
+        };
+        let id = lines.intern(LineKey::field(line)?, work, cancelled)?;
+        let (removed, retained) = inside.subtraction_split(
+            |point| sign * ((if axis == 0 { point.x } else { point.y }) - bound),
+            Some((axis, bound)),
+            id,
+            work,
+            cancelled,
+        )?;
         outside[count] = removed;
         count += 1;
         inside = retained;
@@ -1231,7 +1625,7 @@ fn subtract(
 /// Painting is transactional. Limits apply to retained and temporary fragment
 /// vectors independently; a shared operation budget bounds all clipping work.
 pub struct OrderedPixel<'a> {
-    regions: AdmittedVec<'a, Fragment>,
+    regions: StoredRegions<'a>,
     lines: LinePool<'a>,
 }
 // Prove a strict winner over a convex incoming polygon. Ambiguous rounded
@@ -1269,7 +1663,7 @@ impl<'a> OrderedPixel<'a> {
     /// No allocation occurs until the first nonempty triangle is painted.
     pub fn new(admit: &'a Admitter<'a>, maximum_fragments: usize) -> Self {
         Self {
-            regions: AdmittedVec::new(admit, maximum_fragments),
+            regions: StoredRegions::new(admit, maximum_fragments),
             lines: LinePool::new(admit),
         }
     }
@@ -1422,7 +1816,16 @@ impl<'a> OrderedPixel<'a> {
             return Ok(());
         }
         if let Some(last) = self.regions.values.last() {
-            if dominates(&last.owner, &owner, &triangle, work, cancelled)?
+            #[cfg(feature = "experimental-shared-partitions")]
+            let can_contain = !BATCH || (
+                (last.owner.patch_index > owner.patch_index
+                    || (last.owner.patch_index == owner.patch_index
+                        && (last.owner.v != owner.v || last.owner.u != owner.u)))
+                && last.polygon.bounds_contain(&triangle)
+            );
+            #[cfg(not(feature = "experimental-shared-partitions"))]
+            let can_contain = true;
+            if can_contain && dominates(&last.owner, &owner, &triangle, work, cancelled)?
                 && last.polygon.contains(&triangle, work, cancelled)?
             {
                 return Ok(());
@@ -1445,33 +1848,40 @@ impl<'a> OrderedPixel<'a> {
             return Ok(());
         }
         let triangle = tagged;
-        let mut next = AdmittedVec::new(admit, maximum);
+        // The incoming triangle is immutable throughout this transaction.
+        // Reuse its exact bounds for both the carry scan and individual tests.
+        let triangle_bounds = triangle.bounds();
+        let mut next = fresh_regions(&self.regions);
         let mut incoming = AdmittedVec::new(admit, maximum);
-        incoming.push(Fragment {
-            polygon: triangle,
-            owner,
-            has_area: true, // tagged.moments() was checked above.
-            no_merge_with_previous: true,
-        })?;
+        incoming.push(Fragment::new(triangle, owner, true, true))?;
         let mut old_index = 0;
         let mut tail_matches_old = false;
         while old_index < self.regions.values.len() {
             if BATCH && tail_matches_old {
-                let start = old_index;
                 let room = next.maximum - next.values.len();
+                let span=reusable_region_span(&self.regions,old_index,&triangle,incoming.values.is_empty(),room,work,cancelled)?;
+                if let Some((end,true))=span {
+                    if end-old_index<=room {
+                        tick(work,cancelled)?;
+                        carry_regions(&mut next,&self.regions,old_index,end,work,cancelled)?;
+                        old_index=end;continue;
+                    }
+                }
+                let scan_end=span.map_or(self.regions.values.len(),|(end,_)|end);
+                let start = old_index;
                 // Do not pre-scan fragments that cannot fit. The ordinary
                 // path handles the next boundary and bounded Limit refusal.
-                while old_index < self.regions.values.len() && old_index - start < room {
+                while old_index < scan_end && old_index - start < room {
                     let old = &self.regions.values[old_index];
                     if !old.has_area || !old.no_merge_with_previous
-                        || (!incoming.values.is_empty() && old.polygon.bounds_overlap(&triangle)) {
+                        || (!incoming.values.is_empty() && old.polygon.bounds_overlap_rect(triangle_bounds)) {
                         break;
                     }
                     tick(work, cancelled)?;
                     old_index += 1;
                 }
                 if old_index > start {
-                    next.extend_copy(&self.regions.values[start..old_index], work, cancelled)?;
+                    carry_regions(&mut next,&self.regions,start,old_index,work,cancelled)?;
                     continue;
                 }
             }
@@ -1486,7 +1896,10 @@ impl<'a> OrderedPixel<'a> {
             // Every remainder is contained in the clipped incoming triangle.
             // Disjoint bounds therefore preserve this old region without
             // rebuilding the incoming list or comparing source priorities.
-            if !old.polygon.bounds_overlap(&triangle) {
+            let disjoint = !old.polygon.bounds_overlap_rect(triangle_bounds);
+            #[cfg(feature = "experimental-shared-partitions")]
+            let disjoint = disjoint || (BATCH && old.bounds.disjoint(&triangle, work, cancelled)?);
+            if disjoint {
                 tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
                 continue;
             }
@@ -1555,10 +1968,7 @@ impl<'a> OrderedPixel<'a> {
             let whole_old_wins = old_wins.len == overlap.len
                 && old_wins.points[..old_wins.len] == overlap.points[..overlap.len];
             if whole_old_wins {
-                next.values.truncate(prefix);
-                if let Some(previous) = previous_last {
-                    next.values[prefix - 1] = previous;
-                }
+                restore_region_prefix(&mut next,prefix,previous_last)?;
                 tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
             } else {
                 keep(&mut next, old_wins, old.owner, work, cancelled)?;
@@ -1591,6 +2001,135 @@ impl<'a> OrderedPixel<'a> {
 #[cfg(test)]
 mod exact_orientation_tests {
     use super::*;
+    #[cfg(feature = "experimental-shared-partitions")]
+    #[test]
+    fn containment_bounds_only_reject_impossible_enclosures() {
+        let polygon = |points: &[[f64;2]]| {
+            let mut p=Polygon::empty();for &[x,y] in points {p.push(Point::new(x,y)).unwrap();}p
+        };
+        let square=polygon(&[[0.,0.],[1.,0.],[1.,1.],[0.,1.]]);
+        let inside=polygon(&[[0.,0.],[0.5,0.],[0.,0.5]]);
+        assert!(square.bounds_contain(&inside));
+        assert_eq!(square.contains(&inside,&mut 100,&||false),Ok(true));
+        let outside=polygon(&[[1.,0.],[1f64.next_up(),0.],[1.,0.5]]);
+        assert!(!square.bounds_contain(&outside));
+        assert_eq!(square.contains(&outside,&mut 100,&||false),Ok(false));
+        let diamond=polygon(&[[0.,0.5],[0.5,0.],[1.,0.5],[0.5,1.]]);
+        assert!(diamond.bounds_contain(&inside));
+        assert_eq!(diamond.contains(&inside,&mut 100,&||false),Ok(false));
+        let mut checked=0;
+        for x in -2..=6 { for y in -2..=6 { for side in [0.125,0.5,1.] {
+            let (x,y)=(f64::from(x)/4.,f64::from(y)/4.);
+            let other=polygon(&[[x,y],[x+side,y],[x,y+side]]);
+            for outer in [&square,&diamond] {
+                if !outer.bounds_contain(&other) {
+                    assert_eq!(outer.contains(&other,&mut 1000,&||false),Ok(false));
+                    checked+=1;
+                }
+            }
+        }}}
+        eprintln!("CONTAINMENT_GATE independent exact-half-plane rejections={checked}; touching retained; one-ulp outside rejected; bbox false-positive keeps exact test");
+    }
+
+    #[cfg(feature = "experimental-shared-partitions")]
+    #[test]
+    fn fragment_bounds_prune_diagonal_gaps_and_observe_every_query_failure() {
+        use std::cell::Cell;
+        let polygon = |shift:f64| {
+            let mut p=Polygon::empty();
+            for [x,y] in [[0.1,0.1+shift],[0.9,0.7+shift],[0.9,0.71+shift]] {
+                p.push_tagged(Point::new(x,y),1).unwrap();
+            }
+            p
+        };
+        let stored=polygon(0.);let cut=polygon(0.1);
+        assert!(stored.bounds_overlap(&cut));
+        let bounds=FragmentBounds::new(&stored);let checks=Cell::new(0);let mut work=100;
+        assert_eq!(bounds.disjoint(&cut,&mut work,&||{checks.set(checks.get()+1);false}),Ok(true));
+        let cost=100-work;
+        assert_eq!(bounds.disjoint(&stored,&mut 100,&||false),Ok(false));
+        for stop in 0..checks.get() {
+            let at=Cell::new(0);assert_eq!(bounds.disjoint(&cut,&mut 100,&||{let now=at.get();at.set(now+1);now==stop}),Err(PixelPartitionError::Cancelled));
+        }
+        for mut quota in 0..cost {assert_eq!(bounds.disjoint(&cut,&mut quota,&||false),Err(PixelPartitionError::Limit));}
+        assert_eq!(bounds.disjoint(&cut,&mut cost.clone(),&||false),Ok(true));
+        let mut unknown=stored;unknown.incoming[0]=0;
+        assert_eq!(FragmentBounds::new(&unknown).axis,[0.;2]);
+        assert_eq!(bounds.disjoint(&unknown,&mut 100,&||false),Ok(false));
+        let interval=FragmentBounds::project([1e308,-1e308],Point::new(f64::from_bits(1),f64::from_bits(1))).unwrap();
+        assert!(interval[0]<=0. && interval[1]>=0.);
+        assert!(FragmentBounds::project([f64::MAX,f64::MAX],Point::new(1.,1.)).is_none());
+        eprintln!("FRAGMENT_BOUNDS diagonal disjoint, overlap/unknown fallback; cancellations={} quotas={cost}; retry exact; inline bytes={}",checks.get(),size_of::<FragmentBounds>());
+    }
+
+    #[test]
+    fn exact_separation_requires_a_supporting_line_and_observes_every_failure() {
+        use std::cell::Cell;
+        let polygon = |points: &[[f64; 2]]| {
+            let mut p = Polygon::empty();
+            for &[x, y] in points {
+                p.push(Point::new(x, y)).unwrap();
+            }
+            p
+        };
+        let triangle = polygon(&[[0., 0.], [1., 0.], [0., 1.]]);
+        let outside = polygon(&[[0.8, 0.8], [1., 0.8], [0.8, 1.]]);
+        let inside = polygon(&[[0.1, 0.1], [0.2, 0.1], [0.1, 0.2]]);
+        let touching = polygon(&[[0.5, 0.5], [0.7, 0.5], [0.5, 0.7]]);
+        let crossing = polygon(&[[0., 0.], [1., 1.], [0., 1.], [1., 0.]]);
+        let right = polygon(&[[1., 0.], [2., 0.], [1., 1.]]);
+        let cases = [
+            (triangle, outside, true),
+            (triangle, inside, false),
+            (triangle, touching, true),
+            (crossing, right, true),
+            (crossing, inside, false),
+        ];
+        for (cut, subject, expected) in cases {
+            let checks = Cell::new(0);
+            let mut work = 10000;
+            let answer = cut
+                .separates(&subject, &mut work, &|| {
+                    checks.set(checks.get() + 1);
+                    false
+                })
+                .unwrap();
+            assert_eq!(answer, expected);
+            let spent = 10000 - work;
+            for stop in 0..checks.get() {
+                let at = Cell::new(0);
+                assert_eq!(
+                    cut.separates(&subject, &mut 10000, &|| {
+                        let now = at.get();
+                        at.set(now + 1);
+                        now == stop
+                    }),
+                    Err(PixelPartitionError::Cancelled)
+                );
+            }
+            for quota in 0..spent {
+                assert_eq!(
+                    cut.separates(&subject, &mut quota.clone(), &|| false),
+                    Err(PixelPartitionError::Limit)
+                );
+            }
+            assert_eq!(
+                cut.separates(&subject, &mut spent.clone(), &|| false),
+                Ok(expected)
+            );
+        }
+    }
+    #[test]
+    fn mean_sign_filter_covers_subnormal_coordinate_underflow() {
+        let key = LineKey::Field([-1e-17, 1e308, 0.].map(f64::to_bits));
+        let minimum = f64::from_bits(1);
+        let mean = minimum / 3.;
+        assert_eq!(mean, 0.);
+        let probe = value([-1e-17, 1e308, 0.], Point::new(mean, 0.));
+        let exact_order = -1e-17 + (1e308 * minimum) / 3.;
+        assert!(probe < 0. && exact_order > 0.);
+        assert!(probe.abs() <= key.mean_roundoff(Point::new(mean, 0.), Point::new(mean, 0.)));
+    }
     #[test]
     fn retained_boundary_cache_is_sound_after_generated_paints_and_refusals() {
         let admit = |_: usize| Some(Box::new(()) as Credit);
@@ -1608,7 +2147,7 @@ mod exact_orientation_tests {
                     component_count: 3, u: [0.,1.,0.],
                     v: if i%2==0 { [0.,0.,1.] } else { [0.1,0.,0.8] },
                     components: [[0.25,0.,0.],[0.5,0.,0.],[0.75,0.,0.],[0.;3]] };
-                let before = pixel.regions.values.clone();
+                let before = pixel.regions.values.iter().copied().collect::<Vec<_>>();
                 if pixel.paint_triangle(points,owner,&mut 1_000_000,&||false).is_err() {
                     refused += 1;
                     assert_eq!(before.len(),pixel.regions.values.len());
@@ -1681,7 +2220,7 @@ mod exact_orientation_tests {
         assert!(polygon.moments().is_none());
         let owner = PixelSourceOwner { patch_index: 0, sample_index: 0, component_count: 1,
             u: [0.;3], v: [0.;3], components: [[0.;3];4] };
-        let fragment = Fragment { polygon, owner, has_area: false, no_merge_with_previous: false };
+        let fragment = Fragment::new(polygon, owner, false, false);
         let mut out = AdmittedVec::new(&admit, 0);
         let mut work = 0;
         keep_existing(&mut out, &fragment, &mut work, &|| panic!("no tick on empty carry")).unwrap();
@@ -1737,7 +2276,13 @@ mod exact_orientation_tests {
             fields[4][0] = 0.75f64.to_bits();
             (i + 1, i, 3, points, fields)
         }).collect();
-        for (label, rows, repetitions) in [("pair", pair, 8192), ("dense50", fifty, 32), ("dense75", seventy_five, 64), ("sparse64", sparse.as_slice(), 512)] {
+        let sparse256:Vec<Row>=(0..256).map(|i| {
+            let x=(i%16) as f64/16.;let y=(i/16) as f64/16.;
+            let points=[[x,y],[x+1./256.,y],[x,y+1./256.]].map(|p|p.map(f64::to_bits));
+            let mut fields=[[0u64;3];6];fields[2][0]=0.25f64.to_bits();fields[3][0]=0.5f64.to_bits();fields[4][0]=0.75f64.to_bits();
+            (i+1,i,3,points,fields)
+        }).collect();
+        for (label, rows, repetitions) in [("pair", pair, 8192), ("dense50", fifty, 32), ("dense75", seventy_five, 64), ("sparse64", sparse.as_slice(), 512), ("sparse256", sparse256.as_slice(),32)] {
             let inputs: Vec<_> = rows.iter().map(|&(patch, sample, count, points, fields)| {
                 let f = fields.map(|v| v.map(f64::from_bits));
                 (points.map(|p| Point::new(f64::from_bits(p[0]), f64::from_bits(p[1]))),
@@ -1747,8 +2292,10 @@ mod exact_orientation_tests {
             let run = |legacy: bool| {
                 let walk_control = std::env::var_os("RRRAH_SPLIT_PROBE_WALK_CONTROL").is_some();
                 let recheck_control = std::env::var_os("RRRAH_KEEP_PROBE_RECHECK").is_some();
-                let batch_control = std::env::var_os("RRRAH_CARRY_PROBE_NO_BATCH").is_some();
-                NO_BATCH_CONTROL.with(|v| v.set(legacy && batch_control));
+                let store_control=std::env::var_os("RRRAH_SHARED_STORE_PROBE").is_some();
+                let previous_store=shared_fragment_store::set_shared(store_control && !legacy);
+                let batch_control = std::env::var_os("RRRAH_CARRY_PROBE_NO_BATCH").is_some() || store_control;
+                NO_BATCH_CONTROL.with(|v| v.set(legacy && batch_control && !store_control));
                 LEGACY_SPLIT_CONTROL.with(|v| v.set(legacy && !walk_control && !recheck_control && !batch_control));
                 WALK_SPLIT_CONTROL.with(|v| v.set(legacy && walk_control && !recheck_control && !batch_control));
                 RECHECK_RETAINED_CONTROL.with(|v| v.set(legacy && recheck_control && !batch_control));
@@ -1767,6 +2314,7 @@ mod exact_orientation_tests {
                 WALK_SPLIT_CONTROL.with(|v| v.set(false));
                 RECHECK_RETAINED_CONTROL.with(|v| v.set(false));
                 NO_BATCH_CONTROL.with(|v| v.set(false));
+                shared_fragment_store::set_shared(previous_store);
                 elapsed
             };
             run(true); run(false);
@@ -2038,19 +2586,9 @@ mod exact_orientation_tests {
             p
         };
         let mut out = AdmittedVec::new(&admit, 16);
-        out.push(Fragment {
-            polygon: rect(0., 0.25),
-            owner,
-            has_area: true,
-            no_merge_with_previous: false,
-        })
+        out.push(Fragment::new(rect(0., 0.25), owner, true, false))
         .unwrap();
-        out.push(Fragment {
-            polygon: rect(0.25, 0.5),
-            owner,
-            has_area: true,
-            no_merge_with_previous: false,
-        })
+        out.push(Fragment::new(rect(0.25, 0.5), owner, true, false))
         .unwrap();
         let first = out.values[0];
         let saved = out.values[1];
@@ -2333,3 +2871,8 @@ mod exact_orientation_tests {
         }
     }
 }
+
+// Prototype storage is qualified independently before changing the normal partition.
+#[cfg(any(test,feature="experimental-shared-partitions"))]
+#[path = "shared_fragment_store.rs"]
+mod shared_fragment_store;

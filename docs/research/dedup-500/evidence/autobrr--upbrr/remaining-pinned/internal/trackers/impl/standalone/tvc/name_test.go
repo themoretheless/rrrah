@@ -1,0 +1,59 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package tvc
+
+import (
+	"strings"
+	"testing"
+
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func TestReleaseNamePolicyVersion(t *testing.T) {
+	t.Parallel()
+	if got := Profile().ReleaseNamePolicy.ID; got != "standalone/tvc/v3" {
+		t.Fatalf("TVC release-name policy = %q", got)
+	}
+}
+
+func TestResolveNameUsesOnlyAvailableTVPresentationFacts(t *testing.T) {
+	t.Parallel()
+
+	base := api.UploadSubject{
+		Identity:   api.ExternalIdentity{Category: api.CanonicalCategoryTV},
+		Release:    api.ReleaseInfo{Title: "Example Show", Resolution: "1080p"},
+		Type:       "WEBDL",
+		VideoCodec: "H.264",
+	}
+
+	daily := base
+	daily.DailyEpisodeDate = "2026-02-03"
+	if got := resolveName(daily); !strings.Contains(got, "Example Show 2026-02-03") || strings.Contains(got, "S01E01") || strings.Contains(got, "(0)") {
+		t.Fatalf("daily name = %q", got)
+	}
+
+	if got := resolveName(base); strings.Contains(got, "S01E01") || strings.Contains(got, "(0)") {
+		t.Fatalf("cleared-facts name = %q", got)
+	}
+
+	base.EffectiveMetadata.TitleProvenance = api.FactProvenanceManualEmpty
+	if got := resolveName(base); strings.Contains(got, "Example Show") {
+		t.Fatalf("manual-empty name restored release title = %q", got)
+	}
+}
+
+func TestResolveNameHEVCDoesNotRewriteTitleBrackets(t *testing.T) {
+	t.Parallel()
+	subject := api.UploadSubject{
+		Identity:   api.ExternalIdentity{Category: api.CanonicalCategoryTV},
+		Release:    api.ReleaseInfo{Title: "Example [HEVC] Show", Resolution: "1080p"},
+		Type:       "WEBDL",
+		VideoCodec: "HEVC",
+		SeasonInt:  1,
+		EpisodeInt: 2,
+	}
+	if got, want := resolveName(subject), "Example [HEVC] Show S01E02 [1080p WEB-DL EVC HEVC]"; got != want {
+		t.Fatalf("HEVC name = %q, want %q", got, want)
+	}
+}

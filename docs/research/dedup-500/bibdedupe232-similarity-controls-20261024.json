@@ -1,0 +1,52 @@
+{
+  "repository": "CoLRev-Environment/bib-dedupe",
+  "commit": "c97feab2e66095a6ff8e20ac9a6381f155b993b7",
+  "scope": "Original selected function bodies, only stdlib and plain strings/dictionaries. All observations take branches returning before any rapidfuzz/pandas reference. No substitute fuzzy scorer and no complete pipeline/upstream execution.",
+  "authored_controls": [
+    {
+      "name": "title digit-count asymmetry before fuzzy scoring",
+      "passed": true,
+      "observed": [
+        1.0,
+        0
+      ]
+    },
+    {
+      "name": "title suffix is perfect similarity",
+      "passed": true,
+      "observed": 1.0
+    },
+    {
+      "name": "title spaces ignored",
+      "passed": true,
+      "observed": 1.0
+    },
+    {
+      "name": "non-numeric distinct volumes both map to zero",
+      "passed": true,
+      "observed": 1.0
+    },
+    {
+      "name": "single last page admitted equal to range",
+      "passed": true,
+      "observed": 1.0
+    },
+    {
+      "name": "missing years differ from equal years",
+      "passed": true,
+      "observed": [
+        0,
+        1.0,
+        0.95
+      ]
+    },
+    {
+      "name": "page adjacency and disjoint positive controls",
+      "passed": true,
+      "observed": [
+        "adjacent",
+        "non_overlapping"
+      ]
+    }
+  ]
+}

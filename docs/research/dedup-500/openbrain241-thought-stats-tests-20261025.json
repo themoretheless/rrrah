@@ -1,0 +1,37 @@
+{
+  "scope": "Original eight thought-stats callbacks; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "no days passes null to days_back RPC param",
+      "passed": true
+    },
+    {
+      "name": "with days passes value to days_back",
+      "passed": true
+    },
+    {
+      "name": "returns stats data as JSON",
+      "passed": true
+    },
+    {
+      "name": "db error returns isError",
+      "passed": true
+    },
+    {
+      "name": "returns by_theme in stats data",
+      "passed": true
+    },
+    {
+      "name": "missing brain context returns error",
+      "passed": true
+    },
+    {
+      "name": "includes theme_tracking with velocity and lifecycle",
+      "passed": true
+    },
+    {
+      "name": "thought_stats works when theme_tracking RPC fails",
+      "passed": true
+    }
+  ]
+}

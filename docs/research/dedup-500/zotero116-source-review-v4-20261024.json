@@ -1,0 +1,84 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v3-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [],
+  "whole_files_read_total": 10,
+  "whole_repo_complete": false,
+  "partial_files_read": [
+    {
+      "path": "content/trackingStore.mjs",
+      "local": "15-trackingStore.mjs",
+      "git_blob": "afe6fdee696f77645d725a35a2bc7b5f84c579b4",
+      "sha256": "4a358cc31d4289ffde3505110fbd5a2f039891a4be9e0d9f3ace12321a0ab4b8",
+      "whole_text_read": false,
+      "read_ranges": [
+        [
+          1,
+          335
+        ],
+        [
+          350,
+          410
+        ],
+        [
+          475,
+          565
+        ],
+        [
+          750,
+          950
+        ]
+      ],
+      "note": "Disjoint inspected ranges only; complete original module loaded unchanged for tests."
+    },
+    {
+      "path": "content/watchFolder.mjs",
+      "new_read_ranges": [
+        [
+          1,
+          100
+        ]
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_distinct": 5,
+    "total_authored_controls_distinct": 15,
+    "initial_adapter_controls_passed": 4,
+    "stronger_original_store_controls_passed": 5,
+    "counting_rule": "First four same scenarios requalified with original factory and original TrackingStore, not counted twice; persistence/reload/index observation is one additional case.",
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-real-store-controls-20261024",
+    "scope": "Original unchanged utils/hashCache/duplicateDetector/trackingStore modules, exact extracted Step3b; owner init fields set explicitly, native files/WebCrypto and owned IOUtils writeJSON/readJSON/exists adapters, Zotero search/item adapters. IOUtils write adapter writes directly and does not qualify Gecko atomic tmpPath semantics. Actual import represented by counter; no real Zotero or full WatchFolderService."
+  },
+  "findings": [
+    {
+      "finding": "After same-size/mtime content replacement AAA->BBB, cached AAA digest finds parent with sole AAA child. Fresh child digest does not equal fresh BBB input digest; sole-child fallback still selects AAA child and original factory/store save clean record with lastSyncedHash=BBB and attachmentKey=AAA child. Extracted original caller skips import.",
+      "evidence": "native original-module control"
+    },
+    {
+      "finding": "Original TrackingStore serializes mismatch into owned JSON, reloads it, and findByHash(BBB) resolves to AAA attachment. Thus constructor/storage/index do not reject caller mismatch.",
+      "evidence": "native original store persistence/reload control"
+    },
+    {
+      "finding": "Direct attachment candidate is selected without digest recheck and stores same mismatch.",
+      "evidence": "native original-module control"
+    },
+    {
+      "finding": "Two nonmatching child attachments cause fallback-to-import and no record; advancing mtime also permits import without wrong record.",
+      "evidence": "two positive native controls"
+    }
+  ],
+  "remaining": [
+    "90 blobs not whole-read incl remaining watchFolder and trackingStore ranges",
+    "Full WatchFolderService initialization/upstream tests/real Zotero import not executed",
+    "Real Gecko persistence and release not qualified",
+    "Root and dependency licenses incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

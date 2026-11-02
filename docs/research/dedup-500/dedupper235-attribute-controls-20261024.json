@@ -1,0 +1,38 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original AttributeService method bodies, native path and fs.promises, own temporary target+relative/absolute symlink. Only own fixtures cleaned. No application deletion, user paths, database, native pHash or full Jest.",
+  "authored_controls": [
+    {
+      "name": "library prefix accepts sibling directory",
+      "passed": true,
+      "observed": {
+        "inside": true,
+        "sibling": true
+      }
+    },
+    {
+      "name": "healthy relative symlink classified dead",
+      "passed": true,
+      "observed": {
+        "actualTargetExists": true,
+        "isDeadLink": true
+      }
+    },
+    {
+      "name": "healthy absolute symlink positive control",
+      "passed": true,
+      "observed": {
+        "isDeadLink": false
+      }
+    },
+    {
+      "name": "getStat follows symlink before isSymbolicLink check",
+      "passed": true,
+      "observed": {
+        "originalStatIsSymlink": false,
+        "lstatIsSymlink": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v1-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/hookReadDedup.ts",
+      "local": "03-hookReadDedup.ts",
+      "git_blob": "8e4a80354549ce2380b2ca70008321fe81989b50",
+      "sha256": "3a8919bc6d8d85a407a7836f989b6e271c4533f8159aceb7ea50b40d30fcb923",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/dedupRead.ts",
+      "local": "04-dedupRead.ts",
+      "git_blob": "3e2fd2eafd37a87c5a590860326b8b819acf3d03",
+      "sha256": "d318aee520dce3210c7aaf50e6bf1ac8a31a3a8dab1140fdfcaac8411bd2b2e0",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 4,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_run": false,
+  "authored_controls_total_distinct": 7,
+  "new_authored_controls": 4,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 4,
+    "findings": [
+      "First PreToolUse records observation before actual Read;second identical request denied without any completed Read in fixture",
+      "Fresh full-byte hash lets changed same-size content pass after restoredmtime",
+      "Partial Read passes and doesnot append cache",
+      "Missing source passes rather than denied"
+    ],
+    "scope": "Original full hook with4 runtime import targets redirected to owned path/cache/prewarm seams and original decision module;real original hashFile reads owned files;warmfill not exercised;no actual tool execution or Claude session",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/hook-owned-0gNOLg"
+  },
+  "findings": [
+    "Original realDedupIO fresh full-byte hash detects rewritten800-byte file despite exactly equal restored mtimeMs and size;old metadata-cache finding doesnot apply to this hook.",
+    "PreToolUse cache records before completed Read;fixture repeat denied with zero completed tool calls. Actual host failure/retry delivery unqualified.",
+    "Partial read and missing source pass."
+  ],
+  "transformations": "Hook4 runtime imports redirected to owned seams;original decision module unchanged renamed mts;type imports erased by Node;full path normalization/cache persistence/prewarm not qualified",
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

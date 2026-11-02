@@ -1,0 +1,49 @@
+{
+  "repository": "bakdata/dedupe",
+  "commit": "fe34c67d7276cd2706270c72903c52733fe8d836",
+  "whole_files_read": [
+    {
+      "path": "core/src/main/java/com/bakdata/dedupe/deduplication/Deduplication.java",
+      "local": "02-Deduplication.java",
+      "git_blob": "41b368824d03793d5789a444267370692a30c4e3",
+      "sha256": "1fb5dac538b60d802e44ea6f3dd53e3dfd79a561db5b3697865d36c1a1d7b98d",
+      "whole_text_read": true
+    },
+    {
+      "path": "core/src/main/java/com/bakdata/dedupe/duplicate_detection/DuplicateDetection.java",
+      "local": "03-DuplicateDetection.java",
+      "git_blob": "caebe47706357e3e8e3045d8300d5cdab66589f8",
+      "sha256": "6dd0192b2893b0440e177734d21a002ca4c1b561fa684c6e776718c6f99fc563",
+      "whole_text_read": true
+    },
+    {
+      "path": "core/src/main/java/com/bakdata/dedupe/duplicate_detection/PossibleDuplicateHandler.java",
+      "local": "04-PossibleDuplicateHandler.java",
+      "git_blob": "50137997246d8a269c870f1a79a83ce181e20e5c",
+      "sha256": "9688330e0fedb2a49048d87f1ee759ad4c03fc38d366fc109d508ced350866c3",
+      "whole_text_read": true
+    },
+    {
+      "path": "common/src/test/java/com/bakdata/dedupe/similarity/MatchingSimilarityTest.java",
+      "local": "05-MatchingSimilarityTest.java",
+      "git_blob": "1e3b8c6b3fdc378de1c7fe72a435998f16a2363e",
+      "sha256": "ec406ae7583de804bcad421727d978b4c3be8fd4d7f970a8d05475dc1ef667f6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 4,
+  "tracked_blobs": 139,
+  "whole_repo_complete": false,
+  "original_upstream_tests_run": false,
+  "authored_runtime_controls": 0,
+  "findings": [
+    "Generic record/entity clustering with online revisions and explicit possible/unknown classifications;no filebytes or pixel comparison in reviewed interfaces.",
+    "Public materialization defaults use two-argument Collectors.toMap without merge function despite online repeated-id discussion;behavior not executed.",
+    "PossibleDuplicateHandler explicitly offers promotion/demotion/unknown policy withconfidence0;no evidence of exactidentity.",
+    "Six reviewed MatchingSimilarity tests cover list matching and null=>NaN;they are not image equivalence tests."
+  ],
+  "execution_limit": "macOS /usr/bin/javac launcher exists but javac-version reports no Java runtime;no Java tests run;no toolchain installed.",
+  "decision": "reference",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

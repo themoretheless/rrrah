@@ -1,0 +1,15 @@
+{
+  "controls_passed": 4,
+  "scope": "Original AST _isdup and selector functions;real mmh3 5.2.0;owned synthetic text/files;no EVTX decoding or actual event data",
+  "collision": {
+    "first": "{\"owned_record\": 87859}",
+    "second": "{\"owned_record\": 144217}",
+    "hash": -1091379343
+  },
+  "findings": [
+    "Different JSON records with same32bit Murmur hash suppressed as duplicates.",
+    "Repeated identical text suppressed.",
+    "Separate channel keeps independent hash sets.",
+    "Global LOGS retains prior input;second missing-file validation returns true."
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v1-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/utils.mjs",
+      "local": "10-utils.mjs",
+      "git_blob": "9fbc6eaee1f662399988624c516374330351feff",
+      "sha256": "8fb7c2b44ded2e3e9110950e8e8c5e6c6f877a059b2deb61c2d412341ae05dcd",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/duplicateDetector.mjs",
+      "local": "11-duplicateDetector.mjs",
+      "git_blob": "e32b252f9e3398c873a526213d4a22c4eb738ce7",
+      "sha256": "9548ac3cf09b5a2c3cd90f5b588a0f2cc9dfb7507f0619bf449fd0e64ab4793c",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 4,
+    "total_authored_controls_distinct": 8,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-detector-controls-20261024",
+    "scope": "Original utils/hashCache/duplicateDetector module bytes unchanged; real Node filesystem/WebCrypto with owned IOUtils/Zotero Search/Prefs/Notifier adapters. Only owned temporary files; no real Zotero or import/deletion execution."
+  },
+  "findings": [
+    {
+      "finding": "findByHash uses cached digest to search stored Extra stamp; checkDuplicate immediately returns isDuplicate=true confidence1.0 without refreshing hash or byte confirmation. With real replaced AAA->BBB file and preserved size/mtime, original combined modules produce definitive duplicate result for stale AAA stamp; current bytes independently hash to BBB digest. No actual importer skip execution.",
+      "evidence": "native authored original-module control"
+    },
+    {
+      "finding": "Advancing mtime changes the returned hash and original combined modules reject mismatch against AAA stored stamp.",
+      "evidence": "native positive control"
+    },
+    {
+      "finding": "Actual getFileHash reads whole file and computes SHA256 through WebCrypto; files sharing first1MiB but differing final byte produce distinct correct independent digests. Old first1MB/64KB function comments are stale.",
+      "evidence": "native positive control"
+    },
+    {
+      "finding": "getPref returns raw value; duplicateTitleThreshold stored85 by defaults, _loadPreferences assigns85 with no division. Fuzzy similarity0.9 does not reach85; changing instance threshold to0.85 yields result with same owned item/cache. Other callers preference overrides unreviewed.",
+      "evidence": "native authored control"
+    },
+    {
+      "finding": "Metadata DOI/ISBN/title matches also return isDuplicate=true even when hash differs; comments say possible duplicate reference/import+review handled by metadata retriever. Actual importer/retriever must be read before treating this as automatic unwanted skip.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Build title cache has no maximum-size eviction call while notifier add does; method described as LRU evicts insertion order without promoting search hits. No large-library runtime claim.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "ISBN conversions calculate output checksum but do not validate original input check digit; source-only no ISBN runtime tests in this step.",
+      "evidence": "source-only"
+    }
+  ],
+  "remaining": [
+    "92 blobs not whole-read",
+    "Inspect importer/retriever policy following definitive hash versus metadata results",
+    "Original test suite, Zotero runtime and root/dependency licenses incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

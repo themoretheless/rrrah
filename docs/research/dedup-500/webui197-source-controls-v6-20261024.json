@@ -1,0 +1,120 @@
+{
+  "repository": "WSH032/image-deduplicate-cluster-webui",
+  "commit": "02963057d5ae9368f8f481f44e2d30b7c63ed946",
+  "source_sha256": "909a2d747512a4e37bcd73b2cfb6d55b193b5f86e27c2a46e5a1f09181b77e11",
+  "read_scope": {
+    "path": "img_dedup_clust/deduplicate_fn.py",
+    "lines_read": [
+      1,
+      739
+    ],
+    "total_lines": 739,
+    "whole_file_read": true
+  },
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "original_tests_run": 0,
+  "authored_control_scenarios": 11,
+  "authored_control_cases": 34,
+  "control_source": "docs/research/dedup-500/webui197-controls-20261024/cluster_control.py",
+  "control_results": "docs/research/dedup-500/webui197-controls-20261024/cluster-control-results.json",
+  "runtime_scope": "Unchanged AST-extracted complete cluster_duplicates function, MyHasher adapter supplies synthetic symmetric graph. No actual image hashing/model/Gradio runtime.",
+  "findings": [
+    "First-overlap-only set merging does not merge all previously accumulated intersecting sets. Symmetric A-B-C-D chain yields overlapping output clusters in4/24 key insertion orders, single connected component in20/24.",
+    "Connected components of approximate similarity are not pairwise equality; even corrected union-find cannot establish exact image duplicates.",
+    "Source delegates hashing/CNN to imagededup; equality semantics require downstream algorithm review.",
+    "Mutable module globals hold selection, clusters, confirmed directory and duplicate map; upstream TODO explicitly notes multi-user interference. Concurrency not runtime tested.",
+    "Original selection function accepts negative parent/child indexes; synthetic -1/-1 selects last image D. Repeated index0 plans same image A twice. Recording operation stub only, no real removals.",
+    "Select-all deliberately includes every member. confirm_cluster has no retained-member guard; this is explicit manual feature, not evidence auto_select deletes all.",
+    "Selection indexes are resolved against mutable current global cluster_list without scan generation identity. Multi-session/stale-selection consequences not runtime verified.",
+    "Real unchanged cache_images_file retains stale same-name red thumbnail after owned source is replaced by blue PNG; reports no cache error. Filename-only cache validity lacks source identity/mtime/content verification.",
+    "operate_images_file logs per-file failures and returns no structured success/failure report; caller confirm_cluster unconditionally builds success message and resets state after return. Source inspection only; failure injection not yet run.",
+    "Failure injection now reproduces earlier static finding: copy and move failures are logged but operation function returns None; original confirm_cluster reports successful move and clears scan state even when sole selected move failed. Owned source bytes preserved. Not a real Gradio end-to-end run.",
+    "Requirements do not pin imagededup, torch, Pillow, numpy or toml; Gradio only lower bounded3.31.0. No reproducible current complete-app dependency environment established.",
+    "UI hash distance slider0..64 defaults10; CNN cosine threshold defaults0.9. These are similarity controls, not exact-byte or canonical-pixel equality proof.",
+    "Default operation is move; all-select is explicitly exposed alongside heuristic auto-select and manual TOML edit. No scan generation token supplied to confirm_cluster.",
+    "Real directory scanner controls: extension-only nonrecursive listing, same-stem sidecar aliasing, and directory snapshot retained until explicit image_files refresh. These scopes need explicit contracts before reuse."
+  ],
+  "decision": "reject-cluster-merge-implementation; wrapper-reference-only",
+  "remaining": "12 whole text files read/40 tracked blobs;remaining source/docs/notebooks review and full runtime qualification pending.",
+  "deferred": "Native pHash.org/ASAN remains skipped; Python wrapper inspection does not run that item.",
+  "previous_audit": "docs/research/dedup-500/webui197-source-controls-v5-20261024.json",
+  "selection_control_source": "docs/research/dedup-500/webui197-controls-20261024/selection_control.py",
+  "selection_control_results": "docs/research/dedup-500/webui197-controls-20261024/selection-control-results.json",
+  "additional_whole_file_reads": [
+    {
+      "path": "deduplicate_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/02-deduplicate_images.py",
+      "sha256": "7e7fcecdcb9eb716bf7454958d61626636c0f28cfe33320fbb8e1bf75968c64c"
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_js.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/04-deduplicate_js.py",
+      "sha256": "b5232d14bbe392638a17ddbf73d15d37cb2c24c8ec55daf9516b14141773f137"
+    },
+    {
+      "path": "run_deduplicate_images.ps1",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/05-run_deduplicate_images.ps1",
+      "sha256": "6a1b787514247687bd614d7977d211262765d7b97a071aac13f1c09c11e17046"
+    },
+    {
+      "path": "img_dedup_clust/tools/operate_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/operate_images.py",
+      "sha256": "18e62a0643e4c54c80d9c927d96c717e157728acc05d494b4bcc93267aa2239d"
+    },
+    {
+      "path": "requirements.txt",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/requirements.txt",
+      "sha256": "e8e68c438281c689ac7756e68a0c80e3b35b18103a3672ea5569ee66a485796f"
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_ui.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/deduplicate_ui.py",
+      "sha256": "4ca88fc23d01fae0886d1f9429b2cb8e2bac7a1403a959cfac8999d13ed4f2c6"
+    },
+    {
+      "path": "img_dedup_clust/tools/path_tools.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/path_tools.py",
+      "sha256": "06f608ac7d9dc2538b93994fc344956199670058c9119677988ac55ca2e2bab0"
+    },
+    {
+      "path": "img_dedup_clust/tools/partialmethod_tools.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/partialmethod_tools.py",
+      "sha256": "bd6355308365ac9294f443540ea3ef42724f89885538261268a399f816114913"
+    },
+    {
+      "path": "img_dedup_clust/tools/webui_error_wrapper.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/webui_error_wrapper.py",
+      "sha256": "c089e57fa91c745fdfe10e647ba6ec9229c749c74db732934d0a461fcc156b2b"
+    },
+    {
+      "path": "scripts/ui.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/scripts/ui.py",
+      "sha256": "88085887326916e275ee2b58f349be0cd38ec98d869fc03a1ff35528208857a4"
+    },
+    {
+      "path": "img_dedup_clust/tools/SearchImagesTags.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/SearchImagesTags.py",
+      "sha256": "f360ddd6a6c23a2c06346f95903ce6907414e6a3988a4060352418f4a527712a"
+    }
+  ],
+  "tracked_blob_count": 40,
+  "whole_text_files_read": 12,
+  "cache_control_source": "docs/research/dedup-500/webui197-controls-20261024/cache_control.py",
+  "cache_control_results": "docs/research/dedup-500/webui197-controls-20261024/cache-control-results.json",
+  "failure_controls": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/failure_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/failure-control-results.json",
+    "caller_source": "docs/research/dedup-500/webui197-controls-20261024/caller_failure_control.py",
+    "caller_results": "docs/research/dedup-500/webui197-controls-20261024/caller-failure-results.json",
+    "cases": 3,
+    "qualification": "Original operations module and undecorated AST caller; owned temporary files, copy/move failures injected, serialization/UI adapters. No real file move/removal."
+  },
+  "acquisition": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-acquisition.json",
+  "all_tracked_blobs_acquired_verified": 40,
+  "scan_controls": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/scan_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/scan-control-results.json",
+    "cases": 3
+  }
+}

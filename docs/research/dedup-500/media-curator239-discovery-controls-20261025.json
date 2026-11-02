@@ -1,0 +1,54 @@
+{
+  "scope": "Original pinned Rust discovery/extensions modules; isolated cargo harness, serde1 and thiserror2 instead of original thiserror1; no full upstream suite",
+  "observations": {
+    "missing_root": {
+      "exit_code": 0,
+      "stdout": {
+        "byExtension": {},
+        "stats": {
+          "fileCount": 0,
+          "dirCount": 1
+        }
+      },
+      "stderr": "Error scanning directory /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/media239-discovery-2u2od14k/missing: No such file or directory (os error 2)\n"
+    },
+    "directory": {
+      "exit_code": 0,
+      "stdout": {
+        "byExtension": {
+          "jpg": [
+            "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/media239-discovery-2u2od14k/a.jpg"
+          ]
+        },
+        "stats": {
+          "fileCount": 1,
+          "dirCount": 1
+        }
+      },
+      "stderr": ""
+    },
+    "direct_symlink": {
+      "exit_code": 0,
+      "stdout": {
+        "byExtension": {
+          "jpg": [
+            "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/media239-discovery-2u2od14k/alias.jpg"
+          ]
+        },
+        "stats": {
+          "fileCount": 1,
+          "dirCount": 0
+        }
+      },
+      "stderr": ""
+    },
+    "non_utf8_fixture": {
+      "status": "blocked_by_filesystem",
+      "errno": 92,
+      "message": "[Errno 92] Illegal byte sequence: b'/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/media239-discovery-2u2od14k/bad\\xff.jpg'"
+    }
+  },
+  "missing_root_returns_success": true,
+  "nested_symlink_skipped_direct_symlink_followed": true,
+  "non_utf8_collision_runtime_verified": false
+}

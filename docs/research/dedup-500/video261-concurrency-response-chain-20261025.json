@@ -1,0 +1,29 @@
+{
+  "scope": "Pinned source call-chain inspection, no C# or WinForms runtime",
+  "conclusion": "Normal pinned server GetConfiguration responses normalize concurrency to at least 1 before returning it; the zero/negative UI assignment hypothesis is not established on this normal path. Direct caller or incompatible server behavior remains outside this proof.",
+  "chain": [
+    "VideoDedupService.GetConfiguration -> LoadConfiguration",
+    "LoadConfiguration -> ConfigurationManager.GetDedupSettings",
+    "GetDedupSettings -> GetDedupEngineConcurrencyLevel -> NormalizeConcurrencyLevel",
+    "NormalizeConcurrencyLevel maps <=0 to Math.Max(1, Environment.ProcessorCount / 2)",
+    "Client constructor sets Maximum=int.MaxValue; designer Minimum=1"
+  ],
+  "sources": [
+    {
+      "path": "VideoDedupServer/ConfigurationManager.cs",
+      "sha256": "1b2cf703136c7b970c92f9b6ae6fb44943cbfb53d6cd6734ec4f7cdc02f57026"
+    },
+    {
+      "path": "VideoDedupServer/VideoDedupService.cs",
+      "sha256": "c542f9cc77895539180f644a669719dc2b5bae65d82d4b0b0e8439236d10df91"
+    },
+    {
+      "path": "VideoDedupClient/Controls/DedupSettings/DedupSettingsCtrl.cs",
+      "sha256": "80f68b96f5b0a593ba583a8271c4540c944cd368d1e58f6ae81b143a382cc15c"
+    },
+    {
+      "path": "VideoDedupClient/Controls/DedupSettings/DedupSettingsCtrl.Designer.cs",
+      "sha256": "8dc23bea2e80368e468e1d99f34625a102f8d625f21995f1eb4b49ea55f30e73"
+    }
+  ]
+}

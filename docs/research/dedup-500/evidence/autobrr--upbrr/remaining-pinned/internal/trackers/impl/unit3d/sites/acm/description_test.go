@@ -1,0 +1,123 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package acm
+
+import (
+	"strings"
+	"testing"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func TestDVDAudioAnalysisFollowsMediaInfoAndMenus(t *testing.T) {
+	t.Parallel()
+	meta := api.UploadSubject{DiscType: "DVD", DVDVOBMediaInfoText: "Synthetic VOB MediaInfo"}
+	cfg := config.Config{}
+	cfg.Description.ThumbnailSize = 420
+	got, err := buildACMDescription(t.Context(), meta, cfg, config.TrackerConfig{}, api.NopLogger{},
+		"Notes\n\n[spoiler=source_audio]\n[img]https://images.example.invalid/audio.png[/img]\n[/spoiler]",
+		[]api.ScreenshotImage{{
+			RawURL: "https://images.example.invalid/menu.png",
+			ImgURL: "https://images.example.invalid/menu.png",
+			WebURL: "https://images.example.invalid/menu",
+		}},
+		[]api.ScreenshotImage{{
+			RawURL: "https://images.example.invalid/shot.png",
+			ImgURL: "https://images.example.invalid/shot.png",
+			WebURL: "https://images.example.invalid/shot",
+		}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Index(got, "Synthetic VOB MediaInfo") >= strings.Index(got, "menu.png") ||
+		strings.Index(got, "menu.png") >= strings.Index(got, "audio.png") ||
+		strings.Index(got, "audio.png") >= strings.Index(got, "shot.png") ||
+		!strings.Contains(got, "[img=420]https://images.example.invalid/audio.png[/img]") ||
+		!strings.Contains(got, "[img=420]https://images.example.invalid/shot.png[/img]") {
+		t.Fatalf("audio analysis placement = %q", got)
+	}
+}
+
+func TestDescriptionUsesOnlyACMMarkupTransforms(t *testing.T) {
+	const body = "[center][spoiler=Scene NFO:][code]scene nfo[/code][/spoiler][/center]\n" +
+		"[right][url=https://github.com/autobrr/upbrr][size=4]Uploaded by upbrr[/size][/url][/right]\n" +
+		"[align=left][hide=FraMeSToR NFO:][pre]release notes[/pre][/hide][/align]\n" +
+		"[comparison=Source,Encode]https://images.example/source.png https://images.example/encode.png[/comparison]"
+	got, err := buildACMDescription(t.Context(), api.UploadSubject{}, config.Config{}, config.TrackerConfig{}, api.NopLogger{}, body, nil,
+		[]api.ScreenshotImage{{RawURL: "https://images.example/screen.png", ImgURL: "https://images.example/thumb.png"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(got, "scene nfo") {
+		t.Fatalf("ACM scene NFO cleanup was skipped: %q", got)
+	}
+	if strings.Count(got, "Uploaded by upbrr") != 1 {
+		t.Fatalf("ACM must replace the imported signature: %q", got)
+	}
+	for _, want := range []string{
+		"[align=left][spoiler=FraMeSToR NFO:][code]release notes[/code][/spoiler][/align]",
+		"[comparison=Source,Encode]https://images.example/source.png https://images.example/encode.png[/comparison]",
+		"https://images.example/source.png",
+		"https://images.example/encode.png",
+		"https://images.example/thumb.png",
+	} {
+		if !strings.Contains(got, want) {
+			t.Errorf("description missing tracker-owned markup %q: %q", want, got)
+		}
+	}
+}
+
+func TestDescriptionPreservesImportedComparisonMarkup(t *testing.T) {
+	comparison := "[comparison=Source,Encode]\r\nhttps://images.example/source.png https://images.example/encode.png\r\n[/comparison]"
+	meta := api.UploadSubject{TrackerData: []api.TrackerMetadata{{Tracker: "ACM", Description: comparison}}}
+	got, err := buildACMDescription(t.Context(), meta, config.Config{}, config.TrackerConfig{}, api.NopLogger{},
+		"[pre]Notes[/pre]\n\n"+comparison, nil, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(got, comparison) || !strings.Contains(got, "[code]Notes[/code]") {
+		t.Fatalf("ACM changed imported comparison or skipped surrounding cleanup: %q", got)
+	}
+	meta.TrackerData = nil
+	got, err = buildACMDescription(t.Context(), meta, config.Config{}, config.TrackerConfig{}, api.NopLogger{},
+		"[pre]Notes[/pre]\n\n"+comparison, nil, nil)
+	if err != nil || !strings.Contains(got, comparison) {
+		t.Fatalf("ACM changed DB-only comparison: description=%q err=%v", got, err)
+	}
+}
+
+func TestDescriptionTransformsTemplateAndReplacesScreenshots(t *testing.T) {
+	const comparison = "[comparison=Source,Encode]https://images.example/source.png https://images.example/encode.png[/comparison]"
+	meta := api.UploadSubject{DescriptionTemplate: "[center][spoiler=Scene NFO:][code]stale scene nfo[/code][/spoiler][/center]\n" +
+		"[align=left][hide=FraMeSToR NFO:][pre]template notes[/pre][/hide][/align]\n" +
+		comparison}
+	oldScreenshots := []api.ScreenshotImage{
+		{RawURL: "https://images.example/old-one.png"},
+		{RawURL: "https://images.example/old-two.png"},
+		{RawURL: "https://images.example/old-three.png"},
+	}
+	first, err := buildACMDescription(t.Context(), meta, config.Config{}, config.TrackerConfig{}, api.NopLogger{}, "User notes", nil, oldScreenshots)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(first, "stale scene nfo") || !strings.Contains(first, "[spoiler=FraMeSToR NFO:][code]template notes[/code][/spoiler]") ||
+		!strings.Contains(first, comparison) {
+		t.Errorf("template bypassed ACM transforms: %s", first)
+	}
+	meta.DescriptionTemplate = ""
+	current := []api.ScreenshotImage{{RawURL: "https://images.example/current.png"}}
+	rebuilt, err := buildACMDescription(t.Context(), meta, config.Config{}, config.TrackerConfig{}, api.NopLogger{}, first, nil, current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(rebuilt, "https://images.example/old-") {
+		t.Errorf("regeneration retained obsolete screenshots: %s", rebuilt)
+	}
+	for _, want := range []string{"User notes", "template notes", comparison, "https://images.example/current.png"} {
+		if !strings.Contains(rebuilt, want) {
+			t.Errorf("regeneration lost %q: %s", want, rebuilt)
+		}
+	}
+}

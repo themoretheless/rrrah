@@ -1,0 +1,92 @@
+{
+  "name": "sipcode",
+  "version": "1.6.20",
+  "mcpName": "io.github.Anuj7411/sipcode",
+  "description": "Sip your tokens, don't gulp them. Keep Claude Code's context clean: drift detection, re-read dedup, integrity scoring, AST-aware reads, and 15 MCP tools for Claude Desktop.",
+  "keywords": [
+    "claude-code",
+    "claude-desktop",
+    "ai-coding",
+    "token-optimization",
+    "context-engineering",
+    "drift-detection",
+    "context-rot",
+    "mcp",
+    "ast",
+    "cursor",
+    "cli",
+    "context-window",
+    "cost-reduction",
+    "reliability"
+  ],
+  "homepage": "https://github.com/Anuj7411/sipcode",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anuj7411/sipcode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Anuj7411/sipcode/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Anuj Ojha",
+    "url": "https://github.com/Anuj7411"
+  },
+  "type": "module",
+  "bin": {
+    "sipcode": "dist/cli.js",
+    "sipcode-mcp": "dist/mcp/server.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "benchmark/corpus",
+    "benchmark/METHODOLOGY.md",
+    "CHANGELOG.md",
+    "README.md",
+    "LICENSE",
+    "PRIVACY.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-assets.mjs",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run --exclude tests/e2e/",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit",
+    "clean": "rimraf dist coverage",
+    "test:e2e": "vitest run tests/e2e/"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "cosmiconfig": "^9.0.0",
+    "ora": "^8.1.0",
+    "prompts": "^2.4.2",
+    "satori": "^0.11.3",
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-go": "^0.21.0",
+    "tree-sitter-javascript": "^0.21.0",
+    "tree-sitter-python": "^0.21.0",
+    "tree-sitter-typescript": "^0.21.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/prompts": "^2.4.9",
+    "@vitest/coverage-v8": "^2.0.0",
+    "rimraf": "^6.0.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^2.0.0"
+  }
+}

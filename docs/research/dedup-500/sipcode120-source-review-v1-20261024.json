@@ -1,0 +1,34 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "whole_files_read": [
+    {
+      "path": "src/modules/manifest/scanFiles.ts",
+      "local": "02-scanFiles.ts",
+      "git_blob": "67f20d21bb10104386bec1aa64d26694deb28020",
+      "sha256": "6b7173351c35ee6d5bf863a9c5ef37ffc82d94b16866ce8d4ecd0247810545e8",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/scanFiles.test.ts",
+      "local": "05-scanFiles.test.ts",
+      "git_blob": "b3080a00437ca743a18dcbd8aae157730711b78e",
+      "sha256": "aa178f51b3517762a49679bbab78129ca241c7cb01cc07bb9e23e7873a9a237a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 2,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_run": false,
+  "authored_controls_passed": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "findings": [
+    "Original scanner deliberately omits hard-skip/hidden and >256KiB files;not a complete duplicate-file discovery policy.",
+    "Missing root gives empty array;injected child read failure gives partial list with no completeness diagnostic in this API.",
+    "Reviewed original tests cover language classification, hard skips,POSIX names and sorting;not root/child failures or size omission."
+  ],
+  "runtime_scope": "Original unchanged TypeScript renamed mts,Node22.23.4 strip-types,owned Node filesystem adapter;no full application/Vitest proof",
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

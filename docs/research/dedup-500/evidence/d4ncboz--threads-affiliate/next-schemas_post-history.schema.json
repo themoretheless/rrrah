@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/d4ncboz/threads-affiliate/schemas/post-history.schema.json",
+  "title": "Post History Schema",
+  "description": "Schema for data/post_history.json — append-only post log used by dedup",
+  "type": "object",
+  "required": ["posts"],
+  "properties": {
+    "posts": {
+      "type": "array",
+      "maxItems": 100,
+      "description": "Most recent 100 posts (auto-trim on save)",
+      "items": {
+        "type": "object",
+        "required": ["date", "hook_category", "hook_text", "affiliate_link"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISO 8601 timestamp of when post was made"
+          },
+          "hook_category": {
+            "type": "string",
+            "enum": ["edukasi", "validasi_mental", "storytelling", "problem_solving", "hook_pancingan", "transformasi", "social_proof", "urgency", "controversy"],
+            "description": "Hook style used (controls dedup rotation)"
+          },
+          "category": {
+            "type": "string",
+            "enum": ["skincare", "parfum", "haircare", "makeup"],
+            "description": "Product category"
+          },
+          "hook_text": {
+            "type": "string",
+            "maxLength": 80,
+            "description": "First 80 chars of post 1 (used for similarity check)"
+          },
+          "product": {
+            "type": "string",
+            "description": "Product name as posted"
+          },
+          "affiliate_link": {
+            "type": "string",
+            "pattern": "^https://s\\.shopee\\.co\\.id/.+$",
+            "description": "Shopee affiliate short link (never reused)"
+          },
+          "num_posts": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 3,
+            "description": "Number of posts in the chain (2 or 3)"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["posted", "failed", "rejected_dedup", "rejected_cookies"],
+            "description": "Final state"
+          },
+          "post_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional: link to the verified post on Threads"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,388 @@
+{
+  "date": "2026-10-25",
+  "scope": "RR-0056 background TTL worker only; fixed-stack values, existing O(N) key plan retained",
+  "checks": [
+    {
+      "name": "memory",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-memory",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "45",
+          "0",
+          "0"
+        ]
+      ]
+    },
+    {
+      "name": "cache",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "157",
+          "0",
+          "5"
+        ]
+      ]
+    }
+  ],
+  "benchmarks": [
+    {
+      "name": "pairs-1",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--lib",
+        "rr56_qualification::ttl_release_outside_lock_pairs",
+        "--",
+        "--ignored",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "binary_sha256": "6a48330f37c2123cc2581b88d0da9d0176a5ae6e2f01d75613700cde11bb4ae1"
+    },
+    {
+      "name": "pairs-2",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--lib",
+        "rr56_qualification::ttl_release_outside_lock_pairs",
+        "--",
+        "--ignored",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "binary_sha256": "a202e3e83d865beade1fef7b6aca16d8958382b9c6148a62381a2a8ca0b2a4b9"
+    },
+    {
+      "name": "scaling",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--lib",
+        "expiry_scaling_qualification::real_file_multi_batch_pairs",
+        "--",
+        "--ignored",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "1",
+          "0",
+          "0"
+        ]
+      ],
+      "binary_sha256": "a202e3e83d865beade1fef7b6aca16d8958382b9c6148a62381a2a8ca0b2a4b9"
+    }
+  ],
+  "paired_results": {
+    "pairs-1.log": {
+      "1": {
+        "True": {
+          "wait_p50_ns": {
+            "median_ratio": 0.9956302430552182,
+            "wins": 5
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.8972229529211027,
+            "wins": 6
+          },
+          "hold_p95_ns": {
+            "median_ratio": 1.0075928888576582,
+            "wins": 5
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.785822063735949,
+            "wins": 7
+          }
+        },
+        "False": {
+          "wait_p50_ns": {
+            "median_ratio": 0.021213980078156953,
+            "wins": 10
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.029791175613610825,
+            "wins": 9
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.007016861362439663,
+            "wins": 10
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.9088927576656275,
+            "wins": 6
+          }
+        }
+      },
+      "2": {
+        "True": {
+          "wait_p50_ns": {
+            "median_ratio": 0.9197765791681649,
+            "wins": 7
+          },
+          "wait_p95_ns": {
+            "median_ratio": 2.3017959635136345,
+            "wins": 3
+          },
+          "hold_p95_ns": {
+            "median_ratio": 1.50323714132187,
+            "wins": 4
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 1.1123356797077968,
+            "wins": 5
+          }
+        },
+        "False": {
+          "wait_p50_ns": {
+            "median_ratio": 0.02716062968580458,
+            "wins": 10
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.029743171965037535,
+            "wins": 10
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.008712843892212736,
+            "wins": 10
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.8821274945424884,
+            "wins": 7
+          }
+        }
+      },
+      "4": {
+        "True": {
+          "wait_p50_ns": {
+            "median_ratio": 0.8593581818181818,
+            "wins": 6
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.6311473307005997,
+            "wins": 7
+          },
+          "hold_p95_ns": {
+            "median_ratio": 1.1571820207789536,
+            "wins": 2
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.8697819512058398,
+            "wins": 8
+          }
+        },
+        "False": {
+          "wait_p50_ns": {
+            "median_ratio": 0.04429289259725973,
+            "wins": 10
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.05607159558511732,
+            "wins": 10
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.01003024869318395,
+            "wins": 10
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 1.00455072137866,
+            "wins": 5
+          }
+        }
+      }
+    },
+    "pairs-2.log": {
+      "1": {
+        "True": {
+          "wait_p50_ns": {
+            "median_ratio": 1.0016191528769915,
+            "wins": 5
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.8314560734792023,
+            "wins": 8
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.965978764026374,
+            "wins": 6
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 1.144469377097784,
+            "wins": 3
+          }
+        },
+        "False": {
+          "wait_p50_ns": {
+            "median_ratio": 0.023968826183429333,
+            "wins": 10
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.02791028051543664,
+            "wins": 10
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.00829860605386172,
+            "wins": 10
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.9103403487353978,
+            "wins": 6
+          }
+        }
+      },
+      "2": {
+        "True": {
+          "wait_p50_ns": {
+            "median_ratio": 0.9854082461879187,
+            "wins": 5
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.9301517775228452,
+            "wins": 6
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.8755779427359491,
+            "wins": 8
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.9257632769248269,
+            "wins": 7
+          }
+        },
+        "False": {
+          "wait_p50_ns": {
+            "median_ratio": 0.02296733738851302,
+            "wins": 10
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.029622088238917616,
+            "wins": 10
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.009531376909339043,
+            "wins": 10
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.8068015979429246,
+            "wins": 7
+          }
+        }
+      },
+      "4": {
+        "True": {
+          "wait_p50_ns": {
+            "median_ratio": 1.2072072624920982,
+            "wins": 1
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.6393535211941619,
+            "wins": 6
+          },
+          "hold_p95_ns": {
+            "median_ratio": 1.2119181095404419,
+            "wins": 2
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.9869374144147606,
+            "wins": 5
+          }
+        },
+        "False": {
+          "wait_p50_ns": {
+            "median_ratio": 0.03577259491943589,
+            "wins": 10
+          },
+          "wait_p95_ns": {
+            "median_ratio": 0.040755366422406084,
+            "wins": 10
+          },
+          "hold_p95_ns": {
+            "median_ratio": 0.008501692489224544,
+            "wins": 10
+          },
+          "cleanup_p95_ns": {
+            "median_ratio": 0.8078495434636617,
+            "wins": 8
+          }
+        }
+      }
+    }
+  },
+  "scaling": {
+    "129": {
+      "median_cleanup_ratio": 0.9689212813711487,
+      "pairs": 3
+    },
+    "1025": {
+      "median_cleanup_ratio": 0.9559054768640501,
+      "pairs": 3
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-cache/src/swap.rs": "76dcd473343d8f431b18fab3f7fbb779ebc698a6c3c9088152e21a72353710db",
+    "crates/rrrah-memory/src/policy.rs": "aa8af4bdfff89f3825752569f802705cc46d0de8870d301801326d05469310fd"
+  },
+  "limits": [
+    "Local macOS/APFS real files; no hardware qualification",
+    "Public prune and lazy get expiry retain previous mutex/quota ordering",
+    "Fixed 64-payload array adds bounded stack storage, not a new O(N) heap collection",
+    "Existing O(N) expiry key Vec and allocator bookkeeping are not newly brought into MemoryBudget",
+    "Mutex microbenchmark synchronizes contenders at detach; not end-to-end viewer throughput",
+    "pairs-1 preceded final public-prune compatibility restoration; its detach code is identical, pairs-2 and scaling use final source"
+  ]
+}

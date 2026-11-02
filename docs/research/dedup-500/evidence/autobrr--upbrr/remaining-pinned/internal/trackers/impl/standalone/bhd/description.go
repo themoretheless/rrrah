@@ -1,0 +1,223 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package bhd
+
+import (
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/autobrr/upbrr/internal/bbcode"
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/description"
+	"github.com/autobrr/upbrr/internal/metadata/metautil"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func buildDescription(meta api.UploadSubject, cfg config.Config, assets trackers.DescriptionAssets) string {
+	base := strings.TrimSpace(assets.Description)
+	if assets.Final {
+		return base
+	}
+	base, audioAnalysis := description.SplitTrailingSourceAudioSpoiler(base)
+
+	cleaned := CleanDescription(base, BBCodeOptions{
+		Framestor: hasGroup(meta.Tag, "framestor"),
+		Flux:      hasGroup(meta.Tag, "flux"),
+	})
+
+	descriptionBody := strings.TrimSpace(cleaned.Description)
+	maskedDescription, comparisonBlocks := maskBHDComparisonBlocks(descriptionBody)
+	maskedDescription = stripUASignature(maskedDescription)
+	maskedDescription = strings.ReplaceAll(maskedDescription, "[img]", "[img width=300]")
+	descriptionBody = restoreBHDComparisonBlocks(maskedDescription, comparisonBlocks)
+
+	images := assets.Screenshots
+	if len(images) == 0 {
+		images = screenshotsFromReport(cleaned.Images)
+	}
+	screenshotLimit := len(images)
+	if meta.Options.Screens > 0 {
+		screenshotLimit = meta.Options.Screens
+	}
+
+	parts := make([]string, 0, 5)
+	if discSection := buildDiscSection(meta, cfg.MainSettings.DBPath); discSection != "" {
+		parts = append(parts, discSection)
+	}
+	if descriptionBody != "" {
+		parts = append(parts, descriptionBody)
+	}
+	if menus := buildDiscScreenshotSection(meta, assets.MenuImages, len(assets.MenuImages)); menus != "" {
+		parts = append(parts, "[b]Disc Menus[/b]\n"+menus)
+	}
+	if audioAnalysis != "" {
+		parts = append(parts, strings.ReplaceAll(audioAnalysis, "[img]", "[img width=350]"))
+	}
+	if screenshots := buildDiscScreenshotSection(meta, images, screenshotLimit); screenshots != "" {
+		parts = append(parts, screenshots)
+	}
+	parts = append(parts, `[align=right][url=https://github.com/autobrr/upbrr]Uploaded by upbrr[/url][/align]`)
+	return strings.TrimSpace(strings.Join(parts, "\n\n"))
+}
+
+func buildDiscSection(meta api.UploadSubject, dbPath string) string {
+	switch strings.ToUpper(strings.TrimSpace(meta.DiscType)) {
+	case "DVD":
+		media := metautil.FirstNonEmptyTrimmed(trackers.ReadDVDVOBMediaInfo(meta), readTextFileNoErr(strings.TrimSpace(meta.MediaInfoTextPath)))
+		if media == "" {
+			return ""
+		}
+		return fmt.Sprintf("[spoiler=VOB MediaInfo][code]%s[/code][/spoiler]", media)
+	case "BDMV":
+		text, _ := trackers.ReadBDInfo(dbPath, meta)
+		if text == "" {
+			return ""
+		}
+		return fmt.Sprintf("[spoiler=BDINFO][code]%s[/code][/spoiler]", text)
+	default:
+		return ""
+	}
+}
+
+func buildScreenshotSection(images []api.ScreenshotImage, limit int) string {
+	if len(images) == 0 || limit <= 0 {
+		return ""
+	}
+
+	var section strings.Builder
+	section.WriteString("[align=center]")
+	count := 0
+	for _, image := range images {
+		if count >= limit {
+			break
+		}
+		imgURL := metautil.FirstNonEmptyTrimmed(strings.TrimSpace(image.ImgURL), strings.TrimSpace(image.RawURL))
+		webURL := metautil.FirstNonEmptyTrimmed(strings.TrimSpace(image.WebURL), strings.TrimSpace(image.RawURL), imgURL)
+		if imgURL == "" || webURL == "" {
+			continue
+		}
+		if count > 0 {
+			if count%2 == 0 {
+				section.WriteString("\n\n")
+			} else {
+				section.WriteByte(' ')
+			}
+		}
+		line := fmt.Sprintf("[url=%s][img width=350]%s[/img][/url]", webURL, imgURL)
+		section.WriteString(line)
+		count++
+	}
+	if count == 0 {
+		return ""
+	}
+	section.WriteString("[/align]")
+	return section.String()
+}
+
+func buildDiscScreenshotSection(meta api.UploadSubject, images []api.ScreenshotImage, limit int) string {
+	if len(meta.Disc.Items) < 2 {
+		return buildScreenshotSection(images, limit)
+	}
+	if limit > 0 && limit < len(images) {
+		images = images[:limit]
+	}
+	parts := make([]string, 0, len(meta.Disc.Items)+1)
+	used := make(map[int]struct{}, len(images))
+	for _, disc := range meta.Disc.Items {
+		group := make([]api.ScreenshotImage, 0)
+		for index, image := range images {
+			if image.DiscID != disc.ID {
+				continue
+			}
+			group = append(group, image)
+			used[index] = struct{}{}
+		}
+		if section := buildScreenshotSection(group, len(group)); section != "" {
+			parts = append(parts, "[b]"+safeDiscLabel(disc.Name)+"[/b]\n"+section)
+		}
+	}
+	unscoped := make([]api.ScreenshotImage, 0, len(images)-len(used))
+	for index, image := range images {
+		if _, ok := used[index]; !ok {
+			unscoped = append(unscoped, image)
+		}
+	}
+	if section := buildScreenshotSection(unscoped, len(unscoped)); section != "" {
+		parts = append(parts, section)
+	}
+	return strings.Join(parts, "\n\n")
+}
+
+func safeDiscLabel(value string) string {
+	value = strings.ReplaceAll(value, "[", "(")
+	value = strings.ReplaceAll(value, "]", ")")
+	value = strings.ReplaceAll(value, "\r", " ")
+	value = strings.ReplaceAll(value, "\n", " ")
+	return strings.Join(strings.Fields(value), " ")
+}
+
+func screenshotsFromReport(images []bbcode.Image) []api.ScreenshotImage {
+	if len(images) == 0 {
+		return nil
+	}
+	out := make([]api.ScreenshotImage, 0, len(images))
+	for idx, image := range images {
+		imgURL := strings.TrimSpace(image.ImgURL)
+		rawURL := metautil.FirstNonEmptyTrimmed(strings.TrimSpace(image.RawURL), imgURL)
+		webURL := metautil.FirstNonEmptyTrimmed(strings.TrimSpace(image.WebURL), rawURL, imgURL)
+		if imgURL == "" && rawURL == "" {
+			continue
+		}
+		out = append(out, api.ScreenshotImage{
+			Index:  idx,
+			Host:   strings.TrimSpace(image.Host),
+			ImgURL: metautil.FirstNonEmptyTrimmed(imgURL, rawURL),
+			RawURL: rawURL,
+			WebURL: webURL,
+		})
+	}
+	return out
+}
+
+func stripUASignature(value string) string {
+	trimmed := trackers.StripDescriptionSignatures(value)
+	if trimmed == "" {
+		return ""
+	}
+	signatures := []string{
+		`[align=right][url=https://github.com/autobrr/upbrr][size=10]upbrr[/size][/url][/align]`,
+		`[align=right][url=https://github.com/autobrr/upbrr]upbrr[/url][/align]`,
+		`[align=right][url=https://github.com/autobrr/upbrr]Created by upbrr[/url][/align]`,
+		`[align=right]Created by upbrr[/align]`,
+		`[align=right][url=https://github.com/autobrr/upbrr]Uploaded by upbrr[/url][/align]`,
+		`[right][url=https://github.com/autobrr/upbrr][size=10]upbrr[/size][/url][/right]`,
+		`[right][url=https://github.com/autobrr/upbrr]upbrr[/url][/right]`,
+		`[right][url=https://github.com/autobrr/upbrr]Created by upbrr[/url][/right]`,
+		`[right]Created by upbrr[/right]`,
+		`[right][url=https://github.com/autobrr/upbrr]Uploaded by upbrr[/url][/right]`,
+	}
+	for _, signature := range signatures {
+		trimmed = strings.TrimSpace(strings.ReplaceAll(trimmed, signature, ""))
+	}
+	return trimmed
+}
+
+func readTextFileNoErr(path string) string {
+	trimmed := strings.TrimSpace(path)
+	if trimmed == "" {
+		return ""
+	}
+	payload, err := os.ReadFile(trimmed)
+	if err != nil {
+		return ""
+	}
+	return string(payload)
+}
+
+func hasGroup(tag string, name string) bool {
+	trimmed := strings.ToLower(strings.TrimSpace(strings.TrimPrefix(tag, "-")))
+	return trimmed == strings.ToLower(strings.TrimSpace(name))
+}

@@ -1,0 +1,18 @@
+{
+  "scope": "Unmodified pinned files copied to disposable isolated cwd; upstream LLM/send/storage stubs, no live providers or messaging; config fetched and hash-verified but not whole-read",
+  "python": "3.15.1 (main, Oct 21 2026, 05:55:12) [Clang 21.0.0 (clang-2100.3.34.2)]",
+  "runs": [
+    {
+      "module": "test_semantic_dedup.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_digest_merge_groups_same_event_items (review_tests.SemanticDedupServiceTests.test_digest_merge_groups_same_event_items) ... ok\ntest_duplicate_result_uses_job_provider_and_match_confidence (review_tests.SemanticDedupServiceTests.test_duplicate_result_uses_job_provider_and_match_confidence) ... ok\ntest_duplicate_without_match_id_is_allowed (review_tests.SemanticDedupServiceTests.test_duplicate_without_match_id_is_allowed) ... ok\ntest_low_confidence_duplicate_is_allowed (review_tests.SemanticDedupServiceTests.test_low_confidence_duplicate_is_allowed) ... ok\n\n----------------------------------------------------------------------\nRan 4 tests in 0.004s\n\nOK\n"
+    },
+    {
+      "module": "test_aggregate_dispatcher.py",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "test_aggregate_dispatch_uses_target_origins_and_blocks_duplicates (review_tests.AggregateDispatcherTests.test_aggregate_dispatch_uses_target_origins_and_blocks_duplicates) ... ok\ntest_aggregate_image_mode_uses_local_renderer (review_tests.AggregateDispatcherTests.test_aggregate_image_mode_uses_local_renderer) ... ok\ntest_aggregate_send_false_releases_dispatch_claim_for_retry (review_tests.AggregateDispatcherTests.test_aggregate_send_false_releases_dispatch_claim_for_retry) ... ok\ntest_target_error_classifier_keeps_transient_send_errors_retryable (review_tests.AggregateDispatcherTests.test_target_error_classifier_keeps_transient_send_errors_retryable) ... ok\ntest_transient_send_error_does_not_disable_origin (review_tests.AggregateDispatcherTests.test_transient_send_error_does_not_disable_origin) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.005s\n\nOK\n"
+    }
+  ]
+}

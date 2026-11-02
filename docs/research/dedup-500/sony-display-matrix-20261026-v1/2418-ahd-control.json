@@ -1,0 +1,46 @@
+{
+  "render_command": [
+    "/opt/homebrew/bin/dcraw_emu",
+    "-w",
+    "-W",
+    "-o",
+    "1",
+    "-q",
+    "3",
+    "-6",
+    "-T",
+    "-Z",
+    "-",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw"
+  ],
+  "tiff_sha256": "b578f1f1bb5df8cffe0e206b2e9364983fea502e09a18758e2244f491bcccffd",
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff",
+    "--verify-spatial-display"
+  ],
+  "binary_sha256": "724c414d11fa1433809a4652eb359090c87f07178ce59bdf9ecb7e326e74260a",
+  "exit_code": 0,
+  "candidate": [
+    "false"
+  ],
+  "matched_pixels": [
+    "21476404",
+    "21462150",
+    "22353488",
+    "21284411"
+  ],
+  "compared_pixels": [
+    "24000000",
+    "23991656",
+    "24000000",
+    "23991656"
+  ],
+  "managed": [
+    "managed_used=0 managed_peak=1016765952"
+  ],
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-control.log",
+  "sha256": "28bb3327fd425b8ea8e25fae951026fffc5b1956d193765ef1830d3a144de954",
+  "scope": "Replication of independent AHD vs linear reference control on second Sony source; no replacement of failing linear reference or default change."
+}

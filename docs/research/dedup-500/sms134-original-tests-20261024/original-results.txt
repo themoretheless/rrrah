@@ -1,0 +1,138 @@
+test_alternate_country_code_disabled (test_country_codes.TestCountryCodes.test_alternate_country_code_disabled) ... Reading 'tests/test_cases/alternate_country_code.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        sms         |         2          |         0          |         2          
+        mms         |         2          |         0          |         2          
+No duplicate messages found. Skipping writing of output file.
+ok
+test_alternate_country_code_enabled (test_country_codes.TestCountryCodes.test_alternate_country_code_enabled)
+Check that user can specify +2 country code to identify corresponding duplicates. ... Reading 'tests/test_cases/alternate_country_code.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         2          |         1          |         1          
+        sms         |         2          |         1          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_missing_country_code (test_country_codes.TestCountryCodes.test_missing_country_code)
+Check that missing +1 country code is correctly identified as a duplicate. ... Reading 'tests/test_cases/missing_country_code.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        sms         |         2          |         1          |         1          
+        mms         |         2          |         1          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_cross_sms_mms_disabled (test_cross_message_protocol.TestCrossMessageProtocol.test_cross_sms_mms_disabled) ... Reading 'tests/test_cases/cross_sms_mms_duplicate.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         1          |         0          |         1          
+        sms         |         1          |         0          |         1          
+No duplicate messages found. Skipping writing of output file.
+ok
+test_cross_sms_mms_enabled (test_cross_message_protocol.TestCrossMessageProtocol.test_cross_sms_mms_enabled)
+Check that duplicates can be identified across SMS/MMS/RCS protocols if aggressively deduplicating. ... Reading 'tests/test_cases/cross_sms_mms_duplicate.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+     sms or mms     |         2          |         1          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_different_smil_format_ignored (test_different_smil_format.TestDifferentSMILFormat.test_different_smil_format_ignored)
+Check that duplicates can be identified across SMS/MMS/RCS protocols if aggressively deduplicating. ... Reading 'tests/test_cases/different_smil_format.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         10         |         9          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_combine_and_dedupe_two_files (test_multi_file.TestMultiFile.test_combine_and_dedupe_two_files)
+Combine two files that together contain duplicates across files and ensure total count and dedupe. ... Reading 'tests/test_cases/multi_file_part1.xml', 'tests/test_cases/multi_file_part2.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        sms         |         4          |         1          |         3          
+        mms         |         2          |         1          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_works_with_flags (test_multi_file.TestMultiFile.test_works_with_flags)
+Ensure flags still apply when combining, e.g., whitespace ignore across files. ... Reading 'tests/test_cases/multi_file_whitespace_part1.xml', 'tests/test_cases/multi_file_whitespace_part2.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         2          |         1          |         1          
+        sms         |         2          |         1          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_multiple_duplicates (test_multiple_duplicates.TestMultipleDuplicates.test_multiple_duplicates)
+Check that deduplication can remove multiple messages all mapped to a single message. ... Reading 'tests/test_cases/multiple_duplicates.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        sms         |         4          |         3          |         1          
+        mms         |         3          |         2          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_similar_timestamps_disabled (test_timestamps.TestTimestamps.test_similar_timestamps_disabled) ... Reading 'tests/test_cases/similar_timestamps.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         4          |         0          |         4          
+        sms         |         4          |         0          |         4          
+No duplicate messages found. Skipping writing of output file.
+ok
+test_similar_timestamps_enabled (test_timestamps.TestTimestamps.test_similar_timestamps_enabled)
+Check that user can specify deduplication of identical messages in same-second buckets. ... Reading 'tests/test_cases/similar_timestamps.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         4          |         2          |         2          
+        sms         |         4          |         2          |         2          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_utf16_surrogate_pairs (test_utf16_encoding.TestUTF16Encoding.test_utf16_surrogate_pairs)
+Invalid XMLs with surrogate pairs should still run with --fix-utf16. ... Reading 'tests/test_cases/utf16_encoding.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        sms         |         2          |         1          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+test_whitespace_disabled (test_whitespace.TestCrossMessageProtocol.test_whitespace_disabled) ... Reading 'tests/test_cases/whitespace_duplicates.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        sms         |         5          |         0          |         5          
+        mms         |         5          |         0          |         5          
+No duplicate messages found. Skipping writing of output file.
+ok
+test_whitespace_enabled (test_whitespace.TestCrossMessageProtocol.test_whitespace_enabled)
+Check that user can specify deduplication of messages that only differ by whitespace. ... Reading 'tests/test_cases/whitespace_duplicates.xml'... Done in 0.0 s.
+Preparing log file 'test_deduplication.log'.
+Searching for duplicates... Done in 0.0 s.
+Deduplication Summary:
+    Message Type    |   Original Count   |      Removed       | Deduplicated Count 
+        mms         |         5          |         4          |         1          
+        sms         |         5          |         4          |         1          
+Writing 'test_deduplicated.xml'... Done in 0.0 s
+ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.670s
+
+OK

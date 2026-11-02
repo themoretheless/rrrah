@@ -1,0 +1,41 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original PHashService.expandOneBitRange body and exact DHashService conversion expression extracted verbatim; Node Buffer/string fixtures only. No native pHash, image decoding, database, app, filesystem mutation or original Jest execution.",
+  "authored_controls": [
+    {
+      "name": "distinct 64bit dHash buffers collapse in Number conversion",
+      "passed": true,
+      "observed": {
+        "first": "9223372036854776000",
+        "second": "9223372036854776000",
+        "exactDistinct": true
+      }
+    },
+    {
+      "name": "small exact integers remain distinct positive control",
+      "passed": true,
+      "observed": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "name": "one bit expansion loses unique neighbors for high bit hashes",
+      "passed": true,
+      "observed": {
+        "returned": 64,
+        "unique": 54,
+        "originalIncluded": true
+      }
+    },
+    {
+      "name": "one bit expansion zero positive control",
+      "passed": true,
+      "observed": {
+        "returned": 64,
+        "unique": 64
+      }
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "scope": "Original AST token batching/date-delay helpers on synthetic data, no plugin import/LLM/server or user store",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Oversized Unicode message splits into estimated-budget-bounded chunks and concatenates without text loss",
+    "Budget too small for one character raises ValueError",
+    "Same-session memory with missing time suppressed while other-session missing-time memory retained",
+    "Precompact same-session memory exempt from recency delay positive control"
+  ],
+  "limits": "Budget is heuristic estimated tokens, not provider tokenizer guarantee",
+  "full_plugin_runtime_run": false
+}

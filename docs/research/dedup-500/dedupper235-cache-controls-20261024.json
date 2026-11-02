@@ -1,0 +1,41 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original isOlder/load/isValidFileInfo bodies extracted through Flow AST; synthetic stat/cache/path adapters only. No filesystem/database mutations, native image hashing or full app/Jest.",
+  "authored_controls": [
+    {
+      "name": "older timestamps admit changed size and inode",
+      "passed": true,
+      "observed": {
+        "isOlder": false,
+        "sourceSize": 999,
+        "sourceInode": 99
+      }
+    },
+    {
+      "name": "newer mtime invalidates positive control",
+      "passed": true
+    },
+    {
+      "name": "load preserves cached hash and size under admitted timestamps",
+      "passed": true,
+      "observed": {
+        "cachedHash": "stale-hash",
+        "cachedSize": 4,
+        "currentSize": 999
+      }
+    },
+    {
+      "name": "noncanonical hash admitted prefix1suffix",
+      "passed": true
+    },
+    {
+      "name": "noncanonical hash admitted -1",
+      "passed": true
+    },
+    {
+      "name": "empty image hashes rejected positive control",
+      "passed": true
+    }
+  ]
+}

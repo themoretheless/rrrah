@@ -1,0 +1,10 @@
+{
+  "scope": "Unchanged AST-extracted three original functions, real NumPy and owned temporary NPZs; no model/sklearn/UI.",
+  "cases": 3,
+  "findings": [
+    "Missing entire NPZ becomes all-ones row and error index returned.",
+    "NPZ containing requested inside layer but missing outside layer appends inside twice across try/except, producing ragged matrix and ValueError instead of documented replacement.",
+    "Bipolarize ties/all-zero rows choose first category by argmax."
+  ],
+  "partial_layer_error": "setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (3,) + inhomogeneous part."
+}

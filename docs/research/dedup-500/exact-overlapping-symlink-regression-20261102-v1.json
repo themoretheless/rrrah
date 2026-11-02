@@ -1,0 +1,19 @@
+{
+  "command": "cargo +1.98.1 test -j 2 -p rrrah-dedup --no-default-features --test exact_files",
+  "exit_code": 0,
+  "passed": 52,
+  "failed": 0,
+  "ignored": 0,
+  "filtered_out": 0,
+  "runtime_seconds": 1.16,
+  "source_pins": {
+    "crates/rrrah-dedup/src/exact.rs": "e18ba5bbd33a0d04d0b3f19adadf5980b23f53b5752708114dd66f49068673f5",
+    "crates/rrrah-dedup/tests/exact_files.rs": "97be25c49405b3910905250ddb15baaed70ec793adbfd36e4d0e07dd36876b9e",
+    "Cargo.lock": "a020e36e00203badaca46653a7f4a9d1285f48800abdd730692a49fecc139b0f",
+    "crates/rrrah-dedup/Cargo.toml": "3973c2ad4c338a2c5f15a45eb3a19d27897142b23e46d97c5f38b06c3e88d5cb"
+  },
+  "added_test": "overlapping_roots_preserve_copy_groups_and_skipped_link_diagnostics",
+  "production_code_changed": false,
+  "observation": "Shallower explicit roots revisit directories; skipped-link diagnostics can repeat without changing exact copy partitions. Regression covers scan and scan_verified, three root arrangements, physical independent copies and untouched symlink/content.",
+  "scope": "Exact-file integration target only; previous all-target receipt predates this added test and is not a run of the expanded suite."
+}

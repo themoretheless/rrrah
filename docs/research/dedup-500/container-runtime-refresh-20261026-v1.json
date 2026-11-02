@@ -1,0 +1,20 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "container"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 460.741927541967,
+  "test_source_sha256_before": "2ba284471b16f5b4f1d318fc1fd0f88edb1716248929b218a22fda014eaf8be0",
+  "test_source_sha256_after": "2ba284471b16f5b4f1d318fc1fd0f88edb1716248929b218a22fda014eaf8be0",
+  "stdout": "\nrunning 14 tests\ntest exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok\ntest selected_frame_does_not_establish_whole_animation_identity ... ok\ntest dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok\ntest recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok\ntest generation_change_at_final_group_admission_returns_no_result ... ok\ntest batch_full_presentations_preserve_negative_and_error_evidence ... ok\ntest automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok\ntest complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok\ntest complete_page_comparison_rejects_last_page_changes_and_limits ... ok\ntest indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges ... ok\ntest indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them ... ok\ntest indexed_recursive_corrupt_animation_is_inconclusive_and_preserves_healthy_edges ... ok\ntest mixed_recursive_indexed_presentations_cover_all_three_scope_classes ... ok\ntest indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget ... ok\n\ntest result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.06s\n\n",
+  "stderr": "warning: hiding a lifetime that's elided elsewhere is confusing\n   --> vendor/jxl-color/src/icc/parse.rs:229:38\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {\n    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here\n    |                                      |\n    |                                      the lifetime is elided here\n    |\n    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing\n    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default\nhelp: use `'_` for type paths\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {\n    |                                                                 ++++\n\nwarning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)\n   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n    Finished `test` profile [optimized + debuginfo] target(s) in 7m 34s\n     Running tests/container.rs (target/debug/deps/container-e984367c8902a665)\n",
+  "scope": "Current macOS container integration suite; authored fixtures, not all formats, platforms, power-loss or RSS qualification"
+}

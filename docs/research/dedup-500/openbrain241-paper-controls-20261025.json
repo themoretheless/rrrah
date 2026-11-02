@@ -1,0 +1,62 @@
+{
+  "scope": "Original paper fetcher processing and original MCP client with same fake dependencies as RSS controls; replaced paper fetch with fixtures; no network or real tracker persistence",
+  "confirmed": "Both mark filtered entries in dry-run; both count result.isError tool failure as capture",
+  "outcomes": [
+    {
+      "source": "hf",
+      "dry_run": false,
+      "stats": {
+        "fetched": 1,
+        "skipped": 0,
+        "captured": 1,
+        "failed": 0,
+        "filtered": 0
+      },
+      "seen": {
+        "hf_paper_fixture": "hf_papers"
+      }
+    },
+    {
+      "source": "hf",
+      "dry_run": true,
+      "stats": {
+        "fetched": 1,
+        "skipped": 0,
+        "captured": 0,
+        "failed": 0,
+        "filtered": 1
+      },
+      "seen": {
+        "hf_paper_reject": "hf_papers-filtered"
+      }
+    },
+    {
+      "source": "emergent",
+      "dry_run": false,
+      "stats": {
+        "fetched": 1,
+        "skipped": 0,
+        "captured": 1,
+        "failed": 0,
+        "filtered": 0
+      },
+      "seen": {
+        "emergentmind_fixture": "emergent_mind"
+      }
+    },
+    {
+      "source": "emergent",
+      "dry_run": true,
+      "stats": {
+        "fetched": 1,
+        "skipped": 0,
+        "captured": 0,
+        "failed": 0,
+        "filtered": 1
+      },
+      "seen": {
+        "emergentmind_reject": "emergentmind-low-temp"
+      }
+    }
+  ]
+}

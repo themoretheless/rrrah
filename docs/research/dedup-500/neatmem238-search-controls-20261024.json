@@ -1,0 +1,30 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original search and boost functions, six original test callbacks with their own fake vector store; two authored synthetic controls. No embeddings, external storage, model, live server, or full pytest run.",
+  "original_callbacks": [
+    "test_single_query_unchanged_shape",
+    "test_merge_takes_max_score_and_provenance_tracks_winner",
+    "test_duplicate_expansion_not_researched",
+    "test_merged_results_are_superset_of_single_query_top_hits",
+    "test_bm25_runs_on_original_query_only",
+    "test_extra_queries_none_equivalent_to_empty"
+  ],
+  "authored_controls": [
+    {
+      "name": "top1 expansion evicts original top hit",
+      "passed": true,
+      "observed": {
+        "single": "old",
+        "expanded": "new"
+      }
+    },
+    {
+      "name": "noncandidate keyword hit changes normalization denominator",
+      "passed": true,
+      "observed": [
+        0.9,
+        0.45
+      ]
+    }
+  ]
+}

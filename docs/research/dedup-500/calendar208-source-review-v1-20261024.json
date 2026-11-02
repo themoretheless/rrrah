@@ -1,0 +1,150 @@
+{
+  "index": 208,
+  "repository": "bryant24hao/macos-calendar-assistant-skill",
+  "commit": "ecfeec26be02ce01ea64bffa4710d0de4e1f5a60",
+  "tracked_blob_count": 31,
+  "whole_file_reads": [
+    {
+      "path": "scripts/calendar_clean.py",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/03-calendar_clean.py",
+      "sha256": "34ded7e660a977b776a3098cb9d6e20931a26714a859f68bac228f2f703ad472",
+      "git_blob_sha1": "b178a9575ed8deac2924e99267093c79c8493952"
+    },
+    {
+      "path": "scripts/regression_test.py",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/05-regression_test.py",
+      "sha256": "b88de01f13195edbeea3285c5e627f6026dce00dd45847781a4a5ee7a8eea495",
+      "git_blob_sha1": "ed091bdd3900deb6d3ab5da4c71e5c84fb2d1b0f"
+    }
+  ],
+  "whole_file_read_count": 2,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "authored_controls_run": 4,
+  "original_tests_run": 0,
+  "controls": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/pure-dedup-control-results.json",
+  "decision": "reject-domain",
+  "findings": [
+    "Calendar title/slot heuristic, not file content identity. Four pure controls reproduce duration-insensitive same-calendar grouping, subsecond truncation, all-day exclusion and contradictory survivors across phases. Cross-calendar stage does not require different calendars.",
+    "Deletion Swift code selects title/calendar/start rather than stable event identifier and removes every matching event, potentially including chosen survivor with identical raw title/start. Source-only deletion observation; never executed.",
+    "Original regression script creates/updates/deletes real EventKit entries, counts candidates0 after cleanup without asserting exactly one survivor; could pass after all copies removed. Read only, not executed."
+  ],
+  "remaining": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "bytes": 682
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 52
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1068
+    },
+    {
+      "path": "README.md",
+      "bytes": 10819
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 4543
+    },
+    {
+      "path": "assets/demo-add-edit-task.jpg",
+      "bytes": 126713
+    },
+    {
+      "path": "assets/demo-daily-review.jpg",
+      "bytes": 57883
+    },
+    {
+      "path": "assets/demo-weekly-view.jpg",
+      "bytes": 67604
+    },
+    {
+      "path": "config.example.json",
+      "bytes": 317
+    },
+    {
+      "path": "references/CLAWDHUB_SUBMISSION.md",
+      "bytes": 864
+    },
+    {
+      "path": "references/LOCAL_CONVERGENCE.md",
+      "bytes": 770
+    },
+    {
+      "path": "references/RE-AUDIT-RESULT.md",
+      "bytes": 2565
+    },
+    {
+      "path": "references/RELEASE_NOTES_v0.1.0-beta.md",
+      "bytes": 939
+    },
+    {
+      "path": "references/REVIEW_CHECKLIST.md",
+      "bytes": 971
+    },
+    {
+      "path": "references/TEST_PLAN.md",
+      "bytes": 1530
+    },
+    {
+      "path": "scripts/add_event.py",
+      "bytes": 3808
+    },
+    {
+      "path": "scripts/calendar_clean_notify.sh",
+      "bytes": 2916
+    },
+    {
+      "path": "scripts/config_utils.py",
+      "bytes": 1383
+    },
+    {
+      "path": "scripts/env_check.py",
+      "bytes": 1703
+    },
+    {
+      "path": "scripts/install.sh",
+      "bytes": 1260
+    },
+    {
+      "path": "scripts/list_calendars.py",
+      "bytes": 493
+    },
+    {
+      "path": "scripts/list_calendars.swift",
+      "bytes": 2194
+    },
+    {
+      "path": "scripts/list_events.swift",
+      "bytes": 2308
+    },
+    {
+      "path": "scripts/move_event.swift",
+      "bytes": 3333
+    },
+    {
+      "path": "scripts/set_alarm.py",
+      "bytes": 1476
+    },
+    {
+      "path": "scripts/smoke_test.sh",
+      "bytes": 2335
+    },
+    {
+      "path": "scripts/uninstall.sh",
+      "bytes": 260
+    },
+    {
+      "path": "scripts/upsert_event.py",
+      "bytes": 5596
+    },
+    {
+      "path": "scripts/within_2h.py",
+      "bytes": 1274
+    }
+  ]
+}

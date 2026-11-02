@@ -1,0 +1,28 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original disk scan module and extracted validate_duplicate_files helper. Temporary files only. Case-distinct check records skip when host filesystem cannot represent pair; no server/database/services/deletion run.",
+  "authored_controls": [
+    {
+      "name": "rounded MiB group key overwrites earlier similar-size pair",
+      "passed": true,
+      "observed": [
+        200,
+        201
+      ]
+    },
+    {
+      "name": "combined skips additional same-size copy already touching name group",
+      "passed": true,
+      "observed": [
+        "Movie.mkv",
+        "Movie.mkv"
+      ]
+    },
+    {
+      "name": "case-distinct files",
+      "passed": null,
+      "skipped": "temporary filesystem is case-insensitive"
+    }
+  ]
+}

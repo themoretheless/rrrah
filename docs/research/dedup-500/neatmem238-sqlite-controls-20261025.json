@@ -1,0 +1,22 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original SQLite module with abstract base replaced by object; actual stdlib SQLite in-memory only, closed afterwards. Direct store/helper inputs, no HTTP validation, model, disk DB, network or original pytest. NUL helper collision is serialization ambiguity, not SHA256 cryptographic collision.",
+  "authored_controls": [
+    {
+      "name": "name/event timestamp differences intentionally collapse",
+      "passed": true
+    },
+    {
+      "name": "app-specific ordinary count 1 but pending count 2",
+      "passed": true
+    },
+    {
+      "name": "unescaped NUL-delimited role/content fingerprint ambiguity",
+      "passed": true
+    },
+    {
+      "name": "cursor rejects equal and lower sequence",
+      "passed": true
+    }
+  ]
+}

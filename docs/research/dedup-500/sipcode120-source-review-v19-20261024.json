@@ -1,0 +1,65 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v18-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/transcript/parse.test.ts",
+      "local": "parser-tests-tests_modules_transcript_parse.test.ts",
+      "git_blob": "f6536fad28cb02b824a77e24f4ddcacb4a076cef",
+      "sha256": "6e9f05edbb294b23bd89c5c70cbf158ca54640c6fe7714050554090c41ac95da",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/transcripts/older-schema-no-usage.jsonl",
+      "local": "parser-fixture-tests_fixtures_transcripts_older-schema-no-usage.jsonl",
+      "git_blob": "de0db265951b32669a81137485c33a66ef884481",
+      "sha256": "fa32134d695a409fbed3118bf483cec18386cbedcea578c205fa9dffeeb45b4d",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/transcripts/malformed-mid-stream.jsonl",
+      "local": "parser-fixture-tests_fixtures_transcripts_malformed-mid-stream.jsonl",
+      "git_blob": "4ee5603edb5ed57fdff08090776d7bd7c745d02a",
+      "sha256": "ce760ab2c1f932c975ed6cba8f224a9b363cace713aa9cb604a6d663624943c4",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/transcripts/empty.jsonl",
+      "local": "parser-fixture-tests_fixtures_transcripts_empty.jsonl",
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/fixtures/transcripts/multi-model.jsonl",
+      "local": "parser-fixture-tests_fixtures_transcripts_multi-model.jsonl",
+      "git_blob": "595f281c7b8b622c924db4c826a0f5b8733da6a7",
+      "sha256": "e835c1c4127eede2a6d07a25459416212c41c8deb4e5fa77c4adf9fb1e86339d",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 59,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 185,
+    "numPassedTests": 185,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 8,
+  "authored_upstream_controls_total_distinct": 41,
+  "new_authored_controls": 2,
+  "owned_subset_cases_passed": 10,
+  "prior_owned_subset_cases": 8,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "findings": [
+    "Invalidtimestamp stringacceptedbyoriginalschema/parser leadsNaN durationwith0linesskipped.",
+    "Replayidenticalassistant uuid/tool id produces2turns andduplicate100tokens;no replayidempotenceinparser. Malformed/replayedinputboundary only,nolivehostclaim.",
+    "Original8parsecases covernormalfixtures,missingusage,malformedJSON,multimodel,duration;donotcoverinvaliddates orreplay."
+  ],
+  "runtime_scope": "Originalparser/schema/analyzer withVitest2.1.9/zod3.23.8;ownedJSONL plusoriginalfixtures;not actualusersessions",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

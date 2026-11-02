@@ -1,0 +1,68 @@
+Release History - DeDuplicator for Heritrix 3
+~~~~~~~~~~~~~~~
+
+  The following is a list of releases of the DeDuplicator for Heritrix 3. For Heritrix 1 see 
+  {{{./release.html}here}}.   
+  
+  Current stable release is 3.0.0. 
+
+* {3.0.0} (Stable)
+~~~~~~~~~~~~~~~~~~
+
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-dist.tar.gz}deduplicator-3.0.0-dist.tar.gz}}
+  
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-dist.zip}deduplicator-3.0.0-dist.zip}}
+  
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-src.tar.gz}deduplicator-3.0.0-src.tar.gz}}
+  
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-src.zip}deduplicator-3.0.0-src.zip}}
+
+ This release is compatible with Heritrix 3.0.0-3.2.0. It is also mostly compatible with Heritrix 3.3.0-SNAPSHOT builds
+ created before July 21st 2014.
+ 
+ Heritrix 3.3.0 changes greatly how the WarcWriterProcessor and statistics trackers handle duplicates. This is mostly 
+ a good thing, but it does mean that the DeDuplicator will need to be updated and users will need to make sure to
+ use a version of the DeDuplicator that is compatible with their version of Heritrix.
+ 
+ This stable release is built against Heritrix 3.2.0, but is essentially the same as the 20131122 snapshot build 
+ against Heritrix 3.1.0-RC1 that is available below.
+
+  
+* {3.0.0-SNAPSHOT-20131122} 
+~~~~~~~~~~~~~~~~~~
+
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-SNAPSHOT-20131122-dist.tar.gz}deduplicator-3.0.0-SNAPSHOT-20131122-dist.tar.gz}}
+  
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-SNAPSHOT-20131122-dist.zip}deduplicator-3.0.0-SNAPSHOT-20131122-dist.zip}}
+  
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-SNAPSHOT-20131122-src.tar.gz}deduplicator-3.0.0-SNAPSHOT-20131122-src.tar.gz}}
+  
+  * {{{http://landsbokasafn.github.io/SNAPSHOTS/deduplicator-3.0.0-SNAPSHOT-20131122-src.zip}deduplicator-3.0.0-SNAPSHOT-20131122-src.zip}}
+
+ This version is compiled against Heritrix 3.1.0-RC1 and should work with any 3.1.X version. 
+ 
+ Now only considers 2XX successes, ignores 3XX redirects when checking for duplicates.
+
+ See also notes on previous SNAPSHOT release as they still apply. 
+
+* {3.0.0-SNAPSHOT-20100727} 
+~~~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+
+ This version is compiled against Heritrix 3.0.0. 
+
+ It also updates to use Lucene 3.0.2 (from 2.0.0). Please note that changes in
+ the Lucene library mean that memory usage will be approximately 40% greater than
+ before. Memory usage appears to be approximately 5 bytes per URL in index, as 
+ compared to 3.6 bytes per URL previously. Query times have however improved 
+ significantly and are now fixed time without regard for the index size. For
+ large indexes this can mean as much as 10-30 times shorter query times. Building
+ indexes is also much faster (approximately 3-4 times as fast).
+
+ Currently the DeDupFetchHTTP processor has not been converted. 
+ 
+ An option has been added to the DigestIndexer making it possible to not index documents whose size falls 
+ below a configurable threshold.
+ 
+ 

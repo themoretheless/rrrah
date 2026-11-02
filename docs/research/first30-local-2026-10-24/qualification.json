@@ -1,0 +1,125 @@
+{
+  "started_at": "2026-10-24",
+  "completed_at": "2026-10-25",
+  "timezone": "Asia/Tbilisi",
+  "environment": "macOS arm64 Apple M4 Max Metal / local APFS",
+  "execution_summary": {
+    "verified": 11,
+    "blocked": 3,
+    "partial": 3,
+    "rejected": 10,
+    "measured_no_change": 3
+  },
+  "verified_this_pass": [
+    "RR-0013",
+    "RR-0015",
+    "RR-0019"
+  ],
+  "rejected_specific_hypotheses": [
+    "RR-0014",
+    "RR-0016",
+    "RR-0017",
+    "RR-0030"
+  ],
+  "additional_confirmed_fix": "RR-0010 opaque HDR editor panel backing",
+  "remaining_first30": [
+    "RR-0003",
+    "RR-0004",
+    "RR-0005",
+    "RR-0006",
+    "RR-0010",
+    "RR-0028"
+  ],
+  "all_first30_complete": false,
+  "source_sha256": {
+    "crates/rrrah-app/src/first30_remaining.rs": "97f1ec23bb4560817851c02d069fca4bf6fa2ac6cf7980c4bd805c256aaff9b4",
+    "crates/rrrah-app/src/main.rs": "191e5060236c462908e45204720cd68d6cfa564c2ae737d24b32495a193f1630",
+    "crates/rrrah-app/src/gallery.rs": "5e9d40a085d1f0e6c9923d9d051cba80b89d950c2430abf951cb22ab3fec6eec",
+    "crates/rrrah-app/src/model_upload_worker.rs": "068ec67bddb968ce1ce20b11a13c0a3a9dc798384cbdb1e4ba6afa99c99cf66f",
+    "crates/rrrah-gpu/src/lib.rs": "601bf286f8d25f583c4c1869dc76b92f71c115fbc52d3131d401dd4c74af06f9",
+    "crates/rrrah-gpu/src/edit_panel.rs": "ff7de67f5faf8261bb7136b01a152470bc70f6c65e8a0a535f206c3d879ff3b6",
+    "crates/rrrah-gpu/src/telemetry_pass_qualification.rs": "177f60bf58629d360d7611c2f014565fbe4035ac97455da5e74b16ec05fca63c",
+    "crates/rrrah-gpu/src/raw_reuse_qualification.rs": "7d8a949200c0c021470562e1125389b66d6382c9858cfdd8ddf2a5a07f5a94ab",
+    "docs/research/first30-local-2026-10-24/metadata-calls.c": "01248d79ed2a8758f87c4aaac2634e2440540be1f2beab56d998075efac3a84d",
+    "docs/research/first30-local-2026-10-24/run-cover-volume.py": "ea6fd03d5ff792cd9eea8be93a6289647cfb0718329b2e2d64317da9d4ab5dad",
+    "docs/research/first30-local-2026-10-24/run-final-gpu.py": "1458538ecef86533910643f4384b9051c48f0c90674db4ddc95c7566fea88145",
+    "docs/research/first30-local-2026-10-24/summarize.py": "9539f1defb5b33e77571385fd7d553cfdf68c284e0497a419cc05e2521842b66"
+  },
+  "limits": [
+    "Source snapshot is not frozen build attestation",
+    "Specific rejected candidates do not disprove every optimization",
+    "Per-device Metal allocations are not physical dedicated VRAM residency",
+    "APFS remount-cold VFS is not physical cold disk",
+    "One APFS repeat timed out; failure retained, cause unestablished",
+    "Screen-reader settings not changed without pending confirmation",
+    "CUDA/physical HDR/Windows not qualified"
+  ],
+  "tests": {
+    "app-tests.log": {
+      "status": "ok",
+      "passed": 328,
+      "failed": 0,
+      "ignored": 48
+    },
+    "gpu-library-final.log": {
+      "status": "ok",
+      "passed": 77,
+      "failed": 0,
+      "ignored": 7
+    },
+    "model-worker.log": {
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    "idle-skip-final.log": {
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "panel-contrast-final.log": {
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "telemetry-public-api-final.log": {
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "raw-reuse-negative.log": {
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "final_binary_sha256": "bf9888812106acba129b5711ca2ad1a096c93b14c80b1a7c8bc1c6d033e9c60d",
+  "artifact_checks": {
+    "app-tests.log": "expected successful summary",
+    "gpu-library-final.log": "expected successful summary",
+    "model-worker.log": "expected successful summary",
+    "idle-skip-final.log": "expected successful summary",
+    "panel-contrast-final.log": "expected successful summary",
+    "telemetry-public-api-final.log": "expected successful summary",
+    "raw-reuse-negative.log": "expected successful summary",
+    "foreground-124-run2.log.json": "six 1/2/4 producer control/AB groups with ten pairs",
+    "foreground-124-run3.log.json": "six 1/2/4 producer control/AB groups with ten pairs",
+    "telemetry-run1.log.json": "ten control and AB pairs",
+    "telemetry-run2.log.json": "ten control and AB pairs",
+    "cover-volume-results.json": "twenty alternating remount/warm variants, no errors",
+    "cover-counts-final.json": "lstat 10002 to zero, global fstatat zero, global fstat two for both",
+    "HDR panel before/after": "reproduced failure before, eighteen background independence cases after"
+  },
+  "registry_validation": {
+    "tasks": 1000,
+    "first30_execution_records": 30,
+    "strict_snapshot_warnings": 0,
+    "mutation_tests_passed": 6,
+    "diff_check": "passed"
+  }
+}

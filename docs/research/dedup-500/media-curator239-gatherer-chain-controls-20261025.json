@@ -1,0 +1,17 @@
+{
+  "scope": "Original gatherer transpiled; mocked processor, semaphore, reporter and DB; no media decoding; original deduplicator with empty mock DB and mock comparator",
+  "returned_db_error": {
+    "validFiles": [
+      "x.jpg"
+    ],
+    "errorFiles": []
+  },
+  "thrown_db_error": {
+    "validFiles": [],
+    "errorFiles": [
+      "x.jpg"
+    ]
+  },
+  "warning_count": 1,
+  "downstream_missing_db_row_marked_unique": true
+}

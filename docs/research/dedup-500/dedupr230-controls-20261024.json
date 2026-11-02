@@ -1,0 +1,44 @@
+{
+  "repository": "igoramadas/dedupr",
+  "commit": "015246a299dcde2e1004ca2a8f8dd56ad3271f65",
+  "node": "v22.23.4",
+  "transpiler": "3.8.3",
+  "scope": "Original full Dedupr and utils TS transpiled in VM; anyhow logger stub; actual Node crypto and temporary file reads. delete=false and unlink guard. No upstream suite or CLI run.",
+  "authored_controls": [
+    {
+      "name": "1500 bytes different tail after 1024",
+      "passed": true,
+      "observed_duplicates": 1,
+      "byte_equal": false
+    },
+    {
+      "name": "4096 bytes same sampled edges different middle",
+      "passed": true,
+      "observed_duplicates": 1,
+      "byte_equal": false
+    },
+    {
+      "name": "healthy exact copies",
+      "passed": true,
+      "observed_duplicates": 1,
+      "byte_equal": true
+    },
+    {
+      "name": "same size different prefix",
+      "passed": true,
+      "observed_duplicates": 0,
+      "byte_equal": false
+    },
+    {
+      "name": "one physical file",
+      "passed": true,
+      "observed_duplicates": 0,
+      "byte_equal": null
+    },
+    {
+      "name": "repeated identical physical path counts as its own duplicate",
+      "passed": true,
+      "observed_same_path": true
+    }
+  ]
+}

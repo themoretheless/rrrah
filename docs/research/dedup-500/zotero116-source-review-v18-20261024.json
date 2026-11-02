@@ -1,0 +1,63 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v17-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/collectionWatcher.test.mjs",
+      "local": "33-collectionWatcher.test.mjs",
+      "sha256": "646868a67982e1117f6559ffa69b2816672e121a0599162bf2e5c28c75629cf9",
+      "git_blob": "9c4548c36ee579f9ba4eb0031227049885e98ba8",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/syncCoordinator.test.mjs",
+      "local": "34-syncCoordinator.test.mjs",
+      "sha256": "41d0525509bf8a2e6cc21b7c4229f9620fe6163826c47a97bc92ea93a7df9785",
+      "git_blob": "bd10404e4bfb36cc243e761b81723378b13ecd60",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 36,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 31,
+    "new_original_counts": {
+      "collectionWatcher.test.mjs": 25,
+      "syncCoordinator.test.mjs": 6
+    },
+    "original_tests_total_distinct": 426,
+    "new_authored_controls_passed": 2,
+    "total_authored_controls_distinct": 47,
+    "retained_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "scope": "Original complete source/test files unchanged; original collaborators mocked in upstream fixtures. Own probes reuse fixture definitions with original watcher/coordinator; membership handler replaced with minimal last-event state model, baseline explicit promise gate, watchers mocked. No real file actions or real Zotero."
+  },
+  "findings": [
+    {
+      "finding": "All25 original watcher and6 coordinator cases pass; watcher tests setdebounce0 and coordinator runtime mode test transitions only after start completed.",
+      "evidence": "native original Vitest results and full test review"
+    },
+    {
+      "finding": "Same-ID add/remove/add in one batch dispatches onlyadd thenremove because grouping merges equal(event,type) and deduplicates IDs. Minimal downstream last-event model endsabsent despite raw finaladd. Actual membership handler consults current item state and must be reviewed before claiming real membership loss.",
+      "evidence": "native authored dispatch-order control"
+    },
+    {
+      "finding": "Coordinator start checks mode3 thenawaits baseline. While gate pending, mode\u2192mode1 _onModeChanged sees runningfalse so doesnotstop. Releasing baseline lets original start register mocked watchers andsetrunningtrue without recheckingmode. Real callbacks/notifications and eventual next observer event unqualified.",
+      "evidence": "native authored deterministic promise-gate control"
+    },
+    {
+      "finding": "Original start/stop tests do not exercise cancellation or generation fencing across in-flight baseline. Own result is startup lifecycle issue, not evidence any deletion actually occurred.",
+      "evidence": "scope boundary"
+    }
+  ],
+  "remaining": [
+    "64blobs not whole-read",
+    "Review actual membership handler and mirror executor behavior",
+    "Full original suite/live Zotero/runtime and license/release checks incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

@@ -1,0 +1,59 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v21-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/proxy/ast/ts-symbols.test.ts",
+      "local": "nativeast-tests_modules_proxy_ast_ts-symbols.test.ts",
+      "git_blob": "0aa7b7791f7a06c64913b31c854f3aad85780549",
+      "sha256": "0517e5a17e4d059043722431d4b98d5130f9bed14d2b1c3e866e7119159e855a",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/ast/py-symbols.test.ts",
+      "local": "nativeast-tests_modules_proxy_ast_py-symbols.test.ts",
+      "git_blob": "a195d67b8b8d346a79655a80cc23cdf29765c76e",
+      "sha256": "66490ad663f4aa993e9c81d30b4f681f36b9874c6f4d5e8f83c2f229927ad7a4",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/hookAstRead.test.ts",
+      "local": "nativeast-tests_modules_proxy_hookAstRead.test.ts",
+      "git_blob": "1ae998a596de59283466d3d9a335c42ab8acdc49",
+      "sha256": "668a7f2223e4ffd493801b86e4334555b2402be8bfd767ecf12447896719482f",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 72,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 244,
+    "numPassedTests": 244,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 41,
+  "authored_upstream_controls_total_distinct": 46,
+  "new_authored_controls": 2,
+  "owned_subset_cases_passed": 14,
+  "prior_owned_subset_cases": 12,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "native_dependencies": {
+    "tree-sitter": "0.21.1",
+    "tree-sitter-typescript": "0.21.2",
+    "tree-sitter-python": "0.21.0",
+    "vitest": "2.1.9",
+    "node": "22.23.4"
+  },
+  "findings": [
+    "ActualnativeTSrootNode.hasError=true forbrokenfile withvalidtarget;originalextractor returns target andoriginalASThookstilltrims.",
+    "Validnativeparse positivecontrolhasError=falseandtrims;confirms loadedparser notmissing-binding fallback.",
+    "Originalbrokensyntax tests onlyassertArray.isArray,not emptyresult orpassthrough.",
+    "NativeTS/Python extraction andmock-I/OASThook originaltests nowqualifiedonthishost;notrealClaudeReadsemantics/fullpackage/otherplatforms."
+  ],
+  "install_notes": "Initialexacttypescript0.21.0unpublishedETARGET;queriedregistrytheninstalled0.21.2withinproject^0.21.0. Initialinstallfailureearnednotestcredit.",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

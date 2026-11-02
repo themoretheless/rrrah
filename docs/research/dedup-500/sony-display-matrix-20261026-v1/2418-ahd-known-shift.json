@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff",
+    "--verify-known-shift"
+  ],
+  "exit_code": 0,
+  "shift": [
+    12,
+    12
+  ],
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-known-shift.log",
+  "log_sha256": "dc15a048ea47ed2a7317405a87154c030c037fe9b95ff3ed6dd29b7000dce283",
+  "matched_pixels": [
+    "21052230",
+    "21241074",
+    "21472020",
+    "21472020"
+  ],
+  "compared_pixels": [
+    "24000000",
+    "24000000",
+    "24000000",
+    "24000000"
+  ],
+  "scope": "Diagnostic strict and unprojected photometric comparison with fixed integer shift; not the display-projection acceptance gate.",
+  "strict_fraction_both_directions": 0.8946675,
+  "interpretation": "Fixed 12x12 shift yields 89.46675% strict matching in both directions. Geometry correction alone does not satisfy the strict 90% criterion. This does not isolate the display-projection failure, because range-fit and display-projection policies differ."
+}

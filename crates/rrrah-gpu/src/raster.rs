@@ -44,6 +44,9 @@ struct Parameters {
     comparison: [f32; 4],
     sensor_geometry: [u32; 4],
     crop: [u32; 4],
+    authoring: [u32; 4],
+    author_curve: [[f32; 4]; 32],
+    original_curve: [[f32; 4]; 32],
 }
 
 // Balanced tiles minimize padding while respecting negotiated device extents.
@@ -88,6 +91,7 @@ impl RasterTiles {
 /// RGBA16F intermediate. Float output is not physical HDR display configuration.
 #[derive(Debug)]
 pub struct RasterRenderer {
+    edit_states: Option<(rrrah_core::edit::EditState, rrrah_core::edit::EditState)>,
     pipeline: wgpu::RenderPipeline,
     single_layer_pipeline: wgpu::RenderPipeline,
     region_pipeline: Option<wgpu::RenderPipeline>,
@@ -220,6 +224,9 @@ impl RasterRenderer {
             background: [0.018, 0.018, 0.018, 1.0],
             raw_development: [0; 4],
             curve: [[0.0; 4]; 256],
+            authoring: [0; 4],
+            author_curve: [[0.; 4]; 32],
+            original_curve: [[0.; 4]; 32],
             resident_rect: [0, 0, 1, 1],
             comparison: [0.; 4],
             sensor_geometry: [1, 1, 0, 0],
@@ -231,6 +238,7 @@ impl RasterRenderer {
             usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
         });
         Self {
+            edit_states: None,
             pipeline,
             single_layer_pipeline,
             region_pipeline: None,
@@ -866,6 +874,8 @@ impl RasterRenderer {
         self.texture = Some(texture);
         self.texture_reservation = reservation;
         self.parameters.raw_development = [0; 4];
+        self.parameters.authoring = [0; 4];
+        self.edit_states = None;
         self.parameters.image_size = [width as f32, height as f32];
         self.parameters.sensor_geometry = [width, height, 0, 0];
         self.parameters.crop = [0, 0, width, height];
@@ -887,6 +897,46 @@ impl RasterRenderer {
         ];
         self.parameters.curve[..knots.len()].copy_from_slice(&knots);
         queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+    }
+
+    /// Display-only document curves after source development/exposure. Identity
+    /// skips evaluation, preserving signed/HDR samples exactly. Before/after has
+    /// its own baseline curve; source textures and cache identities stay unchanged.
+    pub fn set_edit_curves(
+        &mut self,
+        queue: &wgpu::Queue,
+        current: &rrrah_core::edit::EditState,
+        original: &rrrah_core::edit::EditState,
+    ) -> Result<(), rrrah_core::edit::EditError> {
+        current.validate()?;
+        original.validate()?;
+        if self
+            .edit_states
+            .as_ref()
+            .is_some_and(|(a, b)| a == current && b == original)
+        {
+            return Ok(());
+        }
+
+        let mut curves = [[[0.; 4]; 32]; 2];
+        let mut sizes = [0; 4];
+        for (i, state) in [current, original].into_iter().enumerate() {
+            if state.points() == rrrah_core::edit::EditState::default().points() {
+                continue;
+            }
+            let points: Vec<_> = state.points().iter().map(|p| (p[0], p[1])).collect();
+            let curve = rrrah_core::develop::MonotoneCurve::new(&points)
+                .map_err(|_| rrrah_core::edit::EditError::Invalid)?;
+            let knots = curve.gpu_knots();
+            curves[i][..knots.len()].copy_from_slice(&knots);
+            sizes[i] = knots.len() as u32;
+        }
+        self.edit_states = Some((*current, *original));
+        self.parameters.authoring = sizes;
+        self.parameters.author_curve = curves[0];
+        self.parameters.original_curve = curves[1];
+        queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));
+        Ok(())
     }
 
     /// Integrate premultiplied linear pixels over the output pixel footprint when shrinking.
@@ -1036,6 +1086,136 @@ fn normalized_view(view: ViewParameters) -> ViewParameters {
 #[cfg(test)]
 mod tile_admission_tests {
     use super::*;
+    #[test]
+    fn authoring_shader_and_host_layout_validate() {
+        let module = naga::front::wgsl::parse_str(include_str!("../shaders/raster_view.wgsl")).unwrap();
+        naga::valid::Validator::new(
+            naga::valid::ValidationFlags::all(),
+            naga::valid::Capabilities::all(),
+        )
+        .validate(&module)
+        .unwrap();
+        let (_, ty) = module
+            .types
+            .iter()
+            .find(|(_, t)| t.name.as_deref() == Some("Parameters"))
+            .unwrap();
+        let naga::TypeInner::Struct { span, .. } = &ty.inner else {
+            panic!("uniform not a struct")
+        };
+        assert_eq!(*span as usize, std::mem::size_of::<Parameters>());
+    }
+    #[test]
+    #[cfg(target_os = "macos")]
+    fn authoring_curve_before_after_and_hdr_readback_metal() {
+        let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+        descriptor.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(descriptor);
+        let adapter =
+            pollster::block_on(instance.request_adapter(&Default::default())).expect("actual Metal required");
+        eprintln!("authoring curve adapter: {:?}", adapter.get_info());
+        let (device, queue) = pollster::block_on(adapter.request_device(&Default::default())).unwrap();
+        let mut renderer = RasterRenderer::create(&device, wgpu::TextureFormat::Rgba32Float);
+        let current = rrrah_core::edit::EditState::default()
+            .with_curve(&[[0., 0.], [0.25, 0.5], [1., 1.]])
+            .unwrap();
+        for value in [0.25f32, 2., -0.125, 0., f32::MAX] {
+            let raster = DecodedRaster::new(
+                1,
+                1,
+                RasterPixels::Rgba32Float(std::sync::Arc::new(vec![value, value, value, 1.]).into()),
+                RasterColorSpace::LinearSrgb,
+            )
+            .unwrap();
+            renderer.upload(&device, &queue, &raster).unwrap();
+            renderer.update_view(
+                &queue,
+                ViewParameters {
+                    viewport: [2., 1.],
+                    zoom: 4.,
+                    ..Default::default()
+                },
+            );
+            renderer.set_comparison(&queue, 0.5, 0.);
+            let edited = if value == 0. {
+                rrrah_core::edit::EditState::default()
+                    .with_curve(&[[0., 0.125], [1., 1.]])
+                    .unwrap()
+            } else {
+                current
+            };
+            renderer
+                .set_edit_curves(&queue, &edited, &rrrah_core::edit::EditState::default())
+                .unwrap();
+            let target = device.create_texture(&wgpu::TextureDescriptor {
+                label: None,
+                size: wgpu::Extent3d {
+                    width: 2,
+                    height: 1,
+                    depth_or_array_layers: 1,
+                },
+                mip_level_count: 1,
+                sample_count: 1,
+                dimension: wgpu::TextureDimension::D2,
+                format: wgpu::TextureFormat::Rgba32Float,
+                usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+                view_formats: &[],
+            });
+            let read = device.create_buffer(&wgpu::BufferDescriptor {
+                label: None,
+                size: 256,
+                usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
+                mapped_at_creation: false,
+            });
+            let mut encoder = device.create_command_encoder(&Default::default());
+            renderer.encode(&mut encoder, &target.create_view(&Default::default()));
+            encoder.copy_texture_to_buffer(
+                wgpu::TexelCopyTextureInfo {
+                    texture: &target,
+                    mip_level: 0,
+                    origin: wgpu::Origin3d::ZERO,
+                    aspect: wgpu::TextureAspect::All,
+                },
+                wgpu::TexelCopyBufferInfo {
+                    buffer: &read,
+                    layout: wgpu::TexelCopyBufferLayout {
+                        offset: 0,
+                        bytes_per_row: Some(256),
+                        rows_per_image: Some(1),
+                    },
+                },
+                wgpu::Extent3d {
+                    width: 2,
+                    height: 1,
+                    depth_or_array_layers: 1,
+                },
+            );
+            queue.submit([encoder.finish()]);
+            let (tx, rx) = std::sync::mpsc::channel();
+            read.slice(..)
+                .map_async(wgpu::MapMode::Read, move |r| tx.send(r).unwrap());
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            rx.recv().unwrap().unwrap();
+            let mapped = read.slice(..).get_mapped_range().unwrap();
+            let pixels = bytemuck::cast_slice::<u8, f32>(&mapped[..32]);
+            let after = if value == 0.25 {
+                0.5
+            } else if value == 0. {
+                0.125
+            } else {
+                value
+            };
+            for c in 0..3 {
+                assert!((pixels[c] - value).abs() < 1e-5, "before: {pixels:?}");
+                assert!((pixels[c + 4] - after).abs() < 1e-5, "after: {pixels:?}");
+            }
+            drop(mapped);
+            read.unmap();
+        }
+        eprintln!(
+            "authoring curve Metal: before identity, authored midpoint and lifted black, signed and >1 HDR preserved"
+        );
+    }
     #[test]
     #[cfg(target_os = "macos")]
     fn area_float32_extreme_channel_scaling_metal() {
@@ -1331,6 +1511,165 @@ mod tile_admission_tests {
     }
 
     #[test]
+    #[cfg(target_os = "macos")]
+    #[ignore = "actual Metal full-frame A/A and A/B including native allocation samples"]
+    fn view_uniform_full_frame_pairs() {
+        use objc2_metal::{MTLCopyAllDevices, MTLDevice};
+        let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+        descriptor.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(descriptor);
+        let adapter = pollster::block_on(instance.request_adapter(&Default::default())).unwrap();
+        eprintln!("FRAME_UNIFORM_ADAPTER {:?}", adapter.get_info());
+        assert!(adapter.features().contains(wgpu::Features::TIMESTAMP_QUERY));
+        let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+            required_features: wgpu::Features::TIMESTAMP_QUERY,
+            ..Default::default()
+        }))
+        .unwrap();
+        let all = MTLCopyAllDevices();
+        assert_eq!(all.len(), 1);
+        let native = all.objectAtIndex(0);
+        assert_eq!(native.name().to_string(), adapter.get_info().name);
+        let before = native.currentAllocatedSize();
+        let challenge = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: 8 * 1024 * 1024,
+            usage: wgpu::BufferUsages::COPY_DST,
+            mapped_at_creation: true,
+        });
+        challenge.get_mapped_range_mut(..).unwrap().slice(..).fill(1);
+        challenge.unmap();
+        assert!(native.currentAllocatedSize() >= before + 8 * 1024 * 1024);
+        drop(challenge);
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        let budget = rrrah_core::MemoryBudget::new(65536);
+        let mut renderer = RasterRenderer::new_linear_hdr_with_budget(&device, budget.clone());
+        let values: Vec<f32> = (0..4096)
+            .flat_map(|i| [0.1 + (i % 64) as f32 / 128., 0.2, 0.3, 1.])
+            .collect();
+        let source = DecodedRaster::new(
+            64,
+            64,
+            RasterPixels::Rgba32Float(std::sync::Arc::new(values).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        renderer.upload(&device, &queue, &source).unwrap();
+        let target = device.create_texture(&wgpu::TextureDescriptor {
+            label: None,
+            size: wgpu::Extent3d {
+                width: 1920,
+                height: 1080,
+                depth_or_array_layers: 1,
+            },
+            mip_level_count: 1,
+            sample_count: 1,
+            dimension: wgpu::TextureDimension::D2,
+            format: wgpu::TextureFormat::Rgba16Float,
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+            view_formats: &[],
+        });
+        let target_view = target.create_view(&Default::default());
+        let view = ViewParameters {
+            viewport: [1920., 1080.],
+            zoom: 2.,
+            ..Default::default()
+        };
+        renderer.update_view(&queue, view);
+        queue.submit([]);
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        let queries = device.create_query_set(&wgpu::QuerySetDescriptor {
+            label: None,
+            ty: wgpu::QueryType::Timestamp,
+            count: 2,
+        });
+        let resolved = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: 256,
+            usage: wgpu::BufferUsages::QUERY_RESOLVE | wgpu::BufferUsages::COPY_SRC,
+            mapped_at_creation: false,
+        });
+        let read = device.create_buffer(&wgpu::BufferDescriptor {
+            label: None,
+            size: 16,
+            usage: wgpu::BufferUsages::COPY_DST | wgpu::BufferUsages::MAP_READ,
+            mapped_at_creation: false,
+        });
+        for control in [true, false] {
+            for pair in 0..13 {
+                for mode in [pair % 2, 1 - pair % 2] {
+                    let mut times = Vec::new();
+                    let mut cpu = Vec::new();
+                    let mut gpu = Vec::new();
+                    let mut peak = 0;
+                    for _ in 0..30 {
+                        let start = std::time::Instant::now();
+                        if !control && mode == 0 {
+                            queue.write_buffer(
+                                &renderer.uniform,
+                                0,
+                                bytemuck::bytes_of(&renderer.parameters),
+                            );
+                        } else {
+                            renderer.update_view(&queue, view);
+                        }
+                        let mut encoder = device.create_command_encoder(&Default::default());
+                        renderer.encode_with_timestamps(
+                            &mut encoder,
+                            &target_view,
+                            Some(wgpu::RenderPassTimestampWrites {
+                                query_set: &queries,
+                                beginning_of_pass_write_index: Some(0),
+                                end_of_pass_write_index: Some(1),
+                            }),
+                        );
+                        queue.submit([encoder.finish()]);
+                        cpu.push(start.elapsed().as_nanos());
+                        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+                        times.push(start.elapsed().as_nanos());
+                        let mut encoder = device.create_command_encoder(&Default::default());
+                        encoder.resolve_query_set(&queries, 0..2, &resolved, 0);
+                        encoder.copy_buffer_to_buffer(&resolved, 0, &read, 0, 16);
+                        queue.submit([encoder.finish()]);
+                        let (tx, rx) = std::sync::mpsc::channel();
+                        read.slice(..)
+                            .map_async(wgpu::MapMode::Read, move |r| tx.send(r).unwrap());
+                        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+                        rx.recv().unwrap().unwrap();
+                        let mapped = read.slice(..).get_mapped_range().unwrap();
+                        let begin = u64::from_le_bytes(mapped[..8].try_into().unwrap());
+                        let end = u64::from_le_bytes(mapped[8..16].try_into().unwrap());
+                        assert!(end > begin);
+                        gpu.push(((end - begin) as f64 * f64::from(queue.get_timestamp_period())) as u128);
+                        drop(mapped);
+                        read.unmap();
+                        peak = peak.max(native.currentAllocatedSize());
+                    }
+                    times.sort_unstable();
+                    cpu.sort_unstable();
+                    gpu.sort_unstable();
+                    assert_eq!(budget.used(), 65536);
+                    if pair >= 3 {
+                        eprintln!(
+                            "FRAME_UNIFORM control={control} pair={} mode={mode} p50_ns={} p95_ns={} cpu_p95_ns={} gpu_p95_ns={} frames=30 native_peak={peak} source_budget=65536",
+                            pair - 3,
+                            times[14],
+                            times[28],
+                            cpu[28],
+                            gpu[28]
+                        );
+                    }
+                }
+            }
+        }
+        drop(renderer);
+        drop(target_view);
+        drop(target);
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        assert_eq!(budget.used(), 0);
+        eprintln!("FRAME_UNIFORM_COMPLETE managed_final=0");
+    }
+    #[test]
     #[ignore = "manual actual Metal paired uniform-update timing for RR-0027"]
     fn repeated_view_uniform_ab_probe() {
         let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
@@ -1468,6 +1807,166 @@ mod tile_admission_tests {
             .unwrap(),
             None
         );
+    }
+
+    #[test]
+    #[cfg(target_os = "macos")]
+    #[ignore = "actual Metal constrained-device upload rollback and exact SDR/HDR readback"]
+    fn constrained_metal_refusal_partial_cancel_and_retry_keep_previous_frame() {
+        let mut descriptor = wgpu::InstanceDescriptor::new_without_display_handle();
+        descriptor.backends = wgpu::Backends::METAL;
+        let instance = wgpu::Instance::new(descriptor);
+        let adapter =
+            pollster::block_on(instance.request_adapter(&Default::default())).expect("required Metal");
+        let limits = wgpu::Limits {
+            max_texture_dimension_2d: 64,
+            max_texture_array_layers: 2,
+            ..Default::default()
+        };
+        let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
+            required_limits: limits,
+            ..Default::default()
+        }))
+        .unwrap();
+        assert_eq!(device.limits().max_texture_dimension_2d, 64);
+        assert_eq!(device.limits().max_texture_array_layers, 2);
+        eprintln!("constrained Metal adapter={:?}", adapter.get_info());
+        let frame = |width, height, color: [f32; 4]| {
+            DecodedRaster::new(
+                width,
+                height,
+                RasterPixels::Rgba32Float(
+                    std::sync::Arc::new(color.repeat(width as usize * height as usize)).into(),
+                ),
+                RasterColorSpace::LinearSrgb,
+            )
+            .unwrap()
+        };
+        for format in [
+            wgpu::TextureFormat::Rgba8UnormSrgb,
+            wgpu::TextureFormat::Rgba16Float,
+        ] {
+            let root = rrrah_core::MemoryBudget::new(192);
+            let uploads = rrrah_core::MemoryBudget::new(1024);
+            let mut renderer = RasterRenderer::create(&device, format);
+            renderer.memory_budget = Some(root.clone());
+            renderer.upload_queue_budget = Some(uploads.clone());
+            renderer
+                .upload(&device, &queue, &frame(1, 1, [0.25, 0.5, 4., 1.]))
+                .unwrap();
+            renderer.update_view(
+                &queue,
+                ViewParameters {
+                    viewport: [4., 4.],
+                    zoom: 4.,
+                    ..Default::default()
+                },
+            );
+            let readback = |renderer: &RasterRenderer| {
+                let target = device.create_texture(&wgpu::TextureDescriptor {
+                    label: None,
+                    size: wgpu::Extent3d {
+                        width: 4,
+                        height: 4,
+                        depth_or_array_layers: 1,
+                    },
+                    mip_level_count: 1,
+                    sample_count: 1,
+                    dimension: wgpu::TextureDimension::D2,
+                    format,
+                    usage: wgpu::TextureUsages::RENDER_ATTACHMENT | wgpu::TextureUsages::COPY_SRC,
+                    view_formats: &[],
+                });
+                let read = device.create_buffer(&wgpu::BufferDescriptor {
+                    label: None,
+                    size: 1024,
+                    usage: wgpu::BufferUsages::MAP_READ | wgpu::BufferUsages::COPY_DST,
+                    mapped_at_creation: false,
+                });
+                let mut encoder = device.create_command_encoder(&Default::default());
+                renderer.encode(&mut encoder, &target.create_view(&Default::default()));
+                encoder.copy_texture_to_buffer(
+                    wgpu::TexelCopyTextureInfo {
+                        texture: &target,
+                        mip_level: 0,
+                        origin: wgpu::Origin3d::ZERO,
+                        aspect: wgpu::TextureAspect::All,
+                    },
+                    wgpu::TexelCopyBufferInfo {
+                        buffer: &read,
+                        layout: wgpu::TexelCopyBufferLayout {
+                            offset: 0,
+                            bytes_per_row: Some(256),
+                            rows_per_image: Some(4),
+                        },
+                    },
+                    wgpu::Extent3d {
+                        width: 4,
+                        height: 4,
+                        depth_or_array_layers: 1,
+                    },
+                );
+                queue.submit([encoder.finish()]);
+                let (tx, rx) = std::sync::mpsc::channel();
+                read.slice(..)
+                    .map_async(wgpu::MapMode::Read, move |result| tx.send(result).unwrap());
+                device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+                rx.recv().unwrap().unwrap();
+                let mapped = read.slice(..).get_mapped_range().unwrap();
+                let mut pixels = Vec::new();
+                let row = if format == wgpu::TextureFormat::Rgba16Float {
+                    32
+                } else {
+                    16
+                };
+                for y in 0..4 {
+                    pixels.extend_from_slice(&mapped[y * 256..y * 256 + row]);
+                }
+                drop(mapped);
+                read.unmap();
+                pixels
+            };
+            let before = readback(&renderer);
+            let parameters = bytemuck::bytes_of(&renderer.parameters).to_vec();
+            assert_eq!((root.used(), uploads.used()), (16, 0));
+            let error_scope = device.push_error_scope(wgpu::ErrorFilter::Validation);
+            assert!(matches!(
+                renderer.upload(&device, &queue, &frame(129, 1, [0., 0., 0., 1.])),
+                Err(RasterUploadError::TextureLimit)
+            ));
+            assert_eq!((root.used(), uploads.used()), (16, 0));
+            let replacement = frame(2, 2, [0.75, 0.125, 2., 1.]);
+            let pressure = root.try_reserve(root.limit() - root.used()).unwrap();
+            assert!(matches!(
+                renderer.upload(&device, &queue, &replacement),
+                Err(RasterUploadError::Memory(_))
+            ));
+            drop(pressure);
+            let mut admitted_polls = 0;
+            assert!(matches!(
+                renderer.upload_with_cancel(&device, &queue, &replacement, || {
+                    if root.used() > 16 && uploads.used() > 0 {
+                        admitted_polls += 1;
+                    }
+                    admitted_polls >= 3
+                }),
+                Err(RasterUploadError::Cancelled)
+            ));
+            assert_eq!(admitted_polls, 3); // After admission, layer entry, then one queued tile write.
+            assert_eq!(bytemuck::bytes_of(&renderer.parameters), parameters);
+            assert_eq!(readback(&renderer), before);
+            assert_eq!((root.used(), uploads.used()), (16, 0));
+            assert!(pollster::block_on(error_scope.pop()).is_none());
+            renderer.upload(&device, &queue, &replacement).unwrap();
+            assert_ne!(readback(&renderer), before);
+            assert_eq!((root.used(), uploads.used()), (64, 0));
+            drop(renderer);
+            device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!((root.used(), uploads.used()), (0, 0));
+            eprintln!(
+                "{format:?}: texture-limit/memory/partial-write cancellation; old attachment+uniforms exact; retry changed frame; final GPU/upload credit=0"
+            );
+        }
     }
 
     #[test]

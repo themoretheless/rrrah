@@ -1,0 +1,729 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package authmaterial
+
+import (
+	"context"
+	"crypto/rand"
+	"crypto/sha256"
+	"crypto/subtle"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+	"slices"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/autobrr/upbrr/internal/apitoken"
+	"github.com/autobrr/upbrr/internal/redaction"
+
+	"golang.org/x/crypto/argon2"
+)
+
+const (
+	// AuthPasswordMinLength defines the minimum web auth password length.
+	AuthPasswordMinLength = 12
+
+	// OWASP Password Storage Cheat Sheet Argon2id baseline.
+	authArgon2Time        = 2
+	authArgon2MemoryKB    = 19 * 1024
+	authArgon2Parallelism = 1
+	authArgon2KeyLen      = 32
+	authArgon2Version     = argon2.Version
+
+	legacyAuthArgon2Time        = 1
+	legacyAuthArgon2MemoryKB    = 64 * 1024
+	legacyAuthArgon2Parallelism = 4
+	legacyAuthArgon2KeyLen      = 32
+)
+
+// Record is the persisted web-auth state. PendingUpgrade makes auth-dependent
+// data rewrap resumable without replacing the active credentials early.
+type Record struct {
+	Username                string          `json:"username"`
+	PasswordHash            string          `json:"password_hash"`
+	EncryptionKeySeed       string          `json:"encryption_key_seed,omitempty"`
+	APIKeys                 []APIKeyRecord  `json:"api_keys,omitempty"`
+	AllowUnencryptedExport  bool            `json:"allow_unencrypted_export,omitempty"`
+	BrowseRoot              string          `json:"browse_root,omitempty"`
+	AllowUnrestrictedBrowse bool            `json:"allow_unrestricted_browse,omitempty"`
+	PendingUpgrade          *PendingUpgrade `json:"pending_upgrade,omitempty"`
+	CreatedAt               time.Time       `json:"created_at"`
+}
+
+// APIKeyRecord is one persisted bearer-key hash plus safe operator metadata.
+// APIKeyHash is a one-way SHA-256 digest of a high-entropy generated token.
+type APIKeyRecord struct {
+	ID         string           `json:"id"`
+	Name       string           `json:"name"`
+	OwnerID    string           `json:"owner_id"`
+	APIKeyHash string           `json:"api_key_hash"`
+	Scopes     []apitoken.Scope `json:"scopes"`
+	CreatedAt  time.Time        `json:"created_at"`
+	RevokedAt  *time.Time       `json:"revoked_at,omitempty"`
+}
+
+// PendingUpgrade stores the target auth record and the last completed rewrap
+// stage while the active record remains unchanged.
+type PendingUpgrade struct {
+	Stage     string    `json:"stage"`
+	Target    Record    `json:"target"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+const (
+	UpgradeStagePrepared         = "prepared"
+	UpgradeStageCookiesRewrapped = "cookies_rewrapped"
+	UpgradeStageDataRewrapped    = "data_rewrapped"
+)
+
+// Store serializes operations performed through one web-auth file handle.
+// Writes use a same-directory temporary file, sync it, set mode 0600, then
+// rename it over the active record.
+type Store struct {
+	path string
+	mu   sync.Mutex
+}
+
+// NewStore targets web-auth.json beside dbPath and creates its parent directory.
+func NewStore(dbPath string) (*Store, error) {
+	dir := filepath.Dir(strings.TrimSpace(dbPath))
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return nil, fmt.Errorf("web auth: create config dir: %w", err)
+	}
+	return &Store{path: filepath.Join(dir, WebAuthFileName)}, nil
+}
+
+// AuthFilePath returns the web-auth.json path beside dbPath without touching
+// the filesystem.
+func AuthFilePath(dbPath string) string {
+	return filepath.Join(filepath.Dir(strings.TrimSpace(dbPath)), WebAuthFileName)
+}
+
+// BootstrapAuthFile creates the initial auth record and refuses to overwrite
+// an existing record.
+func BootstrapAuthFile(dbPath string, username string, password string) error {
+	store, err := NewStore(dbPath)
+	if err != nil {
+		return err
+	}
+	return store.Bootstrap(username, password)
+}
+
+// Exists reports whether the store's auth file currently exists.
+func (s *Store) Exists() (bool, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	_, err := os.Stat(s.path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, fmt.Errorf("web auth: stat auth file: %w", err)
+}
+
+// Load reads the persisted record without applying the stricter usability and
+// permission checks performed by [LoadRecordFromDBPath].
+func (s *Store) Load() (Record, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.loadLocked()
+}
+
+// CreateBackup copies the current auth file bytes to a unique secure file
+// beside it. Completed backups are never overwritten or removed.
+func (s *Store) CreateBackup() (string, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	raw, err := os.ReadFile(s.path)
+	if err != nil {
+		return "", fmt.Errorf("web auth: read auth file for backup: %w", err)
+	}
+
+	backupFile, err := os.CreateTemp(filepath.Dir(s.path), filepath.Base(s.path)+".backup-*")
+	if err != nil {
+		return "", fmt.Errorf("web auth: create backup file: %w", err)
+	}
+	backupPath := backupFile.Name()
+
+	if err := backupFile.Chmod(0o600); err != nil {
+		_ = backupFile.Close()
+		_ = os.Remove(backupPath)
+		return "", fmt.Errorf("web auth: chmod backup file: %w", err)
+	}
+	if _, err := backupFile.Write(raw); err != nil {
+		_ = backupFile.Close()
+		_ = os.Remove(backupPath)
+		return "", fmt.Errorf("web auth: write backup file: %w", err)
+	}
+	if err := backupFile.Sync(); err != nil {
+		_ = backupFile.Close()
+		_ = os.Remove(backupPath)
+		return "", fmt.Errorf("web auth: sync backup file: %w", err)
+	}
+	if err := backupFile.Close(); err != nil {
+		_ = os.Remove(backupPath)
+		return "", fmt.Errorf("web auth: close backup file: %w", err)
+	}
+
+	return backupPath, nil
+}
+
+// loadLocked is intentionally separate so read-modify-write operations hold
+// one store lock across both the read and atomic replacement.
+func (s *Store) loadLocked() (Record, error) {
+	raw, err := os.ReadFile(s.path)
+	if err != nil {
+		return Record{}, fmt.Errorf("web auth: read auth file: %w", err)
+	}
+	var record Record
+	if err := json.Unmarshal(raw, &record); err != nil {
+		return Record{}, fmt.Errorf("web auth: unmarshal auth file: %s", redaction.RedactValue(err.Error(), nil))
+	}
+	return record, nil
+}
+
+// Bootstrap hashes the password, generates a stable encryption seed, and
+// creates a new record. It refuses to replace an existing auth file.
+func (s *Store) Bootstrap(username string, password string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if _, err := os.Stat(s.path); err == nil {
+		return errors.New("web auth: user already exists")
+	}
+
+	hash, err := HashPassword(password)
+	if err != nil {
+		return err
+	}
+	seed, err := GenerateSeed()
+	if err != nil {
+		return err
+	}
+
+	record := Record{
+		Username:          strings.TrimSpace(username),
+		PasswordHash:      hash,
+		EncryptionKeySeed: seed,
+		CreatedAt:         time.Now().UTC(),
+	}
+	return s.saveLocked(record)
+}
+
+// UpdatePasswordHash replaces only the hash when username and current hash
+// still match the active record.
+func (s *Store) UpdatePasswordHash(username string, currentPasswordHash string, passwordHash string) error {
+	return s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(username) {
+			return errors.New("web auth: user mismatch")
+		}
+		if strings.TrimSpace(record.PasswordHash) != strings.TrimSpace(currentPasswordHash) {
+			return errors.New("web auth: password changed during update")
+		}
+		record.PasswordHash = strings.TrimSpace(passwordHash)
+		return nil
+	})
+}
+
+// InitializeBrowsePolicy atomically persists the first WebUI browse policy. It
+// returns false without modifying a policy that was already configured.
+func (s *Store) InitializeBrowsePolicy(username string, browseRoot string, allowUnrestricted bool) (bool, error) {
+	browseRoot = strings.TrimSpace(browseRoot)
+	if allowUnrestricted && browseRoot != "" {
+		return false, errors.New("web auth: unrestricted browsing cannot be combined with browse roots")
+	}
+	if !allowUnrestricted && browseRoot == "" {
+		return false, errors.New("web auth: at least one browse root is required")
+	}
+
+	initialized := false
+	err := s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(username) {
+			return errors.New("web auth: user mismatch")
+		}
+		if strings.TrimSpace(record.BrowseRoot) != "" || record.AllowUnrestrictedBrowse {
+			return nil
+		}
+
+		record.BrowseRoot = browseRoot
+		record.AllowUnrestrictedBrowse = allowUnrestricted
+		if record.PendingUpgrade != nil {
+			record.PendingUpgrade.Target.BrowseRoot = record.BrowseRoot
+			record.PendingUpgrade.Target.AllowUnrestrictedBrowse = allowUnrestricted
+		}
+		initialized = true
+		return nil
+	})
+	return initialized, err
+}
+
+// UpdateRecord replaces mutable auth, export, browse, and upgrade fields while
+// preserving the active username and creation time.
+func (s *Store) UpdateRecord(updated Record) error {
+	return s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(updated.Username) {
+			return errors.New("web auth: user mismatch")
+		}
+
+		record.PasswordHash = strings.TrimSpace(updated.PasswordHash)
+		record.EncryptionKeySeed = strings.TrimSpace(updated.EncryptionKeySeed)
+		record.AllowUnencryptedExport = updated.AllowUnencryptedExport
+		record.BrowseRoot = strings.TrimSpace(updated.BrowseRoot)
+		record.AllowUnrestrictedBrowse = updated.AllowUnrestrictedBrowse
+		record.PendingUpgrade = updated.PendingUpgrade
+		return nil
+	})
+}
+
+// BeginPendingUpgrade records target at the prepared stage only if current
+// still matches the active auth and browse settings.
+func (s *Store) BeginPendingUpgrade(current Record, target Record) error {
+	return s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(current.Username) {
+			return errors.New("web auth: user mismatch")
+		}
+		if strings.TrimSpace(record.PasswordHash) != strings.TrimSpace(current.PasswordHash) ||
+			strings.TrimSpace(record.EncryptionKeySeed) != strings.TrimSpace(current.EncryptionKeySeed) ||
+			record.AllowUnencryptedExport != current.AllowUnencryptedExport ||
+			strings.TrimSpace(record.BrowseRoot) != strings.TrimSpace(current.BrowseRoot) ||
+			record.AllowUnrestrictedBrowse != current.AllowUnrestrictedBrowse {
+			return errors.New("web auth: auth record changed during upgrade")
+		}
+
+		target.PendingUpgrade = nil
+		target.APIKeys = nil
+		record.PendingUpgrade = &PendingUpgrade{
+			Stage:     UpgradeStagePrepared,
+			Target:    target,
+			UpdatedAt: time.Now().UTC(),
+		}
+		return nil
+	})
+}
+
+// AdvancePendingUpgrade sets any recognized upgrade stage. It validates the
+// stage name but does not enforce forward-only transitions.
+func (s *Store) AdvancePendingUpgrade(username string, stage string) error {
+	stage = strings.TrimSpace(stage)
+	switch stage {
+	case UpgradeStagePrepared, UpgradeStageCookiesRewrapped, UpgradeStageDataRewrapped:
+	default:
+		return fmt.Errorf("web auth: invalid upgrade stage %q", stage)
+	}
+
+	return s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(username) {
+			return errors.New("web auth: user mismatch")
+		}
+		if record.PendingUpgrade == nil {
+			return errors.New("web auth: no pending upgrade")
+		}
+		record.PendingUpgrade.Stage = stage
+		record.PendingUpgrade.UpdatedAt = time.Now().UTC()
+		return nil
+	})
+}
+
+// FinalizePendingUpgrade replaces the active record with its pending target,
+// clears pending state, and preserves the original creation time.
+func (s *Store) FinalizePendingUpgrade(username string) (Record, error) {
+	var finalized Record
+
+	err := s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(username) {
+			return errors.New("web auth: user mismatch")
+		}
+		if record.PendingUpgrade == nil {
+			return errors.New("web auth: no pending upgrade")
+		}
+
+		target := record.PendingUpgrade.Target
+		target.PendingUpgrade = nil
+		target.APIKeys = cloneAPIKeyRecords(record.APIKeys)
+		target.CreatedAt = record.CreatedAt
+		*record = target
+		finalized = target
+		return nil
+	})
+
+	return finalized, err
+}
+
+// ClearPendingUpgrade removes pending upgrade state without changing active
+// auth or browse settings.
+func (s *Store) ClearPendingUpgrade(username string) error {
+	return s.updateRecordLocked(func(record *Record) error {
+		if record.Username != strings.TrimSpace(username) {
+			return errors.New("web auth: user mismatch")
+		}
+		record.PendingUpgrade = nil
+		return nil
+	})
+}
+
+func (s *Store) updateRecordLocked(apply func(record *Record) error) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	record, err := s.loadLocked()
+	if err != nil {
+		return err
+	}
+	if err := apply(&record); err != nil {
+		return err
+	}
+
+	return s.saveLocked(record)
+}
+
+// CreateAPIToken appends one generated-key hash to web-auth.json.
+func (s *Store) CreateAPIToken(ctx context.Context, stored apitoken.StoredRecord) error {
+	if err := ctx.Err(); err != nil {
+		return fmt.Errorf("web auth: create API key canceled: %w", err)
+	}
+	encodedHash := base64.RawStdEncoding.EncodeToString(stored.TokenHash[:])
+	return s.updateRecordLocked(func(record *Record) error {
+		if err := ctx.Err(); err != nil {
+			return fmt.Errorf("web auth: create API key canceled: %w", err)
+		}
+		if !record.AuthMaterial().IsUsable() {
+			return ErrUnavailable
+		}
+		for _, existing := range record.APIKeys {
+			if existing.ID == stored.ID || existing.APIKeyHash == encodedHash {
+				return errors.New("web auth: duplicate API key")
+			}
+		}
+		record.APIKeys = append(record.APIKeys, APIKeyRecord{
+			ID:         stored.ID,
+			Name:       stored.Name,
+			OwnerID:    stored.OwnerID,
+			APIKeyHash: encodedHash,
+			Scopes:     append([]apitoken.Scope(nil), stored.Scopes...),
+			CreatedAt:  stored.CreatedAt,
+		})
+		return nil
+	})
+}
+
+// ListAPITokens returns safe metadata newest first; hashes remain private.
+func (s *Store) ListAPITokens(ctx context.Context) ([]apitoken.Record, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, fmt.Errorf("web auth: list API keys canceled: %w", err)
+	}
+	record, err := s.Load()
+	if err != nil {
+		return nil, fmt.Errorf("web auth: list API keys: %w", err)
+	}
+	if !record.AuthMaterial().IsUsable() {
+		return nil, ErrUnavailable
+	}
+	result := make([]apitoken.Record, 0, len(record.APIKeys))
+	for _, v := range slices.Backward(record.APIKeys) {
+		result = append(result, apiKeyMetadata(v))
+	}
+	return result, nil
+}
+
+// FindActiveAPITokenByHash resolves active metadata with constant-time hash comparison.
+func (s *Store) FindActiveAPITokenByHash(
+	ctx context.Context,
+	hash [sha256.Size]byte,
+) (apitoken.Record, error) {
+	if err := ctx.Err(); err != nil {
+		return apitoken.Record{}, fmt.Errorf("web auth: authenticate API key canceled: %w", err)
+	}
+	record, err := s.Load()
+	if err != nil {
+		return apitoken.Record{}, fmt.Errorf("web auth: authenticate API key: %w", err)
+	}
+	if !record.AuthMaterial().IsUsable() {
+		return apitoken.Record{}, ErrUnavailable
+	}
+	for _, candidate := range record.APIKeys {
+		decoded, err := base64.RawStdEncoding.DecodeString(strings.TrimSpace(candidate.APIKeyHash))
+		if err != nil || len(decoded) != sha256.Size {
+			return apitoken.Record{}, errors.New("web auth: invalid stored API key hash")
+		}
+		if candidate.RevokedAt == nil && subtle.ConstantTimeCompare(hash[:], decoded) == 1 {
+			return apiKeyMetadata(candidate), nil
+		}
+	}
+	return apitoken.Record{}, apitoken.ErrNotFound
+}
+
+// RevokeAPIToken marks one active key revoked while retaining audit metadata.
+func (s *Store) RevokeAPIToken(ctx context.Context, id string, revokedAt time.Time) (bool, error) {
+	if err := ctx.Err(); err != nil {
+		return false, fmt.Errorf("web auth: revoke API key canceled: %w", err)
+	}
+	revoked := false
+	err := s.updateRecordLocked(func(record *Record) error {
+		if err := ctx.Err(); err != nil {
+			return fmt.Errorf("web auth: revoke API key canceled: %w", err)
+		}
+		if !record.AuthMaterial().IsUsable() {
+			return ErrUnavailable
+		}
+		for index := range record.APIKeys {
+			if record.APIKeys[index].ID == id && record.APIKeys[index].RevokedAt == nil {
+				value := revokedAt.UTC()
+				record.APIKeys[index].RevokedAt = &value
+				revoked = true
+				break
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return false, fmt.Errorf("web auth: revoke API key: %w", err)
+	}
+	return revoked, nil
+}
+
+func apiKeyMetadata(record APIKeyRecord) apitoken.Record {
+	return apitoken.Record{
+		ID:        record.ID,
+		Name:      record.Name,
+		OwnerID:   record.OwnerID,
+		Scopes:    append([]apitoken.Scope(nil), record.Scopes...),
+		CreatedAt: record.CreatedAt,
+		RevokedAt: record.RevokedAt,
+	}
+}
+
+func cloneAPIKeyRecords(records []APIKeyRecord) []APIKeyRecord {
+	cloned := make([]APIKeyRecord, len(records))
+	for index, record := range records {
+		cloned[index] = record
+		cloned[index].Scopes = append([]apitoken.Scope(nil), record.Scopes...)
+		if record.RevokedAt != nil {
+			value := *record.RevokedAt
+			cloned[index].RevokedAt = &value
+		}
+	}
+	return cloned
+}
+
+// AuthMaterial returns a trimmed projection of the record's helper inputs.
+func (r Record) AuthMaterial() Material {
+	return Material{
+		Username:               strings.TrimSpace(r.Username),
+		PasswordHash:           strings.TrimSpace(r.PasswordHash),
+		EncryptionKeySeed:      strings.TrimSpace(r.EncryptionKeySeed),
+		AllowUnencryptedExport: r.AllowUnencryptedExport,
+	}
+}
+
+func (s *Store) saveLocked(record Record) error {
+	raw, err := json.MarshalIndent(record, "", "  ")
+	if err != nil {
+		return fmt.Errorf("web auth: marshal auth file: %w", err)
+	}
+
+	dir := filepath.Dir(s.path)
+	tmpFile, err := os.CreateTemp(dir, filepath.Base(s.path)+".tmp-*")
+	if err != nil {
+		return fmt.Errorf("web auth: create temp auth file: %w", err)
+	}
+	tmpPath := tmpFile.Name()
+
+	if _, err := tmpFile.Write(raw); err != nil {
+		_ = tmpFile.Close()
+		_ = os.Remove(tmpPath)
+		return fmt.Errorf("web auth: write temp auth file: %w", err)
+	}
+	if err := tmpFile.Sync(); err != nil {
+		_ = tmpFile.Close()
+		_ = os.Remove(tmpPath)
+		return fmt.Errorf("web auth: sync temp auth file: %w", err)
+	}
+	if err := tmpFile.Close(); err != nil {
+		_ = os.Remove(tmpPath)
+		return fmt.Errorf("web auth: close temp auth file: %w", err)
+	}
+	if err := os.Chmod(tmpPath, 0o600); err != nil {
+		_ = os.Remove(tmpPath)
+		return fmt.Errorf("web auth: chmod temp auth file: %w", err)
+	}
+	if err := os.Rename(tmpPath, s.path); err != nil {
+		_ = os.Remove(tmpPath)
+		return fmt.Errorf("web auth: replace auth file: %w", err)
+	}
+	return nil
+}
+
+// HashPassword validates the minimum length and returns an Argon2id encoded
+// hash with a new random salt.
+func HashPassword(password string) (string, error) {
+	password = strings.TrimSpace(password)
+	if len(password) < AuthPasswordMinLength {
+		return "", fmt.Errorf("password must be at least %d characters", AuthPasswordMinLength)
+	}
+	salt, err := randomString(16)
+	if err != nil {
+		return "", err
+	}
+	sum := argon2.IDKey(
+		[]byte(password),
+		[]byte(salt),
+		authArgon2Time,
+		authArgon2MemoryKB,
+		authArgon2Parallelism,
+		authArgon2KeyLen,
+	)
+	return fmt.Sprintf(
+		"argon2id$v=%d$m=%d,t=%d,p=%d$%s$%s",
+		authArgon2Version,
+		authArgon2MemoryKB,
+		authArgon2Time,
+		authArgon2Parallelism,
+		salt,
+		base64.RawStdEncoding.EncodeToString(sum),
+	), nil
+}
+
+// VerifyPassword reports whether password matches a supported Argon2id encoding.
+func VerifyPassword(password string, encoded string) bool {
+	ok, _ := VerifyPasswordWithUpgrade(password, encoded)
+	return ok
+}
+
+// VerifyPasswordWithUpgrade reports both password validity and whether the
+// matched encoding uses the legacy three-part format.
+func VerifyPasswordWithUpgrade(password string, encoded string) (bool, bool) {
+	parts := strings.Split(encoded, "$")
+	if len(parts) < 3 || parts[0] != "argon2id" {
+		return false, false
+	}
+
+	salt, hashPart, params, legacy, ok := parseAuthHash(parts)
+	if !ok {
+		return false, false
+	}
+
+	sum := argon2.IDKey(
+		[]byte(password),
+		[]byte(salt),
+		params.time,
+		params.memoryKB,
+		params.parallelism,
+		params.keyLen,
+	)
+	expected, err := base64.RawStdEncoding.DecodeString(hashPart)
+	if err != nil {
+		return false, false
+	}
+	return subtle.ConstantTimeCompare(sum, expected) == 1, legacy
+}
+
+type authHashParams struct {
+	time        uint32
+	memoryKB    uint32
+	parallelism uint8
+	keyLen      uint32
+}
+
+func parseAuthHash(parts []string) (string, string, authHashParams, bool, bool) {
+	if len(parts) == 3 {
+		return parts[1], parts[2], authHashParams{
+			time:        legacyAuthArgon2Time,
+			memoryKB:    legacyAuthArgon2MemoryKB,
+			parallelism: legacyAuthArgon2Parallelism,
+			keyLen:      legacyAuthArgon2KeyLen,
+		}, true, true
+	}
+
+	if len(parts) != 5 {
+		return "", "", authHashParams{}, false, false
+	}
+
+	version, ok := parseAuthHashVersion(parts[1])
+	if !ok || version <= 0 {
+		return "", "", authHashParams{}, false, false
+	}
+
+	params, ok := parseAuthHashConfig(parts[2])
+	if !ok {
+		return "", "", authHashParams{}, false, false
+	}
+
+	return parts[3], parts[4], params, false, true
+}
+
+func parseAuthHashVersion(part string) (int, bool) {
+	if !strings.HasPrefix(part, "v=") {
+		return 0, false
+	}
+
+	version, err := strconv.Atoi(strings.TrimPrefix(part, "v="))
+	if err != nil {
+		return 0, false
+	}
+
+	return version, true
+}
+
+func parseAuthHashConfig(part string) (authHashParams, bool) {
+	fields := strings.Split(part, ",")
+	if len(fields) != 3 {
+		return authHashParams{}, false
+	}
+
+	var params authHashParams
+	for _, field := range fields {
+		key, value, ok := strings.Cut(field, "=")
+		if !ok || value == "" {
+			return authHashParams{}, false
+		}
+
+		switch key {
+		case "m":
+			parsed, err := strconv.ParseUint(value, 10, 32)
+			if err != nil || parsed == 0 {
+				return authHashParams{}, false
+			}
+			params.memoryKB = uint32(parsed)
+		case "t":
+			parsed, err := strconv.ParseUint(value, 10, 32)
+			if err != nil || parsed == 0 {
+				return authHashParams{}, false
+			}
+			params.time = uint32(parsed)
+		case "p":
+			parsed, err := strconv.ParseUint(value, 10, 8)
+			if err != nil || parsed == 0 {
+				return authHashParams{}, false
+			}
+			params.parallelism = uint8(parsed)
+		default:
+			return authHashParams{}, false
+		}
+	}
+
+	if params.memoryKB == 0 || params.time == 0 || params.parallelism == 0 {
+		return authHashParams{}, false
+	}
+
+	params.keyLen = authArgon2KeyLen
+	return params, true
+}
+
+func randomString(length int) (string, error) {
+	buf := make([]byte, length)
+	if _, err := rand.Read(buf); err != nil {
+		return "", fmt.Errorf("auth material: generate random string: %w", err)
+	}
+	return base64.RawURLEncoding.EncodeToString(buf)[:length], nil
+}

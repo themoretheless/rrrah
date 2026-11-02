@@ -1,0 +1,22 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original embedding class methods, constructor bypassed and recording-shaped fake embeddings client; no OpenAI SDK import/provider/network. Direct inputs, configuration validation pending.",
+  "authored_controls": [
+    {
+      "name": "batch restores response order by index",
+      "passed": true
+    },
+    {
+      "name": "short response silently returns fewer vectors",
+      "passed": true
+    },
+    {
+      "name": "negative batch size silently emits no vectors",
+      "passed": true
+    },
+    {
+      "name": "zero batch size raises ValueError",
+      "passed": true
+    }
+  ]
+}

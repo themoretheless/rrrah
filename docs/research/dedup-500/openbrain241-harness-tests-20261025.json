@@ -1,0 +1,41 @@
+{
+  "scope": "Original 8 harness test functions, mock dependency imports, actual score_results extracted by AST, temporary files; no pytest runner/network",
+  "outcomes": [
+    {
+      "name": "test_load_questions",
+      "passed": false,
+      "error": "KeyError: 'question_type'"
+    },
+    {
+      "name": "test_load_questions_subset",
+      "passed": false,
+      "error": "KeyError: 'question_type'"
+    },
+    {
+      "name": "test_load_questions_subset_empty_filter",
+      "passed": false,
+      "error": "KeyError: 'question_type'"
+    },
+    {
+      "name": "test_load_questions_unknown_id",
+      "passed": false,
+      "error": "KeyError: 'question_type'"
+    },
+    {
+      "name": "test_write_summary",
+      "passed": true
+    },
+    {
+      "name": "test_write_summary_empty",
+      "passed": true
+    },
+    {
+      "name": "test_write_summary_creates_parent_dirs",
+      "passed": true
+    },
+    {
+      "name": "test_write_summary_all_categories",
+      "passed": true
+    }
+  ]
+}

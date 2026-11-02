@@ -1,0 +1,10 @@
+--- a/libtiff/tif_fax3.c
++++ b/libtiff/tif_fax3.c
+@@ -1825,2 +1825,3 @@
+         EXPAND1D(EOFRLE);
++        fprintf(stderr,"RRLE before line=%d cp=%td avail=%d\n",sp->line,cp-(unsigned char*)tif->tif_rawdata,BitsAvail);
+         (*sp->fill)(buf, thisrun, pa, (uint32_t)lastx);
+@@ -1841,2 +1842,3 @@
+         }
++        fprintf(stderr,"RRLE after line=%d cp=%td avail=%d\n",sp->line,cp-(unsigned char*)tif->tif_rawdata,BitsAvail);
+         buf += sp->b.rowbytes;

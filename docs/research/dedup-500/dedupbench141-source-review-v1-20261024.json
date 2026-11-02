@@ -1,0 +1,51 @@
+{
+  "repository": "UWASL/dedup-bench",
+  "commit": "8e2697cbf6332ac5da6dc615bfab82a720e820e4",
+  "whole_files_read": [
+    {
+      "path": "supporting_tools/calculate_file_similarities.py",
+      "local": "02-calculate_file_similarities.py",
+      "git_blob": "f326d43f04f76568183d8a2bcf32d2738d769f0a",
+      "sha256": "32ae0ffe5b5986c000ad8c578390c1c5de92608f10921adf6266e6d1181c3b2a",
+      "whole_text_read": true
+    },
+    {
+      "path": "dedup/src/hashing/hash.cpp",
+      "local": "05-hash.cpp",
+      "git_blob": "524378401eba5e59ac1c474322cd618eba56994e",
+      "sha256": "1e67fbae848f34d3a87f48074d7ce7cd8b39f26c3a76b57fce7200134d34d083",
+      "whole_text_read": true
+    },
+    {
+      "path": "dedup/src/hashing/hashing_common.cpp",
+      "local": "06-hashing_common.cpp",
+      "git_blob": "0d136e2eecadbe360b046297fcce93ad0d19dd69",
+      "sha256": "53c43eefe7f39cd6b929ff83bc6d5032e6df37332d785ff2863098dbf118804e",
+      "whole_text_read": true
+    },
+    {
+      "path": "dedup/src/hashing/md5_hashing.cpp",
+      "local": "07-md5_hashing.cpp",
+      "git_blob": "f2d4b8662106b555403bd03944ec3cd2a1893b65",
+      "sha256": "db0ce4f1b06990ec8fe0afb2418b7683999c866f569ac67422fe10104d122d89",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 4,
+  "tracked_blobs": 165,
+  "whole_repo_complete": false,
+  "authored_controls_passed": 5,
+  "original_upstream_tests_run": false,
+  "controls": "dedupbench141-controls-20261024/results.json",
+  "scope": "Original full module imported without CLI main;actual owned filesystem inputs;UTF8 macOS Python text IO;no C++ chunker or benchmark dataset execution",
+  "findings": [
+    "ASCII identical scores1.",
+    "Byte-identical UTF8 unicode files score0.5 because character numerator/byte denominator.",
+    "CRLF versus LF normalized in text IO;score2/3,not byte-position equality.",
+    "Two empty files raise ZeroDivisionError.",
+    "Identical nonUTF8 byte ff raises UnicodeDecodeError."
+  ],
+  "decision": "reference",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

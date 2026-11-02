@@ -1,0 +1,21 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test dicom_preamble",
+  "passed": 1,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-dicom-preamble-endian-matrix-20261026.log",
+  "log_sha256": "beda3e85cba76153a0f42f42d2ce22ef76082bba9414fa716471cd528ae2bcd3",
+  "test_source_sha256": "ad4e84cd95893fe39a8e2bb76b520025fbf49bdf2e4cffcc00e41f9782d07b88",
+  "scope": "Declared-sRGB DICOM with arbitrary preambles beginning classic TIFF and BigTIFF in both byte orders, plus ICO and CUR magic. Every reported frame must preserve direct normalized selected-frame equality and metadata, with managed memory zero after each baseline/variant group.",
+  "preamble_variants": [
+    "TIFF-LE",
+    "TIFF-BE",
+    "BigTIFF-LE",
+    "BigTIFF-BE",
+    "ICO",
+    "CUR"
+  ],
+  "limitations": [
+    "One underlying DICOM fixture; does not establish all transfer syntax, photometric, window or clinical data semantics.",
+    "Selected-frame equality does not prove whole-file identity."
+  ]
+}

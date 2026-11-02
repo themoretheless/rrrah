@@ -1,0 +1,29 @@
+{
+  "argv": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff",
+    "--verify-known-shift"
+  ],
+  "environment": {
+    "RRRAH_EXPECTED_SHIFT": "12,12",
+    "RRRAH_FIT_DISPLAY": "1",
+    "RRRAH_DISPLAY_RESIDUAL_BINS": "1",
+    "RRRAH_WHITE_ANCHOR_GAINS": "1.0093242283270603,1.0094443064849008,1.0112024024886321,0.9906657684577661,0.9904200151505004,0.988045852358381"
+  },
+  "fit_report": "docs/research/dedup-500/sony-display-matrix-20261026-v1/display-pair-white-anchor-holdout-20261026.json",
+  "fit_report_sha256": "fdd2ee1c4fa127b2e8c3ffe67bae1d8d8f23642afc33c15473719a9ec3bd8abc",
+  "binary_sha256": "873e717b5341ca8bb6b1c81e97adbd72a473b40241e97196558892ae6114fa03",
+  "inputs_before": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff": "b578f1f1bb5df8cffe0e206b2e9364983fea502e09a18758e2244f491bcccffd"
+  },
+  "inputs_after": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff": "b578f1f1bb5df8cffe0e206b2e9364983fea502e09a18758e2244f491bcccffd"
+  },
+  "exit_code": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-white-anchor-dense-20261026.log",
+  "log_sha256": "712416eef0e52e9c394a5669ceb5f0396ffc485dca09c9ff2693f8072029ff74",
+  "scope": "Dense diagnostic with gains fixed from training grid before run. All pixels retained; includes training points. No geometry discovery or production acceptance change."
+}

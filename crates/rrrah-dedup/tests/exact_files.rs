@@ -2,12 +2,140 @@ use rrrah_dedup::exact::{IssueKind, Options, scan};
 use std::{cell::Cell, fs};
 
 #[test]
+fn matching_directory_layouts_sizes_and_times_do_not_establish_file_equality() {
+    use std::collections::{BTreeMap, BTreeSet};
+    let root = tempfile::tempdir().unwrap();
+    let directories =
+        ["collection", "collection-copy", "collection-other"].map(|name| root.path().join(name));
+    let modified = std::time::UNIX_EPOCH + std::time::Duration::from_secs(1_700_000_000);
+    let families = [[0_u8, 2, 4], [1, 2, 5], [0, 3, 6]];
+    let mut expected_by_bytes = BTreeMap::<Vec<u8>, BTreeSet<std::path::PathBuf>>::new();
+    let mut originals = BTreeMap::new();
+    for (directory, family) in directories.iter().zip(families) {
+        fs::create_dir(directory).unwrap();
+        for (index, family_id) in family.into_iter().enumerate() {
+            let path = directory.join(format!("part-{index}.bin"));
+            let mut bytes = vec![71; 32 * 1024];
+            let middle = bytes.len() / 2;
+            bytes[middle] = family_id;
+            fs::write(&path, &bytes).unwrap();
+            fs::File::options()
+                .write(true)
+                .open(&path)
+                .unwrap()
+                .set_times(fs::FileTimes::new().set_modified(modified))
+                .unwrap();
+            expected_by_bytes
+                .entry(bytes.clone())
+                .or_default()
+                .insert(path.clone());
+            originals.insert(path, bytes);
+        }
+    }
+    let expected: BTreeSet<_> = expected_by_bytes
+        .into_values()
+        .filter(|paths| paths.len() > 1)
+        .collect();
+    assert_eq!(expected.len(), 2);
+    let stamps: BTreeSet<_> = originals
+        .keys()
+        .map(|path| {
+            let metadata = fs::metadata(path).unwrap();
+            (metadata.len(), metadata.modified().unwrap())
+        })
+        .collect();
+    assert_eq!(stamps.len(), 1, "all namesakes must have equal size and time");
+    for roots in [
+        directories.to_vec(),
+        directories.iter().rev().cloned().collect(),
+        vec![
+            root.path().to_path_buf(),
+            directories[0].clone(),
+            directories[1].clone(),
+        ],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, originals.len());
+            let actual: BTreeSet<BTreeSet<_>> = report
+                .groups
+                .into_iter()
+                .map(|group| group.paths.into_iter().collect())
+                .collect();
+            assert_eq!(actual, expected);
+        }
+    }
+    for (path, bytes) in originals {
+        assert_eq!(fs::read(path).unwrap(), bytes);
+    }
+}
+
+#[test]
+fn length_extension_zeroes_match_written_zeroes_but_not_a_middle_byte_change() {
+    use std::io::{Seek, SeekFrom, Write};
+    let root = tempfile::tempdir().unwrap();
+    let length = 4 * 1024 * 1024 + 17;
+    let sparse = root.path().join("sparse");
+    let dense = root.path().join("dense");
+    let changed = root.path().join("changed");
+    let mut file = fs::File::create(&sparse).unwrap();
+    // Some filesystems allocate this range; the assertion concerns logical bytes,
+    // independently of whether the filesystem represents the zeroes as holes.
+    file.set_len(length as u64).unwrap();
+    for offset in [0, length - 1] {
+        file.seek(SeekFrom::Start(offset as u64)).unwrap();
+        file.write_all(&[73]).unwrap();
+    }
+    file.sync_all().unwrap();
+    drop(file);
+    let mut bytes = vec![0; length];
+    bytes[0] = 73;
+    bytes[length - 1] = 73;
+    fs::write(&dense, &bytes).unwrap();
+    assert_eq!(fs::read(&sparse).unwrap(), bytes);
+    bytes[length / 2] = 1;
+    fs::write(&changed, &bytes).unwrap();
+    let mut expected = vec![sparse.clone(), dense.clone()];
+    expected.sort();
+    for roots in [
+        vec![sparse.clone(), dense.clone(), changed.clone()],
+        vec![changed.clone(), dense.clone(), sparse.clone()],
+        vec![root.path().to_path_buf()],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(report.issues.is_empty() && report.aliases.is_empty());
+            assert_eq!(report.files_observed, 3);
+            assert_eq!(report.groups.len(), 1);
+            assert_eq!(report.groups[0].bytes, length as u64);
+            let mut actual = report.groups[0].paths.clone();
+            actual.sort();
+            assert_eq!(actual, expected);
+        }
+    }
+    assert_eq!(fs::read(sparse).unwrap(), fs::read(dense).unwrap());
+    assert_eq!(fs::read(changed).unwrap(), bytes);
+}
+
+#[test]
 fn block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
     let mut expected = BTreeSet::new();
     for size in [
-        65_535, 65_536, 65_537, 131_071, 131_072, 131_073, 1_000_001, 8_388_608,
+        1_500, 2_047, 2_048, 2_049, 65_535, 65_536, 65_537, 131_071, 131_072, 131_073, 1_000_001, 1_048_577,
+        1_572_864, 2_097_151, 8_388_608,
     ] {
         let bytes: Vec<u8> = (0..size).map(|index| (index % 251) as u8).collect();
         let mut copies = vec![
@@ -43,7 +171,7 @@ fn block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes() {
             assert!(report.complete(), "{report:?}");
             assert!(report.issues.is_empty());
             assert!(report.aliases.is_empty());
-            assert_eq!(report.files_observed, 32);
+            assert_eq!(report.files_observed, expected.len() * 4);
             let actual = report
                 .groups
                 .iter()
@@ -413,6 +541,36 @@ fn nested_overlapping_roots_match_the_full_authored_partition() {
 }
 
 #[test]
+fn explicit_nested_root_restores_its_own_depth_budget() {
+    let root = tempfile::tempdir().unwrap();
+    let nested = root.path().join("nested");
+    fs::create_dir(&nested).unwrap();
+    let paths = [nested.join("a"), nested.join("b")];
+    for path in &paths {
+        fs::write(path, b"independent root depth budget").unwrap();
+    }
+    let options = Options {
+        max_depth: 1,
+        ..Options::default()
+    };
+    for roots in [
+        vec![root.path().to_path_buf(), nested.clone()],
+        vec![nested, root.path().to_path_buf()],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &options, || false)
+            } else {
+                scan(&roots, &options, || false)
+            };
+            assert_eq!(report.files_observed, 2, "{report:?}");
+            assert_eq!(report.groups.len(), 1, "{report:?}");
+            assert_eq!(report.groups[0].paths, paths);
+        }
+    }
+}
+
+#[test]
 fn copies_empty_files_and_equal_size_negatives() {
     let root = tempfile::tempdir().unwrap();
     for (name, bytes) in [
@@ -573,6 +731,74 @@ fn same_length_mutation_during_sample_is_detected() {
 
 #[cfg(unix)]
 #[test]
+fn dangling_and_self_referential_symlinks_preserve_healthy_copy_groups() {
+    use std::os::unix::fs::symlink;
+    let root = tempfile::tempdir().unwrap();
+    let copies = [root.path().join("copy-a"), root.path().join("copy-b")];
+    let payload = b"independent regular copies beside unavailable symlink targets";
+    for path in &copies {
+        fs::write(path, payload).unwrap();
+    }
+    let dangling = root.path().join("dangling");
+    let looping = root.path().join("looping");
+    symlink("missing-target", &dangling).unwrap();
+    symlink("looping", &looping).unwrap();
+    for verified in [false, true] {
+        for follow_symlinks in [false, true] {
+            let options = Options {
+                follow_symlinks,
+                ..Options::default()
+            };
+            for roots in [
+                vec![root.path().to_path_buf()],
+                vec![
+                    dangling.clone(),
+                    copies[0].clone(),
+                    looping.clone(),
+                    copies[1].clone(),
+                ],
+                vec![
+                    copies[1].clone(),
+                    looping.clone(),
+                    copies[0].clone(),
+                    dangling.clone(),
+                ],
+            ] {
+                let report = if verified {
+                    rrrah_dedup::exact::scan_verified(&roots, &options, || false)
+                } else {
+                    scan(&roots, &options, || false)
+                };
+                assert_eq!(report.complete(), !follow_symlinks, "{report:?}");
+                assert!(!report.cancelled && report.aliases.is_empty());
+                assert_eq!(report.files_observed, 2);
+                assert_eq!(report.groups.len(), 1, "{report:?}");
+                assert_eq!(report.groups[0].paths, copies);
+                assert_eq!(report.groups[0].bytes, payload.len() as u64);
+                assert_eq!(report.issues.len(), 2, "{report:?}");
+                for path in [&dangling, &looping] {
+                    let issue = report.issues.iter().find(|issue| &issue.path == path).unwrap();
+                    if follow_symlinks {
+                        assert!(matches!(issue.kind, IssueKind::Io(_)), "{issue:?}");
+                    } else {
+                        assert_eq!(issue.kind, IssueKind::SymlinkSkipped);
+                    }
+                }
+            }
+        }
+    }
+    for path in &copies {
+        assert_eq!(fs::read(path).unwrap(), payload);
+    }
+    assert_eq!(
+        fs::read_link(&dangling).unwrap(),
+        std::path::Path::new("missing-target")
+    );
+    assert_eq!(fs::read_link(&looping).unwrap(), std::path::Path::new("looping"));
+}
+
+#[cfg(unix)]
+#[test]
 fn hardlink_aliases_and_followed_symlink_cycles() {
     use std::os::unix::fs::symlink;
     let root = tempfile::tempdir().unwrap();
@@ -717,6 +943,53 @@ fn non_utf8_paths_preserve_exact_identity_and_duplicates() {
 
 #[cfg(unix)]
 #[test]
+fn unix_socket_roots_and_entries_do_not_hide_regular_copies() {
+    use std::os::unix::net::UnixListener;
+    let root = tempfile::tempdir().unwrap();
+    let socket = root.path().join("socket");
+    let listener = UnixListener::bind(&socket).unwrap();
+    let mut expected = vec![root.path().join("original"), root.path().join("copy")];
+    for path in &expected {
+        fs::write(path, b"regular duplicate payload").unwrap();
+    }
+    expected.sort();
+    for roots in [
+        vec![root.path().to_path_buf()],
+        vec![socket.clone(), expected[0].clone(), expected[1].clone()],
+        vec![expected[1].clone(), expected[0].clone(), socket.clone()],
+        vec![socket.clone()],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert!(!report.cancelled && report.aliases.is_empty());
+            assert_eq!(report.issues.len(), 1);
+            assert_eq!(report.issues[0].path, socket);
+            assert_eq!(report.issues[0].kind, IssueKind::NotRegular);
+            if roots.len() == 1 && roots[0] == socket {
+                assert_eq!(report.files_observed, 0);
+                assert_eq!(report.bytes_read, 0);
+                assert!(report.groups.is_empty());
+            } else {
+                assert_eq!(report.files_observed, 2);
+                assert_eq!(report.groups.len(), 1);
+                let mut actual = report.groups[0].paths.clone();
+                actual.sort();
+                assert_eq!(actual, expected);
+            }
+        }
+    }
+    drop(listener);
+    assert_eq!(fs::read(&expected[0]).unwrap(), b"regular duplicate payload");
+    assert_eq!(fs::read(&expected[1]).unwrap(), b"regular duplicate payload");
+}
+
+#[cfg(unix)]
+#[test]
 fn fifo_replacement_does_not_block_or_hide_healthy_copies() {
     let root = tempfile::tempdir().unwrap();
     let paths: Vec<_> = ["a", "b", "c"].map(|name| root.path().join(name)).into();
@@ -821,7 +1094,10 @@ fn verified_scan_preserves_groups_and_observes_every_admitted_file() {
     assert_eq!(verified.groups, ordinary.groups);
     assert_eq!(verified.aliases, ordinary.aliases);
     assert_eq!(verified.files_observed, 3);
-    assert!(verified.bytes_read >= ordinary.bytes_read + 2 * (4 + 4 + 16));
+    // Every admitted file still needs the initial observation and two final
+    // validations, plus byte confirmation of the two duplicate copies.
+    // Candidate hashes may reuse the initial full-content observations.
+    assert!(verified.bytes_read >= 3 * (4 + 4 + 16) + 2 * 4);
     let cancelled = rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || true);
     assert!(cancelled.cancelled && cancelled.groups.is_empty());
 }
@@ -1549,10 +1825,8 @@ fn paths_sharing_more_than_256_characters_preserve_copy_partitions() {
 fn path_delimiters_preserve_distinct_files_and_copy_partitions() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
-    let paths = [
-        "a;b", "copy;one", "a", "a\nb", "b", "a\tb", "a:1.rs", "report 0%",
-    ]
-    .map(|name| root.path().join(name));
+    let paths = ["a;b", "copy;one", "a", "a\nb", "b", "a\tb", "a:1.rs", "report 0%"]
+        .map(|name| root.path().join(name));
     for (path, content) in paths.iter().zip([
         b"first family",
         b"first family",
@@ -1653,8 +1927,7 @@ fn shared_filename_suffixes_and_extensionless_names_preserve_content_partitions(
 fn text_normalization_does_not_replace_encoded_byte_equality() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
-    let paths = ["words-a", "copy-a", "words-b", "copy-b", "lf", "crlf"]
-        .map(|name| root.path().join(name));
+    let paths = ["words-a", "copy-a", "words-b", "copy-b", "lf", "crlf"].map(|name| root.path().join(name));
     let contents: [&[u8]; 6] = [b"ab c", b"ab c", b"a bc", b"a bc", b"a\nb\n", b"a\r\nb\r\n"];
     for (path, content) in paths.iter().zip(contents) {
         fs::write(path, content).unwrap();
@@ -1692,9 +1965,23 @@ fn service_style_names_remain_eligible_for_exact_content_matches() {
     use std::collections::BTreeSet;
     let root = tempfile::tempdir().unwrap();
     fs::create_dir(root.path().join("__MACOSX")).unwrap();
-    let paths = ["Thumbs.db", "binary-copy", "__MACOSX/page.txt", "text-copy", "deleted.txt", "note-copy"]
-        .map(|name| root.path().join(name));
-    let contents: [&[u8]; 6] = [b"\xd0\xcf\x11\xe0", b"\xd0\xcf\x11\xe0", b"page", b"page", b"note", b"note"];
+    let paths = [
+        "Thumbs.db",
+        "binary-copy",
+        "__MACOSX/page.txt",
+        "text-copy",
+        "deleted.txt",
+        "note-copy",
+    ]
+    .map(|name| root.path().join(name));
+    let contents: [&[u8]; 6] = [
+        b"\xd0\xcf\x11\xe0",
+        b"\xd0\xcf\x11\xe0",
+        b"page",
+        b"page",
+        b"note",
+        b"note",
+    ];
     for (path, content) in paths.iter().zip(contents) {
         fs::write(path, content).unwrap();
     }
@@ -1770,5 +2057,136 @@ fn normalized_parent_names_do_not_merge_distinct_physical_paths() {
                 .collect();
             assert_eq!(actual, expected);
         }
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn explicit_symlink_root_restores_depth_without_reentering_a_cycle() {
+    use std::os::unix::fs::symlink;
+
+    let temp = tempfile::tempdir().unwrap();
+    let base = temp.path().join("base");
+    let target = temp.path().join("target");
+    fs::create_dir(&base).unwrap();
+    fs::create_dir(&target).unwrap();
+    for name in ["a", "b"] {
+        fs::write(target.join(name), b"two physical copies behind directory aliases").unwrap();
+    }
+    symlink(&target, base.join("a-link")).unwrap();
+    let explicit = base.join("z-link");
+    symlink(&target, &explicit).unwrap();
+    symlink(&target, target.join("loop")).unwrap();
+    let options = Options {
+        follow_symlinks: true,
+        max_depth: 1,
+        max_entries: 64,
+        ..Options::default()
+    };
+    for roots in [
+        vec![base.clone(), explicit.clone()],
+        vec![explicit.clone(), base.clone()],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &options, || false)
+            } else {
+                scan(&roots, &options, || false)
+            };
+            assert_eq!(report.files_observed, 2, "{report:?}");
+            assert_eq!(report.groups.len(), 1, "{report:?}");
+            assert_eq!(report.groups[0].paths, [explicit.join("a"), explicit.join("b")]);
+            assert!(!report.cancelled, "{report:?}");
+            assert!(report.issues.iter().any(|issue| issue.kind == IssueKind::Limit));
+            assert!(report.issues.iter().all(|issue| issue.kind == IssueKind::Limit));
+            assert_eq!(fs::read_link(target.join("loop")).unwrap(), target);
+        }
+    }
+}
+
+#[test]
+fn entry_limit_preserves_already_admitted_directory_children() {
+    let root = tempfile::tempdir().unwrap();
+    for name in ["a", "b", "c"] {
+        fs::write(root.path().join(name), b"equal independent bounded children").unwrap();
+    }
+    let roots = [root.path().to_path_buf()];
+    let options = Options {
+        max_entries: 3,
+        ..Options::default()
+    };
+    let discovery = rrrah_dedup::exact::discover(&roots, &options, || false);
+    assert_eq!(discovery.files.len(), 2, "{discovery:?}");
+    assert!(
+        discovery
+            .issues
+            .iter()
+            .any(|issue| issue.kind == IssueKind::Limit)
+    );
+    for verified in [false, true] {
+        let report = if verified {
+            rrrah_dedup::exact::scan_verified(&roots, &options, || false)
+        } else {
+            scan(&roots, &options, || false)
+        };
+        assert_eq!(report.files_observed, 2, "{report:?}");
+        assert_eq!(report.groups.len(), 1, "{report:?}");
+        assert_eq!(report.groups[0].paths.len(), 2);
+        assert!(!report.complete());
+        assert!(!report.cancelled);
+        assert!(report.issues.iter().any(|issue| issue.kind == IssueKind::Limit));
+        for path in &report.groups[0].paths {
+            assert_eq!(fs::read(path).unwrap(), b"equal independent bounded children");
+        }
+    }
+}
+
+#[cfg(unix)]
+#[test]
+fn overlapping_roots_preserve_copy_groups_and_skipped_link_diagnostics() {
+    use std::{collections::BTreeSet, os::unix::fs::symlink};
+    let root = tempfile::tempdir().unwrap();
+    let nested = root.path().join("nested");
+    fs::create_dir(&nested).unwrap();
+    let paths = [nested.join("a"), nested.join("b")];
+    for path in &paths {
+        fs::write(path, b"independent physical copies").unwrap();
+    }
+    let link = nested.join("skipped");
+    symlink(&paths[0], &link).unwrap();
+    let expected = BTreeSet::from(paths.clone());
+    for roots in [
+        vec![root.path().to_path_buf()],
+        vec![root.path().to_path_buf(), nested.clone()],
+        vec![nested.clone(), root.path().to_path_buf()],
+    ] {
+        for verified in [false, true] {
+            let report = if verified {
+                rrrah_dedup::exact::scan_verified(&roots, &Options::default(), || false)
+            } else {
+                scan(&roots, &Options::default(), || false)
+            };
+            assert!(report.complete(), "{report:?}");
+            assert_eq!(report.files_observed, 2);
+            assert_eq!(report.groups.len(), 1);
+            assert_eq!(
+                report.groups[0].paths.iter().cloned().collect::<BTreeSet<_>>(),
+                expected
+            );
+            assert!(report.aliases.is_empty());
+            assert!(!report.issues.is_empty());
+            // Shallower explicit roots can revisit a directory. Each skipped
+            // link observation may be reported; no omission may disappear.
+            assert!(
+                report
+                    .issues
+                    .iter()
+                    .all(|issue| issue.path == link && issue.kind == IssueKind::SymlinkSkipped)
+            );
+        }
+    }
+    assert_eq!(fs::read_link(&link).unwrap(), paths[0]);
+    for path in &paths {
+        assert_eq!(fs::read(path).unwrap(), b"independent physical copies");
     }
 }

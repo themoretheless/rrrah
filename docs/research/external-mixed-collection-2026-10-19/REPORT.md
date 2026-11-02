@@ -104,3 +104,13 @@ This milestone runs CPU preparation/cache transport; it adds no new Metal,
 physical HDR or NVIDIA proof. Full-resolution large-image libraries, physical
 slow disks, hours-long live GUI endurance, independent appearance correctness,
 remaining format/metadata cases and the overall 100-format/GPU goal remain open.
+
+## Fresh mixed collection after cancellation changes — 2026-10-24
+
+A new decode-independent selection enumerated 8,623 byte-unique eligible candidates and sampled 1,024 files over 13 suffixes/11 families (JPEG/TIFF suffix aliases are not separate formats). The same source size/header filters remain; this is local source/test media, not independent photographs or a complete 100-format corpus. Selection initially lacked Pillow in system Python; the bundled Python/Pillow runtime ran the unchanged selector. Absolute source paths remain only in the retained external manifest; repository metadata pins its hash.
+
+Strict baseline: 929 accepted, 95 refused. The same fixed selection passed varying directional windows and partial byte budgets: all 929 accepted paths navigated, 696 nearest-neighbour hits, 1,390 far-neighbour byte refusals, 59 TTL restores; swap 946 reads/1,854 writes/zero errors, final managed root zero. Managed peak 512 MiB includes intentional full-budget pressure; maximum observed before pressure 22,189,168 bytes. Runtime 22.95 s, not a benchmark. Full result rows are retained once in compact `current-result.json`, with selection and source hashes in `current-selection.json`.
+
+The first run exposed a stale test assumption (`current-red.log`): TTL bookkeeping tried resolving a key after deliberately cancelling the request, which now correctly returns None. The test now preserves the live identity before cancellation; cancellation/cache invariants are not bypassed. Same-manifest rerun passed 1/0failed/0ignored (`current-green.log`). Per-source/per-navigation repetitive markers are omitted from these repository logs; complete original raw logs remain in the external manifest directory recorded in metadata. Decoder library current gate also passed 232/0failed/5ignored (`decode-current.log`); ordinary application suite was not needlessly repeated after a test-only fix.
+
+All 95 refusals remain explicit: 66 require qualified source color, 13 unsupported/invalid EXR color metadata, two nonconforming AVIF aspect boxes, 14 other cases. The latter include two palette TIFF and one Fax3 TIFF feature gaps as well as malformed/truncated inputs. Those TIFF cases are next decoder work, not accepted transport evidence. These results do not establish independent appearance fidelity, Metal execution, physical HDR, physical slow disks, NVIDIA or all-format completion.

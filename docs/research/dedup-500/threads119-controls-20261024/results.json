@@ -1,0 +1,15 @@
+{
+  "source_sha256": "a82902b736854127c5a8f8fce05922d2b12d3056a0346801ef8393a32584e2fc",
+  "original_test_functions_passed": [
+    "test_dedup_link_reuse",
+    "test_dedup_category_burst"
+  ],
+  "authored_controls_passed": 3,
+  "findings": [
+    "Never-reuse-ever contract ends after100 records; oldlink allowed while retainedlink rejected",
+    "Word containment overlap is asymmetric, not symmetric similarity",
+    "Malformed history raises JSONDecodeError, not silent empty history"
+  ],
+  "scope": "Original standalone module and2 original test bodies with package imports bypassed;3 authored controls;real owned temp files;no posting/network/browser",
+  "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/threads119-20261024/owned-8oexbl_6"
+}

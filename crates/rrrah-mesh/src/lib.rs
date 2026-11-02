@@ -33,3 +33,5 @@ mod stl_swap;
 pub use stl_swap::{StlSwapError, read_stl_swap_payload, stl_swap_payload_len, write_stl_swap_payload};
 mod stl;
 pub use stl::{StlDecodeError, StlFacet, StlMesh, decode_stl};
+#[cfg(test)]
+mod rr31_60_qualification;

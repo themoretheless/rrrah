@@ -1,0 +1,67 @@
+{
+  "repository": "CoLRev-Environment/bib-dedupe",
+  "scope": "Original prep functions and CPU selector; np.array replaced by list for string fixtures. No actual NumPy/pandas runtime, full pipeline, upstream callbacks or benchmark.",
+  "authored_controls": [
+    {
+      "name": "DOI dots removed and hyphen underscore collapsed",
+      "passed": true,
+      "observed": [
+        "10123/ab",
+        "10123/ab",
+        "10123/a_b",
+        "10123/a_b"
+      ]
+    },
+    {
+      "name": "only old http dx DOI prefix recognized",
+      "passed": true,
+      "observed": [
+        "10123/abc",
+        ""
+      ]
+    },
+    {
+      "name": "year bounds and fractional truncation",
+      "passed": true,
+      "observed": [
+        "",
+        "1901",
+        "2099",
+        "",
+        "2024",
+        "2024"
+      ]
+    },
+    {
+      "name": "infinite year escapes ValueError handler",
+      "passed": true,
+      "observed": "OverflowError"
+    },
+    {
+      "name": "volume letter distinctions removed",
+      "passed": true,
+      "observed": [
+        "12",
+        "12"
+      ]
+    },
+    {
+      "name": "number letter distinctions removed",
+      "passed": true,
+      "observed": [
+        "12",
+        "12"
+      ]
+    },
+    {
+      "name": "small dataset overrides invalid cpu",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "large dataset retains invalid zero cpu",
+      "passed": true,
+      "observed": 0
+    }
+  ]
+}

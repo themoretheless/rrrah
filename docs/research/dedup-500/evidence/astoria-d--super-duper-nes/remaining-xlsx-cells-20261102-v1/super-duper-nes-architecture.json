@@ -1,0 +1,4160 @@
+{
+  "path": "doc/super-duper-nes-architecture.xlsx",
+  "sha256": "366b4f702ee275923af494191d894dc210cfbc7205d95d1ba3e736e98014987b",
+  "sheets": [
+    {
+      "member": "xl/worksheets/sheet4.xml",
+      "cells": []
+    },
+    {
+      "member": "xl/worksheets/sheet3.xml",
+      "cells": [
+        {
+          "cell": "A3",
+          "value": "CPU space",
+          "formula": null
+        },
+        {
+          "cell": "B3",
+          "value": "0x10000",
+          "formula": null
+        },
+        {
+          "cell": "A4",
+          "value": "memory map",
+          "formula": null
+        },
+        {
+          "cell": "B4",
+          "value": "0xfffa",
+          "formula": null
+        },
+        {
+          "cell": "D4",
+          "value": "reset vector",
+          "formula": null
+        },
+        {
+          "cell": "B5",
+          "value": "0xfff8",
+          "formula": null
+        },
+        {
+          "cell": "D5",
+          "value": "duper io reg",
+          "formula": null
+        },
+        {
+          "cell": "F5",
+          "value": "0xfff9",
+          "formula": null
+        },
+        {
+          "cell": "G5",
+          "value": "w: push fifo register",
+          "formula": null
+        },
+        {
+          "cell": "G6",
+          "value": "r: pop fifo register",
+          "formula": null
+        },
+        {
+          "cell": "D7",
+          "value": "prog rom",
+          "formula": null
+        },
+        {
+          "cell": "F7",
+          "value": "0xfff8",
+          "formula": null
+        },
+        {
+          "cell": "G7",
+          "value": "fifo status register",
+          "formula": null
+        },
+        {
+          "cell": "D8",
+          "value": "upper bank",
+          "formula": null
+        },
+        {
+          "cell": "B9",
+          "value": "0xc000",
+          "formula": null
+        },
+        {
+          "cell": "G10",
+          "value": "firo status register",
+          "formula": null
+        },
+        {
+          "cell": "F11",
+          "value": "bit",
+          "formula": null
+        },
+        {
+          "cell": "D12",
+          "value": "prog rom",
+          "formula": null
+        },
+        {
+          "cell": "F12",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "G12",
+          "value": "write fifo empty",
+          "formula": null
+        },
+        {
+          "cell": "D13",
+          "value": "lower bank",
+          "formula": null
+        },
+        {
+          "cell": "F13",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "G13",
+          "value": "write fifo full",
+          "formula": null
+        },
+        {
+          "cell": "F14",
+          "value": "2",
+          "formula": null
+        },
+        {
+          "cell": "G14",
+          "value": "always 0",
+          "formula": null
+        },
+        {
+          "cell": "B15",
+          "value": "0x8000",
+          "formula": null
+        },
+        {
+          "cell": "F15",
+          "value": "3",
+          "formula": null
+        },
+        {
+          "cell": "G15",
+          "value": "always 0",
+          "formula": null
+        },
+        {
+          "cell": "F16",
+          "value": "4",
+          "formula": null
+        },
+        {
+          "cell": "G16",
+          "value": "read fifo empty",
+          "formula": null
+        },
+        {
+          "cell": "D17",
+          "value": "sram",
+          "formula": null
+        },
+        {
+          "cell": "F17",
+          "value": "5",
+          "formula": null
+        },
+        {
+          "cell": "G17",
+          "value": "read fifo full",
+          "formula": null
+        },
+        {
+          "cell": "B18",
+          "value": "0x6000",
+          "formula": null
+        },
+        {
+          "cell": "F18",
+          "value": "6",
+          "formula": null
+        },
+        {
+          "cell": "G18",
+          "value": "always 0",
+          "formula": null
+        },
+        {
+          "cell": "F19",
+          "value": "7",
+          "formula": null
+        },
+        {
+          "cell": "G19",
+          "value": "always 0",
+          "formula": null
+        },
+        {
+          "cell": "D20",
+          "value": "expantion rom",
+          "formula": null
+        },
+        {
+          "cell": "B22",
+          "value": "0x4020",
+          "formula": null
+        },
+        {
+          "cell": "B23",
+          "value": "0x4000",
+          "formula": null
+        },
+        {
+          "cell": "D23",
+          "value": "io reg",
+          "formula": null
+        },
+        {
+          "cell": "D26",
+          "value": "mirror",
+          "formula": null
+        },
+        {
+          "cell": "D27",
+          "value": "0x2000-0x2007",
+          "formula": null
+        },
+        {
+          "cell": "B29",
+          "value": "0x2008",
+          "formula": null
+        },
+        {
+          "cell": "B30",
+          "value": "0x2000",
+          "formula": null
+        },
+        {
+          "cell": "D30",
+          "value": "io reg",
+          "formula": null
+        },
+        {
+          "cell": "D32",
+          "value": "mirror",
+          "formula": null
+        },
+        {
+          "cell": "D33",
+          "value": "0x0000-0x07ff",
+          "formula": null
+        },
+        {
+          "cell": "B34",
+          "value": "0x0800",
+          "formula": null
+        },
+        {
+          "cell": "B37",
+          "value": "0x0200",
+          "formula": null
+        },
+        {
+          "cell": "D37",
+          "value": "ram",
+          "formula": null
+        },
+        {
+          "cell": "B38",
+          "value": "0x0100",
+          "formula": null
+        },
+        {
+          "cell": "C38",
+          "value": "stack",
+          "formula": null
+        },
+        {
+          "cell": "B39",
+          "value": "0x0000",
+          "formula": null
+        },
+        {
+          "cell": "C39",
+          "value": "zp",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet2.xml",
+      "cells": [
+        {
+          "cell": "L17",
+          "value": "NES cartridge",
+          "formula": null
+        },
+        {
+          "cell": "AB17",
+          "value": "I2C",
+          "formula": null
+        },
+        {
+          "cell": "L18",
+          "value": "I/F",
+          "formula": null
+        },
+        {
+          "cell": "AB18",
+          "value": "GPIO",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet1.xml",
+      "cells": [
+        {
+          "cell": "Q8",
+          "value": "IDE 40 pins flat cable I/F",
+          "formula": null
+        },
+        {
+          "cell": "K12",
+          "value": "Fami con cartlidge I/F",
+          "formula": null
+        },
+        {
+          "cell": "AB12",
+          "value": "I2C",
+          "formula": null
+        },
+        {
+          "cell": "K13",
+          "value": "60 pin 2.54 mm pitch",
+          "formula": null
+        },
+        {
+          "cell": "K14",
+          "value": "dual side card edge",
+          "formula": null
+        },
+        {
+          "cell": "H22",
+          "value": "AV out",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet10.xml",
+      "cells": []
+    },
+    {
+      "member": "xl/worksheets/sheet9.xml",
+      "cells": [
+        {
+          "cell": "R47",
+          "value": "Address = 0x44 ( 100 0100)",
+          "formula": null
+        },
+        {
+          "cell": "BQ47",
+          "value": "Data = ‘d’ (0x64, 0110 0100)",
+          "formula": null
+        },
+        {
+          "cell": "H49",
+          "value": "Start seq",
+          "formula": null
+        },
+        {
+          "cell": "V49",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "AA49",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AG49",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AL49",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AQ49",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "AV49",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "BB49",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "BG49",
+          "value": "R/W = 0 (Write)",
+          "formula": null
+        },
+        {
+          "cell": "BL49",
+          "value": "Ack",
+          "formula": null
+        },
+        {
+          "cell": "BQ49",
+          "value": "D7",
+          "formula": null
+        },
+        {
+          "cell": "BV49",
+          "value": "D6",
+          "formula": null
+        },
+        {
+          "cell": "CA49",
+          "value": "D5",
+          "formula": null
+        },
+        {
+          "cell": "CF49",
+          "value": "D4",
+          "formula": null
+        },
+        {
+          "cell": "CL49",
+          "value": "D3",
+          "formula": null
+        },
+        {
+          "cell": "CQ49",
+          "value": "D2",
+          "formula": null
+        },
+        {
+          "cell": "CV49",
+          "value": "D1",
+          "formula": null
+        },
+        {
+          "cell": "DA49",
+          "value": "D0",
+          "formula": null
+        },
+        {
+          "cell": "DG49",
+          "value": "Ack",
+          "formula": null
+        },
+        {
+          "cell": "DP49",
+          "value": "Stop",
+          "formula": null
+        },
+        {
+          "cell": "A51",
+          "value": "SDA",
+          "formula": null
+        },
+        {
+          "cell": "A59",
+          "value": "SCL",
+          "formula": null
+        },
+        {
+          "cell": "U81",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "V81",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "W81",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "X81",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AI81",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AJ81",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AM81",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AP81",
+          "value": "ack",
+          "formula": null
+        },
+        {
+          "cell": "P82",
+          "value": "S",
+          "formula": null
+        },
+        {
+          "cell": "R82",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "S82",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "Y82",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "Z82",
+          "value": "r",
+          "formula": null
+        },
+        {
+          "cell": "AA82",
+          "value": "ack",
+          "formula": null
+        },
+        {
+          "cell": "AB82",
+          "value": "P",
+          "formula": null
+        },
+        {
+          "cell": "AE82",
+          "value": "S",
+          "formula": null
+        },
+        {
+          "cell": "AF82",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AG82",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AK82",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AL82",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "AN82",
+          "value": "0",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet12.xml",
+      "cells": [
+        {
+          "cell": "B4",
+          "value": "i2c",
+          "formula": null
+        },
+        {
+          "cell": "C4",
+          "value": "clock",
+          "formula": null
+        },
+        {
+          "cell": "D4",
+          "value": "100 kHz",
+          "formula": null
+        },
+        {
+          "cell": "B5",
+          "value": "addr ",
+          "formula": null
+        },
+        {
+          "cell": "C5",
+          "value": "8clk+1ack",
+          "formula": null
+        },
+        {
+          "cell": "B6",
+          "value": "data",
+          "formula": null
+        },
+        {
+          "cell": "C6",
+          "value": "8clk+1ack",
+          "formula": null
+        },
+        {
+          "cell": "E6",
+          "value": "1byte = 18 clks.",
+          "formula": null
+        },
+        {
+          "cell": "E7",
+          "value": "1 clock = 1 / 100 / 1000 = 10 usec",
+          "formula": null
+        },
+        {
+          "cell": "E9",
+          "value": "1 byte = 180 usec",
+          "formula": null
+        },
+        {
+          "cell": "E10",
+          "value": "1 / 180 * 1000000",
+          "formula": null
+        },
+        {
+          "cell": "G10",
+          "value": "5555.5555555555557",
+          "formula": " 1000000/180"
+        },
+        {
+          "cell": "E11",
+          "value": "5.5 k byte / sec",
+          "formula": null
+        },
+        {
+          "cell": "I12",
+          "value": "i2c is much faster!!",
+          "formula": null
+        },
+        {
+          "cell": "B13",
+          "value": "nes frame rate",
+          "formula": null
+        },
+        {
+          "cell": "C14",
+          "value": "30",
+          "formula": null
+        },
+        {
+          "cell": "D14",
+          "value": "Hz",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet8.xml",
+      "cells": [
+        {
+          "cell": "B3",
+          "value": "fifo",
+          "formula": null
+        },
+        {
+          "cell": "D5",
+          "value": "init:",
+          "formula": null
+        },
+        {
+          "cell": "F6",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI7",
+          "value": "size = 0",
+          "formula": null
+        },
+        {
+          "cell": "AI8",
+          "value": "empty = 1",
+          "formula": null
+        },
+        {
+          "cell": "F9",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI9",
+          "value": "full = 0",
+          "formula": null
+        },
+        {
+          "cell": "AU9",
+          "value": "NES > BBB",
+          "formula": null
+        },
+        {
+          "cell": "D12",
+          "value": "push x 4",
+          "formula": null
+        },
+        {
+          "cell": "J13",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI14",
+          "value": "size = 4",
+          "formula": null
+        },
+        {
+          "cell": "AI15",
+          "value": "empty = 0",
+          "formula": null
+        },
+        {
+          "cell": "F16",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI16",
+          "value": "full = 0",
+          "formula": null
+        },
+        {
+          "cell": "AU17",
+          "value": "duper state machine",
+          "formula": null
+        },
+        {
+          "cell": "D19",
+          "value": "pop x 2",
+          "formula": null
+        },
+        {
+          "cell": "J20",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI21",
+          "value": "size = 2",
+          "formula": null
+        },
+        {
+          "cell": "AI22",
+          "value": "empty = 0",
+          "formula": null
+        },
+        {
+          "cell": "H23",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI23",
+          "value": "full = 0",
+          "formula": null
+        },
+        {
+          "cell": "D26",
+          "value": "pop x 2",
+          "formula": null
+        },
+        {
+          "cell": "J27",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI28",
+          "value": "size = 0",
+          "formula": null
+        },
+        {
+          "cell": "AI29",
+          "value": "empty = 1",
+          "formula": null
+        },
+        {
+          "cell": "AZ29",
+          "value": "fifo head set",
+          "formula": null
+        },
+        {
+          "cell": "J30",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI30",
+          "value": "full = 0",
+          "formula": null
+        },
+        {
+          "cell": "D33",
+          "value": "push x 10",
+          "formula": null
+        },
+        {
+          "cell": "BB33",
+          "value": "notify via gpio",
+          "formula": null
+        },
+        {
+          "cell": "M34",
+          "value": "・・・・・・",
+          "formula": null
+        },
+        {
+          "cell": "P34",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI35",
+          "value": "size = 10",
+          "formula": null
+        },
+        {
+          "cell": "AI36",
+          "value": "empty = 0",
+          "formula": null
+        },
+        {
+          "cell": "J37",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI37",
+          "value": "full = 0",
+          "formula": null
+        },
+        {
+          "cell": "BJ37",
+          "value": "i2c serial xfer",
+          "formula": null
+        },
+        {
+          "cell": "D40",
+          "value": "push x 246",
+          "formula": null
+        },
+        {
+          "cell": "I41",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI42",
+          "value": "size = 256",
+          "formula": null
+        },
+        {
+          "cell": "AI43",
+          "value": "empty = 0",
+          "formula": null
+        },
+        {
+          "cell": "J44",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI44",
+          "value": "full = 1",
+          "formula": null
+        },
+        {
+          "cell": "D47",
+          "value": "pop x 2",
+          "formula": null
+        },
+        {
+          "cell": "I48",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI49",
+          "value": "size = 254",
+          "formula": null
+        },
+        {
+          "cell": "AI50",
+          "value": "empty = 0",
+          "formula": null
+        },
+        {
+          "cell": "L51",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI51",
+          "value": "full = 0",
+          "formula": null
+        },
+        {
+          "cell": "D54",
+          "value": "pop x 254",
+          "formula": null
+        },
+        {
+          "cell": "I55",
+          "value": "fifo tail",
+          "formula": null
+        },
+        {
+          "cell": "AI56",
+          "value": "size = 0",
+          "formula": null
+        },
+        {
+          "cell": "AI57",
+          "value": "empty = 1",
+          "formula": null
+        },
+        {
+          "cell": "I58",
+          "value": "fifo head",
+          "formula": null
+        },
+        {
+          "cell": "AI58",
+          "value": "full = 0",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet7.xml",
+      "cells": [
+        {
+          "cell": "M5",
+          "value": "linux command send",
+          "formula": null
+        },
+        {
+          "cell": "AJ5",
+          "value": "linux terminal",
+          "formula": null
+        },
+        {
+          "cell": "M6",
+          "value": "console display",
+          "formula": null
+        },
+        {
+          "cell": "AJ6",
+          "value": "i2c i/o",
+          "formula": null
+        },
+        {
+          "cell": "H11",
+          "value": "composite out",
+          "formula": null
+        },
+        {
+          "cell": "R11",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "AB11",
+          "value": "fifo status read (gpio)",
+          "formula": null
+        },
+        {
+          "cell": "R12",
+          "value": "fifo status read",
+          "formula": null
+        },
+        {
+          "cell": "AB12",
+          "value": "i2c data read",
+          "formula": null
+        },
+        {
+          "cell": "R13",
+          "value": "fifo read",
+          "formula": null
+        },
+        {
+          "cell": "AB13",
+          "value": "i2c data write",
+          "formula": null
+        },
+        {
+          "cell": "H14",
+          "value": "keypad input",
+          "formula": null
+        },
+        {
+          "cell": "R14",
+          "value": "fifo write",
+          "formula": null
+        },
+        {
+          "cell": "W19",
+          "value": "duper state machine",
+          "formula": null
+        },
+        {
+          "cell": "F35",
+          "value": "de0-cv base clock = 50 MHz",
+          "formula": null
+        },
+        {
+          "cell": "Q35",
+          "value": "x 27.93 times",
+          "formula": null
+        },
+        {
+          "cell": "F37",
+          "value": "nes cpu clock = 1.789773 MHz",
+          "formula": null
+        },
+        {
+          "cell": "X38",
+          "value": "x 500 times",
+          "formula": null
+        },
+        {
+          "cell": "F39",
+          "value": "i2c clock = 100 KHz",
+          "formula": null
+        },
+        {
+          "cell": "R39",
+          "value": "x 17.89 times",
+          "formula": null
+        },
+        {
+          "cell": "J48",
+          "value": "base clock",
+          "formula": null
+        },
+        {
+          "cell": "J54",
+          "value": "nes clock",
+          "formula": null
+        },
+        {
+          "cell": "F59",
+          "value": "instruction",
+          "formula": null
+        },
+        {
+          "cell": "L59",
+          "value": "nop",
+          "formula": null
+        },
+        {
+          "cell": "Z59",
+          "value": "lda $50",
+          "formula": null
+        },
+        {
+          "cell": "AU59",
+          "value": "lda $ff25",
+          "formula": null
+        },
+        {
+          "cell": "F60",
+          "value": "state machie",
+          "formula": null
+        },
+        {
+          "cell": "L60",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "S60",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "Z60",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "AG60",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "AN60",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AU60",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "BB60",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "BI60",
+          "value": "rom read",
+          "formula": null
+        },
+        {
+          "cell": "BP60",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AT61",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AS62",
+          "value": "fifo push",
+          "formula": null
+        },
+        {
+          "cell": "J64",
+          "value": "i2c clock",
+          "formula": null
+        },
+        {
+          "cell": "N69",
+          "value": "i2c transfer ",
+          "formula": null
+        },
+        {
+          "cell": "AS69",
+          "value": "i2c done",
+          "formula": null
+        },
+        {
+          "cell": "N79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "O79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "P79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "Q79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "R79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "S79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "T79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "U79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "V79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "W79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "X79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "Y79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "Z79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AA79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AB79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AC79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AD79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AE79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AF79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AG79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AH79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AI79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AJ79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AK79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AL79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AM79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AN79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AO79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AP79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AQ79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AR79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AS79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AT79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AU79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AV79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AW79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AX79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "AY79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "AZ79",
+          "value": "rom",
+          "formula": null
+        },
+        {
+          "cell": "BA79",
+          "value": "idle",
+          "formula": null
+        },
+        {
+          "cell": "N85",
+          "value": "i2c xfer",
+          "formula": null
+        },
+        {
+          "cell": "AJ85",
+          "value": "i2c ack",
+          "formula": null
+        },
+        {
+          "cell": "AX85",
+          "value": "i2c idle",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet5.xml",
+      "cells": [
+        {
+          "cell": "AF2",
+          "value": "DE1",
+          "formula": null
+        },
+        {
+          "cell": "BS2",
+          "value": "BBB",
+          "formula": null
+        },
+        {
+          "cell": "CF2",
+          "value": "nes_f_full",
+          "formula": null
+        },
+        {
+          "cell": "CD3",
+          "value": "bbb_f_empty",
+          "formula": null
+        },
+        {
+          "cell": "CI3",
+          "value": "i2c1_csl",
+          "formula": null
+        },
+        {
+          "cell": "CQ3",
+          "value": "gnd",
+          "formula": null
+        },
+        {
+          "cell": "BU5",
+          "value": "45",
+          "formula": null
+        },
+        {
+          "cell": "BV5",
+          "value": "43",
+          "formula": null
+        },
+        {
+          "cell": "BW5",
+          "value": "41",
+          "formula": null
+        },
+        {
+          "cell": "BX5",
+          "value": "39",
+          "formula": null
+        },
+        {
+          "cell": "BY5",
+          "value": "37",
+          "formula": null
+        },
+        {
+          "cell": "BZ5",
+          "value": "35",
+          "formula": null
+        },
+        {
+          "cell": "CA5",
+          "value": "33",
+          "formula": null
+        },
+        {
+          "cell": "CB5",
+          "value": "31",
+          "formula": null
+        },
+        {
+          "cell": "CC5",
+          "value": "29",
+          "formula": null
+        },
+        {
+          "cell": "CD5",
+          "value": "27",
+          "formula": null
+        },
+        {
+          "cell": "CE5",
+          "value": "25",
+          "formula": null
+        },
+        {
+          "cell": "CF5",
+          "value": "23",
+          "formula": null
+        },
+        {
+          "cell": "CG5",
+          "value": "21",
+          "formula": null
+        },
+        {
+          "cell": "CH5",
+          "value": "19",
+          "formula": null
+        },
+        {
+          "cell": "CI5",
+          "value": "17",
+          "formula": null
+        },
+        {
+          "cell": "CJ5",
+          "value": "15",
+          "formula": null
+        },
+        {
+          "cell": "CK5",
+          "value": "13",
+          "formula": null
+        },
+        {
+          "cell": "CL5",
+          "value": "11",
+          "formula": null
+        },
+        {
+          "cell": "CM5",
+          "value": "9",
+          "formula": null
+        },
+        {
+          "cell": "CN5",
+          "value": "7",
+          "formula": null
+        },
+        {
+          "cell": "CO5",
+          "value": "5",
+          "formula": null
+        },
+        {
+          "cell": "CP5",
+          "value": "3",
+          "formula": null
+        },
+        {
+          "cell": "CQ5",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "BU6",
+          "value": "46",
+          "formula": null
+        },
+        {
+          "cell": "BV6",
+          "value": "44",
+          "formula": null
+        },
+        {
+          "cell": "BW6",
+          "value": "42",
+          "formula": null
+        },
+        {
+          "cell": "BX6",
+          "value": "40",
+          "formula": null
+        },
+        {
+          "cell": "BY6",
+          "value": "38",
+          "formula": null
+        },
+        {
+          "cell": "BZ6",
+          "value": "36",
+          "formula": null
+        },
+        {
+          "cell": "CA6",
+          "value": "34",
+          "formula": null
+        },
+        {
+          "cell": "CB6",
+          "value": "32",
+          "formula": null
+        },
+        {
+          "cell": "CC6",
+          "value": "30",
+          "formula": null
+        },
+        {
+          "cell": "CD6",
+          "value": "28",
+          "formula": null
+        },
+        {
+          "cell": "CE6",
+          "value": "26",
+          "formula": null
+        },
+        {
+          "cell": "CF6",
+          "value": "24",
+          "formula": null
+        },
+        {
+          "cell": "CG6",
+          "value": "22",
+          "formula": null
+        },
+        {
+          "cell": "CH6",
+          "value": "20",
+          "formula": null
+        },
+        {
+          "cell": "CI6",
+          "value": "18",
+          "formula": null
+        },
+        {
+          "cell": "CJ6",
+          "value": "16",
+          "formula": null
+        },
+        {
+          "cell": "CK6",
+          "value": "14",
+          "formula": null
+        },
+        {
+          "cell": "CL6",
+          "value": "12",
+          "formula": null
+        },
+        {
+          "cell": "CM6",
+          "value": "10",
+          "formula": null
+        },
+        {
+          "cell": "CN6",
+          "value": "8",
+          "formula": null
+        },
+        {
+          "cell": "CO6",
+          "value": "6",
+          "formula": null
+        },
+        {
+          "cell": "CP6",
+          "value": "4",
+          "formula": null
+        },
+        {
+          "cell": "CQ6",
+          "value": "2",
+          "formula": null
+        },
+        {
+          "cell": "CI8",
+          "value": "i2c1_sda",
+          "formula": null
+        },
+        {
+          "cell": "CP8",
+          "value": "vdd_33",
+          "formula": null
+        },
+        {
+          "cell": "CC10",
+          "value": "serial debug port",
+          "formula": null
+        },
+        {
+          "cell": "CE12",
+          "value": "Tx",
+          "formula": null
+        },
+        {
+          "cell": "CF12",
+          "value": "Rx",
+          "formula": null
+        },
+        {
+          "cell": "CI12",
+          "value": "gnd",
+          "formula": null
+        },
+        {
+          "cell": "CY16",
+          "value": "on/off",
+          "formula": null
+        },
+        {
+          "cell": "C21",
+          "value": "NES",
+          "formula": null
+        },
+        {
+          "cell": "J27",
+          "value": "FRONT",
+          "formula": null
+        },
+        {
+          "cell": "O27",
+          "value": "BACK",
+          "formula": null
+        },
+        {
+          "cell": "J29",
+          "value": "1:GND",
+          "formula": null
+        },
+        {
+          "cell": "L29",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M29",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O29",
+          "value": "31:Vcc",
+          "formula": null
+        },
+        {
+          "cell": "D30",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E30",
+          "value": "2:PRG-A11",
+          "formula": null
+        },
+        {
+          "cell": "J30",
+          "value": "2:PRG-A11",
+          "formula": null
+        },
+        {
+          "cell": "L30",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M30",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O30",
+          "value": "32:M2",
+          "formula": null
+        },
+        {
+          "cell": "D31",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E31",
+          "value": "3:PRG-A10",
+          "formula": null
+        },
+        {
+          "cell": "J31",
+          "value": "3:PRG-A10",
+          "formula": null
+        },
+        {
+          "cell": "L31",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M31",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O31",
+          "value": "33:PRG-A12",
+          "formula": null
+        },
+        {
+          "cell": "T31",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "U31",
+          "value": "33:PRG-A12",
+          "formula": null
+        },
+        {
+          "cell": "D32",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E32",
+          "value": "4:PRG-A9",
+          "formula": null
+        },
+        {
+          "cell": "J32",
+          "value": "4:PRG-A9",
+          "formula": null
+        },
+        {
+          "cell": "L32",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M32",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O32",
+          "value": "34:PRG-A13",
+          "formula": null
+        },
+        {
+          "cell": "T32",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "U32",
+          "value": "34:PRG-A13",
+          "formula": null
+        },
+        {
+          "cell": "D33",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E33",
+          "value": "5:PRG-A8",
+          "formula": null
+        },
+        {
+          "cell": "J33",
+          "value": "5:PRG-A8",
+          "formula": null
+        },
+        {
+          "cell": "L33",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M33",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O33",
+          "value": "35:PRG-A14",
+          "formula": null
+        },
+        {
+          "cell": "T33",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "U33",
+          "value": "35:PRG-A14",
+          "formula": null
+        },
+        {
+          "cell": "D34",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E34",
+          "value": "6:PRG-A7",
+          "formula": null
+        },
+        {
+          "cell": "J34",
+          "value": "6:PRG-A7",
+          "formula": null
+        },
+        {
+          "cell": "L34",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M34",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O34",
+          "value": "36:PRG-D7",
+          "formula": null
+        },
+        {
+          "cell": "S34",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T34",
+          "value": "36:PRG-D7",
+          "formula": null
+        },
+        {
+          "cell": "AN34",
+          "value": "i2c_sda",
+          "formula": null
+        },
+        {
+          "cell": "AO34",
+          "value": "i2c_scl",
+          "formula": null
+        },
+        {
+          "cell": "AP34",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AQ34",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AR34",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AS34",
+          "value": "3.3V",
+          "formula": null
+        },
+        {
+          "cell": "AT34",
+          "value": "47:~CHR-WE",
+          "formula": null
+        },
+        {
+          "cell": "AU34",
+          "value": "50:CHR-A7",
+          "formula": null
+        },
+        {
+          "cell": "AV34",
+          "value": "51:CHR-A8",
+          "formula": null
+        },
+        {
+          "cell": "AW34",
+          "value": "52:CHR-A9",
+          "formula": null
+        },
+        {
+          "cell": "AX34",
+          "value": "53:CHR-A10",
+          "formula": null
+        },
+        {
+          "cell": "AY34",
+          "value": "54:CHR-A11",
+          "formula": null
+        },
+        {
+          "cell": "AZ34",
+          "value": "55:CHR-A12",
+          "formula": null
+        },
+        {
+          "cell": "BA34",
+          "value": "56~:CHR-A13",
+          "formula": null
+        },
+        {
+          "cell": "BB34",
+          "value": "5v",
+          "formula": null
+        },
+        {
+          "cell": "BC34",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "BD34",
+          "value": "57:CHR-D7",
+          "formula": null
+        },
+        {
+          "cell": "BE34",
+          "value": "58:CHR-D6",
+          "formula": null
+        },
+        {
+          "cell": "BF34",
+          "value": "59:CHR-D5",
+          "formula": null
+        },
+        {
+          "cell": "BG34",
+          "value": "60:CHR-D4",
+          "formula": null
+        },
+        {
+          "cell": "D35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E35",
+          "value": "7:PRG-A6",
+          "formula": null
+        },
+        {
+          "cell": "J35",
+          "value": "7:PRG-A6",
+          "formula": null
+        },
+        {
+          "cell": "L35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O35",
+          "value": "37:PRG-D6",
+          "formula": null
+        },
+        {
+          "cell": "S35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T35",
+          "value": "37:PRG-D6",
+          "formula": null
+        },
+        {
+          "cell": "Y35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "Z35",
+          "value": "32:M2",
+          "formula": null
+        },
+        {
+          "cell": "AN35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AO35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AP35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AQ35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AR35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AS35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AT35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AU35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AV35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AW35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AX35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AY35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AZ35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BA35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BB35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BC35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BD35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BE35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BF35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BG35",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BJ35",
+          "value": "JP1",
+          "formula": null
+        },
+        {
+          "cell": "D36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E36",
+          "value": "8:PRG-A5",
+          "formula": null
+        },
+        {
+          "cell": "J36",
+          "value": "8:PRG-A5",
+          "formula": null
+        },
+        {
+          "cell": "L36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O36",
+          "value": "38:PRG-D5",
+          "formula": null
+        },
+        {
+          "cell": "S36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T36",
+          "value": "38:PRG-D5",
+          "formula": null
+        },
+        {
+          "cell": "Y36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "Z36",
+          "value": "44:~PRG-CE",
+          "formula": null
+        },
+        {
+          "cell": "AN36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AO36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AP36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AQ36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AR36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AS36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AT36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AU36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AV36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AW36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AX36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AY36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AZ36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BA36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BB36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BC36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BD36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BE36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BF36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BG36",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "D37",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E37",
+          "value": "9:PRG-A4",
+          "formula": null
+        },
+        {
+          "cell": "J37",
+          "value": "9:PRG-A4",
+          "formula": null
+        },
+        {
+          "cell": "L37",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M37",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O37",
+          "value": "39:PRG-D4",
+          "formula": null
+        },
+        {
+          "cell": "S37",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T37",
+          "value": "39:PRG-D4",
+          "formula": null
+        },
+        {
+          "cell": "AN37",
+          "value": "bbb_f_empty",
+          "formula": null
+        },
+        {
+          "cell": "AO37",
+          "value": "nes_f_full",
+          "formula": null
+        },
+        {
+          "cell": "AP37",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AQ37",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AR37",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AS37",
+          "value": "GND",
+          "formula": null
+        },
+        {
+          "cell": "AT37",
+          "value": "17:~CHR-OE",
+          "formula": null
+        },
+        {
+          "cell": "AU37",
+          "value": "19:CHR-A6",
+          "formula": null
+        },
+        {
+          "cell": "AV37",
+          "value": "20:CHR-A5",
+          "formula": null
+        },
+        {
+          "cell": "AW37",
+          "value": "21:CHR-A4",
+          "formula": null
+        },
+        {
+          "cell": "AX37",
+          "value": "22:CHR-A3",
+          "formula": null
+        },
+        {
+          "cell": "AY37",
+          "value": "23:CHR-A2",
+          "formula": null
+        },
+        {
+          "cell": "AZ37",
+          "value": "24:CHR-A1",
+          "formula": null
+        },
+        {
+          "cell": "BA37",
+          "value": "25:CHR-A0",
+          "formula": null
+        },
+        {
+          "cell": "BB37",
+          "value": "GND",
+          "formula": null
+        },
+        {
+          "cell": "BC37",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "BD37",
+          "value": "29:CHR-D0",
+          "formula": null
+        },
+        {
+          "cell": "BE37",
+          "value": "28:CHR-D1",
+          "formula": null
+        },
+        {
+          "cell": "BF37",
+          "value": "27:CHR-D2",
+          "formula": null
+        },
+        {
+          "cell": "BG37",
+          "value": "26:CHR-D3",
+          "formula": null
+        },
+        {
+          "cell": "C38",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "D38",
+          "value": "10:PRG-A3",
+          "formula": null
+        },
+        {
+          "cell": "J38",
+          "value": "10:PRG-A3",
+          "formula": null
+        },
+        {
+          "cell": "L38",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M38",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O38",
+          "value": "40:PRG-D3",
+          "formula": null
+        },
+        {
+          "cell": "S38",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T38",
+          "value": "40:PRG-D3",
+          "formula": null
+        },
+        {
+          "cell": "C39",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "D39",
+          "value": "11:PRG-A2",
+          "formula": null
+        },
+        {
+          "cell": "J39",
+          "value": "11:PRG-A2",
+          "formula": null
+        },
+        {
+          "cell": "L39",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M39",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O39",
+          "value": "41:PRG-D2",
+          "formula": null
+        },
+        {
+          "cell": "S39",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T39",
+          "value": "41:PRG-D2",
+          "formula": null
+        },
+        {
+          "cell": "C40",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "D40",
+          "value": "12:PRG-A1",
+          "formula": null
+        },
+        {
+          "cell": "J40",
+          "value": "12:PRG-A1",
+          "formula": null
+        },
+        {
+          "cell": "L40",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M40",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O40",
+          "value": "42:PRG-D1",
+          "formula": null
+        },
+        {
+          "cell": "S40",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T40",
+          "value": "42:PRG-D1",
+          "formula": null
+        },
+        {
+          "cell": "AN40",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AO40",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AP40",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AQ40",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AR40",
+          "value": "44:~PRG-CE",
+          "formula": null
+        },
+        {
+          "cell": "AS40",
+          "value": "3.3V",
+          "formula": null
+        },
+        {
+          "cell": "AT40",
+          "value": "2:PRG-A11",
+          "formula": null
+        },
+        {
+          "cell": "AU40",
+          "value": "3:PRG-A10",
+          "formula": null
+        },
+        {
+          "cell": "AV40",
+          "value": "4:PRG-A9",
+          "formula": null
+        },
+        {
+          "cell": "AW40",
+          "value": "5:PRG-A8",
+          "formula": null
+        },
+        {
+          "cell": "AX40",
+          "value": "6:PRG-A7",
+          "formula": null
+        },
+        {
+          "cell": "AY40",
+          "value": "7:PRG-A6",
+          "formula": null
+        },
+        {
+          "cell": "AZ40",
+          "value": "8:PRG-A5",
+          "formula": null
+        },
+        {
+          "cell": "BA40",
+          "value": "9:PRG-A4",
+          "formula": null
+        },
+        {
+          "cell": "BB40",
+          "value": "5v",
+          "formula": null
+        },
+        {
+          "cell": "BC40",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "BD40",
+          "value": "36:PRG-D7",
+          "formula": null
+        },
+        {
+          "cell": "BE40",
+          "value": "37:PRG-D6",
+          "formula": null
+        },
+        {
+          "cell": "BF40",
+          "value": "38:PRG-D5",
+          "formula": null
+        },
+        {
+          "cell": "BG40",
+          "value": "39:PRG-D4",
+          "formula": null
+        },
+        {
+          "cell": "C41",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "D41",
+          "value": "13:PRG-A0",
+          "formula": null
+        },
+        {
+          "cell": "J41",
+          "value": "13:PRG-A0",
+          "formula": null
+        },
+        {
+          "cell": "L41",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M41",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O41",
+          "value": "43:PRG-D0",
+          "formula": null
+        },
+        {
+          "cell": "S41",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T41",
+          "value": "43:PRG-D0",
+          "formula": null
+        },
+        {
+          "cell": "Z41",
+          "value": "i2c_sda",
+          "formula": null
+        },
+        {
+          "cell": "AN41",
+          "value": "34",
+          "formula": null
+        },
+        {
+          "cell": "AO41",
+          "value": "32",
+          "formula": null
+        },
+        {
+          "cell": "AP41",
+          "value": "30",
+          "formula": null
+        },
+        {
+          "cell": "AQ41",
+          "value": "28",
+          "formula": null
+        },
+        {
+          "cell": "AR41",
+          "value": "26",
+          "formula": null
+        },
+        {
+          "cell": "AT41",
+          "value": "24",
+          "formula": null
+        },
+        {
+          "cell": "AU41",
+          "value": "22",
+          "formula": null
+        },
+        {
+          "cell": "AV41",
+          "value": "20",
+          "formula": null
+        },
+        {
+          "cell": "AW41",
+          "value": "18",
+          "formula": null
+        },
+        {
+          "cell": "AX41",
+          "value": "16",
+          "formula": null
+        },
+        {
+          "cell": "AY41",
+          "value": "14",
+          "formula": null
+        },
+        {
+          "cell": "AZ41",
+          "value": "12",
+          "formula": null
+        },
+        {
+          "cell": "BA41",
+          "value": "10",
+          "formula": null
+        },
+        {
+          "cell": "BC41",
+          "value": "8",
+          "formula": null
+        },
+        {
+          "cell": "BD41",
+          "value": "6",
+          "formula": null
+        },
+        {
+          "cell": "BE41",
+          "value": "4",
+          "formula": null
+        },
+        {
+          "cell": "BF41",
+          "value": "2",
+          "formula": null
+        },
+        {
+          "cell": "BG41",
+          "value": "0",
+          "formula": null
+        },
+        {
+          "cell": "C42",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "D42",
+          "value": "14:PRG-R/~W",
+          "formula": null
+        },
+        {
+          "cell": "J42",
+          "value": "14:PRG-R/~W",
+          "formula": null
+        },
+        {
+          "cell": "L42",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M42",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O42",
+          "value": "44:~PRG-CE",
+          "formula": null
+        },
+        {
+          "cell": "Z42",
+          "value": "i2c_scl",
+          "formula": null
+        },
+        {
+          "cell": "J43",
+          "value": "15:~IRQ N/C (Out)",
+          "formula": null
+        },
+        {
+          "cell": "L43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O43",
+          "value": "45:Sound In C46",
+          "formula": null
+        },
+        {
+          "cell": "AN43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AO43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AP43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AQ43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AR43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AS43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AT43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AU43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AV43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AW43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AX43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AY43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AZ43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BA43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BB43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BC43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BD43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BE43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BF43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BG43",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "J44",
+          "value": "16:GND",
+          "formula": null
+        },
+        {
+          "cell": "L44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O44",
+          "value": "46:Sound Out C45",
+          "formula": null
+        },
+        {
+          "cell": "AN44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AO44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AP44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AQ44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AR44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AS44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AT44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AU44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AV44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AW44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AX44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AY44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "AZ44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BA44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BB44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BC44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BD44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BE44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BF44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BG44",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "BJ44",
+          "value": "JP2",
+          "formula": null
+        },
+        {
+          "cell": "J45",
+          "value": "17:~CHR-OE",
+          "formula": null
+        },
+        {
+          "cell": "L45",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M45",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O45",
+          "value": "47:~CHR-WE",
+          "formula": null
+        },
+        {
+          "cell": "J46",
+          "value": "18:VRAM-A10",
+          "formula": null
+        },
+        {
+          "cell": "L46",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M46",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O46",
+          "value": "48:~VRAM-CE",
+          "formula": null
+        },
+        {
+          "cell": "T46",
+          "value": " ",
+          "formula": null
+        },
+        {
+          "cell": "AN46",
+          "value": "35",
+          "formula": null
+        },
+        {
+          "cell": "AO46",
+          "value": "33",
+          "formula": null
+        },
+        {
+          "cell": "AP46",
+          "value": "31",
+          "formula": null
+        },
+        {
+          "cell": "AQ46",
+          "value": "29",
+          "formula": null
+        },
+        {
+          "cell": "AR46",
+          "value": "27",
+          "formula": null
+        },
+        {
+          "cell": "AT46",
+          "value": "25",
+          "formula": null
+        },
+        {
+          "cell": "AU46",
+          "value": "23",
+          "formula": null
+        },
+        {
+          "cell": "AV46",
+          "value": "21",
+          "formula": null
+        },
+        {
+          "cell": "AW46",
+          "value": "19",
+          "formula": null
+        },
+        {
+          "cell": "AX46",
+          "value": "17",
+          "formula": null
+        },
+        {
+          "cell": "AY46",
+          "value": "15",
+          "formula": null
+        },
+        {
+          "cell": "AZ46",
+          "value": "13",
+          "formula": null
+        },
+        {
+          "cell": "BA46",
+          "value": "11",
+          "formula": null
+        },
+        {
+          "cell": "BC46",
+          "value": "9",
+          "formula": null
+        },
+        {
+          "cell": "BD46",
+          "value": "7",
+          "formula": null
+        },
+        {
+          "cell": "BE46",
+          "value": "5",
+          "formula": null
+        },
+        {
+          "cell": "BF46",
+          "value": "3",
+          "formula": null
+        },
+        {
+          "cell": "BG46",
+          "value": "1",
+          "formula": null
+        },
+        {
+          "cell": "D47",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E47",
+          "value": "17:~CHR-OE",
+          "formula": null
+        },
+        {
+          "cell": "J47",
+          "value": "19:CHR-A6",
+          "formula": null
+        },
+        {
+          "cell": "L47",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M47",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O47",
+          "value": "49:CHR-A13",
+          "formula": null
+        },
+        {
+          "cell": "T47",
+          "value": "47:~CHR-WE",
+          "formula": null
+        },
+        {
+          "cell": "AN47",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AO47",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AP47",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AQ47",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "AR47",
+          "value": "32:M2",
+          "formula": null
+        },
+        {
+          "cell": "AS47",
+          "value": "GND",
+          "formula": null
+        },
+        {
+          "cell": "AT47",
+          "value": "10:PRG-A3",
+          "formula": null
+        },
+        {
+          "cell": "AU47",
+          "value": "11:PRG-A2",
+          "formula": null
+        },
+        {
+          "cell": "AV47",
+          "value": "12:PRG-A1",
+          "formula": null
+        },
+        {
+          "cell": "AW47",
+          "value": "13:PRG-A0",
+          "formula": null
+        },
+        {
+          "cell": "AX47",
+          "value": "14:PRG-R/~W",
+          "formula": null
+        },
+        {
+          "cell": "AY47",
+          "value": "35:PRG-A14",
+          "formula": null
+        },
+        {
+          "cell": "AZ47",
+          "value": "34:PRG-A13",
+          "formula": null
+        },
+        {
+          "cell": "BA47",
+          "value": "35:PRG-A12",
+          "formula": null
+        },
+        {
+          "cell": "BB47",
+          "value": "GND",
+          "formula": null
+        },
+        {
+          "cell": "BC47",
+          "value": "NC",
+          "formula": null
+        },
+        {
+          "cell": "BD47",
+          "value": "40:PRG-D3",
+          "formula": null
+        },
+        {
+          "cell": "BE47",
+          "value": "41:PRG-D2",
+          "formula": null
+        },
+        {
+          "cell": "BF47",
+          "value": "42:PRG-D1",
+          "formula": null
+        },
+        {
+          "cell": "BG47",
+          "value": "43:PRG-D0",
+          "formula": null
+        },
+        {
+          "cell": "D48",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E48",
+          "value": "19:CHR-A6",
+          "formula": null
+        },
+        {
+          "cell": "J48",
+          "value": "20:CHR-A5",
+          "formula": null
+        },
+        {
+          "cell": "L48",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M48",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O48",
+          "value": "50:CHR-A7",
+          "formula": null
+        },
+        {
+          "cell": "T48",
+          "value": "50:CHR-A7",
+          "formula": null
+        },
+        {
+          "cell": "D49",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E49",
+          "value": "20:CHR-A5",
+          "formula": null
+        },
+        {
+          "cell": "J49",
+          "value": "21:CHR-A4",
+          "formula": null
+        },
+        {
+          "cell": "L49",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M49",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O49",
+          "value": "51:CHR-A8",
+          "formula": null
+        },
+        {
+          "cell": "T49",
+          "value": "51:CHR-A8",
+          "formula": null
+        },
+        {
+          "cell": "D50",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E50",
+          "value": "21:CHR-A4",
+          "formula": null
+        },
+        {
+          "cell": "J50",
+          "value": "22:CHR-A3",
+          "formula": null
+        },
+        {
+          "cell": "L50",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M50",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O50",
+          "value": "52:CHR-A9",
+          "formula": null
+        },
+        {
+          "cell": "T50",
+          "value": "52:CHR-A9",
+          "formula": null
+        },
+        {
+          "cell": "D51",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E51",
+          "value": "22:CHR-A3",
+          "formula": null
+        },
+        {
+          "cell": "J51",
+          "value": "23:CHR-A2",
+          "formula": null
+        },
+        {
+          "cell": "L51",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M51",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O51",
+          "value": "53:CHR-A10",
+          "formula": null
+        },
+        {
+          "cell": "S51",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T51",
+          "value": "53:CHR-A10",
+          "formula": null
+        },
+        {
+          "cell": "D52",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E52",
+          "value": "23:CHR-A2",
+          "formula": null
+        },
+        {
+          "cell": "J52",
+          "value": "24:CHR-A1",
+          "formula": null
+        },
+        {
+          "cell": "L52",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M52",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O52",
+          "value": "54:CHR-A11",
+          "formula": null
+        },
+        {
+          "cell": "S52",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T52",
+          "value": "54:CHR-A11",
+          "formula": null
+        },
+        {
+          "cell": "D53",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E53",
+          "value": "24:CHR-A1",
+          "formula": null
+        },
+        {
+          "cell": "J53",
+          "value": "25:CHR-A0",
+          "formula": null
+        },
+        {
+          "cell": "L53",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M53",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O53",
+          "value": "55:CHR-A12",
+          "formula": null
+        },
+        {
+          "cell": "S53",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T53",
+          "value": "55:CHR-A12",
+          "formula": null
+        },
+        {
+          "cell": "D54",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E54",
+          "value": "25:CHR-A0",
+          "formula": null
+        },
+        {
+          "cell": "J54",
+          "value": "26:CHR-D0",
+          "formula": null
+        },
+        {
+          "cell": "L54",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M54",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O54",
+          "value": "56~:CHR-A13",
+          "formula": null
+        },
+        {
+          "cell": "S54",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T54",
+          "value": "56~:CHR-A13",
+          "formula": null
+        },
+        {
+          "cell": "C55",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E55",
+          "value": "26:CHR-D0",
+          "formula": null
+        },
+        {
+          "cell": "J55",
+          "value": "27:CHR-D1",
+          "formula": null
+        },
+        {
+          "cell": "L55",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M55",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O55",
+          "value": "57:CHR-D7",
+          "formula": null
+        },
+        {
+          "cell": "R55",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T55",
+          "value": "57:CHR-D7",
+          "formula": null
+        },
+        {
+          "cell": "C56",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E56",
+          "value": "27:CHR-D1",
+          "formula": null
+        },
+        {
+          "cell": "J56",
+          "value": "28:CHR-D2",
+          "formula": null
+        },
+        {
+          "cell": "L56",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M56",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O56",
+          "value": "58:CHR-D6",
+          "formula": null
+        },
+        {
+          "cell": "R56",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T56",
+          "value": "58:CHR-D6",
+          "formula": null
+        },
+        {
+          "cell": "C57",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E57",
+          "value": "28:CHR-D2",
+          "formula": null
+        },
+        {
+          "cell": "J57",
+          "value": "29:CHR-D3",
+          "formula": null
+        },
+        {
+          "cell": "L57",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M57",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O57",
+          "value": "59:CHR-D5",
+          "formula": null
+        },
+        {
+          "cell": "R57",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T57",
+          "value": "59:CHR-D5",
+          "formula": null
+        },
+        {
+          "cell": "C58",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "E58",
+          "value": "29:CHR-D3",
+          "formula": null
+        },
+        {
+          "cell": "J58",
+          "value": "30:Vcc",
+          "formula": null
+        },
+        {
+          "cell": "L58",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "M58",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "O58",
+          "value": "60:CHR-D4",
+          "formula": null
+        },
+        {
+          "cell": "R58",
+          "value": "x",
+          "formula": null
+        },
+        {
+          "cell": "T58",
+          "value": "60:CHR-D4",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet6.xml",
+      "cells": [
+        {
+          "cell": "AA11",
+          "value": "/data",
+          "formula": null
+        },
+        {
+          "cell": "AA12",
+          "value": "/addr",
+          "formula": null
+        },
+        {
+          "cell": "AM13",
+          "value": "/i2c_data_in",
+          "formula": null
+        },
+        {
+          "cell": "AV13",
+          "value": "/empty",
+          "formula": null
+        },
+        {
+          "cell": "BE13",
+          "value": "/full",
+          "formula": null
+        },
+        {
+          "cell": "AM14",
+          "value": "/i2c_data_out",
+          "formula": null
+        },
+        {
+          "cell": "AM21",
+          "value": "/scl",
+          "formula": null
+        },
+        {
+          "cell": "AV21",
+          "value": "/full",
+          "formula": null
+        },
+        {
+          "cell": "BE21",
+          "value": "/empty",
+          "formula": null
+        },
+        {
+          "cell": "AM22",
+          "value": "/sda",
+          "formula": null
+        },
+        {
+          "cell": "BM23",
+          "value": "/gpio",
+          "formula": null
+        },
+        {
+          "cell": "BM26",
+          "value": "/i2c",
+          "formula": null
+        },
+        {
+          "cell": "AA30",
+          "value": "/data",
+          "formula": null
+        },
+        {
+          "cell": "AA31",
+          "value": "/addr",
+          "formula": null
+        },
+        {
+          "cell": "J32",
+          "value": "/composite",
+          "formula": null
+        }
+      ]
+    },
+    {
+      "member": "xl/worksheets/sheet11.xml",
+      "cells": [
+        {
+          "cell": "B3",
+          "value": "https://vadl.github.io/beagleboneblack/2016/07/29/setting-up-bbb-gpio",
+          "formula": null
+        },
+        {
+          "cell": "C5",
+          "value": "GPIO Numbering Scheme",
+          "formula": null
+        },
+        {
+          "cell": "C6",
+          "value": "The gpio pins of the bbb are grouped into 3 groups of 32: GPIO0, GPIO1, and GPIO2. An individual pin can be refered to using the convention GPIOX_Y where X is its gpio register and Y is its number within that register. However, all references to a particular pin made in software instead uses its absolute pin number! A gpio’s absolute pin number is calculated in the following manner: Z = 32*X + Y where X is again the gpio register and Yis the position within that register.",
+          "formula": null
+        },
+        {
+          "cell": "C8",
+          "value": "i.e. GPIO2_24 is 32*2+24, making it GPIO_88. If this pin were to be referenced anywhere in software, the user would use the number 88, not 24!",
+          "formula": null
+        },
+        {
+          "cell": "H14",
+          "value": "nes_f_full",
+          "formula": null
+        },
+        {
+          "cell": "F15",
+          "value": "bbb_f_empty",
+          "formula": null
+        },
+        {
+          "cell": "K15",
+          "value": "bbb_f_empty = gpio115",
+          "formula": null
+        },
+        {
+          "cell": "K16",
+          "value": "nes_f_full = gpio49",
+          "formula": null
+        },
+        {
+          "cell": "F17",
+          "value": "27",
+          "formula": null
+        },
+        {
+          "cell": "G17",
+          "value": "25",
+          "formula": null
+        },
+        {
+          "cell": "H17",
+          "value": "23",
+          "formula": null
+        },
+        {
+          "cell": "F21",
+          "value": "gpio1_17 = 49",
+          "formula": null
+        },
+        {
+          "cell": "I22",
+          "value": "32",
+          "formula": null
+        },
+        {
+          "cell": "J22",
+          "value": "17",
+          "formula": null
+        },
+        {
+          "cell": "F23",
+          "value": "gpio3_19 = 115",
+          "formula": null
+        },
+        {
+          "cell": "I23",
+          "value": "96",
+          "formula": null
+        },
+        {
+          "cell": "J23",
+          "value": "19",
+          "formula": null
+        }
+      ]
+    }
+  ],
+  "drawings": [
+    {
+      "member": "xl/drawings/drawing10.xml",
+      "text": []
+    },
+    {
+      "member": "xl/drawings/drawing11.xml",
+      "text": []
+    },
+    {
+      "member": "xl/drawings/drawing9.xml",
+      "text": []
+    },
+    {
+      "member": "xl/drawings/drawing3.xml",
+      "text": [
+        "NES",
+        "DE0-CV",
+        "BBB",
+        "Duper Cartridge",
+        "CHRROM",
+        "Duper ROM",
+        "- fifo status reg",
+        "- fifo read reg",
+        "- fifo write reg",
+        "I2C",
+        "Slave",
+        "FIFO IN",
+        "FIFO OUT",
+        "PRGROM",
+        "GPIO",
+        "I2C Master",
+        "CPU",
+        "PPU"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing4.xml",
+      "text": [
+        "power",
+        "NIC",
+        "19: i2c2_scl",
+        "20:",
+        " i2c2_sda"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing2.xml",
+      "text": [
+        "NES",
+        "CPU 6502",
+        "PPU",
+        "RAM",
+        "2k",
+        "DE0-CV",
+        "PROM",
+        "32k",
+        "CROM",
+        "8k",
+        "FIFO",
+        "256",
+        " byte",
+        "FIFO",
+        "256",
+        " byte",
+        "I2C",
+        "Slave",
+        "VRAM",
+        "2k",
+        "Beagle bone",
+        "CPU",
+        "AM3358",
+        "DDR3",
+        "512MB",
+        "EEPROM",
+        "4k",
+        "onboard",
+        " NAND",
+        "eMMC 4GB",
+        "GPIO",
+        "GPIO",
+        "I2C",
+        "Master"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing1.xml",
+      "text": [
+        "NES (fami-con)",
+        "6502",
+        " CPU",
+        "DE1 board",
+        "RAM",
+        "PPU",
+        "PRG-ROM",
+        "CHR-ROM",
+        "Universal board",
+        "VRAM",
+        "TV",
+        "Rasbery",
+        " Pi or mbed board",
+        "Linux",
+        "Duper Pix",
+        " Processor"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing5.xml",
+      "text": [
+        "AM3359",
+        "de0-cv",
+        "prgrom",
+        "chrrom",
+        "i2c_slave",
+        "fifo_in",
+        "fifo_out",
+        "bbb",
+        "i2c_master",
+        "gpio",
+        "nes",
+        "cpu",
+        "ppu",
+        "tv"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing8.xml",
+      "text": [
+        "v"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing7.xml",
+      "text": [
+        "CPU",
+        "lda fifo_data",
+        "sta fifo_addr",
+        "idle",
+        "rom read",
+        "idle",
+        "fifo",
+        " push",
+        "idle",
+        "rom read",
+        "idle",
+        "fifo",
+        " push",
+        "BBB",
+        "I2C master",
+        "GPIO",
+        "read i2c",
+        "idle",
+        "rom read",
+        "idle",
+        "rom read",
+        "idle",
+        "rom read",
+        "idle",
+        "fifo",
+        " pop"
+      ]
+    },
+    {
+      "member": "xl/drawings/drawing6.xml",
+      "text": [
+        "NES",
+        "Duper Cartridge",
+        "BBB",
+        "TV",
+        "joypad",
+        "idle",
+        "rom read",
+        "fifo status read",
+        "fifo read",
+        "fifo write",
+        "bbb",
+        " ",
+        "i2c read",
+        "bbb i2c write",
+        "fifo pop",
+        "fifo read ok",
+        "fifo push",
+        "fifo write ok"
+      ]
+    }
+  ],
+  "media": [
+    "xl/media/image16.png",
+    "xl/media/image15.png",
+    "xl/media/image14.png",
+    "xl/media/image13.png",
+    "xl/media/image9.png",
+    "xl/media/image10.png",
+    "xl/media/image11.png",
+    "xl/media/image12.png",
+    "xl/media/image8.png",
+    "xl/media/image7.png",
+    "xl/media/image1.jpeg",
+    "xl/media/image3.png",
+    "xl/media/image4.png",
+    "xl/media/image5.png",
+    "xl/media/image6.png",
+    "xl/media/image2.png"
+  ],
+  "manual_content_review": false,
+  "scope": "Extraction only; formulas and links inert, no rendered layout or image review."
+}

@@ -1,0 +1,36 @@
+{
+  "receipt": "docs/research/dedup-500/row-major-index-probe-decode-20261102-v1.json",
+  "summary": {
+    "dense512": {
+      "reference_median_ns": 169917.0,
+      "row_major_median_ns": 157896.0,
+      "reference_over_row_major": 1.0761323909408724,
+      "samples_each": 16
+    },
+    "dense8192": {
+      "reference_median_ns": 3554333.0,
+      "row_major_median_ns": 3176625.0,
+      "reference_over_row_major": 1.1189022941014442,
+      "samples_each": 16
+    },
+    "dense32768": {
+      "reference_median_ns": 19762354.0,
+      "row_major_median_ns": 16451395.5,
+      "reference_over_row_major": 1.2012569997481368,
+      "samples_each": 16
+    },
+    "flat8192": {
+      "reference_median_ns": 2550958.0,
+      "row_major_median_ns": 2154604.0,
+      "reference_over_row_major": 1.1839567734952687,
+      "samples_each": 16
+    },
+    "sparse8192": {
+      "reference_median_ns": 3241687.5,
+      "row_major_median_ns": 2807458.5,
+      "reference_over_row_major": 1.1546697840769506,
+      "samples_each": 16
+    }
+  },
+  "scope": "Observed optimized test-profile construction timing under concurrent host load; no isolated release-performance claim"
+}

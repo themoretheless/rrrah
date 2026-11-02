@@ -2,9 +2,9 @@
   "index": 120,
   "repository": "Anuj7411/sipcode",
   "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "106/788 whole files;393 distinct original cases;62 authored upstream controls;1 local exact regression",
   "decision": "reference",
-  "finding": "Raw-byte SHA256 and mtime-based read cache; useful change-detection design but source context/token dedup only.",
+  "finding": "Fresh SHA256+mtime comparison confirmed;pre-tool recording allows repeat denial without completed read in isolated original-hook fixture. Scanner omissions explicit scope limitation.",
   "available_source_evidence": [
     {
       "path": "src/modules/manifest/scanFiles.ts",
@@ -70,7 +70,7 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 206,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -94,5 +94,122 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v2-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v4-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v5-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v6-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v7-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v8-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v9-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v10-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v11-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v12-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v13-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v14-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v15-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v16-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v17-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v18-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v19-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v20-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v21-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v22-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v23-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v24-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v25-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v26-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v27-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/sipcode120-source-review-v28-20261024.json",
+      "whole_repo_complete": false
+    }
+  ],
+  "full_repository_read": false,
+  "upstream_test_scope": "Isolated subset124originalcases on declaredVitestmajor2 and4,Node22.23.4;notfullproject",
+  "latest_source_review": "sipcode120-source-review-v29-20261024.json"
 }

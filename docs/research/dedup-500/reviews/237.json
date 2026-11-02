@@ -2,7 +2,7 @@
   "index": 237,
   "repository": "d3vyce/taskiq-deduplication",
   "commit": "c1f91bc5e1fbf5140a936bfa859d42eff42eb48e",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 23 tracked blobs assessed: 22 whole text reads and one structurally parsed lock; 17 original pure callbacks and 8 authored isolated controls passed. No Redis/Taskiq integration or full pytest run.",
   "decision": "reference",
   "finding": "Redis task fingerprint ownership script and truncated SHA256; useful task coalescing, not file proof.",
   "available_source_evidence": [
@@ -84,5 +84,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "taskiq237-source-review-v2-20261024.json"
 }

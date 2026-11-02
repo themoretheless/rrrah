@@ -1,0 +1,30 @@
+{
+  "scope": "Original API utils with API imports replaced; bounded first-three yields for nonpositive sizes, no network or unbounded iteration.",
+  "controls": [
+    {
+      "control": "nonpositive_chunk_size_0",
+      "first_three_chunks": [
+        [],
+        [],
+        []
+      ],
+      "pass": true
+    },
+    {
+      "control": "nonpositive_chunk_size_-1",
+      "first_three_chunks": [
+        [
+          1,
+          2
+        ],
+        [],
+        []
+      ],
+      "pass": true
+    },
+    {
+      "control": "positive_chunk_size_retains_all_elements",
+      "pass": true
+    }
+  ]
+}

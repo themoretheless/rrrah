@@ -1,0 +1,22 @@
+{
+  "checkpoint": "Exact geometric separation for repeated supports only; fixes four-triangle counterexample, leaves three-triangle residual.",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "ae8366c66f712686d25742894d18b7d672108854a70cc5d25942c35974a1d5aa",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "68a4b16b85db5766d457587748f4cb35496b6264b54fbb780cffc70da948fa50",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "255ae5681718147241fbaa93d592e22efc3930e5dbd836c8e05e982f99c84630"
+  },
+  "decoder_sha256": "3dd9f82b25cf936e0b5c1514ae1b9d7bf3c241047792973f8417b51fa7ac33ab",
+  "ordered": {
+    "passed": 55,
+    "ignored": 3
+  },
+  "full_encode": {
+    "passed": 92,
+    "ignored": 4
+  },
+  "feature_public": {
+    "passed": 256,
+    "ignored": 11
+  },
+  "real_ai": "all four sampled calls still exhaust 100M; one.ai page 0 differs by 2522 pixels, page 1 exact"
+}

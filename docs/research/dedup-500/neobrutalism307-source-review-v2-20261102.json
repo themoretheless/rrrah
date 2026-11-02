@@ -1,0 +1,88 @@
+{
+  "index": 307,
+  "repository": "quak-smauga/Neo-brutalism-CSS",
+  "commit": "cf19c9a4270eb6ebbed2aeb9f72a0ff54643fb33",
+  "tracked_blob_count": 16,
+  "whole_file_reads": [
+    {
+      "path": "styles/animations.css",
+      "local": "docs/research/dedup-500/evidence/quak-smauga--Neo-brutalism-CSS/03-animations.css",
+      "sha256": "4e0089fd98c6731d93451afb088a29a49403f9ea279acaac7dc76d5007f1cb4e",
+      "git_blob_sha1": "08c64e9778772228cfd7d3768858b7d309c396bb"
+    },
+    {
+      "path": "styles/components.css",
+      "local": "docs/research/dedup-500/evidence/quak-smauga--Neo-brutalism-CSS/04-components.css",
+      "sha256": "e71b9d5d7af4ce6c11b5d94dee323d827a78f1014199ff1c53b341641818882d",
+      "git_blob_sha1": "41ce098bf83639a7dedf54a26bb160ae5c9f265e"
+    },
+    {
+      "path": "neobrutalism-showcase.html",
+      "local": "docs/research/dedup-500/evidence/quak-smauga--Neo-brutalism-CSS/02-neobrutalism-showcase.html",
+      "sha256": "6dbc65870066427184b766bb9b170963b0fcd5b406825696575a2649fcf598c6",
+      "git_blob_sha1": "5e699a8b06b02f51b9ffca1a7cb02693e84d27bc"
+    }
+  ],
+  "structured_assessments": [],
+  "remaining": [
+    {
+      "path": "LICENSE",
+      "bytes": 1068
+    },
+    {
+      "path": "README.md",
+      "bytes": 7645
+    },
+    {
+      "path": "showcase_img.png",
+      "bytes": 202178
+    },
+    {
+      "path": "styles/README.md",
+      "bytes": 12411
+    },
+    {
+      "path": "styles/layout.css",
+      "bytes": 1951
+    },
+    {
+      "path": "styles/main.css",
+      "bytes": 271
+    },
+    {
+      "path": "styles/neo-brutalism.css",
+      "bytes": 3155
+    },
+    {
+      "path": "styles/reset.css",
+      "bytes": 431
+    },
+    {
+      "path": "styles/responsive.css",
+      "bytes": 1757
+    },
+    {
+      "path": "styles/theme-customization.css",
+      "bytes": 1101
+    },
+    {
+      "path": "styles/typography.css",
+      "bytes": 1355
+    },
+    {
+      "path": "styles/utilities.css",
+      "bytes": 4422
+    },
+    {
+      "path": "styles/variables.css",
+      "bytes": 1068
+    }
+  ],
+  "upstream_tests_run": false,
+  "full_manual_review": false,
+  "findings": [
+    "Two CSS modules fully read: decorative transforms/keyframes/hover animations and navigation/hero/service/footer/contact presentation. No duplicate-search computation. Inventory16blobs is HTML/CSS/Markdown/license plus1PNG, no separately tracked application algorithm or tests. HTML inline behavior and remaining files still require reading. Reject-domain retained provisionally.",
+    "Entire638line HTML showcase read, including inline style and sole script. Demonstrates colors, typography, buttons, cards, icons, grid/flex layout, animation and placeholder service/contact sections. Sole JS toggles active class on mobile menu. No file selection, hashing, comparison, dedup pipeline or worker/network computation; Google Fonts and placeholder image references are presentation assets. HTML was source-reviewed, not rendered or interaction-tested."
+  ],
+  "previous_audit": "docs/research/dedup-500/neobrutalism307-source-review-v1-20261102.json"
+}

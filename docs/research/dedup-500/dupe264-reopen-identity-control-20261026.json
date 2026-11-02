@@ -1,0 +1,12 @@
+{
+  "scope": "Original filerec_open with single-thread no-op mutex macros and minimal struct; only temporary synthetic file atomically replaced before open. No actual scan cache/kernel dedup, no corruption claim.",
+  "source": "docs/research/dedup-500/evidence/markfasheh--duperemove/remaining-pinned/filerec.c",
+  "sha256": "9fc1ca50f0ff2d11f89fe5f3b042a339218ddf0ccd641ef46e5027c5bba491f1",
+  "old_inode": 227846645,
+  "replacement_inode": 227846646,
+  "build_returncode": 0,
+  "build_stderr": "",
+  "run_returncode": 0,
+  "stdout": "return=0 fd_refs=1 opened_inode=227846646 first_byte=B\n",
+  "harness": "#include <stdbool.h>\n#include <stdio.h>\n#include <string.h>\n#include <errno.h>\n#include <fcntl.h>\n#include <unistd.h>\n#include <sys/stat.h>\n#include <assert.h>\nstruct filerec{char *filename;int fd;unsigned int fd_refs;};\nstatic int filerec_fd_mutex;\n#define g_mutex_lock(x) ((void)0)\n#define g_mutex_unlock(x) ((void)0)\n#define abort_on(x) assert(!(x))\n#define eprintf(...) fprintf(stderr,__VA_ARGS__)\nint filerec_open(struct filerec *file, bool quiet)\n{\n\tint ret = 0;\n\tint fd;\n\n\tg_mutex_lock(&filerec_fd_mutex);\n\tif (file->fd_refs == 0) {\n\t\tabort_on(file->fd != -1);\n\n\t\tfd = open(file->filename, O_RDONLY);\n\t\tif (fd == -1) {\n\t\t\tret = errno;\n\t\t\tif (ret != ENOENT || !quiet)\n\t\t\t\teprintf(\"Error %d: %s while opening \\\"%s\\\"\\n\",\n\t\t\t\t\tret, strerror(ret), file->filename);\n\t\t\tgoto out_unlock;\n\t\t}\n\n\t\tfile->fd = fd;\n\t}\n\tfile->fd_refs++;\nout_unlock:\n\tg_mutex_unlock(&filerec_fd_mutex);\n\n\treturn ret;\n}\nint main(int argc,char **argv){struct filerec f={argv[1],-1,0};int ret=filerec_open(&f,true);struct stat st={0};if(!ret)fstat(f.fd,&st);char c=0;if(!ret)read(f.fd,&c,1);printf(\"return=%d fd_refs=%u opened_inode=%llu first_byte=%c\\n\",ret,f.fd_refs,(unsigned long long)st.st_ino,c);if(f.fd>=0)close(f.fd);return ret;}\n"
+}

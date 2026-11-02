@@ -1,0 +1,293 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1234,11 +1234,11 @@
+     {out.copy_from(old,start,end,work,cancelled)}
+ }
+ #[inline]
+-fn reusable_region_span(old:&StoredRegions<'_>,start:usize,cut:&Polygon,empty:bool)->Option<(usize,bool)> {
++fn reusable_region_span(old:&StoredRegions<'_>,start:usize,cut:&Polygon,empty:bool,work:&mut usize,cancelled:&dyn Fn()->bool)->Result<Option<(usize,bool)>> {
+     #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+-    {let _=(old,start,cut,empty);None}
++    {let _=(old,start,cut,empty,work,cancelled);Ok(None)}
+     #[cfg(any(test,feature="experimental-shared-partitions"))]
+-    {old.carry_span(start,cut,empty)}
++    {old.carry_span(start,cut,empty,work,cancelled)}
+ }
+ fn restore_region_prefix(out:&mut StoredRegions<'_>,prefix:usize,previous:Option<Fragment>)->Result<()> {
+     #[cfg(not(any(test,feature="experimental-shared-partitions")))]
+@@ -1726,7 +1726,7 @@
+         while old_index < self.regions.values.len() {
+             if BATCH && tail_matches_old {
+                 let room = next.maximum - next.values.len();
+-                let span=reusable_region_span(&self.regions,old_index,&triangle,incoming.values.is_empty());
++                let span=reusable_region_span(&self.regions,old_index,&triangle,incoming.values.is_empty(),work,cancelled)?;
+                 if let Some((end,true))=span {
+                     if end-old_index<=room {
+                         tick(work,cancelled)?;
+--- a/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
++++ b/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
+@@ -9,22 +9,57 @@
+ #[derive(Clone, Copy)]
+ struct ChunkSummary {
+     bounds: [f64; 4],
++    axis: [f64; 2],
++    projection: [f64; 2],
++    known_edges: bool,
+     eligible: bool,
+ }
+ impl ChunkSummary {
+     fn empty() -> Self {
+         Self {
+             bounds: [f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY],
++            axis: [0.; 2],
++            projection: [f64::INFINITY, f64::NEG_INFINITY],
++            known_edges: true,
+             eligible: true,
+         }
++    }
++    // Outward-rounded intervals enclose the exact dot product of these
++    // represented doubles, including cancellation and gradual underflow.
++    fn project(axis: [f64; 2], point: kurbo::Point) -> Option<[f64; 2]> {
++        let x = axis[0] * point.x;
++        let y = axis[1] * point.y;
++        let low = (x.next_down() + y.next_down()).next_down();
++        let high = (x.next_up() + y.next_up()).next_up();
++        (low.is_finite() && high.is_finite()).then_some([low, high])
+     }
+     fn include(&mut self, f: &Fragment) {
+         self.eligible &= f.has_area && f.no_merge_with_previous;
++        self.known_edges &= f.polygon.incoming[..f.polygon.len].iter().all(|id| *id != 0);
++        if self.bounds[0] == f64::INFINITY {
++            let mut longest = 0.;
++            for [a, b] in f.polygon.edges() {
++                let d = b - a;
++                let length = d.x.abs().max(d.y.abs());
++                if length.is_finite() && length > longest {
++                    self.axis = [-d.y, d.x];
++                    longest = length;
++                }
++            }
++        }
+         for p in &f.polygon.points[..f.polygon.len] {
+             self.bounds[0] = self.bounds[0].min(p.x);
+             self.bounds[1] = self.bounds[1].min(p.y);
+             self.bounds[2] = self.bounds[2].max(p.x);
+             self.bounds[3] = self.bounds[3].max(p.y);
++            if self.axis != [0.; 2] {
++                if let Some([low, high]) = Self::project(self.axis, *p) {
++                    self.projection[0] = self.projection[0].min(low);
++                    self.projection[1] = self.projection[1].max(high);
++                } else {
++                    self.projection = [f64::NEG_INFINITY, f64::INFINITY];
++                }
++            }
+         }
+     }
+     fn from_values(values: &[Fragment]) -> Self {
+@@ -34,7 +69,7 @@
+         }
+         summary
+     }
+-    fn disjoint(&self, cut: &super::Polygon) -> bool {
++    fn disjoint(&self, cut: &super::Polygon, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<bool> {
+         let mut b = [f64::INFINITY, f64::INFINITY, f64::NEG_INFINITY, f64::NEG_INFINITY];
+         for p in &cut.points[..cut.len] {
+             b[0] = b[0].min(p.x);
+@@ -42,7 +77,31 @@
+             b[2] = b[2].max(p.x);
+             b[3] = b[3].max(p.y);
+         }
+-        !(self.bounds[0] < b[2] && b[0] < self.bounds[2] && self.bounds[1] < b[3] && b[1] < self.bounds[3])
++        if !(self.bounds[0] < b[2] && b[0] < self.bounds[2] && self.bounds[1] < b[3] && b[1] < self.bounds[3])
++        {
++            return Ok(true);
++        }
++        // An unknown support can be interned by the ordinary overlay even
++        // when its final intersection is empty. Keep that path so future
++        // canonical line identities remain identical to the flat backend.
++        if !self.known_edges
++            || cut.incoming[..cut.len].contains(&0)
++            || self.axis == [0.; 2]
++            || !self.projection.iter().all(|v| v.is_finite())
++        {
++            return Ok(false);
++        }
++        let mut low = f64::INFINITY;
++        let mut high = f64::NEG_INFINITY;
++        for point in &cut.points[..cut.len] {
++            tick(work, cancelled)?;
++            let Some([a, b]) = Self::project(self.axis, *point) else {
++                return Ok(false);
++            };
++            low = low.min(a);
++            high = high.max(b);
++        }
++        Ok(self.projection[1] < low || high < self.projection[0])
+     }
+ }
+ struct Chunk {
+@@ -434,16 +493,18 @@
+         start: usize,
+         cut: &super::Polygon,
+         empty: bool,
+-    ) -> Option<(usize, bool)> {
++        work: &mut usize,
++        cancelled: &dyn Fn() -> bool,
++    ) -> Result<Option<(usize, bool)>> {
+         let RegionValues::Shared(values) = &self.values else {
+-            return None;
++            return Ok(None);
+         };
+         let index = values.segments.values.partition_point(|s| s.end <= start);
+-        let segment = values.segments.values.get(index)?;
+-        Some((
++        let Some(segment) = values.segments.values.get(index) else { return Ok(None); };
++        Ok(Some((
+             segment.end,
+-            segment.chunk.summary.eligible && (empty || segment.chunk.summary.disjoint(cut)),
+-        ))
++            segment.chunk.summary.eligible && (empty || segment.chunk.summary.disjoint(cut, work, cancelled)?),
++        )))
+     }
+     pub(super) fn copy_from(
+         &mut self,
+@@ -1675,6 +1736,100 @@
+         assert_eq!(ledger.used(), 0);
+     }
+     #[test]
++    fn oriented_chunk_bounds_prune_diagonal_gaps_and_keep_ambiguous_overlap() {
++        let mut values = Vec::new();
++        for i in 0..16 {
++            let mut item = fragment(i);
++            item.polygon = super::super::Polygon::empty();
++            let shift = i as f64 / 1000.;
++            for [x, y] in [[0.1, 0.1 + shift], [0.9, 0.7 + shift], [0.9, 0.71 + shift]] {
++                item.polygon.push(kurbo::Point::new(x, y)).unwrap();
++            }
++            // Distinct synthetic support labels suffice for this metadata
++            // predicate; real LinePool bindings are covered by kernel replays.
++            for edge in 0..item.polygon.len { item.polygon.incoming[edge] = (i*3+edge+1) as u32; }
++            item.no_merge_with_previous = true;
++            values.push(item);
++        }
++        let summary = ChunkSummary::from_values(&values);
++        assert!(summary.eligible && summary.axis != [0.; 2]);
++        let mut cut = super::super::Polygon::empty();
++        for [x, y] in [[0.1, 0.2], [0.8, 0.725], [0.8, 0.735]] {
++            cut.push(kurbo::Point::new(x, y)).unwrap();
++        }
++        for edge in 0..cut.len { cut.incoming[edge] = (100+edge) as u32; }
++        // Axis-aligned bounds overlap; the additional oriented interval is
++        // needed to prove the finite figures separate.
++        assert!(summary.bounds[0] < 0.8 && summary.bounds[2] > 0.1);
++        assert!(summary.bounds[1] < 0.735 && summary.bounds[3] > 0.2);
++        let checks = Cell::new(0);
++        let mut work = 100;
++        assert_eq!(
++            summary.disjoint(&cut, &mut work, &|| {
++                checks.set(checks.get() + 1);
++                false
++            }),
++            Ok(true)
++        );
++        let cost = 100 - work;
++        assert_eq!(cost, 3);
++        for stop in 0..checks.get() {
++            let at = Cell::new(0);
++            assert_eq!(
++                summary.disjoint(&cut, &mut 100, &|| {
++                    let now = at.get();
++                    at.set(now + 1);
++                    now == stop
++                }),
++                Err(PixelPartitionError::Cancelled)
++            );
++        }
++        for mut quota in 0..cost {
++            assert_eq!(
++                summary.disjoint(&cut, &mut quota, &|| false),
++                Err(PixelPartitionError::Limit)
++            );
++        }
++        assert_eq!(
++            summary.disjoint(&values[0].polygon, &mut 100, &|| false),
++            Ok(false)
++        );
++        let mut unknown = summary;
++        unknown.known_edges = false;
++        assert_eq!(unknown.disjoint(&cut, &mut 100, &|| false), Ok(false));
++        let mut unknown_cut = cut;
++        unknown_cut.incoming[0] = 0;
++        assert_eq!(summary.disjoint(&unknown_cut, &mut 100, &|| false), Ok(false));
++        let mut uncertain = summary;
++        uncertain.projection = [f64::NEG_INFINITY, f64::INFINITY];
++        assert_eq!(uncertain.disjoint(&cut, &mut 100, &|| false), Ok(false));
++        let admit = |_: usize| Some(Box::new(()) as Credit);
++        let mut output = mode_pixel(&admit, 4096, true);
++        for item in &values {
++            output.regions.sink_push(*item).unwrap();
++        }
++        assert_eq!(
++            output
++                .regions
++                .carry_span(0, &cut, false, &mut 100, &|| false)
++                .unwrap(),
++            Some((16, true))
++        );
++    }
++    #[test]
++    fn oriented_projection_intervals_cover_subnormal_cancellation_and_overflow() {
++        let minimum = f64::from_bits(1);
++        let positive = ChunkSummary::project([0.5, 0.], kurbo::Point::new(minimum, 0.)).unwrap();
++        assert!(positive[0] <= 0. && positive[1] >= minimum);
++        let negative = ChunkSummary::project([-0.5, 0.], kurbo::Point::new(minimum, 0.)).unwrap();
++        assert!(negative[0] <= -minimum && negative[1] >= 0.);
++        let cancelled = ChunkSummary::project([1., -1.], kurbo::Point::new(1., 1.)).unwrap();
++        assert!(cancelled[0] < 0. && cancelled[1] > 0.);
++        let exact = ChunkSummary::project([0.5, -0.25], kurbo::Point::new(0.5, 0.5)).unwrap();
++        assert!(exact[0] <= 0.125 && exact[1] >= 0.125);
++        assert!(ChunkSummary::project([f64::MAX, f64::MAX], kurbo::Point::new(f64::MAX, -f64::MAX)).is_none());
++    }
++    #[test]
+     #[ignore = "manual fixed-input CPU timing; no page/display inference"]
+     fn captured_dense_cell_fixed_work_cpu() {
+         use std::{hint::black_box, time::Instant};
+@@ -1730,6 +1885,9 @@
+                     expected.bounds.map(f64::to_bits),
+                     segment.chunk.summary.bounds.map(f64::to_bits)
+                 );
++                assert_eq!(expected.axis.map(f64::to_bits), segment.chunk.summary.axis.map(f64::to_bits));
++                assert_eq!(expected.projection.map(f64::to_bits), segment.chunk.summary.projection.map(f64::to_bits));
++                assert_eq!(expected.known_edges, segment.chunk.summary.known_edges);
+                 assert_eq!(expected.eligible, segment.chunk.summary.eligible);
+                 assert!(segment.start + segment.len <= segment.chunk.values.len());
+             }
+@@ -1755,7 +1913,7 @@
+             assert!(matches!(shared.regions.values, RegionValues::Shared(_)));
+             let mut flat_work = 100_000_000;
+             let mut shared_work = flat_work;
+-            for &(patch, sample, count, points, fields) in rows {
++            for (step, &(patch, sample, count, points, fields)) in rows.iter().enumerate() {
+                 let points = points.map(|p| kurbo::Point::new(f64::from_bits(p[0]), f64::from_bits(p[1])));
+                 let f = fields.map(|f| f.map(f64::from_bits));
+                 let owner = super::super::PixelSourceOwner {
+@@ -1774,7 +1932,18 @@
+                 for (a, b) in flat.regions.values.iter().zip(shared.regions.values.iter()) {
+                     assert_fragment(a, b);
+                 }
+-                assert!(flat.lines.keys == shared.lines.keys);
++                if flat.lines.keys != shared.lines.keys {
++                    let describe = |key: &LineKey| match key {
++                        LineKey::Edge(bits) => format!("edge {bits:?}"),
++                        LineKey::Field(bits) => format!("field {bits:?}"),
++                        LineKey::Axis(axis,bits) => format!("axis {axis} {bits}"),
++                    };
++                    let common=flat.lines.keys.iter().zip(&shared.lines.keys).take_while(|(a,b)| a==b).count();
++                    eprintln!("LINEAGE_DIVERGENCE rows={} step={step} patch={patch} common={common} flat={} shared={} flat_next={} shared_next={}",rows.len(),flat.lines.keys.len(),shared.lines.keys.len(),flat.lines.next,shared.lines.next);
++                    for key in &flat.lines.keys[common..] {eprintln!("FLAT_EXTRA {}",describe(key));}
++                    for key in &shared.lines.keys[common..] {eprintln!("SHARED_EXTRA {}",describe(key));}
++                }
++                assert!(flat.lines.keys == shared.lines.keys, "rows={} step={step}",rows.len());
+                 assert_eq!(flat.lines.next, shared.lines.next);
+             }
+             eprintln!(

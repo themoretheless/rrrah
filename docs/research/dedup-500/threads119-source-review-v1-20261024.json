@@ -1,0 +1,51 @@
+{
+  "repository": "d4ncboz/threads-affiliate",
+  "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
+  "whole_files_read": [
+    {
+      "path": "threads_poster/dedup.py",
+      "local": "02-dedup.py",
+      "git_blob": "a0be41a798138a814983a2acf3a447203dcde7cd",
+      "sha256": "a82902b736854127c5a8f8fce05922d2b12d3056a0346801ef8393a32584e2fc",
+      "whole_text_read": true
+    },
+    {
+      "path": "threads_poster/__init__.py",
+      "local": "03-__init__.py",
+      "git_blob": "7eb9071d177d0633ff03297a93aaad96cc892b0f",
+      "sha256": "691066b9b4c0a688aed7e1a31a57986a9c8deaf71e1a4051a31a8904418ab4ca",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_core.py",
+      "local": "07-test_core.py",
+      "git_blob": "47a98531af285a69de89ccd9065e5fdde1be6434",
+      "sha256": "50e3adfc09807e8ad2416c2d4a9b321c72e378365b179859fd40f08ed6a9d9b6",
+      "whole_text_read": true
+    },
+    {
+      "path": "threads_poster/content_generator.py",
+      "local": "06-content_generator.py",
+      "git_blob": "f3f47ed60b8d4a7b5f51d93b7cf570a4a37ebd06",
+      "sha256": "7397b6ea56a280279047a6c3433e14a9d0c5f39db492670431b8c5da084599b2",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 4,
+  "tracked_blobs": 35,
+  "whole_repo_complete": false,
+  "decision": "reject-domain",
+  "original_test_functions_passed": 2,
+  "original_test_scope": "Exact2 dedup test AST function bodies, bypassing package-level imports. Not full upstream pytest invocation.",
+  "authored_controls_passed": 3,
+  "harness": "docs/research/dedup-500/threads119-controls-20261024",
+  "findings": [
+    "Dedup of affiliate link/text, not file identity.",
+    "Save retains100 records, so link never reused ever guarantee not true after eviction; owned fixture confirmed.",
+    "Text word overlap asymmetric; reverse ordering changes decision in owned control.",
+    "Malformed JSON raises rather than treating corrupt history as empty; owned control confirmed."
+  ],
+  "production_changes": false,
+  "remaining": "31 blobs not whole-read;full package/browser/posting/runtime not qualified",
+  "native_phash_asan": "deferred"
+}

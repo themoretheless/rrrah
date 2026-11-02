@@ -2,9 +2,9 @@
   "index": 163,
   "repository": "ayushgupta4897/fast-dedupe",
   "commit": "779ab732c045e6dd93b67647e6b609846afa3e20",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "4/36 pinned files wholly read; AST-selected unchanged original pure functions and two unchanged original unittest method bodies; no full package/dependency/CLI/pipeline execution",
   "decision": "reject-domain",
-  "finding": "RapidFuzz character n-gram/cosine text matching; no visual or byte identity.",
+  "finding": "Executed original Jaccard: differing token order and multiplicity score 100; intentional text similarity, not file identity. Executed original Jaro-Winkler with prefix_weight=1.0: abcdx vs abcdy scores 140, beyond documented 0..100. Executed default cosine: Document vs document scores 100.",
   "available_source_evidence": [
     {
       "path": "fastdedupe/similarity.py",
@@ -70,7 +70,7 @@
   "license_metadata": "MIT",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 5,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -94,5 +94,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/fast163-source-review-v1-20261024.json",
+  "full_repository_read": false,
+  "upstream_test_scope": "AST-selected unchanged original pure functions and two unchanged original unittest method bodies; no full package/dependency/CLI/pipeline execution",
+  "original_test_bodies_run": 2
 }

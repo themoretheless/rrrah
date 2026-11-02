@@ -16,6 +16,9 @@ struct Parameters {
     comparison: vec4<f32>,
     sensor_geometry: vec4<u32>,
     crop: vec4<u32>,
+    authoring: vec4<u32>,
+    author_curve: array<vec4<f32>,32>,
+    original_curve: array<vec4<f32>,32>,
 };
 @group(0) @binding(0) var image: texture_2d_array<f32>;
 @group(0) @binding(1) var<uniform> p: Parameters;
@@ -101,6 +104,20 @@ fn aces_tone_map(rgb: vec3<f32>, exposure: f32) -> vec3<f32> {
         return vec3<f32>(0.0);
     }
     return color * (aces_scalar(input_scale*norm*exp2(exposure)) / norm);
+}
+
+fn author_knot(index:u32,before:bool)->vec4<f32> {
+    if before {return p.original_curve[index];} return p.author_curve[index];
+}
+fn author_value(x:f32,before:bool,count:u32)->f32 {
+    let first=author_knot(0u,before);let last=author_knot(count-1u,before);
+    // Unit-slope extension preserves HDR excursions outside the authored domain.
+    if x<=first.x {return first.y;}
+    if x>=last.x {return last.y+x-last.x;}
+    var low=0u;var high=count-1u;
+    loop {if high-low<=1u {break;}let mid=(low+high)/2u;if author_knot(mid,before).x<=x {low=mid;} else {high=mid;}}
+    let a=author_knot(low,before);let b=author_knot(high,before);let width=b.x-a.x;let t=(x-a.x)/width;
+    return ((2.*t-3.)*t*t+1.)*a.y+((t-2.)*t+1.)*t*width*a.z+(-2.*t+3.)*t*t*b.y+(t-1.)*t*t*width*b.z;
 }
 
 fn evaluate_curve(x:f32)->f32 {
@@ -224,6 +241,16 @@ fn fs_main(@builtin(position) position: vec4<f32>) -> @location(0) vec4<f32> {
         if luminance > 0.0 { rgb *= curve_luminance / luminance; } else { rgb=vec3<f32>(curve_luminance); }
         let peak = max(rgb.r,max(rgb.g,rgb.b));
         if peak > 1.0 { rgb=mix(rgb,vec3<f32>(curve_luminance),clamp((peak-1.0)/max(peak-curve_luminance,0.000001),0.0,1.0)); }
+    }
+    let author_count=select(p.authoring.x,p.authoring.y,before);
+    if author_count>=2u && color.a>0.0 {
+        let luminance=dot(rgb/color.a,vec3<f32>(0.2126,0.7152,0.0722));
+        if luminance>0.0 {
+            let last=author_knot(author_count-1u,before);
+            if luminance>last.x {rgb *= 1.0+(last.y-last.x)/luminance;}
+            else {rgb *= author_value(luminance,before,author_count)/luminance;}
+        }
+        else if all(rgb==vec3<f32>(0.0)) {rgb=vec3<f32>(author_value(0.0,before,author_count)*color.a);}
     }
     var result = rgb + p.background.rgb*(1.0-color.a);
     if p.raw_development.z != 0u {

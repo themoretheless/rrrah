@@ -1,0 +1,64 @@
+{
+  "index": 204,
+  "repository": "IlyaSemenov/bunlock-dedupe",
+  "commit": "9e020bbbe6f2e6d282779fa2ed62446494e827e8",
+  "whole_file_reads": [
+    {
+      "path": "src/dedupe/index.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/04-index.ts",
+      "sha256": "1255ab71774a0209784776779e494bb059ffa3ef543825e541accdaff8243658"
+    },
+    {
+      "path": "src/bunlock/ranges.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/bunlock/ranges.ts",
+      "sha256": "2380a4d552469cd6c1cc83cdb0213f5c45ce130e098e8f160c67ce4360edbc6c"
+    },
+    {
+      "path": "src/bunlock/resolve.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/bunlock/resolve.ts",
+      "sha256": "1c6e845998845b537a7d6b5fa6721d1da6491327c00613ba0081df5052c3d6ec"
+    },
+    {
+      "path": "src/bunlock/render.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/bunlock/render.ts",
+      "sha256": "1d6c625cb5ab1b6b4c92367ba51f2cf6e4fa928527c3d13cdd7033e6ecf7686f"
+    },
+    {
+      "path": "src/read-bun-lock.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/read-bun-lock.ts",
+      "sha256": "4066bc0d0b8d4487c4a22bdac665e91e8b5fec2fa3bf239046d96030284d981e"
+    },
+    {
+      "path": "src/cli.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/cli.ts",
+      "sha256": "46add20bbf410eeba64088ef5be08284a513dc6c0f7e51ae3e73864405ad597e"
+    },
+    {
+      "path": "src/bunlock/parse.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/bunlock/parse.ts",
+      "sha256": "9e3a39d5f8119039b5bfd40af81b26eb329531a7d438f84255b4c79d3514b0b7"
+    }
+  ],
+  "whole_file_read_count": 7,
+  "tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Public entrypoint exposes package-version duplicate analysis,lock text rewriting and version update safety; not file/image content comparison.",
+    "Range helper explicitly preserves unknown as undefined for unsupported protocols/invalid semver. Required or unknown-compatible optional peer stays reachable; only known-incompatible optional peer excluded. This conservative unknown handling is a useful contract principle, not transferable semver logic for image equality.",
+    "Bare-name override authoritative even when uninterpretable; no fallback to declaration. Bun-version behavior stated in comments not independently verified or executed.",
+    "Original resolver whole-read and executed in Node with built-in TS stripping:4 authored cases pass for scoped-root discrimination, exact nested priority, closest ancestor and ambiguous/unique fallback. No Bun install/lockfile rewrite/registry run; does not qualify whole tool.",
+    "Renderer whole-read preserves object insertion/lock-key order and inline package tuples, filters undefined properties and emits trailing commas. Text reconstruction, not filesystem write; no atomic-write guarantee inferred.",
+    "Reader whole-read resolves explicit directory to bun.lock or searches cwd parents, reads full UTF8 synchronously and exits process1 on resolution/read failure. No size bound/stable snapshot/cancellation in this module; actual CLI mutation path not yet read.",
+    "CLI whole-read:plain fix,update-fix and repair-fix directly writeFileSync original path after computing result. No temp+rename, source generation check, backup or final re-read in this file; actual partial-write/concurrent mutation failure not injected. No user lockfile modified.",
+    "CLI rejects offline+fix because integrity metadata missing, distinguishes analysis/fix and aborts RegistryError instead of reporting transient missing data as partial success. Useful conservative reporting pattern; full registry/cache error behavior not executed.",
+    "Parser whole-read: JSON5 plus explicit overrides object/string validation; generic isObject includes arrays, so top-level array passes initial object check and returned cast without full schema validation. Downstream rejection/impact not established; no JSON5 execution.",
+    "Package tuple admission checks array and first element string only; metadata classified by objectness incl array. normalizeDependencyMap silently keeps string-valued entries, discarding others. This is permissive boundary, not whole-lock semantic validity proof.",
+    "Resolved spec splits last@ for scoped names; optional peer treated optional only when not also declared dependency/optional dependency. No production transfer or file/image identity algorithm."
+  ],
+  "remaining": "Other source/tests/media and actual Bun runtime unreviewed.",
+  "authored_controls_run": 4,
+  "resolver_controls": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/resolve-control-results.json",
+  "previous_audit": "docs/research/dedup-500/bunlock204-source-review-v4-20261024.json"
+}

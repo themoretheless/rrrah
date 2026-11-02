@@ -1,0 +1,37 @@
+<!-- Version: 1.9 | Last Updated: 2025-04-06 | Updated By: Cline -->
+
+# Cline Rules & Project Intelligence
+
+*   **User Preferences:**
+    *   Language for interaction: Cantonese (香港語)
+    *   Language for technical content (code, docs, commits): English
+    *   **Architectural Preference:** Strong interest in refactoring towards Functional Programming. Open to exploring alternative DI patterns (Riverpod-like) or potentially removing DI. Emphasis on high performance and scalability (millions of files).
+    *   **UI Preference:** Desire for improved UI, potentially including a Web UI.
+*   **Project Patterns:**
+    *   Memory Bank system is used for context persistence.
+    *   Strict 500 LoC limit per source file.
+    *   Dependency Management: Manual Injection via `index.ts`.
+    *   *Current:* Pipeline architecture decomposed into functional stages (`discovery`, `gatherer`, `deduplicator`, `transfer`).
+    *   *Current:* Job logic refactored into functions (`src/jobs/`).
+    *   *Current:* Caching isolated (`src/caching/LmdbCache.ts`).
+    *   *Current:* External tools wrapped (`src/external/`).
+    *   Use of WASM for performance-critical calculations (Hamming distance).
+    *   Use of `workerpool` for concurrency.
+    *   Use of DB-centric LSH for similarity candidate finding.
+*   **Workflow:**
+    *   Read ALL Memory Bank files at the start of each task.
+    *   Update Memory Bank after task completion/significant analysis/change in direction.
+    *   Use Git for version control. Commit frequently after logical steps.
+    *   Use Windows Batch/filesystem-mcp for file/system ops, gh CLI for GitHub.
+*   **Known Challenges:**
+    *   Managing complexity of different media formats and metadata.
+    *   Balancing performance and accuracy in deduplication.
+    *   Ensuring robustness of file operations.
+    *   Coordinating caching.
+    *   Efficient parallelization.
+    *   Complexity of FFmpeg filters.
+    *   Integration/loading of WASM.
+    *   **Testing Environment:** Persistent issues encountered mocking `fs.existsSync` and `crypto.randomBytes` within `bun test` environment. Need robust mocking/testing strategy for refactored code.
+*   **Tool Usage:**
+    *   Prefer `filesystem-mcp` for batch file operations.
+    *   Use `write_to_file` cautiously, prefer `apply_diff` or `insert_content` for modifications unless overwriting is intended or simpler.

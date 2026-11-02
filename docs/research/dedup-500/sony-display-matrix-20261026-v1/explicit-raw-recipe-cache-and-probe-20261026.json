@@ -1,0 +1,31 @@
+{
+  "scope": "Explicit RAW recipe cache separation and probe compilation",
+  "tests": {
+    "raw_selected": 3,
+    "cache_interpretation": 2,
+    "failed": 0
+  },
+  "probe_check": "passed",
+  "logs": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-explicit-raw-recipe-final-20261026.log",
+      "sha256": "9cca5d2a0ab6642191a0f0811f8accf735ed72bdc37143273b88165292a9ba7d"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-raw-recipe-probe-check-20261026.log",
+      "sha256": "dade434ab9133048eb636831de9d756c3b4192729bf51cf4347e2f68d807899d"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/raw_selected.rs": "61c17236d24ed5dc01e4705493993f904461b908e4fa8664c59d11ef63674c7f",
+    "crates/rrrah-dedup/src/decode_recipe.rs": "726432ee86503cb48cd1046d5d27ec065007ee0e24ed617fa50f4b2b65e2b120",
+    "crates/rrrah-dedup/src/decode.rs": "258989b40e02309e0e99841d2be0758c06f707627495080f51f9183e066c5e73",
+    "crates/rrrah-raw/src/lib.rs": "a5f32221098bdf7d7fa42b39d4ef5f1f2bb68ecce5a8dc3070df81170b6c8228",
+    "crates/rrrah-dedup/examples/raw_raster_probe.rs": "c3f892e9d8220cf5094f69a00c293e119643e2b53cbd071496283be289480b3d"
+  },
+  "limits": [
+    "No new real-camera runtime comparison through the request recipe in this receipt.",
+    "Five finite regression tests do not prove universal image coverage.",
+    "Upstream review remains incomplete."
+  ]
+}

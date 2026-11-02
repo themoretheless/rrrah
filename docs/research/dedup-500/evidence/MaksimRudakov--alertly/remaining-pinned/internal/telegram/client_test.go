@@ -1,0 +1,403 @@
+package telegram
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"log/slog"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/MaksimRudakov/alertly/internal/metrics"
+)
+
+func init() {
+	metrics.Init()
+}
+
+func newClient(t *testing.T, server *httptest.Server, opts ...func(*Config)) Client {
+	t.Helper()
+	cfg := Config{
+		APIURL:         server.URL,
+		Token:          "test-token",
+		ParseMode:      "HTML",
+		RequestTimeout: 5 * time.Second,
+		MaxAttempts:    3,
+		InitialBackoff: 5 * time.Millisecond,
+		MaxBackoff:     50 * time.Millisecond,
+	}
+	for _, o := range opts {
+		o(&cfg)
+	}
+	return New(cfg, NewLimiter(1000, 1000), slog.New(slog.NewTextHandler(io.Discard, nil)))
+}
+
+func TestSendMessageOK(t *testing.T) {
+	var got sendMessagePayload
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.URL.Path, "/bottest-token/sendMessage") {
+			t.Errorf("bad path: %s", r.URL.Path)
+		}
+		_ = json.NewDecoder(r.Body).Decode(&got)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = io.WriteString(w, `{"ok":true,"result":{}}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv)
+	if _, err := c.SendMessage(context.Background(), 123, nil, "hi", nil); err != nil {
+		t.Fatal(err)
+	}
+	if got.ChatID != 123 || got.Text != "hi" || got.ParseMode != "HTML" || !got.DisableWebPagePreview {
+		t.Errorf("payload: %+v", got)
+	}
+}
+
+func TestSendMessageThread(t *testing.T) {
+	var got sendMessagePayload
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_ = json.NewDecoder(r.Body).Decode(&got)
+		_, _ = io.WriteString(w, `{"ok":true}`)
+	}))
+	defer srv.Close()
+
+	thread := 42
+	c := newClient(t, srv)
+	if _, err := c.SendMessage(context.Background(), -100, &thread, "hi", nil); err != nil {
+		t.Fatal(err)
+	}
+	if got.MessageThreadID == nil || *got.MessageThreadID != 42 {
+		t.Errorf("thread: %+v", got.MessageThreadID)
+	}
+}
+
+func TestRetryOn429WithRetryAfter(t *testing.T) {
+	var attempts atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		n := attempts.Add(1)
+		if n < 3 {
+			w.WriteHeader(429)
+			_, _ = io.WriteString(w, `{"ok":false,"error_code":429,"description":"Too Many Requests","parameters":{"retry_after":1}}`)
+			return
+		}
+		_, _ = io.WriteString(w, `{"ok":true}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv, func(c *Config) {
+		c.MaxBackoff = 20 * time.Millisecond
+	})
+	if _, err := c.SendMessage(context.Background(), 1, nil, "x", nil); err != nil {
+		t.Fatal(err)
+	}
+	if attempts.Load() != 3 {
+		t.Errorf("expected 3 attempts, got %d", attempts.Load())
+	}
+}
+
+func TestRetryOn5xx(t *testing.T) {
+	var attempts atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		n := attempts.Add(1)
+		if n < 2 {
+			w.WriteHeader(503)
+			_, _ = io.WriteString(w, `{"ok":false,"description":"unavailable"}`)
+			return
+		}
+		_, _ = io.WriteString(w, `{"ok":true}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv)
+	if _, err := c.SendMessage(context.Background(), 1, nil, "x", nil); err != nil {
+		t.Fatal(err)
+	}
+	if attempts.Load() != 2 {
+		t.Errorf("attempts: %d", attempts.Load())
+	}
+}
+
+func TestNoRetryOn400(t *testing.T) {
+	var attempts atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		attempts.Add(1)
+		w.WriteHeader(400)
+		_, _ = io.WriteString(w, `{"ok":false,"description":"bad request"}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv)
+	_, err := c.SendMessage(context.Background(), 1, nil, "x", nil)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if attempts.Load() != 1 {
+		t.Errorf("expected 1 attempt, got %d", attempts.Load())
+	}
+}
+
+func TestRetryRespectsContext(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(503)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv, func(c *Config) {
+		c.InitialBackoff = 100 * time.Millisecond
+		c.MaxBackoff = time.Second
+		c.MaxAttempts = 5
+	})
+
+	ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
+	defer cancel()
+	_, err := c.SendMessage(ctx, 1, nil, "x", nil)
+	if err == nil {
+		t.Fatal("expected error")
+	}
+}
+
+func TestRetryAbortsOnInsufficientDeadlineBudget(t *testing.T) {
+	var attempts atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		attempts.Add(1)
+		w.WriteHeader(429)
+		_, _ = io.WriteString(w, `{"ok":false,"error_code":429,"description":"Too Many Requests","parameters":{"retry_after":5}}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv, func(c *Config) {
+		c.MaxAttempts = 5
+		c.InitialBackoff = 10 * time.Millisecond
+		c.MaxBackoff = 10 * time.Second
+	})
+
+	// Ctx deadline must be smaller than retry_after (5s) so the client must
+	// abort instead of sleeping past the deadline and (worse) succeeding on a
+	// later attempt while the caller has already given up.
+	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
+	defer cancel()
+
+	start := time.Now()
+	_, err := c.SendMessage(ctx, 1, nil, "x", nil)
+	elapsed := time.Since(start)
+
+	if err == nil {
+		t.Fatal("expected error")
+	}
+	if elapsed > 500*time.Millisecond {
+		t.Errorf("retry should abort fast, elapsed=%s", elapsed)
+	}
+	if attempts.Load() != 1 {
+		t.Errorf("expected 1 attempt, got %d", attempts.Load())
+	}
+	var ae *APIError
+	if !errors.As(err, &ae) || ae.StatusCode != 429 {
+		t.Errorf("expected APIError 429, got %T %v", err, err)
+	}
+}
+
+func TestGetMe(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet || !strings.HasSuffix(r.URL.Path, "/getMe") {
+			t.Errorf("unexpected req: %s %s", r.Method, r.URL.Path)
+		}
+		_, _ = io.WriteString(w, `{"ok":true,"result":{"id":1,"username":"bot"}}`)
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv)
+	if err := c.GetMe(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestDryRunSkipsCall(t *testing.T) {
+	called := false
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		called = true
+	}))
+	defer srv.Close()
+
+	c := newClient(t, srv, func(c *Config) { c.DryRun = true })
+	if _, err := c.SendMessage(context.Background(), 1, nil, "x", nil); err != nil {
+		t.Fatal(err)
+	}
+	if called {
+		t.Error("DRY_RUN must not call Telegram")
+	}
+}
+
+func TestSendMessageErrorDoesNotLeakToken(t *testing.T) {
+	const token = "123456:AA-super-secret-token"
+	var logs bytes.Buffer
+	c := New(Config{
+		APIURL:         "http://127.0.0.1:1",
+		Token:          token,
+		RequestTimeout: 200 * time.Millisecond,
+		MaxAttempts:    2,
+		InitialBackoff: time.Millisecond,
+		MaxBackoff:     2 * time.Millisecond,
+	}, nil, slog.New(slog.NewTextHandler(&logs, nil)))
+
+	_, err := c.SendMessage(context.Background(), 1, nil, "hi", nil)
+	if err == nil {
+		t.Fatal("want error from unreachable API")
+	}
+	if strings.Contains(err.Error(), token) {
+		t.Fatalf("bot token leaked into error: %v", err)
+	}
+	if !strings.Contains(err.Error(), redactedToken) {
+		t.Fatalf("want redaction marker in %q", err.Error())
+	}
+	if strings.Contains(logs.String(), token) {
+		t.Fatalf("bot token leaked into logs: %s", logs.String())
+	}
+}
+
+func TestGetUpdatesErrorDoesNotLeakToken(t *testing.T) {
+	const token = "123456:AA-super-secret-token"
+	c := New(Config{
+		APIURL:         "http://127.0.0.1:1",
+		Token:          token,
+		RequestTimeout: 200 * time.Millisecond,
+		MaxAttempts:    1,
+	}, nil, slog.New(slog.NewTextHandler(io.Discard, nil)))
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+	_, err := c.GetUpdates(ctx, 0, 100*time.Millisecond)
+	if err == nil {
+		t.Fatal("want error from unreachable API")
+	}
+	if strings.Contains(err.Error(), token) {
+		t.Fatalf("bot token leaked into error: %v", err)
+	}
+}
+
+func TestScrubTokenKeepsErrorsUnwrappable(t *testing.T) {
+	api := &APIError{StatusCode: 500, Body: "boom secret-token"}
+	wrapped := scrubToken(fmt.Errorf("http call: %w", api), "secret-token")
+	if strings.Contains(wrapped.Error(), "secret-token") {
+		t.Fatalf("token survived scrubbing: %v", wrapped)
+	}
+	var got *APIError
+	if !errors.As(wrapped, &got) || got.StatusCode != 500 {
+		t.Fatalf("errors.As lost the APIError: %v", wrapped)
+	}
+}
+
+func TestAPIErrorBodyIsScrubbed(t *testing.T) {
+	const token = "123456:AA-super-secret-token"
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		// Telegram does not normally echo the token, but a proxy in front of it
+		// might: the error must stay safe to log either way.
+		_, _ = io.WriteString(w, `{"ok":false,"description":"Bad Request: bot`+token+` blocked"}`)
+	}))
+	defer srv.Close()
+
+	c := New(Config{APIURL: srv.URL, Token: token, RequestTimeout: time.Second, MaxAttempts: 1}, nil,
+		slog.New(slog.NewTextHandler(io.Discard, nil)))
+
+	_, err := c.SendMessage(context.Background(), 1, nil, "hi", nil)
+	if err == nil {
+		t.Fatal("want error")
+	}
+	if strings.Contains(err.Error(), token) {
+		t.Fatalf("token leaked: %v", err)
+	}
+	var ae *APIError
+	if !errors.As(err, &ae) || ae.StatusCode != http.StatusBadRequest {
+		t.Fatalf("APIError not reachable through the scrubbed error: %v", err)
+	}
+}
+
+// newOKServer returns a Telegram stub that answers ok to everything and counts
+// calls per method suffix.
+func newOKServer(t *testing.T) (*httptest.Server, *atomic.Int64) {
+	t.Helper()
+	var calls atomic.Int64
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
+		_, _ = io.WriteString(w, `{"ok":true,"result":{"message_id":7}}`)
+	}))
+	t.Cleanup(srv.Close)
+	return srv, &calls
+}
+
+func TestEditMessageReplyMarkupGoesThroughLimiter(t *testing.T) {
+	srv, _ := newOKServer(t)
+	limiter := NewLimiter(100, 1) // 1 rps per chat, burst 1
+	c := New(Config{APIURL: srv.URL, Token: "tok", RequestTimeout: time.Second, MaxAttempts: 1},
+		limiter, slog.New(slog.NewTextHandler(io.Discard, nil)))
+
+	start := time.Now()
+	for i := 0; i < 3; i++ {
+		if err := c.EditMessageReplyMarkup(context.Background(), 42, int64(i+1), nil); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if elapsed := time.Since(start); elapsed < 1800*time.Millisecond {
+		t.Errorf("3 edits at 1 rps per chat should take ≥1.8s, got %v", elapsed)
+	}
+}
+
+func TestAnswerCallbackQueryConsumesGlobalQuota(t *testing.T) {
+	srv, _ := newOKServer(t)
+	limiter := NewLimiter(1, 1000) // 1 rps global
+	c := New(Config{APIURL: srv.URL, Token: "tok", RequestTimeout: time.Second, MaxAttempts: 1},
+		limiter, slog.New(slog.NewTextHandler(io.Discard, nil)))
+
+	start := time.Now()
+	for i := 0; i < 2; i++ {
+		if err := c.AnswerCallbackQuery(context.Background(), "cb", "ok", false); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if elapsed := time.Since(start); elapsed < 800*time.Millisecond {
+		t.Errorf("2 answers at 1 rps global should take ≥0.8s, got %v", elapsed)
+	}
+}
+
+func TestRetriesConsumeLimiterQuota(t *testing.T) {
+	var calls atomic.Int64
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusInternalServerError)
+		_, _ = io.WriteString(w, `{"ok":false,"description":"boom"}`)
+	}))
+	defer srv.Close()
+
+	limiter := NewLimiter(1, 1000) // 1 rps global, burst 1
+	c := New(Config{
+		APIURL:         srv.URL,
+		Token:          "tok",
+		RequestTimeout: time.Second,
+		MaxAttempts:    3,
+		InitialBackoff: time.Millisecond,
+		MaxBackoff:     2 * time.Millisecond,
+	}, limiter, slog.New(slog.NewTextHandler(io.Discard, nil)))
+
+	start := time.Now()
+	_, err := c.SendMessage(context.Background(), 1, nil, "hi", nil)
+	elapsed := time.Since(start)
+	if err == nil {
+		t.Fatal("want error after exhausted retries")
+	}
+	if got := calls.Load(); got != 3 {
+		t.Fatalf("want 3 attempts, got %d", got)
+	}
+	// Attempt 1 spends the burst token; attempts 2 and 3 must each wait ~1s.
+	// Before the fix the limiter was consulted once per SendMessage, and the
+	// retries fired back-to-back.
+	if elapsed < 1800*time.Millisecond {
+		t.Errorf("retries bypassed the limiter: 3 attempts at 1 rps took %v", elapsed)
+	}
+}

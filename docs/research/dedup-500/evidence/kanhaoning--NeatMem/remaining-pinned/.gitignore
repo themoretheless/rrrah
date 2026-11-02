@@ -1,0 +1,94 @@
+# 环境变量
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+site/
+
+# 数据库
+qdrant_db/
+qdrant_db_*/
+qdrant_db.*/
+chroma_db/
+test.db
+
+# 日志
+*.log
+nohup.out
+
+# 备份 / 临时文件
+backups/
+*.bak
+*.bak.*
+tmp/
+
+# 本地运行 / 调试产物
+captured_requests/
+debug/
+probe/
+note.txt
+analysis/
+
+# mem0 原版对比服务（本地实验，不公开）
+mem0-baseline/
+
+# Agent-local instructions
+AGENTS.md
+CLAUDE.md
+.claude/
+
+# Notebook
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# 误创建的空文件
+\!
+/1
+
+# 回收站 / 爬虫缓存 / 临时标记
+.Trash/
+.firecrawl/
+.qdrant-initialized
+
+# 根目录评测结果
+results/
+
+# Node / OpenClaw plugin
+openclaw/node_modules/
+openclaw/dist/
+openclaw/package-lock.json
+openclaw/*.tsbuildinfo
+
+# OpenClaw backups
+openclaw.backup-*/
+
+# Internal development notes (public docs pages under docs/ ARE tracked)
+/docs/internal-notes/
+/docs/research/
+
+# Evaluation - 本地实验产物，不公开（只忽略根目录，不影响 neatmem/evaluation/）
+/evaluation/
+
+# Evaluation backup
+evaluation_backup*/
+assets/
+
+# Zhihu article working files (drafts and planning docs)
+/articles/
+
+# Demo cases and run records (not ready to publish yet)
+/demos/

@@ -2,9 +2,9 @@
   "index": 223,
   "repository": "alpbasarann/nestjs-request-deduplicator",
   "commit": "108d9454c436f4ede11dd9e62cde7bfe0f97345b",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Request serialization/SHA256 and decorator cache; normalization/singleflight concepts only.",
+  "review_scope": "All45tracked blobs assessed:44whole text files+1structural lock inventory;68pure original callbacks and4authored controls pass, full Nest/Jest/E2E not run.",
+  "decision": "reject-domain",
+  "finding": "HTTP completed-request rejection with intentional concurrent repeat execution; no file identity or atomic singleflight adoption.",
   "available_source_evidence": [
     {
       "path": "src/duplicate-request.exception.ts",
@@ -84,5 +84,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/nestjs223-source-review-v5-20261024.json"
 }

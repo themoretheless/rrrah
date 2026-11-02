@@ -2,10 +2,47 @@
 use rrrah_core::MemoryBudget;
 use rrrah_decode::DecodeRequest;
 use rrrah_dedup::decode::decode_selected_frame;
+// This selects the ordinary library request recipe, not the manual diagnostic path.
+fn recipe_request(path: &str) -> Result<DecodeRequest, Box<dyn std::error::Error>> {
+    let mut request = DecodeRequest::new(path);
+    request.raw_development_recipe = match std::env::var("RRRAH_RAW_RECIPE") {
+        Err(std::env::VarError::NotPresent) => rrrah_decode::RawDevelopmentRecipe::NativeDefault,
+        Ok(value) if value == "native-default" => rrrah_decode::RawDevelopmentRecipe::NativeDefault,
+        Ok(value) if value == "bilinear" => rrrah_decode::RawDevelopmentRecipe::Bilinear,
+        _ => return Err("RRRAH_RAW_RECIPE must be native-default or bilinear".into()),
+    };
+    Ok(request)
+}
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = std::env::args().skip(1).collect::<Vec<_>>();
     validate_arguments(&args)?;
-    let budget = MemoryBudget::new(2 * 1024 * 1024 * 1024);
+    if std::env::var_os("RRRAH_RAW_RECIPE").is_some() {
+        recipe_request(&args[0])?; // Validate before decoding or comparison.
+        let supported = args
+            .get(2)
+            .is_some_and(|mode| mode.starts_with("--verify-spatial"))
+            || (args.get(2).is_some_and(|mode| mode == "--verify-known-shift")
+                && std::env::var_os("RRRAH_FILE_WHITE_ANCHOR").is_some());
+        if !supported
+            || (std::env::var_os("RRRAH_VERIFY_COLLECTION").is_some()
+                && !args
+                    .get(2)
+                    .is_some_and(|mode| mode.starts_with("--verify-spatial")))
+        {
+            return Err("RRRAH_RAW_RECIPE requires spatial comparison or a known-shift file pair".into());
+        }
+    }
+    let managed_bytes = match std::env::var("RRRAH_MANAGED_BUDGET_MIB") {
+        Err(std::env::VarError::NotPresent) => 2 * 1024 * 1024 * 1024,
+        Ok(value) => value
+            .parse::<u64>()
+            .ok()
+            .filter(|n| *n > 0)
+            .and_then(|n| n.checked_mul(1024 * 1024))
+            .ok_or("RRRAH_MANAGED_BUDGET_MIB must be a positive representable MiB count")?,
+        Err(_) => return Err("RRRAH_MANAGED_BUDGET_MIB must be UTF-8".into()),
+    };
+    let budget = MemoryBudget::new(managed_bytes);
     if args
         .get(2)
         .is_some_and(|mode| mode.starts_with("--verify-spatial"))
@@ -228,8 +265,8 @@ fn verify_spatial_files(
         local_scan::{LocalFilePolicy, SpatialFeaturePolicy, compare_local_files_spatial_with_policy},
         warp::WarpPolicy,
     };
-    let left = DecodeRequest::new(&paths[0]);
-    let mut right = DecodeRequest::new(&paths[1]);
+    let left = recipe_request(&paths[0])?;
+    let mut right = recipe_request(&paths[1])?;
     right.assume_untagged_srgb = true;
     let policy = LocalFilePolicy {
         decode: AnimationBudget {
@@ -265,8 +302,16 @@ fn verify_spatial_files(
         residual: policy.pixels,
         minimum_samples: 1000,
         minimum_variance: 1e-5,
-        minimum_gain: 0.2,
-        maximum_gain: 5.0,
+        minimum_gain: if std::env::var_os("RRRAH_FILTER_WHITE_ANCHOR").is_some() {
+            0.9
+        } else {
+            0.2
+        },
+        maximum_gain: if std::env::var_os("RRRAH_FILTER_WHITE_ANCHOR").is_some() {
+            1.1
+        } else {
+            5.0
+        },
         maximum_offset: 0.1,
     };
     let search = rrrah_dedup::local_scan::LocalSearchPolicy {
@@ -298,7 +343,11 @@ fn verify_spatial_files(
                     },
                     color_space: rrrah_dedup::warp::FilterColorSpace::EncodedSrgb,
                 },
-                fit: rrrah_dedup::warp::PhotometricFitMode::ConstrainedLeastSquares,
+                fit: if std::env::var_os("RRRAH_FILTER_WHITE_ANCHOR").is_some() {
+                    rrrah_dedup::warp::PhotometricFitMode::WhiteAnchoredLeastSquares
+                } else {
+                    rrrah_dedup::warp::PhotometricFitMode::ConstrainedLeastSquares
+                },
             },
             _ => rrrah_dedup::local_scan::LocalComparisonMode::Strict,
         },
@@ -308,6 +357,42 @@ fn verify_spatial_files(
         rows: 12,
         max_per_cell: 3,
     };
+    if std::env::var_os("RRRAH_AUTO_WHITE_ANCHOR").is_some() {
+        if std::env::var_os("RRRAH_VERIFY_COLLECTION").is_some() {
+            let files = collection_inputs(left, right)?;
+            let anchored = rrrah_dedup::local_scan::LocalSearchPolicy {
+                local: policy,
+                comparison: rrrah_dedup::local_scan::LocalComparisonMode::WhiteAnchoredDisplay(
+                    rrrah_dedup::warp::PhotometricPolicy {
+                        minimum_gain: 0.9,
+                        maximum_gain: 1.1,
+                        ..photometric
+                    },
+                ),
+            };
+            return verify_collection(files, anchored, spatial, budget);
+        }
+        let result = rrrah_dedup::local_scan::compare_local_files_white_anchored(
+            &left,
+            &right,
+            policy,
+            rrrah_dedup::warp::PhotometricPolicy {
+                minimum_gain: 0.9,
+                maximum_gain: 1.1,
+                ..photometric
+            },
+            Some(spatial),
+            budget,
+            || false,
+        )?;
+        println!("diagnostic_auto_white_anchor={result:#?}");
+        drop(result);
+        println!("managed_used={} managed_peak={}", budget.used(), budget.peak());
+        if budget.used() != 0 {
+            return Err("automatic API retained managed memory".into());
+        }
+        return Ok(());
+    }
     if std::env::var_os("RRRAH_VERIFY_COLLECTION").is_some() {
         let files = collection_inputs(left, right)?;
         return verify_collection(files, search, spatial, budget);
@@ -422,7 +507,18 @@ fn verify_collection(
         report.local.issues,
         report.local.source_issues
     );
+    let incomplete = !report.file_issues.is_empty()
+        || !report.local.issues.is_empty()
+        || !report.local.source_issues.is_empty();
     for pair in report.local.pairs {
+        println!(
+            "pair_fit=({}, {}) photometric={:?} range={:?} display_projection={}",
+            pair.left,
+            pair.right,
+            pair.evidence.photometric,
+            pair.evidence.photometric_fit_range,
+            pair.evidence.display_projection
+        );
         println!(
             "pair=({}, {}) candidate={} geometry={} pixels={:?}",
             pair.left,
@@ -435,6 +531,11 @@ fn verify_collection(
     println!("managed_used={} managed_peak={}", budget.used(), budget.peak());
     if budget.used() != 0 {
         return Err("managed memory retained".into());
+    }
+    if incomplete {
+        return Err(
+            "collection search incomplete; inspect file_issues, pair_issues and source_issues".into(),
+        );
     }
     Ok(())
 }
@@ -458,11 +559,11 @@ fn collection_inputs(
         .iter()
         .zip(1u64..)
         .map(|(path, id)| {
-            let mut request = DecodeRequest::new(path);
+            let mut request = recipe_request(path)?;
             request.assume_untagged_srgb = true;
-            (id, request)
+            Ok((id, request))
         })
-        .collect())
+        .collect::<Result<Vec<_>, Box<dyn std::error::Error>>>()?)
 }
 
 fn verify_known_shift(paths: &[String], budget: &MemoryBudget) -> Result<(), Box<dyn std::error::Error>> {
@@ -474,7 +575,85 @@ fn verify_known_shift(paths: &[String], budget: &MemoryBudget) -> Result<(), Box
     if shift.len() != 2 || shift.iter().any(|v| !v.is_finite()) {
         return Err("expected finite x,y shift".into());
     }
-    let left = decode_selected_frame(&DecodeRequest::new(&paths[0]), 100_000_000, budget, || false)?;
+    let diagnostic_demosaic = match std::env::var("RRRAH_DIAGNOSTIC_DEMOSAIC").ok().as_deref() {
+        None => None,
+        Some("bilinear") => Some(rrrah_core::develop::DemosaicAlgorithm::Bilinear),
+        Some(_) => return Err("diagnostic demosaic must be bilinear when supplied".into()),
+    };
+    if std::env::var_os("RRRAH_FILE_WHITE_ANCHOR").is_some() {
+        if std::env::var_os("RRRAH_DISABLE_HIGHLIGHT_RECOVERY").is_some() || diagnostic_demosaic.is_some() {
+            return Err("file API rejects manual diagnostic development overrides".into());
+        }
+        let left = recipe_request(&paths[0])?;
+        let mut right = recipe_request(&paths[1])?;
+        right.assume_untagged_srgb = true;
+        let result = rrrah_dedup::white_anchored_file::verify_white_anchored_files(
+            &left,
+            &right,
+            rrrah_dedup::geometry::Transform {
+                a: 1.0,
+                b: 0.0,
+                translation: [shift[0], shift[1]],
+            },
+            rrrah_dedup::animated::AnimationBudget {
+                max_frames: 1,
+                max_pixels: 100_000_000,
+                max_file_bytes: 512 * 1024 * 1024,
+            },
+            rrrah_dedup::warp::PhotometricPolicy {
+                residual: rrrah_dedup::warp::WarpPolicy {
+                    tolerance: 0.03,
+                    max_source_pixels: 100_000_000,
+                },
+                minimum_samples: 1000,
+                minimum_variance: 1e-5,
+                minimum_gain: 0.9,
+                maximum_gain: 1.1,
+                maximum_offset: 0.1,
+            },
+            budget,
+            || false,
+        )?;
+        println!("diagnostic_file_white_anchor={result:#?}");
+        println!("managed_used={} managed_peak={}", budget.used(), budget.peak());
+        if budget.used() != 0 {
+            return Err("file API retained managed memory".into());
+        }
+        return Ok(());
+    }
+    // Diagnostic-only alternative recipe; no cached fingerprints or production requests.
+    let left = if std::env::var_os("RRRAH_DISABLE_HIGHLIGHT_RECOVERY").is_some()
+        || diagnostic_demosaic.is_some()
+    {
+        let mut request = DecodeRequest::new(&paths[0]);
+        request.memory_budget = Some(budget.clone());
+        let rrrah_decode::DecodedImage::Sensor(sensor) = rrrah_decode::decode_image(&request)? else {
+            return Err("diagnostic RAW routed as raster".into());
+        };
+        if u64::from(sensor.mosaic.metadata.width) * u64::from(sensor.mosaic.metadata.height) > 100_000_000 {
+            return Err("diagnostic RAW exceeds pixel budget".into());
+        }
+        let lists = rrrah_decode::raw_development_opcodes(&request)?;
+        let developed = rrrah_core::develop::develop_raw(
+            &sensor.mosaic,
+            &rrrah_core::develop::DevelopOptions {
+                recover_highlights: std::env::var_os("RRRAH_DISABLE_HIGHLIGHT_RECOVERY").is_none(),
+                demosaic: diagnostic_demosaic.unwrap_or(rrrah_core::develop::DemosaicAlgorithm::Auto),
+                ..Default::default()
+            },
+            &lists,
+            Some(budget),
+            &|| false,
+        )?;
+        println!(
+            "diagnostic_highlight_recovery={}",
+            std::env::var_os("RRRAH_DISABLE_HIGHLIGHT_RECOVERY").is_none()
+        );
+        println!("diagnostic_demosaic={diagnostic_demosaic:?}");
+        rrrah_dedup::raster::NormalizedRaster::new(&developed, 100_000_000, budget, || false)?
+    } else {
+        decode_selected_frame(&DecodeRequest::new(&paths[0]), 100_000_000, budget, || false)?
+    };
     let mut request = DecodeRequest::new(&paths[1]);
     request.assume_untagged_srgb = true;
     let right = decode_selected_frame(&request, 100_000_000, budget, || false)?;
@@ -494,6 +673,13 @@ fn verify_known_shift(paths: &[String], budget: &MemoryBudget) -> Result<(), Box
     )?;
     if std::env::var_os("RRRAH_RESIDUAL_BINS").is_some() {
         report_residual_bins(
+            &left.view(|| false)?,
+            &right.view(|| false)?,
+            [shift[0], shift[1]],
+        )?;
+    }
+    if std::env::var_os("RRRAH_FIT_DISPLAY").is_some() {
+        report_known_display_fit(
             &left.view(|| false)?,
             &right.view(|| false)?,
             [shift[0], shift[1]],
@@ -625,5 +811,194 @@ fn report_known_range_fit(
         || false,
     )?;
     println!("diagnostic_known_range_fit={result:#?}");
+    Ok(())
+}
+
+// Opt-in RRRAH_FIT_DISPLAY diagnostic for --verify-known-shift. Uses the
+// spatial-display recipe with externally supplied geometry, without changing
+// candidate selection, thresholds, or the production comparison policy.
+fn report_known_display_fit(
+    left: &rrrah_dedup::linear::LinearRgbaView<'_>,
+    right: &rrrah_dedup::linear::LinearRgbaView<'_>,
+    shift: [f64; 2],
+) -> Result<(), Box<dyn std::error::Error>> {
+    use rrrah_dedup::warp::{
+        FitSampleRange, PhotometricPolicy, WarpPolicy, verify_photometric_display_projection,
+    };
+    let result = verify_photometric_display_projection(
+        left,
+        right,
+        rrrah_dedup::geometry::Transform {
+            a: 1.0,
+            b: 0.0,
+            translation: shift,
+        },
+        PhotometricPolicy {
+            residual: WarpPolicy {
+                tolerance: 0.03,
+                max_source_pixels: 100_000_000,
+            },
+            minimum_samples: 1000,
+            minimum_variance: 1e-5,
+            minimum_gain: 0.2,
+            maximum_gain: 5.0,
+            maximum_offset: 0.1,
+        },
+        FitSampleRange {
+            minimum: 0.0,
+            maximum: 1.0,
+        },
+        || false,
+    )?;
+    println!("diagnostic_known_display_fit={result:#?}");
+    if std::env::var_os("RRRAH_NATIVE_WHITE_ANCHOR").is_some() {
+        let anchored = rrrah_dedup::warp::verify_photometric_white_anchored_display_projection(
+            left,
+            right,
+            rrrah_dedup::geometry::Transform {
+                a: 1.0,
+                b: 0.0,
+                translation: shift,
+            },
+            PhotometricPolicy {
+                residual: WarpPolicy {
+                    tolerance: 0.03,
+                    max_source_pixels: 100_000_000,
+                },
+                minimum_samples: 1000,
+                minimum_variance: 1e-5,
+                minimum_gain: 0.9,
+                maximum_gain: 1.1,
+                maximum_offset: 0.1,
+            },
+            || false,
+        )?;
+        println!("diagnostic_native_white_anchor={anchored:#?}");
+    }
+    if std::env::var_os("RRRAH_DISPLAY_RESIDUAL_BINS").is_some() {
+        report_display_residual_bins(left, right, shift, &result.projected.evidence)?;
+    }
+    Ok(())
+}
+
+// Diagnostic only: integer aligned, fully opaque pairs. Check the independent
+// pass against the public verifier before reporting any bin attribution.
+fn report_display_residual_bins(
+    left: &rrrah_dedup::linear::LinearRgbaView<'_>,
+    right: &rrrah_dedup::linear::LinearRgbaView<'_>,
+    shift: [f64; 2],
+    fit: &rrrah_dedup::warp::BidirectionalPhotometricEvidence,
+) -> Result<(), Box<dyn std::error::Error>> {
+    if shift
+        .iter()
+        .any(|v| !v.is_finite() || v.fract() != 0.0 || *v < 0.0 || *v > f64::from(u32::MAX))
+    {
+        return Err("display bins require finite nonnegative integer shift".into());
+    }
+    #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
+    let offset = [shift[0] as u32, shift[1] as u32];
+    let (width, height) = left.dimensions();
+    let mut counts = [0_u64; 3];
+    let mut rejected = [[0_u64; 3]; 2];
+    let anchor_gains = std::env::var("RRRAH_WHITE_ANCHOR_GAINS")
+        .ok()
+        .map(|text| -> Result<Vec<f64>, Box<dyn std::error::Error>> {
+            let gains = text
+                .split(',')
+                .map(str::parse::<f64>)
+                .collect::<Result<Vec<_>, _>>()?;
+            if gains.len() != 6 || gains.iter().any(|g| !g.is_finite() || !(0.9..=1.1).contains(g)) {
+                return Err("white-anchor diagnostic requires six gains within 0.9..1.1".into());
+            }
+            Ok(gains)
+        })
+        .transpose()?;
+    let mut anchor_rejected = [[0_u64; 3]; 2];
+    use std::io::Write as _;
+    let mut sample_file = std::env::var_os("RRRAH_DISPLAY_PAIR_SAMPLES")
+        .map(|path| {
+            std::fs::OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .open(path)
+        })
+        .transpose()?
+        .map(std::io::BufWriter::new);
+    if let Some(file) = sample_file.as_mut() {
+        writeln!(file, "x,y,source_r,source_g,source_b,target_r,target_g,target_b")?;
+    }
+    for y in 0..height {
+        for x in 0..width {
+            let a = left.rgba(x, y).ok_or("display bin source absent")?;
+            let Some(b) = x
+                .checked_add(offset[0])
+                .zip(y.checked_add(offset[1]))
+                .and_then(|(x, y)| right.rgba(x, y))
+            else {
+                continue;
+            };
+            if a[3] != 1.0 || b[3] != 1.0 || a.iter().chain(&b).any(|v| !v.is_finite()) {
+                return Err("display bins require finite opaque pixels".into());
+            }
+            let bucket = if a[..3].iter().any(|v| !(0.0..=1.0).contains(v)) {
+                1
+            } else if b[..3].iter().any(|v| !(0.0..=1.0).contains(v)) {
+                2
+            } else {
+                0
+            };
+            counts[bucket] += 1;
+            if x % 32 == 0 && y % 32 == 0 {
+                if let Some(file) = sample_file.as_mut() {
+                    writeln!(
+                        file,
+                        "{x},{y},{},{},{},{},{},{}",
+                        a[0], a[1], a[2], b[0], b[1], b[2]
+                    )?;
+                }
+            }
+            for (direction, (source, target, model)) in
+                [(a, b, fit.forward), (b, a, fit.reverse)].into_iter().enumerate()
+            {
+                let mut maximum = 0.0_f64;
+                for c in 0..3 {
+                    let expected = (model.gain[c] * f64::from(source[c]) + model.offset[c]).clamp(0.0, 1.0);
+                    let actual = f64::from(target[c]).clamp(0.0, 1.0);
+                    maximum = maximum.max((expected - actual).abs());
+                }
+                rejected[direction][bucket] += u64::from(maximum > 0.03);
+                if let Some(gains) = anchor_gains.as_ref() {
+                    let mut anchor_maximum = 0.0_f64;
+                    for c in 0..3 {
+                        let gain = gains[direction * 3 + c];
+                        let expected = (gain * f64::from(source[c]) + (1.0 - gain)).clamp(0.0, 1.0);
+                        anchor_maximum =
+                            anchor_maximum.max((expected - f64::from(target[c]).clamp(0.0, 1.0)).abs());
+                    }
+                    anchor_rejected[direction][bucket] += u64::from(anchor_maximum > 0.03);
+                }
+            }
+        }
+    }
+    if let Some(file) = sample_file.as_mut() {
+        file.flush()?;
+    }
+    let total: u64 = counts.iter().sum();
+    for (direction, model) in [fit.forward, fit.reverse].into_iter().enumerate() {
+        let failures: u64 = rejected[direction].iter().sum();
+        if model.pixels.compared_pixels != total || model.pixels.matched_pixels != total - failures {
+            return Err(format!("display bin parity failed for direction {direction}").into());
+        }
+    }
+    println!(
+        "diagnostic_display_residual_bins counts={counts:?} forward_rejected={:?} reverse_rejected={:?} parity=true",
+        rejected[0], rejected[1]
+    );
+    if let Some(gains) = anchor_gains {
+        println!(
+            "diagnostic_white_anchor_dense gains={gains:?} counts={counts:?} forward_rejected={:?} reverse_rejected={:?}",
+            anchor_rejected[0], anchor_rejected[1]
+        );
+    }
     Ok(())
 }

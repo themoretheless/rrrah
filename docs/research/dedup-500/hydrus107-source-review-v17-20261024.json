@@ -1,0 +1,27 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v16-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/hydrus_api/LICENSE",
+      "local": "02-LICENSE",
+      "git_blob": "2def0e8831c25daae02b8b87cd439da27f1ac1c1",
+      "sha256": "91b65277959ec273763d28ef002e83a6b3fba57c7a35436c9e5b66536333d720",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 74,
+  "remaining_without_whole_review": 3,
+  "whole_repo_complete": false,
+  "new_authored_controls": 0,
+  "authored_controls_total": 28,
+  "findings": [
+    "Entire661line bundled license read, GNU Affero General Public License Version3. API source headers separately specify version3or later. Root MIT metadata is not sole license notice for bundled API.",
+    "Source inventory records different licenses without asserting legal compatibility or giving distribution advice. No API code adopted into production.",
+    "License reviewed as source material; application instructions within license appendix are not user instructions to modify our project."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

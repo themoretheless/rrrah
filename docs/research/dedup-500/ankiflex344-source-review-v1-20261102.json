@@ -1,0 +1,84 @@
+{
+  "index": 344,
+  "repository": "matthayes/anki_flex_dupes",
+  "commit": "5e750b2ce2faf96eef03b516356c6108deeec934",
+  "tracked_blob_count": 15,
+  "whole_file_reads": [
+    {
+      "path": "flex_dupe_checking/__init__.py",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/02-__init__.py",
+      "sha256": "cb86c8af4d6571e35646154bb5549ace6c641dce56ddb4dc97e52b2a16109191",
+      "git_blob_sha1": "2b4d860987881d362217f729f278094b07b7947c"
+    },
+    {
+      "path": "__init__.py",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/03-__init__.py",
+      "sha256": "631e67e808406f05df859a2634c0006e5316cf5631f0f063e504cf58a2fc33d9",
+      "git_blob_sha1": "30d0e4c5185ccda1f951142e4a4443fa7163e101"
+    },
+    {
+      "path": "release.sh",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/04-release.sh",
+      "sha256": "dd59397e813ef88a6dc68fd4a3f5dc16ffab542c227526c98b4a5e45b9105afc",
+      "git_blob_sha1": "039843c5b09784b486716b8ce183f253bb9f3548"
+    }
+  ],
+  "remaining": [
+    {
+      "path": ".flake8",
+      "bytes": 44
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 60
+    },
+    {
+      "path": ".travis.yml",
+      "bytes": 102
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 34526
+    },
+    {
+      "path": "Makefile",
+      "bytes": 79
+    },
+    {
+      "path": "README.md",
+      "bytes": 5772
+    },
+    {
+      "path": "images/la_mano.png",
+      "bytes": 35171
+    },
+    {
+      "path": "images/la_mano2.png",
+      "bytes": 13302
+    },
+    {
+      "path": "images/la_mano_es_dup.png",
+      "bytes": 26186
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 78
+    },
+    {
+      "path": "project_description.html",
+      "bytes": 6424
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 27
+    }
+  ],
+  "full_manual_review": false,
+  "upstream_tests_run": false,
+  "controls": "docs/research/dedup-500/ankiflex344-function-control-20261102-v1.json",
+  "findings": [
+    "Three implementation/entry/release files fully read. Domain Anki notes; SQL checksum prefilter scoped to model excluding current ID, followed by normalized equality on first field plus _pk suffixed fields. Nonkey fields intentionally ignored. Useful principle: hash candidates require explicit equality verification; no file/image engine here.",
+    "Four original-function AST controls passed with synthetic host adapters: colliding checksum different first field rejected, different _pk rejected, nonkey difference accepted, whitespace first field empty. These are not upstream Anki integration tests; actual checksum/HTML-media normalization replaced by identity stubs.",
+    "Browser search drops extra key constraint if term contains both quote types, so results can be broader than equality checker; first-field search contents and field names lack explicit escaping here. Patch-version logic only parses final dotted component. Release script deletes target relative to current working directory and lacks set-e/quoted paths; read only, not executed. No code adopted."
+  ]
+}

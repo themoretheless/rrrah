@@ -226,6 +226,42 @@ impl Drop for ModelUploadWorker {
 mod tests {
     use super::*;
     #[test]
+    #[ignore = "actual Metal negative control for deferring old completed upload credit release"]
+    fn deferred_completed_drop_refuses_an_otherwise_admissible_replacement() {
+        let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual Metal required");
+        let budget = rrrah_core::MemoryBudget::new(72);
+        let renderer = rrrah_gpu::ModelRenderer::new_with_budget(
+            &gpu.device,
+            crate::navigation_metal_readback::READBACK_FORMAT,
+            budget.clone(),
+        );
+        let preparer = renderer.upload_preparer();
+        let request = rrrah_decode::DecodeRequest::new(
+            std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../tests/fixtures/models/triangle.stl"),
+        );
+        let model = rrrah_decode::decode_model(&request).unwrap();
+        let resident = preparer.prepare_with_cancel(model.triangles(), || false).unwrap();
+        let obsolete = preparer.prepare_with_cancel(model.triangles(), || false).unwrap();
+        assert_eq!(budget.used(), 72);
+        assert!(
+            preparer.prepare_with_cancel(model.triangles(), || false).is_err(),
+            "publishing new work before dropping the old completed result changes admission"
+        );
+        assert_eq!(budget.used(), 72);
+        drop(obsolete);
+        assert_eq!(budget.used(), 36);
+        let replacement = preparer.prepare_with_cancel(model.triangles(), || false).unwrap();
+        assert_eq!(budget.used(), 72);
+        drop(replacement);
+        drop(resident);
+        drop(renderer);
+        assert_eq!(budget.used(), 0);
+        eprintln!(
+            "DEFERRED_DROP_NEGATIVE budget=72 resident=36 obsolete=36 replacement_refused_before_drop=true replacement_admitted_after_drop=true final=0"
+        );
+    }
+    #[test]
     #[ignore = "requires actual GPU for bounded model worker qualification"]
     fn latest_model_upload_wins_and_cancel_releases_worker_credit() {
         let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual GPU required");

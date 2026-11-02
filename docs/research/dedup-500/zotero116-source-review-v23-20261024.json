@@ -1,0 +1,34 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v22-20261024.json",
+  "whole_files_read_total": 40,
+  "tracked_blobs": 100,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 529,
+  "total_authored_controls_distinct": 55,
+  "new_distinct_controls": 0,
+  "requalified_controls": 2,
+  "harness": "docs/research/dedup-500/zotero116-shadow-native-controls-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls": [
+      {
+        "name": "actual directory rename leaves canonical tracking record at vanished old path when shadow inserted later",
+        "passed": true,
+        "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/zotero116-shadow-native-20261024/owned-runs/case-ou4pog"
+      },
+      {
+        "name": "actual directory rename and tracking agree with a single record",
+        "passed": true,
+        "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/zotero116-shadow-native-20261024/owned-runs/case-igd62O"
+      }
+    ],
+    "moves": 2,
+    "scope": "Original executor/store; real Node owned directory rename on local host; IOUtils adapter, not Gecko API; no real Zotero or external files"
+  },
+  "finding": "Physical owned directory rename confirms canonical tracking remains at vanished Old/p.pdf when a later shadow shares attachment key; single-record positive succeeds.",
+  "remaining": "Actual Gecko/Zotero, collisions and rollback unqualified; 60 blobs not whole-read.",
+  "production_changes": false,
+  "native_phash_asan": "deferred by user"
+}

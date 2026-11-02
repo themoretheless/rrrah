@@ -2,7 +2,7 @@
   "index": 262,
   "repository": "RhoninSeiei/astrbot_plugin_rss_forwarder",
   "commit": "436d7c45aed97e8c89c575d13d8c86cdbadbf8c2",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Pinned72paths assessed:65whole text/source readings,6PNGvisual reviews and1TTC structural inspection; all hashes freshly reverified. Font glyph/rasterization and full application/platform/runtime qualification remain open.",
   "decision": "reject-domain",
   "finding": "RSS semantic suppression/delivery orchestration; event/text duplicates rather than images.",
   "available_source_evidence": [
@@ -50,7 +50,7 @@
   "license_metadata": "AGPL-3.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 18,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,10 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/rss262-source-review-v72-20261102.json",
+  "upstream_tests_scope": "42 passed across six selected original modules: storage13/parser5/compat4/semantic4/aggregate5/pipeline11; mocked providers/transports, not complete suite or real AstrBot",
+  "additional_static_checks": "14 page contract tests passed; no browser execution",
+  "assessment_coverage": "docs/research/dedup-500/rss262-assessment-coverage-20261026.json",
+  "all_tracked_paths_assessed": true
 }

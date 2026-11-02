@@ -1,0 +1,344 @@
+package config
+
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strings"
+	"time"
+
+	"gopkg.in/yaml.v3"
+)
+
+const (
+	DefaultPath     = "/etc/alertly/config.yaml"
+	defaultTemplate = `{{ severity_emoji .Severity }} <b>{{ escape_html .Title }}</b>
+{{ if .Body }}{{ escape_html .Body }}{{ end }}`
+)
+
+type Config struct {
+	Server       Server            `yaml:"server"`
+	Telegram     Telegram          `yaml:"telegram"`
+	Templates    map[string]string `yaml:"templates"`
+	Logging      Logging           `yaml:"logging"`
+	Updates      Updates           `yaml:"updates"`
+	Alertmanager Alertmanager      `yaml:"alertmanager"`
+	Dedup        Dedup             `yaml:"dedup"`
+}
+
+type Server struct {
+	ListenAddr      string        `yaml:"listen_addr"`
+	ReadTimeout     time.Duration `yaml:"read_timeout"`
+	WriteTimeout    time.Duration `yaml:"write_timeout"`
+	ShutdownTimeout time.Duration `yaml:"shutdown_timeout"`
+	MaxBodyBytes    int64         `yaml:"max_body_bytes"`
+	// IdleTimeout closes idle keep-alive connections. Kept well above
+	// ReadTimeout (net/http's fallback when unset) so Alertmanager's pooled
+	// connections stay warm between webhook bursts.
+	IdleTimeout time.Duration `yaml:"idle_timeout"`
+	// ReadHeaderTimeout bounds reading the request headers alone, so a
+	// slow-header client is cut off before the full ReadTimeout budget.
+	ReadHeaderTimeout time.Duration `yaml:"read_header_timeout"`
+}
+
+type Telegram struct {
+	APIURL         string        `yaml:"api_url"`
+	ParseMode      string        `yaml:"parse_mode"`
+	RequestTimeout time.Duration `yaml:"request_timeout"`
+	RateLimit      RateLimit     `yaml:"rate_limit"`
+	Retry          Retry         `yaml:"retry"`
+	// ChatAllowlist limits which chat IDs webhook URLs may target. Empty
+	// (default) = any chat, preserving previous behaviour. Non-empty rejects
+	// requests naming other chats with 403 before anything is sent — this also
+	// bounds the per-chat metric cardinality and rate-limiter state, since
+	// both are keyed by whatever chat IDs callers put in the URL.
+	ChatAllowlist []int64 `yaml:"chat_allowlist"`
+}
+
+type RateLimit struct {
+	PerChatPerSec float64 `yaml:"per_chat_per_sec"`
+	GlobalPerSec  float64 `yaml:"global_per_sec"`
+}
+
+type Retry struct {
+	MaxAttempts    int           `yaml:"max_attempts"`
+	InitialBackoff time.Duration `yaml:"initial_backoff"`
+	MaxBackoff     time.Duration `yaml:"max_backoff"`
+}
+
+type Logging struct {
+	Level  string `yaml:"level"`
+	Format string `yaml:"format"`
+}
+
+type Updates struct {
+	Enabled          bool          `yaml:"enabled"`
+	PollTimeout      time.Duration `yaml:"poll_timeout"`
+	ChatAllowlist    []int64       `yaml:"chat_allowlist"`
+	UserAllowlist    []int64       `yaml:"user_allowlist"`
+	SilenceDurations []string      `yaml:"silence_durations"`
+	LabelCacheTTL    time.Duration `yaml:"label_cache_ttl"`
+	LabelCacheMax    int           `yaml:"label_cache_max"`
+	// ButtonTTL defines the window during which a user can press the silence
+	// buttons on an alert message. After this window the sweeper removes the
+	// inline keyboard and late clicks are rejected. Allowed range: 2h..48h.
+	ButtonTTL time.Duration `yaml:"button_ttl"`
+	// ButtonTrackerMax bounds the in-memory button/undo trackers (FIFO
+	// eviction of the oldest entry). An evicted button behaves like the
+	// restart case: it stays on screen, but a click is rejected.
+	ButtonTrackerMax int `yaml:"button_tracker_max"`
+	// SilenceMatchers limits which alert labels become silence matchers.
+	// Empty (default) = all labels: the narrowest silence, matching only this
+	// exact alert instance. Listing e.g. [alertname, namespace] creates a
+	// broader silence that also covers sibling alerts sharing those labels.
+	SilenceMatchers []string `yaml:"silence_matchers"`
+	// UndoWindow is how long the ↩️ Undo button stays on the message after a
+	// silence is created (silence is deleted via the AM API on press).
+	// 0 disables undo. Allowed range: 0..1h.
+	UndoWindow time.Duration `yaml:"undo_window"`
+	// Commands enables read-only chat-ops commands (/status) over the same
+	// long-poll loop and allowlists as the silence buttons.
+	Commands Commands `yaml:"commands"`
+}
+
+type Commands struct {
+	Enabled bool          `yaml:"enabled"`
+	Status  StatusCommand `yaml:"status"`
+}
+
+// StatusCommand tunes the /status reply.
+type StatusCommand struct {
+	// Pipeline adds the delivery-pipeline section: AM /api/v2/status, alert
+	// counts, the Watchdog deadman check and last webhook/delivery timestamps.
+	Pipeline bool `yaml:"pipeline"`
+	// WatchdogAlert is the always-firing alert used as a Prometheus deadman's
+	// switch ("Watchdog" in kube-prometheus-stack). Empty disables the check.
+	WatchdogAlert string `yaml:"watchdog_alert"`
+	// PipelineTimeout bounds each AM call made while building the reply.
+	PipelineTimeout time.Duration `yaml:"pipeline_timeout"`
+}
+
+const (
+	ButtonTTLMin  = 2 * time.Hour
+	ButtonTTLMax  = 48 * time.Hour
+	UndoWindowMax = time.Hour
+)
+
+type Alertmanager struct {
+	URL            string        `yaml:"url"`
+	RequestTimeout time.Duration `yaml:"request_timeout"`
+}
+
+// Dedup controls the in-process duplicate-suppression cache. A retry from the
+// upstream caller (e.g. Alertmanager when the previous webhook ACK timed out)
+// is dropped when the same (fingerprint, chat target, status) was delivered
+// within TTL. Cache is per-process; it is rebuilt after a restart.
+type Dedup struct {
+	Enabled bool          `yaml:"enabled"`
+	TTL     time.Duration `yaml:"ttl"`
+}
+
+func Default() Config {
+	return Config{
+		Server: Server{
+			ListenAddr:        ":8080",
+			ReadTimeout:       10 * time.Second,
+			WriteTimeout:      30 * time.Second,
+			ShutdownTimeout:   30 * time.Second,
+			MaxBodyBytes:      1 << 20,
+			IdleTimeout:       120 * time.Second,
+			ReadHeaderTimeout: 5 * time.Second,
+		},
+		Telegram: Telegram{
+			APIURL:         "https://api.telegram.org",
+			ParseMode:      "HTML",
+			RequestTimeout: 10 * time.Second,
+			RateLimit: RateLimit{
+				PerChatPerSec: 1,
+				GlobalPerSec:  30,
+			},
+			Retry: Retry{
+				MaxAttempts:    5,
+				InitialBackoff: time.Second,
+				MaxBackoff:     60 * time.Second,
+			},
+		},
+		Templates: map[string]string{
+			"default": defaultTemplate,
+		},
+		Logging: Logging{
+			Level:  "info",
+			Format: "json",
+		},
+		Updates: Updates{
+			Enabled:          false,
+			PollTimeout:      30 * time.Second,
+			ChatAllowlist:    nil,
+			UserAllowlist:    nil,
+			SilenceDurations: []string{"1h", "4h", "24h"},
+			LabelCacheTTL:    48 * time.Hour,
+			LabelCacheMax:    10000,
+			ButtonTTL:        8 * time.Hour,
+			ButtonTrackerMax: 10000,
+			SilenceMatchers:  nil,
+			UndoWindow:       5 * time.Minute,
+			Commands: Commands{
+				Enabled: false,
+				Status: StatusCommand{
+					Pipeline:        true,
+					WatchdogAlert:   "Watchdog",
+					PipelineTimeout: 4 * time.Second,
+				},
+			},
+		},
+		Alertmanager: Alertmanager{
+			URL:            "",
+			RequestTimeout: 10 * time.Second,
+		},
+		Dedup: Dedup{
+			Enabled: true,
+			TTL:     time.Hour,
+		},
+	}
+}
+
+func Load(path string) (Config, error) {
+	cfg := Default()
+
+	data, err := os.ReadFile(path) // #nosec G304 -- config path is operator-supplied by design
+	if err != nil {
+		return Config{}, fmt.Errorf("read config %q: %w", path, err)
+	}
+
+	if err := yaml.Unmarshal(data, &cfg); err != nil {
+		return Config{}, fmt.Errorf("parse config %q: %w", path, err)
+	}
+
+	if v := os.Getenv("LOG_LEVEL"); v != "" {
+		cfg.Logging.Level = v
+	}
+
+	if cfg.Templates == nil {
+		cfg.Templates = map[string]string{}
+	}
+	if _, ok := cfg.Templates["default"]; !ok {
+		cfg.Templates["default"] = defaultTemplate
+	}
+
+	if err := cfg.Validate(); err != nil {
+		return Config{}, err
+	}
+	return cfg, nil
+}
+
+func (c Config) Validate() error {
+	if c.Server.ListenAddr == "" {
+		return errors.New("server.listen_addr is required")
+	}
+	if c.Server.MaxBodyBytes <= 0 {
+		return errors.New("server.max_body_bytes must be > 0")
+	}
+	if c.Server.IdleTimeout <= 0 {
+		return errors.New("server.idle_timeout must be > 0")
+	}
+	if c.Server.ReadHeaderTimeout <= 0 {
+		return errors.New("server.read_header_timeout must be > 0")
+	}
+	if c.Telegram.APIURL == "" {
+		return errors.New("telegram.api_url is required")
+	}
+	if c.Telegram.RequestTimeout <= 0 {
+		return errors.New("telegram.request_timeout must be > 0")
+	}
+	if c.Telegram.RateLimit.PerChatPerSec <= 0 {
+		return errors.New("telegram.rate_limit.per_chat_per_sec must be > 0")
+	}
+	if c.Telegram.RateLimit.GlobalPerSec <= 0 {
+		return errors.New("telegram.rate_limit.global_per_sec must be > 0")
+	}
+	if c.Telegram.Retry.MaxAttempts <= 0 {
+		return errors.New("telegram.retry.max_attempts must be > 0")
+	}
+	if c.Telegram.Retry.InitialBackoff <= 0 {
+		return errors.New("telegram.retry.initial_backoff must be > 0")
+	}
+	if c.Telegram.Retry.MaxBackoff < c.Telegram.Retry.InitialBackoff {
+		return errors.New("telegram.retry.max_backoff must be >= initial_backoff")
+	}
+	switch c.Logging.Level {
+	case "debug", "info", "warn", "error":
+	default:
+		return fmt.Errorf("invalid logging.level %q", c.Logging.Level)
+	}
+	switch c.Logging.Format {
+	case "json", "text":
+	default:
+		return fmt.Errorf("invalid logging.format %q", c.Logging.Format)
+	}
+	if c.Updates.Enabled {
+		if c.Updates.PollTimeout <= 0 {
+			return errors.New("updates.poll_timeout must be > 0 when updates.enabled is true")
+		}
+		if len(c.Updates.SilenceDurations) == 0 {
+			return errors.New("updates.silence_durations must have at least one entry when updates.enabled is true")
+		}
+		for _, d := range c.Updates.SilenceDurations {
+			if _, err := time.ParseDuration(d); err != nil {
+				return fmt.Errorf("updates.silence_durations: invalid duration %q: %w", d, err)
+			}
+		}
+		if c.Updates.LabelCacheTTL <= 0 {
+			return errors.New("updates.label_cache_ttl must be > 0 when updates.enabled is true")
+		}
+		if c.Updates.LabelCacheMax <= 0 {
+			return errors.New("updates.label_cache_max must be > 0 when updates.enabled is true")
+		}
+		if c.Alertmanager.URL == "" {
+			return errors.New("alertmanager.url is required when updates.enabled is true")
+		}
+		if c.Alertmanager.RequestTimeout <= 0 {
+			return errors.New("alertmanager.request_timeout must be > 0 when updates.enabled is true")
+		}
+		if c.Updates.ButtonTrackerMax <= 0 {
+			return errors.New("updates.button_tracker_max must be > 0 when updates.enabled is true")
+		}
+		if c.Updates.ButtonTTL < ButtonTTLMin || c.Updates.ButtonTTL > ButtonTTLMax {
+			return fmt.Errorf("updates.button_ttl must be within %s..%s, got %s",
+				ButtonTTLMin, ButtonTTLMax, c.Updates.ButtonTTL)
+		}
+		for _, m := range c.Updates.SilenceMatchers {
+			if strings.TrimSpace(m) == "" {
+				return errors.New("updates.silence_matchers must not contain empty label names")
+			}
+		}
+		if c.Updates.UndoWindow < 0 || c.Updates.UndoWindow > UndoWindowMax {
+			return fmt.Errorf("updates.undo_window must be within 0..%s, got %s",
+				UndoWindowMax, c.Updates.UndoWindow)
+		}
+	}
+	if c.Updates.Commands.Enabled && !c.Updates.Enabled {
+		return errors.New("updates.commands.enabled requires updates.enabled")
+	}
+	if c.Updates.Commands.Enabled && c.Updates.Commands.Status.Pipeline && c.Updates.Commands.Status.PipelineTimeout <= 0 {
+		return errors.New("updates.commands.status.pipeline_timeout must be > 0 when the pipeline section is enabled")
+	}
+	if c.Dedup.Enabled && c.Dedup.TTL <= 0 {
+		return errors.New("dedup.ttl must be > 0 when dedup.enabled is true")
+	}
+	return nil
+}
+
+func Path() string {
+	if v := os.Getenv("ALERTLY_CONFIG"); v != "" {
+		return v
+	}
+	return DefaultPath
+}
+
+func DryRun() bool {
+	switch os.Getenv("DRY_RUN") {
+	case "1", "true", "TRUE", "True", "yes":
+		return true
+	}
+	return false
+}

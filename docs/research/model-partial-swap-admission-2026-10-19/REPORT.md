@@ -43,3 +43,17 @@ The model-readback suite passed on Metal Apple M4 Max: 7 passed, zero failures,
 rendered frames remained exact, including SDR/HDR render targets; cancellation
 and pressure recovery released all managed and queued credit. This is offscreen
 readback, not physical HDR-display validation. See `metal.log`.
+
+## Transient shared-root restore refusal — 2026-10-24
+
+The restored-weight floor preflight protects RAM membership, but an independently occupied shared memory root can still refuse the actual swap allocation. Previously the retained-background model path treated that transient memory refusal as a cache miss and entered native decode. The new real-cache regression reproduced the fallthrough on triangle.stl (restore-pressure-red.log). In the worker the fallback could also enter/wait for the decode gate and re-read the model source unnecessarily.
+
+The retained, non-visible path now returns a specific refusal after a retryable memory-capacity error from swap; it checks cancellation first. It preserves the immutable swap object for another attempt instead of treating it as invalid. Foreground and explicitly non-retaining paths keep their existing fallback behavior. A permanently insufficient configured restore cap (requested allocation greater than its limit) also keeps native fallback, allowing normal decoding when the shared root has headroom. No payload format or estimate changes were made.
+
+The combined CPU/actual-Metal regression covers STL, OFF with binary attributes, OBJ with shared metadata and float64 PLY. A real native payload is stored in swap; another selected model stays pinned in RAM. With zero or one byte free in the128KiB shared root, count/minimum-weight preflight still permits the neighbour, but atomic restore admission refuses. A decoder panic guard proves this never enters native fallback. Visible key and membership stay unchanged, successful swap reads/errors remain0 and pressure release restores the exact retained object without native decoding. Payload bytes compare exactly, including source attributes/metadata. The successful restore is retained alongside the selected model.
+
+A separate one-byte restore-cap cache proves a real indexed payload was written (write count1 and a known minimum weight above1), then permits exactly one native decode under otherwise available shared memory; payload bytes still match. This distinguishes permanent restore configuration from transient occupancy. Every source ends with managed root0.
+
+On actual Apple M4 Max, the retry produces nonempty neutral-geometry SDR and float16 HDR frames exactly matching the original pose at64×64 and63×65. This covers existing geometry rendering, not source materials/textures or physical HDR. Focused CPU1 passed/0ignored/0failed (restore-pressure-current.log); required Metal1 passed/0ignored/0failed, four source variants (restore-pressure-metal.log). Full app330 passed/85ignored/0failed, shared current log at ../prefetch-count-swap-hit-2026-10-16/app-current.log. Ordinary production check passed (restore-pressure-check.log). No speed, real slow-disk, physical VRAM or NVIDIA claim follows.
+
+Implementation/source SHA-256 (crates/rrrah-app/src/main.rs): 1b8bc9bc6a47c34277f2064f8fd51dc05bec1d589ff5f6c1075e7045cb76d42d.

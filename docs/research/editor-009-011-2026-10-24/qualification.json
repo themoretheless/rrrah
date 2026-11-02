@@ -1,0 +1,141 @@
+{
+  "date": "2026-10-24",
+  "verified_at_utc": "2026-10-24T00:36:50.128372+00:00",
+  "host": "Hardware:\n\n    Hardware Overview:\n\n      Model Name: MacBook Pro\n      Model Identifier: Mac16,5\n      Model Number: Z1FW0007BLL/A\n      Chip: Apple M4 Max\n      Total Number of Cores: 16 (12 Performance and 4 Efficiency)\n      Memory: 128 GB\n      System Firmware Version: 20457.41.2\n      OS Loader Version: 18000.161.10.702.4\n      Serial Number (system): H2XLFGVWL6\n      Hardware UUID: F7F68AFB-A71A-5F09-825D-AC7A387DF7C7\n      Provisioning UDID: 00006041-001261D41E31801C\n      Activation Lock Status: Enabled\n\n",
+  "results": {
+    "final-app-tests.log": {
+      "exit_code": 0,
+      "test_results": [
+        "ok. 302 passed; 0 failed; 43 ignored; 0 measured; 59 filtered out; finished in 22.35s"
+      ]
+    },
+    "histogram-all.log": {
+      "exit_code": 0,
+      "test_results": [
+        "ok. 6 passed; 0 failed; 0 ignored; 0 measured; 73 filtered out; finished in 19.34s"
+      ]
+    },
+    "extended-histogram.log": {
+      "exit_code": 0,
+      "test_results": [
+        "ok. 1 passed; 0 failed; 0 ignored; 0 measured; 78 filtered out; finished in 12.66s"
+      ]
+    },
+    "native-counter-test.log": {
+      "exit_code": 0,
+      "test_results": [
+        "ok. 1 passed; 0 failed; 0 ignored; 0 measured; 402 filtered out; finished in 10.48s"
+      ]
+    },
+    "journal-tests.log": {
+      "exit_code": 0,
+      "test_results": [
+        "ok. 23 passed; 0 failed; 1 ignored; 0 measured; 379 filtered out; finished in 15.37s"
+      ]
+    },
+    "final-build.log": {
+      "exit_code": 0,
+      "clean": false
+    },
+    "clippy.log": {
+      "exit_code": 0,
+      "clean": false
+    }
+  },
+  "registry": {
+    "count": 1000,
+    "execution_records": 30,
+    "strict_snapshot": "passed",
+    "mutation_tests": 6
+  },
+  "task_statuses": {
+    "RR-0009": "verified",
+    "RR-0011": "verified"
+  },
+  "source_sha256": {
+    "Cargo.lock": "43dfb866b1bd53a87c1585f108121272b461c831515219a38984107a5c74484f",
+    "crates/rrrah-app/Cargo.toml": "05e6e5f0bedba84f17ca4e93800643d043956f90dab1b3f84fd53b00a98d25e1",
+    "crates/rrrah-app/src/edit_journal.rs": "e269f47b9ca107736227bf7c74a8f7ca119798aad47df29f81eb2fcda6458fdd",
+    "crates/rrrah-app/src/edit_store.rs": "ae28528a401d76b8ed6f28c30143aa100f5e6de64c8b280e16055ad3f89d4d59",
+    "crates/rrrah-app/src/edit_qualification.rs": "19a10c40bab1b1f2dc5b6c0b48da4510d20cfaaea7b38a9bbfa7dcb0329a266f",
+    "crates/rrrah-app/src/main.rs": "d8282402d314e5b6ccbb0ee6f56702b69998bd2d127cc4b82befaef6428d3df6",
+    "crates/rrrah-app/src/editor.rs": "bb5ac3bdefda171860e61006597bd8c8c2b12e21fa5fff876d66a009706a784d",
+    "crates/rrrah-gpu/src/histogram.rs": "b0768faea354ee40f42848e31201acc48f6cc230bc19d9ce6825bf107a599333",
+    "crates/rrrah-gpu/shaders/histogram.wgsl": "9e9c09be35b33c194f7b01904d826c1b524334adfd0abf73cd55aef9b38a97db",
+    "scripts/prepare-editor-memory-probe.py": "25678f2850d3d08de6d669c0868857af78786c5aa9845f449a92555fe9522af1"
+  },
+  "final_binary_sha256": "0b889bc511ae328a027b5181d42f07cd702904ac8bad70b299a6d6338d7eb125",
+  "gui_frozen_binary_sha256": "28f802e0d7967d5b49d5eb4dc901dfd05b4302aa96abba3b3cffb167fb66906f",
+  "memory_results": "memory-results.json",
+  "gui_recovery": "recovery-verification.json",
+  "api_compatibility": "XMP/EditState v1; recovery v1 read compatibility and checked-write migration to v2; old binaries fail closed on v2",
+  "limits": [
+    "macOS-local filesystem and Apple M4 Max qualified only",
+    "native GPU allocation sampled peak is not lifetime GPU residency or dedicated VRAM",
+    "kernel lifetime RSS/footprint include 8 MiB allocation challenge; shared GPU memory must not be added",
+    "shared-desktop absolute p95 observations, not FPS or paired speedup",
+    "direct fragment/XTrans GPU histogram, CUDA/NVIDIA/physical HDR not qualified",
+    "earlier cached startup timeout root cause not established",
+    "Clippy warnings remain",
+    "concurrent GOAL_COVERAGE documentation drift detected, snapshot refreshed and strict validation repeated"
+  ],
+  "artifact_sha256": {
+    "REPORT.md": "0c847cc4434098c5b71e0efd157d4ba328a20fae8bec371316a9152a031f82c4",
+    "build.log": "e773bb71b762c0ae1053a2314cd602e37502dd75b0538f404bbbf13c017a413b",
+    "clippy.log": "1b32cc19b2a7255ae427d5dd5ed89869e2b02ac6425fd8e5491d10e74f825849",
+    "diff-check.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "extended-histogram.log": "b7d38459fe191a0d96f2481461349d77d860504aa1eca7a62c6d5335a8c168e7",
+    "final-app-tests.log": "ebf25993f658166f732ca07ae83ac546932587781f0bf3d9dfd3c3a875dbbd9b",
+    "final-build.log": "fe927dcc2cf5ed1ddfaa8a274a18fc042985b350ee59f5f321dc12b3426500ef",
+    "fixtures.json": "033fefbde28287f1dc7b2ef2791bedf1962ad915e414c3eaf98d4d2c1e0cd539",
+    "hardware.txt": "c0e162ba3886c5e2b7607b8674ee035fbee1498f3c33368bd60a36f39d28a83e",
+    "histogram-all.log": "aa885b05a10da7cebf0ad4d30bba593219f0c63c2ab1cf6d2b31f232ff84f8c5",
+    "host.txt": "8fdf8e6ec0d33676cfccf604a6b15a3091aa467c3393d348a39d7b88ceea665a",
+    "journal-tests.log": "06507bd12865d95be19b8c21280a1e5f2ac400b98c8bc3f571de3e4055c9816d",
+    "large-ax.txt": "51a4114a5b49e5b767a44dc6241c54c5179ac4f9fba7c3ff42dbcbed78204923",
+    "large-frames.json": "4c1699b8f2675cf8fab9a356ae59d0ed9f73628b3a6b517eaf8d103ff65bead9",
+    "large-manifest.json": "68e7fb8cf56993774f1f73c77c4b2a4b8a953b4bd83c1b9804be2271ff642d40",
+    "large-usage.txt": "878a09e389d2b97570105acffddd4fedb13847962edc28d3cf5e62abfc604c79",
+    "large-viewer.log": "3ecf5b8ff8c276f5e8cc0b55a99502938cf583765d67b350bb697ef3e7b79783",
+    "large.png": "4b00f16269dcf5a591b33e7e29ec8c975c5f2757e914b7eb39e0ceb423b2e915",
+    "memory-results.json": "8b7ab299839c00c192721e9ea1a0c7a95d0b8d49cefda441d946c0e7022784be",
+    "native-counter-test.log": "3099b0d7a8ad32b8029b9ec83566da2393fc5a40b2e699c403bff412b6f1982f",
+    "raw-cold-ax.txt": "86f42b4540c1e0d8f7923484e6413dcd4fb9dd1db34ce9647b131bd5bcba8963",
+    "raw-cold-frames.json": "d3c1785728e0bfaa41851bc99896da8d2bf9f8cec03ee43fdda908425e3c18d8",
+    "raw-cold-manifest.json": "d570871a412889eebde8fee3ed7b85bfa8004c3ed41fc8a5a7650b39524aac4b",
+    "raw-cold-usage.txt": "dfb64bd7723a8c65f7469584915db68839d7122d04e0647385857421a895a7dd",
+    "raw-cold-viewer.log": "bf159ede3648693b33a127cf91ff86bc1e141fbea7365240f8c1708bef1d1d4e",
+    "raw-cold.png": "c556d29ad51d1daeed9181defa7e3b23aec999f2dc5d0466fa6f8de6aa47af60",
+    "raw-warm-ax.txt": "86f42b4540c1e0d8f7923484e6413dcd4fb9dd1db34ce9647b131bd5bcba8963",
+    "raw-warm-frames.json": "7b062015d9cebf857a05d0e9d70dd435785315bf27b771206f1325c0d0e93281",
+    "raw-warm-manifest.json": "d570871a412889eebde8fee3ed7b85bfa8004c3ed41fc8a5a7650b39524aac4b",
+    "raw-warm-usage.txt": "2c679a1b182731fde65ad51e71b23b0557364bec11531b7327c44e87da8ffb34",
+    "raw-warm-viewer.log": "1cbfc19daa648e351d3820b90adb06ee307beea5af26474b1cb9f89d19e2f098",
+    "raw-warm.png": "c556d29ad51d1daeed9181defa7e3b23aec999f2dc5d0466fa6f8de6aa47af60",
+    "recovery-before-kill-ax.txt": "cc29236cc3ebaa7b28eb94e486ab6ec228be2c7bc232dba5625fe446157fda5e",
+    "recovery-before-kill.log": "51bc2f0253a5e01ea721c3d3caaf7741ebeaded83175f39f117b46e673ad851b",
+    "recovery-before-kill.png": "8e0a9bc683ca5ae78bf2e43c066ba8726428738e38c3cffbde0a07f0d6d9ac64",
+    "recovery-kill.json": "9a6425b08af735e54e69d3a02b1f2a6e5012d8ff96159a941f864768d39a40eb",
+    "recovery-killed-usage.txt": "e9cc374ab51f038a4641f47d62da729c84026603e9b195436a1e7a3ade7436be",
+    "recovery-manifest.json": "068222895fb2bb35bb7fcb0010986a0bd9844a6ea793eec5a0f858b8e54dbaf0",
+    "recovery-usage.txt": "4fd32fb6abce5c87cc90f89ccf442e72a7f4c12ac7afae7a64078b803c1fbd1a",
+    "recovery-v2-after-choice.json": "169afd36697beaa4ef9f7f18d31d3d91bac6dd0eff0ec949ab6cddaf484d4d1e",
+    "recovery-v2-before-kill.json": "169afd36697beaa4ef9f7f18d31d3d91bac6dd0eff0ec949ab6cddaf484d4d1e",
+    "recovery-v2-before-repaint.png": "fb226fd4fb7aef14948e331e21be01d33a8b8c1bf9c15d091715c0fc2a51951d",
+    "recovery-v2-restored-ax.txt": "14cf3a923bc57515af5c2f381097d557dfd7c26ee9a5df5449c17aafafc3c61e",
+    "recovery-v2-restored.png": "716edebf7e3663bd2bdca41ff7f17c331fe1dc979144a2283460e8b095cdc83a",
+    "recovery-verification.json": "f30dac2596713a8acaa30b5ab719ff6ad2e43b10b9603c91a0c4623619189fd3",
+    "recovery-viewer.log": "0edae1b033cd3bc8f5b73d86cbdf1c72b474aa0b9d6d6ae2c0135b9c90771c05",
+    "recovery-xmp-before.xml": "97e531eef7357b275e21befd0486c5d989326f71fc7ec6b64162bfbfa5ff5756",
+    "registry-tests.log": "44e8a56c2f49a8a05d9abd67f0051320d544ff746c7a0fdf94055e5c67296004",
+    "registry-validation-drift.log": "018a9dacfb58feab52bc6fbfa1938269314e6733e379964434d1c5272184a440",
+    "registry-validation.log": "5e4e3654e6a0e067dd4e683a4bf3b8af62253d54659b63a4a3215e3f915c3c8f",
+    "small-ax.txt": "d6c8e4a1e2f2a4767c627a57cdd90552ba09dfb4243e488a34560f1f5a7d4b49",
+    "small-frames.json": "9868b1f4f1ea77d33c5fa7032327ea8d46940dfac6c05b7e2c87307f431e5063",
+    "small-manifest.json": "4b28a0f6aad16115ae8d3b4c05dee101fb4eba4ae37f6a12db3a236798815ac2",
+    "small-usage.txt": "a05f4e1b125a9fe5d286e891a242b646a4a508f2bbc1c9807ad412b918ec3f1a",
+    "small-viewer.log": "b02ad06ef097c7cc02207215a1af1822f1e6f51763529f868f2a9747c4053c1a",
+    "small.png": "c0da585fdeac75d0ba548c8eba2cb9dcd6cac7883a33663a5e54c59ebb273131",
+    "worktree-status.txt": "c28c16e82ab9718cb088b17149109bb6aa2c30ff247cfa069abfed837c5a3f91"
+  }
+}

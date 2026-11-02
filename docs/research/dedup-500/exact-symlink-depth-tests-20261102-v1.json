@@ -1,0 +1,21 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_files",
+  "exit_code": 0,
+  "passed": 49,
+  "failed": 0,
+  "ignored": 0,
+  "filtered_out": 0,
+  "test_seconds": 1.53,
+  "source_sha256_after": {
+    "crates/rrrah-dedup/src/exact.rs": "6aa6ca528c0a255b37ae2dc0729a22e9597c85ba26371e8e27641c52ba3236ca",
+    "crates/rrrah-dedup/tests/exact_files.rs": "be52328804a02ed7559c53bb70eb02ff61dd9a62a4d87fca89c5ec5972b65c5f"
+  },
+  "new_regression": "explicit_symlink_root_restores_depth_without_reentering_a_cycle",
+  "coverage": "Unix/macOS owned temporary fixture: two directory symlinks target same physical directory; later explicit alias root restores depth1 file admission; target contains self-directory cycle. Both scan APIs and both root orders preserve exactly2physical files and one2member group, emit only Limit diagnostics, preserve loop target and finish without cancellation.",
+  "limitations": [
+    "No Windows reparse point qualification.",
+    "Not an atomic concurrent filesystem snapshot.",
+    "Production source unchanged this turn.",
+    "Source hashes captured after test, not a before/after identity proof."
+  ]
+}

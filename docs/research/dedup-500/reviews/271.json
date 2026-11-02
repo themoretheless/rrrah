@@ -2,7 +2,7 @@
   "index": 271,
   "repository": "jlesage/docker-dupeguru",
   "commit": "702498cfa2108dfab8665be2204e791618d95f62",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 16 pinned tree blobs fully read and cached bytes reverified. Pure path-boundary helper control reproduces sibling-prefix bug. No upstream tests/container build or user-file mutations.",
   "decision": "wrapper",
   "finding": "Docker/startup/send-to-trash packaging for dupeGuru; underlying engine is already reviewed separately.",
   "available_source_evidence": [
@@ -74,5 +74,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/dockerdupeguru271-source-review-v4-20261102.json"
 }

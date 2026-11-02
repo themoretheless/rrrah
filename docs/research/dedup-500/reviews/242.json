@@ -2,9 +2,9 @@
   "index": 242,
   "repository": "witold-andelie/revio",
   "commit": "1a528594d8c2a5f52041762c67f69d83eda22d02",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 165 pinned repository blobs whole-file read and hashes verified; isolated controls only, upstream test suite not run",
   "decision": "reject-domain",
-  "finding": "Agentic static code-review fingerprint detection; no photo/file engine.",
+  "finding": "Agentic semantic code-review redundancy scanner; whole pinned source audit complete, reject-domain for byte/file/image duplicate engine. No implementation adopted.",
   "available_source_evidence": [
     {
       "path": "src/revio/detect/fingerprint.py",
@@ -68,7 +68,7 @@
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "root LICENSE and NOTICE whole-file read, Apache-2.0; dependency/nested provenance not qualified; no implementation adopted",
   "tests_detected": 23,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -94,5 +94,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/revio242-source-review-v120-20261025.json",
+  "full_repository_read": true,
+  "all_repository_files_assessed": true
 }

@@ -1,0 +1,46 @@
+{
+  "repository": "Arkalogy/best-photo-picker",
+  "commit": "b59ce09aa78c7fda1931ebbb8cf087539d9d1b71",
+  "reviewed_whole_files": [
+    {
+      "path": "bpp/db/dedupe.py",
+      "git_blob_sha1": "90b6cdfbce120b7c3418b291ed55aa0c0b37c830",
+      "sha256": "d38c1b34d206ce3149fa26e3cf8807d339139596cecca50ec6507279d023026d",
+      "whole_file_read": true
+    },
+    {
+      "path": "bpp/dedupe/phash.py",
+      "git_blob_sha1": "55b5a6f8648d1613e13b44993cb50271dce27590",
+      "sha256": "5f95f24206a937578c96dcb881e72af143d7564937118c06a9066fa0d74ac738",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_dedupe_phash.py",
+      "git_blob_sha1": "2b9012be5b7e19c09f792e926e2f6e9cc30f3a43",
+      "sha256": "6fb6dc5240cbc4f641a58e350e0205a3c9d5ae46e915af94f067416e63241524",
+      "whole_file_read": true
+    }
+  ],
+  "tracked_blobs": 918,
+  "full_repository_read": false,
+  "visual_artifacts_viewed": 24,
+  "visual_inventory": "docs/research/dedup-500/bpp182-controls-20261024/visual-inventory.json",
+  "visual_scope": "All24 tracked image artifacts decoded and visually inspected on six contact sheets. ICO default frame viewed; other icon resolutions inventoried only. Static screenshots do not prove live UI or duplicate correctness.",
+  "visual_observations": [
+    "Fourteen icon assets: dark purple camera/lens application icons plus Leaflet layers/markers/shadow; splash and ICO have flatter icon style.",
+    "Screenshots01-04: library grid with scores, lightbox/quality metadata, face groups and curated picks.",
+    "Screenshots05-08: map clusters, calendar density, two pet groups and photo adjustment panel.",
+    "Screenshots09-10: weighted selection settings and side-by-side duplicate review with current pick/similar100percent labels, quality breakdown and switch/delete controls. Screenshot100percent label is not byte equality proof."
+  ],
+  "authored_controls_run": 5,
+  "authored_results": "docs/research/dedup-500/bpp182-controls-20261024/results.json",
+  "findings": [
+    "Both original signed Hamming implementations return1 for(-1,0),fixed-width64reference64;actual original SQLite cluster function then groups this pair at default threshold8.",
+    "Original SQLite union-find groups same-hash times0,50,100 seconds under60secondwindow: pairwise edge window does not bound group endpoints.",
+    "Original SQLite early return for empty candidate set leaves seeded old cluster fields unchanged."
+  ],
+  "runtime_scope": "Original AST functions, actual owned in-memory SQLite; logger-only adapter. No cv2 decoding/full original test suite/real user DB.",
+  "decision": "reference-only-no-adoption",
+  "remaining": "891/918 tracked blobs not wholly assessed by this audit;3text files wholly read and24image artifacts viewed. Full repository/original runtime suites pending. User143remaining-image count not reconciled;do not subtract24 without shared baseline.",
+  "deferred": "pHash.org/ASAN"
+}

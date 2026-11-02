@@ -1,0 +1,97 @@
+--- 
++++ 
+@@ -309,38 +309,56 @@
+     else:
+         data = [[(None, ip)] for ip in image_paths]
+ 
+-
+-    b_imgs = []  # 用于暂时存放待生成batch时候的数据
+-    tqdm.write("分配进程中...")
+-    for data_entry in tqdm(data, smoothing=0.0):
+-        for data in data_entry:
+-            if data is None:
++    import concurrent.futures
++    # 只能用线程池，进程池无法正确传递模型和无法被pickable
++    # 如果要用进程池，需要把run_batch移到main之外，然后每个进程单独建一个onnxruntime.session
++    # 但是速度慢的瓶颈不在CPU，而在GPU，所以没必要？
++    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
++        pool_futures_list = []  # 用于跟踪进程完成进度
++        b_imgs = []  # 用于暂时存放待生成batch时候的数据
++        tqdm.write("分配进程中...")
++        for data_entry in tqdm(data, smoothing=0.0):
++            for data in data_entry:
++                if data is None:
++                    continue
++                
++                image, image_path = data
++                if image is not None:
++                    image = image.detach().numpy()
++                else:
++                    try:
++                        image = Image.open(image_path)
++                        if image.mode != "RGB":
++                            image = image.convert("RGB")
++                        image = preprocess_image(image)
++                    except Exception as e:
++                        print(f"Could not load image path / 画像を読み込めません: {image_path}, error: {e}")
++                        continue
++                b_imgs.append((image_path, image))
++
++                if len(b_imgs) >= args.batch_size:
++                    # 注意这里必须要存在一个新list里，不然直接用b_imgs.clear()，会出现线程还没调用，内存中b_imgs就已经被删了
++                    b_imgs_batch = [(str(image_path), image) for image_path, image in b_imgs]  # Convert image_path to string
++                    pool_futures_list.append( pool.submit(run_batch, b_imgs_batch) )  # 分配任务给进程池
++                    # run_batch(b_imgs) # 同步任务
++                    b_imgs.clear()
++
++        if len(b_imgs) > 0:
++            b_imgs = [(str(image_path), image) for image_path, image in b_imgs]  # Convert image_path to string
++            pool_futures_list.append( pool.submit(run_batch, b_imgs) )  # 分配任务给进程池
++            # run_batch(b_imgs) # 同步任务
++
++        # 显示完成进度
++        tqdm.write("Waiting for processes to finish...")
++        e_num = 0
++        for future in tqdm( concurrent.futures.as_completed(pool_futures_list), smoothing=0.0, total=len(pool_futures_list) ):
++            try:
++                future.result()
++            except Exception as e:
++                tqdm.write(f"Error: {e}")
++                e_num += 1
+                 continue
+-            
+-            image, image_path = data
+-            if image is not None:
+-                image = image.detach().numpy()
+-            else:
+-                try:
+-                    image = Image.open(image_path)
+-                    if image.mode != "RGB":
+-                        image = image.convert("RGB")
+-                    image = preprocess_image(image)
+-                except Exception as e:
+-                    print(f"Could not load image path / 画像を読み込めません: {image_path}, error: {e}")
+-                    continue
+-            b_imgs.append((image_path, image))
+-
+-            if len(b_imgs) >= args.batch_size:
+-                # 注意这里必须要存在一个新list里，不然直接用b_imgs.clear()，会出现线程还没调用，内存中b_imgs就已经被删了
+-                b_imgs_batch = [(str(image_path), image) for image_path, image in b_imgs]  # Convert image_path to string
+-                run_batch(b_imgs_batch) # 同步任务
+-                b_imgs.clear()
+-
+-    if len(b_imgs) > 0:
+-        b_imgs = [(str(image_path), image) for image_path, image in b_imgs]  # Convert image_path to string
+-        run_batch(b_imgs) # 同步任务
+-
++        print(f"Error count: {e_num}")
+ 
+     if args.frequency_tags:
+         sorted_tags = sorted(tag_freq.items(), key=lambda x: x[1], reverse=True)
+@@ -470,5 +488,5 @@
+ 
+ if __name__ == "__main__":
+     start_time = time.time()
+-    WD14tagger(r"images")
++    WD14tagger(r"E:\GitHub\图片\宫子和会长")
+     print("耗时：", time.time() - start_time, "秒")

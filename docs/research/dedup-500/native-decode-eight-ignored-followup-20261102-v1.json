@@ -1,0 +1,43 @@
+{
+  "original_run": "docs/research/dedup-500/native-decode-all-targets-qualification-20261102-v1.json",
+  "explicit_followups": [
+    {
+      "receipt": "docs/research/dedup-500/gradient-alternating-current-20261102-v1.json",
+      "receipt_sha256": "48a575ffb16a1862e539e99820d1398b814f654cb6929e1f70dd49fd29e3275b",
+      "log_hash_verified": true,
+      "passed": 2
+    },
+    {
+      "receipt": "docs/research/dedup-500/gradient-photo-current-20261102-v1.json",
+      "receipt_sha256": "4fc64d82ae3eb4507e60952fc53155aa7a7a2635dae2e5243ae43552fe8a8e9c",
+      "log_hash_verified": true,
+      "passed": 2
+    },
+    {
+      "receipt": "docs/research/dedup-500/row-major-index-probe-decode-20261102-v1.json",
+      "receipt_sha256": "e2b007cd62750b9115abdf6ffa9fdc14e1dfe2faca997270ec6d33b8513e3129",
+      "log_hash_verified": true,
+      "passed": 1
+    },
+    {
+      "receipt": "docs/research/dedup-500/exact-collection-scaling-current-20261102-v1.json",
+      "receipt_sha256": "4247cb70ea3334fefe1bce3e0d8159caf354b23392b4f5148a2b6b027d80cd61",
+      "log_hash_verified": true,
+      "passed": 1
+    },
+    {
+      "receipt": "docs/research/dedup-500/png-complete-pinned-corpus-20261102-v1.json",
+      "receipt_sha256": "1cdb2247cebb185aed2d99aa11bdde4063b37a1f534ee116fdcfc3e7cc773c34",
+      "log_hash_verified": true,
+      "passed": 2
+    }
+  ],
+  "total_explicit_passes": 8,
+  "remaining_unexecuted_from_original_ignored_list": 0,
+  "limits": "Separate selected-test runs, not a new combined all-target run. PNG fixture/source revalidation is recorded separately. Performance measurements use test profile and concurrent host load. This closes execution accounting for eight omitted tests only, not all-case/library/repository qualification.",
+  "io_review": {
+    "source": "crates/rrrah-dedup/src/collection.rs",
+    "finding": "Per-pair pre/post full snapshot verification and streaming byte equality plus collection-wide final callback-free verification account for six payload reads per pair and four per file in all-copy branch.",
+    "constraint": "Removing pair checks or caching equality across pairs would change existing source mutation detection/checkpoint behavior. No such shortcut implemented. A future fused verified-byte comparison needs direct mutation/error-attribution/cancellation proof."
+  }
+}

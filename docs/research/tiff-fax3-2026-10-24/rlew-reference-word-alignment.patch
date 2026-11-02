@@ -1,0 +1,19 @@
+--- a/libtiff/tif_fax3.c
++++ b/libtiff/tif_fax3.c
+@@ -1836,6 +1836,13 @@
+         {
+-            int n = BitsAvail - (BitsAvail & ~15);
+-            ClrBits(n);
+-            if (BitsAvail == 0 && !isAligned(cp, uint16_t))
++            /* Account for the byte parity of read-ahead, not only BitsAvail. */
++            int n = (BitsAvail - (isAligned(cp, uint16_t) ? 0 : 8)) & 15;
++            if (n <= BitsAvail)
++            {
++                ClrBits(n);
++            }
++            else
++            {
++                ClrBits(BitsAvail);
+                 cp++;
++            }
+         }

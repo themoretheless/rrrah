@@ -2,9 +2,9 @@
   "index": 168,
   "repository": "dedupeio/dedupe-geocoder",
   "commit": "ed1506a36e1a153737adab51144911cbd3ab3112",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "15/22 pinned tracked files wholly read; ten authored scoped controls; data/models and real database not qualified",
   "decision": "reject-domain",
-  "finding": "Geocoder entity-resolution examples; addresses rather than file/image content.",
+  "finding": "Normalization is not idempotent: alpha newline space beta -> alpha two spaces beta -> alpha one space beta. Case/outer whitespace intentionally merged; tabs not mapped to spaces. Source: createMatchBlocksTable exposes primary_key argument but row iterator hardcodes row[id]. Not database-runtime verified. Source: drawSample SELECT orders all canonical addresses randomly without LIMIT; sample_size passed downstream, not SQL. No workload/performance benchmark. Address fuzzy matching and database block keys do not establish file or image equality. Executed original CSV writer writes no header; original leading next(f) discards first accepted match. Two rows -> one remains; one row -> none remains. Executed original writer with all confidences below threshold creates empty CSV; original next(f) raises StopIteration. Source: checkForTable(engine,table_name) reads global args.name instead of table_name; imported-call contract unqualified. Source: trainIncoming writes geocoder/dedupe.settings while blockIncoming reads geocoder/data/dedupe.settings; different artifacts. No full retraining execution. Executed original slugify: House-No and House No both house_no; newline remains in a field name. No database table creation executed. Executed original API handler on real Flask3.1.2: absent/empty address returns HTTP200 with error JSON, despite local status_code=400. Legacy upstream runtime unqualified. Source: type inference rejects leading-zero text as integer then can accept it as float; CSV/schema pipeline not executed. Source: ETL executeTransaction rolls back ProgrammingError and suppresses it by default; not an actual PostgreSQL failure test.",
   "available_source_evidence": [
     {
       "path": "geocoder/deduper.py",
@@ -64,5 +64,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/geocoder168-source-review-v4-20261024.json",
+  "full_repository_read": false,
+  "authored_controls_run": 10
 }

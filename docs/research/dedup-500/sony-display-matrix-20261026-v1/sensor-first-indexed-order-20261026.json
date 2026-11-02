@@ -1,0 +1,306 @@
+{
+  "local_scan_sha256": "bb65ea35e6f1c4a5309b50a9ebc795bb73d6ecb65cb26ce6e59f75c1b7391c88",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+  },
+  "rows": [
+    {
+      "variant": "before",
+      "binary_sha256": "3d3991888c640072533dc75c1f507ddb4c13052fb89f4468942e32ca08b2eb75",
+      "order": "reverse",
+      "input_order": [
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw"
+      ],
+      "exit_code": 0,
+      "seconds": 25.99537933303509,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/sensor-first-indexed-order-before-reverse-20261026.log",
+      "log_sha256": "9cbbf3ab81bddf28750dfa489051fd20a42057736ce6a508e3ee813bd4bbfa90",
+      "pairs": [
+        {
+          "left": 1,
+          "right": 2,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 1,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "candidate": true,
+          "geometry": true
+        }
+      ],
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "managed_released": true,
+      "issues_empty": true,
+      "managed_peak_bytes": 1404919168
+    },
+    {
+      "variant": "after",
+      "binary_sha256": "1a8d3a664d89833605f669039b5899525b8f622382dfbda44a4bf16ce2795e43",
+      "order": "reverse",
+      "input_order": [
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw"
+      ],
+      "exit_code": 0,
+      "seconds": 25.730962833971716,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/sensor-first-indexed-order-after-reverse-20261026.log",
+      "log_sha256": "c66cfb2637643d82683dd95a1916654d9763f08ead165405f033b32f42d0101a",
+      "pairs": [
+        {
+          "left": 1,
+          "right": 2,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 1,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "candidate": true,
+          "geometry": true
+        }
+      ],
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "managed_released": true,
+      "issues_empty": true,
+      "managed_peak_bytes": 1017069952
+    },
+    {
+      "variant": "before",
+      "binary_sha256": "3d3991888c640072533dc75c1f507ddb4c13052fb89f4468942e32ca08b2eb75",
+      "order": "interleaved",
+      "input_order": [
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw"
+      ],
+      "exit_code": 0,
+      "seconds": 25.51352554105688,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/sensor-first-indexed-order-before-interleaved-20261026.log",
+      "log_sha256": "cedf32649bcce71872d99e6f4d1dd2d3248377d6239ee0a3bc8af8af4691fd0b",
+      "pairs": [
+        {
+          "left": 1,
+          "right": 2,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 1,
+          "right": 3,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        }
+      ],
+      "expected": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "managed_released": true,
+      "issues_empty": true,
+      "managed_peak_bytes": 1404919168
+    },
+    {
+      "variant": "after",
+      "binary_sha256": "1a8d3a664d89833605f669039b5899525b8f622382dfbda44a4bf16ce2795e43",
+      "order": "interleaved",
+      "input_order": [
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw"
+      ],
+      "exit_code": 0,
+      "seconds": 27.935246790992096,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/sensor-first-indexed-order-after-interleaved-20261026.log",
+      "log_sha256": "baa28240e12cc66b132b8290473b44e211f1aa57520d39aaffa52cfa945c001c",
+      "pairs": [
+        {
+          "left": 1,
+          "right": 2,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 1,
+          "right": 3,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        }
+      ],
+      "expected": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "managed_released": true,
+      "issues_empty": true,
+      "managed_peak_bytes": 1017069952
+    }
+  ],
+  "comparisons": [
+    {
+      "order": "reverse",
+      "all_non_memory_log_lines_identical": true,
+      "before_peak_bytes": 1404919168,
+      "after_peak_bytes": 1017069952,
+      "saved_bytes": 387849216,
+      "saved_mib": 369.8818359375,
+      "reduction_fraction": 0.2760651465465663
+    },
+    {
+      "order": "interleaved",
+      "all_non_memory_log_lines_identical": true,
+      "before_peak_bytes": 1404919168,
+      "after_peak_bytes": 1017069952,
+      "saved_bytes": 387849216,
+      "saved_mib": 369.8818359375,
+      "reduction_fraction": 0.2760651465465663
+    }
+  ],
+  "scope": "Alternating before/after runs per order with frozen before/after binaries, identical four Sony RAW/linear-TIFF inputs, explicit Bilinear and WhiteAnchoredDisplay collection search.",
+  "limitations": [
+    "Managed memory accounting only; no RSS or throughput improvement claim.",
+    "Two camera scenes and two input orders, not universal coverage.",
+    "Header routing adds bounded header probes and can change which decoder error surfaces first if both inputs are invalid.",
+    "Other pair families and direct known-shift adapter retain their existing scheduling."
+  ]
+}

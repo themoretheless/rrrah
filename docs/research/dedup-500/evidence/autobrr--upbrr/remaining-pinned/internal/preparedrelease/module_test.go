@@ -1,0 +1,1966 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package preparedrelease
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+	"slices"
+	"strconv"
+	"strings"
+	"sync"
+	"testing"
+	"time"
+
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	"github.com/autobrr/upbrr/internal/externalidentity"
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+	"github.com/autobrr/upbrr/internal/sourcelayout"
+	"github.com/autobrr/upbrr/internal/trackers"
+	isimpl "github.com/autobrr/upbrr/internal/trackers/impl/standalone/is"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func TestCanonicalFingerprintEntriesIgnoreDirectoryModificationTime(t *testing.T) {
+	t.Parallel()
+	first := time.Date(2026, time.July, 20, 10, 0, 0, 0, time.UTC)
+	second := first.Add(time.Hour)
+	entries := []api.SourceManifestEntry{
+		{
+			Path:       "C:\\media\\Example",
+			Type:       api.SourceEntryTypeDirectory,
+			ModifiedAt: first,
+		},
+		{
+			Path:       "C:\\media\\Example\\video.mkv",
+			Type:       api.SourceEntryTypeFile,
+			Size:       7,
+			ModifiedAt: first,
+		},
+	}
+	baseline := canonicalFingerprintEntries(entries)
+	entries[0].ModifiedAt = second
+	directoryChanged := canonicalFingerprintEntries(entries)
+	if baseline[0].ModifiedNano != 0 || directoryChanged[0].ModifiedNano != 0 {
+		t.Fatalf("directory modification times = %d, %d", baseline[0].ModifiedNano, directoryChanged[0].ModifiedNano)
+	}
+	if baseline[1].ModifiedNano != directoryChanged[1].ModifiedNano {
+		t.Fatalf("unchanged file modification time changed: %d != %d", baseline[1].ModifiedNano, directoryChanged[1].ModifiedNano)
+	}
+	entries[1].ModifiedAt = second
+	fileChanged := canonicalFingerprintEntries(entries)
+	if fileChanged[1].ModifiedNano == baseline[1].ModifiedNano {
+		t.Fatal("file modification time was omitted from the source fingerprint")
+	}
+}
+
+func TestSourceFingerprintExcludesPlaylistInstruction(t *testing.T) {
+	t.Parallel()
+
+	root := filepath.Join(t.TempDir(), "Example.Release.2026.COMPLETE.BLURAY-GRP")
+	if err := os.MkdirAll(filepath.Join(root, "BDMV", "PLAYLIST"), 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(root, "BDMV", "PLAYLIST", "00001.mpls"), []byte("playlist"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	layout, err := sourcelayout.Resolve(context.Background(), root)
+	if err != nil {
+		t.Fatalf("resolve layout: %v", err)
+	}
+	absent := api.PrepareInput{SourcePath: root}
+	explicit := absent
+	explicit.Instructions.Playlist = api.PlaylistInstruction{Set: true, Selected: []string{"00001.MPLS"}}
+	_, absentFingerprint, err := inspectSource(context.Background(), absent, layout)
+	if err != nil {
+		t.Fatalf("inspect absent selection: %v", err)
+	}
+	_, explicitFingerprint, err := inspectSource(context.Background(), explicit, layout)
+	if err != nil {
+		t.Fatalf("inspect explicit selection: %v", err)
+	}
+	if absentFingerprint != explicitFingerprint {
+		t.Fatalf("source fingerprints differ: %q != %q", absentFingerprint, explicitFingerprint)
+	}
+	absentCompatibility, err := preparationCompatibility(absent, absentFingerprint, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	explicitCompatibility, err := preparationCompatibility(explicit, explicitFingerprint, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if absentCompatibility.FactInstructionFingerprint == explicitCompatibility.FactInstructionFingerprint {
+		t.Fatal("fact-instruction fingerprint ignored playlist intent")
+	}
+}
+
+func TestDiscInventoryFingerprintTracksInsertionAndRename(t *testing.T) {
+	t.Parallel()
+
+	root := filepath.Join(t.TempDir(), "Example.Release.2026.COMPLETE.BLURAY-GRP")
+	writeDisc := func(name string) {
+		dir := filepath.Join(root, name, "BDMV", "PLAYLIST")
+		if err := os.MkdirAll(dir, 0o700); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(filepath.Join(dir, "00001.mpls"), []byte(name), 0o600); err != nil {
+			t.Fatal(err)
+		}
+	}
+	inspect := func() (sourcelayout.Layout, string) {
+		layout, err := sourcelayout.Resolve(context.Background(), root)
+		if err != nil {
+			t.Fatalf("resolve layout: %v", err)
+		}
+		_, fingerprint, err := inspectSource(context.Background(), api.PrepareInput{SourcePath: root}, layout)
+		if err != nil {
+			t.Fatalf("inspect source: %v", err)
+		}
+		return layout, fingerprint
+	}
+
+	writeDisc("Disc 2")
+	before, beforeFingerprint := inspect()
+	beforeID := before.Discs[0].ID
+	writeDisc("Disc 1")
+	afterInsertion, insertionFingerprint := inspect()
+	if beforeFingerprint == insertionFingerprint {
+		t.Fatal("sibling insertion retained inventory fingerprint")
+	}
+	var retainedID string
+	for _, disc := range afterInsertion.Discs {
+		if disc.Name == "Disc 2" {
+			retainedID = disc.ID
+		}
+	}
+	if retainedID != beforeID {
+		t.Fatalf("sibling insertion changed existing disc ID: %q != %q", retainedID, beforeID)
+	}
+	if err := os.Rename(filepath.Join(root, "Disc 2"), filepath.Join(root, "Disc 3")); err != nil {
+		t.Fatal(err)
+	}
+	afterRename, renameFingerprint := inspect()
+	if insertionFingerprint == renameFingerprint {
+		t.Fatal("disc rename retained inventory fingerprint")
+	}
+	for _, disc := range afterRename.Discs {
+		if disc.Name == "Disc 3" && disc.ID == beforeID {
+			t.Fatal("disc rename retained canonical disc ID")
+		}
+	}
+}
+
+func TestPreparedMediaBindingIsStableAndSelectionScoped(t *testing.T) {
+	t.Parallel()
+
+	release := api.PreparedRelease{
+		Generation: 4,
+		Compatibility: api.PreparationCompatibility{
+			SourceFingerprint:          "source-fingerprint",
+			FactInstructionFingerprint: "instruction-fingerprint",
+		},
+		Source: api.SourceManifest{SourcePath: filepath.Join(t.TempDir(), "Example.Release.2026")},
+		Disc: api.DiscFacts{
+			Items: []api.DiscItemFacts{
+				{
+					ID:   "disc-one",
+					Name: "Disc 1",
+					Type: "BDMV",
+					Reports: []api.DiscReportFacts{
+						{
+							Playlist: api.PlaylistInfo{
+								ID:       "00001.MPLS",
+								DiscID:   "disc-one",
+								DiscName: "Disc 1",
+								File:     "00001.MPLS",
+							},
+							Summary: "BDINFO",
+						},
+					},
+				},
+			},
+		},
+	}
+	first, err := preparedMediaBinding(release)
+	if err != nil {
+		t.Fatal(err)
+	}
+	payload, err := cloneWithJSON(release)
+	if err != nil {
+		t.Fatal(err)
+	}
+	second, err := preparedMediaBinding(payload)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !first.Equal(second) || !first.Valid() {
+		t.Fatalf("round-trip bindings differ: %#v != %#v", first, second)
+	}
+
+	changed := release
+	changed.Disc.Items = append([]api.DiscItemFacts(nil), release.Disc.Items...)
+	changed.Disc.Items[0].Reports = append([]api.DiscReportFacts(nil), release.Disc.Items[0].Reports...)
+	changed.Disc.Items[0].Reports[0].Playlist.ID = "00002.MPLS"
+	changedBinding, err := preparedMediaBinding(changed)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if first.Equal(changedBinding) {
+		t.Fatal("playlist change retained prepared-media binding")
+	}
+	changed = release
+	changed.Generation++
+	changedBinding, err = preparedMediaBinding(changed)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if first.Equal(changedBinding) {
+		t.Fatal("generation change retained prepared-media binding")
+	}
+}
+
+func TestDiscProjectionRequiresCanonicalPrimaryPair(t *testing.T) {
+	t.Parallel()
+
+	playlist := api.PlaylistInfo{
+		ID:       "disc-one:00001.MPLS",
+		DiscID:   "disc-one",
+		DiscName: "Disc 1",
+		File:     "00001.MPLS",
+		Duration: 5400,
+		Score:    100,
+	}
+	release := api.PreparedRelease{
+		Source: api.SourceManifest{
+			Classification:    api.SourceClassification{DiscType: "BDMV", DiscCount: 1},
+			SelectedPlaylists: []api.PlaylistInfo{playlist},
+		},
+		Disc: api.DiscFacts{
+			Type:          "BDMV",
+			PlaylistCount: 1,
+			Items: []api.DiscItemFacts{{
+				ID:              "disc-one",
+				Name:            "Disc 1",
+				Type:            "BDMV",
+				DurationSeconds: 5400,
+				Reports:         []api.DiscReportFacts{{Playlist: playlist, Summary: "BDINFO"}},
+			}},
+		},
+	}
+	release.Disc.Summary = release.Disc.AggregateSummary()
+	if reason := discProjectionMismatch(release); !strings.Contains(reason, "primary projection") {
+		t.Fatalf("missing primary reason = %q", reason)
+	}
+	release.Disc.PrimaryDiscID, release.Disc.PrimaryReportID, release.Disc.DurationSeconds, release.Disc.DVDVOBSet = release.Disc.CanonicalPrimary()
+	if reason := discProjectionMismatch(release); reason != "" {
+		t.Fatalf("canonical projection mismatch = %q", reason)
+	}
+}
+
+func TestInvalidateDropsOnlyPublishedPreparedGeneration(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "invalidate-source.mkv", "synthetic media")
+	store := newMemoryStore()
+	module := newTestModule(t, store, &recordingCollector{})
+	prepared, err := module.Prepare(t.Context(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("prepare source: %v", err)
+	}
+	module.Invalidate(path)
+	if _, err := module.ResolveResult(t.Context(), api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation}); err == nil {
+		t.Fatal("invalidated generation remained published")
+	}
+	if _, err := store.LoadPreparedRelease(t.Context(), path); err != nil {
+		t.Fatalf("invalidate changed persisted generation: %v", err)
+	}
+}
+
+func TestPrepareUsesExactCompatibilityAndPublishesConcreteAssessments(t *testing.T) {
+	t.Parallel()
+	path := writePreparedTestFile(t, "source.mkv", "first")
+	store := newMemoryStore()
+	collector := &recordingCollector{}
+	module := newTestModule(t, store, collector)
+	input := api.PrepareInput{
+		SourcePath: path,
+		Intent:     api.PreparationIntentPreview,
+		Instructions: api.ReleaseFactInstructions{
+			ReleaseName: api.ReleaseNameOverrides{},
+		},
+		Policy: api.PreparationPolicy{KeepFolder: true},
+	}
+
+	first, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() first error = %v", err)
+	}
+	if first.Release.Generation != 1 {
+		t.Fatalf("generation = %d, want 1", first.Release.Generation)
+	}
+	if first.Release.Assessments.MediaInfoUniqueID != api.UniqueIDStatusPresent ||
+		first.Release.Assessments.MediaInfoEncodeSettings != api.EncodeSettingsStatusMissing {
+		t.Fatalf("assessments = %#v", first.Release.Assessments)
+	}
+
+	input.Intent = api.PreparationIntentUpload
+	reused, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() reuse error = %v", err)
+	}
+	if reused.Release.Generation != first.Release.Generation {
+		t.Fatalf("intent-specific generation = %d, want %d", reused.Release.Generation, first.Release.Generation)
+	}
+	if collector.callCount() != 1 || store.commitCount() != 1 {
+		t.Fatalf("reuse calls collector=%d commits=%d, want 1/1", collector.callCount(), store.commitCount())
+	}
+
+	name := "Example.Release.2026.1080p-GRP"
+	input.Instructions.ReleaseName.Type = &name
+	second, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() instruction change error = %v", err)
+	}
+	if second.Release.Generation != 2 {
+		t.Fatalf("instruction generation = %d, want 2", second.Release.Generation)
+	}
+
+	input.Policy.OnlyID = true
+	third, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() policy change error = %v", err)
+	}
+	if third.Release.Generation != 3 {
+		t.Fatalf("policy generation = %d, want 3", third.Release.Generation)
+	}
+
+	if err := os.WriteFile(path, []byte("changed source"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	fourth, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() source change error = %v", err)
+	}
+	if fourth.Release.Generation != 4 {
+		t.Fatalf("source generation = %d, want 4", fourth.Release.Generation)
+	}
+}
+
+func TestPrepareRecomputesPreviousDVDRipNameAfterRestart(t *testing.T) {
+	t.Parallel()
+	for _, version := range []string{"prepared-release-v16", "prepared-release-v19", "prepared-release-v20", "prepared-release-v21", "prepared-release-v22", "prepared-release-v23", "prepared-release-v24", "prepared-release-v25"} {
+		t.Run(version, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "Example.Movie.2026.DVDRip.x264-GRP.mkv")
+			if err := os.WriteFile(path, []byte("video"), 0o600); err != nil {
+				t.Fatal(err)
+			}
+			store := newMemoryStore()
+			initial := newTestModule(t, store, &recordingCollector{})
+			input := api.PrepareInput{SourcePath: path}
+			prepared, err := initial.Prepare(t.Context(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			previous := prepared.Release
+			previous.Compatibility.ContractVersion = version
+			previous.Naming.ReleaseName = "Example Movie 2026 DVD x264 DVDRip DD 2.0-GRP"
+			if version != "prepared-release-v16" {
+				previous.Naming.ReleaseName = "Example Movie 2026 DVDRip DD 2.0 x264-GRP"
+			}
+			previous.Naming.Source = "DVD"
+			store.mu.Lock()
+			store.current[canonicalSourceKey(path)] = previous
+			store.mu.Unlock()
+			const want = "Example Movie 2026 576p DVDRip DD 2.0 x264-GRP"
+			collector := &recordingCollector{facts: &CollectedFacts{Naming: api.NamingFacts{ReleaseName: want, Source: "DVD"}}}
+			restarted := newTestModule(t, store, collector)
+			result, err := restarted.Prepare(t.Context(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if collector.callCount() != 1 || result.Release.Generation != previous.Generation+1 ||
+				result.Release.Compatibility.ContractVersion != ContractVersion || result.Release.Naming.ReleaseName != want || result.Release.Naming.Source != "DVD" {
+				t.Fatalf("recomputed generation=%d collector=%d naming=%#v", result.Release.Generation, collector.callCount(), result.Release.Naming)
+			}
+			reused, err := restarted.Prepare(t.Context(), input)
+			if err != nil || reused.Release.Generation != result.Release.Generation || collector.callCount() != 1 {
+				t.Fatalf("reuse generation=%d collector=%d err=%v", reused.Release.Generation, collector.callCount(), err)
+			}
+		})
+	}
+}
+
+func TestPrepareRecomputesPreviousContractAfterRestart(t *testing.T) {
+	t.Parallel()
+	path := filepath.Join(t.TempDir(), "Example Release 2026 PAL DVD")
+	videoTSPath := filepath.Join(path, "VIDEO_TS")
+	if err := os.MkdirAll(videoTSPath, 0o755); err != nil {
+		t.Fatalf("create VIDEO_TS: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(videoTSPath, "VTS_01_1.VOB"), []byte("dvd"), 0o600); err != nil {
+		t.Fatalf("write DVD content: %v", err)
+	}
+	store := newMemoryStore()
+	initial := newTestModule(t, store, &recordingCollector{})
+	prepared, err := initial.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("initial prepare: %v", err)
+	}
+
+	previous := prepared.Release
+	previous.Compatibility.ContractVersion = "prepared-release-v15"
+	previous.Naming.ReleaseName = "Example Release 2026 PAL DVD"
+	previous.Naming.NameWithoutTag = "Example Release 2026 PAL DVD"
+	previous.Naming.Source = "PAL DVD"
+	previous.Naming.Size = ""
+	previous.Assessments.VideoBitrate = api.VideoBitrateAssessment{}
+	store.mu.Lock()
+	store.current[canonicalSourceKey(path)] = previous
+	store.mu.Unlock()
+
+	correctedFacts := CollectedFacts{
+		Naming: api.NamingFacts{
+			Filename:       filepath.Base(path),
+			ReleaseName:    "Example Release 2026 PAL DVD9",
+			NameWithoutTag: "Example Release 2026 PAL DVD9",
+			Source:         "PAL DVD",
+			Size:           "DVD9",
+		},
+		Disc: prepared.Release.Disc,
+	}
+	restartedCollector := &recordingCollector{facts: &correctedFacts}
+	restarted := newTestModule(t, store, restartedCollector)
+	recomputed, err := restarted.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("restart prepare: %v", err)
+	}
+	if recomputed.Release.Generation != prepared.Release.Generation+1 || restartedCollector.callCount() != 1 {
+		t.Fatalf(
+			"restart generation=%d collector=%d, want generation=%d collector=1",
+			recomputed.Release.Generation,
+			restartedCollector.callCount(),
+			prepared.Release.Generation+1,
+		)
+	}
+	if recomputed.Release.Compatibility.ContractVersion != ContractVersion || recomputed.Release.Naming.Size != "DVD9" ||
+		recomputed.Release.Naming.ReleaseName != "Example Release 2026 PAL DVD9" {
+		t.Fatalf("recomputed DVD naming = %#v", recomputed.Release.Naming)
+	}
+	if recomputed.Release.Assessments.VideoBitrate.Status != api.VideoBitrateStatusUnknown {
+		t.Fatalf("video bitrate status = %q, want %q", recomputed.Release.Assessments.VideoBitrate.Status, api.VideoBitrateStatusUnknown)
+	}
+}
+
+func TestPrepareRequirePreparedRejectsMissingAndReusesCompatibleGeneration(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "required-source.mkv", "synthetic media")
+	collector := &recordingCollector{}
+	module := newTestModule(t, newMemoryStore(), collector)
+	required := api.PrepareInput{
+		SourcePath:      path,
+		Intent:          api.PreparationIntentUpload,
+		RequirePrepared: true,
+	}
+	if _, err := module.Prepare(context.Background(), required); err == nil ||
+		!strings.Contains(err.Error(), "compatible prepared generation is required") {
+		t.Fatalf("missing required prepared generation error = %v", err)
+	}
+	if collector.callCount() != 0 {
+		t.Fatalf("missing required generation invoked collector %d time(s)", collector.callCount())
+	}
+
+	allowed := required
+	allowed.RequirePrepared = false
+	prepared, err := module.Prepare(context.Background(), allowed)
+	if err != nil {
+		t.Fatalf("prepare compatible generation: %v", err)
+	}
+	reused, err := module.Prepare(context.Background(), required)
+	if err != nil {
+		t.Fatalf("reuse required generation: %v", err)
+	}
+	if reused.Release.Generation != prepared.Release.Generation || collector.callCount() != 1 {
+		t.Fatalf(
+			"required reuse generation=%d want=%d collector=%d",
+			reused.Release.Generation,
+			prepared.Release.Generation,
+			collector.callCount(),
+		)
+	}
+
+	required.Instructions.TrackerIDs = map[string]string{}
+	reused, err = module.Prepare(context.Background(), required)
+	if err != nil {
+		t.Fatalf("reuse required generation with empty tracker IDs: %v", err)
+	}
+	if reused.Release.Generation != prepared.Release.Generation || collector.callCount() != 1 {
+		t.Fatalf(
+			"empty tracker IDs reuse generation=%d want=%d collector=%d",
+			reused.Release.Generation,
+			prepared.Release.Generation,
+			collector.callCount(),
+		)
+	}
+}
+
+func TestPrepareReportsCanonicalOwnerStagesAndReuse(t *testing.T) {
+	t.Parallel()
+	path := writePreparedTestFile(t, "source.mkv", "synthetic media")
+	module := newTestModule(t, newMemoryStore(), &recordingCollector{})
+	var progress []api.PreparationProgressUpdate
+	ctx := api.WithPreparationProgressReporter(context.Background(), func(update api.PreparationProgressUpdate) {
+		progress = append(progress, update)
+	})
+
+	if _, err := module.Prepare(ctx, api.PrepareInput{SourcePath: path}); err != nil {
+		t.Fatalf("prepare generation: %v", err)
+	}
+	for _, phase := range []api.PreparationProgressPhase{
+		api.PreparationPhaseSourceInspection,
+		api.PreparationPhasePreparedCache,
+		api.PreparationPhaseCanonicalIdentity,
+		api.PreparationPhaseGenerationCommit,
+	} {
+		if !hasPreparationProgress(progress, phase, api.PreparationProgressCompleted) {
+			t.Fatalf("canonical owner phase %q did not complete", phase)
+		}
+	}
+
+	progress = nil
+	if _, err := module.Prepare(ctx, api.PrepareInput{SourcePath: path}); err != nil {
+		t.Fatalf("reuse generation: %v", err)
+	}
+	if !hasPreparationProgress(progress, api.PreparationPhasePreparedCache, api.PreparationProgressCompleted) ||
+		!hasPreparationProgress(progress, api.PreparationPhaseSourceEvidence, api.PreparationProgressSkipped) {
+		t.Fatal("compatible generation reuse did not report cache and skipped collection stages")
+	}
+}
+
+func TestPrepareHydratesPersistedPrivateResourcesOnceAfterRestart(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "synthetic media")
+	store := newMemoryStore()
+	initialCollector := newClientEvidenceTestCollector(clientEvidenceTestSnapshot("initial-hash"))
+	initial := newTestModule(t, store, initialCollector)
+	prepared, err := initial.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("initial prepare: %v", err)
+	}
+
+	restartedCollector := newClientEvidenceTestCollector(clientEvidenceTestSnapshot("hydrated-hash"))
+	restarted := newTestModule(t, store, restartedCollector)
+	reused, err := restarted.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("restart reuse: %v", err)
+	}
+	if reused.Release.Generation != prepared.Release.Generation {
+		t.Fatalf("restart generation = %d, want %d", reused.Release.Generation, prepared.Release.Generation)
+	}
+	if restartedCollector.collectCount() != 0 || restartedCollector.hydrateCount() != 1 {
+		t.Fatalf(
+			"restart collector calls collect=%d hydrate=%d, want 0/1",
+			restartedCollector.collectCount(),
+			restartedCollector.hydrateCount(),
+		)
+	}
+	if _, err := restarted.Prepare(context.Background(), api.PrepareInput{SourcePath: path}); err != nil {
+		t.Fatalf("second restart reuse: %v", err)
+	}
+	if restartedCollector.hydrateCount() != 1 {
+		t.Fatalf("private evidence hydrated %d times, want 1", restartedCollector.hydrateCount())
+	}
+
+	ref := api.ReleaseRef{SourcePath: path, Generation: reused.Release.Generation}
+	upload, err := restarted.ResolveUploadSubject(context.Background(), api.UploadSubjectInput{Release: ref})
+	if err != nil {
+		t.Fatalf("resolve hydrated upload subject: %v", err)
+	}
+	if upload.InfoHash != "hydrated-hash" || !upload.ClientTorrentDataVerified || upload.TrackerIDs["ant"] != "hydrated-id" ||
+		len(upload.MatchedTrackers) != 1 || upload.MatchedTrackers[0] != "ANT" {
+		t.Fatalf("hydrated upload evidence = %#v", upload)
+	}
+	upload.TrackerIDs["ant"] = "mutated"
+	upload.MatchedTrackers[0] = "MUTATED"
+	duplicate, err := restarted.ResolveDuplicateSubject(context.Background(), api.DuplicateCheckInput{Release: ref})
+	if err != nil {
+		t.Fatalf("resolve detached duplicate subject: %v", err)
+	}
+	if duplicate.TrackerIDs["ant"] != "hydrated-id" || duplicate.MatchedTrackers[0] != "ANT" {
+		t.Fatalf("private snapshot was aliased: %#v", duplicate)
+	}
+	screenshot, err := restarted.ResolveScreenshotSubject(context.Background(), api.MediaPlanInput{Release: ref})
+	if err != nil {
+		t.Fatalf("resolve hydrated screenshot subject: %v", err)
+	}
+	if screenshot.MediaInfoJSONPath != path {
+		t.Fatalf("hydrated screenshot MediaInfo path = %q, want %q", screenshot.MediaInfoJSONPath, path)
+	}
+}
+
+func TestResolveUploadSubjectRetainsExplicitPersonalReleaseAfterRestart(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "synthetic media")
+	store := newMemoryStore()
+	personal := false
+	input := api.PrepareInput{
+		SourcePath: path,
+		Instructions: api.ReleaseFactInstructions{Metadata: api.MetadataOverrides{
+			PersonalRelease: &personal,
+		}},
+	}
+	prepared, err := newTestModule(t, store, newClientEvidenceTestCollector(clientEvidenceTestSnapshot("initial-hash"))).Prepare(t.Context(), input)
+	if err != nil {
+		t.Fatalf("initial prepare: %v", err)
+	}
+	restarted := newTestModule(t, store, newClientEvidenceTestCollector(clientEvidenceTestSnapshot("hydrated-hash")))
+	if _, err := restarted.Prepare(t.Context(), input); err != nil {
+		t.Fatalf("restart prepare: %v", err)
+	}
+	upload, err := restarted.ResolveUploadSubject(t.Context(), api.UploadSubjectInput{
+		Release: api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation},
+	})
+	if err != nil {
+		t.Fatalf("ResolveUploadSubject() error = %v", err)
+	}
+	if upload.PersonalReleaseOverride == nil || *upload.PersonalReleaseOverride {
+		t.Fatalf("explicit personal-release false was not retained: %#v", upload.PersonalReleaseOverride)
+	}
+}
+
+func TestPrepareForceRecheckBuildsOneFreshGeneration(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "synthetic media")
+	collector := newClientEvidenceTestCollector(clientEvidenceTestSnapshot("client-hash"))
+	module := newTestModule(t, newMemoryStore(), collector)
+	first, err := module.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("initial prepare: %v", err)
+	}
+	force := true
+	second, err := module.Prepare(context.Background(), api.PrepareInput{
+		SourcePath: path,
+		Controls:   api.PreparationControls{ForceRecheck: &force},
+	})
+	if err != nil {
+		t.Fatalf("forced prepare: %v", err)
+	}
+	if second.Release.Generation != first.Release.Generation+1 {
+		t.Fatalf("forced generation = %d, want %d", second.Release.Generation, first.Release.Generation+1)
+	}
+	if collector.collectCount() != 2 || collector.hydrateCount() != 0 {
+		t.Fatalf("forced preparation calls collect=%d hydrate=%d, want 2/0", collector.collectCount(), collector.hydrateCount())
+	}
+	ref := api.ReleaseRef{SourcePath: path, Generation: second.Release.Generation}
+	upload, err := module.ResolveUploadSubject(context.Background(), api.UploadSubjectInput{Release: ref})
+	if err != nil {
+		t.Fatalf("resolve forced upload subject: %v", err)
+	}
+	if upload.InfoHash != "client-hash" {
+		t.Fatalf("forced client evidence = %#v", upload)
+	}
+}
+
+func TestPrepareExternalRefreshBuildsFreshGeneration(t *testing.T) {
+	testPrepareFreshnessBuildsGeneration(t, api.ExternalFreshnessRefresh)
+}
+
+func TestPrepareFreshLoadBuildsGeneration(t *testing.T) {
+	testPrepareFreshnessBuildsGeneration(t, api.ExternalFreshnessLoad)
+}
+
+func testPrepareFreshnessBuildsGeneration(t *testing.T, freshness api.ExternalFreshness) {
+	t.Helper()
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "synthetic media")
+	collector := &recordingCollector{}
+	module := newTestModule(t, newMemoryStore(), collector)
+	first, err := module.Prepare(t.Context(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatalf("initial prepare: %v", err)
+	}
+	second, err := module.Prepare(t.Context(), api.PrepareInput{
+		SourcePath:        path,
+		ExternalFreshness: freshness,
+	})
+	if err != nil {
+		t.Fatalf("external refresh prepare: %v", err)
+	}
+	if second.Release.Generation != first.Release.Generation+1 {
+		t.Fatalf("external refresh generation = %d, want %d", second.Release.Generation, first.Release.Generation+1)
+	}
+	if collector.callCount() != 2 {
+		t.Fatalf("external refresh collector calls = %d, want 2", collector.callCount())
+	}
+	if collector.externalFreshnessAt(1) != freshness {
+		t.Fatalf("collector external freshness = %q, want %q", collector.externalFreshnessAt(1), freshness)
+	}
+}
+
+func hasPreparationProgress(
+	updates []api.PreparationProgressUpdate,
+	phase api.PreparationProgressPhase,
+	status api.PreparationProgressStatus,
+) bool {
+	for _, update := range updates {
+		if update.Phase == phase && update.Status == status {
+			return true
+		}
+	}
+	return false
+}
+
+func TestPrepareDoesNotCacheImplicitBDMVPlaylistSelection(t *testing.T) {
+	t.Parallel()
+	sourcePath := filepath.Join(t.TempDir(), "disc")
+	if err := os.MkdirAll(filepath.Join(sourcePath, "BDMV", "PLAYLIST"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.MkdirAll(filepath.Join(sourcePath, "BDMV", "STREAM"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	collector := &recordingCollector{}
+	module := newTestModule(t, newMemoryStore(), collector)
+	input := api.PrepareInput{SourcePath: sourcePath}
+
+	first, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() first error = %v", err)
+	}
+	second, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() second error = %v", err)
+	}
+	if second.Release.Generation != first.Release.Generation+1 || collector.callCount() != 2 {
+		t.Fatalf("implicit BDMV reuse generation=%d calls=%d, want generation=%d calls=2", second.Release.Generation, collector.callCount(), first.Release.Generation+1)
+	}
+
+	input.Instructions.Playlist = api.PlaylistInstruction{Set: true, Selected: []string{"00001.MPLS"}}
+	third, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() direct instruction error = %v", err)
+	}
+	fourth, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatalf("Prepare() direct instruction reuse error = %v", err)
+	}
+	if fourth.Release.Generation != third.Release.Generation || collector.callCount() != 3 {
+		t.Fatalf("direct BDMV reuse generation=%d calls=%d, want generation=%d calls=3", fourth.Release.Generation, collector.callCount(), third.Release.Generation)
+	}
+}
+
+func TestPreparationCompatibilityIncludesEvidencePolicyAndExcludesOneShotControls(t *testing.T) {
+	t.Parallel()
+
+	stringPtr := func(value string) *string { return &value }
+	boolPtr := func(value bool) *bool { return &value }
+	baseline := api.PrepareInput{SourcePath: "Example.Release.2026.mkv"}
+	want, err := preparationCompatibility(baseline, "source", 0)
+	if err != nil {
+		t.Fatalf("baseline compatibility: %v", err)
+	}
+	included := []struct {
+		name   string
+		mutate func(*api.PrepareInput)
+	}{
+		{name: "fact instructions", mutate: func(input *api.PrepareInput) { input.Instructions.TrackerIDs = map[string]string{"btn": "123"} }},
+		{name: "keep folder", mutate: func(input *api.PrepareInput) { input.Policy.KeepFolder = true }},
+		{name: "keep images", mutate: func(input *api.PrepareInput) { input.Policy.KeepImages = true }},
+		{name: "only id", mutate: func(input *api.PrepareInput) { input.Policy.OnlyID = true }},
+		{name: "skip client", mutate: func(input *api.PrepareInput) { input.Search.Skip = true }},
+		{name: "client selector", mutate: func(input *api.PrepareInput) { input.Search.Client = stringPtr("qbit") }},
+	}
+	for _, test := range included {
+		t.Run(test.name, func(t *testing.T) {
+			input := baseline
+			test.mutate(&input)
+			got, compatibilityErr := preparationCompatibility(input, "source", 0)
+			if compatibilityErr != nil {
+				t.Fatalf("compatibility: %v", compatibilityErr)
+			}
+			if got == want {
+				t.Fatalf("included change did not affect compatibility: %#v", got)
+			}
+		})
+	}
+	excluded := []struct {
+		name   string
+		mutate func(*api.PrepareInput)
+	}{
+		{name: "intent", mutate: func(input *api.PrepareInput) { input.Intent = api.PreparationIntentUpload }},
+		{name: "interaction", mutate: func(input *api.PrepareInput) { input.Controls.Interaction = api.InteractionModeInteractive }},
+		{name: "rescan permission", mutate: func(input *api.PrepareInput) { input.Controls.ConfirmBDMVRescan = true }},
+		{name: "force recheck", mutate: func(input *api.PrepareInput) { input.Controls.ForceRecheck = boolPtr(true) }},
+		{name: "force preparation", mutate: func(input *api.PrepareInput) { input.Force = true }},
+		{name: "external freshness", mutate: func(input *api.PrepareInput) { input.ExternalFreshness = api.ExternalFreshnessRefresh }},
+	}
+	for _, test := range excluded {
+		t.Run(test.name, func(t *testing.T) {
+			input := baseline
+			test.mutate(&input)
+			got, compatibilityErr := preparationCompatibility(input, "source", 0)
+			if compatibilityErr != nil {
+				t.Fatalf("compatibility: %v", compatibilityErr)
+			}
+			if got != want {
+				t.Fatalf("one-shot change affected compatibility: got %#v want %#v", got, want)
+			}
+		})
+	}
+}
+
+func TestOperationSubjectsUseExactGenerationAndDetachedFacts(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "source")
+	store := newMemoryStore()
+	module := newTestModule(t, store, &recordingCollector{})
+	prepared, err := module.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatal(err)
+	}
+	ref := api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation}
+	upload, err := module.ResolveUploadSubject(context.Background(), api.UploadSubjectInput{
+		Release:                ref,
+		Trackers:               []string{"AITHER"},
+		DescriptionOverride:    "Manual description.",
+		DescriptionGroupsFinal: true,
+		Options:                api.UploadOptions{KeepImages: true},
+	})
+	if err != nil {
+		t.Fatalf("ResolveUploadSubject() error = %v", err)
+	}
+	if upload.SourcePath != path || upload.ReleaseName != "Example.Release.2026.1080p-GRP" || len(upload.Trackers) != 1 {
+		t.Fatalf("upload subject = %#v", upload)
+	}
+	if upload.DescriptionOverride != "Manual description." || !upload.DescriptionGroupsFinal {
+		t.Fatalf("upload description evidence = %#v", upload)
+	}
+	if upload.GeneratedReleaseNames.OmitEpisodeTitle.Name != "Example.Show.S01E02.1080p.WEB-DL-GRP" {
+		t.Fatalf("upload generated variants = %#v", upload.GeneratedReleaseNames)
+	}
+	if upload.GeneratedName == nil || upload.GeneratedName.Render().Name != "Example.Release.2026.1080p-GRP" {
+		t.Fatalf("upload generated document = %#v", upload.GeneratedName)
+	}
+	if upload.NamePresentation != (api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, OmitYear: true}) {
+		t.Fatalf("upload name presentation = %#v", upload.NamePresentation)
+	}
+	persisted, err := store.LoadPreparedRelease(context.Background(), path)
+	if err != nil {
+		t.Fatalf("load persisted release: %v", err)
+	}
+	if persisted.Naming.GeneratedReleaseNames != upload.GeneratedReleaseNames {
+		t.Fatalf(
+			"persisted generated variants = %#v, upload variants %#v",
+			persisted.Naming.GeneratedReleaseNames,
+			upload.GeneratedReleaseNames,
+		)
+	}
+	if persisted.Naming.GeneratedName == nil || persisted.Naming.GeneratedName.Render().Name != upload.GeneratedName.Render().Name {
+		t.Fatalf("persisted generated document = %#v, upload document = %#v", persisted.Naming.GeneratedName, upload.GeneratedName)
+	}
+	if upload.Assessments.MediaInfoUniqueID != api.UniqueIDStatusPresent ||
+		upload.Assessments.MediaInfoEncodeSettings != api.EncodeSettingsStatusMissing {
+		t.Fatalf("upload assessments = %#v", upload.Assessments)
+	}
+	upload.Trackers[0] = "changed"
+
+	duplicate, err := module.ResolveDuplicateSubject(context.Background(), api.DuplicateCheckInput{Release: ref})
+	if err != nil {
+		t.Fatalf("ResolveDuplicateSubject() error = %v", err)
+	}
+	if duplicate.SourcePath != path || duplicate.ReleaseName != "Example.Release.2026.1080p-GRP" {
+		t.Fatalf("duplicate subject = %#v", duplicate)
+	}
+
+	_, err = module.ResolveDuplicateSubject(context.Background(), api.DuplicateCheckInput{
+		Release: api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation + 1},
+	})
+	var stale *StalePreparationError
+	if !errors.As(err, &stale) || stale.Reason != StaleReasonGeneration {
+		t.Fatalf("wrong generation error = %v", err)
+	}
+}
+
+func TestAnimeCorrectionReachesPreparedAndOperationSubjects(t *testing.T) {
+	for _, anime := range []bool{true, false} {
+		t.Run(strconv.FormatBool(anime), func(t *testing.T) {
+			path := writePreparedTestFile(t, "source.mkv", "source")
+			store := newMemoryStore()
+			module := newTestModule(t, store, &recordingCollector{facts: &CollectedFacts{
+				Media: api.MediaFacts{Anime: !anime},
+			}})
+			input := api.PrepareInput{SourcePath: path, Instructions: api.ReleaseFactInstructions{
+				Metadata: api.MetadataOverrides{Anime: new(anime)},
+			}}
+			prepared, err := module.Prepare(t.Context(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if prepared.EffectiveInstructions.Metadata.Anime == nil || *prepared.EffectiveInstructions.Metadata.Anime != anime || prepared.Release.Media.Anime != anime {
+				t.Fatalf("effective anime = %v, prepared anime = %t, want %t", prepared.EffectiveInstructions.Metadata.Anime, prepared.Release.Media.Anime, anime)
+			}
+			persisted, err := store.LoadPreparedRelease(t.Context(), path)
+			if err != nil || persisted.Media.Anime != anime {
+				t.Fatalf("persisted anime = %t, err = %v, want %t", persisted.Media.Anime, err, anime)
+			}
+			ref := api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation}
+			upload, err := module.ResolveUploadSubject(t.Context(), api.UploadSubjectInput{Release: ref})
+			if err != nil || upload.Anime != anime {
+				t.Fatalf("upload anime = %t, err = %v, want %t", upload.Anime, err, anime)
+			}
+			duplicate, err := module.ResolveDuplicateSubject(t.Context(), api.DuplicateCheckInput{Release: ref})
+			if err != nil || duplicate.Anime != anime {
+				t.Fatalf("duplicate anime = %t, err = %v, want %t", duplicate.Anime, err, anime)
+			}
+		})
+	}
+}
+
+func TestOperationSubjectsCarryCorrectedFactsConsistently(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "source")
+	module := newTestModule(t, newMemoryStore(), correctedFactsCollector{})
+	prepared, err := module.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatal(err)
+	}
+	release := prepared.Release
+	if release.Media.Type != "REMUX" || release.Naming.Type != "REMUX" || release.Episode.Season != 3 || release.Naming.Group != "OTHER" {
+		t.Fatalf("prepared facts = %#v", release)
+	}
+
+	ref := api.ReleaseRef{SourcePath: path, Generation: release.Generation}
+	upload, err := module.ResolveUploadSubject(context.Background(), api.UploadSubjectInput{Release: ref})
+	if err != nil {
+		t.Fatalf("ResolveUploadSubject() error = %v", err)
+	}
+	if upload.Type != "REMUX" || upload.Source != "BluRay" || upload.Release.Type != "REMUX" || upload.Release.Resolution != "2160p" ||
+		upload.Release.Title != "Resolved Series" || upload.Release.Alt != "AKA Resolved Original" || upload.Release.Year != 2027 {
+		t.Fatalf("upload subject type facts = %q/%q/%q/%q", upload.Type, upload.Source, upload.Release.Type, upload.Release.Resolution)
+	}
+	if upload.SeasonInt != 3 || upload.EpisodeInt != 7 || upload.SeasonStr != "S03" || upload.EpisodeStr != "E07" {
+		t.Fatalf("upload subject episode facts = %d/%d %q/%q", upload.SeasonInt, upload.EpisodeInt, upload.SeasonStr, upload.EpisodeStr)
+	}
+	if upload.Tag != "-OTHER" || upload.Release.Group != "OTHER" || upload.Edition != "Extended" || upload.Service != "AMZN" {
+		t.Fatalf("upload subject fact projections = %q/%q/%q/%q", upload.Tag, upload.Release.Group, upload.Edition, upload.Service)
+	}
+	if release.Naming.AlternateTitle != "AKA Resolved Original" || upload.AlternateTitle != release.Naming.AlternateTitle {
+		t.Fatalf("alternate title projection = %q, prepared = %q", upload.AlternateTitle, release.Naming.AlternateTitle)
+	}
+
+	duplicate, err := module.ResolveDuplicateSubject(context.Background(), api.DuplicateCheckInput{Release: ref})
+	if err != nil {
+		t.Fatalf("ResolveDuplicateSubject() error = %v", err)
+	}
+	if duplicate.Type != upload.Type || duplicate.Source != upload.Source || duplicate.Tag != upload.Tag {
+		t.Fatalf("duplicate subject diverges from upload subject: %q/%q/%q", duplicate.Type, duplicate.Source, duplicate.Tag)
+	}
+	if duplicate.SeasonInt != upload.SeasonInt || duplicate.EpisodeInt != upload.EpisodeInt || duplicate.Release.Group != upload.Release.Group {
+		t.Fatalf("duplicate subject episode/group diverges: %d/%d %q", duplicate.SeasonInt, duplicate.EpisodeInt, duplicate.Release.Group)
+	}
+}
+
+func TestReleaseInfoDoesNotRestoreSupersededDuplicateFacts(t *testing.T) {
+	t.Parallel()
+
+	got := releaseInfo(api.PreparedRelease{
+		Naming: api.NamingFacts{
+			Title:     "Resolved Title",
+			Type:      "STALE-TYPE",
+			Source:    "STALE-SOURCE",
+			Channels:  "STALE-CHANNELS",
+			Region:    "STALE-REGION",
+			Editions:  []string{"Stale Edition"},
+			Codecs:    []string{"x265"},
+			Languages: []string{"English"},
+		},
+		Episode:  api.EpisodeFacts{Season: 2, Episode: 3},
+		Identity: api.ExternalIdentity{Category: api.CanonicalCategoryTV},
+	})
+	if got.Category != "TV" || got.Title != "Resolved Title" || got.Season != 2 || got.Episode != 3 {
+		t.Fatalf("canonical identity projection = %#v", got)
+	}
+	if got.Type != "" || got.Source != "" || got.Channels != "" || got.Region != "" || got.Edition != nil {
+		t.Fatalf("superseded naming duplicates restored = %#v", got)
+	}
+	if !slices.Equal(got.Codec, []string{"x265"}) || !slices.Equal(got.Language, []string{"English"}) {
+		t.Fatalf("parser syntax tokens changed = %#v", got)
+	}
+}
+
+func TestPrepareRejectsProviderMetadataForDifferentCanonicalID(t *testing.T) {
+	t.Parallel()
+
+	path := writePreparedTestFile(t, "source.mkv", "source")
+	store := newMemoryStore()
+	module, err := New(store, mismatchedProviderIdentityResolver{}, &recordingCollector{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	_, err = module.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	var incompatible *IncompatiblePreparationError
+	if !errors.As(err, &incompatible) || incompatible.Reason != "tmdb provider metadata does not match canonical identity" {
+		t.Fatalf("Prepare() error = %v", err)
+	}
+	if _, err := store.LoadPreparedRelease(context.Background(), path); !errors.Is(err, internalerrors.ErrNotFound) {
+		t.Fatalf("mismatched provider generation was published: %v", err)
+	}
+}
+
+func TestPrepareRejectsInvalidGeneratedNameBeforeCommit(t *testing.T) {
+	for _, document := range []*api.ReleaseNameDocument{
+		{Version: "unsupported"},
+		{Version: api.ReleaseNameDocumentVersionV1, Components: []api.ReleaseNameComponent{{Role: api.NameRoleTitle, Present: true}}},
+		{Version: api.ReleaseNameDocumentVersionV1, Components: []api.ReleaseNameComponent{{Role: api.NameRoleTitle}, {Role: api.NameRoleTitle}}},
+	} {
+		t.Run(document.Version+strconv.Itoa(len(document.Components)), func(t *testing.T) {
+			store := newMemoryStore()
+			module := newTestModule(t, store, &recordingCollector{facts: &CollectedFacts{Naming: api.NamingFacts{GeneratedName: document}}})
+			_, err := module.Prepare(t.Context(), api.PrepareInput{SourcePath: writePreparedTestFile(t, "Example.mkv", "source")})
+			var incompatible *IncompatiblePreparationError
+			if !errors.As(err, &incompatible) || !strings.Contains(incompatible.Reason, "reprepare") {
+				t.Fatalf("invalid document error = %v", err)
+			}
+			if store.commits != 0 {
+				t.Fatal("invalid document was committed")
+			}
+		})
+	}
+}
+
+func TestPreparedISSearchPreservesNamingPresentation(t *testing.T) {
+	for _, test := range []struct {
+		name            string
+		presentation    api.ReleaseNamePresentation
+		requested       *string
+		scene           bool
+		missingDocument bool
+		want            string
+	}{
+		{
+			name:         "automatic episodes",
+			presentation: api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1},
+			want:         "Example Show S03E04",
+		},
+		{
+			name:         "omitted episodes",
+			presentation: api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, OmitSeasonEpisode: true},
+			want:         "Example Show",
+		},
+		{
+			name:         "daily date",
+			presentation: api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, UseDailyDate: true},
+			want:         "Example Show",
+		},
+		{
+			name:         "scene omitted episodes",
+			presentation: api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, OmitSeasonEpisode: true},
+			scene:        true,
+			want:         "Example Show",
+		},
+		{
+			name:            "missing document daily",
+			presentation:    api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, UseDailyDate: true},
+			missingDocument: true,
+			want:            "Example Show",
+		},
+		{
+			name:         "requested upload keeps automatic search",
+			presentation: api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, OmitSeasonEpisode: true},
+			requested:    new("Requested.Name-GRP"),
+			want:         "Example Show",
+		},
+		{
+			name:         "unknown presentation",
+			presentation: api.ReleaseNamePresentation{Version: "unknown", OmitSeasonEpisode: true},
+			want:         "Example Show S03E04",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			document := &api.ReleaseNameDocument{Version: api.ReleaseNameDocumentVersionV1, Components: []api.ReleaseNameComponent{
+				{
+					Role:    api.NameRoleTitle,
+					Value:   "Example Show",
+					Present: true,
+				},
+				{
+					Role:           api.NameRoleSeason,
+					Value:          "S03",
+					AvailableValue: "S03",
+					Present:        !test.presentation.OmitSeasonEpisode && !test.presentation.UseDailyDate,
+					Join:           " ",
+				},
+				{
+					Role:           api.NameRoleEpisode,
+					Value:          "E04",
+					AvailableValue: "E04",
+					Present:        !test.presentation.OmitSeasonEpisode && !test.presentation.UseDailyDate,
+					Join:           " ",
+					AttachTo:       []api.ReleaseNameRole{api.NameRoleSeason},
+				},
+			}}
+			name := document.Render().Name
+			if test.missingDocument {
+				document = nil
+			}
+			facts := &CollectedFacts{
+				Naming: api.NamingFacts{
+					Title:            "Example Show",
+					ReleaseName:      name,
+					GeneratedName:    document,
+					NamePresentation: test.presentation,
+					Scene:            test.scene,
+				},
+				Episode: api.EpisodeFacts{
+					Season:       3,
+					Episode:      4,
+					SeasonLabel:  "S03",
+					EpisodeLabel: "E04",
+					DailyDate:    "2026-04-05",
+				},
+			}
+			if test.scene {
+				facts.Naming.SceneName = "Exact.Scene.Name-GRP"
+				facts.Naming.ReleaseName = facts.Naming.SceneName
+			}
+			module := newTestModule(t, newMemoryStore(), &recordingCollector{facts: facts})
+			path := writePreparedTestFile(t, "Example.mkv", "source")
+			prepared, err := module.Prepare(t.Context(), api.PrepareInput{SourcePath: path})
+			if err != nil {
+				t.Fatal(err)
+			}
+			subject, err := module.ResolveUploadSubject(t.Context(), api.UploadSubjectInput{Release: api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation}})
+			if err != nil {
+				t.Fatal(err)
+			}
+			// The test resolver defaults to movies; exercise IS's TV search on the
+			// otherwise unmodified subject projected by the real prepared owner.
+			subject.Identity.Category = api.CanonicalCategoryTV
+			if subject.SeasonInt != 3 || subject.EpisodeInt != 4 || subject.NamePresentation != test.presentation {
+				t.Fatalf("prepared search inputs = %#v", subject)
+			}
+			resolved, failure := trackers.PrepareInputWithReleaseNamePolicy(trackers.PreparationInput{
+				Tracker:             "IS",
+				Meta:                subject,
+				RequestedUploadName: test.requested,
+			}, isimpl.Profile().ReleaseNamePolicy)
+			if failure != nil {
+				t.Fatal(failure)
+			}
+			if got := resolved.Projection.DuplicateCriteria.Name; got != test.want {
+				t.Fatalf("search = %q, want %q", got, test.want)
+			}
+			if subject.SeasonInt != 3 || subject.EpisodeInt != 4 {
+				t.Fatal("search presentation mutated prepared facts")
+			}
+			if test.requested != nil && resolved.Projection.UploadReleaseName != *test.requested {
+				t.Fatal("search changed requested upload name")
+			}
+		})
+	}
+}
+
+func TestImportRejectsInvalidGeneratedNameBeforeCommit(t *testing.T) {
+	path := writePreparedTestFile(t, "Example.mkv", "source")
+	source := newTestModule(t, newMemoryStore(), &recordingCollector{})
+	prepared, err := source.Prepare(t.Context(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatal(err)
+	}
+	seed, err := source.Export(t.Context(), api.ReleaseRef{SourcePath: path, Generation: prepared.Release.Generation})
+	if err != nil {
+		t.Fatal(err)
+	}
+	seed.payload.result.Release.Naming.GeneratedName.Version = "unsupported"
+	store := newMemoryStore()
+	target := newTestModule(t, store, &recordingCollector{})
+	_, err = target.Import(t.Context(), seed)
+	if _, ok := errors.AsType[*IncompatiblePreparationError](err); !ok {
+		t.Fatalf("Import error = %v", err)
+	}
+	if store.commits != 0 {
+		t.Fatal("invalid imported document was committed")
+	}
+}
+
+func TestPrepareRejectsInvalidCompatibleNamingCacheAndForceRegenerates(t *testing.T) {
+	path := writePreparedTestFile(t, "Example.mkv", "source")
+	store := newMemoryStore()
+	first := newTestModule(t, store, &recordingCollector{})
+	prepared, err := first.Prepare(t.Context(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatal(err)
+	}
+	corrupt := prepared.Release
+	corrupt.Naming.GeneratedName.Version = "unsupported"
+	if err := store.CommitPreparedRelease(t.Context(), corrupt); err != nil {
+		t.Fatal(err)
+	}
+	collector := &recordingCollector{}
+	restarted := newTestModule(t, store, collector)
+	for _, required := range []bool{false, true} {
+		_, err := restarted.Prepare(t.Context(), api.PrepareInput{SourcePath: path, RequirePrepared: required})
+		if _, ok := errors.AsType[*IncompatiblePreparationError](err); !ok {
+			t.Fatalf("RequirePrepared=%t error = %v", required, err)
+		}
+		if restarted.hasPublishedGeneration(path, corrupt.Generation) {
+			t.Fatal("invalid cached generation was published")
+		}
+	}
+	if collector.callCount() != 0 {
+		t.Fatal("invalid cache reuse invoked collector")
+	}
+	regenerated, err := restarted.Prepare(t.Context(), api.PrepareInput{SourcePath: path, Force: true})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if regenerated.Release.Generation <= corrupt.Generation {
+		t.Fatal("force did not replace corrupt generation")
+	}
+	if err := regenerated.Release.Naming.GeneratedName.Validate(); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestPreparationCompatibilityDistinguishesExplicitClearInstructions(t *testing.T) {
+	t.Parallel()
+
+	fingerprints := make(map[string]string, 3)
+	for name, season := range map[string]*string{
+		"unset":          nil,
+		"explicit clear": new(""),
+		"explicit value": new("5"),
+	} {
+		input := api.PrepareInput{SourcePath: "Example.Release.2026.mkv"}
+		input.Instructions.ReleaseName.Season = season
+		compatibility, err := preparationCompatibility(input, "source", 0)
+		if err != nil {
+			t.Fatalf("compatibility for %s: %v", name, err)
+		}
+		fingerprints[name] = compatibility.FactInstructionFingerprint
+	}
+	if fingerprints["unset"] == fingerprints["explicit clear"] ||
+		fingerprints["unset"] == fingerprints["explicit value"] ||
+		fingerprints["explicit clear"] == fingerprints["explicit value"] {
+		t.Fatalf("expected distinct fact-instruction fingerprints, got %#v", fingerprints)
+	}
+}
+
+func TestPrepareCommitFailureLeavesPriorGenerationPublished(t *testing.T) {
+	t.Parallel()
+	path := writePreparedTestFile(t, "source.mkv", "source")
+	store := newMemoryStore()
+	module := newTestModule(t, store, &recordingCollector{})
+	input := api.PrepareInput{SourcePath: path}
+	first, err := module.Prepare(context.Background(), input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	store.setCommitError(errors.New("forced commit failure"))
+	input.Policy.OnlyID = true
+	if _, err := module.Prepare(context.Background(), input); err == nil {
+		t.Fatal("Prepare() error = nil, want commit failure")
+	}
+
+	seed, err := module.Export(context.Background(), api.ReleaseRef{
+		SourcePath: path,
+		Generation: first.Release.Generation,
+	})
+	if err != nil {
+		t.Fatalf("Export() prior generation error = %v", err)
+	}
+	if seed.payload.result.Release.Generation != 1 {
+		t.Fatalf("published generation = %d, want 1", seed.payload.result.Release.Generation)
+	}
+	current, err := store.LoadPreparedRelease(context.Background(), first.Release.Source.SourcePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if current.Generation != 1 {
+		t.Fatalf("persisted generation = %d, want 1", current.Generation)
+	}
+}
+
+func TestSeedImportRechecksSourceFingerprint(t *testing.T) {
+	t.Parallel()
+	path := writePreparedTestFile(t, "source.mkv", "source")
+	sourceStore := newMemoryStore()
+	source := newTestModule(t, sourceStore, &recordingCollector{})
+	prepared, err := source.Prepare(context.Background(), api.PrepareInput{SourcePath: path})
+	if err != nil {
+		t.Fatal(err)
+	}
+	seed, err := source.Export(context.Background(), api.ReleaseRef{
+		SourcePath: path,
+		Generation: prepared.Release.Generation,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	target := newTestModule(t, newMemoryStore(), &recordingCollector{})
+	layout, layoutErr := sourcelayout.Resolve(context.Background(), path)
+	if layoutErr != nil {
+		t.Fatal(layoutErr)
+	}
+	_, actualFingerprint, inspectErr := inspectSource(context.Background(), api.PrepareInput{SourcePath: path}, layout)
+	if inspectErr != nil {
+		t.Fatal(inspectErr)
+	}
+	if actualFingerprint != prepared.Release.Compatibility.SourceFingerprint {
+		t.Fatalf("unchanged fingerprint = %s, want %s", actualFingerprint, prepared.Release.Compatibility.SourceFingerprint)
+	}
+	ref, err := target.Import(context.Background(), seed)
+	if err != nil {
+		t.Fatalf("Import() error = %v", err)
+	}
+	if ref.Generation != prepared.Release.Generation {
+		t.Fatalf("imported generation = %d, want %d", ref.Generation, prepared.Release.Generation)
+	}
+
+	if err := os.WriteFile(path, []byte("changed after acceptance"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	staleTarget := newTestModule(t, newMemoryStore(), &recordingCollector{})
+	_, err = staleTarget.Import(context.Background(), seed)
+	var stale *StalePreparationError
+	if !errors.As(err, &stale) || stale.Reason != StaleReasonFingerprint {
+		t.Fatalf("Import() error = %v, want fingerprint StalePreparationError", err)
+	}
+}
+
+func TestPrepareCancellationDoesNotReorderSourceFIFO(t *testing.T) {
+	t.Parallel()
+	path := writePreparedTestFile(t, "source.mkv", "source")
+	collector := newBlockingCollector()
+	module := newTestModule(t, newMemoryStore(), collector)
+
+	firstDone := make(chan error, 1)
+	go func() {
+		_, err := module.Prepare(context.Background(), prepareInputWithLookup(path, "first"))
+		firstDone <- err
+	}()
+	waitForString(t, collector.started, "first")
+
+	canceledCtx, cancel := context.WithCancel(context.Background())
+	canceledDone := make(chan error, 1)
+	go func() {
+		_, err := module.Prepare(canceledCtx, prepareInputWithLookup(path, "canceled"))
+		canceledDone <- err
+	}()
+	thirdDone := make(chan error, 1)
+	go func() {
+		_, err := module.Prepare(context.Background(), prepareInputWithLookup(path, "third"))
+		thirdDone <- err
+	}()
+	time.Sleep(20 * time.Millisecond)
+	cancel()
+	if err := <-canceledDone; !errors.Is(err, context.Canceled) {
+		t.Fatalf("canceled Prepare() error = %v", err)
+	}
+
+	collector.release <- struct{}{}
+	if err := <-firstDone; err != nil {
+		t.Fatal(err)
+	}
+	waitForString(t, collector.started, "third")
+	collector.release <- struct{}{}
+	if err := <-thirdDone; err != nil {
+		t.Fatal(err)
+	}
+	if got := collector.order(); len(got) != 2 || got[0] != "first" || got[1] != "third" {
+		t.Fatalf("collector order = %v, want [first third]", got)
+	}
+}
+
+func TestPrepareDifferentSourcesRunConcurrently(t *testing.T) {
+	t.Parallel()
+	firstPath := writePreparedTestFile(t, "first.mkv", "first")
+	secondPath := writePreparedTestFile(t, "second.mkv", "second")
+	collector := newBlockingCollector()
+	module := newTestModule(t, newMemoryStore(), collector)
+	done := make(chan error, 2)
+	for path, lookup := range map[string]string{firstPath: "first", secondPath: "second"} {
+		go func() {
+			_, err := module.Prepare(context.Background(), prepareInputWithLookup(path, lookup))
+			done <- err
+		}()
+	}
+	seen := map[string]bool{}
+	seen[<-collector.started] = true
+	seen[<-collector.started] = true
+	if !seen["first"] || !seen["second"] {
+		t.Fatalf("concurrent starts = %v", seen)
+	}
+	collector.release <- struct{}{}
+	collector.release <- struct{}{}
+	for range 2 {
+		if err := <-done; err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+func prepareInputWithLookup(path string, lookup string) api.PrepareInput {
+	return api.PrepareInput{
+		SourcePath: path,
+		Instructions: api.ReleaseFactInstructions{
+			SourceLookup: lookup,
+		},
+	}
+}
+
+func writePreparedTestFile(t *testing.T, name string, body string) string {
+	t.Helper()
+	path := filepath.Join(t.TempDir(), name)
+	if err := os.WriteFile(path, []byte(body), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	return path
+}
+
+func newTestModule(t *testing.T, store Store, collector Collector) *Module {
+	t.Helper()
+	module, err := New(store, staticIdentityResolver{}, collector)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return module
+}
+
+type staticIdentityResolver struct{}
+
+func (staticIdentityResolver) Resolve(_ context.Context, request externalidentity.Request) (externalidentity.Result, error) {
+	now := time.Now().UTC()
+	identity := api.ExternalIdentity{
+		SourcePath: request.SourcePath,
+		Generation: request.Generation,
+		TMDBID:     1234567,
+		Category:   api.CanonicalCategoryMovie,
+		Provenance: api.IdentityProvenanceSet{
+			TMDB:     api.IdentityProvenanceProvider,
+			Category: api.IdentityProvenanceProvider,
+		},
+		Conflict: api.IdentityConflictNone,
+		Resolution: api.IdentityResolutionKey{
+			SourceFingerprint: request.SourceFingerprint,
+			IntentFingerprint: "intent",
+			ContractVersion:   externalidentity.ContractVersion,
+		},
+		ResolvedAt: now,
+	}
+	return externalidentity.Result{
+		Identity: identity,
+		ProviderMetadata: api.SourceScopedMetadata{
+			SourcePath: request.SourcePath,
+			Generation: request.Generation,
+			UpdatedAt:  now,
+		},
+	}, nil
+}
+
+type mismatchedProviderIdentityResolver struct{}
+
+func (mismatchedProviderIdentityResolver) Resolve(_ context.Context, request externalidentity.Request) (externalidentity.Result, error) {
+	return externalidentity.Result{
+		Identity: api.ExternalIdentity{
+			SourcePath: request.SourcePath,
+			Generation: request.Generation,
+			TMDBID:     123456,
+			Category:   api.CanonicalCategoryMovie,
+		},
+		ProviderMetadata: api.SourceScopedMetadata{
+			SourcePath: request.SourcePath,
+			Generation: request.Generation,
+			TMDB:       &api.TMDBMetadata{TMDBID: 654321, Title: "Different Work"},
+		},
+	}, nil
+}
+
+// correctedFactsCollector returns fact groups as the metadata pipeline shapes
+// them after fact-producing release-name instructions were applied.
+type correctedFactsCollector struct{}
+
+func (correctedFactsCollector) Collect(_ context.Context, request preparationstate.Request) (CollectedFacts, error) {
+	return CollectedFacts{
+		Naming: api.NamingFacts{
+			Filename:       filepath.Base(request.Manifest.SourcePath),
+			ReleaseName:    "Example Show 2027 S03E07 Extended 2160p BluRay REMUX-OTHER",
+			Tag:            "-OTHER",
+			Type:           "REMUX",
+			Title:          "Resolved Series",
+			AlternateTitle: "AKA Resolved Original",
+			Source:         "BluRay",
+			Resolution:     "2160p",
+			Year:           2027,
+			Group:          "OTHER",
+		},
+		Episode: api.EpisodeFacts{
+			Season:       3,
+			Episode:      7,
+			SeasonLabel:  "S03",
+			EpisodeLabel: "E07",
+		},
+		Media: api.MediaFacts{
+			Type:     "REMUX",
+			Source:   "BluRay",
+			Edition:  "Extended",
+			Service:  "AMZN",
+			Region:   "B",
+			Channels: "5.1",
+		},
+	}, nil
+}
+
+type recordingCollector struct {
+	mu                  sync.Mutex
+	calls               []string
+	externalFreshnesses []api.ExternalFreshness
+	facts               *CollectedFacts
+}
+
+func (c *recordingCollector) Collect(_ context.Context, request preparationstate.Request) (CollectedFacts, error) {
+	c.mu.Lock()
+	c.calls = append(c.calls, request.Input.Instructions.SourceLookup)
+	c.externalFreshnesses = append(c.externalFreshnesses, request.Input.ExternalFreshness)
+	c.mu.Unlock()
+	if c.facts != nil {
+		return *c.facts, nil
+	}
+	facts := CollectedFacts{
+		Naming: api.NamingFacts{
+			Filename:    filepath.Base(request.Manifest.SourcePath),
+			ReleaseName: "Example.Release.2026.1080p-GRP",
+			GeneratedName: &api.ReleaseNameDocument{
+				Version: api.ReleaseNameDocumentVersionV1,
+				Components: []api.ReleaseNameComponent{
+					{
+						Role:           api.NameRoleTitle,
+						Value:          "Example.Release",
+						AvailableValue: "Example.Release",
+						Present:        true,
+						Join:           " ",
+					},
+					{
+						Role:           api.NameRoleYear,
+						Value:          "2026",
+						AvailableValue: "2026",
+						Present:        true,
+						Join:           ".",
+					},
+					{
+						Role:           api.NameRoleResolution,
+						Value:          "1080p",
+						AvailableValue: "1080p",
+						Present:        true,
+						Join:           ".",
+					},
+					{
+						Role:           api.NameRoleGroup,
+						Value:          "-GRP",
+						AvailableValue: "-GRP",
+						Present:        true,
+					},
+				},
+			},
+			NamePresentation: api.ReleaseNamePresentation{Version: api.ReleaseNamePresentationVersionV1, OmitYear: true},
+			GeneratedReleaseNames: api.GeneratedReleaseNameVariants{
+				IncludeEpisodeTitle: api.ReleaseNameVariant{
+					Name: "Example.Show.S01E02.Example.Episode.1080p.WEB-DL-GRP",
+				},
+				OmitEpisodeTitle: api.ReleaseNameVariant{
+					Name: "Example.Show.S01E02.1080p.WEB-DL-GRP",
+				},
+			},
+		},
+		Assessments: api.ReleaseAssessments{
+			MediaInfoUniqueID:       api.UniqueIDStatusPresent,
+			MediaInfoEncodeSettings: api.EncodeSettingsStatusMissing,
+			Naming: api.NamingAssessment{
+				Status: api.NamingStatusComplete,
+			},
+		},
+	}
+	if len(request.Layout.Discs) > 0 {
+		facts.Disc.Type = request.Layout.DiscType
+		for _, disc := range request.Layout.Discs {
+			facts.Disc.Items = append(facts.Disc.Items, api.DiscItemFacts{
+				ID:   disc.ID,
+				Name: disc.Name,
+				Type: disc.Type,
+			})
+		}
+		if len(request.Layout.Discs) == 1 {
+			for _, selected := range request.Input.Instructions.Playlist.Selected {
+				playlist := api.PlaylistInfo{
+					ID:       selected,
+					DiscID:   request.Layout.Discs[0].ID,
+					DiscName: request.Layout.Discs[0].Name,
+					File:     selected,
+				}
+				facts.Disc.Items[0].Reports = append(facts.Disc.Items[0].Reports, api.DiscReportFacts{Playlist: playlist})
+				facts.Disc.PlaylistCount++
+			}
+		}
+		facts.Disc.PrimaryDiscID, facts.Disc.PrimaryReportID, facts.Disc.DurationSeconds, facts.Disc.DVDVOBSet = facts.Disc.CanonicalPrimary()
+		facts.Disc.Summary = facts.Disc.AggregateSummary()
+	}
+	return facts, nil
+}
+
+func (c *recordingCollector) callCount() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return len(c.calls)
+}
+
+func (c *recordingCollector) externalFreshnessAt(index int) api.ExternalFreshness {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if index < 0 || index >= len(c.externalFreshnesses) {
+		return ""
+	}
+	return c.externalFreshnesses[index]
+}
+
+type clientEvidenceTestCollector struct {
+	base     recordingCollector
+	mu       sync.Mutex
+	hydrates int
+	snapshot preparationstate.ClientEvidenceSnapshot
+	retained []bool
+}
+
+func newClientEvidenceTestCollector(snapshot preparationstate.ClientEvidenceSnapshot) *clientEvidenceTestCollector {
+	return &clientEvidenceTestCollector{snapshot: snapshot}
+}
+
+func (c *clientEvidenceTestCollector) Collect(ctx context.Context, request preparationstate.Request) (CollectedFacts, error) {
+	facts, err := c.base.Collect(ctx, request)
+	if err != nil {
+		return CollectedFacts{}, err
+	}
+	facts.Resources.ClientEvidence = preparationstate.CloneClientEvidenceSnapshot(c.snapshot)
+	c.mu.Lock()
+	c.retained = append(c.retained, request.RetainedClientEvidence != nil)
+	c.mu.Unlock()
+	if request.RetainedClientEvidence != nil {
+		facts.Resources.ClientEvidence = preparationstate.CloneClientEvidenceSnapshot(*request.RetainedClientEvidence)
+	}
+	return facts, nil
+}
+
+func (c *clientEvidenceTestCollector) HydratePrivateResources(
+	_ context.Context,
+	request preparationstate.Request,
+) (CollectedResources, error) {
+	c.mu.Lock()
+	c.hydrates++
+	c.mu.Unlock()
+	return CollectedResources{
+		SourcePath:        request.Manifest.SourcePath,
+		MediaInfoJSONPath: request.Manifest.SourcePath,
+		ClientEvidence:    preparationstate.CloneClientEvidenceSnapshot(c.snapshot),
+	}, nil
+}
+
+func (c *clientEvidenceTestCollector) collectCount() int { return c.base.callCount() }
+
+func (c *clientEvidenceTestCollector) hydrateCount() int {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.hydrates
+}
+
+func clientEvidenceTestSnapshot(infoHash string) preparationstate.ClientEvidenceSnapshot {
+	return preparationstate.ClientEvidenceSnapshot{
+		Disposition: preparationstate.ClientEvidenceDispositionSearched,
+		Result: api.ClientSearchResult{
+			InfoHash:            infoHash,
+			TorrentPath:         "Example.Release.2026.torrent",
+			TorrentDataVerified: true,
+			TrackerIDs:          map[string]string{"ant": "hydrated-id"},
+			MatchedTrackers:     []string{"ANT"},
+		},
+	}
+}
+
+type blockingCollector struct {
+	*recordingCollector
+	started chan string
+	release chan struct{}
+}
+
+func newBlockingCollector() *blockingCollector {
+	return &blockingCollector{
+		recordingCollector: &recordingCollector{},
+		started:            make(chan string, 4),
+		release:            make(chan struct{}, 4),
+	}
+}
+
+func (c *blockingCollector) Collect(ctx context.Context, request preparationstate.Request) (CollectedFacts, error) {
+	c.mu.Lock()
+	c.calls = append(c.calls, request.Input.Instructions.SourceLookup)
+	c.mu.Unlock()
+	c.started <- request.Input.Instructions.SourceLookup
+	select {
+	case <-c.release:
+		request.Input = api.PrepareInput{}
+		return c.recordingCollector.Collect(ctx, request)
+	case <-ctx.Done():
+		return CollectedFacts{}, fmt.Errorf("blocking collector canceled: %w", ctx.Err())
+	}
+}
+
+func (c *blockingCollector) order() []string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	result := make([]string, 0, len(c.calls))
+	for _, call := range c.calls {
+		if call != "" {
+			result = append(result, call)
+		}
+	}
+	return result
+}
+
+func waitForString(t *testing.T, values <-chan string, want string) {
+	t.Helper()
+	select {
+	case got := <-values:
+		if got != want {
+			t.Fatalf("started = %q, want %q", got, want)
+		}
+	case <-time.After(10 * time.Second):
+		t.Fatalf("timed out waiting for %q", want)
+	}
+}
+
+type memoryStore struct {
+	mu          sync.Mutex
+	current     map[string]api.PreparedRelease
+	commits     int
+	commitErr   error
+	corrections map[string]api.ReleaseCorrectionsSnapshot
+}
+
+func newMemoryStore() *memoryStore {
+	return &memoryStore{current: make(map[string]api.PreparedRelease)}
+}
+
+func (s *memoryStore) LoadPreparedRelease(_ context.Context, sourcePath string) (api.PreparedRelease, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	release, ok := s.current[canonicalSourceKey(sourcePath)]
+	if !ok {
+		return api.PreparedRelease{}, internalerrors.ErrNotFound
+	}
+	cloned, err := release.Clone()
+	if err != nil {
+		return api.PreparedRelease{}, fmt.Errorf("memory store: clone loaded release: %w", err)
+	}
+	return cloned, nil
+}
+
+func (s *memoryStore) CommitPreparedRelease(_ context.Context, release api.PreparedRelease) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.commitErr != nil {
+		return s.commitErr
+	}
+	cloned, err := release.Clone()
+	if err != nil {
+		return fmt.Errorf("memory store: clone committed release: %w", err)
+	}
+	s.current[canonicalSourceKey(release.Source.SourcePath)] = cloned
+	s.commits++
+	return nil
+}
+
+func (s *memoryStore) PurgePreparedRelease(_ context.Context, sourcePath string) error {
+	s.mu.Lock()
+	delete(s.current, canonicalSourceKey(sourcePath))
+	s.mu.Unlock()
+	return nil
+}
+
+func (s *memoryStore) setCommitError(err error) {
+	s.mu.Lock()
+	s.commitErr = err
+	s.mu.Unlock()
+}
+
+func (s *memoryStore) commitCount() int {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.commits
+}
+
+func TestPreparationEnrichmentReusesOnlyCompatibleClientEvidence(t *testing.T) {
+	t.Parallel()
+	for _, scenario := range []struct {
+		name          string
+		change        func(*api.PrepareInput)
+		retained      bool
+		replaceSource bool
+	}{
+		{name: "metadata demand", retained: true},
+		{
+			name:     "provider refresh",
+			change:   func(input *api.PrepareInput) { input.ExternalFreshness = api.ExternalFreshnessRefresh },
+			retained: true,
+		},
+		{name: "fresh load", change: func(input *api.PrepareInput) { input.ExternalFreshness = api.ExternalFreshnessLoad }},
+		{name: "forced preparation", change: func(input *api.PrepareInput) { input.Force = true }},
+		{name: "client recheck", change: func(input *api.PrepareInput) { force := true; input.Controls.ForceRecheck = &force }},
+		{name: "client policy", change: func(input *api.PrepareInput) { input.Search.Skip = true }},
+		{name: "client selection", change: func(input *api.PrepareInput) { client := "other"; input.Search.Client = &client }},
+		{name: "source bytes", replaceSource: true},
+		{
+			name:     "image demand",
+			change:   func(input *api.PrepareInput) { input.Policy.KeepImages = true },
+			retained: true,
+		},
+		{name: "folder policy", change: func(input *api.PrepareInput) { input.Policy.KeepFolder = true }},
+		{
+			name:     "source lookup",
+			change:   func(input *api.PrepareInput) { input.Instructions.SourceLookup = "different-source" },
+			retained: true,
+		},
+		{
+			name:     "local correction",
+			change:   func(input *api.PrepareInput) { input.Instructions.ReleaseName.NoEpisodeTitle = new(true) },
+			retained: true,
+		},
+		{name: "playlist", change: func(input *api.PrepareInput) { input.Instructions.Playlist = api.PlaylistInstruction{Set: true} }},
+	} {
+		t.Run(scenario.name, func(t *testing.T) {
+			t.Parallel()
+			path := writePreparedTestFile(t, "source.mkv", "synthetic media")
+			collector := newClientEvidenceTestCollector(clientEvidenceTestSnapshot("client-hash"))
+			module := newTestModule(t, newMemoryStore(), collector)
+			input := api.PrepareInput{SourcePath: path}
+			first, err := module.Prepare(t.Context(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if scenario.replaceSource {
+				if err := os.WriteFile(path, []byte("changed synthetic media"), 0o600); err != nil {
+					t.Fatal(err)
+				}
+			}
+			input.MetadataRequirements = api.MetadataRequirementSet{Version: "expanded-demand"}
+			if scenario.change != nil {
+				scenario.change(&input)
+			}
+			second, err := module.Prepare(t.Context(), input)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if second.Release.Generation != first.Release.Generation+1 || len(collector.retained) != 2 || collector.retained[0] || collector.retained[1] != scenario.retained {
+				t.Fatalf("enrichment generation=%d retained=%v, want retained=%t", second.Release.Generation, collector.retained, scenario.retained)
+			}
+		})
+	}
+}
+
+func TestPrepareRecomputesV19YearSeasonAfterRestart(t *testing.T) {
+	path := writePreparedTestFile(t, "Example.Show.S2026.1080p.WEB-DL-GRP.mkv", "video")
+	store := newMemoryStore()
+	input := api.PrepareInput{SourcePath: path}
+	previous, err := newTestModule(t, store, &recordingCollector{}).Prepare(t.Context(), input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	old := previous.Release
+	old.Compatibility.ContractVersion = "prepared-release-v19"
+	store.mu.Lock()
+	store.current[canonicalSourceKey(path)] = old
+	store.mu.Unlock()
+	collector := &recordingCollector{facts: &CollectedFacts{Episode: api.EpisodeFacts{
+		Season:      2026,
+		SeasonLabel: "S2026",
+		Pack:        true,
+	}}}
+	restarted := newTestModule(t, store, collector)
+	result, err := restarted.Prepare(t.Context(), input)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if collector.callCount() != 1 || result.Release.Generation != old.Generation+1 || result.Release.Episode.Season != 2026 {
+		t.Fatalf("stale year-season generation reused: generation=%d calls=%d episode=%#v", result.Release.Generation, collector.callCount(), result.Release.Episode)
+	}
+	reused, err := restarted.Prepare(t.Context(), input)
+	if err != nil || reused.Release.Generation != result.Release.Generation || collector.callCount() != 1 {
+		t.Fatalf("updated generation was not reused: generation=%d calls=%d err=%v", reused.Release.Generation, collector.callCount(), err)
+	}
+}
+
+func TestPrepareRecomputesOldVideoEncodeAfterRestart(t *testing.T) {
+	for _, oldVersion := range []string{"prepared-release-v21", "prepared-release-v22", "prepared-release-v23", "prepared-release-v24", "prepared-release-v25"} {
+		for _, codec := range []struct{ format, encode string }{{"AVC", "x264"}, {"HEVC", "x265"}} {
+			for _, manual := range []bool{false, true} {
+				t.Run(fmt.Sprintf("%s/%s/manual=%t", oldVersion, codec.format, manual), func(t *testing.T) {
+					path := writePreparedTestFile(t, "Example.Show.S01.1080p.BluRay."+codec.format+"-GRP.mkv", "video")
+					store := newMemoryStore()
+					input := api.PrepareInput{SourcePath: path}
+					if manual {
+						input.Instructions.ReleaseName.Type = new("ENCODE")
+					}
+					oldFacts := &CollectedFacts{
+						Naming: api.NamingFacts{ReleaseName: "Example Show " + codec.format, Type: "ENCODE"},
+						Media:  api.MediaFacts{Type: "ENCODE", VideoCodec: codec.format},
+					}
+					prepared, err := newTestModule(t, store, &recordingCollector{facts: oldFacts}).Prepare(t.Context(), input)
+					if err != nil {
+						t.Fatal(err)
+					}
+					previous := prepared.Release
+					previous.Compatibility.ContractVersion = oldVersion
+					store.mu.Lock()
+					store.current[canonicalSourceKey(path)] = previous
+					store.mu.Unlock()
+
+					wantName := "Example Show " + codec.encode
+					collector := &clientEvidenceTestCollector{base: recordingCollector{facts: &CollectedFacts{
+						Naming: api.NamingFacts{ReleaseName: wantName, Type: "ENCODE"},
+						Media: api.MediaFacts{
+							Type:        "ENCODE",
+							VideoCodec:  codec.format,
+							VideoEncode: codec.encode,
+						},
+					}}}
+					restarted := newTestModule(t, store, collector)
+					result, err := restarted.Prepare(t.Context(), input)
+					if err != nil {
+						t.Fatal(err)
+					}
+					if collector.collectCount() != 1 || result.Release.Generation != previous.Generation+1 ||
+						result.Release.Compatibility.ContractVersion != ContractVersion {
+						t.Fatalf("stale generation reused: generation=%d calls=%d", result.Release.Generation, collector.collectCount())
+					}
+					if result.Release.Naming.ReleaseName != wantName || result.Release.Media.VideoEncode != codec.encode ||
+						result.Release.Media.VideoCodec != codec.format {
+						t.Fatalf("regenerated name=%q codec=%q encode=%q", result.Release.Naming.ReleaseName, result.Release.Media.VideoCodec, result.Release.Media.VideoEncode)
+					}
+					reused, err := restarted.Prepare(t.Context(), input)
+					if err != nil || reused.Release.Generation != result.Release.Generation || collector.collectCount() != 1 {
+						t.Fatalf("corrected generation not reused: generation=%d calls=%d err=%v", reused.Release.Generation, collector.collectCount(), err)
+					}
+				})
+			}
+		}
+	}
+}

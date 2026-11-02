@@ -1,0 +1,64 @@
+{
+  "scope": "Unchanged source via Node TS stripping,7synthetic controls, not upstream Vitest suite",
+  "results": [
+    {
+      "name": "basic",
+      "args": [
+        "color_red.500",
+        "color_blue.500",
+        "bg_red.500"
+      ],
+      "output": "color_blue.500 bg_red.500"
+    },
+    {
+      "name": "non-atomic-repeat",
+      "args": [
+        "plain",
+        "plain"
+      ],
+      "output": "plain plain"
+    },
+    {
+      "name": "tab-separator",
+      "args": [
+        "color_red\tbg_blue",
+        "color_green"
+      ],
+      "output": "color_green"
+    },
+    {
+      "name": "newline-separator",
+      "args": [
+        "color_red\nbg_blue",
+        "color_green"
+      ],
+      "output": "color_green"
+    },
+    {
+      "name": "slot-repeat",
+      "args": [
+        "slot__one",
+        "slot__one"
+      ],
+      "output": "slot__one slot__one"
+    },
+    {
+      "name": "numeric-keys",
+      "args": [
+        "2_red",
+        "1_blue"
+      ],
+      "output": "1_blue 2_red"
+    },
+    {
+      "name": "state-prefix",
+      "args": [
+        "hover:text_red",
+        "text_green",
+        "hover:text_blue"
+      ],
+      "output": "hover:text_blue text_green"
+    }
+  ],
+  "stderr": "(node:70518) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

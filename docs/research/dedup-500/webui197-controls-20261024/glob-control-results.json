@@ -1,0 +1,8 @@
+{
+  "cases": 2,
+  "scope": "Unchanged original glob/check_same_name AST functions, real pathlib on owned temporary files/directories; no decoder/model.",
+  "findings": [
+    "Glob accepts directory named dir.png; no is_file filter. Later image loading may reject it, so no claim directory decoded successfully.",
+    "Same-stem image pair detected; load_data source explicitly logs overwrite warning and continues. Recursive flag controls nested discovery."
+  ]
+}

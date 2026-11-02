@@ -1,0 +1,32 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v10-20261024.json",
+  "whole_repo_complete": false,
+  "new_read_lines": {
+    "path": "dedup_cpp/xxhash.h",
+    "start": 4101,
+    "end": 5300
+  },
+  "cumulative_header_read_lines": [
+    1,
+    5300
+  ],
+  "header_total_lines": 7487,
+  "whole_header_read": false,
+  "new_runtime_tests": 0,
+  "findings": [
+    "Shortinput64bitpaths0..16,17..128,129..240read. Header explicitly documentsseeddependentmulticollisionlimitfor17..240and noncryptographicrandominputscope. No collision constructed; reinforces need byteconfirmation for exactidentity, not a newlydemonstrated projectcollision.",
+    "NEON Appledefaults8lanes versusnonAppleARM64default6;upstreamM1performancetable notcurrentbenchmark.",
+    "Portable64to128multiply and GCC/Clang/MSVCbranches read; ARM64priorcontrols do notexecuteallfallbacks.",
+    "AVX512/AVX2accumulate/scramble/customsecret andpartialSSE2read; nox86executionorcrossISAparityclaim.",
+    "Longinputstripe64bytes,secretoffsetconsume8bytes,prefetchdistcompilerdependent;no tuningadopted."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "xxhash.h5301..7487",
+    "Abseilsubmodule",
+    "fullnativepipeline"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

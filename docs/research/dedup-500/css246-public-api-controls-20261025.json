@@ -1,0 +1,135 @@
+{
+  "repository": "j9t/css-dedup",
+  "commit": "8cc977d7e49c8f630b2a40bb44b48c7b79b9acd4",
+  "scope": "Unchanged public analyze/dedup with locked PostCSS8.5.28; synthetic CSS, no browser computed-style verification",
+  "results": [
+    {
+      "name": "string-ignore",
+      "input": ".a { color:red } .b { color:red }",
+      "selectors": [
+        ".a",
+        ".b"
+      ],
+      "error": {
+        "name": "TypeError",
+        "message": "Cannot create property 'lastIndex' on string '.a'"
+      }
+    },
+    {
+      "name": "opaque-collision",
+      "input": ".a { font-family: 0; } .b { font-family: undefined; }",
+      "selectors": [
+        ".a",
+        ".b"
+      ],
+      "findings": [
+        {
+          "key": "font-family: undefined",
+          "scope": "root"
+        }
+      ],
+      "output": ".a, .b { font-family: 0; }",
+      "applied": 1,
+      "skipped": 0,
+      "bytes": {
+        "before": 59,
+        "after": 32,
+        "saved": 27
+      }
+    },
+    {
+      "name": "font-family-color",
+      "input": ".a { font-family: red; } .b { font-family: #ff0000; }",
+      "selectors": [
+        ".a",
+        ".b"
+      ],
+      "findings": [
+        {
+          "key": "font-family: #ff0000",
+          "scope": "root"
+        }
+      ],
+      "output": ".a, .b { font-family: red; }",
+      "applied": 1,
+      "skipped": 0,
+      "bytes": {
+        "before": 53,
+        "after": 28,
+        "saved": 25
+      }
+    },
+    {
+      "name": "grid-zero",
+      "input": ".a { grid-template-columns: 0fr; } .b { grid-template-columns: 0; }",
+      "selectors": [
+        ".a",
+        ".b"
+      ],
+      "findings": [
+        {
+          "key": "grid-template-columns: 0",
+          "scope": "root"
+        }
+      ],
+      "output": ".a, .b { grid-template-columns: 0; }",
+      "applied": 1,
+      "skipped": 0,
+      "bytes": {
+        "before": 67,
+        "after": 36,
+        "saved": 31
+      }
+    },
+    {
+      "name": "selector-comment",
+      "input": ".x/*[a=\"1\"]*/ { color:red } .x/*[a=\"2\"]*/ { color:blue } .x/*[a=\"3\"]*/ { color:red }",
+      "selectors": [
+        ".x",
+        ".x",
+        ".x"
+      ],
+      "findings": [
+        {
+          "key": "color: #ff0000",
+          "scope": "root"
+        },
+        {
+          "key": ".x",
+          "scope": "root"
+        }
+      ],
+      "output": ".x/*[a=\"3\"]*/ { color:blue; color:red }",
+      "applied": 3,
+      "skipped": 0,
+      "bytes": {
+        "before": 84,
+        "after": 39,
+        "saved": 45
+      }
+    },
+    {
+      "name": "ordinary-control",
+      "input": ".a { color:red } .b { color:red }",
+      "selectors": [
+        ".a",
+        ".b"
+      ],
+      "findings": [
+        {
+          "key": "color: #ff0000",
+          "scope": "root"
+        }
+      ],
+      "output": ".a, .b { color:red }",
+      "applied": 1,
+      "skipped": 0,
+      "bytes": {
+        "before": 33,
+        "after": 20,
+        "saved": 13
+      }
+    }
+  ],
+  "stderr": ""
+}

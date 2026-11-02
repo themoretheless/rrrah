@@ -1,0 +1,34 @@
+{
+  "argv": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "scan",
+    "--test",
+    "scan_retry",
+    "--test",
+    "scan_cancellation_checkpoints",
+    "--test",
+    "scan_group_publication",
+    "--test",
+    "cache_interpretation",
+    "--test",
+    "cache_reload",
+    "--test",
+    "cache_rla_interpretation"
+  ],
+  "suites": [
+    "scan",
+    "scan_retry",
+    "scan_cancellation_checkpoints",
+    "scan_group_publication",
+    "cache_interpretation",
+    "cache_reload",
+    "cache_rla_interpretation"
+  ]
+}

@@ -1,0 +1,33 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 18.03s
+     Running unittests src/main.rs (target/debug/deps/rrrah-e72ec188da58a5e5)
+
+running 8 tests
+test edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification ... ok
+test edit_store::tests::recovery_compare_exchange_preserves_external_bytes_and_allows_known_owned_revision ... ok
+test edit_store::tests::recovery_refuses_corruption_new_source_and_unknown_version_without_deleting ... ok
+test editor::tests::conflicting_recovery_and_sidecar_are_retained_without_implicit_overwrite ... ok
+test editor::tests::explicit_conflict_choices_update_recovery_but_require_save_for_xmp ... ok
+test editor::tests::foreign_recovery_is_not_overwritten_and_latest_local_draft_is_retained ... ok
+test editor::tests::refused_recovery_or_xmp_never_overwrites_foreign_bytes_and_keeps_latest_draft ... ok
+test editor::tests::refused_recovery_requires_explicit_restart_and_retains_exact_bytes ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 390 filtered out; finished in 0.52s
+

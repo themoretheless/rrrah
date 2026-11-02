@@ -1,0 +1,375 @@
+{
+  "scope": "Fixed guarded1024 CPU kernel in supplied release test binaries; no page/display/GPU inference",
+  "workload": "guarded1024",
+  "timing": "Native Instant interval, excluding process startup; six baseline AA controls interspersed with sixteen alternating AB pairs",
+  "platform": "macOS-26.7.2-arm64-arm-64bit-Mach-O",
+  "repetitions": 128,
+  "complete": true,
+  "executables": {
+    "before": {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-carry-boundary-before-cpu-tests-20261102",
+      "sha256": "fcba4eb45fac2f643626481601eaaa445b48e71505748e6850b7393924e30e68"
+    },
+    "after": {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-carry-boundary-after-cpu-tests-20261102",
+      "sha256": "e32b83fd1ed463743eeaa1a4d2e0d452487a56f838716aeb6fe19d0905c9df5e"
+    }
+  },
+  "calls": [
+    {
+      "variant": "before",
+      "phase": "warmup",
+      "pair": 0,
+      "elapsed_ns": 924046,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "warmup",
+      "pair": 0,
+      "elapsed_ns": 832206,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 0,
+      "elapsed_ns": 905670,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 0,
+      "elapsed_ns": 959753,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 0,
+      "elapsed_ns": 968428,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 0,
+      "elapsed_ns": 797629,
+      "total_work": 19328
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 1,
+      "elapsed_ns": 807751,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 1,
+      "elapsed_ns": 937544,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 2,
+      "elapsed_ns": 929795,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 2,
+      "elapsed_ns": 813419,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 1,
+      "elapsed_ns": 917301,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 1,
+      "elapsed_ns": 888416,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 3,
+      "elapsed_ns": 781338,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 3,
+      "elapsed_ns": 976470,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 4,
+      "elapsed_ns": 916161,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 4,
+      "elapsed_ns": 814961,
+      "total_work": 19328
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 5,
+      "elapsed_ns": 825709,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 5,
+      "elapsed_ns": 938167,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 2,
+      "elapsed_ns": 915540,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 2,
+      "elapsed_ns": 923328,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 6,
+      "elapsed_ns": 920792,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 6,
+      "elapsed_ns": 804288,
+      "total_work": 19328
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 7,
+      "elapsed_ns": 836166,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 7,
+      "elapsed_ns": 913002,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 8,
+      "elapsed_ns": 932505,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 8,
+      "elapsed_ns": 786705,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 3,
+      "elapsed_ns": 908823,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 3,
+      "elapsed_ns": 923832,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 9,
+      "elapsed_ns": 849459,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 9,
+      "elapsed_ns": 905628,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 10,
+      "elapsed_ns": 883836,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 10,
+      "elapsed_ns": 836671,
+      "total_work": 19328
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 11,
+      "elapsed_ns": 801956,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 11,
+      "elapsed_ns": 914208,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 4,
+      "elapsed_ns": 893215,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 4,
+      "elapsed_ns": 904965,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 12,
+      "elapsed_ns": 838337,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 12,
+      "elapsed_ns": 762174,
+      "total_work": 19328
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 13,
+      "elapsed_ns": 823414,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 13,
+      "elapsed_ns": 869251,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 14,
+      "elapsed_ns": 905829,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 14,
+      "elapsed_ns": 769748,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 5,
+      "elapsed_ns": 914177,
+      "total_work": 27008
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 5,
+      "elapsed_ns": 874588,
+      "total_work": 27008
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 15,
+      "elapsed_ns": 769340,
+      "total_work": 19328
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 15,
+      "elapsed_ns": 843867,
+      "total_work": 27008
+    }
+  ],
+  "analysis": {
+    "scope": "Local optimized-test-build elapsed CPU-kernel time; no page/display/GPU claim",
+    "estimator": "Mean paired percentage reduction; deterministic percentile bootstrap, 20000 resamples",
+    "workloads": {
+      "guarded1024": {
+        "control": {
+          "pairs": 6,
+          "mean_percent_reduction": -0.38495373941658345,
+          "median_percent_reduction": -1.0830591395973541,
+          "bootstrap_mean_95_interval": [
+            -2.955473498638409,
+            2.2096093824235847
+          ],
+          "first_median_ns": 911500.0,
+          "second_median_ns": 914146.5
+        },
+        "candidate": {
+          "pairs": 16,
+          "mean_percent_reduction": 11.60918238022098,
+          "median_percent_reduction": 12.13279891826464,
+          "bootstrap_mean_95_interval": [
+            9.639192331597895,
+            13.65734625749415
+          ],
+          "first_median_ns": 915184.5,
+          "second_median_ns": 806019.5
+        }
+      }
+    }
+  },
+  "supports_local_speedup": true,
+  "gate": "Candidate interval strictly positive; AA interval contains zero and its absolute envelope is below candidate lower bound",
+  "log_sha256": "421c8ca2fdba33138647954b92fb1042236078e30151544af152a2d4913cfa85"
+}

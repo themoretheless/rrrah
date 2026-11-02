@@ -1,0 +1,44 @@
+{
+  "index": 342,
+  "repository": "Darkseal/publicize-with-hashtags",
+  "commit": "70ee35bbda2d8426f353c78b76df6836e605ed11",
+  "tracked_blob_count": 4,
+  "whole_file_reads": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/Darkseal--publicize-with-hashtags/remaining-pinned/README.md",
+      "sha256": "294a5e4e8ec30563dee325a42207398dae315bbf982827b74721f34a074758b1",
+      "git_blob_sha1": "5af05a406a28a659f6b460b989df2cd3192abb60"
+    },
+    {
+      "path": "publicize-with-hashtags.php",
+      "local": "docs/research/dedup-500/evidence/Darkseal--publicize-with-hashtags/remaining-pinned/publicize-with-hashtags.php",
+      "sha256": "7ce882d81a4d4daf3d27011e226f89d01d33c4e543d3a52dce17dd95bbce1ee9",
+      "git_blob_sha1": "c2882f937a3b67b37772099aeb54cf515d13c91e"
+    },
+    {
+      "path": "readme.txt",
+      "local": "docs/research/dedup-500/evidence/Darkseal--publicize-with-hashtags/remaining-pinned/readme.txt",
+      "sha256": "780a67929bea943056b14eb345b006373d209373c898b0fa30b06e34df20210b",
+      "git_blob_sha1": "04c55e8f760f158c82035fc1c4115f342e0e0470"
+    }
+  ],
+  "structured_assessments": [
+    {
+      "path": "license.txt",
+      "local": "docs/research/dedup-500/evidence/Darkseal--publicize-with-hashtags/remaining-pinned/license.txt",
+      "sha256": "c03cea027b4b40e4402fabd08557736727ec3d5bc54ad64ab6472de432198cad",
+      "git_blob_sha1": "8cdb8451d9b90c1d4000c6f22eb86471a4568be6",
+      "method": "Header22lines and ending18lines inspected; full blob identity verified, body not manually read."
+    }
+  ],
+  "remaining": [],
+  "full_manual_review": false,
+  "upstream_tests_run": false,
+  "findings": [
+    "Only implementation is a WordPress/Jetpack save_post hashtag appender; no filesystem enumeration, file/image comparison or duplicate library. README and WordPress readme fully read; external screenshot URL not fetched or treated as tracked image.",
+    "Case-insensitive substring stripos is used instead of hashtag token equality: existing #foobar suppresses #foo. ASCII space removal maps distinct labels to same hashtag; strlen measures bytes rather than Unicode/social-message character units. Candidate length guard uses <= and omits separator in sum, and breaks on first too-long candidate rather than trying later shorter tags. Source inspection only; PHP unavailable, no runtime test/install or WordPress mutation performed.",
+    "save_post callback accepts first argument as ignorePostStatus boolean, whereas WordPress hook convention supplies post ID; nonzero ID can bypass intended published-status guard. Host API behavior not executed. Plugin writes _wpas_mess metadata, unrelated to duplicate files. No code adopted.",
+    "license.txt header and ending inspected: GPLv2; body not manually read. Plugin header says GPLv2 or later. License retained as structured assessment, not whole-file credit."
+  ]
+}

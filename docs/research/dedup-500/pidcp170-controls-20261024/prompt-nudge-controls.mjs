@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {PromptStore,PROMPTS,DEFAULT_PROMPTS} from './runtime/lib/prompts/index.ts';
+import {makeNudgeHandler} from './runtime/lib/nudges.ts';
+import {createSessionState} from './runtime/lib/state.ts';
+import {DEFAULT_CONFIG} from './runtime/lib/config.ts';
+const directory=fileURLToPath(new URL('owned-prompt-fixtures/',import.meta.url));
+mkdirSync(directory+'/overrides',{recursive:true});
+writeFileSync(directory+'/overrides/soft-nudge.md','');
+const enabled=new PromptStore({customPromptsEnabled:true,promptsDir:directory});
+assert.equal(enabled.read(PROMPTS.softNudge),'');
+const disabled=new PromptStore({customPromptsEnabled:false,promptsDir:directory});
+assert.equal(disabled.read(PROMPTS.softNudge),DEFAULT_PROMPTS['soft-nudge']);
+writeFileSync(directory+'/overrides/soft-nudge.md','owned changed override');
+assert.equal(enabled.read(PROMPTS.softNudge),'');
+const config=structuredClone(DEFAULT_CONFIG);config.compress.iterationNudgeThreshold=8;
+const state=createSessionState();const handler=makeNudgeHandler(config,state,disabled);
+let count=0;
+const ctx={getContextUsage:()=>({tokens:0,contextWindow:100000}),sessionManager:{getBranch:()=>Array.from({length:count},()=>({type:'message',message:{role:'assistant',content:[]}}))}};
+const observations=[];
+for(count=8;count<=80;count+=8){const result=await handler({systemPrompt:'owned base'},ctx);observations.push({nonUserMessages:count,fired:result!==undefined,lastIterationNudgeAt:state.lastIterationNudgeAt});}
+assert(observations.slice(0,8).every(x=>x.fired));assert(observations.slice(8).every(x=>!x.fired));
+const result={scope:'Original PromptStore/nudge/config/state modules, actual filesystem only under explicit owned promptsDir; no user prompts/config or live agent system-prompt modification',authored_controls_run:4,observations:['enabled empty override returns empty string despite nonempty read() comment','disabled overrides use original built-in default','existing PromptStore keeps cached empty override after disk edit',{case:'iteration scan cap freezes count at64 and no longer fires at72 or80 assistant-only messages',runs:observations}]};
+writeFileSync(new URL('prompt-nudge-results.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));

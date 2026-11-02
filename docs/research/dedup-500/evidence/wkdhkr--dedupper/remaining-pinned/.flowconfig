@@ -1,0 +1,12 @@
+[ignore]
+.*/poseNet/demo_util.js
+.*/dist/*
+flow-typed
+bin/*
+./index.js
+[lints]
+#deprecated-call-syntax=off
+[options]
+module.system.node.resolve_dirname=./src
+module.system.node.resolve_dirname=node_modules
+server.max_workers=1

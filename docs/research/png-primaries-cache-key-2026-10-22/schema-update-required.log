@@ -1,0 +1,163 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12256:38
+      |
+12256 |         assert!(cache.insert_visible(old.clone(), make()));
+      |                       -------------- ^^^^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |                       |
+      |                       arguments to this method are incorrect
+      |
+      = note: expected tuple `(..., u64, u128, [u8; 32], usize, ..., bool, bool, bool, ..., ..., ...)`
+                 found tuple `(..., {integer}, {integer}, [{integer}; 32], {integer}, ..., bool, bool, bool, ..., ..., ...)`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:193:12
+      |
+  193 |     pub fn insert_visible(&mut self, key: K, raster: DecodedRaster) -> bool {
+      |            ^^^^^^^^^^^^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-14880200725566422972.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12257:30
+      |
+12257 |         assert!(cache.insert(neighbour.clone(), make()));
+      |                       ------ ^^^^^^^^^^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |                       |
+      |                       arguments to this method are incorrect
+      |
+      = note: expected tuple `(..., u64, u128, [u8; 32], usize, ..., bool, bool, bool, ..., ..., ...)`
+                 found tuple `(..., {integer}, {integer}, [{integer}; 32], {integer}, ..., bool, bool, bool, ..., ..., ...)`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:164:12
+      |
+  164 |     pub fn insert(&mut self, key: K, raster: DecodedRaster) -> bool {
+      |            ^^^^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-14880200725566422972.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12282:27
+      |
+12282 |         assert!(cache.get(&old).is_some());
+      |                       --- ^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |                       |
+      |                       arguments to this method are incorrect
+      |
+      = note: expected reference `&...`
+                 found reference `&...`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:33:12
+      |
+   33 |     pub fn get(&mut self, key: &K) -> Option<DecodedRaster> {
+      |            ^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-9187010789145154451.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12283:27
+      |
+12283 |         assert!(cache.get(&neighbour).is_none());
+      |                       --- ^^^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |                       |
+      |                       arguments to this method are incorrect
+      |
+      = note: expected reference `&...`
+                 found reference `&...`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:33:12
+      |
+   33 |     pub fn get(&mut self, key: &K) -> Option<DecodedRaster> {
+      |            ^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-12953297875727861730.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12340:30
+      |
+12340 |         cache.insert_visible(visible.clone(), make(1));
+      |               -------------- ^^^^^^^^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |               |
+      |               arguments to this method are incorrect
+      |
+      = note: expected tuple `(..., u64, u128, [u8; 32], usize, ..., bool, bool, bool, ..., ..., ...)`
+                 found tuple `(..., {integer}, {integer}, [{integer}; 32], {integer}, ..., bool, bool, bool, ..., ..., ...)`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:193:12
+      |
+  193 |     pub fn insert_visible(&mut self, key: K, raster: DecodedRaster) -> bool {
+      |            ^^^^^^^^^^^^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-14880200725566422972.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12341:22
+      |
+12341 |         cache.insert(neighbour.clone(), make(neighbour_pixels));
+      |               ------ ^^^^^^^^^^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |               |
+      |               arguments to this method are incorrect
+      |
+      = note: expected tuple `(..., u64, u128, [u8; 32], usize, ..., bool, bool, bool, ..., ..., ...)`
+                 found tuple `(..., {integer}, {integer}, [{integer}; 32], {integer}, ..., bool, bool, bool, ..., ..., ...)`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:164:12
+      |
+  164 |     pub fn insert(&mut self, key: K, raster: DecodedRaster) -> bool {
+      |            ^^^^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-14880200725566422972.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12351:27
+      |
+12351 |         assert!(cache.get(&visible).is_some());
+      |                       --- ^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |                       |
+      |                       arguments to this method are incorrect
+      |
+      = note: expected reference `&...`
+                 found reference `&...`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:33:12
+      |
+   33 |     pub fn get(&mut self, key: &K) -> Option<DecodedRaster> {
+      |            ^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-6290039070000649790.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+error[E0308]: mismatched types
+     --> crates/rrrah-app/src/main.rs:12352:27
+      |
+12352 |         assert!(cache.get(&neighbour).is_none());
+      |                       --- ^^^^^^^^^^ expected a tuple with 6 elements, found one with 5 elements
+      |                       |
+      |                       arguments to this method are incorrect
+      |
+      = note: expected reference `&...`
+                 found reference `&...`
+note: method defined here
+     --> crates/rrrah-cache/src/raster_ram.rs:33:12
+      |
+   33 |     pub fn get(&mut self, key: &K) -> Option<DecodedRaster> {
+      |            ^^^
+      = note: the full name for the type has been written to '/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-16127a5d050f7d92.long-type-943807574601266898.txt'
+      = note: consider using `--verbose` to print the full type name to the console
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `rrrah` (bin "rrrah" test) due to 8 previous errors

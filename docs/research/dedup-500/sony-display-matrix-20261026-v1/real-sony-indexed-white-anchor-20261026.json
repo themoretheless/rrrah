@@ -1,0 +1,89 @@
+{
+  "exit_code": 0,
+  "seconds": 25.530054959002882,
+  "binary_sha256": "3d3991888c640072533dc75c1f507ddb4c13052fb89f4468942e32ca08b2eb75",
+  "source_sha256": "bafba4d012699938f4ce83ccd7dc46ee93cda1ecafb477e9c21463c6f25cb5e5",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+  },
+  "inputs_and_binary_stable": true,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-indexed-white-anchor-20261026.log",
+  "log_sha256": "88ad3fc1da8fa83958cfd0df470e92ab45e6dfc6e63b00989d47f92bf9535e39",
+  "pairs": [
+    {
+      "left": 1,
+      "right": 2,
+      "candidate": true,
+      "geometry": true,
+      "projected_agreement": [
+        0.9863411666666667,
+        0.9864285203537381
+      ],
+      "pair_control_pixel_counts_equal": true,
+      "pair_control_log_sha256": "e982515e4002e31ede5af884e87d429946da2e0433126e2f386deb5062c7067a"
+    },
+    {
+      "left": 1,
+      "right": 3,
+      "candidate": false,
+      "geometry": false
+    },
+    {
+      "left": 1,
+      "right": 4,
+      "candidate": false,
+      "geometry": false
+    },
+    {
+      "left": 2,
+      "right": 3,
+      "candidate": false,
+      "geometry": false
+    },
+    {
+      "left": 2,
+      "right": 4,
+      "candidate": false,
+      "geometry": false
+    },
+    {
+      "left": 3,
+      "right": 4,
+      "candidate": true,
+      "geometry": true,
+      "projected_agreement": [
+        0.9517172916666666,
+        0.951994420508881
+      ],
+      "pair_control_pixel_counts_equal": true,
+      "pair_control_log_sha256": "dc5c313ffc7138e5f33022c0115343ff5424eb092a500acf1c77e6b10168bd97"
+    }
+  ],
+  "expected_candidates": [
+    [
+      1,
+      2
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "managed_released": true,
+  "issues_empty": true,
+  "index": {
+    "indexed_features": 1983,
+    "descriptor_hits": 1183325,
+    "proposed_pairs": 6,
+    "pixel_verification_pairs": 2
+  },
+  "scope": "Four-file Sony RAW/independent linear TIFF spatial indexed collection, explicit Bilinear recipe and WhiteAnchoredDisplay mode. Expected two matching pairs among all six possible pairs.",
+  "limitations": [
+    "Two scenes only; not corpus-wide recall or false-positive precision.",
+    "All cross-scene negatives lacked geometry; does not qualify photometric rejection with valid geometry.",
+    "Stored pair controls used an earlier binary; exact pixel count parity is observed output evidence, not frozen same-binary A/B qualification."
+  ]
+}

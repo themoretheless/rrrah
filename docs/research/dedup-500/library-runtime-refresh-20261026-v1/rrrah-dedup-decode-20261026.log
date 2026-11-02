@@ -1,0 +1,91 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9m 50s
+     Running tests/animated.rs (target/debug/deps/animated-3873ea0f9a22e283)
+
+running 7 tests
+test changed_gif_timing_prevents_whole_animation_equality ... ok
+test gif_disposal_modes_match_independently_composited_full_canvas_apng ... ok
+test complete_existing_composition_fixtures_decode_and_compare ... ok
+test independent_cross_container_timeline_splits_and_negatives ... ok
+test every_observed_animation_cancellation_checkpoint_releases_and_allows_retry ... ok
+test every_apng_truncation_and_crc_damage_refuses_without_leaking_then_retries ... ok
+test every_gif_and_webp_truncation_refuses_releases_memory_and_recovers ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.46s
+
+     Running tests/container.rs (target/debug/deps/container-e984367c8902a665)
+
+running 14 tests
+test exhaustive_scan_does_not_filter_on_zero_duration_first_frame ... ok
+test selected_frame_does_not_establish_whole_animation_identity ... ok
+test dcx_icon_and_cursor_page_modes_use_existing_full_decoders ... ok
+test generation_change_at_final_group_admission_returns_no_result ... ok
+test recursive_complete_animation_groups_preserve_paths_aliases_and_errors ... ok
+test batch_full_presentations_preserve_negative_and_error_evidence ... ok
+test automatic_directory_search_groups_renamed_containers_and_retains_detection_failures ... ok
+test complete_animation_groups_remove_stale_edges_and_keep_healthy_group ... ok
+test complete_page_comparison_rejects_last_page_changes_and_limits ... ok
+test indexed_recursive_corrupt_animation_is_inconclusive_and_preserves_healthy_edges ... ok
+test indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges ... ok
+test indexed_recursive_source_change_removes_stale_edges_and_retry_restores_them ... ok
+test mixed_recursive_indexed_presentations_cover_all_three_scope_classes ... ok
+test indexed_recursive_modes_retain_labelled_groups_with_candidate_only_budget ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.35s
+
+     Running tests/decode.rs (target/debug/deps/decode-af998c6eb90c5bee)
+
+running 17 tests
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... ok
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... ok
+test undecodable_files_keep_exact_identity_before_and_after_decode_errors ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test cached_wal_tracks_external_palette_changes_and_removal ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+test actual_pfm_retains_hdr_precision_and_refuses_nonfinite_samples ... ok
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... ok
+test memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.32s
+
+     Running tests/pages.rs (target/debug/deps/pages-2f2925b1bc8a0bcb)
+
+running 11 tests
+test untagged_tiff_requires_explicit_color_transform ... ok
+test all_dcx_pages_and_changed_second_page_are_compared ... ok
+test cursor_hotspot_and_invalid_resource_offsets_are_not_ignored ... ok
+test every_icon_resource_is_compared_including_the_last ... ok
+test complete_tiff_pages_with_icc_detect_last_page_changes_and_cycles ... ok
+test selected_tiff_pages_use_their_own_profile_and_keep_complete_count ... ok
+test identical_tiff_samples_with_different_page_profiles_produce_distinct_colors ... ok
+test selected_tiff_budget_refusals_release_metadata_and_allow_retry ... ok
+test independent_tiff_precision_and_orientation_are_preserved ... ok
+test public_selected_frame_honors_tiff_page_profiles_metadata_and_explicit_limits ... ok
+test independently_encoded_tiff_endian_bigtiff_and_compression_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+

@@ -1,0 +1,128 @@
+{
+  "repository": "CoLRev-Environment/bib-dedupe",
+  "scope": "Original three parametrized test function bodies with original15 literal argument rows and original corresponding functions. Standard library only. No pytest collection, full package, rapidfuzz or pandas runtime.",
+  "passed": 15,
+  "failed": 0,
+  "callbacks": [
+    {
+      "name": "test_sim_year",
+      "args": [
+        "2000",
+        "2000",
+        1.0
+      ]
+    },
+    {
+      "name": "test_sim_year",
+      "args": [
+        "2000",
+        "2001",
+        0.95
+      ]
+    },
+    {
+      "name": "test_sim_year",
+      "args": [
+        "2000",
+        "2002",
+        0.8
+      ]
+    },
+    {
+      "name": "test_sim_year",
+      "args": [
+        "2000",
+        "2003",
+        0.0
+      ]
+    },
+    {
+      "name": "test_sim_year",
+      "args": [
+        "asdf",
+        "2023",
+        0.0
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "1-10",
+        "11-20",
+        "adjacent"
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "1-10",
+        "1-10",
+        ""
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "417-429",
+        "29",
+        ""
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "707-715",
+        "716-723",
+        "adjacent"
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "369-390",
+        "351-368",
+        "adjacent"
+      ]
+    },
+    {
+      "name": "test_page_ranges_adjacent",
+      "args": [
+        "1-10",
+        "20-30",
+        "non_overlapping"
+      ]
+    },
+    {
+      "name": "test_sim_volume",
+      "args": [
+        "1",
+        "1",
+        1.0
+      ]
+    },
+    {
+      "name": "test_sim_volume",
+      "args": [
+        "1",
+        "2",
+        0.0
+      ]
+    },
+    {
+      "name": "test_sim_volume",
+      "args": [
+        "",
+        "",
+        0.0
+      ]
+    }
+  ]
+}

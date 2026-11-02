@@ -1,0 +1,1588 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package data
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"image"
+	_ "image/gif"  // register GIF decoder for tracker images
+	_ "image/jpeg" // register JPEG decoder for tracker images
+	_ "image/png"  // register PNG decoder for tracker images
+	"io"
+	"net"
+	"net/http"
+	"net/netip"
+	"net/url"
+	"path" //nolint:depguard // Builds Unit3D API URL paths, not local filesystem paths.
+	"slices"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/autobrr/rls"
+	_ "golang.org/x/image/webp" // register WebP decoder for tracker images
+	xhtml "golang.org/x/net/html"
+
+	"github.com/autobrr/upbrr/internal/bbcode"
+	"github.com/autobrr/upbrr/internal/config"
+	descriptionunit3d "github.com/autobrr/upbrr/internal/description/unit3d"
+	imagehost "github.com/autobrr/upbrr/internal/imagehosting/host"
+	"github.com/autobrr/upbrr/internal/logging"
+	"github.com/autobrr/upbrr/internal/mediafacts"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/internal/trackers/dupe"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+const (
+	imageTimeout      = 15 * time.Second
+	maxImageBytes     = 20 * 1024 * 1024
+	maxImagePageBytes = 1 * 1024 * 1024
+	imageConcurrency  = 5
+	unit3DUserAgent   = "upbrr"
+)
+
+var unit3DImageBlockedIPRanges = []netip.Prefix{
+	netip.MustParsePrefix("0.0.0.0/8"),
+	netip.MustParsePrefix("100.64.0.0/10"),
+	netip.MustParsePrefix("192.0.0.0/24"),
+	netip.MustParsePrefix("192.0.2.0/24"),
+	netip.MustParsePrefix("198.18.0.0/15"),
+	netip.MustParsePrefix("198.51.100.0/24"),
+	netip.MustParsePrefix("203.0.113.0/24"),
+	netip.MustParsePrefix("240.0.0.0/4"),
+	netip.MustParsePrefix("2001:db8::/32"),
+	netip.MustParsePrefix("fc00::/7"),
+	netip.MustParsePrefix("fe80::/10"),
+}
+
+var unit3DCategoryNamesByID = map[string][]string{
+	"1": {"MOVIE"},
+	"2": {"TV"},
+}
+
+var unit3DTypeNamesByID = map[string][]string{
+	"1": {"DISC"},
+	"2": {"REMUX"},
+	"3": {"ENCODE", "DVDRIP"},
+	"4": {"WEBDL"},
+	"5": {"WEBRIP"},
+	"6": {"HDTV"},
+}
+
+var unit3DResolutionNamesByID = map[string][]string{
+	"10": {"8640P"},
+	"1":  {"4320P"},
+	"2":  {"2160P"},
+	"3":  {"1080P", "1440P"},
+	"4":  {"1080I"},
+	"5":  {"720P"},
+	"6":  {"576P"},
+	"7":  {"576I"},
+	"8":  {"480P"},
+	"9":  {"480I"},
+}
+
+// CategoryID returns the Unit3D category ID for a canonical category name.
+func CategoryID(category string) string {
+	return reverseLookupCanonicalID(CanonicalUnit3DCategory(category), unit3DCategoryNamesByID)
+}
+
+// TypeID returns the Unit3D type ID for a canonical type name.
+func TypeID(typeValue string) string {
+	return reverseLookupCanonicalID(CanonicalUnit3DType(typeValue), unit3DTypeNamesByID)
+}
+
+// ResolutionID returns the Unit3D resolution ID for a canonical resolution name.
+func ResolutionID(value string) string {
+	return reverseLookupCanonicalID(CanonicalUnit3DResolution(value), unit3DResolutionNamesByID)
+}
+
+// CategoryName returns the preferred category name for a Unit3D ID.
+func CategoryName(id string) string {
+	return firstCanonicalValue(CategoryNames(id))
+}
+
+// CategoryNames returns all known category names for a Unit3D ID.
+func CategoryNames(id string) []string {
+	return copyCanonicalValues(unit3DCategoryNamesByID[strings.TrimSpace(id)])
+}
+
+// TypeName returns the preferred type name for a Unit3D ID.
+func TypeName(id string) string {
+	return firstCanonicalValue(TypeNames(id))
+}
+
+// TypeNames returns all known type names for a Unit3D ID.
+func TypeNames(id string) []string {
+	return copyCanonicalValues(unit3DTypeNamesByID[strings.TrimSpace(id)])
+}
+
+// ResolutionName returns the preferred resolution name for a Unit3D ID.
+func ResolutionName(id string) string {
+	return firstCanonicalValue(ResolutionNames(id))
+}
+
+// ResolutionNames returns all known resolution names for a Unit3D ID.
+func ResolutionNames(id string) []string {
+	return copyCanonicalValues(unit3DResolutionNamesByID[strings.TrimSpace(id)])
+}
+
+// CanonicalUnit3DCategory normalizes a Unit3D category name or ID.
+func CanonicalUnit3DCategory(value string) string {
+	switch normalizeUnit3DLookupKey(value) {
+	case "MOVIE", "FILM":
+		return "MOVIE"
+	case "TV", "TELEVISION", "SHOW", "SERIES", "TVSHOW", "EPISODE":
+		return "TV"
+	default:
+		return ""
+	}
+}
+
+// CanonicalUnit3DType normalizes a Unit3D type name or ID.
+func CanonicalUnit3DType(value string) string {
+	switch normalizeUnit3DLookupKey(value) {
+	case "DISC":
+		return "DISC"
+	case "REMUX":
+		return "REMUX"
+	case "ENCODE":
+		return "ENCODE"
+	case "DVDRIP":
+		return "DVDRIP"
+	case "WEBDL":
+		return "WEBDL"
+	case "WEBRIP":
+		return "WEBRIP"
+	case "HDTV", "UHDTV":
+		return "HDTV"
+	default:
+		return ""
+	}
+}
+
+// CanonicalUnit3DResolution normalizes a Unit3D resolution name or ID.
+func CanonicalUnit3DResolution(value string) string {
+	switch normalizeUnit3DLookupKey(value) {
+	case "8640P":
+		return "8640P"
+	case "4320P":
+		return "4320P"
+	case "2160P":
+		return "2160P"
+	case "1440P":
+		return "1440P"
+	case "1080P":
+		return "1080P"
+	case "1080I":
+		return "1080I"
+	case "720P":
+		return "720P"
+	case "576P":
+		return "576P"
+	case "576I":
+		return "576I"
+	case "480P":
+		return "480P"
+	case "480I":
+		return "480I"
+	default:
+		return ""
+	}
+}
+
+func normalizeUnit3DLookupKey(value string) string {
+	return strings.NewReplacer("-", "", "_", "", " ", "").Replace(strings.ToUpper(strings.TrimSpace(value)))
+}
+
+func reverseLookupCanonicalID(canonical string, namesByID map[string][]string) string {
+	if canonical == "" {
+		return ""
+	}
+	for id, names := range namesByID {
+		if slices.Contains(names, canonical) {
+			return id
+		}
+	}
+	return ""
+}
+
+func firstCanonicalValue(values []string) string {
+	if len(values) == 0 {
+		return ""
+	}
+	return values[0]
+}
+
+func copyCanonicalValues(values []string) []string {
+	if len(values) == 0 {
+		return nil
+	}
+	return append([]string{}, values...)
+}
+
+// TrackerAPIKey returns the configured API key for a Unit3D tracker.
+func TrackerAPIKey(cfg config.Config, tracker string) string {
+	key := strings.ToUpper(strings.TrimSpace(tracker))
+	if key == "" {
+		return ""
+	}
+	if entry, ok := cfg.Trackers.Trackers[key]; ok {
+		return strings.TrimSpace(entry.APIKey)
+	}
+	if entry, ok := cfg.Trackers.Trackers[strings.ToLower(key)]; ok {
+		return strings.TrimSpace(entry.APIKey)
+	}
+	for name, entry := range cfg.Trackers.Trackers {
+		if strings.EqualFold(name, key) {
+			return strings.TrimSpace(entry.APIKey)
+		}
+	}
+	return ""
+}
+
+// TorrentInfo fetches by tracker ID or, when absent, filename. No-match and
+// not-found responses return an empty result without error; other HTTP failures
+// return an error. onlyID skips cleaned description text; keepImages enables
+// bounded public-image validation. Image failures retain any identifiers,
+// description, and usable images alongside the error.
+func (c *Client) TorrentInfo(ctx context.Context, tracker string, id string, fileName string, onlyID bool, keepImages bool) (Result, error) {
+	return c.lookupUnit3D(ctx, tracker, id, fileName, onlyID, keepImages)
+}
+
+func (c *Client) lookupUnit3D(ctx context.Context, tracker string, id string, fileName string, onlyID bool, keepImages bool) (Result, error) {
+	logger := logging.FromContext(ctx, c.logger)
+
+	baseURL, ok := baseURLForTrackerWithConfig(c.cfg, c.registry, tracker)
+	if !ok {
+		return Result{}, fmt.Errorf("unit3d: unknown tracker %q", tracker)
+	}
+
+	apiKey := strings.TrimSpace(TrackerAPIKey(c.cfg, tracker))
+	params := url.Values{}
+	if apiKey == "" {
+		logger.Debugf("unit3d: %s missing API key; request will be unauthenticated", tracker)
+	}
+
+	var endpoint string
+	switch {
+	case strings.TrimSpace(id) != "":
+		endpoint = baseURL + "/api/torrents/" + strings.TrimSpace(id)
+	case strings.TrimSpace(fileName) != "":
+		endpoint = baseURL + "/api/torrents/filter"
+		params.Set("file_name", fileName)
+	default:
+		return Result{}, nil
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return Result{}, fmt.Errorf("unit3d: request: %w", err)
+	}
+	if len(params) > 0 {
+		req.URL.RawQuery = params.Encode()
+	}
+	SetUnit3DAPIHeaders(req, apiKey)
+
+	resp, err := c.http.Do(req)
+	if err != nil {
+		return Result{}, fmt.Errorf("unit3d: request: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == http.StatusNotFound {
+		return Result{}, nil
+	}
+	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+		return Result{}, fmt.Errorf("unit3d: request failed status=%d", resp.StatusCode)
+	}
+
+	var payload unit3dResponse
+	if err := json.NewDecoder(resp.Body).Decode(&payload); err != nil {
+		return Result{}, fmt.Errorf("unit3d: decode: %w", err)
+	}
+	attrs := payload.extractAttributes(strings.TrimSpace(id) != "")
+	if attrs == nil {
+		logger.Debugf("unit3d: %s response contained no attributes (id=%q file=%q)", tracker, strings.TrimSpace(id), strings.TrimSpace(fileName))
+		return Result{}, nil
+	}
+
+	result := Result{
+		TrackerID: strings.TrimSpace(id),
+		TMDBID:    attrs.tmdbID,
+		IMDBID:    attrs.imdbID,
+		TVDBID:    attrs.tvdbID,
+		MALID:     attrs.malID,
+		Category:  strings.TrimSpace(attrs.category),
+		InfoHash:  strings.TrimSpace(attrs.infoHash),
+		FileName:  attrs.fileName,
+	}
+	if attrs.id != "" && result.TrackerID == "" {
+		result.TrackerID = attrs.id
+	}
+	if result.TrackerID != "" && !attrs.ambiguous && (attrs.id == "" || attrs.id == result.TrackerID) {
+		result.TorrentURL = baseURL + "/torrents/" + url.PathEscape(result.TrackerID)
+	}
+
+	description := strings.TrimSpace(attrs.description)
+	if description == "" {
+		return result, nil
+	}
+	reports := make([]descriptionunit3d.Report, 0, 2)
+	cleaned := ""
+	if !onlyID {
+		report := descriptionunit3d.CleanDescriptionBody(description, baseURL)
+		reports = append(reports, report)
+		cleaned = report.Description
+	}
+	images := []bbcode.Image(nil)
+	if keepImages {
+		report := descriptionunit3d.CleanDescriptionImages(description, baseURL)
+		reports = append(reports, report)
+		images = convertCleanedUnit3DImages(report.Images)
+	}
+	cleanedLen := len(cleaned)
+	imageCount := len(images)
+	validated := []bbcode.Image(nil)
+	var imageErr error
+	if keepImages {
+		validated, imageErr = PrepareDescriptionImages(ctx, c.http, tracker, logger, images)
+		images = validated
+	} else {
+		images = nil
+	}
+	result.Description = cleaned
+	result.Images = images
+	result.Validated = validated
+	validatedCount := 0
+	for _, image := range validated {
+		if image.RawURL != "" {
+			validatedCount++
+		}
+	}
+	logger.Debugf(
+		"unit3d: %s description raw=%d cleaned=%d images=%d validated=%d onlyID=%t keepImages=%t",
+		tracker,
+		len(description),
+		cleanedLen,
+		imageCount,
+		validatedCount,
+		onlyID,
+		keepImages,
+	)
+	for _, report := range reports {
+		for _, note := range report.Notes {
+			logger.Debugf("unit3d: %s description note kind=%s msg=%s", tracker, note.Kind, note.Message)
+		}
+	}
+
+	return result, imageErr
+}
+
+// PrepareDescriptionImages resolves supported linked originals and validates
+// public image responses while preserving the positions of surviving images.
+// Dropped nonempty entries return an error alongside any usable images;
+// cancellation preserves its context cause. An empty image list succeeds.
+func PrepareDescriptionImages(ctx context.Context, client *http.Client, tracker string, logger api.Logger, images []bbcode.Image) ([]bbcode.Image, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, fmt.Errorf("trackerdata: image preparation canceled: %w", err)
+	}
+	expected := 0
+	for _, image := range images {
+		if image != (bbcode.Image{}) {
+			expected++
+		}
+	}
+	if logger == nil {
+		logger = api.NopLogger{}
+	}
+	safeClient := Unit3DImageHTTPClient(client)
+	images = resolveImgBBImages(ctx, safeClient, tracker, logger, images)
+	for index := range images {
+		if imagehost.IsWsrvProxyURL(images[index].ImgURL) {
+			images[index].ImgURL = images[index].RawURL
+		}
+		if imagehost.IsWsrvProxyURL(images[index].WebURL) {
+			images[index].WebURL = images[index].RawURL
+		}
+	}
+	validated := validateImages(ctx, safeClient, images, tracker, logger)
+	if err := ctx.Err(); err != nil {
+		return validated, fmt.Errorf("trackerdata: image preparation canceled: %w", err)
+	}
+	for _, image := range validated {
+		if image != (bbcode.Image{}) {
+			expected--
+		}
+	}
+	if expected != 0 {
+		return validated, errors.New("trackerdata: description image preparation failed")
+	}
+	return validated, nil
+}
+
+func convertCleanedUnit3DImages(images []descriptionunit3d.Image) []bbcode.Image {
+	if len(images) == 0 {
+		return nil
+	}
+	converted := make([]bbcode.Image, 0, len(images))
+	for _, image := range images {
+		converted = append(converted, bbcode.Image{
+			ImgURL: image.ImgURL,
+			RawURL: image.RawURL,
+			WebURL: image.WebURL,
+			Host:   image.Host,
+		})
+	}
+	return converted
+}
+
+// resolveImgBBImages replaces viewer links with full image URLs. If lookup
+// fails, an existing direct image remains usable while thumbnail-only entries
+// are discarded.
+func resolveImgBBImages(ctx context.Context, client *http.Client, tracker string, logger api.Logger, images []bbcode.Image) []bbcode.Image {
+	safeClient := Unit3DImageHTTPClient(client)
+	for index := range images {
+		pageURL := images[index].WebURL
+		if !isImgBBPageURL(pageURL) {
+			pageURL = imagehost.WsrvSourceURL(pageURL)
+		}
+		if !isImgBBPageURL(pageURL) {
+			pageURL = imagehost.WsrvSourceURL(images[index].ImgURL)
+		}
+		if !isImgBBPageURL(pageURL) {
+			continue
+		}
+		pageCtx, cancel := context.WithTimeout(ctx, imageTimeout)
+		fullURL, reason := fetchImgBBFullImageURL(pageCtx, safeClient, pageURL)
+		cancel()
+		if reason != "" {
+			if isImgBBDirectImageURL(images[index].RawURL) {
+				logger.Debugf(
+					"trackerdata: linked image tracker=%s index=%d host=imgbb full_image_lookup=%s decision=validate_direct_image",
+					tracker, index+1, reason,
+				)
+				continue
+			}
+			logger.Debugf("trackerdata: linked image tracker=%s index=%d host=imgbb full_image_lookup=%s decision=skip_thumbnail", tracker, index+1, reason)
+			images[index] = bbcode.Image{}
+			continue
+		}
+		images[index].RawURL = fullURL
+		images[index].Host = imagehost.ExtractHost(fullURL)
+		logger.Debugf("trackerdata: linked image tracker=%s index=%d host=imgbb full_image_lookup=resolved", tracker, index+1)
+	}
+	return images
+}
+
+func isImgBBPageURL(rawURL string) bool {
+	parsed, err := url.Parse(strings.TrimSpace(rawURL))
+	if err != nil || parsed.Scheme != "https" || parsed.Port() != "" || parsed.User != nil {
+		return false
+	}
+	host := strings.ToLower(parsed.Hostname())
+	return host == "ibb.co" || host == "www.ibb.co"
+}
+
+func isImgBBDirectImageURL(rawURL string) bool {
+	parsed, err := url.Parse(strings.TrimSpace(rawURL))
+	if err != nil || parsed.Scheme != "https" || parsed.Port() != "" || parsed.User != nil ||
+		!strings.EqualFold(parsed.Hostname(), "i.ibb.co") {
+		return false
+	}
+	name := strings.ToLower(path.Base(parsed.Path))
+	return name != "" && name != "." && name != "/" && !strings.Contains(name, "thumb") &&
+		!strings.Contains(strings.ToLower(parsed.Path), "/thumbs/")
+}
+
+// fetchImgBBFullImageURL reads a bounded, validated viewer page and returns
+// its full image URL or a URL-free reason suitable for diagnostic logging.
+func fetchImgBBFullImageURL(ctx context.Context, client *http.Client, webURL string) (string, string) {
+	if err := ValidateUnit3DImageURL(ctx, webURL); err != nil {
+		return "", "invalid_or_nonpublic_page_url"
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, webURL, nil)
+	if err != nil {
+		return "", "invalid_page_request"
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", "page_request_failed"
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Sprintf("http_status_%d", resp.StatusCode)
+	}
+	if resp.ContentLength > maxImagePageBytes {
+		return "", "page_too_large"
+	}
+	page, err := io.ReadAll(io.LimitReader(resp.Body, maxImagePageBytes+1))
+	if err != nil {
+		return "", "page_read_failed"
+	}
+	if len(page) > maxImagePageBytes {
+		return "", "page_too_large"
+	}
+	fullURL := imgBBFullImageURL(page, webURL)
+	if fullURL == "" {
+		return "", "full_image_not_found"
+	}
+	return fullURL, ""
+}
+
+// imgBBFullImageURL extracts a direct ImgBB image from page metadata,
+// preferring og:image over an image_src link.
+func imgBBFullImageURL(page []byte, viewerURL string) string {
+	viewer, err := url.Parse(viewerURL)
+	if err != nil {
+		return ""
+	}
+	tokenizer := xhtml.NewTokenizer(bytes.NewReader(page))
+	linkedImage := ""
+	for {
+		kind := tokenizer.Next()
+		if kind == xhtml.ErrorToken {
+			return linkedImage
+		}
+		if kind != xhtml.StartTagToken && kind != xhtml.SelfClosingTagToken {
+			continue
+		}
+		tag := tokenizer.Token()
+		if !strings.EqualFold(tag.Data, "meta") && !strings.EqualFold(tag.Data, "link") {
+			continue
+		}
+		property, content, rel, href := "", "", "", ""
+		for _, attr := range tag.Attr {
+			switch strings.ToLower(attr.Key) {
+			case "property":
+				property = attr.Val
+			case "content":
+				content = strings.TrimSpace(attr.Val)
+			case "rel":
+				rel = attr.Val
+			case "href":
+				href = strings.TrimSpace(attr.Val)
+			}
+		}
+		isOpenGraph := strings.EqualFold(tag.Data, "meta") && strings.EqualFold(property, "og:image")
+		isImageSource := strings.EqualFold(tag.Data, "link") && strings.EqualFold(rel, "image_src")
+		if !isOpenGraph && !isImageSource {
+			continue
+		}
+		candidate := content
+		if isImageSource {
+			candidate = href
+		}
+		parsed, err := url.Parse(candidate)
+		if err != nil {
+			continue
+		}
+		parsed = viewer.ResolveReference(parsed)
+		if parsed.Scheme != "https" || !strings.EqualFold(parsed.Hostname(), "i.ibb.co") || parsed.Port() != "" || parsed.User != nil {
+			continue
+		}
+		if isOpenGraph {
+			return parsed.String()
+		}
+		if linkedImage == "" {
+			linkedImage = parsed.String()
+		}
+	}
+}
+
+// SearchTorrents returns normalized duplicate candidates in provider order.
+// Non-success responses become a caller-visible warning rather than an error;
+// CBR also appends matching pending uploads.
+func (c *Client) SearchTorrents(ctx context.Context, tracker string, params url.Values, isDisc bool) ([]api.DupeEntry, string, error) {
+	result, err := c.SearchTorrentsWithEvidence(ctx, tracker, params, isDisc)
+	return result.Entries, result.Warning, err
+}
+
+// Unit3DSearchResult retains pagination completion evidence with normalized entries.
+type Unit3DSearchResult struct {
+	Entries        []api.DupeEntry
+	Warning        string
+	Complete       bool
+	Pages          int
+	WrongWorkCount int
+}
+
+// SearchTorrentsWithEvidence consumes every advertised page up to a bounded
+// limit and reports whether the result set is complete.
+func (c *Client) SearchTorrentsWithEvidence(
+	ctx context.Context,
+	tracker string,
+	params url.Values,
+	isDisc bool,
+) (Unit3DSearchResult, error) {
+	return c.SearchTorrentsWithEvidenceBound(ctx, tracker, params, isDisc, 100)
+}
+
+// SearchTorrentsWithEvidenceBound consumes every page advertised by a
+// same-origin continuation link, up to the policy-supplied bound.
+func (c *Client) SearchTorrentsWithEvidenceBound(
+	ctx context.Context,
+	tracker string,
+	params url.Values,
+	isDisc bool,
+	maxPages int,
+) (Unit3DSearchResult, error) {
+	view := *c
+	view.logger = logging.FromContext(ctx, c.logger)
+	c = &view
+
+	if maxPages <= 0 {
+		maxPages = 100
+	}
+	baseURL, ok := baseURLForTrackerWithConfig(c.cfg, c.registry, tracker)
+	if !ok {
+		return Unit3DSearchResult{}, fmt.Errorf("unit3d: unknown tracker %q", tracker)
+	}
+
+	apiKey := strings.TrimSpace(TrackerAPIKey(c.cfg, tracker))
+	if apiKey == "" && c.logger != nil {
+		c.logger.Debugf("unit3d: %s missing API key; request will be unauthenticated", tracker)
+	}
+
+	tmdbValue := params.Get("tmdbId")
+	if tmdbValue == "" {
+		tmdbValue = params.Get("tmdb")
+	}
+	tmdbID, _ := strconv.Atoi(strings.TrimSpace(tmdbValue))
+	endpoints := []unit3dSearchEndpoint{{
+		url:          strings.TrimRight(baseURL, "/") + path.Join("/", "api", "torrents", "filter"),
+		filterTMDBID: tmdbID,
+	}}
+	if usesUnit3DPendingSearch(tracker) {
+		endpoints = append(endpoints, unit3dSearchEndpoint{
+			url:           strings.TrimRight(baseURL, "/") + path.Join("/", "api", "torrents", "pending"),
+			pending:       true,
+			filterTMDBID:  tmdbID,
+			pendingWebURL: strings.TrimRight(baseURL, "/") + "/torrents/pending",
+		})
+	}
+
+	result := Unit3DSearchResult{Complete: true}
+	for _, endpoint := range endpoints {
+		endpointResult, err := c.searchUnit3DEndpoint(
+			ctx,
+			tracker,
+			endpoint,
+			params,
+			apiKey,
+			isDisc,
+			maxPages,
+		)
+		if err != nil {
+			return Unit3DSearchResult{}, err
+		}
+		result.Pages += endpointResult.Pages
+		result.Complete = result.Complete && endpointResult.Complete
+		result.WrongWorkCount += endpointResult.WrongWorkCount
+		if endpointResult.Warning != "" {
+			result.Warning = appendUnit3DWarning(result.Warning, endpointResult.Warning)
+		}
+		result.Entries = append(result.Entries, endpointResult.Entries...)
+	}
+	result.Entries = dedupeUnit3DEntries(result.Entries)
+	if result.WrongWorkCount > 0 {
+		rowLabel := "rows"
+		if result.WrongWorkCount == 1 {
+			rowLabel = "row"
+		}
+		result.Warning = appendUnit3DWarning(
+			result.Warning,
+			fmt.Sprintf("Unit3D search omitted %d %s with conflicting TMDB IDs", result.WrongWorkCount, rowLabel),
+		)
+	}
+
+	return result, nil
+}
+
+type unit3dEndpointSearchResult struct {
+	Entries        []api.DupeEntry
+	Warning        string
+	Complete       bool
+	Pages          int
+	WrongWorkCount int
+}
+
+func (c *Client) searchUnit3DEndpoint(
+	ctx context.Context,
+	tracker string,
+	endpoint unit3dSearchEndpoint,
+	params url.Values,
+	apiKey string,
+	isDisc bool,
+	maxPages int,
+) (unit3dEndpointSearchResult, error) {
+	perPage, _ := strconv.Atoi(strings.TrimSpace(params.Get("perPage")))
+	if perPage <= 0 {
+		perPage = 100
+	}
+	var entries []api.DupeEntry
+	wrongWorkCount := 0
+	received := 0
+	nextPageURL := ""
+	seenPageURLs := make(map[string]struct{}, maxPages)
+	for pageNumber := 1; pageNumber <= maxPages; pageNumber++ {
+		requestURL := endpoint.url
+		usingContinuation := !endpoint.pending && nextPageURL != ""
+		if usingContinuation {
+			requestURL = nextPageURL
+		}
+		req, err := http.NewRequestWithContext(ctx, http.MethodGet, requestURL, nil)
+		if err != nil {
+			return unit3dEndpointSearchResult{}, fmt.Errorf("unit3d: request: %w", err)
+		}
+		if !usingContinuation {
+			pageParams := cloneURLValues(params)
+			pageParams.Set("page", strconv.Itoa(pageNumber))
+			req.URL.RawQuery = pageParams.Encode()
+		}
+		seenPageURLs[unit3DSearchURLKey(req.URL)] = struct{}{}
+		SetUnit3DAPIHeaders(req, apiKey)
+		if c.logger != nil {
+			query := req.URL.Query()
+			requestParams := map[string]any{
+				"request_page": pageNumber,
+				"continuation": usingContinuation,
+				"work_tmdb_id": endpoint.filterTMDBID,
+			}
+			for _, key := range []string{"tmdbId", "tmdb", "categories[]", "types[]", "resolutions[]", "name", "seasonNumber", "episodeNumber", "perPage", "page"} {
+				if values, present := query[key]; present {
+					requestParams[key] = values
+				}
+			}
+			endpointLabel := "/api/torrents/filter"
+			if endpoint.pending {
+				endpointLabel = "/api/torrents/pending"
+			}
+			dupe.TraceSearchRequest(c.logger, tracker, req.Method, endpointLabel, requestParams)
+		}
+
+		resp, err := c.http.Do(req)
+		if err != nil {
+			return unit3dEndpointSearchResult{}, fmt.Errorf("unit3d: request: %w", err)
+		}
+		if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+			resp.Body.Close()
+			if c.logger != nil {
+				c.logger.Warnf("unit3d: %s search failed (status=%d)", tracker, resp.StatusCode)
+			}
+			return unit3dEndpointSearchResult{
+				Entries:        entries,
+				Warning:        fmt.Sprintf("%s search failed (status=%d)", strings.ToUpper(strings.TrimSpace(tracker)), resp.StatusCode),
+				Pages:          pageNumber,
+				WrongWorkCount: wrongWorkCount,
+			}, nil
+		}
+
+		if endpoint.pending {
+			var payload unit3dPendingSearchResponse
+			decodeErr := json.NewDecoder(resp.Body).Decode(&payload)
+			resp.Body.Close()
+			if decodeErr != nil {
+				return unit3dEndpointSearchResult{}, fmt.Errorf("unit3d: decode: %w", decodeErr)
+			}
+			pageEntries, dropped := buildUnit3DPendingEntries(payload.Data, endpoint, isDisc)
+			entries = append(entries, pageEntries...)
+			wrongWorkCount += dropped
+			if len(payload.Data) < perPage {
+				return unit3dEndpointSearchResult{
+					Entries:        entries,
+					Complete:       true,
+					Pages:          pageNumber,
+					WrongWorkCount: wrongWorkCount,
+				}, nil
+			}
+			continue
+		}
+
+		var payload unit3dSearchResponse
+		decodeErr := json.NewDecoder(resp.Body).Decode(&payload)
+		resp.Body.Close()
+		if decodeErr != nil {
+			return unit3dEndpointSearchResult{}, fmt.Errorf("unit3d: decode: %w", decodeErr)
+		}
+		pageEntries, dropped := buildUnit3DSearchEntries(payload.Data, endpoint.filterTMDBID, isDisc)
+		entries = append(entries, pageEntries...)
+		wrongWorkCount += dropped
+		received += len(payload.Data)
+		nextURL, terminal, valid := unit3DNextSearchURL(endpoint.url, payload.Links.Next)
+		if !valid {
+			c.logUnit3DSearchPagination(tracker, "rejected", "invalid_continuation", received)
+			return unit3dEndpointSearchResult{
+				Entries:        entries,
+				Warning:        "Unit3D search returned inconsistent pagination metadata",
+				Pages:          pageNumber,
+				WrongWorkCount: wrongWorkCount,
+			}, nil
+		}
+		if pageNumber == 1 {
+			c.logUnit3DSearchPagination(tracker, "active", "link_mode", received)
+		}
+		if terminal {
+			c.logUnit3DSearchPagination(tracker, "completed", "terminal", received)
+			return unit3dEndpointSearchResult{
+				Entries:        entries,
+				Complete:       true,
+				Pages:          pageNumber,
+				WrongWorkCount: wrongWorkCount,
+			}, nil
+		}
+		if _, seen := seenPageURLs[unit3DSearchURLKey(nextURL)]; seen {
+			c.logUnit3DSearchPagination(tracker, "rejected", "repeated_continuation", received)
+			return unit3dEndpointSearchResult{
+				Entries:        entries,
+				Warning:        "Unit3D search returned inconsistent pagination metadata",
+				Pages:          pageNumber,
+				WrongWorkCount: wrongWorkCount,
+			}, nil
+		}
+		c.logUnit3DSearchPagination(tracker, "active", "continue", received)
+		nextPageURL = nextURL.String()
+	}
+	if !endpoint.pending {
+		c.logUnit3DSearchPagination(tracker, "rejected", "safety_bound", received)
+	}
+	return unit3dEndpointSearchResult{
+		Entries:        entries,
+		Warning:        "Unit3D search reached pagination safety bound",
+		Pages:          maxPages,
+		WrongWorkCount: wrongWorkCount,
+	}, nil
+}
+
+func (c *Client) logUnit3DSearchPagination(tracker, state, decision string, count int) {
+	if c.logger != nil {
+		c.logger.Tracef("unit3d: search pagination tracker=%s state=%s decision=%s count=%d", tracker, state, decision, count)
+	}
+}
+
+func cloneURLValues(values url.Values) url.Values {
+	cloned := make(url.Values, len(values))
+	for key, entries := range values {
+		cloned[key] = append([]string(nil), entries...)
+	}
+	return cloned
+}
+
+// unit3DNextSearchURL accepts only terminal or same-origin continuation links
+// so tracker API credentials never cross origins.
+func unit3DNextSearchURL(endpointURL string, raw json.RawMessage) (*url.URL, bool, bool) {
+	encoded := strings.TrimSpace(string(raw))
+	if encoded == "" {
+		return nil, false, false
+	}
+	if encoded == "null" {
+		return nil, true, true
+	}
+
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil || strings.TrimSpace(value) == "" {
+		return nil, false, false
+	}
+	value = strings.TrimSpace(value)
+	base, err := url.Parse(endpointURL)
+	if err != nil {
+		return nil, false, false
+	}
+	reference, err := url.Parse(value)
+	if err != nil {
+		return nil, false, false
+	}
+	next := base.ResolveReference(reference)
+	if next.User != nil || next.Fragment != "" ||
+		!strings.EqualFold(next.Scheme, base.Scheme) || !strings.EqualFold(next.Host, base.Host) {
+		return nil, false, false
+	}
+	return next, false, true
+}
+
+// unit3DSearchURLKey canonicalizes origin casing and query ordering for loop detection.
+func unit3DSearchURLKey(value *url.URL) string {
+	cloned := *value
+	cloned.Scheme = strings.ToLower(cloned.Scheme)
+	cloned.Host = strings.ToLower(cloned.Host)
+	cloned.RawQuery = cloned.Query().Encode()
+	return cloned.String()
+}
+
+// SetUnit3DAPIHeaders applies the client identification, JSON response format,
+// and optional bearer authentication expected by every Unit3D API request.
+func SetUnit3DAPIHeaders(req *http.Request, apiKey string) {
+	if req == nil {
+		return
+	}
+	req.Header.Set("User-Agent", unit3DUserAgent)
+	req.Header.Set("Accept", "application/json")
+	if apiKey = strings.TrimSpace(apiKey); apiKey != "" {
+		req.Header.Set("Authorization", "Bearer "+apiKey)
+	}
+}
+
+// unit3DTitleHDRFallback fills missing HDR evidence from recognizable metadata
+// after a title boundary, treating omitted HDR markers as SDR. A recognized
+// source must precede the video codec. DVD before REMUX plus a structured remux
+// type and resolution permits omitted codec and resolution tokens.
+// Existing structured evidence is preserved.
+func unit3DTitleHDRFallback(name string, canonicalType string, resolution string, hdr api.HDRFacts) api.HDRFacts {
+	if hdr.Status != api.HDREvidenceMissing {
+		return hdr
+	}
+
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return hdr
+	}
+	release := rls.ParseString(name)
+	metadata, bounded := dupe.TrackerTitleMetadata(release)
+	if strings.TrimSpace(release.Title) == "" || !bounded {
+		return hdr
+	}
+	metadataFields := strings.FieldsFunc(metadata, func(r rune) bool {
+		return r == '.' || r == ' ' || r == '_' || r == '-' || r == '[' || r == ']'
+	})
+	dvd := slices.IndexFunc(metadataFields, func(value string) bool { return strings.EqualFold(value, "DVD") })
+	remux := slices.IndexFunc(metadataFields, func(value string) bool { return strings.EqualFold(value, "REMUX") })
+	dvdRemux := dvd >= 0 && remux > dvd && canonicalType == "REMUX" && CanonicalUnit3DResolution(resolution) != ""
+	if !dvdRemux && !dupe.TrackerTitleHasSourceAndCodec(metadata) {
+		return hdr
+	}
+	recognizable := dvdRemux || slices.ContainsFunc(metadataFields, func(value string) bool {
+		return CanonicalUnit3DResolution(value) != ""
+	})
+	if !recognizable {
+		return hdr
+	}
+
+	titleHDR := dupe.NormalizeTrackerTitleHDR(metadata)
+	if titleHDR.Status == api.HDREvidenceMissing {
+		titleHDR = api.HDRFacts{
+			Formats:      []api.HDRFormat{api.HDRFormatSDR},
+			Origin:       api.HDREvidenceTrackerTitle,
+			Status:       api.HDREvidenceComplete,
+			SourceFields: []string{"title"},
+		}
+	} else {
+		titleHDR.Status = api.HDREvidenceComplete
+	}
+	return titleHDR
+}
+
+func buildUnit3DSearchEntries(items []unit3dSearchItem, filterTMDBID int, isDisc bool) ([]api.DupeEntry, int) {
+	entries := make([]api.DupeEntry, 0, len(items))
+	wrongWorkCount := 0
+	for _, item := range items {
+		if filterTMDBID > 0 && item.Attributes.TMDBID > 0 && item.Attributes.TMDBID != filterTMDBID {
+			wrongWorkCount++
+			continue
+		}
+		rawType := strings.TrimSpace(item.Attributes.Type)
+		hdr := mediafacts.HDRFromMediaInfoText(item.Attributes.MediaInfo)
+		if item.Attributes.HDRDV != nil {
+			trackerHDR := mediafacts.HDRFromUnit3DHDRDV(*item.Attributes.HDRDV)
+			if hdr.Status == api.HDREvidenceComplete && trackerHDR.Status == api.HDREvidenceComplete {
+				formatsAgree := len(hdr.Formats) == len(trackerHDR.Formats) &&
+					!slices.ContainsFunc(hdr.Formats, func(format api.HDRFormat) bool {
+						return !slices.Contains(trackerHDR.Formats, format)
+					})
+				profilesAgree := true
+				if hdr.DolbyVisionProfile != "" && trackerHDR.DolbyVisionProfile != "" {
+					mediaInfoValue, mediaInfoOK := mediafacts.Unit3DHDRDVFromFacts(hdr)
+					trackerValue, trackerOK := mediafacts.Unit3DHDRDVFromFacts(trackerHDR)
+					profilesAgree = mediaInfoOK && trackerOK && mediaInfoValue == trackerValue
+				}
+				if !formatsAgree || !profilesAgree {
+					trackerHDR.Status = api.HDREvidenceContradictory
+					trackerHDR.SourceFields = append(trackerHDR.SourceFields, "media_info")
+					trackerHDR.Contradictions = append(trackerHDR.Contradictions, "MediaInfo HDR differs from hdr_dv")
+				}
+			}
+			hdr = trackerHDR
+		}
+		canonicalType := CanonicalUnit3DType(rawType)
+		hdr = unit3DTitleHDRFallback(item.Attributes.Name, canonicalType, item.Attributes.Resolution, hdr)
+		entry := api.DupeEntry{
+			Name:          strings.TrimSpace(item.Attributes.Name),
+			Trumpable:     item.Attributes.Trumpable,
+			Link:          strings.TrimSpace(item.Attributes.DetailsLink),
+			Download:      strings.TrimSpace(item.Attributes.DownloadLink),
+			ID:            strings.TrimSpace(item.ID.String()),
+			Type:          rawType,
+			CanonicalType: canonicalType,
+			Res:           strings.TrimSpace(item.Attributes.Resolution),
+			Codec:         mediafacts.VideoCodecFromMediaInfoText(item.Attributes.MediaInfo),
+			Provider:      strings.TrimSpace(item.Attributes.Provider),
+			Internal:      item.Attributes.Internal,
+			BDInfo:        strings.TrimSpace(item.Attributes.BDInfo),
+			Description:   strings.TrimSpace(item.Attributes.Description),
+			HDR:           hdr,
+		}
+
+		if sizeValue, err := parseNumberToInt64(item.Attributes.Size); err == nil {
+			entry.SizeBytes = sizeValue
+			entry.SizeKnown = sizeValue > 0
+		} else if raw := strings.TrimSpace(item.Attributes.Size.String()); raw != "" {
+			entry.SizeText = raw
+		}
+
+		if len(item.Attributes.Files) > 0 {
+			entry.FileCount = len(item.Attributes.Files)
+			if !isDisc {
+				entry.Files = make([]string, 0, len(item.Attributes.Files))
+				for _, file := range item.Attributes.Files {
+					trimmed := strings.TrimSpace(file.Name)
+					if trimmed != "" {
+						entry.Files = append(entry.Files, trimmed)
+					}
+				}
+			}
+		}
+
+		entries = append(entries, entry)
+	}
+
+	return entries, wrongWorkCount
+}
+
+func buildUnit3DPendingEntries(items []unit3dPendingSearchItem, endpoint unit3dSearchEndpoint, isDisc bool) ([]api.DupeEntry, int) {
+	entries := make([]api.DupeEntry, 0, len(items))
+	wrongWorkCount := 0
+	for _, item := range items {
+		if endpoint.filterTMDBID > 0 && item.TMDBID > 0 && item.TMDBID != endpoint.filterTMDBID {
+			wrongWorkCount++
+			continue
+		}
+
+		rawType := strings.TrimSpace(item.Type)
+		canonicalType := CanonicalUnit3DType(rawType)
+		hdr := unit3DTitleHDRFallback(item.Name, canonicalType, item.Resolution, mediafacts.HDRFromMediaInfoText(item.MediaInfo))
+		entry := api.DupeEntry{
+			Name:          strings.TrimSpace(item.Name),
+			Trumpable:     item.Trumpable,
+			Link:          endpoint.pendingWebURL,
+			Download:      strings.TrimSpace(item.DownloadLink),
+			ID:            strings.TrimSpace(item.ID.String()),
+			Type:          rawType,
+			CanonicalType: canonicalType,
+			Res:           strings.TrimSpace(item.Resolution),
+			Codec:         mediafacts.VideoCodecFromMediaInfoText(item.MediaInfo),
+			Internal:      item.Internal,
+			BDInfo:        strings.TrimSpace(item.BDInfo),
+			Description:   strings.TrimSpace(item.Description),
+			HDR:           hdr,
+		}
+
+		if sizeValue, err := parseNumberToInt64(item.Size); err == nil {
+			entry.SizeBytes = sizeValue
+			entry.SizeKnown = sizeValue > 0
+		} else if raw := strings.TrimSpace(item.Size.String()); raw != "" {
+			entry.SizeText = raw
+		}
+
+		if len(item.Files) > 0 {
+			entry.FileCount = len(item.Files)
+			if !isDisc {
+				entry.Files = make([]string, 0, len(item.Files))
+				for _, file := range item.Files {
+					trimmed := strings.TrimSpace(file.Name)
+					if trimmed != "" {
+						entry.Files = append(entry.Files, trimmed)
+					}
+				}
+			}
+		}
+
+		entries = append(entries, entry)
+	}
+
+	return entries, wrongWorkCount
+}
+
+func appendUnit3DWarning(existing string, warning string) string {
+	existing, warning = strings.TrimSpace(existing), strings.TrimSpace(warning)
+	if existing == "" {
+		return warning
+	}
+	if warning == "" {
+		return existing
+	}
+	return existing + "; " + warning
+}
+
+func dedupeUnit3DEntries(entries []api.DupeEntry) []api.DupeEntry {
+	result := make([]api.DupeEntry, 0, len(entries))
+	indexByKey := make(map[string]int)
+	for _, entry := range entries {
+		id := strings.TrimSpace(entry.ID)
+		if id == "" {
+			result = append(result, entry)
+			continue
+		}
+		key := id + "\x00" + strings.ToLower(strings.TrimSpace(entry.Name))
+		if index, ok := indexByKey[key]; ok {
+			if unit3DEntryRichness(entry) > unit3DEntryRichness(result[index]) {
+				result[index] = entry
+			}
+			continue
+		}
+		indexByKey[key] = len(result)
+		result = append(result, entry)
+	}
+	return result
+}
+
+func unit3DEntryRichness(entry api.DupeEntry) int {
+	score := len(entry.Files) + len(entry.Flags) + len(entry.HDR.Formats) + len(entry.Attributes)
+	for _, value := range []string{
+		entry.Name, entry.SizeText, entry.Type, entry.CanonicalType, entry.Res, entry.Category, entry.Source, entry.Codec, entry.Container,
+		entry.Provider, entry.Group, entry.Edition, entry.Region, entry.ThreeD, entry.Repack, entry.BDInfo, entry.Description,
+	} {
+		if strings.TrimSpace(value) != "" {
+			score++
+		}
+	}
+	if entry.SizeKnown {
+		score++
+	}
+	if entry.FileCount > 0 {
+		score++
+	}
+	if entry.Season > 0 || entry.Episode > 0 {
+		score++
+	}
+	if entry.FlagsPresent {
+		score++
+	}
+	if entry.FlagsComplete {
+		score++
+	}
+	return score
+}
+
+func usesUnit3DPendingSearch(tracker string) bool {
+	return strings.EqualFold(tracker, "CBR")
+}
+
+func validateImages(ctx context.Context, client *http.Client, images []bbcode.Image, tracker string, logger api.Logger) []bbcode.Image {
+	if len(images) == 0 {
+		return nil
+	}
+	client = Unit3DImageHTTPClient(client)
+
+	results := make([]bbcode.Image, len(images))
+	valid := make([]bool, len(images))
+	failures := make([]string, len(images))
+	sem := make(chan struct{}, imageConcurrency)
+	var wg sync.WaitGroup
+
+	for idx, img := range images {
+		if img == (bbcode.Image{}) {
+			continue
+		}
+		wg.Go(func() {
+			sem <- struct{}{}
+			defer func() { <-sem }()
+			if reason := checkImage(ctx, client, img.RawURL); reason == "" {
+				results[idx] = img
+				valid[idx] = true
+			} else {
+				failures[idx] = reason
+			}
+		})
+	}
+	wg.Wait()
+
+	validatedCount := 0
+	for idx, ok := range valid {
+		if ok {
+			validatedCount++
+		} else if logger != nil && failures[idx] != "" {
+			logger.Debugf("trackerdata: image validation rejected tracker=%s index=%d reason=%s", tracker, idx+1, failures[idx])
+		}
+	}
+	if validatedCount == 0 {
+		return nil
+	}
+	return results
+}
+
+func checkImage(ctx context.Context, client *http.Client, rawURL string) string {
+	trimmed := imagehost.DirectImageURL(rawURL)
+	if trimmed == "" {
+		return "empty_or_invalid_image_url"
+	}
+	if err := ValidateUnit3DImageURL(ctx, trimmed); err != nil {
+		return "invalid_or_nonpublic_url"
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, trimmed, nil)
+	if err != nil {
+		return "invalid_request"
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "request_failed"
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Sprintf("http_status_%d", resp.StatusCode)
+	}
+	if resp.ContentLength > 0 && resp.ContentLength > maxImageBytes {
+		return "image_too_large"
+	}
+	contentType := strings.ToLower(resp.Header.Get("Content-Type"))
+	if contentType != "" && !strings.Contains(contentType, "image") {
+		return "non_image_content_type"
+	}
+	limited := io.LimitReader(resp.Body, maxImageBytes)
+	if _, _, err := image.DecodeConfig(limited); err != nil {
+		return "image_decode_failed"
+	}
+	return ""
+}
+
+// Unit3DImageHTTPClient returns a clone that rejects non-public image redirects and,
+// for standard transports, dials only public target IPs.
+func Unit3DImageHTTPClient(client *http.Client) *http.Client {
+	if client == nil {
+		client = &http.Client{Timeout: imageTimeout}
+	}
+	cloned := *client
+	if cloned.Timeout == 0 {
+		cloned.Timeout = imageTimeout
+	}
+	if transport, ok := unit3DImagePublicTransport(cloned.Transport); ok {
+		cloned.Transport = transport
+	}
+	checkRedirect := cloned.CheckRedirect
+	cloned.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		if err := ValidateUnit3DImageURL(req.Context(), req.URL.String()); err != nil {
+			return err
+		}
+		if checkRedirect != nil {
+			return checkRedirect(req, via)
+		}
+		if len(via) >= 10 {
+			return errors.New("stopped after 10 redirects")
+		}
+		return nil
+	}
+	return &cloned
+}
+
+func unit3DImagePublicTransport(rt http.RoundTripper) (http.RoundTripper, bool) {
+	var transport *http.Transport
+	switch typed := rt.(type) {
+	case nil:
+		defaultTransport, ok := http.DefaultTransport.(*http.Transport)
+		if !ok {
+			return rt, false
+		}
+		transport = defaultTransport.Clone()
+	case *http.Transport:
+		transport = typed.Clone()
+	default:
+		return rt, false
+	}
+
+	originalDial := transport.DialContext
+	dialer := &net.Dialer{Timeout: imageTimeout}
+	transport.DialContext = func(ctx context.Context, network string, address string) (net.Conn, error) {
+		host, port, err := net.SplitHostPort(address)
+		if err != nil {
+			return nil, fmt.Errorf("parse address: %w", err)
+		}
+		addrs, err := resolveUnit3DImagePublicAddrs(ctx, host)
+		if err != nil {
+			return nil, err
+		}
+		var lastErr error
+		for _, addr := range addrs {
+			target := net.JoinHostPort(addr.String(), port)
+			var conn net.Conn
+			if originalDial != nil {
+				conn, err = originalDial(ctx, network, target)
+			} else {
+				conn, err = dialer.DialContext(ctx, network, target)
+			}
+			if err == nil {
+				return conn, nil
+			}
+			lastErr = err
+		}
+		return nil, lastErr
+	}
+	return transport, true
+}
+
+// ValidateUnit3DImageURL rejects non-HTTP(S) or non-public Unit3D image targets.
+func ValidateUnit3DImageURL(ctx context.Context, rawURL string) error {
+	parsed, err := url.Parse(strings.TrimSpace(rawURL))
+	if err != nil {
+		return fmt.Errorf("parse url: %w", err)
+	}
+	scheme := strings.ToLower(strings.TrimSpace(parsed.Scheme))
+	if scheme != "http" && scheme != "https" {
+		return fmt.Errorf("unsupported scheme %q", parsed.Scheme)
+	}
+	host := strings.TrimSpace(parsed.Hostname())
+	if host == "" {
+		return errors.New("missing host")
+	}
+	_, err = resolveUnit3DImagePublicAddrs(ctx, host)
+	return err
+}
+
+func resolveUnit3DImagePublicAddrs(ctx context.Context, host string) ([]netip.Addr, error) {
+	host = strings.Trim(strings.TrimSpace(host), "[]")
+	if host == "" {
+		return nil, errors.New("missing host")
+	}
+	lowerHost := strings.ToLower(host)
+	if lowerHost == "localhost" || strings.HasSuffix(lowerHost, ".localhost") || strings.Contains(lowerHost, "%") {
+		return nil, fmt.Errorf("blocked private image host %q", host)
+	}
+	if addr, err := netip.ParseAddr(host); err == nil {
+		addr = addr.Unmap()
+		if !isUnit3DImagePublicIP(addr) {
+			return nil, fmt.Errorf("blocked private image address %q", addr)
+		}
+		return []netip.Addr{addr}, nil
+	}
+
+	resolved, err := net.DefaultResolver.LookupIPAddr(ctx, host)
+	if err != nil {
+		return nil, fmt.Errorf("resolve host %q: %w", host, err)
+	}
+	addrs := make([]netip.Addr, 0, len(resolved))
+	for _, item := range resolved {
+		addr, ok := netip.AddrFromSlice(item.IP)
+		if !ok {
+			continue
+		}
+		addr = addr.Unmap()
+		if !isUnit3DImagePublicIP(addr) {
+			return nil, fmt.Errorf("blocked private image address %q", addr)
+		}
+		addrs = append(addrs, addr)
+	}
+	if len(addrs) == 0 {
+		return nil, fmt.Errorf("host %q resolved no public addresses", host)
+	}
+	return addrs, nil
+}
+
+func isUnit3DImagePublicIP(addr netip.Addr) bool {
+	addr = addr.Unmap()
+	if !addr.IsValid() || !addr.IsGlobalUnicast() || addr.IsPrivate() || addr.IsLoopback() || addr.IsLinkLocalUnicast() || addr.IsMulticast() ||
+		addr.IsUnspecified() {
+		return false
+	}
+	for _, blocked := range unit3DImageBlockedIPRanges {
+		if blocked.Contains(addr) {
+			return false
+		}
+	}
+	return true
+}
+
+// baseURLForTrackerWithConfig returns the profile-owned endpoint.
+func baseURLForTrackerWithConfig(_ config.Config, registry *trackers.Registry, tracker string) (string, bool) {
+	return registry.LookupBaseURL(tracker)
+}
+
+func parseNumberToInt64(value json.Number) (int64, error) {
+	text := strings.TrimSpace(value.String())
+	if text == "" {
+		return 0, errors.New("empty number")
+	}
+	if parsed, err := strconv.ParseInt(text, 10, 64); err == nil {
+		return parsed, nil
+	}
+	parsed, err := strconv.ParseFloat(text, 64)
+	if err != nil {
+		return 0, fmt.Errorf("parse numeric JSON value %q: %w", text, err)
+	}
+	return int64(parsed), nil
+}
+
+type unit3dResponse struct {
+	Data       json.RawMessage `json:"data"`
+	Attributes json.RawMessage `json:"attributes"`
+}
+
+type unit3dDataItem struct {
+	ID         json.Number      `json:"id"`
+	Attributes unit3dAttributes `json:"attributes"`
+}
+
+type unit3dAttributes struct {
+	Category      string         `json:"category"`
+	Description   string         `json:"description"`
+	TMDBID        int            `json:"tmdb_id"`
+	IMDBID        int            `json:"imdb_id"`
+	TVDBID        int            `json:"tvdb_id"`
+	MALID         int            `json:"mal_id"`
+	InfoHash      string         `json:"info_hash"`
+	Files         []unit3dFile   `json:"files"`
+	RegionID      int            `json:"region_id"`
+	DistributorID int            `json:"distributor_id"`
+	RawFileName   string         `json:"file_name"`
+	ExtraFiles    []unit3dFile   `json:"file"`
+	Other         map[string]any `json:"-"`
+}
+
+type unit3dFile struct {
+	Name string `json:"name"`
+}
+
+type parsedAttributes struct {
+	id          string
+	ambiguous   bool
+	category    string
+	description string
+	tmdbID      int
+	imdbID      int
+	tvdbID      int
+	malID       int
+	infoHash    string
+	fileName    string
+}
+
+func (r unit3dResponse) extractAttributes(preferTopLevel bool) *parsedAttributes {
+	if len(r.Data) > 0 {
+		var dataString string
+		if err := json.Unmarshal(r.Data, &dataString); err == nil {
+			if strings.TrimSpace(dataString) == "404" {
+				return nil
+			}
+		}
+		var dataItems []unit3dDataItem
+		if err := json.Unmarshal(r.Data, &dataItems); err == nil {
+			if len(dataItems) > 0 {
+				attrs := parseAttributes(dataItems[0].Attributes)
+				attrs.ambiguous = len(dataItems) > 1
+				if len(dataItems) == 1 {
+					attrs.id = string(dataItems[0].ID)
+				}
+				return attrs
+			}
+		}
+	}
+
+	if !preferTopLevel || len(r.Attributes) == 0 {
+		return nil
+	}
+	var attrs unit3dAttributes
+	if err := json.Unmarshal(r.Attributes, &attrs); err != nil {
+		return nil
+	}
+	return parseAttributes(attrs)
+}
+
+func parseAttributes(attrs unit3dAttributes) *parsedAttributes {
+	info := &parsedAttributes{
+		category:    attrs.Category,
+		description: attrs.Description,
+		infoHash:    attrs.InfoHash,
+	}
+	info.tmdbID = normalizeID(attrs.TMDBID)
+	info.imdbID = normalizeID(attrs.IMDBID)
+	info.tvdbID = normalizeID(attrs.TVDBID)
+	info.malID = normalizeID(attrs.MALID)
+
+	fileNames := make([]string, 0, len(attrs.Files))
+	for _, file := range attrs.Files {
+		trimmed := strings.TrimSpace(file.Name)
+		if trimmed == "" {
+			continue
+		}
+		fileNames = append(fileNames, trimmed)
+		if len(fileNames) >= 5 {
+			break
+		}
+	}
+	if len(fileNames) == 1 {
+		info.fileName = fileNames[0]
+	} else if len(fileNames) > 1 {
+		info.fileName = strings.Join(fileNames, ", ")
+	}
+	if info.fileName == "" {
+		info.fileName = strings.TrimSpace(attrs.RawFileName)
+	}
+	return info
+}
+
+func normalizeID(value int) int {
+	if value <= 0 {
+		return 0
+	}
+	return value
+}
+
+type unit3dSearchResponse struct {
+	Data  []unit3dSearchItem `json:"data"`
+	Links unit3dSearchLinks  `json:"links"`
+}
+
+type unit3dSearchLinks struct {
+	Next json.RawMessage `json:"next"`
+}
+
+type unit3dSearchEndpoint struct {
+	url           string
+	pending       bool
+	filterTMDBID  int
+	pendingWebURL string
+}
+
+type unit3dSearchItem struct {
+	ID         json.Number       `json:"id"`
+	Attributes unit3dSearchAttrs `json:"attributes"`
+}
+
+type unit3dSearchAttrs struct {
+	Name         string       `json:"name"`
+	Size         json.Number  `json:"size"`
+	Files        []unit3dFile `json:"files"`
+	Trumpable    bool         `json:"trumpable"`
+	DetailsLink  string       `json:"details_link"`
+	DownloadLink string       `json:"download_link"`
+	Type         string       `json:"type"`
+	Resolution   string       `json:"resolution"`
+	Internal     bool         `json:"internal"`
+	BDInfo       string       `json:"bd_info"`
+	MediaInfo    string       `json:"media_info"`
+	Description  string       `json:"description"`
+	TMDBID       int          `json:"tmdb_id"`
+	HDRDV        *string      `json:"hdr_dv"`
+	Provider     string       `json:"provider"`
+}
+
+type unit3dPendingSearchResponse struct {
+	Data []unit3dPendingSearchItem `json:"data"`
+}
+
+type unit3dPendingSearchItem struct {
+	ID           json.Number  `json:"id"`
+	TMDBID       int          `json:"tmdb_id"`
+	Name         string       `json:"name"`
+	Size         json.Number  `json:"size"`
+	Files        []unit3dFile `json:"files"`
+	Trumpable    bool         `json:"trumpable"`
+	DownloadLink string       `json:"download_link"`
+	Type         string       `json:"type"`
+	Resolution   string       `json:"resolution"`
+	Internal     bool         `json:"internal"`
+	BDInfo       string       `json:"bd_info"`
+	MediaInfo    string       `json:"mediainfo"`
+	Description  string       `json:"description"`
+}

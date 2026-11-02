@@ -6,6 +6,11 @@ const MAGIC: &[u8] = b"\x8aMNG\r\n\x1a\n";
 pub(crate) fn has_magic(bytes: &[u8]) -> bool {
     bytes.starts_with(MAGIC)
 }
+#[cfg(test)]
+thread_local! {
+    static PREALLOCATE_FRAME_LIMIT: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+    static INITIAL_FRAME_CAPACITY: std::cell::Cell<usize> = const { std::cell::Cell::new(0) };
+}
 fn bad(message: &'static str) -> RasterDecodeError {
     RasterDecodeError::InvalidMng(message)
 }
@@ -50,6 +55,14 @@ pub(crate) fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<MngImage, 
     let mut at = 8usize;
     let mut header = None;
     let mut frames = Vec::new();
+    #[cfg(test)]
+    if PREALLOCATE_FRAME_LIMIT.with(std::cell::Cell::get) {
+        frames
+            .try_reserve_exact(4096)
+            .map_err(|_| RasterDecodeError::OutputTooLarge)?;
+    }
+    #[cfg(test)]
+    INITIAL_FRAME_CAPACITY.with(|capacity| capacity.set(frames.capacity()));
     let mut frame_start = None;
     let mut idat = false;
     let mut globals: [Option<std::ops::Range<usize>>; 4] = Default::default();
@@ -610,6 +623,37 @@ mod tests {
         out
     }
 
+    #[test]
+    fn frame_limit_preallocation_spends_heap_before_invalid_header_rejection() {
+        let bytes = b"\x8aMNG\r\n\x1a\n".to_vec();
+        let budget = rrrah_core::MemoryBudget::new(64);
+        let mut request = DecodeRequest::new("invalid-frame-index");
+        request.memory_budget = Some(budget.clone());
+        let selected = std::env::var("RRRAH_FRAME_ALLOCATION_VARIANT").ok();
+        let mut reference = None;
+        for candidate in [false, true] {
+            if selected.as_ref().is_some_and(|v| (v == "candidate") != candidate) {
+                continue;
+            }
+            PREALLOCATE_FRAME_LIMIT.with(|mode| mode.set(candidate));
+            let error = format!("{:?}", decode(&bytes, &request).unwrap_err());
+            if let Some(reference) = reference.as_ref() {
+                assert_eq!(&error, reference);
+            } else {
+                reference = Some(error);
+            }
+            let capacity = INITIAL_FRAME_CAPACITY.with(std::cell::Cell::get);
+            assert_eq!(capacity, if candidate { 4096 } else { 0 });
+            assert_eq!(budget.used(), 0);
+            eprintln!(
+                "RR38_EARLY_INVALID candidate={candidate} collection_allocations={} capacity={capacity} requested_bytes={} managed_peak={} final=0",
+                u8::from(candidate),
+                capacity * std::mem::size_of::<Layer>(),
+                budget.peak()
+            );
+        }
+        PREALLOCATE_FRAME_LIMIT.with(|mode| mode.set(false));
+    }
     #[test]
     fn transparent_partial_layers_blend_in_linear_light_and_keep_last_owner_credit() {
         let bytes = alpha_stream(10, &[[255, 0, 0, 255], [0, 255, 0, 128], [0, 0, 255, 0]]);

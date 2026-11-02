@@ -1,0 +1,35 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.12s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_raw-fc4530d559d45e4b)
+
+running 10 tests
+test camtiff::cr2::tests::cancellation_during_decode_is_typed ... ok
+test camtiff::cr2::tests::decodes_ljpeg_slices_into_row_major_sensor_order ... ok
+test camtiff::cr2::tests::decodes_unsliced_stream_as_identity ... ok
+test camtiff::cr2::tests::parses_header_signature_and_selects_raw_ifd_via_pointer ... ok
+test camtiff::cr2::tests::reads_metadata_from_dng_like_cr2_tags ... ok
+test camtiff::cr2::tests::rejects_dangling_raw_ifd_pointer ... ok
+test camtiff::cr2::tests::rejects_non_cfa_photometric ... ok
+test camtiff::cr2::tests::rejects_slice_geometry_mismatch ... ok
+test camtiff::cr2::tests::rejects_unsupported_compression ... ok
+test camtiff::cr2::tests::rejects_wrong_signature_and_non_little_endian ... ok
+
+successes:
+
+---- camtiff::cr2::tests::cancellation_during_decode_is_typed stdout ----
+CR2 cancellation checkpoints: 11
+
+
+successes:
+    camtiff::cr2::tests::cancellation_during_decode_is_typed
+    camtiff::cr2::tests::decodes_ljpeg_slices_into_row_major_sensor_order
+    camtiff::cr2::tests::decodes_unsliced_stream_as_identity
+    camtiff::cr2::tests::parses_header_signature_and_selects_raw_ifd_via_pointer
+    camtiff::cr2::tests::reads_metadata_from_dng_like_cr2_tags
+    camtiff::cr2::tests::rejects_dangling_raw_ifd_pointer
+    camtiff::cr2::tests::rejects_non_cfa_photometric
+    camtiff::cr2::tests::rejects_slice_geometry_mismatch
+    camtiff::cr2::tests::rejects_unsupported_compression
+    camtiff::cr2::tests::rejects_wrong_signature_and_non_little_endian
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 490 filtered out; finished in 0.00s
+

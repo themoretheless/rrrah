@@ -6,11 +6,11 @@
 
 ## Выполнение первых 30
 
-Локации и текущие SHA обновлены после реализации первых 30. baseline_evidence/audit_source_sha256 сохраняют исходный аудит. Последняя проверка: [APNG и watchdog, 2026-10-16](research/first30-close-2026-10-16/REPORT.md). Остальные 970 задач повторно не квалифицированы.
+2026-10-25: локальный проход завершён. RR-0013/0015/0019 verified в проверенной macOS/M4 Max/APFS области; RR-0014/0016/0017/0030 закрыты rejected для конкретных воспроизведённых unsafe/incorrect вариантов. RR-0010 получил исправление HDR контраста, но остаётся partial без screen-reader qualification. Открыты RR-0003/0004/0005/0006/0010/0028. Отчёт: docs/research/first30-local-2026-10-24/REPORT.md. Следующий проход RR-0031–RR-0060 отражён отдельно в execution_batches; RR-0061–RR-1000 ещё не переоценены. VoiceOver по RR-0010 отложен пользователем.
 
-verified: 2; blocked: 3; partial: 11; reviewed: 5; rejected: 6; measured_no_change: 3.
+verified: 11; blocked: 3; partial: 3; rejected: 10; measured_no_change: 3.
 
-[Результаты и ограничения](research/first30-2026-10-14/REPORT.md). Статус исходного основания и execution.status независимы. partial не означает выполнение всего acceptance. Остальные 970 задач не квалифицированы повторно.
+[Результаты и ограничения](research/first30-2026-10-14/REPORT.md). Статус исходного основания и execution.status независимы. partial не означает выполнение всего acceptance. Записи без execution ещё не квалифицированы повторно.
 
 ## Методика исходного аудита
 
@@ -33,19 +33,19 @@ verified: 2; blocked: 3; partial: 11; reviewed: 5; rejected: 6; measured_no_chan
 | [RR-0004](#rr-0004) | Связать выбор CUDA и графического адаптера | P1 | L | blocked |
 | [RR-0005](#rr-0005) | Автоматизировать обязательный NVIDIA hardware gate | P1 | M | partial |
 | [RR-0006](#rr-0006) | Отделить физическую HDR-квалификацию от offscreen readback | P1 | L | blocked |
-| [RR-0007](#rr-0007) | Добавить версионированную историю редактирования | P1 | L | partial |
-| [RR-0008](#rr-0008) | Добавить атомарный XMP sidecar round-trip | P1 | L | partial |
-| [RR-0009](#rr-0009) | Добавить восстановление несохранённых правок | P1 | L | partial |
+| [RR-0007](#rr-0007) | Добавить версионированную историю редактирования | P1 | L | verified |
+| [RR-0008](#rr-0008) | Добавить атомарный XMP sidecar round-trip | P1 | L | verified |
+| [RR-0009](#rr-0009) | Добавить восстановление несохранённых правок | P1 | L | verified |
 | [RR-0010](#rr-0010) | Предоставить доступную семантику элементов просмотрщика | P1 | L | partial |
-| [RR-0011](#rr-0011) | Добавить ограниченную HDR-гистограмму текущего изображения | P1 | L | partial |
-| [RR-0012](#rr-0012) | Добавить сравнение исходного и текущего развития | P1 | L | partial |
-| [RR-0013](#rr-0013) | Сократить удержание синхронизации: main::submit_request_with_prefetch | P1 | M | partial |
-| [RR-0014](#rr-0014) | Сократить удержание синхронизации: main::enqueue_foreground | P1 | S | reviewed |
-| [RR-0015](#rr-0015) | Снизить стоимость обращения к GPU: main::render | P1 | M | reviewed |
-| [RR-0016](#rr-0016) | Снизить стоимость обращения к GPU: main::about_to_wait | P1 | M | reviewed |
-| [RR-0017](#rr-0017) | Сократить удержание синхронизации: model_upload_worker::submit_context | P1 | M | reviewed |
+| [RR-0011](#rr-0011) | Добавить ограниченную HDR-гистограмму текущего изображения | P1 | L | verified |
+| [RR-0012](#rr-0012) | Добавить сравнение исходного и текущего развития | P1 | L | verified |
+| [RR-0013](#rr-0013) | Сократить удержание синхронизации: main::submit_request_with_prefetch | P1 | M | verified |
+| [RR-0014](#rr-0014) | Сократить удержание синхронизации: main::enqueue_foreground | P1 | S | rejected |
+| [RR-0015](#rr-0015) | Снизить стоимость обращения к GPU: main::render | P1 | M | verified |
+| [RR-0016](#rr-0016) | Снизить стоимость обращения к GPU: main::about_to_wait | P1 | M | rejected |
+| [RR-0017](#rr-0017) | Сократить удержание синхронизации: model_upload_worker::submit_context | P1 | M | rejected |
 | [RR-0018](#rr-0018) | Сократить удержание синхронизации: raster_lod_worker::try_take | P1 | S | rejected |
-| [RR-0019](#rr-0019) | Сократить обращения к файловой системе: gallery::first_supported_image_with_cancel | P1 | S | partial |
+| [RR-0019](#rr-0019) | Сократить обращения к файловой системе: gallery::first_supported_image_with_cancel | P1 | S | verified |
 | [RR-0020](#rr-0020) | Сократить накладные расходы потокового ввода-вывода: lib::read_into | P1 | S | measured_no_change |
 | [RR-0021](#rr-0021) | Сократить накладные расходы потокового ввода-вывода: lib::write_chunks | P1 | S | measured_no_change |
 | [RR-0022](#rr-0022) | Сократить накладные расходы потокового ввода-вывода: segmented::write_segmented | P1 | S | measured_no_change |
@@ -53,10 +53,51 @@ verified: 2; blocked: 3; partial: 11; reviewed: 5; rejected: 6; measured_no_chan
 | [RR-0024](#rr-0024) | Сократить временные аллокации: apng::decode | P1 | L | rejected |
 | [RR-0025](#rr-0025) | Сократить работу основного прохода: raster::decode_raster | P2 | S | rejected |
 | [RR-0026](#rr-0026) | Сократить работу основного прохода: demosaic::amaze | P2 | M | rejected |
-| [RR-0027](#rr-0027) | Снизить стоимость обращения к GPU: raster::install_texture | P1 | S | partial |
+| [RR-0027](#rr-0027) | Снизить стоимость обращения к GPU: raster::install_texture | P1 | S | verified |
 | [RR-0028](#rr-0028) | Ограничить ожидание дочернего процесса: qualify-viewer-storage-gpu::main | P1 | L | partial |
 | [RR-0029](#rr-0029) | Сократить временные аллокации: emf::decode | P1 | L | rejected |
-| [RR-0030](#rr-0030) | Снизить стоимость обращения к GPU: lib::upload_mosaic_with_tiling_and_cancel | P1 | L | reviewed |
+| [RR-0030](#rr-0030) | Снизить стоимость обращения к GPU: lib::upload_mosaic_with_tiling_and_cancel | P1 | L | rejected |
+
+## Проверка RR-0031–RR-0060
+
+Проверка RR-0031–RR-0060 завершена: 4 внедрённых verified, 26 конкретных гипотез rejected. Rejected не означает выполненную оптимизацию. RR-0056 завершена отдельным bounded-release проходом; VoiceOver и другое оборудование исключены по указанию пользователя.
+
+rejected: 26; verified: 4.
+
+[Результаты и ограничения](research/rr-0031-0060-2026-10-25/REPORT.md).
+
+| ID | Задача | Выполнение |
+|---|---|---|
+| [RR-0031](#rr-0031) | Сократить временные аллокации: pvr::decode | rejected |
+| [RR-0032](#rr-0032) | Сократить временные аллокации: wmf::decode | rejected |
+| [RR-0033](#rr-0033) | Сократить временные аллокации: ply::decode_bytes_budgeted | rejected |
+| [RR-0034](#rr-0034) | Ограничить ожидание дочернего процесса: qualify-x3f-sd10::main | verified |
+| [RR-0035](#rr-0035) | Сократить временные аллокации: raster::to_linear_srgb_with_budget_and_cancel | rejected |
+| [RR-0036](#rr-0036) | Сократить временные аллокации: dicom::decode | verified |
+| [RR-0037](#rr-0037) | Сократить временные аллокации: dpx::decode | rejected |
+| [RR-0038](#rr-0038) | Сократить временные аллокации: mng::decode | rejected |
+| [RR-0039](#rr-0039) | Сократить временные аллокации: ktx::decode | rejected |
+| [RR-0040](#rr-0040) | Сократить временные аллокации: psd::decode | rejected |
+| [RR-0041](#rr-0041) | Сократить временные аллокации: model_banks::search_model_banks_pixel_selected | rejected |
+| [RR-0042](#rr-0042) | Сократить временные аллокации: gradient::match_gradients_selected_with_scratch | rejected |
+| [RR-0043](#rr-0043) | Сократить временные аллокации: anchor_rank::compare_anchor_rank | rejected |
+| [RR-0044](#rr-0044) | Сократить накладные расходы потокового ввода-вывода: jng::decode | rejected |
+| [RR-0045](#rr-0045) | Сократить накладные расходы потокового ввода-вывода: ply_swap::read_ply_swap_payload | rejected |
+| [RR-0046](#rr-0046) | Сократить временные аллокации: cr2::decode_pixels | rejected |
+| [RR-0047](#rr-0047) | Сократить временные аллокации: local_collection::scan_gradient_collection_with_confirmation_selected | rejected |
+| [RR-0048](#rr-0048) | Сократить временные аллокации: fits::decode | rejected |
+| [RR-0049](#rr-0049) | Сократить временные аллокации: gallery::with_budget | rejected |
+| [RR-0050](#rr-0050) | Сократить временные аллокации: raster_color::prepare_raster_for_display_with_budget_and_cancel | rejected |
+| [RR-0051](#rr-0051) | Сократить временные аллокации: webp_animation::decode | rejected |
+| [RR-0052](#rr-0052) | Сократить временные аллокации: anchor_rank_file::search_anchor_rank_opposite_files_selected | rejected |
+| [RR-0053](#rr-0053) | Сократить накладные расходы потокового ввода-вывода: obj_swap::read_obj_swap_payload | rejected |
+| [RR-0054](#rr-0054) | Сократить удержание синхронизации: thumbnail::develop_with_cancel | rejected |
+| [RR-0055](#rr-0055) | Сделать публикацию артефакта устойчивой к прерыванию: bench-report::main | verified |
+| [RR-0056](#rr-0056) | Сократить удержание синхронизации: swap::new_with_budgets | verified |
+| [RR-0057](#rr-0057) | Сократить удержание синхронизации: pdf::decode | rejected |
+| [RR-0058](#rr-0058) | Сократить временные аллокации: heif::decode | rejected |
+| [RR-0059](#rr-0059) | Сократить временные аллокации: sti::decode | rejected |
+| [RR-0060](#rr-0060) | Сократить временные аллокации: raster::hdr_to_linear_srgb | rejected |
 
 ## Сборка и совместимость
 
@@ -261,9 +302,9 @@ API/совместимость: Добавить необязательный se
 
 Участок: `fn nvidia_full_output_boundaries_hdr_alpha_and_managed_limits() {`
 
-**Выполнение: partial (2026-10-15).** Добавлен ручной self-hosted NVIDIA workflow с проверкой фактически выполненного теста и артефактами.
+**Выполнение: partial (2026-10-24).** NVIDIA gate требует ровно конкретный CUDA тест, completion marker на 42 случая, нулевые ignored/failed, GPU UUID/name/driver и полный source SHA manifest. Negative parser fixtures исключают ложное принятие 11 passed, другого теста, отсутствующего marker и stale source.
 
-Осталось/границы: Workflow не запускался на NVIDIA runner; аппаратный критерий не выполнен. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Настоящий NVIDIA workflow не исполнялся; parser fixtures не аппаратное доказательство. Нужен self-hosted NVIDIA runner. [Отчёт](research/first30-remaining-2026-10-24/REPORT.md).
 
 Изменение: Добавить отдельный запускаемый вручную hardware job на выделенном NVIDIA runner с этим тестом, сохранением идентичности адаптера и запретом fallback/skip.
 
@@ -302,13 +343,13 @@ API/совместимость: Существующие сигнатуры и �
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/raster.rs:866](../crates/rrrah-gpu/src/raster.rs#L866), `install_texture`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/raster.rs:847](../crates/rrrah-gpu/src/raster.rs#L847), `install_texture`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
-Участок: `queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));`
+Участок: `fn install_texture(`
 
-**Выполнение: partial (2026-10-15).** Повторная запись неизменного view uniform пропускается по точным bits шести полей; Metal A/B: 10/10 пар в пользу изменения.
+**Выполнение: verified (2026-10-24).** Полный Metal render 1920×1080 Rgba16Float: 3 warmup + 10 alternating A/A и A/B пар по 30 кадров, CPU submission и настоящие GPU timestamps. A/A p95 wall ratio 1.022/GPU 1.000; A/B wall 0.805 (9/10), CPU 0.619 (10/10), GPU 0.863 (9/10). Native sampled allocations одинаковы 18677760 B; final managed 0. Exact readback/resize отдельно прошли.
 
-Осталось/границы: Измерена операция 1000 повторов, не FPS; install_texture и новая геометрия сохраняют запись. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Steady-view результат на Apple M4 Max; не FPS приложения или физическая dedicated VRAM. Все пары, проигранная пара и предварительный потенциально перекрытый GPU прогон сохранены. Resize не измерен как A/B performance. [Отчёт](research/first30-remaining-2026-10-24/REPORT.md).
 
 Изменение: Измерить CPU submission time и GPU timestamps; сравнить повторное использование ресурса или объединение передач без увеличения удерживаемой VRAM. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -323,13 +364,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:1687](../crates/rrrah-gpu/src/lib.rs#L1687), `upload_mosaic_with_tiling_and_cancel`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/lib.rs:1571](../crates/rrrah-gpu/src/lib.rs#L1571), `upload_mosaic_with_tiling_and_cancel`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
-Участок: `let texture = device.create_texture(&wgpu::TextureDescriptor {`
+Участок: `pub fn upload_mosaic_with_tiling_and_cancel(`
 
-**Выполнение: reviewed (2026-10-15).** RAW atlas создаётся при загрузке нового изображения; tile scratch переиспользуется. Это не аллокация каждого кадра.
+**Выполнение: rejected (2026-10-25).** Реальный Metal test-only in-place reuse записал новый RAW atlas слой и получил cancellation до публикации. Uniforms и logical budget остались прежними, но пиксели удерживаемого кадра изменились в SDR и HDR. Final credits 0. Production сохраняет отдельный atlas до commit; ошибочная reuse стратегия не включена.
 
-Осталось/границы: Pooling без доказательства GPU completion и budget ownership не внедрён; нужен upload профиль. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Отклонён конкретный reuse видимого atlas до принятия результата. Completion-safe pool с отдельным memory/lifetime доказательством и CPU/GPU A/B — другая непроверенная стратегия; её ускорение не заявлено. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить CPU submission time и GPU timestamps; сравнить повторное использование ресурса или объединение передач без увеличения удерживаемой VRAM. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -378,7 +419,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:806](../crates/rrrah-gpu/src/lib.rs#L806), `update_cards`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/lib.rs:751](../crates/rrrah-gpu/src/lib.rs#L751), `update_cards`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `self.vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {`
 
@@ -395,7 +436,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:677](../crates/rrrah-gpu/src/lib.rs#L677), `update`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/lib.rs:751](../crates/rrrah-gpu/src/lib.rs#L751), `update`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `self.vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {`
 
@@ -412,7 +453,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:1847](../crates/rrrah-gpu/src/lib.rs#L1847), `set_output_mode`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/lib.rs:1945](../crates/rrrah-gpu/src/lib.rs#L1945), `set_output_mode`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));`
 
@@ -446,7 +487,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:1861](../crates/rrrah-gpu/src/lib.rs#L1861), `update_view`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/lib.rs:1945](../crates/rrrah-gpu/src/lib.rs#L1945), `update_view`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `queue.write_buffer(&self.uniform_buffer, 0, bytemuck::bytes_of(&self.parameters));`
 
@@ -463,7 +504,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:1274](../crates/rrrah-gpu/src/lib.rs#L1274), `drop`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/lib.rs:1369](../crates/rrrah-gpu/src/lib.rs#L1369), `drop`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `self.queue.submit([]);`
 
@@ -480,7 +521,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/raster.rs:866](../crates/rrrah-gpu/src/raster.rs#L866), `set_pixel_aspect`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/raster.rs:885](../crates/rrrah-gpu/src/raster.rs#L885), `set_pixel_aspect`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));`
 
@@ -497,7 +538,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/raster.rs:866](../crates/rrrah-gpu/src/raster.rs#L866), `update_view`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-gpu/src/raster.rs:885](../crates/rrrah-gpu/src/raster.rs#L885), `update_view`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `queue.write_buffer(&self.uniform, 0, bytemuck::bytes_of(&self.parameters));`
 
@@ -514,7 +555,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:947](../crates/rrrah-gpu/src/lib.rs#L947), `push_hud_card`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-gpu/src/lib.rs:1042](../crates/rrrah-gpu/src/lib.rs#L1042), `push_hud_card`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (line_index, line) in wrap_hud_text(card.description, body_limit, description_lines)`
 
@@ -531,7 +572,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/compute.rs:370](../crates/rrrah-gpu/src/compute.rs#L370), `encode`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-gpu/src/compute.rs:407](../crates/rrrah-gpu/src/compute.rs#L407), `encode`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while offset_pixels < u64::from(count) {`
 
@@ -548,7 +589,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:2041](../crates/rrrah-gpu/src/lib.rs#L2041), `tile_with_halo_into`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-gpu/src/lib.rs:2139](../crates/rrrah-gpu/src/lib.rs#L2139), `tile_with_halo_into`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `.copy_from_slice(&source_row[source_x..source_x + copy_len]);`
 
@@ -565,7 +606,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:974](../crates/rrrah-gpu/src/lib.rs#L974), `wrap_hud_text`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-gpu/src/lib.rs:1069](../crates/rrrah-gpu/src/lib.rs#L1069), `wrap_hud_text`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `let word: Vec<char> = word.chars().collect();`
 
@@ -599,7 +640,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:1968](../crates/rrrah-gpu/src/lib.rs#L1968), `mosaic_bytes_with_cancel`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-gpu/src/lib.rs:2066](../crates/rrrah-gpu/src/lib.rs#L2066), `mosaic_bytes_with_cancel`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `padded[destination_range].copy_from_slice(&source[source_range]);`
 
@@ -650,7 +691,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-gpu/src/lib.rs:205](../crates/rrrah-gpu/src/lib.rs#L205), `default_tile_size`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-gpu/src/lib.rs:279](../crates/rrrah-gpu/src/lib.rs#L279), `default_tile_size`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while layer_count(width, height, tile) > u64::from(max_array_layers) {`
 
@@ -704,19 +745,19 @@ API/совместимость: Сохранить существующие си
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5213](../crates/rrrah-app/src/main.rs#L5213), `fn window_event(`. Roadmap требует versioned edit history; в просмотренном app/core нет undo/redo пользовательских правок. Нужен smoke-check актуального UI перед внедрением. Связанный roadmap: docs/EDITOR_100.md (| F70 |).
+Основание: [crates/rrrah-app/src/main.rs:5956](../crates/rrrah-app/src/main.rs#L5956), `fn window_event(`. Roadmap требует versioned edit history; в просмотренном app/core нет undo/redo пользовательских правок. Нужен smoke-check актуального UI перед внедрением. Связанный roadmap: docs/EDITOR_100.md (| F70 |).
 
 Участок: `fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {`
 
-**Выполнение: partial (2026-10-15).** Внедрены bounded native EditSession, undo/redo, coalescing и изоляция документа/страницы; подключена экспозиция viewer. Reload creates a separate session; undo/redo are reused only after full content identity and persisted state match. Stale Open cannot initialize a newer decode generation. Explicit clean-session reset now reuses the admitted history buffer, clears undo/redo and gesture, and succeeds with the entire history budget occupied; invalid reset leaves history unchanged.
+**Выполнение: verified (2026-10-23).** Добавлен native графический редактор кривой T: monotone knots, drag coalescing, undo/redo и before/after GPU. Сохранена последняя dirty история при reload со старой записью в полёте без второй аллокации. GUI и Metal readback проверили кривую, alpha, signed/HDR и f32::MAX.
 
-Осталось/границы: Графический редактор кривых отсутствует; native кривая проверена отдельно. [Отчёт](research/editor-locks-2026-10-15/REPORT.md).
+Осталось/границы: Квалифицировано на macOS Apple M4 Max для linear/developed raster, включая compute RAW; direct fragment RAW требует linear path. Всеобщая квалификация платформ и камер не заявлена. [Отчёт](research/editor-008-011-2026-10-23/REPORT.md).
 
 Изменение: Создать native EditSession с командами и ограниченным бюджетом истории; объединять непрерывный жест в одну команду и привязать undo/redo к текущему документу.
 
 Приёмка: Экспозиция/кривая и последовательность переключений документа проходят undo/redo; новая правка очищает redo; превышение бюджета ограничивает историю предсказуемо.
 
-API/совместимость: Новый native EditSession/command API; cache MosaicRecipeManifest не переиспользовать как схему пользовательских правок. Additive EditSession::reset(EditState) -> Result<(), EditError> preserves existing signatures and allocation; validates before mutation, clears history/gesture and sets the new baseline.
+API/совместимость: Новый native EditSession/command API; cache MosaicRecipeManifest не переиспользовать как схему пользовательских правок. Additive EditSession::reset(EditState) -> Result<(), EditError> preserves existing signatures and allocation; validates before mutation, clears history/gesture and sets the new baseline. Additive native curve/histogram APIs preserve existing callers; XMP schema remains v1; recovery writer uses bounded command-log v2 with a legacy-v1 reader. Typed StoreError preserves underlying io::Error. Recovery CAS uses exact content digest; no automatic schema migration or destructive retained cleanup.
 
 Зависимости: нет установленных. Условия: Синтетические входы и релевантные существующие регрессии; внешние оригиналы проверять на месте без копирования в реестр.
 
@@ -725,19 +766,19 @@ API/совместимость: Новый native EditSession/command API; cache
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1025](../crates/rrrah-app/src/main.rs#L1025), `fn run_viewer(`. В roadmap есть XMP read/write; поиск app/core не обнаружил реализации sidecar редактирования. Связанный roadmap: docs/EDITOR_100.md (| F83 |).
+Основание: [crates/rrrah-app/src/main.rs:1031](../crates/rrrah-app/src/main.rs#L1031), `fn run_viewer(`. В roadmap есть XMP read/write; поиск app/core не обнаружил реализации sidecar редактирования. Связанный roadmap: docs/EDITOR_100.md (| F83 |).
 
 Участок: `fn run_viewer(`
 
-**Выполнение: partial (2026-10-15).** Bounded атомарный XMP round-trip сохраняет неизвестный XML и другие страницы; перед записью проверяются полный hash исходника и digest sidecar. Для f64 кривых включён float_roundtrip. Блокировка заменена на неблокирующий OS lock: конкурирующий writer получает отказ, после process kill сохранение снова разрешено без удаления lock inode. Существующий legacy lock не захватывается автоматически.
+**Выполнение: verified (2026-10-23).** Добавлены typed I/O/conflict/retention errors и native диалог local/saved edits. GUI выбор внешнего XMP и неизменность его SHA подтверждены. Atomic round-trip/неизвестный XML/лимиты/process-kill и конкурирующие writers проверены; безопасная ограниченная orphan/backup policy реализована.
 
-Осталось/границы: Нужны типизированные ошибки I/O и диалог внешнего изменения XMP; несотрудничающий writer может конкурировать с rename. Legacy lock требует отдельного решения. Windows, сетевые FS и отключение питания не квалифицированы. [Отчёт](research/editor-locks-2026-10-15/REPORT.md).
+Осталось/границы: Квалифицировано на macOS локальной FS. Cooperative locking не исключает несотрудничающий writer при rename; legacy locks не удаляются. Windows, network FS и power loss не проверены. [Отчёт](research/editor-008-011-2026-10-23/REPORT.md).
 
 Изменение: Добавить ограниченный native parser/writer XMP с сохранением неизвестных полей и атомарной заменой файла; конфликт внешнего изменения предъявлять пользователю до перезаписи.
 
 Приёмка: Чтение-запись сохраняет известные и неизвестные поля; повреждённый XML, превышение лимита, прерывание записи и внешнее изменение не уничтожают предыдущий sidecar.
 
-API/совместимость: Отдельная версионированная схема правок и typed I/O errors; входные изображения не переписывать. Схема XMP v1 сохранена. Advisory lock использует отдельный .rrrah-lock-v2 с постоянным inode; legacy .xmp.rrrah-lock не удалять автоматически. Одновременная запись старой и новой версий не квалифицирована.
+API/совместимость: Отдельная версионированная схема правок и typed I/O errors; входные изображения не переписывать. Схема XMP v1 сохранена. Advisory lock использует отдельный .rrrah-lock-v2 с постоянным inode; legacy .xmp.rrrah-lock не удалять автоматически. Одновременная запись старой и новой версий не квалифицирована. Additive native curve/histogram APIs preserve existing callers; XMP schema remains v1; recovery writer uses bounded command-log v2 with a legacy-v1 reader. Typed StoreError preserves underlying io::Error. Recovery CAS uses exact content digest; no automatic schema migration or destructive retained cleanup.
 
 Зависимости: нет установленных. Условия: Синтетические входы и релевантные существующие регрессии; внешние оригиналы проверять на месте без копирования в реестр.
 
@@ -746,19 +787,19 @@ API/совместимость: Отдельная версионированн�
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4970](../crates/rrrah-app/src/main.rs#L4970), `fn exiting(`. Roadmap требует crash recovery/autosave journal; в app/core не найдены autosave или пользовательский журнал. Связанный roadmap: docs/EDITOR_100.md (| F98 |).
+Основание: [crates/rrrah-app/src/main.rs:5694](../crates/rrrah-app/src/main.rs#L5694), `fn exiting(`. Roadmap требует crash recovery/autosave journal; в app/core не найдены autosave или пользовательский журнал. Связанный roadmap: docs/EDITOR_100.md (| F98 |).
 
 Участок: `fn exiting(&mut self, _event_loop: &ActiveEventLoop) {`
 
-**Выполнение: partial (2026-10-15).** Checksummed bounded snapshot journal, защита полного source hash и изоляция поколений загрузки подключены к viewer. Добавлено явное начало чистого сеанса для изменившегося исходника, неизвестной схемы или повреждённого журнала: сначала сохраняются точные байты в no-clobber .retained backup, затем создаётся schema-v1 journal. XMP не меняется. Проверены отказ при изменившихся source/journal, конфликтующей backup, повторное использование backup и process kill после её сохранения. OS lock journal автоматически освобождается при завершении процесса.
+**Выполнение: verified (2026-10-24).** Command log recovery v2: checkpoint + до 64 команд exposure/curve, sequence/hash chain, bounded compaction и atomic compare-and-exchange. v1 читается без изменения и мигрирует при checked Save; неизвестные версии сохраняются. 1000 команд replay, 200 legacy saves, corruption/truncation, 12 atomic kill checkpoints и реальный GUI SIGKILL/relaunch восстановили +0.50 и кривую без изменения XMP.
 
-Осталось/границы: Snapshot вместо командного журнала; нужны GUI kill-серия, политика хранения retained backups и безопасная очистка orphan temporary files. Shutdown на медленной FS не ограничен по времени. Identity устанавливается после decode: нужна привязка к допуску декодера. Dirty/failed история предыдущей загрузки сохраняется в bounded памяти без UI выбора. Legacy lock не захватывается автоматически; Windows, сетевые FS и отключение питания не квалифицированы. [Отчёт](research/editor-locks-2026-10-15/REPORT.md).
+Осталось/границы: Квалифицировано на macOS локальной FS. Bounded recovery не обещает бесконечное persistent undo. Windows/network FS/power loss не проверены; cooperative lock не исключает несотрудничающий writer. Deadline persistence actor не ограничивает весь decoder shutdown. Каталог retained drafts — отдельное возможное UX-расширение. [Отчёт](research/editor-009-011-2026-10-24/REPORT.md).
 
 Изменение: Поверх EditSession записывать ограниченный журнал команд с идентичностью исходника и контрольными суммами; восстанавливать только подтверждённый целый префикс после сбоя.
 
 Приёмка: Kill между записями восстанавливает последний целый набор правок; изменившийся исходник и неизвестная версия требуют явного решения; журнал не растёт бесконечно.
 
-API/совместимость: Версионированный journal format, независимый от session-only swap. Схема journal остаётся v1; неизвестная схема не интерпретируется. Явный reset сохраняет точные исходные байты в content-addressed .retained без перезаписи существующей копии.
+API/совместимость: Recovery format v2: checkpoint + bounded exposure/curve command sequence, per-command hash chain and document checksum. EditState/XMP schema stays v1. Legacy-v1 snapshots are read without rewriting and migrated on the next checked Save; older binaries must fail closed on v2. Unknown schemas and source mismatches require explicit retained-backup/clean choice. Core session APIs and existing callers remain compatible; persistent undo across all compacted history is not promised.
 
 Зависимости: RR-0007. Условия: Синтетические входы и релевантные существующие регрессии; внешние оригиналы проверять на месте без копирования в реестр.
 
@@ -767,19 +808,19 @@ API/совместимость: Версионированный journal format,
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5765](../crates/rrrah-app/src/main.rs#L5765), `fn render(`. Roadmap требует histogram/waveform/vectorscope; найденные gradient histograms относятся к dedup, а не к просмотру. Связанный roadmap: docs/EDITOR_100.md (| F93 |).
+Основание: [crates/rrrah-app/src/main.rs:6616](../crates/rrrah-app/src/main.rs#L6616), `fn render(`. Roadmap требует histogram/waveform/vectorscope; найденные gradient histograms относятся к dedup, а не к просмотру. Связанный roadmap: docs/EDITOR_100.md (| F93 |).
 
 Участок: `fn render(&mut self) {`
 
-**Выполнение: partial (2026-10-15).** Добавлена асинхронная bounded log HDR histogram для LinearSrgb float raster; аналитические bins и stale generation проверяются тестами.
+**Выполнение: verified (2026-10-24).** Расширены Metal проверки: 3 crop-сценария × 12 повторов, HDR extremes, invalid/alpha policy, budget/cancellation/drop и явный отказ неверной геометрии. Сняты 4 GUI-прогона HDR/RAW cold+warm cache: по 64 frame samples, kernel maximum RSS/peak footprint и native Metal allocations с проверкой счётчика настоящим wgpu allocation challenge. Все метрики и hashes в отчёте/memory-results.json.
 
-Осталось/границы: Нет RAW GPU histogram, графического histogram plot и end-to-end p95/RAM квалификации. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Проверенная среда — Apple M4 Max/macOS, linear/developed raster и compute Bayer. Native Metal metric — sampled resource allocations, не lifetime peak residency; на unified memory нет отдельной физической VRAM. Замеры не являются FPS/A-B ускорением или глобальным hard cap: surface/driver расходы выходят за managed budget. Direct fragment/XTrans GPU histogram, физический HDR/CUDA/NVIDIA не квалифицированы. Старый cached startup timeout не воспроизведён; первопричина не установлена. [Отчёт](research/editor-009-011-2026-10-24/REPORT.md).
 
 Изменение: Реализовать линейную RGB/luminance histogram с HDR диапазоном и bounded downsample; вычислять асинхронно, отменяя результаты старого поколения. Waveform/vectorscope оставить отдельным будущим расширением.
 
 Приёмка: Аналитические SDR/HDR patches попадают в ожидаемые bins; NaN policy явная; быстрая навигация не публикует старую гистограмму; RAM/VRAM и p95 кадра измерены.
 
-API/совместимость: Отдельный HistogramRequest/Result с generation и описанием диапазона, без изменения исходных пикселей.
+API/совместимость: Additive GpuHistogram submit/poll/cancel service with decode generation and per-request revision; RGB/Y source-linear results, bounded samples/readback, no pixel mutation. Native Metal memory probe is debug-only opt-in, requires a uniquely matched selected device and a real allocation challenge; unavailable counters fail qualification explicitly.
 
 Зависимости: нет установленных. Условия: Синтетические входы и релевантные существующие регрессии; внешние оригиналы проверять на месте без копирования в реестр.
 
@@ -788,13 +829,13 @@ API/совместимость: Отдельный HistogramRequest/Result с ge
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5765](../crates/rrrah-app/src/main.rs#L5765), `fn render(`. Roadmap требует before/after; поиск app не показал отдельного пользовательского режима сравнения правок. Связанный roadmap: docs/EDITOR_100.md (| F95 |).
+Основание: [crates/rrrah-app/src/main.rs:6616](../crates/rrrah-app/src/main.rs#L6616), `fn render(`. Roadmap требует before/after; поиск app не показал отдельного пользовательского режима сравнения правок. Связанный roadmap: docs/EDITOR_100.md (| F95 |).
 
 Участок: `fn render(&mut self) {`
 
-**Выполнение: partial (2026-10-15).** Удержание B и split C используют тот же texture/atlas; обе стороны совпали с SDR/HDR и RAW GPU readback эталонами на Metal.
+**Выполнение: verified (2026-10-24).** Metal comparison matrix: 128 orientation/viewport/zoom/pan/SDR/HDR случаев, точные пиксели обеих половин, unchanged residency и final credits 0. Live GUI: navigation/edit/split/pan/zoom/resize/focus, сброс before и возврат выбранной команды через F6. Финальный trace 64 кадров: CPU p95 15.822 ms, host queue p95 29.338 ms; kernel RSS/footprint и native Metal allocations сохранены.
 
-Осталось/границы: Live GUI, resize/focus и p95 ещё требуют проверки; CUA server timeout. Финальный RAW-ретест остановлен после 1200 секунд ожидания create_render_pipeline/MetalCompiler; это не успешная проверка. Причина задержки не установлена; предыдущий RAW-readback сохранён отдельно. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Квалифицировано на macOS Apple M4 Max для проверенных raster/RAW путей. Host queue completion не физический scanout; Metal allocatedSize не dedicated VRAM. Первый Documents startup stall сохранён как отрицательное доказательство, причина не установлена; успешный TMP запуск его не объясняет. [Отчёт](research/first30-remaining-2026-10-24/REPORT.md).
 
 Изменение: Добавить удерживаемое действие before/after и разделяемый вид с общей геометрией viewport, одинаковым output transform и ограниченным дополнительным residency.
 
@@ -812,13 +853,13 @@ API/совместимость: Viewer comparison state поверх EditSession
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5213](../crates/rrrah-app/src/main.rs#L5213), `fn window_event(`. Roadmap требует accessibility; в app не найден accessibility bridge. Проверка screen reader необходима перед оценкой текущих ограничений. Связанный roadmap: docs/EDITOR_100.md (| F99 |).
+Основание: [crates/rrrah-app/src/main.rs:5956](../crates/rrrah-app/src/main.rs#L5956), `fn window_event(`. Roadmap требует accessibility; в app не найден accessibility bridge. Проверка screen reader необходима перед оценкой текущих ограничений. Связанный roadmap: docs/EDITOR_100.md (| F99 |).
 
 Участок: `fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {`
 
-**Выполнение: partial (2026-10-15).** AccessKit tree, семантика изображения/папки/состояния, Tab/ShiftTab и 11 действий подключены к viewer. Добавлены явный выбор recovery/XMP и начало чистого сеанса с сохранением отказавшего recovery; при блокировке правок статус сохраняет соответствующую клавиатурную подсказку.
+**Выполнение: partial (2026-10-25).** К прежним 30 native AX/keyboard командам добавлено исправление HDR контраста: подложка Conflict/Curve/Histogram alpha 0.98→1. Metal regression воспроизвёл зависимость фона до исправления, после него все пиксели панелей одинаковы на −16/0/1/16/1024/65504 (18 случаев), область вне панели меняет яркость.
 
-Осталось/границы: Реальный screen reader, контрастность, GUI фокус и shortcut path ещё не квалифицированы; native проверка дерева не заменяет GUI. [Отчёт](research/editor-locks-2026-10-15/REPORT.md).
+Осталось/границы: VoiceOver и требующие другого оборудования проверки отложены пользователем (2026-10-25), повторного разрешения не ожидают. Это не полная screen-reader/contrast квалификация всех режимов, форматов и платформ; physical HDR display не проверен. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Добавить native accessibility bridge для текущего изображения, выбранного элемента filmstrip, ошибок и доступных действий; обеспечить логичный клавиатурный фокус и текстовые обозначения состояний.
 
@@ -833,13 +874,13 @@ API/совместимость: Семантическое дерево дост
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1758](../crates/rrrah-app/src/main.rs#L1758), `submit_request_with_prefetch`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/main.rs:1814](../crates/rrrah-app/src/main.rs#L1814), `submit_request_with_prefetch`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
-Участок: `.lock()`
+Участок: `fn submit_request_with_prefetch(`
 
-**Выполнение: partial (2026-10-15).** Убраны clone prefetch списка и лишнее первоначальное заполнение slot; два синтетических A/B прогона показывают выигрыш локальной операции.
+**Выполнение: verified (2026-10-25).** Настоящий ForegroundLoader submit: 1/2/4 producers + consumer/source stat, 3 warmup + 10 alternating A/A/A/B пар, wall/lock wait/hold p50/p95 и throughput, точное latest generation/queue. Две hold-instrumented серии: total ratios 1/2/4 = 0.735/0.760/0.813 и 0.707/0.764/0.819. Submit/cancel нагрузка и disconnected queue refusal прошли. Устранённый ранее redundant clone квалифицирован.
 
-Осталось/границы: Это microbenchmark, не измерение открытия/навигации и не профиль конкуренции UI. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Проверен submit ownership/queue path; это не end-to-end opening/navigation или decoder throughput. Test-only timing hooks добавляют overhead обоим вариантам. В 4-producer повторе p50 не улучшился устойчиво; выигрыша каждой метрики не заявлено. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -854,13 +895,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1758](../crates/rrrah-app/src/main.rs#L1758), `enqueue_foreground`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/main.rs:1918](../crates/rrrah-app/src/main.rs#L1918), `enqueue_foreground`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
-Участок: `.lock()`
+Участок: `fn enqueue_foreground(`
 
-**Выполнение: reviewed (2026-10-15).** enqueue_foreground использует общий prefetch slot; перенос операций вне mutex без доказательства ordering не принят.
+**Выполнение: rejected (2026-10-25).** Детерминированная ранняя разблокировка перед enqueue/publication дала потерю нового intent: generation 1 после паузы затёр queue/flight generation 2, оставив лишь отменённый request. Production сериализация сохранена. Настоящий path прошёл 1/2/4 producers/cancel; профиль wait/hold/throughput сохранён вместе с RR-0013.
 
-Осталось/границы: Нужен профиль реальной конкуренции и latency; подтверждённого изменения нет. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Закрыт проверенный вариант раннего unlock, без утверждения оптимальности mutex. Новый двухфазный протокол публикации не квалифицирован и не внедрён. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -875,19 +916,19 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5808](../crates/rrrah-app/src/main.rs#L5808), `render`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-app/src/main.rs:6616](../crates/rrrah-app/src/main.rs#L6616), `render`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
-Участок: `self.queue.submit([encoder.finish()]);`
+Участок: `fn render(&mut self) {`
 
-**Выполнение: reviewed (2026-10-15).** Уточнено основание: render относится к TelemetryState, а не к отрисовке изображения. Изменение не принято.
+**Выполнение: verified (2026-10-25).** TelemetryState clear и HUD объединены в один render pass через additive encode_with_clear. Exact readback пустой панели и 12 карточек совпал при трёх размерах. Две Metal A/A/A/B серии: CPU p95 ratios 0.611/0.717, GPU 0.851/0.826, host wall 0.847/0.844; native sampled allocations равны 13467648 B. Live GUI показал панель, native zoom изменил размер, F6 вернул фокус.
 
-Осталось/границы: Измерить стоимость панели телеметрии отдельно; image FPS из этого участка не следует. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Это панель телеметрии, не image FPS. Metal allocatedSize — per-device unified allocations, не dedicated physical VRAM. Измерены steady 1248×900 кадры; resize проверен correctness, не performance A/B. Idle live GUI не заменяет полный RAW pipeline корпус. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить CPU submission time и GPU timestamps; сравнить повторное использование ресурса или объединение передач без увеличения удерживаемой VRAM. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Проверить реальный адаптер, readback, resize и освобождение ресурсов; сравнить p95 кадра и peak VRAM, отключённый GPU не считать проходом. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
 
-API/совместимость: Сохранить существующие сигнатуры, ошибки, формат данных и правила владения; изменение API оформлять отдельно после подтверждения необходимости.
+API/совместимость: Добавлен совместимый HudRenderer::encode_with_clear(encoder, target, color) для standalone HUD; очищает target даже при пустой геометрии. Существующий encode сохраняет Load/overlay и no-op для пустой геометрии. Сигнатуры прежних API не меняются.
 
 Зависимости: нет установленных. Условия: Сравнить baseline и вариант на одном locked build/host: 3 warmup, минимум 10 чередующихся пар; публиковать сырые времена и median/p95, RSS и релевантные счётчики. Сначала проверить существующие тесты и вызывающие стороны; наличие операции не доказывает дефект или отсутствие оптимизации.
 
@@ -896,13 +937,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5118](../crates/rrrah-app/src/main.rs#L5118), `about_to_wait`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-app/src/main.rs:5793](../crates/rrrah-app/src/main.rs#L5793), `about_to_wait`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
-Участок: `gpu.upload_completions.poll(&gpu.device).unwrap_or_else(|error| {`
+Участок: `fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {`
 
-**Выполнение: reviewed (2026-10-15).** UploadCompletions.poll уже возвращает управление при pending==0; poll нужен для освобождения GPU lease.
+**Выполнение: rejected (2026-10-25).** Реальный Metal отрицательный контроль скрытого окна: спустя 20 ms без poll/submit/redraw завершённый upload всё ещё удерживает 16 B credits, следующий upload отказан. Production poll освобождает до 0, GPU readback точно равен 16 байтам 0x5a. Idle pending=0 fast path уже не вызывает device.poll.
 
-Осталось/границы: Нужен профиль активных загрузок; удалять обязательное обслуживание без доказательства нельзя. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Отклонён пропуск обязательного callback polling; ускорение не заявлено. Coalescing с poll_loss и адаптивная частота — другие непроверенные стратегии. Непригодный по correctness вариант не измеряется как ускорение. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить CPU submission time и GPU timestamps; сравнить повторное использование ресурса или объединение передач без увеличения удерживаемой VRAM. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -917,13 +958,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/model_upload_worker.rs:117](../crates/rrrah-app/src/model_upload_worker.rs#L117), `submit_context`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/model_upload_worker.rs:93](../crates/rrrah-app/src/model_upload_worker.rs#L93), `submit_context`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
-Участок: `let mut slots = shared.slots.lock().unwrap();`
+Участок: `fn submit_context(`
 
-**Выполнение: reviewed (2026-10-15).** Подготовка model upload выполняется вне mutex; destruction старых jobs связано с admission/ownership.
+**Выполнение: rejected (2026-10-25).** Отложенный drop obsolete completed upload ломает admission: при budget 72 и resident/obsolete по 36 B replacement отказан до drop и принят после него, final credits 0. Повторно прошли 1000 latest-wins replacements, stale caller/completion, cancel и source ownership. submit требует &mut self: 2/4 независимых callers не соответствуют API без внешней сериализации; реальная конкуренция — UI и один worker.
 
-Осталось/границы: Нужны paired contention measurements и проверка memory admission перед переносом destruction. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Отклонён конкретный перенос drop после подготовки/публикации новой работы. Безопасная двухфазная release-before-wake схема не квалифицирована; production mutex без изменений, ускорение не заявлено. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -938,9 +979,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/raster_lod_worker.rs:296](../crates/rrrah-app/src/raster_lod_worker.rs#L296), `try_take`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/raster_lod_worker.rs:292](../crates/rrrah-app/src/raster_lod_worker.rs#L292), `try_take`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
-Участок: `.lock()`
+Участок: `pub fn try_take(&self) -> Option<Completed> {`
 
 **Выполнение: rejected (2026-10-15).** try_take отпускает временный mutex guard до проверки отмены/деструкции результата; предположение о длительном удержании не подтверждено.
 
@@ -959,13 +1000,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:1096](../crates/rrrah-app/src/gallery.rs#L1096), `first_supported_image_with_cancel`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-app/src/gallery.rs:1257](../crates/rrrah-app/src/gallery.rs#L1257), `first_supported_image_with_cancel`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
-Участок: `let candidates = std::fs::read_dir(folder)`
+Участок: `fn first_supported_image_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool) -> Option<PathBuf> {`
 
-**Выполнение: partial (2026-10-15).** Обложка сначала фильтрует расширение, затем использует DirEntry.file_type без следования symlink; downstream identity validation сохранена.
+**Выполнение: verified (2026-10-25).** Настоящий cover path на одноразовой APFS: 10000 файлов + directory/symlink, 10 alternating A/B пар после отдельных remount и warm повторов. Ratios remount-cold/warm 0.168/0.255, 10/10 выигрышей; cover точен. Test-only libc interposition: lstat 10002→0, stat/fstatat 0→0 для fixture paths. Замена same-length source, удаление, symlink/broken link, отмена и настоящий PermissionDenied прошли.
 
-Осталось/границы: Два прогона каталогов 1000/10000 файлов подтверждают локальную операцию, не весь viewer/cold disk путь. [Отчёт](research/first30-2026-10-14/REPORT.md).
+Осталось/границы: Локальная APFS, remount-cold VFS не физический SSD/controller cache. Счётчик покрывает указанные metadata libc API, не все kernel I/O. Preliminary с compilation и отдельный повтор с 20 s timeout сохранены; причина timeout не установлена, это не универсальная гарантия отсутствия FS stalls. Network FS/Windows и все layouts не квалифицированы. [Отчёт](research/first30-local-2026-10-24/REPORT.md).
 
 Изменение: Измерить число filesystem запросов при повторных обращениях; сравнить объединение обходов или ограниченное переиспользование уже полученной информации с сохранением проверки идентичности источника. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -980,9 +1021,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:310](../crates/rrrah-app/src/gallery.rs#L310), `with_budget`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-app/src/gallery.rs:323](../crates/rrrah-app/src/gallery.rs#L323), `with_budget`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut protected = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** Prefetch protected содержит CacheKey, не pixel leases. При cache count limit=0 текущий worker прерывается до первого push. Eager reserve плана 4096 путей выделяет 131072 B вместо 0; managed final=0 в обеих ветках. Кандидат отклонён.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -997,7 +1042,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:3335](../crates/rrrah-app/src/main.rs#L3335), `thumbnail_loader_with_cancel`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-app/src/main.rs:3709](../crates/rrrah-app/src/main.rs#L3709), `thumbnail_loader_with_cancel`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut pixels = Vec::new();`
 
@@ -1014,7 +1059,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:846](../crates/rrrah-app/src/gallery.rs#L846), `with_source_reader`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/gallery.rs:866](../crates/rrrah-app/src/gallery.rs#L866), `with_source_reader`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1031,7 +1076,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/model_swap.rs:58](../crates/rrrah-app/src/model_swap.rs#L58), `read_payload`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-app/src/model_swap.rs:61](../crates/rrrah-app/src/model_swap.rs#L61), `read_payload`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `reader.read_exact(&mut magic).map_err(SwapPayloadError::Invalid)?;`
 
@@ -1065,7 +1110,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1795](../crates/rrrah-app/src/main.rs#L1795), `poll_duplicate`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/main.rs:1862](../crates/rrrah-app/src/main.rs#L1862), `poll_duplicate`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1082,7 +1127,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:792](../crates/rrrah-app/src/gallery.rs#L792), `new_with_cancel`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/gallery.rs:866](../crates/rrrah-app/src/gallery.rs#L866), `new_with_cancel`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1116,7 +1161,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:873](../crates/rrrah-app/src/gallery.rs#L873), `scan_folder_with_cancel`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-app/src/gallery.rs:947](../crates/rrrah-app/src/gallery.rs#L947), `scan_folder_with_cancel`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let Ok(entries) = std::fs::read_dir(folder) else {`
 
@@ -1133,7 +1178,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:1070](../crates/rrrah-app/src/gallery.rs#L1070), `sibling_folder_tiles_with_cancel`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-app/src/gallery.rs:1232](../crates/rrrah-app/src/gallery.rs#L1232), `sibling_folder_tiles_with_cancel`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let Ok(entries) = std::fs::read_dir(parent) else {`
 
@@ -1150,7 +1195,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:542](../crates/rrrah-app/src/gallery.rs#L542), `neighbour_prefetch_indices`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-app/src/gallery.rs:570](../crates/rrrah-app/src/gallery.rs#L570), `neighbour_prefetch_indices`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `pub fn neighbour_prefetch_indices(`
 
@@ -1167,7 +1212,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:792](../crates/rrrah-app/src/gallery.rs#L792), `submit`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/gallery.rs:866](../crates/rrrah-app/src/gallery.rs#L866), `submit`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1184,7 +1229,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:792](../crates/rrrah-app/src/gallery.rs#L792), `drop`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/gallery.rs:866](../crates/rrrah-app/src/gallery.rs#L866), `drop`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1201,7 +1246,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1268](../crates/rrrah-app/src/main.rs#L1268), `cancel_pending`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/main.rs:1322](../crates/rrrah-app/src/main.rs#L1322), `cancel_pending`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1235,7 +1280,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:846](../crates/rrrah-app/src/gallery.rs#L846), `submit_with_sources`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/gallery.rs:866](../crates/rrrah-app/src/gallery.rs#L866), `submit_with_sources`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1252,7 +1297,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:3459](../crates/rrrah-app/src/main.rs#L3459), `submit_upload_lease`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-app/src/main.rs:3835](../crates/rrrah-app/src/main.rs#L3835), `submit_upload_lease`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `let submission = queue.submit([]);`
 
@@ -1354,7 +1399,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:792](../crates/rrrah-app/src/gallery.rs#L792), `try_recv`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-app/src/gallery.rs:866](../crates/rrrah-app/src/gallery.rs#L866), `try_recv`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -1371,7 +1416,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:3447](../crates/rrrah-app/src/main.rs#L3447), `poll`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
+Основание: [crates/rrrah-app/src/main.rs:3823](../crates/rrrah-app/src/main.rs#L3823), `poll`. Создание, передача или ожидание GPU-ресурсов может попадать на критический путь кадра.
 
 Участок: `device.poll(wgpu::PollType::Poll)?;`
 
@@ -1388,7 +1433,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:3775](../crates/rrrah-app/src/main.rs#L3775), `drain_load_events`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:4160](../crates/rrrah-app/src/main.rs#L4160), `drain_load_events`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `GenerationToken::new(self.foreground_loader.generation.clone(), *generation);`
 
@@ -1405,7 +1450,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2789](../crates/rrrah-app/src/main.rs#L2789), `execute_load`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:3158](../crates/rrrah-app/src/main.rs#L3158), `execute_load`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `decode_request.cancellation = Some(token.clone());`
 
@@ -1422,7 +1467,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5415](../crates/rrrah-app/src/main.rs#L5415), `window_event`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:6264](../crates/rrrah-app/src/main.rs#L6264), `window_event`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let folder = self.strip.tiles[index].folder.clone();`
 
@@ -1439,7 +1484,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:6260](../crates/rrrah-app/src/main.rs#L6260), `update_view`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:7202](../crates/rrrah-app/src/main.rs#L7202), `update_view`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let token = GenerationToken::new(self.viewport_generation.clone(), identity);`
 
@@ -1490,7 +1535,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4578](../crates/rrrah-app/src/main.rs#L4578), `drain_thumbnails`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5254](../crates/rrrah-app/src/main.rs#L5254), `drain_thumbnails`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let Some(folder) = self.strip.tiles.get(ready.index).map(|tile| tile.folder.clone()) else {`
 
@@ -1507,7 +1552,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2081](../crates/rrrah-app/src/main.rs#L2081), `load_with_cancel_resolving_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2212](../crates/rrrah-app/src/main.rs#L2212), `load_with_cancel_resolving_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `self.visible = Some(key.clone());`
 
@@ -1524,7 +1569,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5005](../crates/rrrah-app/src/main.rs#L5005), `resumed`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5561](../crates/rrrah-app/src/main.rs#L5561), `resumed`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `window.clone(),`
 
@@ -1541,7 +1586,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1063](../crates/rrrah-app/src/main.rs#L1063), `run_viewer`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:1069](../crates/rrrah-app/src/main.rs#L1069), `run_viewer`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `cache_root.clone(),`
 
@@ -1558,7 +1603,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2347](../crates/rrrah-app/src/main.rs#L2347), `preload_raw_with_lease`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2543](../crates/rrrah-app/src/main.rs#L2543), `preload_raw_with_lease`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let admitted = ram.insert(key, mosaic.clone());`
 
@@ -1592,7 +1637,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2589](../crates/rrrah-app/src/main.rs#L2589), `load_cached_raster_mode_resolving_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2896](../crates/rrrah-app/src/main.rs#L2896), `load_cached_raster_mode_resolving_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let mut probe = key.clone();`
 
@@ -1626,9 +1671,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4501](../crates/rrrah-app/src/main.rs#L4501), `drain_folder_scan`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-app/src/main.rs:5139](../crates/rrrah-app/src/main.rs#L5139), `drain_folder_scan`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
-Участок: `self.gallery_index = ready.paths.iter().position(|candidate| candidate == &self.path);`
+Участок: `fn drain_folder_scan(&mut self) {`
 
 Изменение: Измерить размеры коллекции и число сравнений; сравнить существующий поиск с переиспользованием найденной позиции либо индексом с учётом цены его построения. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -1643,7 +1688,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4722](../crates/rrrah-app/src/main.rs#L4722), `open_gallery_index`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5401](../crates/rrrah-app/src/main.rs#L5401), `open_gallery_index`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `.submit_request_with_prefetch(path.clone(), 0, None, true, neighbours)`
 
@@ -1660,7 +1705,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2402](../crates/rrrah-app/src/main.rs#L2402), `preload_raster_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2399](../crates/rrrah-app/src/main.rs#L2399), `preload_raster_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `resolved.clone()`
 
@@ -1694,7 +1739,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:5746](../crates/rrrah-app/src/main.rs#L5746), `rebuild_hud`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-app/src/main.rs:6595](../crates/rrrah-app/src/main.rs#L6595), `rebuild_hud`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect();`
 
@@ -1711,7 +1756,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2240](../crates/rrrah-app/src/main.rs#L2240), `preload_model_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2399](../crates/rrrah-app/src/main.rs#L2399), `preload_model_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `resolved.clone()`
 
@@ -1745,7 +1790,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:1085](../crates/rrrah-app/src/gallery.rs#L1085), `finish_foreground_and_submit`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-app/src/gallery.rs:1247](../crates/rrrah-app/src/gallery.rs#L1247), `finish_foreground_and_submit`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect::<Vec<_>>();`
 
@@ -1779,7 +1824,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4805](../crates/rrrah-app/src/main.rs#L4805), `adjust_scientific_window`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5497](../crates/rrrah-app/src/main.rs#L5497), `adjust_scientific_window`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `.submit_image_with_window(self.path.clone(), index, Some(window))`
 
@@ -1796,7 +1841,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4680](../crates/rrrah-app/src/main.rs#L4680), `drain_dropped_paths`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5356](../crates/rrrah-app/src/main.rs#L5356), `drain_dropped_paths`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `self.gallery = vec![path.clone()];`
 
@@ -1830,7 +1875,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4775](../crates/rrrah-app/src/main.rs#L4775), `navigate_image`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5464](../crates/rrrah-app/src/main.rs#L5464), `navigate_image`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `.submit_image_with_window(self.path.clone(), next, self.scalar_window)`
 
@@ -1847,7 +1892,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2521](../crates/rrrah-app/src/main.rs#L2521), `raster_display_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2803](../crates/rrrah-app/src/main.rs#L2803), `raster_display_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `request.path.clone(),`
 
@@ -1864,7 +1909,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:13883](../crates/rrrah-app/src/main.rs#L13883), `select_viewer_surface`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-app/src/main.rs:16770](../crates/rrrah-app/src/main.rs#L16770), `select_viewer_surface`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `.find(wgpu::TextureFormat::is_srgb)`
 
@@ -1881,7 +1926,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1335](../crates/rrrah-app/src/main.rs#L1335), `resolve_foreground_prefetch_paths`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-app/src/main.rs:1389](../crates/rrrah-app/src/main.rs#L1389), `resolve_foreground_prefetch_paths`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `let Some(selected) = paths.iter().position(|candidate| candidate == path) else {`
 
@@ -1932,7 +1977,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:922](../crates/rrrah-app/src/gallery.rs#L922), `smallest_paths`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-app/src/gallery.rs:996](../crates/rrrah-app/src/gallery.rs#L996), `smallest_paths`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `kept.into_sorted_vec().into_iter().map(|(_, path)| path).collect()`
 
@@ -1983,7 +2028,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1986](../crates/rrrah-app/src/main.rs#L1986), `insert`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-app/src/main.rs:2107](../crates/rrrah-app/src/main.rs#L2107), `insert`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (key, model) in victims {`
 
@@ -2017,7 +2062,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4530](../crates/rrrah-app/src/main.rs#L4530), `submit_thumb_jobs`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:5206](../crates/rrrah-app/src/main.rs#L5206), `submit_thumb_jobs`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `source: tile.cover.clone(),`
 
@@ -2085,7 +2130,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:2026](../crates/rrrah-app/src/main.rs#L2026), `visible_lease_for`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2147](../crates/rrrah-app/src/main.rs#L2147), `visible_lease_for`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let key = self.visible.clone()?;`
 
@@ -2102,7 +2147,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1962](../crates/rrrah-app/src/main.rs#L1962), `model_display_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:2083](../crates/rrrah-app/src/main.rs#L2083), `model_display_key`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `request.path.clone(),`
 
@@ -2153,7 +2198,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:4979](../crates/rrrah-app/src/main.rs#L4979), `exiting`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-app/src/main.rs:5703](../crates/rrrah-app/src/main.rs#L5703), `exiting`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while self.receiver.try_recv().is_ok() {}`
 
@@ -2170,7 +2215,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:13624](../crates/rrrah-app/src/main.rs#L13624), `parse_tone_curve`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-app/src/main.rs:16511](../crates/rrrah-app/src/main.rs#L16511), `parse_tone_curve`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect::<Result<Vec<_>>>()?;`
 
@@ -2187,7 +2232,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:1986](../crates/rrrah-app/src/main.rs#L1986), `spill_expired`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-app/src/main.rs:2107](../crates/rrrah-app/src/main.rs#L2107), `spill_expired`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (key, model) in victims {`
 
@@ -2238,7 +2283,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/gallery.rs:481](../crates/rrrah-app/src/gallery.rs#L481), `begin_foreground`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-app/src/gallery.rs:504](../crates/rrrah-app/src/gallery.rs#L504), `begin_foreground`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while self.pending.try_recv().is_ok() {}`
 
@@ -2255,7 +2300,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-app/src/main.rs:3437](../crates/rrrah-app/src/main.rs#L3437), `track_submitted`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-app/src/main.rs:3813](../crates/rrrah-app/src/main.rs#L3813), `track_submitted`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let pending = self.pending.clone();`
 
@@ -2292,9 +2337,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/lib.rs:456](../crates/rrrah-swap/src/lib.rs#L456), `read_into`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-swap/src/lib.rs:446](../crates/rrrah-swap/src/lib.rs#L446), `read_into`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `file.read_exact(block)?;`
+Участок: `pub fn read_into(`
 
 **Выполнение: measured_no_change (2026-10-15).** read_into: снят warm временный FS baseline для 0/65539/16MiB, exact bytes и возврат кредитов проверены.
 
@@ -2313,9 +2358,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/lib.rs:275](../crates/rrrah-swap/src/lib.rs#L275), `write_chunks`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-swap/src/lib.rs:248](../crates/rrrah-swap/src/lib.rs#L248), `write_chunks`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `file.write_all(block)?;`
+Участок: `pub fn write_chunks<'a>(`
 
 **Выполнение: measured_no_change (2026-10-15).** write_chunks: сняты baseline времена и reader calls; границы scratch/admission сохранены.
 
@@ -2334,9 +2379,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/segmented.rs:195](../crates/rrrah-swap/src/segmented.rs#L195), `write_segmented`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-swap/src/segmented.rs:187](../crates/rrrah-swap/src/segmented.rs#L187), `write_segmented`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `reader.read_exact(&mut scratch[..length])?;`
+Участок: `pub fn write_segmented(`
 
 **Выполнение: measured_no_change (2026-10-15).** write_segmented: снят warm baseline и проверен exact round-trip; квоты после завершения равны нулю.
 
@@ -2355,7 +2400,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/lib.rs:584](../crates/rrrah-swap/src/lib.rs#L584), `read`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-swap/src/lib.rs:595](../crates/rrrah-swap/src/lib.rs#L595), `read`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `self.file.read_exact(block)?;`
 
@@ -2372,7 +2417,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/segmented.rs:75](../crates/rrrah-swap/src/segmented.rs#L75), `read_into`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-swap/src/segmented.rs:79](../crates/rrrah-swap/src/segmented.rs#L79), `read_into`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `self.file.seek(SeekFrom::Start(block_offset))?;`
 
@@ -2406,7 +2451,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/lib.rs:528](../crates/rrrah-swap/src/lib.rs#L528), `flush`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-swap/src/lib.rs:539](../crates/rrrah-swap/src/lib.rs#L539), `flush`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `self.file.write_all(&self.buffer[..self.used])?;`
 
@@ -2440,7 +2485,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/segmented.rs:290](../crates/rrrah-swap/src/segmented.rs#L290), `restore_rows`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-swap/src/segmented.rs:314](../crates/rrrah-swap/src/segmented.rs#L314), `restore_rows`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for row in 0..rows {`
 
@@ -2457,7 +2502,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/lib.rs:515](../crates/rrrah-swap/src/lib.rs#L515), `write`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-swap/src/lib.rs:526](../crates/rrrah-swap/src/lib.rs#L526), `write`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `self.buffer[self.used..self.used + accepted].copy_from_slice(&input[..accepted]);`
 
@@ -2474,7 +2519,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-swap/src/segmented.rs:122](../crates/rrrah-swap/src/segmented.rs#L122), `segmented_reader`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-swap/src/segmented.rs:132](../crates/rrrah-swap/src/segmented.rs#L132), `segmented_reader`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `handle: handle.clone(),`
 
@@ -2494,7 +2539,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/raster_ram.rs:159](../crates/rrrah-cache/src/raster_ram.rs#L159), `insert`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/raster_ram.rs:163](../crates/rrrah-cache/src/raster_ram.rs#L163), `insert`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let (admitted, evicted) = match self.entries.insert(key.clone(), raster, weight) {`
 
@@ -2515,15 +2560,19 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:250](../crates/rrrah-cache/src/swap.rs#L250), `new_with_budgets`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-cache/src/swap.rs:281](../crates/rrrah-cache/src/swap.rs#L281), `new_with_budgets`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
-Участок: `if let Ok(mut index) = worker_index.lock() {`
+Участок: `pub fn new_with_budgets(`
+
+**Выполнение: verified (2026-10-25).** Фоновый TTL-worker извлекает expired payloads пакетами по 64 в фиксированный массив на стеке и удаляет файлы после освобождения index mutex. Убран дополнительный O(N) payload Vec; прежний O(N) список ключей сохранён. Проверены отмена между пакетами, повторная очистка, свежие замены/pins, внешние handles и возврат quota. Парные замеры 1/2/4 читателей и real-file batches 129/1025 сохранены.
+
+Осталось/границы: Проверена локальная CPU/APFS TTL-maintenance область. Публичный prune, lazy get expiry и spill eviction сохраняют прежний mutex/quota порядок; общего ускорения viewer не заявляется. Существующий O(N) key plan не стал учтённым MemoryBudget и остаётся отдельной границей. [Отчёт](research/rr-0056-bounded-2026-10-25/REPORT.md).
 
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Сравнить p50/p95 ожидания, пропускную способность и порядок публикации; проверить отказ/отмену без зависания. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
 
-API/совместимость: Сохранить существующие сигнатуры, ошибки, формат данных и правила владения; изменение API оформлять отдельно после подтверждения необходимости.
+API/совместимость: WeightedLru получает additive expired_keys_for_prune(cutoff) и remove_if_expired_at(key, cutoff). План допускает отмену/перекрытие; удаление перепроверяет срок и protected status. Существующие методы, ImageSwapCache public prune и порядок допуска дисковой квоты сохранены; оптимизация включена только в background TTL-worker.
 
 Зависимости: нет установленных. Условия: Сравнить baseline и вариант на одном locked build/host: 3 warmup, минимум 10 чередующихся пар; публиковать сырые времена и median/p95, RSS и релевантные счётчики. Сначала проверить существующие тесты и вызывающие стороны; наличие операции не доказывает дефект или отсутствие оптимизации.
 
@@ -2532,7 +2581,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:371](../crates/rrrah-cache/src/disk.rs#L371), `load_impl`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-cache/src/disk.rs:387](../crates/rrrah-cache/src/disk.rs#L387), `load_impl`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `reader.read_exact(&mut magic).map_err(|source| CacheError::Io {`
 
@@ -2549,7 +2598,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/raster_payload.rs:213](../crates/rrrah-cache/src/raster_payload.rs#L213), `read_raster_payload_impl`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-cache/src/raster_payload.rs:229](../crates/rrrah-cache/src/raster_payload.rs#L229), `read_raster_payload_impl`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `reader.read_exact(&mut h)?;`
 
@@ -2566,7 +2615,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:661](../crates/rrrah-cache/src/disk.rs#L661), `plan_write_evictions`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-cache/src/disk.rs:671](../crates/rrrah-cache/src/disk.rs#L671), `plan_write_evictions`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `for shard in fs::read_dir(&self.root).map_err(|source| CacheError::Io {`
 
@@ -2583,7 +2632,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:562](../crates/rrrah-cache/src/disk.rs#L562), `store_with_cancel_preserving`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-cache/src/disk.rs:572](../crates/rrrah-cache/src/disk.rs#L572), `store_with_cancel_preserving`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `writer.write_all(MAGIC)?;`
 
@@ -2600,7 +2649,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:470](../crates/rrrah-cache/src/swap.rs#L470), `try_get`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-cache/src/swap.rs:570](../crates/rrrah-cache/src/swap.rs#L570), `try_get`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -2634,7 +2683,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:263](../crates/rrrah-cache/src/disk.rs#L263), `usage`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-cache/src/disk.rs:279](../crates/rrrah-cache/src/disk.rs#L279), `usage`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let shards = match fs::read_dir(&self.root) {`
 
@@ -2651,7 +2700,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:39](../crates/rrrah-cache/src/disk.rs#L39), `from_path`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
+Основание: [crates/rrrah-cache/src/disk.rs:48](../crates/rrrah-cache/src/disk.rs#L48), `from_path`. В участке есть обращение к файловой системе; частота повторных запросов и их вклад в задержку требуют измерения.
 
 Участок: `let metadata = fs::metadata(path).map_err(|source| CacheError::Io {`
 
@@ -2753,7 +2802,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/raster_payload.rs:181](../crates/rrrah-cache/src/raster_payload.rs#L181), `read_samples`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-cache/src/raster_payload.rs:197](../crates/rrrah-cache/src/raster_payload.rs#L197), `read_samples`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `reader.read_exact(bytemuck::cast_slice_mut(chunk))?;`
 
@@ -2770,7 +2819,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:577](../crates/rrrah-cache/src/swap.rs#L577), `shutdown`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-cache/src/swap.rs:649](../crates/rrrah-cache/src/swap.rs#L649), `shutdown`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -2804,7 +2853,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:799](../crates/rrrah-cache/src/disk.rs#L799), `write_pixels`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-cache/src/disk.rs:809](../crates/rrrah-cache/src/disk.rs#L809), `write_pixels`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `writer.write_all(bytes)?;`
 
@@ -2821,7 +2870,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:161](../crates/rrrah-cache/src/swap.rs#L161), `drop`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-cache/src/swap.rs:186](../crates/rrrah-cache/src/swap.rs#L186), `drop`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -2855,7 +2904,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:806](../crates/rrrah-cache/src/disk.rs#L806), `read_u32`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-cache/src/disk.rs:852](../crates/rrrah-cache/src/disk.rs#L852), `read_u32`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `reader.read_exact(&mut bytes).map_err(|source| CacheError::Io {`
 
@@ -2889,7 +2938,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:549](../crates/rrrah-cache/src/swap.rs#L549), `prune_expired`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-cache/src/swap.rs:570](../crates/rrrah-cache/src/swap.rs#L570), `prune_expired`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `.lock()`
 
@@ -2906,7 +2955,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:387](../crates/rrrah-cache/src/swap.rs#L387), `try_enqueue`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/swap.rs:481](../crates/rrrah-cache/src/swap.rs#L481), `try_enqueue`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `keys.insert(key.clone(), generation);`
 
@@ -2923,7 +2972,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:603](../crates/rrrah-cache/src/disk.rs#L603), `lock_writes`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/disk.rs:613](../crates/rrrah-cache/src/disk.rs#L613), `lock_writes`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `path: self.root.clone(),`
 
@@ -2940,9 +2989,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/ram.rs:153](../crates/rrrah-cache/src/ram.rs#L153), `get_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/ram.rs:151](../crates/rrrah-cache/src/ram.rs#L151), `get_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
-Участок: `self.insert_visible(*key, mosaic.clone());`
+Участок: `fn try_get_mode(`
 
 Изменение: Установить тип копируемого значения и время жизни получателя; сравнить текущую передачу с заимствованием или переносом владения без изменения времени освобождения ресурса. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -2957,9 +3006,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/raster_ram.rs:121](../crates/rrrah-cache/src/raster_ram.rs#L121), `get_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/raster_ram.rs:110](../crates/rrrah-cache/src/raster_ram.rs#L110), `get_mode`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
-Участок: `self.insert_visible(key.clone(), frame.clone());`
+Участок: `fn try_get_mode(`
 
 Изменение: Установить тип копируемого значения и время жизни получателя; сравнить текущую передачу с заимствованием или переносом владения без изменения времени освобождения ресурса. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -2991,7 +3040,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/ram.rs:187](../crates/rrrah-cache/src/ram.rs#L187), `insert`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-cache/src/ram.rs:191](../crates/rrrah-cache/src/ram.rs#L191), `insert`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (key, mosaic) in evicted {`
 
@@ -3025,7 +3074,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/raster_ram.rs:189](../crates/rrrah-cache/src/raster_ram.rs#L189), `insert_visible`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/raster_ram.rs:193](../crates/rrrah-cache/src/raster_ram.rs#L193), `insert_visible`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `if self.insert(key.clone(), raster) {`
 
@@ -3042,7 +3091,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/disk.rs:106](../crates/rrrah-cache/src/disk.rs#L106), `sample_offsets`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-cache/src/disk.rs:122](../crates/rrrah-cache/src/disk.rs#L122), `sample_offsets`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `offsets.sort_unstable();`
 
@@ -3076,7 +3125,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/raster_ram.rs:73](../crates/rrrah-cache/src/raster_ram.rs#L73), `set_limits_and_spill`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-cache/src/raster_ram.rs:74](../crates/rrrah-cache/src/raster_ram.rs#L74), `set_limits_and_spill`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (key, frame) in victims {`
 
@@ -3127,7 +3176,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-cache/src/swap.rs:439](../crates/rrrah-cache/src/swap.rs#L439), `set_restore_budget`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-cache/src/swap.rs:533](../crates/rrrah-cache/src/swap.rs#L533), `set_restore_budget`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `self.retired_restore_budgets.push(self.restore_budget.clone());`
 
@@ -3147,9 +3196,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-animation/src/apng.rs:180](../crates/rrrah-animation/src/apng.rs#L180), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-animation/src/apng.rs:48](../crates/rrrah-animation/src/apng.rs#L48), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
-Участок: `let mut frames: Vec<Control<'_>> = Vec::new();`
+Участок: `pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<ApngImage, RasterDecodeError> {`
 
 **Выполнение: rejected (2026-10-16).** Гипотеза точного предварительного резервирования frames проверена полным APNG decoder A/B: 11 сценариев, 10 чередующихся process-пар, 3 warmup, 100 batch samples на вариант/сценарий. Пик Rust live allocations на раннем повреждённом fcTL вырос с 38326 до 196734 байт; на 4096 корректных кадрах и чередовании малых/крупных входов устойчивый выигрыш не доказан. Выходные пиксели/ошибки и managed budget совпали; production не изменён.
 
@@ -3168,9 +3217,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:317](../crates/rrrah-decode/src/raster.rs#L317), `decode_raster`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-decode/src/raster.rs:322](../crates/rrrah-decode/src/raster.rs#L322), `decode_raster`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
-Участок: `while used < prefix.len() {`
+Участок: `pub fn decode_raster(request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {`
 
 **Выполнение: rejected (2026-10-15).** Header probe уже bounded stack 740 байт, цикл нужен для short/interrupted read; router переиспользует inspected probe.
 
@@ -3189,9 +3238,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/emf.rs:135](../crates/rrrah-vector/src/emf.rs#L135), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-vector/src/emf.rs:77](../crates/rrrah-vector/src/emf.rs#L77), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
-Участок: `let mut objects = vec![None; handles];`
+Участок: `pub fn decode(b: &[u8], request: &DecodeRequest) -> Result<rrrah_core::DecodedRaster, RasterDecodeError> {`
 
 **Выполнение: rejected (2026-10-15).** EMF object table уже создаётся одним vec![None; handles] при handles в 1..4096; предлагаемая предварительная аллокация присутствует.
 
@@ -3214,6 +3263,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut metadata = Vec::new();`
 
+**Выполнение: rejected (2026-10-25).** PVR сначала считает metadata records, затем try_reserve_exact(records); reservation корректируется по фактической capacity. Повторный рост этой коллекции отсутствует; возвращаемые metadata принадлежат результату.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3227,9 +3280,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/wmf.rs:64](../crates/rrrah-vector/src/wmf.rs#L64), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-vector/src/wmf.rs:61](../crates/rrrah-vector/src/wmf.rs#L61), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut objects = vec![None; count];`
+
+**Выполнение: rejected (2026-10-25).** WMF object table уже создаётся vec![None; count] после ограничения count≤4096. Предлагаемое точное резервирование дублирует действующий путь; смена владельца/pool потребовала бы отдельной API-гипотезы.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3244,9 +3301,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-mesh/src/ply.rs:468](../crates/rrrah-mesh/src/ply.rs#L468), `decode_bytes_budgeted`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-mesh/src/ply.rs:470](../crates/rrrah-mesh/src/ply.rs#L470), `decode_bytes_budgeted`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut offsets = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** Проверен кандидат reserve(element.count+1) для PLY list offsets. На усечённом теле с объявлением 1 000 000 элементов пик managed bytes вырос 1151→4001151 при одинаковом отказе и final=0. Текущий постепенный рост оставлен.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3261,15 +3322,19 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-scientific/src/dicom.rs:99](../crates/rrrah-scientific/src/dicom.rs#L99), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-scientific/src/dicom.rs:70](../crates/rrrah-scientific/src/dicom.rs#L70), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
-Участок: `let mut seen = BTreeSet::new();`
+Участок: `// Only fields interpreted by the scalar decoder get a concrete VR here.`
+
+**Выполнение: verified (2026-10-25).** Убрано BTreeSet всех DICOM tags: строгий порядок проверяет previous, четыре обязательных meta tag — битовая маска. Совпадают ошибки/пиксели и бюджет. Две серии по 10 чередующихся пар: total ratio 0.132/0.128 при A/A≈1; malloc 54140→1190 за 300 декодирований в отдельном allocation probe.
+
+Осталось/границы: Выигрыш относится к CPU full-decode корпусу с 0/64/4096 private tags и малым pixel payload, не ко всем DICOM/просмотрщику. Managed peak=96 B, per-process RSS измерен отдельно. API, допустимые форматы и pixel output сохранены; физический HDR не проверялся. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
 
-API/совместимость: Сохранить существующие сигнатуры, ошибки, формат данных и правила владения; изменение API оформлять отдельно после подтверждения необходимости.
+API/совместимость: Публичный Rust API, допустимые DICOM tags/порядок, ошибки, pixel output и budget admission сохранены. BTreeSet reference и переключатель варианта существуют только под cfg(test).
 
 Зависимости: нет установленных. Условия: Сравнить baseline и вариант на одном locked build/host: 3 warmup, минимум 10 чередующихся пар; публиковать сырые времена и median/p95, RSS и релевантные счётчики. Сначала проверить существующие тесты и вызывающие стороны; наличие операции не доказывает дефект или отсутствие оптимизации. Синтетические корректные и повреждённые входы; для camera-specific результата нужен pinned оригинал и независимый oracle, никаких выводов о полном формате из одного fixture.
 
@@ -3281,6 +3346,10 @@ API/совместимость: Сохранить существующие си
 Основание: [crates/rrrah-vfx/src/dpx.rs:111](../crates/rrrah-vfx/src/dpx.rs#L111), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut out = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** Обе DPX output ветви уже заранее резервируют полное количество samples и учитывают capacity в credit. Коллекция становится владельцем выходных пикселей; повторного роста отмеченного Vec нет.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3295,9 +3364,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/mng.rs:52](../crates/rrrah-decode/src/mng.rs#L52), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-decode/src/mng.rs:57](../crates/rrrah-decode/src/mng.rs#L57), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut frames = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** MNG: предварительный reserve 4096 кадров на одном 8-byte signature выделяет 819200 B вместо 0, хотя header отвергается одинаково. Managed counters=0 не покрывают этот heap. Сохранён отрицательный regression и отдельные allocation/RSS пробы.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3316,6 +3389,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {`
 
+**Выполнение: rejected (2026-10-25).** KTX заранее вычисляет output/level sizes, резервирует выход точно и проверяет бюджет. Указанный decode anchor не доказывает временный growing scratch; новое предварительное резервирование повторяет существующее.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3329,9 +3406,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/psd.rs:126](../crates/rrrah-layered/src/psd.rs#L126), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-layered/src/psd.rs:212](../crates/rrrah-layered/src/psd.rs#L212), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `pub fn decode(bytes: &[u8], request: &DecodeRequest) -> Result<DecodedRaster, RasterDecodeError> {`
+
+**Выполнение: rejected (2026-10-25).** PSD raw planes заимствованы из входа; compressed planes выделяются по известному total, RGBA output сразу получает pixels*4 capacity. Эти выделения удерживают данные результата, не независимый повторно используемый scratch.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3350,6 +3431,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `z.write_all(if gray { &[0, 0][..] } else { &[0, 0, 0, 0][..] })`
 
+**Выполнение: rejected (2026-10-25).** JNG z.write_all пишет 2/4 байта локального metadata carrier 1×1 в память через ZlibEncoder. Файловый backend здесь отсутствует; объединение disk I/O и cold/warm benchmark к отмеченному вызову неприменимы.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Сохранить ошибки short read, повреждения и отмены; сравнить CPU и фактически обработанные байты. Для файлового backend отдельно измерить cold/warm время; для memory backend измерить проходы и копии без заявления о дисковом ускорении. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3366,6 +3451,10 @@ API/совместимость: Сохранить существующие си
 Основание: [crates/rrrah-mesh/src/ply_swap.rs:475](../crates/rrrah-mesh/src/ply_swap.rs#L475), `read_ply_swap_payload`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `r.read_exact(&mut magic)?;`
+
+**Выполнение: rejected (2026-10-25).** PLY swap уже читает scalar blocks по 16 KiB. Дополнительный BufReader повышает managed peak 2900→19284 B и не проходит прежний tight budget. Проверены roundtrip, framing NEXT, короткие/Interrupted чтения, усечение, отмена, corrupt magic; final=0.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3384,6 +3473,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut pixels = Vec::new();`
 
+**Выполнение: rejected (2026-10-25).** CR2 decode_pixels заранее резервирует total и передаёт выделение в sensor raster с credit. Отмеченный Vec — выход, а не забытый growing scratch; предлагаемое exact reserve уже есть.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3401,6 +3494,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `pub fn decode_fits(request: &DecodeRequest) -> Result<FitsImage, RasterDecodeError> {`
 
+**Выполнение: rejected (2026-10-25).** decode_fits — ограниченная read/decode обёртка. parse_header делает count pass, заимствует cards из bytes и резервирует budget buffer(count); metadata упорядочены. Предположение о неизвестном growing temporary не подтверждено.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3414,9 +3511,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-animation/src/raster_color.rs:123](../crates/rrrah-animation/src/raster_color.rs#L123), `prepare_raster_for_display_with_budget_and_cancel`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-animation/src/raster_color.rs:148](../crates/rrrah-animation/src/raster_color.rs#L148), `prepare_raster_for_display_with_budget_and_cancel`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `*curve = Some(ToneReprCurve::Parametric(vec![f32::from(values[0]) / 256.0]));`
+
+**Выполнение: rejected (2026-10-25).** Одноэлементный Vec gamma/TRC передаётся во владеющий ICC profile, не растёт в цикле; gamma=1 использует пустую identity кривую. Предложенное повторное использование scratch не сохраняет эту семантику владения.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3431,9 +3532,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-animation/src/webp_animation.rs:87](../crates/rrrah-animation/src/webp_animation.rs#L87), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-animation/src/webp_animation.rs:92](../crates/rrrah-animation/src/webp_animation.rs#L92), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut frames = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** WebP: eager reserve 4096 frames выделяет 163840 B до отказа на неполном VP8X input; текущая capacity=0 и та же ошибка. Managed counters не видят это выделение. Сохранены regression и отдельные allocation/RSS пробы.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3452,6 +3557,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `r.read_exact(&mut magic)?;`
 
+**Выполнение: rejected (2026-10-25).** OBJ swap уже объединяет scalar/record чтения блоками 16 KiB. Дополнительный BufReader повышает managed peak 1039→17423 B и нарушает прежний tight admission; негативные streaming/cancel/framing сценарии проходят без него.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Сохранить ошибки short read, повреждения и отмены; сравнить CPU и фактически обработанные байты. Для файлового backend отдельно измерить cold/warm время; для memory backend измерить проходы и копии без заявления о дисковом ускорении. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3465,9 +3574,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/pdf.rs:169](../crates/rrrah-vector/src/pdf.rs#L169), `decode`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
+Основание: [crates/rrrah-vector/src/pdf.rs:170](../crates/rrrah-vector/src/pdf.rs#L170), `decode`. Ожидание блокировки или работа внутри критической секции может увеличивать задержку конкурирующих запросов.
 
 Участок: `*curve_error.lock().unwrap() = Some(error);`
+
+**Выполнение: rejected (2026-10-25).** curve_error mutex создаётся на один PDF decode; lock выполняет только присвоение ошибки budget callback. В нормальной ветке lock не берётся, независимые decode не делят mutex. Гипотеза длинной общей критической секции не подтверждена.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3486,6 +3599,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut out = Vec::with_capacity(width as usize * height as usize * 4);`
 
+**Выполнение: rejected (2026-10-25).** HEIF RGBA output уже создаётся with_capacity(width*height*4) после проверки размера и reservation. Выход удерживает pixel storage; точное резервирование не новое изменение. Нативные libheif tests выполнены на этой машине.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -3502,6 +3619,10 @@ API/совместимость: Сохранить существующие си
 Основание: [crates/rrrah-texture/src/sti.rs:88](../crates/rrrah-texture/src/sti.rs#L88), `decode`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut output = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** STI заранее резервирует samples, reconciles capacity и credit; выход удерживается raster. Отмеченный Vec::new не означает повторных аллокаций.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -3720,7 +3841,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:415](../crates/rrrah-decode/src/raster.rs#L415), `decode_raster_inspected`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-decode/src/raster.rs:430](../crates/rrrah-decode/src/raster.rs#L430), `decode_raster_inspected`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
 Участок: `.and_then(|file| file.take(216).read_to_end(&mut prefix))`
 
@@ -4434,9 +4555,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/camtiff/mef_sensor.rs:198](../crates/rrrah-raw/src/camtiff/mef_sensor.rs#L198), `decode_mef_zd_sensor_file`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-raw/src/camtiff/mef_sensor.rs:168](../crates/rrrah-raw/src/camtiff/mef_sensor.rs#L168), `decode_mef_zd_sensor_file`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `file.read_exact(chunk).map_err(io_error)?;`
+Участок: `pub fn decode_mef_zd_sensor_file(`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -4468,9 +4589,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/bounded_io.rs:46](../crates/rrrah-raw/src/bounded_io.rs#L46), `read_legacy`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-raw/src/bounded_io.rs:56](../crates/rrrah-raw/src/bounded_io.rs#L56), `read_legacy`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `.read_to_end(&mut data)`
+Участок: `fn read_legacy(request: &DecodeRequest) -> Result<Vec<u8>, DecodeError> {`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -4553,7 +4674,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:1149](../crates/rrrah-decode/src/raster.rs#L1149), `decode_farbfeld`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-decode/src/raster.rs:1281](../crates/rrrah-decode/src/raster.rs#L1281), `decode_farbfeld`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut values = Vec::new();`
 
@@ -4689,9 +4810,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/bounded_io.rs:96](../crates/rrrah-raw/src/bounded_io.rs#L96), `read_managed_capped`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-raw/src/bounded_io.rs:124](../crates/rrrah-raw/src/bounded_io.rs#L124), `read_managed_capped`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `file.read_exact(chunk).map_err(io_error)?;`
+Участок: `read_managed_capped(request, budget, MAX_INPUT_BYTES).map(SourceBuffer::Managed)`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -4723,9 +4844,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/bay.rs:152](../crates/rrrah-raw/src/bay.rs#L152), `read_bay_image_rows`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-raw/src/bay.rs:131](../crates/rrrah-raw/src/bay.rs#L131), `read_bay_image_rows`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `file.read_exact(&mut row).map_err(io_error)?;`
+Участок: `fn read_bay_image_rows(`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -4774,7 +4895,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-animation/src/webp_animation.rs:30](../crates/rrrah-animation/src/webp_animation.rs#L30), `chunks`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-animation/src/webp_animation.rs:35](../crates/rrrah-animation/src/webp_animation.rs#L35), `chunks`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut out = Vec::new();`
 
@@ -4859,9 +4980,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/camtiff/mef_sensor.rs:234](../crates/rrrah-raw/src/camtiff/mef_sensor.rs#L234), `read_verified_sensor`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
+Основание: [crates/rrrah-raw/src/camtiff/mef_sensor.rs:218](../crates/rrrah-raw/src/camtiff/mef_sensor.rs#L218), `read_verified_sensor`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `reader.read_exact(&mut row).map_err(io_error)?;`
+Участок: `fn read_verified_sensor(`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -5216,7 +5337,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:831](../crates/rrrah-decode/src/raster.rs#L831), `decode_raster_bytes_inner`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-decode/src/raster.rs:861](../crates/rrrah-decode/src/raster.rs#L861), `decode_raster_bytes_inner`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `path: request.path.clone(),`
 
@@ -5233,7 +5354,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_vm.rs:399](../crates/rrrah-vector/src/eps_vm.rs#L399), `operate`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
+Основание: [crates/rrrah-vector/src/eps_vm.rs:524](../crates/rrrah-vector/src/eps_vm.rs#L524), `operate`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
 
 Участок: `(O::Sin, _) => angle.to_radians().sin(),`
 
@@ -5301,7 +5422,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_raster.rs:308](../crates/rrrah-vector/src/eps_raster.rs#L308), `rasterize`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-vector/src/eps_raster.rs:431](../crates/rrrah-vector/src/eps_raster.rs#L431), `rasterize`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `pixel.copy_from_slice(&[color[0] as u8, color[1] as u8, color[2] as u8, 255]);`
 
@@ -5505,7 +5626,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/png_color.rs:105](../crates/rrrah-vector/src/png_color.rs#L105), `declaration`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/png_color.rs:119](../crates/rrrah-vector/src/png_color.rs#L119), `declaration`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for _ in 0..65536 {`
 
@@ -5539,7 +5660,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_vm.rs:726](../crates/rrrah-vector/src/eps_vm.rs#L726), `graphics_operation`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-vector/src/eps_vm.rs:1046](../crates/rrrah-vector/src/eps_vm.rs#L1046), `graphics_operation`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `output[..2].copy_from_slice(&graphics.current_point()?);`
 
@@ -5743,7 +5864,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:477](../crates/rrrah-decode/src/raster.rs#L477), `decode_raster_bytes`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-decode/src/raster.rs:493](../crates/rrrah-decode/src/raster.rs#L493), `decode_raster_bytes`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `bytes[2..4].copy_from_slice(&1u16.to_le_bytes());`
 
@@ -5828,7 +5949,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_vm.rs:1052](../crates/rrrah-vector/src/eps_vm.rs#L1052), `evaluate_eps_impl`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/eps_vm.rs:1406](../crates/rrrah-vector/src/eps_vm.rs#L1406), `evaluate_eps_impl`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while machine.depth != 0 {`
 
@@ -6015,7 +6136,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:916](../crates/rrrah-layered/src/xcf.rs#L916), `parse_xcf_hierarchy`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:938](../crates/rrrah-layered/src/xcf.rs#L938), `parse_xcf_hierarchy`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (value, expected) in dimensions`
 
@@ -6083,7 +6204,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/mng.rs:304](../crates/rrrah-decode/src/mng.rs#L304), `decode_layer`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-decode/src/mng.rs:317](../crates/rrrah-decode/src/mng.rs#L317), `decode_layer`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `selected.colors.iter().flatten().collect()`
 
@@ -6168,7 +6289,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1391](../crates/rrrah-layered/src/xcf.rs#L1391), `parse_xcf_layer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:1382](../crates/rrrah-layered/src/xcf.rs#L1382), `parse_xcf_layer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for property in properties.by_ref() {`
 
@@ -6287,7 +6408,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/native_backend.rs:323](../crates/rrrah-raw/src/native_backend.rs#L323), `adapt_native_frame`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-raw/src/native_backend.rs:398](../crates/rrrah-raw/src/native_backend.rs#L398), `adapt_native_frame`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `cells: profile.cfa.into_iter().collect(),`
 
@@ -6576,7 +6697,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster_corpus.rs:647](../crates/rrrah-decode/src/raster_corpus.rs#L647), `qualify_hdr10_file`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-decode/src/raster_corpus.rs:732](../crates/rrrah-decode/src/raster_corpus.rs#L732), `qualify_hdr10_file`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `request.memory_budget = Some(budget.clone());`
 
@@ -6814,7 +6935,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1205](../crates/rrrah-layered/src/xcf.rs#L1205), `attributes`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:1191](../crates/rrrah-layered/src/xcf.rs#L1191), `attributes`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for property in properties {`
 
@@ -6831,7 +6952,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:870](../crates/rrrah-layered/src/xcf.rs#L870), `decode_xcf_level`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-layered/src/xcf.rs:892](../crates/rrrah-layered/src/xcf.rs#L892), `decode_xcf_level`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `.copy_from_slice(&tile[source..source + tile_width * stride]);`
 
@@ -6899,7 +7020,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/pdf.rs:84](../crates/rrrah-vector/src/pdf.rs#L84), `preflight_fonts`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-vector/src/pdf.rs:85](../crates/rrrah-vector/src/pdf.rs#L85), `preflight_fonts`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `resources.clone(),`
 
@@ -6933,7 +7054,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1019](../crates/rrrah-layered/src/xcf.rs#L1019), `decode_xcf_tile`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-layered/src/xcf.rs:1041](../crates/rrrah-layered/src/xcf.rs#L1041), `decode_xcf_tile`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `output.copy_from_slice(`
 
@@ -6950,7 +7071,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/aseprite.rs:669](../crates/rrrah-layered/src/aseprite.rs#L669), `render_cel`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-layered/src/aseprite.rs:670](../crates/rrrah-layered/src/aseprite.rs#L670), `render_cel`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `out.copy_from_slice(data);`
 
@@ -7120,7 +7241,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1472](../crates/rrrah-layered/src/xcf.rs#L1472), `parse_xcf_object_tables`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:1446](../crates/rrrah-layered/src/xcf.rs#L1446), `parse_xcf_object_tables`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for property in properties.by_ref() {`
 
@@ -7137,7 +7258,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1327](../crates/rrrah-layered/src/xcf.rs#L1327), `parse_xcf_channel`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:1382](../crates/rrrah-layered/src/xcf.rs#L1382), `parse_xcf_channel`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for property in properties.by_ref() {`
 
@@ -7783,7 +7904,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/aseprite.rs:718](../crates/rrrah-layered/src/aseprite.rs#L718), `render_group`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-layered/src/aseprite.rs:719](../crates/rrrah-layered/src/aseprite.rs#L719), `render_group`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `order.sort_by_key(|&index| {`
 
@@ -8021,7 +8142,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_graphics.rs:735](../crates/rrrah-vector/src/eps_graphics.rs#L735), `prepare_path`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/eps_graphics.rs:759](../crates/rrrah-vector/src/eps_graphics.rs#L759), `prepare_path`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for segment in output.iter_mut() {`
 
@@ -8310,7 +8431,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_vm.rs:266](../crates/rrrah-vector/src/eps_vm.rs#L266), `slot`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/eps_vm.rs:388](../crates/rrrah-vector/src/eps_vm.rs#L388), `slot`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for &b in key {`
 
@@ -8752,7 +8873,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1136](../crates/rrrah-layered/src/xcf.rs#L1136), `group`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:1191](../crates/rrrah-layered/src/xcf.rs#L1191), `group`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for property in properties {`
 
@@ -8871,7 +8992,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/xcf.rs:1171](../crates/rrrah-layered/src/xcf.rs#L1171), `composition_attributes`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-layered/src/xcf.rs:1191](../crates/rrrah-layered/src/xcf.rs#L1191), `composition_attributes`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for property in properties {`
 
@@ -9211,7 +9332,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-decode/src/raster.rs:1043](../crates/rrrah-decode/src/raster.rs#L1043), `normalize_avif_u16`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-decode/src/raster.rs:1168](../crates/rrrah-decode/src/raster.rs#L1168), `normalize_avif_u16`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (index, pixel) in pixels.chunks_exact_mut(4).enumerate() {`
 
@@ -9262,7 +9383,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/psd.rs:56](../crates/rrrah-layered/src/psd.rs#L56), `unpack`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-layered/src/psd.rs:72](../crates/rrrah-layered/src/psd.rs#L72), `unpack`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `out.extend_from_slice(r.take(n)?);`
 
@@ -9432,7 +9553,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/bay.rs:186](../crates/rrrah-raw/src/bay.rs#L186), `unpack_bay_sensor`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-raw/src/bay.rs:208](../crates/rrrah-raw/src/bay.rs#L208), `unpack_bay_sensor`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (row, pixels) in bytes`
 
@@ -9534,7 +9655,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_graphics.rs:817](../crates/rrrah-vector/src/eps_graphics.rs#L817), `copy_path`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/eps_graphics.rs:841](../crates/rrrah-vector/src/eps_graphics.rs#L841), `copy_path`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while let Some(at) = head {`
 
@@ -9551,7 +9672,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/lib.rs:224](../crates/rrrah-raw/src/lib.rs#L224), `combine`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-raw/src/lib.rs:227](../crates/rrrah-raw/src/lib.rs#L227), `combine`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let mut additional = self.additional.to_vec();`
 
@@ -9619,7 +9740,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-raw/src/bay.rs:204](../crates/rrrah-raw/src/bay.rs#L204), `unpack_row`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-raw/src/bay.rs:226](../crates/rrrah-raw/src/bay.rs#L226), `unpack_row`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (group, samples) in row[..width * 10 / 8]`
 
@@ -9755,7 +9876,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/eps_graphics.rs:787](../crates/rrrah-vector/src/eps_graphics.rs#L787), `same_clip_path`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/eps_graphics.rs:811](../crates/rrrah-vector/src/eps_graphics.rs#L811), `same_clip_path`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `while let (Some(x), Some(y)) = (left, right) {`
 
@@ -10095,7 +10216,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-layered/src/aseprite.rs:787](../crates/rrrah-layered/src/aseprite.rs#L787), `decode`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-layered/src/aseprite.rs:788](../crates/rrrah-layered/src/aseprite.rs#L788), `decode`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `layer_names: inv.layers.into_iter().map(|l| l.name).collect(),`
 
@@ -10180,7 +10301,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-mesh/src/ply.rs:331](../crates/rrrah-mesh/src/ply.rs#L331), `line`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-mesh/src/ply.rs:333](../crates/rrrah-mesh/src/ply.rs#L333), `line`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `.position(|v| v == ending)`
 
@@ -10503,7 +10624,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-animation/src/apng.rs:420](../crates/rrrah-animation/src/apng.rs#L420), `save_previous_rectangle`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-animation/src/apng.rs:424](../crates/rrrah-animation/src/apng.rs#L424), `save_previous_rectangle`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `saved[y * stride..(y + 1) * stride].copy_from_slice(&canvas[start..start + stride]);`
 
@@ -10741,7 +10862,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-vector/src/png_color.rs:83](../crates/rrrah-vector/src/png_color.rs#L83), `crc32`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-vector/src/png_color.rs:70](../crates/rrrah-vector/src/png_color.rs#L70), `crc32`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for byte in bytes {`
 
@@ -10775,7 +10896,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-animation/src/apng.rs:435](../crates/rrrah-animation/src/apng.rs#L435), `restore_previous_rectangle`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
+Основание: [crates/rrrah-animation/src/apng.rs:439](../crates/rrrah-animation/src/apng.rs#L439), `restore_previous_rectangle`. Перенос последовательности может добавлять проход по памяти и перевыделение целевого буфера.
 
 Участок: `canvas[start..start + stride].copy_from_slice(&saved[y * stride..(y + 1) * stride]);`
 
@@ -10982,9 +11103,9 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:1858](../crates/rrrah-demosaic/src/demosaic.rs#L1858), `amaze`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:1824](../crates/rrrah-demosaic/src/demosaic.rs#L1824), `amaze`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
-Участок: `for y in 0..bh {`
+Участок: `pub fn amaze(m: &Mosaic, cancelled: &impl Fn() -> bool) -> Result<Rgb32f, DevelopError> {`
 
 **Выполнение: rejected (2026-10-15).** Эксперимент AMaZE с прямыми interior offsets дал побайтово равный результат, median ratio 1.0642 и лишь 7/10 выигрышей; экспериментальная правка откатана.
 
@@ -11003,9 +11124,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-develop/src/raster.rs:622](../crates/rrrah-develop/src/raster.rs#L622), `to_linear_srgb_with_budget_and_cancel`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-develop/src/raster.rs:771](../crates/rrrah-develop/src/raster.rs#L771), `to_linear_srgb_with_budget_and_cancel`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut output = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** Выход linear sRGB уже имеет try_reserve_exact(count), фактическую capacity и credit; LUT ограничен и допускает scalar fallback. Выходной Vec удерживается raster, а не является временным scratch.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -11024,6 +11149,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut guard = slots[idx].lock().unwrap();`
 
+**Выполнение: rejected (2026-10-25).** slots создаются заново внутри develop_with_cancel; AtomicUsize.fetch_add выдаёт каждому worker уникальный idx. Каждый mutex принадлежит одному worker, конкурирующие вызовы имеют разные slots. Удержание lock не создаёт предполагаемую очередь между запросами.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить время ожидания и удержания при 1/2/4 конкурентных вызовах; вынести независимые вычисления из критической секции, если профиль подтверждает задержку. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Сравнить p50/p95 ожидания, пропускную способность и порядок публикации; проверить отказ/отмену без зависания. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -11037,9 +11166,13 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-develop/src/raster.rs:212](../crates/rrrah-develop/src/raster.rs#L212), `hdr_to_linear_srgb`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-develop/src/raster.rs:298](../crates/rrrah-develop/src/raster.rs#L298), `hdr_to_linear_srgb`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut output = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** HDR CPU conversion заранее резервирует output(count). PQ LUT ограничен бюджетом, scalar fallback сохраняет работоспособность при тесном бюджете. Повторное exact reserve уже реализовано; тесты не требуют физического HDR дисплея.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -11139,7 +11272,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-develop/src/lib.rs:689](../crates/rrrah-develop/src/lib.rs#L689), `develop_rgbe`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-develop/src/lib.rs:691](../crates/rrrah-develop/src/lib.rs#L691), `develop_rgbe`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut output = Vec::with_capacity((bytes / 4) as usize);`
 
@@ -11173,7 +11306,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:2609](../crates/rrrah-demosaic/src/demosaic.rs#L2609), `xtrans_markesteijn_3pass`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:2606](../crates/rrrah-demosaic/src/demosaic.rs#L2606), `xtrans_markesteijn_3pass`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
 
 Участок: `let sharp = xtrans_markesteijn_3pass(m, cancelled)?;`
 
@@ -11190,7 +11323,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · L · требует воспроизведения**
 
-Основание: [crates/rrrah-develop/src/lib.rs:307](../crates/rrrah-develop/src/lib.rs#L307), `develop_raw`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-develop/src/lib.rs:309](../crates/rrrah-develop/src/lib.rs#L309), `develop_raw`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `pub fn develop_raw(`
 
@@ -11445,7 +11578,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:2688](../crates/rrrah-demosaic/src/demosaic.rs#L2688), `clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:2685](../crates/rrrah-demosaic/src/demosaic.rs#L2685), `clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, out_g) in row.iter_mut().enumerate() {`
 
@@ -11462,7 +11595,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:3052](../crates/rrrah-demosaic/src/demosaic.rs#L3052), `suppress_chromatic_fringe`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:3049](../crates/rrrah-demosaic/src/demosaic.rs#L3049), `suppress_chromatic_fringe`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let src = rgb.data.clone();`
 
@@ -11479,7 +11612,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:3004](../crates/rrrah-demosaic/src/demosaic.rs#L3004), `suppress_false_color`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:3001](../crates/rrrah-demosaic/src/demosaic.rs#L3001), `suppress_false_color`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `dr.sort_unstable_by(|a, b| a.total_cmp(b));`
 
@@ -11513,7 +11646,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:2726](../crates/rrrah-demosaic/src/demosaic.rs#L2726), `generic_cfa`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:2723](../crates/rrrah-demosaic/src/demosaic.rs#L2723), `generic_cfa`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for (x, px) in row.iter_mut().enumerate() {`
 
@@ -11598,7 +11731,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:2952](../crates/rrrah-demosaic/src/demosaic.rs#L2952), `suppress_cfa_impulse_noise`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:2949](../crates/rrrah-demosaic/src/demosaic.rs#L2949), `suppress_cfa_impulse_noise`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `slice.sort_unstable_by(|a, b| a.total_cmp(b));`
 
@@ -11649,7 +11782,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:2885](../crates/rrrah-demosaic/src/demosaic.rs#L2885), `equilibrate_bayer_greens`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:2882](../crates/rrrah-demosaic/src/demosaic.rs#L2882), `equilibrate_bayer_greens`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let src = samples.to_vec();`
 
@@ -11683,7 +11816,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-demosaic/src/demosaic.rs:2629](../crates/rrrah-demosaic/src/demosaic.rs#L2629), `is_clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-demosaic/src/demosaic.rs:2626](../crates/rrrah-demosaic/src/demosaic.rs#L2626), `is_clustered_bayer`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for by in [0, cluster] {`
 
@@ -11751,7 +11884,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-develop/src/raster.rs:131](../crates/rrrah-develop/src/raster.rs#L131), `srgb_linear`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
+Основание: [crates/rrrah-develop/src/raster.rs:154](../crates/rrrah-develop/src/raster.rs#L154), `srgb_linear`. Трансцендентная операция может повторяться для множества отсчётов с одинаковыми параметрами.
 
 Участок: `((value + 0.055) / 1.055).powf(2.4)`
 
@@ -11775,9 +11908,9 @@ API/совместимость: Сохранить существующие си
 
 Участок: `help='Run pinned native AI replay-plane Metal transport; production AI fidelity remains unqualified')`
 
-**Выполнение: partial (2026-10-16).** Каждый suite получил deadline, POSIX process-group TERM/KILL и bounded cleanup; timeout никогда не verified. Усилена POSIX регрессия: normal exit 0/stdout, exit 7/stderr и timeout с SIGTERM-resistant child; проверяется фактическое отсутствие исполняющегося ребёнка. Мутация без SIGKILL отвергнута этой регрессией.
+**Выполнение: partial (2026-10-24).** Каждый suite получил deadline, POSIX process-group TERM/KILL и bounded cleanup; timeout никогда не verified. Усилена POSIX регрессия: normal exit 0/stdout, exit 7/stderr и timeout с SIGTERM-resistant child; проверяется фактическое отсутствие исполняющегося ребёнка. Мутация без SIGKILL отвергнута этой регрессией. POSIX три теста повторно прошли 2026-10-24.
 
-Осталось/границы: POSIX watchdog проверен тремя тестами и отрицательной мутацией; Windows taskkill ветка не исполнена. POSIX zombie, если он ещё ожидает reaping ОС, считается завершившим исполнение; тест не утверждает немедленное удаление PID. [Отчёт](research/first30-close-2026-10-16/REPORT.md).
+Осталось/границы: POSIX watchdog проверен тремя тестами и отрицательной мутацией; Windows taskkill ветка не исполнена. POSIX zombie, если он ещё ожидает reaping ОС, считается завершившим исполнение; тест не утверждает немедленное удаление PID. [Отчёт](research/first30-remaining-2026-10-24/REPORT.md).
 
 Изменение: Проверить общий watchdog; если вызов не ограничен им, добавить настраиваемый timeout с остановкой дочернего процесса и диагностическим результатом вместо бесконечного ожидания.
 
@@ -11792,15 +11925,19 @@ API/совместимость: Сохранить существующие си
 
 **улучшение · P1 · L · требует воспроизведения**
 
-Основание: [scripts/qualify-x3f-sd10.py:75](../scripts/qualify-x3f-sd10.py#L75), `main`. В этом вызове subprocess не передан timeout; наличие внешнего watchdog и достижимость зависания требуют проверки.
+Основание: [scripts/qualify-x3f-sd10.py:85](../scripts/qualify-x3f-sd10.py#L85), `main`. В этом вызове subprocess не передан timeout; наличие внешнего watchdog и достижимость зависания требуют проверки.
 
-Участок: `result = subprocess.run([str(x) for x in command], cwd=ROOT, env=env,`
+Участок: `'remaining': ['Independent complete converter output unless --dcraw-source is supplied',`
+
+**Выполнение: verified (2026-10-25).** Все внешние команды X3F qualification переведены на общий watchdog дерева процессов. Добавлен --timeout (по умолчанию 1800 с на команду), запрещены неположительные/NaN/Inf. Проверены успешный exit, exit=7 со stderr и зависший SIGTERM-resistant потомок; timeout не считается успехом.
+
+Осталось/границы: Проверен локальный POSIX watchdog и CLI. Полный camera/oracle/Metal прогон X3F и Windows process cleanup этим изменением повторно не квалифицированы; настройки VoiceOver не менялись. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Проверить общий watchdog; если вызов не ограничен им, добавить настраиваемый timeout с остановкой дочернего процесса и диагностическим результатом вместо бесконечного ожидания.
 
 Приёмка: Синтетический зависающий процесс завершается в заданный срок; код возврата и stderr сохранены, дочерние процессы не остаются; нормальный прогон не меняет результат.
 
-API/совместимость: Сохранить существующие сигнатуры, ошибки, формат данных и правила владения; изменение API оформлять отдельно после подтверждения необходимости.
+API/совместимость: CLI совместим: прежние аргументы сохранены, добавлен необязательный --timeout seconds (default=1800 на команду). JSON command log получает timed_out и timeout_seconds; stdout/stderr остаются объединёнными. Windows cleanup не квалифицирован.
 
 Зависимости: нет установленных. Условия: Изолированный временный каталог; синтетический процесс/файл; реальный корпус читать на месте. Не запускать инструменты, изменяющие исходники, как часть проверки реестра.
 
@@ -11809,15 +11946,19 @@ API/совместимость: Сохранить существующие си
 
 **улучшение · P1 · M · требует воспроизведения**
 
-Основание: [scripts/bench-report.py:360](../scripts/bench-report.py#L360), `main`. Функция непосредственно записывает файл; атомарность общей схемы публикации и наличие конкурентного читателя требуют проверки.
+Основание: [scripts/bench-report.py:301](../scripts/bench-report.py#L301), `main`. Функция непосредственно записывает файл; атомарность общей схемы публикации и наличие конкурентного читателя требуют проверки.
 
-Участок: `args.json_out.write_text(json.dumps(json_safe(report), indent=2) + "\n", encoding="utf-8")`
+Участок: `# The unfiltered metrics remain available under all_samples.`
+
+**Выполнение: verified (2026-10-25).** JSON отчёт публикуется через уникальный tempfile в том же каталоге, flush/fsync и os.replace; прежний mode сохраняется. POSIX flock сериализует writers с deadline 5 с и позволяет следующему writer удалить собственные orphan temp. Реальные SIGKILL до/после replace и конкурентный читатель не видят частичный JSON.
+
+Осталось/границы: Квалифицирован локальный POSIX/macOS filesystem. SIGKILL может оставить tempfile до следующей публикации; постоянный .lock намеренно сохраняется. Нет заявления о power-loss durability, NFS, Windows или несогласованных сторонних writers. CLI/report schema сохранены. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Проследить путь записываемого артефакта до читателя; при публикации финального результата использовать временный файл в том же каталоге и атомарную замену, сохраняя предыдущий валидный результат.
 
 Приёмка: Прервать процесс до/во время публикации: читатель получает предыдущий или новый целый документ; частичный документ не принимается за успешный отчёт; временные файлы убираются.
 
-API/совместимость: Сохранить существующие сигнатуры, ошибки, формат данных и правила владения; изменение API оформлять отдельно после подтверждения необходимости.
+API/совместимость: CLI --json-out/--baseline-json и JSON report schema сохранены. Публикация заменяет inode атомарно, сохраняет mode и symlink-target semantics. На POSIX создаётся постоянный .lock и возможен TimeoutError после 5 с занятости; orphan temp убирается следующим cooperating writer. Power-loss/NFS/Windows не квалифицированы.
 
 Зависимости: нет установленных. Условия: Изолированный временный каталог; синтетический процесс/файл; реальный корпус читать на месте. Не запускать инструменты, изменяющие исходники, как часть проверки реестра.
 
@@ -11826,7 +11967,7 @@ API/совместимость: Сохранить существующие си
 
 **улучшение · P1 · M · требует воспроизведения**
 
-Основание: [scripts/qualify-ai-upstream.py:45](../scripts/qualify-ai-upstream.py#L45), `main`. В этом вызове subprocess не передан timeout; наличие внешнего watchdog и достижимость зависания требуют проверки.
+Основание: [scripts/qualify-ai-upstream.py:90](../scripts/qualify-ai-upstream.py#L90), `main`. В этом вызове subprocess не передан timeout; наличие внешнего watchdog и достижимость зависания требуют проверки.
 
 Участок: `info = subprocess.check_output(["pdfinfo", str(path)], text=True)`
 
@@ -13373,7 +13514,7 @@ API/совместимость: Сохранить существующие си
 
 **улучшение · P2 · M · требует воспроизведения**
 
-Основание: [scripts/run-metal-collection-soak.py:144](../scripts/run-metal-collection-soak.py#L144), `main`. Функция читает файл целиком; верхняя граница его размера и цена дополнительной копии требуют измерения.
+Основание: [scripts/run-metal-collection-soak.py:148](../scripts/run-metal-collection-soak.py#L148), `main`. Функция читает файл целиком; верхняя граница его размера и цена дополнительной копии требуют измерения.
 
 Участок: `text = (output / 'test.log').read_text(errors='replace') if (output / 'test.log').exists() else ''`
 
@@ -13550,6 +13691,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut slots = Vec::new();`
 
+**Выполнение: rejected (2026-10-25).** Pixel-selected model banks используют фиксированные 25 slots и предварительно рассчитанные/допущенные размеры. Повторный рост отмеченного массива отсутствует; перераспределение кредитов не даёт доказанного выигрыша.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -13566,6 +13711,10 @@ API/совместимость: Сохранить существующие си
 Основание: [crates/rrrah-dedup/src/gradient.rs:1144](../crates/rrrah-dedup/src/gradient.rs#L1144), `match_gradients_selected_with_scratch`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut v = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** Gradient matcher получает явный scratch budget, заранее выделяет forward/reverse, учитывает distance/runners. Наличие Vec::new само по себе не доказывает рост: границы и capacity заданы до заполнения.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -13584,6 +13733,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut aw = Vec::new();`
 
+**Выполнение: rejected (2026-10-25).** Anchor-rank aw/bw резервируются по числу points; их reservations переходят в сохраняемое evidence. Пул потребовал бы изменить владельца результата, точное резервирование уже реализовано.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -13601,6 +13754,10 @@ API/совместимость: Сохранить существующие си
 
 Участок: `let mut entries = Vec::new();`
 
+**Выполнение: rejected (2026-10-25).** Gradient collection заранее резервирует entries и owners по числу файлов и принимает фактическую capacity в бюджет. Время жизни owners требуется для сохранения результатов; общий пул не является локальной заменой Vec.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
+
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
 Приёмка: Показать allocation count и peak managed bytes/RSS; сохранить содержимое и отказ при нехватке памяти, проверить чередование малых и крупных входов. Выигрыш должен превышать разброс парных замеров без ухудшения результата и бюджета; отрицательный результат также фиксируется как проверенная гипотеза, а не выполненная оптимизация.
@@ -13617,6 +13774,10 @@ API/совместимость: Сохранить существующие си
 Основание: [crates/rrrah-dedup/src/anchor_rank_file.rs:1132](../crates/rrrah-dedup/src/anchor_rank_file.rs#L1132), `search_anchor_rank_opposite_files_selected`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut swapped = Vec::new();`
+
+**Выполнение: rejected (2026-10-25).** Anchor-rank opposite swapped points заранее резервируются по точному числу proposals; reservation переносится в retained evidence. Исходный набор освобождается после передачи; локальный growing scratch не обнаружен.
+
+Осталось/границы: Отклонена указанная конкретная гипотеза; production не изменён. Это не квалификация всех возможных scratch/pool оптимизаций и не заявление об ускорении. Полный исходный performance acceptance не заявляется выполненным. [Отчёт](research/rr-0031-0060-2026-10-25/REPORT.md).
 
 Изменение: Измерить число аллокаций, capacity и время жизни коллекции; сравнить повторное использование scratch либо точное предварительное выделение с текущим путём. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -13990,7 +14151,7 @@ API/совместимость: Сохранить существующие си
 
 Основание: [crates/rrrah-dedup/src/cache.rs:199](../crates/rrrah-dedup/src/cache.rs#L199), `read`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `input.read_exact(&mut header)?;`
+Участок: `read_exact_cancellable(&mut input, &mut header, &cancel)?;`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -14313,7 +14474,7 @@ API/совместимость: Сохранить существующие си
 
 Основание: [crates/rrrah-dedup/src/cache.rs:151](../crates/rrrah-dedup/src/cache.rs#L151), `write`. В участке есть потоковые Read/Write/Seek операции. Они могут работать с памятью или файлом; тип backend и долю накладных расходов нужно установить по вызывающему контексту.
 
-Участок: `output.write_all(header)?;`
+Участок: `write_all_cancellable(&mut output, header, &cancel)?;`
 
 Изменение: Записать число и размеры потоковых операций; сравнить группировку соседних диапазонов либо ограниченный буфер с текущим порядком обработки, сохраняя границы и отмену. Сохранить воспроизводимый benchmark этого участка. Изменение production применять только после устойчивого выигрыша; при нулевом выигрыше закрыть гипотезу измеренным отчётом и оставить полезный benchmark.
 
@@ -15212,7 +15373,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-dedup/src/decode_recipe.rs:93](../crates/rrrah-dedup/src/decode_recipe.rs#L93), `update_interpretation`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-dedup/src/decode_recipe.rs:106](../crates/rrrah-dedup/src/decode_recipe.rs#L106), `update_interpretation`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for channel in value.rgb {`
 
@@ -16864,7 +17025,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P1 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/policy.rs:234](../crates/rrrah-memory/src/policy.rs#L234), `expired_keys`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
+Основание: [crates/rrrah-memory/src/policy.rs:262](../crates/rrrah-memory/src/policy.rs#L262), `expired_keys`. Создание коллекции внутри операции может давать повторные аллокации и повышать пиковую память.
 
 Участок: `let mut expired = Vec::new();`
 
@@ -16881,7 +17042,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · M · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/policy.rs:362](../crates/rrrah-memory/src/policy.rs#L362), `insert_at_collect`. Полное упорядочивание может быть дороже отбора реально используемого результата.
+Основание: [crates/rrrah-memory/src/policy.rs:412](../crates/rrrah-memory/src/policy.rs#L412), `insert_at_collect`. Полное упорядочивание может быть дороже отбора реально используемого результата.
 
 Участок: `victims.sort_unstable_by_key(|v| (v.0, v.1));`
 
@@ -16932,7 +17093,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:170](../crates/rrrah-memory/src/lease_cache.rs#L170), `insert`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:180](../crates/rrrah-memory/src/lease_cache.rs#L180), `insert`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect())`
 
@@ -17000,7 +17161,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:186](../crates/rrrah-memory/src/lease_cache.rs#L186), `set_limits`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:196](../crates/rrrah-memory/src/lease_cache.rs#L196), `set_limits`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect()`
 
@@ -17017,7 +17178,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/policy.rs:287](../crates/rrrah-memory/src/policy.rs#L287), `take_lru`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-memory/src/policy.rs:337](../crates/rrrah-memory/src/policy.rs#L337), `take_lru`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let key = self.evictable.first_key_value()?.1.clone();`
 
@@ -17034,7 +17195,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:186](../crates/rrrah-memory/src/lease_cache.rs#L186), `drain_expired`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:196](../crates/rrrah-memory/src/lease_cache.rs#L196), `drain_expired`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect()`
 
@@ -17051,7 +17212,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:134](../crates/rrrah-memory/src/lease_cache.rs#L134), `get`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:144](../crates/rrrah-memory/src/lease_cache.rs#L144), `get`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `let value = self.inner.get(key)?.clone();`
 
@@ -17068,7 +17229,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:111](../crates/rrrah-memory/src/lease_cache.rs#L111), `remove`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:121](../crates/rrrah-memory/src/lease_cache.rs#L121), `remove`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `if self.leased.contains_key(key) {`
 
@@ -17119,7 +17280,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:85](../crates/rrrah-memory/src/lease_cache.rs#L85), `pin`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:95](../crates/rrrah-memory/src/lease_cache.rs#L95), `pin`. Повторное создание владельца может копировать данные или увеличивать стоимость счётчиков ссылок; тип и стоимость требуют проверки.
 
 Участок: `self.pinned.insert(key.clone());`
 
@@ -17136,7 +17297,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/policy.rs:258](../crates/rrrah-memory/src/policy.rs#L258), `drain_expired_at`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
+Основание: [crates/rrrah-memory/src/policy.rs:286](../crates/rrrah-memory/src/policy.rs#L286), `drain_expired_at`. Материализация итератора может создавать временную коллекцию перед следующим проходом.
 
 Участок: `.collect()`
 
@@ -17187,7 +17348,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/policy.rs:225](../crates/rrrah-memory/src/policy.rs#L225), `prune_expired_at`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
+Основание: [crates/rrrah-memory/src/policy.rs:253](../crates/rrrah-memory/src/policy.rs#L253), `prune_expired_at`. Проход по элементам может повторно вычислять инварианты или обращаться к данным в неудобном порядке.
 
 Участок: `for key in keys {`
 
@@ -17204,7 +17365,7 @@ API/совместимость: Сохранить существующие си
 
 **оптимизация · P2 · S · требует воспроизведения**
 
-Основание: [crates/rrrah-memory/src/lease_cache.rs:94](../crates/rrrah-memory/src/lease_cache.rs#L94), `unpin`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
+Основание: [crates/rrrah-memory/src/lease_cache.rs:104](../crates/rrrah-memory/src/lease_cache.rs#L104), `unpin`. Повторный поиск по коллекции может увеличивать число сравнений на больших входах.
 
 Участок: `if !self.leased.contains_key(key) {`
 

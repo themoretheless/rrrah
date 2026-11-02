@@ -1,0 +1,28 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "png_pinned_corpus",
+    "--",
+    "--include-ignored",
+    "--nocapture"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 3.1795991670005606,
+  "passed_tests": 2,
+  "valid_png_decodes": 161,
+  "interlaced_plain_exact_pairs": 15,
+  "invalid_png_rejections": 14,
+  "fixture_hashes_rechecked": 175,
+  "test_sha256": "8600610cfb6e63fcfbe4a17087a6b4eecf2d8beccc8b7535d41989f7de9cc6ba",
+  "fixture_receipt": "docs/research/dedup-500/png-pnm-corpus-refresh-20261102-v1.json",
+  "log": "docs/research/dedup-500/png-complete-pinned-corpus-20261102-v1.log",
+  "log_sha256": "ae4a53448533670f5364602a54c6f88c94ae90a8df61e099d8299321fc754961",
+  "scope": "Complete pinned175file corpus for this selected-frame policy, not every PNG/color policy or duplicate corpus."
+}

@@ -1,0 +1,81 @@
+{
+  "runs": [
+    {
+      "case": "small",
+      "max_rss_bytes": 189267968,
+      "peak_footprint_bytes": 598918224,
+      "native_metal_sampled_peak_bytes": 87932928,
+      "p95_cpu_ms": 9.308917,
+      "p95_queue_complete_ms": 16.979167,
+      "logical_cpu_peak_bytes": 4313904,
+      "logical_gpu_peaks_bytes": [
+        0,
+        2125872,
+        262144
+      ],
+      "samples": 64,
+      "warmups": 3,
+      "binary_sha256": "28f802e0d7967d5b49d5eb4dc901dfd05b4302aa96abba3b3cffb167fb66906f",
+      "gpu_registry_id": 4294968439
+    },
+    {
+      "case": "large",
+      "max_rss_bytes": 257835008,
+      "peak_footprint_bytes": 774833304,
+      "native_metal_sampled_peak_bytes": 158613504,
+      "p95_cpu_ms": 18.868667,
+      "p95_queue_complete_ms": 32.120583,
+      "logical_cpu_peak_bytes": 67108864,
+      "logical_gpu_peaks_bytes": [
+        0,
+        33554432,
+        262144
+      ],
+      "samples": 64,
+      "warmups": 3,
+      "binary_sha256": "28f802e0d7967d5b49d5eb4dc901dfd05b4302aa96abba3b3cffb167fb66906f",
+      "gpu_registry_id": 4294968439
+    },
+    {
+      "case": "raw-cold",
+      "max_rss_bytes": 310673408,
+      "peak_footprint_bytes": 790414536,
+      "native_metal_sampled_peak_bytes": 204226560,
+      "p95_cpu_ms": 18.371333,
+      "p95_queue_complete_ms": 29.141000000000002,
+      "logical_cpu_peak_bytes": 1179648,
+      "logical_gpu_peaks_bytes": [
+        2361624,
+        1048576,
+        262144
+      ],
+      "samples": 64,
+      "warmups": 3,
+      "binary_sha256": "28f802e0d7967d5b49d5eb4dc901dfd05b4302aa96abba3b3cffb167fb66906f",
+      "gpu_registry_id": 4294968439
+    },
+    {
+      "case": "raw-warm",
+      "max_rss_bytes": 252641280,
+      "peak_footprint_bytes": 796574872,
+      "native_metal_sampled_peak_bytes": 240975872,
+      "p95_cpu_ms": 17.272541,
+      "p95_queue_complete_ms": 24.567458000000002,
+      "logical_cpu_peak_bytes": 1213440,
+      "logical_gpu_peaks_bytes": [
+        2361624,
+        1048576,
+        262144
+      ],
+      "samples": 64,
+      "warmups": 3,
+      "binary_sha256": "28f802e0d7967d5b49d5eb4dc901dfd05b4302aa96abba3b3cffb167fb66906f",
+      "gpu_registry_id": 4294968439
+    }
+  ],
+  "rss_unit": "bytes on Darwin time -l",
+  "gpu_metric": "native MTLDevice.currentAllocatedSize, sampled during 64 histogram frames; not peak residency or dedicated VRAM",
+  "rss_scope": "whole instrumented process lifetime; includes an 8 MiB transient allocation challenge",
+  "footprint_scope": "kernel peak memory footprint from time -l; do not add RSS or shared GPU allocations to it",
+  "timing_scope": "CPU prepare/submit and host-observed queue completion; not scanout or FPS, shared desktop, no A/B speedup claim"
+}

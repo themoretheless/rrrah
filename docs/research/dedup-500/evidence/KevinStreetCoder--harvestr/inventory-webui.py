@@ -1,0 +1,6202 @@
+#!/usr/bin/env python3
+"""
+Web UI for Harvestr (universal video downloader).
+
+Features:
+  - Add/remove performers
+  - Select which sites to probe (or all)
+  - Start/stop background downloads
+  - Live progress: running, completed, failed
+  - View history.json / failed.json entries
+  - Trigger dedup
+  - Browse downloaded files
+  - Tail log in real-time
+
+Usage:
+  python webui.py [--port 7860] [--host 127.0.0.1]
+
+Then open http://127.0.0.1:7860 in a browser.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import os
+import subprocess
+import sys
+import threading
+import time
+from collections import deque
+from datetime import datetime
+from pathlib import Path
+
+try:
+    from flask import Flask, jsonify, make_response, render_template_string, request, send_file
+except ImportError:
+    print("ERROR: Flask is required. Install with: pip install flask")
+    sys.exit(1)
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+CONFIG_PATH = SCRIPT_DIR / "config.json"
+DOWNLOADS_DIR = SCRIPT_DIR / "downloads"
+HISTORY_PATH = DOWNLOADS_DIR / "history.json"
+FAILED_PATH = DOWNLOADS_DIR / "failed.json"
+LOG_PATH = DOWNLOADS_DIR / "universal.log"
+# Network settings (both gitignored — hold proxy credentials / rotation config):
+SITE_PROXIES_PATH = SCRIPT_DIR / "site_proxies.json"
+VPN_CONFIG_PATH = SCRIPT_DIR / "vpn_config.json"
+
+app = Flask(__name__)
+
+
+@app.after_request
+def _gzip_json(resp):
+    """Transparently gzip large JSON/text responses. The Live status payload is
+    ~660 KB for 1000+ models; gzip drops it to ~10% on the wire. Browsers send
+    Accept-Encoding: gzip and decompress automatically, so it's invisible to the
+    frontend and needs no client change."""
+    try:
+        if 'gzip' not in (request.headers.get('Accept-Encoding') or '').lower():
+            return resp
+        if resp.direct_passthrough or resp.headers.get('Content-Encoding'):
+            return resp
+        ct = resp.content_type or ''
+        if 'application/json' not in ct and 'text/' not in ct:
+            return resp
+        data = resp.get_data()
+        if len(data) < 1024:
+            return resp
+        import gzip as _gzip
+        gz = _gzip.compress(data, 5)
+        resp.set_data(gz)
+        resp.headers['Content-Encoding'] = 'gzip'
+        resp.headers['Content-Length'] = str(len(gz))
+        resp.headers['Vary'] = 'Accept-Encoding'
+    except Exception:
+        pass
+    return resp
+
+# ── Live recording manager (built in the BACKGROUND) ─────────────────────────
+#
+# This used to run inline at import time, which meant Flask didn't bind its
+# socket until LiveManager had finished restoring every tracked model. At ~1450
+# models that is around ten minutes of the web UI refusing connections outright
+# — indistinguishable from "the app is broken" — on every single restart.
+#
+# Build it on a daemon thread instead so the server answers immediately. Routes
+# already guard on `if not _live`, so the only new state is "still starting",
+# which /api/live/* reports so the UI can say so instead of showing the
+# permanent "live recording unavailable" error.
+_live = None
+_live_available = False
+_live_booting = True
+_live_boot_error = None
+_live_boot_started_at = time.time()
+
+
+def _boot_live_manager():
+    global _live, _live_available, _live_booting, _live_boot_error
+    _boot_log = logging.getLogger("webui")
+    try:
+        from live_recording import (LiveManager as _LiveManager,
+                                    available as _av, import_error as _ie)
+        _live_available = _av
+        if not _av:
+            # StreaMonitor itself failed to import — keep the reason so the UI
+            # can show something more useful than "unavailable".
+            _live_boot_error = _ie
+            return
+        _live = _LiveManager(downloads_dir=DOWNLOADS_DIR)
+    except Exception as _le:
+        _live = None
+        _live_available = False
+        _live_boot_error = f"{type(_le).__name__}: {_le}"
+        _boot_log.warning(f"[live] manager failed to start: {_live_boot_error}")
+    finally:
+        _live_booting = False
+        _boot_log.info(
+            f"[live] manager ready in {time.time() - _live_boot_started_at:.0f}s")
+
+
+threading.Thread(target=_boot_live_manager, name="live-boot", daemon=True).start()
+
+
+def _live_boot_state():
+    """Shared 'not ready yet' payload for the /api/live/* endpoints."""
+    return {
+        "available": bool(_live_available),
+        "booting": _live_booting,
+        "boot_error": _live_boot_error,
+        "boot_elapsed_s": round(time.time() - _live_boot_started_at),
+    }
+
+# ── Disk manager ─────────────────────────────────────────────────────────────
+try:
+    from disk_manager import DiskManager as _DiskManager
+    _disk = _DiskManager(downloads_dir=DOWNLOADS_DIR)
+except Exception:
+    _disk = None
+
+
+# ── State shared with background task ────────────────────────────────────────
+_state = {
+    "running": False,
+    "pid": None,
+    "started_at": None,
+    "current_performer": "",
+    "last_output_line": "",
+    "log_tail": deque(maxlen=500),
+}
+_state_lock = threading.Lock()
+_runner_thread: subprocess.Popen | None = None
+
+# ── Mutual-exclusion helpers (Live ⇄ Archive) ────────────────────────────────
+# Only one mode can be active at a time. Starting Archive stops all Live bots
+# first; starting Live kills any tracked Archive subprocess first. _mode_lock
+# serializes these transitions so two clicks can't race into a half-state.
+_mode_lock = threading.Lock()
+
+
+def _pid_alive(pid: int) -> bool:
+    if not pid:
+        return False
+    try:
+        if sys.platform == "win32":
+            import ctypes
+            PROCESS_QUERY_INFORMATION = 0x0400
+            kernel32 = ctypes.windll.kernel32
+            h = kernel32.OpenProcess(PROCESS_QUERY_INFORMATION, False, int(pid))
+            if h:
+                kernel32.CloseHandle(h)
+                return True
+            return False
+        else:
+            os.kill(int(pid), 0)
+            return True
+    except Exception:
+        return False
+
+
+def _clear_stale_progress() -> bool:
+    """Reset _progress.json's session.running flag. Called after killing an
+    archive subprocess (to update the UI immediately) and at webui startup
+    (to drop stale state from a prior crashed run). Returns True if it
+    actually cleared something."""
+    pp = DOWNLOADS_DIR / "_progress.json"
+    if not pp.exists():
+        return False
+    try:
+        with open(pp, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception:
+        return False
+    sess = data.get("session") or {}
+    if not sess.get("running"):
+        return False
+    sess["running"] = False
+    sess["phase"] = "idle"
+    sess["phase_label"] = "idle"
+    data["session"] = sess
+    data["active"] = []   # unstick the UI's active-rows list too
+    tmp = pp.with_suffix(".json.tmp")
+    try:
+        tmp.write_text(json.dumps(data, indent=2, ensure_ascii=False),
+                       encoding="utf-8")
+        os.replace(tmp, pp)
+    except Exception:
+        try: tmp.unlink()
+        except Exception: pass
+        return False
+    return True
+
+
+def _archive_is_running() -> bool:
+    """True if a tracked archive subprocess is alive OR _progress.json says
+    running with a PID that's still alive. (External CLI runs would also
+    register here.)"""
+    with _state_lock:
+        proc = _runner_thread
+    if proc and proc.poll() is None:
+        return True
+    try:
+        pp = DOWNLOADS_DIR / "_progress.json"
+        if pp.exists():
+            data = json.loads(pp.read_text(encoding="utf-8"))
+            sess = data.get("session") or {}
+            if sess.get("running"):
+                pid = int(sess.get("pid", 0) or 0)
+                if pid and _pid_alive(pid):
+                    return True
+    except Exception:
+        pass
+    return False
+
+
+def _kill_archive_subprocess(timeout: float = 10.0) -> bool:
+    """Kill the tracked archive subprocess and clear stale progress state.
+    Idempotent – safe to call when no archive is running. Returns True if
+    something was actually killed."""
+    global _runner_thread
+    killed = False
+    with _state_lock:
+        proc = _runner_thread
+    if proc and proc.poll() is None:
+        try:
+            if sys.platform == "win32":
+                subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)],
+                              capture_output=True, timeout=timeout)
+            else:
+                proc.terminate()
+            try:
+                proc.wait(timeout=timeout)
+            except subprocess.TimeoutExpired:
+                # Subprocess didn't die – try kill() as last resort
+                try: proc.kill()
+                except Exception: pass
+            killed = True
+        except Exception:
+            pass
+    # Also kill any external runner whose PID is in _progress.json (CLI run)
+    try:
+        pp = DOWNLOADS_DIR / "_progress.json"
+        if pp.exists():
+            data = json.loads(pp.read_text(encoding="utf-8"))
+            sess = data.get("session") or {}
+            ext_pid = int(sess.get("pid", 0) or 0)
+            our_pid = int(proc.pid) if proc else -1
+            if (ext_pid and ext_pid != our_pid and ext_pid != os.getpid()
+                    and _pid_alive(ext_pid)):
+                if sys.platform == "win32":
+                    subprocess.run(["taskkill", "/F", "/T", "/PID", str(ext_pid)],
+                                  capture_output=True, timeout=timeout)
+                    killed = True
+                else:
+                    try:
+                        os.kill(ext_pid, 9)
+                        killed = True
+                    except Exception:
+                        pass
+    except Exception:
+        pass
+    with _state_lock:
+        _state["running"] = False
+        _state["pid"] = None
+        _runner_thread = None
+    _clear_stale_progress()
+    return killed
+
+
+def _stop_all_live_bots() -> int:
+    """Stop every running live bot. Returns count stopped. Safe if _live
+    is None or unavailable."""
+    if not _live:
+        return 0
+    try:
+        result = _live.toggle_all(False)
+        return int(result.get("count", 0)) if isinstance(result, dict) else 0
+    except Exception:
+        return 0
+
+
+# At startup: drop any stale archive-running flag from a previous crashed run.
+# We're the authority for archive subprocess lifecycle in this process; if the
+# webui just (re)started, no archive is running. The flag would otherwise stay
+# stuck-true and disable the Start button forever.
+try:
+    _clear_stale_progress()
+except Exception:
+    pass
+
+
+def load_config() -> dict:
+    if CONFIG_PATH.exists():
+        try:
+            return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {"performers": [], "enabled_sites": []}
+
+
+def save_config(cfg: dict) -> None:
+    CONFIG_PATH.write_text(json.dumps(cfg, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+# ── Network settings: per-site proxy + Mullvad VPN rotation ───────────────
+# Both files are gitignored. site_proxies.json holds proxy URLs WITH credentials;
+# vpn_config.json holds the rotation config. The webui reads/writes them so a
+# cloner can configure everything from the UI without editing the repo, and so
+# OUR working config stays local (never pushed).
+_VPN_DEFAULTS = {
+    "enabled": True, "cli_path": None,
+    "rotate_locations": ["nl", "se", "de", "gb", "ch", "us"],
+    "restart_threshold": 10, "rotate_threshold": 25,
+    "ratelimit_window_sec": 120, "restart_cooldown_sec": 60,
+    "rotate_cooldown_sec": 300, "connect_wait_sec": 40,
+}
+# site slug -> human label, for the UI dropdown
+NET_SITE_LABELS = {
+    "CB": "Chaturbate", "SC": "StripChat", "CS": "CamSoda", "SM": "Stripcaster",
+    "BC": "BongaCams", "C4": "Cam4", "XLC": "XLoveCam",
+}
+
+
+def load_site_proxies() -> dict:
+    d = load_json(SITE_PROXIES_PATH) or {}
+    return {str(k).upper(): str(v) for k, v in d.items() if v} if isinstance(d, dict) else {}
+
+
+def save_site_proxies(d: dict) -> None:
+    SITE_PROXIES_PATH.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def load_vpn_config() -> dict:
+    cfg = dict(_VPN_DEFAULTS)
+    data = load_json(VPN_CONFIG_PATH) or {}
+    if isinstance(data, dict):
+        cfg.update(data)
+    cfg.pop("_comment", None)
+    return cfg
+
+
+def save_vpn_config(d: dict) -> None:
+    VPN_CONFIG_PATH.write_text(json.dumps(d, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def _mask_proxy(url: str) -> str:
+    """user:pass@host -> user:***@host so the password isn't shipped to the DOM."""
+    try:
+        import re as _re
+        return _re.sub(r"(://[^:/@]+:)([^@/]+)(@)", r"\1***\3", url or "")
+    except Exception:
+        return url or ""
+
+
+def _unmask_proxy(new_url: str, old_url: str) -> str:
+    """If the UI sent back a masked password (***), splice the stored one back in
+    so host/port edits survive without re-typing credentials."""
+    if "***" not in (new_url or ""):
+        return new_url
+    try:
+        import re as _re
+        m = _re.search(r"://[^:/@]+:([^@/]+)@", old_url or "")
+        if m:
+            return new_url.replace("***", m.group(1), 1)
+    except Exception:
+        pass
+    return new_url
+
+
+def load_json(path: Path) -> dict:
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            pass
+    return {}
+
+
+def save_json(path: Path, data: dict) -> None:
+    """Atomic-rename write for JSON files. Shared by history/failed-reset
+    endpoints so the downloader process doesn't see a half-written file."""
+    import tempfile
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent),
+                                prefix=f"._{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+        os.replace(tmp, path)
+    except Exception:
+        try: os.remove(tmp)
+        except OSError: pass
+        raise
+
+
+def load_sites() -> list[str]:
+    """Return a simple list of all site names (yt-dlp + custom scrapers)."""
+    return [s["name"] for s in load_sites_detailed()]
+
+
+# Sites that benefit from or require cookie auth – surfaced in the UI's
+# auth panel with inline setup instructions.
+AUTH_SITES: dict[str, dict] = {
+    "recume": {
+        "label": "Recu.me / Recurbate",
+        "why": "Cloudflare-blocked without cookies. Free account = 5 plays/day, premium = unlimited + official downloads.",
+        "cookies": ["cf_clearance", "PHPSESSID", "im18"],
+        "signup_url": "https://recu.me/account/signup",
+        "paid_url": "https://recu.me/account/subscribe",
+    },
+    "xcom": {
+        "label": "X.com / Twitter",
+        "why": "Premium X = 10x daily quota, full archive, long videos. Without auth you get at most 1k posts/day.",
+        "cookies": ["auth_token", "ct0"],
+        "signup_url": "https://x.com/i/flow/signup",
+        "paid_url": "https://x.com/i/premium_sign_up",
+    },
+    "camwhores_tv": {
+        "label": "camwhores.tv (private videos)",
+        "why": "Private uploads need you to be a 'friend' of the uploader. Public videos work without login.",
+        "cookies": ["phpsessid"],
+        "signup_url": "https://www.camwhores.tv/signup/",
+    },
+    "camvault": {
+        "label": "camvault.to",
+        "why": "Premium = full downloads; free = 10-second previews.",
+        "cookies": ["session"],
+        "signup_url": "https://camvault.to/register",
+        "paid_url": "https://camvault.to/premium",
+    },
+    "archivebate": {
+        "label": "archivebate.com",
+        "why": "Some archives require login for HD stream access.",
+        "cookies": ["laravel_session"],
+        "signup_url": "https://archivebate.com/",
+    },
+    "camsmut": {
+        "label": "camsmut.com",
+        "why": "Video pages return 404 without a logged-in session. Free account works (no premium tier needed).",
+        "cookies": ["laravel_session", "camsmut_session"],
+        "signup_url": "https://camsmut.com/register",
+        "uses_credentials": True,
+    },
+    "Tango": {
+        "label": "Tango Live (manual URL)",
+        "why": (
+            "Tango.me streams require a master.m3u8?token=... URL extracted "
+            "manually from the browser's Network tab. The bot expects this "
+            "URL in the room_id field (NOT the username). Use streams from "
+            "the 'Following' tab – those have static tokens that stay valid "
+            "for the duration of the live show. Streams from 'For You' or "
+            "'Explore' have token-refresh and won't keep recording. "
+            "See yt-dlp/yt-dlp#11433 for context."
+        ),
+        "cookies": [],
+        "signup_url": "https://www.tango.me/",
+        "uses_credentials": False,
+    },
+}
+
+
+def load_sites_detailed() -> list[dict]:
+    """Return structured site metadata: name, category, backend, auth_info.
+
+    Categories used by the UI picker:
+      mainstream · adult · cam · mirror · archive
+    """
+    cat_override = {
+        # Mirror sites that the downloader treats as the "creator mirror" bucket
+        "coomer": "mirror",
+        "kemono": "mirror",
+        # Cam-archive sites (KVS mirror family, archivebates, recu.me)
+        "camwhores_tv": "cam", "camwhores_video": "cam", "camwhores_co": "cam",
+        "camwhoreshd": "cam", "camwhoresbay": "cam", "camwhoresbay_tv": "cam",
+        "camwhores_bz": "cam", "camwhorescloud": "cam", "camvideos_tv": "cam",
+        "camhub_cc": "cam", "camwh_com": "cam", "cambro_tv": "cam",
+        "camcaps_tv": "cam", "camcaps_io": "cam", "camstreams_tv": "cam",
+        "porntrex": "cam", "camsrip": "cam", "recordbate": "cam",
+        "archivebate": "cam", "camvault": "cam", "recume": "cam",
+        # New (May 2026): cam-rip aggregators + erome album host
+        "showcamrips": "cam", "webcamsrips": "cam",
+        "erome": "adult",
+        # New (May 2026 round 2): theporndude top-tier additions
+        "pornhat": "adult", "okxxx": "adult",
+        "porndoe": "adult", "hqporner": "adult",
+        # New yt-dlp-supported sites in sites.json
+        "txxx": "adult", "youjizz": "adult",
+    }
+
+    out: list[dict] = []
+    seen: set[str] = set()
+
+    # yt-dlp sites from sites.json
+    sites_json = SCRIPT_DIR / "sites.json"
+    if sites_json.exists():
+        try:
+            data = json.loads(sites_json.read_text(encoding="utf-8"))
+            for name, info in data.get("sites", {}).items():
+                if name.startswith("_"):
+                    continue
+                seen.add(name)
+                cat = cat_override.get(name, info.get("category", "mainstream"))
+                out.append({
+                    "name": name,
+                    "category": cat,
+                    "backend": "yt-dlp",
+                    "notes": info.get("notes", ""),
+                    "needs_auth": name in AUTH_SITES,
+                    "auth_info": AUTH_SITES.get(name),
+                })
+        except Exception:
+            pass
+
+    # Custom scrapers
+    try:
+        sys.path.insert(0, str(SCRIPT_DIR))
+        from custom_scrapers import ALL_SCRAPER_CLASSES
+        for cls in ALL_SCRAPER_CLASSES:
+            if cls.NAME in seen:
+                continue
+            seen.add(cls.NAME)
+            cat = cat_override.get(cls.NAME, getattr(cls, "CATEGORY", "adult"))
+            has_cookie = bool(getattr(cls, "COOKIE_DOMAIN", "") or "")
+            out.append({
+                "name": cls.NAME,
+                "category": cat,
+                "backend": "custom",
+                "notes": (cls.__doc__ or "").strip().split("\n")[0][:120],
+                "needs_auth": cls.NAME in AUTH_SITES or has_cookie,
+                "auth_info": AUTH_SITES.get(cls.NAME),
+            })
+    except Exception:
+        pass
+
+    out.sort(key=lambda s: (s["category"], s["name"]))
+    return out
+
+
+def read_progress() -> dict:
+    """Read the live progress JSON written by the downloader."""
+    path = DOWNLOADS_DIR / "_progress.json"
+    if not path.exists():
+        return {"session": {"running": False}, "active": []}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"session": {"running": False}, "active": []}
+
+
+def cookies_diagnostics() -> dict:
+    """Report, per auth-required site, whether usable cookies are loaded."""
+    cfg = load_config()
+    cookies_file = cfg.get("cookies_file") or ""
+    report: dict[str, dict] = {}
+
+    loaded_domains: dict[str, set[str]] = {}
+    if cookies_file and Path(cookies_file).exists():
+        try:
+            from http.cookiejar import MozillaCookieJar
+            jar = MozillaCookieJar(cookies_file)
+            jar.load(ignore_discard=True, ignore_expires=True)
+            for c in jar:
+                dom = c.domain.lstrip(".")
+                loaded_domains.setdefault(dom, set()).add(c.name)
+        except Exception:
+            pass
+
+    def _match(dom_needle: str) -> set[str]:
+        hits: set[str] = set()
+        for d, names in loaded_domains.items():
+            if dom_needle in d:
+                hits |= names
+        return hits
+
+    domain_map = {
+        "recume": "recu.me",
+        "xcom": "x.com",
+        "camwhores_tv": "camwhores.tv",
+        "camvault": "camvault.to",
+        "archivebate": "archivebate.com",
+        "camsmut": "camsmut.com",
+    }
+
+    cfg_for_creds = cfg  # for scrapers that auth via username/password
+
+    for key, info in AUTH_SITES.items():
+        found = _match(domain_map.get(key, key))
+        missing = [c for c in info["cookies"] if c.lower() not in {n.lower() for n in found}]
+        status = "ok" if not missing else ("partial" if found else "none")
+        # Sites authenticating via username/password (camsmut) – treat as OK
+        # when credentials are present in config even if no cookies are loaded.
+        if info.get("uses_credentials"):
+            if key == "camsmut" and cfg.get("camsmut_username") and cfg.get("camsmut_password"):
+                status = "ok"
+                found = found | {"<username>", "<password>"}
+                missing = []
+        report[key] = {
+            "label": info["label"],
+            "cookies_required": info["cookies"],
+            "cookies_found": sorted(found),
+            "missing": missing,
+            "status": status,
+        }
+    return {
+        "cookies_file": cookies_file,
+        "cookies_file_exists": bool(cookies_file and Path(cookies_file).exists()),
+        "sites": report,
+    }
+
+
+# ── HTML UI ──────────────────────────────────────────────────────────────────
+INDEX_HTML = r"""
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Harvestr – video downloader</title>
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23a0d7ff'/><stop offset='1' stop-color='%232a6cb3'/></linearGradient></defs><circle cx='32' cy='32' r='28' fill='%23181b22' stroke='url(%23g)' stroke-width='2'/><path d='M32 14 L32 40 M22 32 L32 42 L42 32' stroke='url(%23g)' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/><path d='M18 48 L46 48' stroke='url(%23g)' stroke-width='3' stroke-linecap='round'/></svg>"/>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --bg-2: #141821;
+    --bg-3: #1c2230;
+    --border: #262c3a;
+    --border-2: #323a4d;
+    --text: #e6e9ef;
+    --text-2: #9aa4b8;
+    --text-3: #6b7691;
+    --accent: #5cb8ff;
+    --accent-2: #2a6cb3;
+    --good: #4ade80;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --purple: #a78bfa;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font: 14px/1.55 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(ellipse at top, #13182580 0%, var(--bg) 60%) fixed, var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(180deg, #151a25, #10141c);
+    padding: 12px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+    position: sticky; top: 0; z-index: 500;
+    backdrop-filter: blur(8px);
+    /* overflow: visible is the default but the sticky + backdrop-filter
+       still creates a stacking context that traps tooltips to within its
+       own layer. Keep nothing here that clips (no overflow: hidden). */
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand svg { width: 30px; height: 30px; }
+  .brand h1 { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: -.3px;
+              background: linear-gradient(135deg, #e6e9ef 10%, var(--accent) 90%);
+              -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .brand .tagline { color: var(--text-3); font-size: 11.5px; letter-spacing: .3px; }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 20px; background: #1a2030;
+    border: 1px solid var(--border); font-size: 12px; color: var(--text-2);
+  }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #555; }
+  .status-dot.running { background: var(--good); box-shadow: 0 0 8px #4ade8080; animation: pulse 1.8s infinite; }
+  .status-dot.error { background: var(--bad); }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin { animation: spin 1s linear infinite; transform-origin: 50% 50%; }
+  .container { max-width: 1480px; margin: 0 auto; padding: 20px 24px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 1100px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: linear-gradient(180deg, var(--bg-2), #10141c);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; margin-bottom: 18px;
+    box-shadow: 0 1px 3px #00000040, 0 0 0 1px #ffffff05 inset;
+  }
+  .card h2 {
+    margin: 0 0 12px 0; font-size: 13px; font-weight: 600;
+    color: var(--text-2); text-transform: uppercase; letter-spacing: .8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h2 .icon { width: 15px; height: 15px; color: var(--accent); flex-shrink: 0; }
+
+  button {
+    background: var(--bg-3); color: var(--text); border: 1px solid var(--border-2);
+    padding: 7px 14px; border-radius: 7px; cursor: pointer;
+    font-size: 13px; font-weight: 500; font-family: inherit;
+    transition: all .15s; display: inline-flex; align-items: center; gap: 5px;
+  }
+  button:hover { background: #2a3248; border-color: #3d4662; }
+  /* Inline SVG icons inside buttons/badges: never let them shrink in a flex
+     row, and keep the stroke from looking heavier than the label next to it. */
+  .ic { flex: 0 0 auto; vertical-align: -.125em; }
+  button .ic { opacity: .85; }
+  button:hover .ic { opacity: 1; }
+  button:disabled .ic { opacity: .5; }
+  /* "Currently downloading" — a disabled button alone reads as "unavailable",
+     which is indistinguishable from "busy". This says which one it is. */
+  button.is-active { opacity: 1 !important; cursor: default; }
+  button.primary.is-active {
+    background: linear-gradient(180deg, #2f6ea8, #24507e);
+    border-color: #4c9bf5;
+  }
+  button.is-active .ic { opacity: 1; animation: pulse 1.6s ease-in-out infinite; }
+  button.primary { background: linear-gradient(180deg, #3b8ce6, #2a6cb3);
+                   border-color: #3b8ce6; color: white; font-weight: 600; }
+  button.primary:hover { background: linear-gradient(180deg, #4c9bf5, #3478c0); }
+  button.danger { background: linear-gradient(180deg, #e65252, #a8381b);
+                  border-color: #e65252; color: white; font-weight: 600; }
+  button.danger:hover { background: linear-gradient(180deg, #f56363, #c04830); }
+  button.success { background: linear-gradient(180deg, #48d37c, #2ea85c);
+                   border-color: #48d37c; color: white; }
+  button.warn { background: linear-gradient(180deg, #f0a53a, #c6781b);
+                border-color: #f0a53a; color: #1a1206; font-weight: 600; }
+  button.warn:hover { background: linear-gradient(180deg, #ffb84f, #d78825); }
+  button.ghost { background: transparent; }
+  button.ghost:hover { background: var(--bg-3); }
+  button:disabled { opacity: 0.35; cursor: not-allowed; }
+  button.xs { padding: 3px 8px; font-size: 11px; border-radius: 5px; }
+
+  input[type="text"], input[type="password"], textarea, select {
+    width: 100%; background: var(--bg); color: var(--text);
+    border: 1px solid var(--border); border-radius: 7px;
+    padding: 8px 10px; font-size: 13px; font-family: inherit;
+    transition: border-color .15s;
+  }
+  input:focus, textarea:focus, select:focus {
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px #5cb8ff20;
+  }
+  textarea { resize: vertical; min-height: 100px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); }
+  th { background: #10141c; font-weight: 600; color: var(--text-2); position: sticky; top: 0;
+       text-transform: uppercase; font-size: 11px; letter-spacing: .5px; }
+  tbody tr { transition: background .12s; }
+  tbody tr:hover { background: #1a2030; }
+  td.mono { font-family: "JetBrains Mono", Consolas, monospace; font-size: 11.5px; color: var(--text-2); }
+
+  .log-viewer {
+    background: #06070c; color: #c8d0da; border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px; height: 320px; overflow: auto;
+    font-family: "JetBrains Mono", Consolas, monospace;
+    font-size: 11.5px; white-space: pre-wrap; line-height: 1.45;
+  }
+  .log-viewer .INFO { color: #c8d0da; }
+  .log-viewer .WARN, .log-viewer .WARNING { color: var(--warn); }
+  .log-viewer .ERROR { color: var(--bad); }
+  .log-viewer .DEBUG { color: var(--text-3); }
+
+  .pill {
+    display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px;
+    background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border-2);
+    font-weight: 500;
+  }
+  .pill.ok { background: #103d1d; color: #6dea8c; border-color: #225a2d; }
+  .pill.fail { background: #3d1010; color: #ea6d6d; border-color: #5a2225; }
+  .pill.private { background: #3d3010; color: #eac96d; border-color: #5a4522; }
+  .pill.info { background: #0f2941; color: #6db7ea; border-color: #1e4773; }
+  .pill.custom { background: #2b1a4d; color: #b79cff; border-color: #432a70; }
+  .pill.ytdlp { background: #1a3a4d; color: #6fcdef; border-color: #285573; }
+
+  .flex { display: flex; gap: 10px; align-items: center; }
+  .mb { margin-bottom: 12px; }
+
+  /* Add-row: one line, flex-wrap on narrow screens, input grows */
+  .add-row {
+    display: flex; gap: 8px; align-items: stretch;
+    flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .add-row > input[type="text"],
+  .add-row > select { flex: 1 1 200px; min-width: 0; }
+  .add-row > button { flex: 0 0 auto; white-space: nowrap; }
+  /* Primary buttons are wider so they feel distinct */
+  .add-row > button.primary { min-width: 86px; justify-content: center; }
+  .add-row > button.ghost   { min-width: 72px; justify-content: center; }
+  .add-row svg { flex-shrink: 0; }
+  @media (max-width: 540px) {
+    .add-row > input, .add-row > select, .add-row > button { flex: 1 1 100%; }
+  }
+
+  .perf-row {
+    display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+    border: 1px solid transparent; border-radius: 7px;
+    margin-bottom: 4px; cursor: pointer; transition: all .12s;
+  }
+  .perf-row:hover { background: var(--bg-3); border-color: var(--border); }
+  .perf-row.selected { background: linear-gradient(90deg, #2a6cb340, #2a6cb310);
+                        border-color: var(--accent-2); }
+  .perf-row .name { font-weight: 500; }
+  .perf-row .count { margin-left: auto; color: var(--text-3); font-size: 11.5px; }
+  .perf-list { max-height: clamp(200px, 50vh, 420px); overflow-y: auto; padding-right: 4px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  @media (max-width: 768px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .stats { grid-template-columns: 1fr; } }
+  .stat-box {
+    background: linear-gradient(180deg, var(--bg-2), #10141c);
+    border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; text-align: left; position: relative; overflow: hidden;
+  }
+  .stat-box::before {
+    content: ''; position: absolute; left: 0; top: 0; width: 3px; height: 100%;
+    background: var(--accent);
+  }
+  .stat-box .value { font-size: 22px; font-weight: 700; color: var(--text); }
+  .stat-box .label { font-size: 11px; color: var(--text-3); margin-top: 2px;
+                     text-transform: uppercase; letter-spacing: .5px; }
+  .stat-box.good::before { background: var(--good); }
+  .stat-box.good .value { color: var(--good); }
+  .stat-box.bad::before { background: var(--bad); }
+  .stat-box.bad .value { color: var(--bad); }
+  .stat-box.warn::before { background: var(--warn); }
+  .stat-box.warn .value { color: var(--warn); }
+
+  /* RAG health light */
+  .health-pill { display: inline-flex; align-items: center; gap: 9px; padding: 7px 14px;
+                 border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 14px;
+                 border: 1px solid var(--border); max-width: 100%; }
+  .health-pill .hp-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+  .health-pill .hp-uptime { color: var(--text-3); font-weight: 400; font-size: 11.5px; margin-left: 4px; }
+  .health-pill.green { color: var(--good); background: #0e1f15; }
+  .health-pill.green .hp-dot { background: var(--good); box-shadow: 0 0 8px var(--good); }
+  .health-pill.amber { color: var(--warn); background: #241d0a; }
+  .health-pill.amber .hp-dot { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+  .health-pill.red   { color: var(--bad);  background: #2a1013; }
+  .health-pill.red .hp-dot { background: var(--bad); box-shadow: 0 0 8px var(--bad); animation: hp-pulse 1.2s infinite; }
+  @keyframes hp-pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  /* Monitor widgets (sparkline / VPN / per-site / alerts / top recorders) */
+  .mon-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .mon-card { background: var(--bg-2); border: 1px solid var(--border); border-radius: 10px; padding: 11px 13px; min-width: 0; }
+  .mon-title { font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--text-3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .mon-cur { color: var(--accent); font-weight: 700; text-transform: none; letter-spacing: 0; font-size: 13px; }
+  .mon-spark { width: 100%; height: 46px; display: block; }
+  .mon-sub { font-size: 11.5px; color: var(--text-3); margin-top: 6px; }
+  .mon-vpn { font-size: 12.5px; line-height: 1.65; }
+  .mon-vpn b { color: var(--text); } .mon-vpn .muted { color: var(--text-3); }
+  .vpn-rot-row { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+  .vpn-toggle { position: relative; width: 34px; height: 18px; padding: 0; border-radius: 9px;
+                border: 1px solid var(--border-2); background: var(--bg-3); cursor: pointer;
+                flex: 0 0 auto; transition: background .15s, border-color .15s; }
+  .vpn-toggle .knob { position: absolute; top: 2px; left: 2px; width: 12px; height: 12px;
+                      border-radius: 50%; background: var(--text-3); transition: left .15s, background .15s; }
+  .vpn-toggle.on { background: #1f4d33; border-color: var(--good); }
+  .vpn-toggle.on .knob { left: 18px; background: var(--good); }
+  .vpn-toggle:disabled { opacity: .5; cursor: wait; }
+  .mon-site-dots { display: flex; flex-wrap: wrap; gap: 6px; }
+  .site-dot { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; padding: 3px 8px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); }
+  .site-dot .d { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+  .site-dot .d.green { background: var(--good); } .site-dot .d.amber { background: var(--warn); }
+  .site-dot .d.red { background: var(--bad); box-shadow: 0 0 6px var(--bad); }
+  .site-dot .d.off { background: var(--text-3); opacity: .5; }
+  /* Clickable per-site recording switch */
+  .site-dot.tog { cursor: pointer; user-select: none; transition: border-color .12s, background .12s, opacity .12s; }
+  .site-dot.tog:hover { border-color: var(--accent); background: var(--bg-2); }
+  .site-dot.tog:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .site-dot.tog.disabled { opacity: .55; }
+  .site-dot.tog.disabled .nm { text-decoration: line-through; }
+  .site-dot.tog.busy { opacity: .4; pointer-events: none; }
+  .site-dot .off-tag { font-size: 9.5px; letter-spacing: .4px; color: var(--text-3); border: 1px solid var(--border); border-radius: 6px; padding: 0 3px; }
+  .mon-list { max-height: 180px; overflow-y: auto; font-size: 12px; display: flex; flex-direction: column; gap: 2px; }
+  .mon-list .ev { display: flex; gap: 8px; padding: 2px 4px; border-radius: 4px; }
+  .mon-list .ev .t { color: var(--text-3); flex: 0 0 auto; font-variant-numeric: tabular-nums; }
+  .mon-list .ev.WARNING .m { color: var(--warn); } .mon-list .ev.ERROR .m { color: var(--bad); }
+  .mon-list .ev .m { color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mon-list .toprow { display: flex; justify-content: space-between; gap: 8px; padding: 2px 4px; }
+  .mon-list .toprow .mb { color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+  .mon-list .toprow .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* Site picker */
+  .site-tabs { display: flex; gap: 2px; background: var(--bg); padding: 3px;
+               border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; }
+  .site-tabs .tab {
+    flex: 1; padding: 6px 10px; text-align: center; font-size: 12px;
+    border-radius: 5px; cursor: pointer; color: var(--text-2); transition: all .12s;
+  }
+  .site-tabs .tab.active { background: var(--bg-3); color: var(--accent); font-weight: 600; }
+  .site-tabs .tab:hover:not(.active) { background: #1a2030; }
+  .site-list { max-height: clamp(150px, 40vh, 300px); overflow-y: auto; padding: 2px;
+               background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
+  .site-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 10px; border-radius: 5px;
+    cursor: pointer; font-size: 12.5px; transition: background .1s;
+  }
+  .site-row:hover { background: #1a2030; }
+  .site-row input { margin: 0; accent-color: var(--accent); width: 14px; height: 14px; }
+  .site-row .site-name { font-weight: 500; flex: 1; }
+  .site-row .site-badge { font-size: 10px; padding: 1px 6px; border-radius: 8px;
+                          background: var(--bg-3); color: var(--text-3); }
+  .site-row .auth-icon {
+    width: 12px; height: 12px; color: var(--warn);
+    display: inline-flex; align-items: center; position: relative;
+  }
+  .site-row .auth-icon[data-status="ok"] { color: var(--good); }
+  .site-row .auth-icon[data-status="partial"] { color: var(--warn); }
+  .site-row .auth-icon[data-status="none"] { color: var(--text-3); }
+
+  /* Progress bar */
+  .progress-card { padding: 16px 20px; background: linear-gradient(180deg, #0e2036, #0b1726);
+                    border: 1px solid #1e4773; }
+  .progress-card h2 { color: var(--accent); }
+  .dl-active { margin-bottom: 10px; padding: 10px 12px;
+                background: #0b1320; border: 1px solid #1c2438; border-radius: 8px;
+                transition: border-color .18s, background .18s, opacity .18s; }
+  .dl-active:hover { border-color: #284a77; }
+  .dl-active.cancelling { opacity: 0.55; border-color: #5b2a2a; background: #1a0f14; }
+  .dl-active .top { display: flex; align-items: center; gap: 10px; font-size: 12.5px; margin-bottom: 6px; }
+  .dl-active .top .title { flex: 1; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dl-active .top .meta { color: var(--text-3); font-size: 11.5px; font-family: "JetBrains Mono", monospace; }
+  .dl-cancel {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; padding: 0; margin: 0;
+    background: transparent; color: var(--text-3);
+    border: 1px solid #2a3244; border-radius: 6px;
+    cursor: pointer; font-size: 13px; line-height: 1;
+    transition: all .15s ease; flex-shrink: 0;
+  }
+  .dl-cancel:hover {
+    background: #3d1420; color: #ff6b7d; border-color: #7a2b3b;
+    transform: scale(1.05);
+  }
+  .dl-cancel:active { transform: scale(0.95); }
+  .dl-cancel:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .dl-cancel svg { width: 12px; height: 12px; }
+  .progress-bar {
+    height: 8px; background: #0a0e18; border-radius: 4px; overflow: hidden;
+    position: relative; border: 1px solid #1c2438;
+  }
+  .progress-bar .fill {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--purple));
+    background-size: 200% 100%; animation: shimmer 2.5s linear infinite;
+    transition: width .3s;
+  }
+  @keyframes shimmer { 0%{background-position:0% 0;} 100%{background-position:200% 0;} }
+  .dl-empty { color: var(--text-3); font-size: 12.5px; padding: 12px; text-align: center; }
+
+  .phase-panel {
+    background: #0b1320; border: 1px solid #1c2438; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 10px;
+  }
+  .phase-panel.done { background: #0b2318; border-color: #1d4d31; }
+  .phase-panel .phase-line {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
+  }
+  .phase-panel .phase-label {
+    font-size: 12.5px; font-weight: 600; color: var(--accent);
+  }
+  .phase-panel.done .phase-label { color: var(--good); }
+  .phase-panel .phase-meta {
+    margin-left: auto; font-size: 11.5px; color: var(--text-3);
+    font-family: "JetBrains Mono", Consolas, monospace;
+  }
+  .phase-panel code {
+    background: var(--bg-3); padding: 1px 5px; border-radius: 3px;
+    font-size: 10.5px; color: var(--accent);
+  }
+
+  .hits-row {
+    padding: 8px 12px; background: #0a1320; border: 1px solid #1c2438;
+    border-radius: 8px; margin-bottom: 10px; line-height: 1.9;
+    font-size: 12px;
+  }
+  .hits-row .hits-label {
+    color: var(--text-3); margin-right: 6px; font-weight: 500;
+  }
+  .pill.hit-pill {
+    background: #103d1d; color: #6dea8c; border-color: #225a2d;
+  }
+  .hit-pill-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    text-decoration: none;
+    transition: background .14s, color .14s, border-color .14s, transform .14s;
+    cursor: pointer;
+  }
+  .hit-pill-link:hover {
+    background: #1b5a2e; color: #9cff9c; border-color: #2f7d42;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px #0f3b1f60;
+  }
+  .hit-pill-link .ext-icon {
+    width: 10px; height: 10px; opacity: 0.7; flex-shrink: 0;
+    margin-left: 1px; transition: opacity .14s;
+  }
+  .hit-pill-link:hover .ext-icon { opacity: 1; }
+
+  /* Clickable video title in active download row */
+  .dl-active .top .title.clickable {
+    cursor: pointer;
+    transition: color .15s, text-decoration-color .15s;
+    text-decoration: underline dashed transparent;
+    text-underline-offset: 3px;
+  }
+  .dl-active .top .title.clickable:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  /* Tooltips – use max z-index + escape via filter so cards can't clip */
+  [data-tip] { position: relative; }
+  [data-tip]:hover::after,
+  [data-tip]:focus-visible::after {
+    content: attr(data-tip);
+    position: absolute;
+    z-index: 9999;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #0a0e18;
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    line-height: 1.3;
+    white-space: nowrap;
+    border: 1px solid var(--border-2);
+    box-shadow: 0 4px 12px #00000080;
+    pointer-events: none;
+    opacity: 0;
+    animation: tip-in .14s ease-out forwards;
+    animation-delay: .35s;
+  }
+  [data-tip]:hover::before,
+  [data-tip]:focus-visible::before {
+    content: '';
+    position: absolute;
+    z-index: 9999;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--border-2);
+    pointer-events: none;
+    opacity: 0;
+    animation: tip-in .14s ease-out forwards;
+    animation-delay: .35s;
+  }
+  @keyframes tip-in { from { opacity: 0; transform: translateX(-50%) translateY(2px); }
+                        to   { opacity: 1; transform: translateX(-50%) translateY(0); } }
+  @keyframes tip-in-down { from { opacity: 0; transform: translateX(-50%) translateY(-2px); }
+                            to   { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+  /* Tooltips on header buttons: flip to BELOW the element, since going
+     above would put them off the top of the viewport (header is sticky-top-0).
+     Also applies to any element explicitly marked data-tip-pos="bottom". */
+  header [data-tip]:hover::after,
+  header [data-tip]:focus-visible::after,
+  [data-tip-pos="bottom"][data-tip]:hover::after,
+  [data-tip-pos="bottom"][data-tip]:focus-visible::after {
+    bottom: auto;
+    top: calc(100% + 6px);
+    animation-name: tip-in-down;
+  }
+  header [data-tip]:hover::before,
+  header [data-tip]:focus-visible::before,
+  [data-tip-pos="bottom"][data-tip]:hover::before,
+  [data-tip-pos="bottom"][data-tip]:focus-visible::before {
+    bottom: auto;
+    top: calc(100% + 2px);
+    border-top-color: transparent;
+    border-bottom-color: var(--border-2);
+    animation-name: tip-in-down;
+  }
+
+  /* Cards need visible overflow so tooltips can escape – but inner panels
+     with internal scroll areas keep their overflow for real content. */
+  .card { overflow: visible; }
+
+  /* Config */
+  .config-table { font-size: 13px; }
+  .config-table td { padding: 6px 4px; border: none; }
+  .config-table td:first-child { color: var(--text-3); width: 42%; font-size: 12.5px; }
+  .config-table td:last-child { padding-left: 10px; }
+  .config-table tr:not(:last-child) td { border-bottom: 1px solid var(--border); }
+
+  /* Auth panel */
+  .auth-site { padding: 10px 12px; border: 1px solid var(--border);
+                border-radius: 8px; margin-bottom: 8px; background: var(--bg); }
+  .auth-site .header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .auth-site .header .title { font-weight: 600; flex: 1; }
+  .auth-site .header .status {
+    font-size: 10.5px; padding: 2px 8px; border-radius: 8px;
+  }
+  .auth-site .status.ok { background: #103d1d; color: #6dea8c; }
+  .auth-site .status.partial { background: #3d3010; color: #eac96d; }
+  .auth-site .status.none { background: #3d1010; color: #ea6d6d; }
+  .auth-site .why { color: var(--text-3); font-size: 12px; margin-bottom: 6px; }
+  .auth-site .cookies { font-size: 11.5px; color: var(--text-2); }
+  .auth-site .cookies code { background: var(--bg-3); padding: 1px 5px;
+                              border-radius: 3px; font-size: 11px; color: var(--accent); }
+  .auth-site details { margin-top: 6px; }
+  .auth-site details summary { cursor: pointer; color: var(--accent);
+                                font-size: 12px; padding: 3px 0; }
+
+  /* Toasts – stacking container */
+  #toast-stack {
+    position: fixed; top: 74px; right: 24px; z-index: 2000;
+    display: flex; flex-direction: column; gap: 8px; max-width: min(420px, 90vw);
+    pointer-events: none;
+  }
+  #toast-stack .toast-item {
+    padding: 12px 16px;
+    background: linear-gradient(180deg, #2f8ae0, #2a6cb3);
+    color: white; border-radius: 8px; font-size: 13px; font-weight: 500;
+    box-shadow: 0 6px 20px #00000080;
+    border: 1px solid #3b8ce6;
+    animation: toast-in .28s cubic-bezier(.2,.9,.3,1.4);
+    pointer-events: auto;
+    display: flex; align-items: center; gap: 10px;
+  }
+  #toast-stack .toast-item.hide { animation: toast-out .25s forwards; }
+  #toast-stack .toast-item.error { background: linear-gradient(180deg, #e85656, #a8381b); border-color: #e85656; }
+  #toast-stack .toast-item.success { background: linear-gradient(180deg, #34c26e, #1b7d3b); border-color: #34c26e; }
+  #toast-stack .toast-item.info { background: linear-gradient(180deg, #5a5e7e, #323546); border-color: #525879; }
+  #toast-stack .toast-item .icon-small { flex-shrink: 0; width: 15px; height: 15px; opacity: .9; }
+  @keyframes toast-in {
+    0%   { opacity: 0; transform: translateY(-14px) scale(.92); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes toast-out {
+    0%   { opacity: 1; transform: translateX(0); }
+    100% { opacity: 0; transform: translateX(40px); }
+  }
+  /* Back-compat (old .toast if still referenced) */
+  .toast { display: none; }
+
+  /* Modal backdrop blur */
+  .modal-backdrop { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  .modal-backdrop.show { animation: modal-in .2s ease-out; }
+  @keyframes modal-in { from { opacity: 0; } to { opacity: 1; } }
+  .modal-card { animation: card-in .24s cubic-bezier(.2,.9,.3,1.2); }
+  @keyframes card-in { from { opacity: 0; transform: translateY(-10px) scale(.97); }
+                         to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  /* Scrollbar polish (Webkit) */
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 5px;
+                                border: 2px solid transparent; background-clip: padding-box; }
+  *::-webkit-scrollbar-thumb:hover { background: #4d5570;
+                                      border: 2px solid transparent; background-clip: padding-box; }
+
+  /* Professional confirm / prompt dialog */
+  .modal-card.dialog {
+    width: min(440px, 92vw); padding: 0; overflow: hidden;
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    box-shadow: 0 24px 60px #00000090;
+  }
+  .dialog-head { padding: 18px 20px 4px; }
+  .dialog-head .icon-wrap {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--bg-3); margin-bottom: 10px;
+  }
+  .dialog-head .icon-wrap svg { width: 20px; height: 20px; }
+  .dialog-head.danger  .icon-wrap { background: #3d1010; color: var(--bad); }
+  .dialog-head.warn    .icon-wrap { background: #3d3010; color: var(--warn); }
+  .dialog-head.info    .icon-wrap { background: #0f2941; color: var(--accent); }
+  .dialog-head h3 { margin: 0 0 6px; font-size: 16px; font-weight: 700; }
+  .dialog-head .msg { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--text-2); }
+  .dialog-head .msg code { background: var(--bg-3); padding: 1px 6px; border-radius: 3px;
+                            color: var(--accent); font-size: 12px; }
+  .dialog-input-wrap { padding: 14px 20px 4px; }
+  .dialog-input-wrap input {
+    width: 100%; padding: 10px 12px; font-size: 14px;
+    font-family: "JetBrains Mono", Consolas, monospace;
+  }
+  .dialog-actions {
+    padding: 14px 20px 16px; display: flex; justify-content: flex-end; gap: 8px;
+  }
+  .dialog-actions button { min-width: 88px; justify-content: center; }
+
+  /* Bulk-add modal */
+  .modal-card.bulkadd {
+    width: min(640px, 94vw); padding: 0; overflow: hidden;
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    box-shadow: 0 24px 60px #00000080;
+  }
+  .bulkadd-head {
+    padding: 18px 20px 12px; display: flex; align-items: flex-start; gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .bulkadd-head h3 { margin: 0; font-size: 16px; font-weight: 700; }
+  .bulkadd-head p { margin: 4px 0 0; font-size: 12.5px; }
+  .modal-card.bulkadd textarea {
+    width: 100%; min-height: 220px; resize: vertical;
+    background: var(--bg); color: var(--text); border: none; outline: none;
+    padding: 14px 20px; font: 13px "JetBrains Mono", Consolas, monospace;
+    border-bottom: 1px solid var(--border); border-radius: 0;
+  }
+  .bulkadd-actions {
+    padding: 12px 20px; display: flex; align-items: center; gap: 8px;
+  }
+
+  /* Live settings modal */
+  .modal-card.livesettings-card {
+    width: min(640px, 94vw); padding: 0; overflow: hidden;
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    box-shadow: 0 24px 60px #00000090;
+    display: flex; flex-direction: column;
+    max-height: 88vh;
+  }
+  .livesettings-head {
+    padding: 18px 22px 14px; display: flex; align-items: flex-start; gap: 12px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #10182a, var(--bg-2));
+  }
+  .livesettings-head h3 {
+    margin: 0; font-size: 16.5px; font-weight: 700;
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .livesettings-head p { margin: 4px 0 0; font-size: 12.5px; }
+  .livesettings-body {
+    padding: 8px 22px 18px; overflow-y: auto; flex: 1;
+  }
+  .ls-section {
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .ls-section:last-child { border-bottom: none; }
+  .ls-section-title {
+    font-size: 10.5px; color: var(--text-3); font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .ls-row {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: center; gap: 12px; padding: 6px 0;
+    min-height: 32px;
+  }
+  .ls-row label {
+    font-size: 13px; color: var(--text); font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .ls-row .ls-unit {
+    color: var(--text-3); font-size: 11px; font-weight: 400;
+    font-family: "JetBrains Mono", monospace;
+    padding: 1px 6px; background: var(--bg-3); border-radius: 4px;
+  }
+  .ls-row input[type="number"] {
+    width: 130px; text-align: right;
+    background: var(--bg); border: 1px solid var(--border-2); color: var(--text);
+    padding: 6px 10px; border-radius: 6px; font-size: 13px;
+    font-family: "JetBrains Mono", monospace;
+    transition: border-color .15s;
+  }
+  .ls-row input[type="number"]:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 2px #5cb8ff30;
+  }
+  .ls-row.switch-row { grid-template-columns: 1fr auto; }
+
+  /* iOS-style toggle */
+  .switch {
+    position: relative; display: inline-block; width: 40px; height: 22px;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch .slider {
+    position: absolute; cursor: pointer; inset: 0;
+    background: var(--bg-3); border: 1px solid var(--border-2);
+    transition: .2s; border-radius: 22px;
+  }
+  .switch .slider::before {
+    content: ''; position: absolute; height: 16px; width: 16px;
+    left: 2px; bottom: 2px; background: var(--text-3);
+    transition: .2s; border-radius: 50%;
+  }
+  .switch input:checked + .slider {
+    background: linear-gradient(180deg, #3b8ce6, #2a6cb3);
+    border-color: var(--accent);
+  }
+  .switch input:checked + .slider::before {
+    transform: translateX(17px); background: #fff;
+  }
+  .livesettings-actions {
+    padding: 12px 22px; display: flex; align-items: center; gap: 8px;
+    border-top: 1px solid var(--border); background: var(--bg);
+  }
+  .livesettings-actions button { min-width: 110px; }
+  .livesettings-actions button.primary { margin-left: auto; }
+  .file-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; background: var(--bg-3); color: var(--text);
+    border: 1px solid var(--border-2); border-radius: 7px; cursor: pointer;
+    font-size: 13px; font-weight: 500; transition: all .15s;
+  }
+  .file-btn:hover { background: #2a3248; border-color: #3d4662; }
+
+  /* Skeleton loaders */
+  .skel {
+    background: linear-gradient(90deg, var(--bg-3) 25%, #252a38 50%, var(--bg-3) 75%);
+    background-size: 200% 100%;
+    animation: skel 1.4s ease-in-out infinite;
+    border-radius: 4px;
+  }
+  @keyframes skel { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .muted { color: var(--text-3); font-size: 11.5px; }
+  .clickable { cursor: pointer; }
+
+  /* Video preview modal */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: #000000b0;
+    /* Above the sticky header (500) and everything else so a modal is never
+       clipped by page chrome. Toasts (2000) + tooltips (9999) still layer above
+       so save confirmations and hints show over an open modal. */
+    display: none; align-items: center; justify-content: center; z-index: 1000;
+  }
+  .modal-backdrop.show { display: flex; }
+  .modal-card {
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 12px;
+    max-width: 90vw; max-height: 90vh; padding: 14px;
+  }
+  .modal-card video { max-width: 85vw; max-height: 75vh; border-radius: 8px; }
+  .modal-card .top { display: flex; align-items: center; margin-bottom: 10px; }
+  .modal-card .top .title { flex: 1; font-weight: 600; margin-right: 10px; }
+
+  /* Filter chip row */
+  .filter-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+  .filter-row input, .filter-row select { width: auto; min-width: 120px; }
+  .filter-row .chip {
+    padding: 4px 10px; border-radius: 20px; background: var(--bg-3);
+    border: 1px solid var(--border-2); font-size: 11.5px; cursor: pointer;
+    color: var(--text-2); transition: all .12s;
+  }
+  .filter-row .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .filter-row .chip.active { background: var(--accent-2); color: white; border-color: var(--accent); }
+
+  /* Tab bar (top navigation) */
+  .tab-bar { display: flex; gap: 2px; background: var(--bg); padding: 3px;
+             border-radius: 9px; border: 1px solid var(--border); margin: 0 8px; }
+  .tab-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 14px; background: transparent; border: 1px solid transparent;
+    color: var(--text-2); cursor: pointer; font-size: 13px; font-weight: 500;
+    border-radius: 6px; transition: all .15s; position: relative;
+  }
+  .tab-btn .icon { width: 14px; height: 14px; }
+  .tab-btn:hover { background: var(--bg-3); color: var(--text); }
+  .tab-btn.active { background: var(--bg-3); color: var(--accent);
+                    border-color: var(--border-2); font-weight: 600; }
+  .tab-btn .tab-badge {
+    padding: 1px 7px; border-radius: 10px; font-size: 11px;
+    background: var(--good); color: #06121a; font-weight: 700; line-height: 1.2;
+    margin-left: 2px;
+  }
+
+  /* Pages */
+  .page { display: block; }
+  .page[hidden] { display: none !important; }
+
+  /* Live model grid */
+  .live-grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  .live-card {
+    background: linear-gradient(180deg, var(--bg-2), #10141c);
+    border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px 16px; transition: border-color .15s, transform .15s;
+    position: relative; overflow: hidden;
+  }
+  .live-card:hover { border-color: var(--border-2); transform: translateY(-1px); }
+  .live-card.recording {
+    border-color: var(--good);
+    box-shadow: 0 0 0 1px var(--good), 0 0 12px #4ade8030;
+  }
+  .live-card.recording::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--good), transparent);
+    animation: scan 2s linear infinite;
+  }
+  @keyframes scan {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .live-card .top { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .live-card .username { font-weight: 700; font-size: 15px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .live-card .site-chip { font-size: 10.5px; padding: 1px 6px; border-radius: 4px;
+                          background: var(--bg-3); color: var(--text-2); font-family: "JetBrains Mono", monospace; }
+  .live-card .status-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+    font-size: 12px;
+  }
+  .live-card .state-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .live-card .state-dot.good     { background: var(--good);  box-shadow: 0 0 6px #4ade80; animation: pulse-dot 1.5s ease-in-out infinite; }
+  .live-card .state-dot.accent   { background: var(--accent); box-shadow: 0 0 6px #5cb8ff; }
+  .live-card .state-dot.purple   { background: var(--purple); box-shadow: 0 0 6px #a78bfa; }
+  .live-card .state-dot.warn     { background: var(--warn);   box-shadow: 0 0 6px #fbbf2450; }
+  .live-card .state-dot.bad      { background: var(--bad);    box-shadow: 0 0 6px #f87171; }
+  .live-card .state-dot.text-3   { background: #3a4253; }
+  @keyframes pulse-dot { 0%,100%{opacity:1;} 50%{opacity:.45;} }
+  .live-card .state-label { font-weight: 500; }
+  .live-card .state-label.good { color: var(--good); }
+  .live-card .state-label.accent { color: var(--accent); }
+  .live-card .state-label.purple { color: var(--purple); }
+  .live-card .state-label.warn { color: var(--warn); }
+  .live-card .state-label.bad { color: var(--bad); }
+  .live-card .state-label.text-3 { color: var(--text-3); }
+  .live-card .meta { font-size: 11.5px; color: var(--text-3); font-family: "JetBrains Mono", monospace; }
+  .live-card .actions { display: flex; gap: 6px; margin-top: 12px; }
+  .live-card .actions button { flex: 1; padding: 6px 8px; }
+  .live-card .actions button.icon-only { flex: 0 0 34px; padding: 6px; }
+  .live-card .actions button svg { width: 12px; height: 12px; }
+
+  /* Thumbnail header – shown when the site returned an avatar/preview */
+  .live-card .hero {
+    margin: -14px -16px 10px -16px;
+    height: 90px;
+    background-size: cover; background-position: center;
+    background-color: #0e1421;
+    position: relative; overflow: hidden;
+  }
+  .live-card .hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 30%, #10141c 100%);
+  }
+  .live-card .hero.small { height: 52px; }
+
+  /* Badges row under status */
+  .live-card .badges {
+    display: flex; flex-wrap: wrap; gap: 4px 5px; margin-bottom: 8px;
+  }
+  .live-card .badge {
+    font-size: 10.5px; padding: 1px 7px; border-radius: 11px;
+    background: #121826; color: var(--text-2); border: 1px solid var(--border);
+    display: inline-flex; align-items: center; gap: 3px; line-height: 1.5;
+  }
+  .live-card .badge.country { background: #0e1e2e; color: #7fd0ff; }
+  .live-card .badge.age { background: #1e1830; color: #c8a8ff; }
+  .live-card .badge.language { background: #11241e; color: #5ee2a6; }
+  .live-card .badge.viewers { background: #2a1211; color: #ff9595; }
+  .live-card .badge.duration { background: #13171f; color: #ffc878; }
+  .live-card .badge .mini-dot {
+    width: 5px; height: 5px; border-radius: 50%; display: inline-block;
+  }
+  .live-card .tags {
+    display: flex; flex-wrap: wrap; gap: 3px; margin: 0 0 8px 0;
+    font-size: 10.5px; line-height: 1.4;
+  }
+  .live-card .tag-chip {
+    background: #0b1322; border: 1px solid #1c2438;
+    color: #7aa4cf; padding: 1px 6px; border-radius: 10px;
+  }
+
+  /* Freq/history row */
+  .live-card .freq-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4px 10px; font-size: 11px; margin-bottom: 10px;
+    padding: 7px 9px; background: #0b1320; border-radius: 6px;
+    border: 1px solid #141c2d;
+  }
+  .live-card .freq-grid .k {
+    color: var(--text-3); font-family: "JetBrains Mono", monospace; font-size: 10px;
+    text-transform: uppercase; letter-spacing: .3px;
+  }
+  .live-card .freq-grid .v {
+    color: var(--text); text-align: right;
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .live-card .freq-grid .v.good    { color: var(--good); }
+  .live-card .freq-grid .v.accent  { color: var(--accent); }
+  .live-card .freq-grid .v.warn    { color: var(--warn); }
+
+  .live-card.error-state { border-color: #6b2a2a; }
+  .live-card.paused-state { border-color: #5a4a1e; }
+  .live-card.paused-state::after {
+    content: 'PAUSED'; position: absolute; top: 10px; right: 12px;
+    font-size: 9.5px; font-weight: 700; letter-spacing: 1px;
+    color: var(--warn); background: #1f1508; padding: 2px 7px;
+    border-radius: 4px; border: 1px solid #5a4a1e;
+  }
+  .live-card.live-now {
+    background: linear-gradient(180deg, #0d2916, #10141c);
+    border-color: #2f7d42;
+  }
+  .live-card.live-now::after {
+    content: '● LIVE'; position: absolute; top: 10px; right: 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: .5px;
+    color: #5ee2a6; background: #072416; padding: 2px 8px;
+    border-radius: 4px; border: 1px solid #145a3b;
+    animation: pulse-dot 1.5s ease-in-out infinite;
+  }
+
+  /* Stat-box accent variant */
+  .stat-box.accent::before { background: var(--accent); }
+  .stat-box.accent .value { color: var(--accent); }
+
+  /* Command palette */
+  .modal-card.palette {
+    width: min(560px, 90vw); padding: 0; overflow: hidden;
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    box-shadow: 0 20px 60px #00000080;
+  }
+  .modal-card.palette input {
+    border: none; background: transparent; color: var(--text);
+    padding: 16px 18px; font-size: 14px; width: 100%;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-card.palette input:focus { outline: none; box-shadow: none; border-bottom-color: var(--accent); }
+  #palette-list { max-height: 340px; overflow-y: auto; padding: 4px; }
+  #palette-list .pcmd {
+    padding: 9px 12px; border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; font-size: 13px;
+    color: var(--text);
+  }
+  #palette-list .pcmd:hover,
+  #palette-list .pcmd.selected { background: var(--bg-3); }
+  #palette-list .pcmd .kbd {
+    margin-left: auto; font-size: 11px; color: var(--text-3);
+    padding: 1px 6px; border: 1px solid var(--border-2); border-radius: 3px;
+    font-family: "JetBrains Mono", monospace;
+  }
+  #palette-list .pcmd .desc { color: var(--text-3); font-size: 11.5px; margin-left: 4px; }
+  .palette-footer {
+    padding: 8px 14px; font-size: 11.5px; border-top: 1px solid var(--border);
+    display: flex; gap: 14px;
+  }
+
+  /* Sort chips */
+  .chip[data-sort] { background: var(--bg); }
+  .chip[data-sort].active { background: var(--accent-2); color: white; border-color: var(--accent); }
+
+  /* Disk / Storage */
+  .drive-bar {
+    display: flex; height: 22px; border-radius: 6px; overflow: hidden;
+    background: var(--bg); border: 1px solid var(--border);
+    transition: all .3s;
+  }
+  .drive-bar .seg { height: 100%; transition: width .4s ease; }
+  .drive-bar .seg-archive { background: linear-gradient(90deg, var(--accent), var(--purple)); }
+  .drive-bar .seg-used    { background: var(--bg-3); }
+  .drive-bar .seg-free    { background: linear-gradient(90deg, #2a543a, #3a7d52); }
+  .drive-legend {
+    display: flex; gap: 16px; font-size: 12px; padding: 8px 4px 0;
+    flex-wrap: wrap;
+  }
+  .drive-legend .sw {
+    display: inline-block; width: 10px; height: 10px; border-radius: 2px;
+    margin-right: 4px; vertical-align: middle;
+  }
+  .drive-legend .sw-archive { background: linear-gradient(135deg, var(--accent), var(--purple)); }
+  .drive-legend .sw-used    { background: var(--bg-3); border: 1px solid var(--border-2); }
+  .drive-legend .sw-free    { background: #3a7d52; }
+
+  .disk-perf-row {
+    display: grid; grid-template-columns: 180px 1fr 90px 70px auto;
+    gap: 10px; align-items: center; padding: 8px 10px;
+    border-bottom: 1px solid var(--border); font-size: 12.5px;
+    transition: background .12s;
+  }
+  .disk-perf-row:hover { background: var(--bg-3); }
+  .disk-perf-row:last-child { border-bottom: none; }
+  .disk-perf-row .pname { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .disk-perf-row .pmeter {
+    height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .disk-perf-row .pmeter-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--purple));
+    transition: width .3s;
+  }
+  .disk-perf-row .psize { text-align: right; font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--text-2); }
+  .disk-perf-row .pcount { text-align: right; color: var(--text-3); font-size: 11.5px; }
+
+  .drive-legend #disk-lbl-warn.warn { color: var(--warn); font-weight: 600; }
+  .drive-legend #disk-lbl-warn.bad  { color: var(--bad);  font-weight: 600; }
+
+  /* Repair progress banner (Live tab) */
+  .repair-banner {
+    background: linear-gradient(180deg, #0e2036, #0b1726);
+    border: 1px solid #1e4773; border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 14px;
+  }
+  .repair-banner.done { background: linear-gradient(180deg, #0d2916, #10141c); border-color: #2f7d42; }
+  .repair-banner.error { background: linear-gradient(180deg, #29100d, #1a0f14); border-color: #6b2a2a; }
+  .repair-banner-inner { display: flex; flex-direction: column; gap: 8px; }
+  .repair-banner-head {
+    display: flex; align-items: center; gap: 8px; font-size: 13px;
+  }
+  .repair-banner-title { font-weight: 600; color: var(--accent); }
+  .repair-banner.done .repair-banner-title { color: var(--good); }
+  .repair-banner.error .repair-banner-title { color: var(--bad); }
+  .repair-banner-pct {
+    font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--text-2);
+    margin-left: auto;
+  }
+  .repair-banner-elapsed {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--text-3);
+  }
+  .repair-progress-bar {
+    height: 6px; background: #0a0e18; border-radius: 3px; overflow: hidden;
+    border: 1px solid #1c2438;
+  }
+  .repair-progress-bar .fill {
+    height: 100%; width: 0;
+    background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--purple));
+    background-size: 200% 100%; animation: shimmer 2.5s linear infinite;
+    transition: width .3s;
+  }
+  .repair-banner.done .repair-progress-bar .fill {
+    animation: none;
+    background: var(--good);
+  }
+  .repair-banner-body {
+    display: flex; align-items: baseline; gap: 10px; font-size: 11.5px;
+  }
+  .repair-current {
+    flex: 1; color: var(--text-3); font-family: "JetBrains Mono", monospace;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .repair-counts {
+    display: inline-flex; gap: 6px; flex-wrap: wrap;
+  }
+  .repair-counts .repair-chip {
+    padding: 1px 7px; border-radius: 10px; font-size: 10.5px;
+    background: #121826; color: var(--text-2); border: 1px solid var(--border);
+    font-family: "JetBrains Mono", monospace;
+  }
+  .repair-counts .repair-chip.ok        { background: #0b1320; color: var(--text-3); }
+  .repair-counts .repair-chip.remuxed   { background: #0d2916; color: #5ee2a6; border-color: #145a3b; }
+  .repair-counts .repair-chip.reencoded { background: #0e1e2e; color: #7fd0ff; border-color: #1d4468; }
+  .repair-counts .repair-chip.deleted   { background: #2a1211; color: #ff9595; border-color: #6b2a2a; }
+  .repair-counts .repair-chip.failed    { background: #1f1508; color: var(--warn); border-color: #5a4a1e; }
+
+  .repair-spin {
+    animation: repair-spin 2s linear infinite;
+    color: var(--accent);
+  }
+  .repair-banner.done .repair-spin { animation: none; color: var(--good); }
+  @keyframes repair-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  /* Danger zone (history reset) */
+  .danger-zone-title {
+    margin-top: 22px; margin-bottom: 4px; font-size: 12.5px;
+    color: var(--bad); text-transform: uppercase; letter-spacing: .7px;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .danger-zone {
+    background: #1a0f14; border: 1px solid #4b2023; border-radius: 8px;
+    padding: 10px 12px; margin-top: 4px;
+  }
+  .danger-zone .danger-row {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .danger-zone .danger-row select {
+    background: #0f0a0c; border-color: #4b2023; color: var(--text);
+  }
+  .danger-zone button.danger {
+    padding: 5px 10px; font-size: 12px; white-space: nowrap;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 48px 24px; color: var(--text-3);
+    border: 2px dashed var(--border); border-radius: 12px; font-size: 13.5px;
+  }
+  .empty-state .big-icon { width: 48px; height: 48px; margin-bottom: 12px; color: var(--border-2); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5cb8ff"/>
+          <stop offset=".6" stop-color="#2a6cb3"/>
+          <stop offset="1" stop-color="#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <circle cx="32" cy="32" r="28" fill="#141821" stroke="url(#logo-grad)" stroke-width="2"/>
+      <!-- Arrow -->
+      <path d="M32 14 L32 40 M22 32 L32 42 L42 32"
+            stroke="url(#logo-grad)" stroke-width="3" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Shelf -->
+      <path d="M18 48 L46 48" stroke="url(#logo-grad)" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div>
+      <h1>Harvestr</h1>
+      <div class="tagline">ONE NAME · EVERY VIDEO</div>
+    </div>
+  </div>
+
+  <nav class="tab-bar" role="tablist" aria-label="Main sections">
+    <button class="tab-btn active" role="tab" data-page="archive"
+            aria-selected="true" aria-controls="page-archive"
+            onclick="switchTab('archive')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+      Archive
+    </button>
+    <button class="tab-btn" role="tab" data-page="live"
+            aria-selected="false" aria-controls="page-live"
+            onclick="switchTab('live')">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9" opacity=".35"/><circle cx="12" cy="12" r="6" opacity=".55"/></svg>
+      Live
+      <span id="tab-live-badge" class="tab-badge" hidden>0</span>
+    </button>
+  </nav>
+
+  <span class="status-pill" role="status" aria-live="polite">
+    <span class="status-dot" id="status-dot"></span>
+    <span id="status-text">idle</span>
+  </span>
+
+  <div style="flex:1"></div>
+
+  <button class="ghost" data-tip="Command palette (Ctrl+K)"
+          onclick="openPalette()" aria-label="Open command palette">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span style="opacity:.7; font-size:11px; padding:0 4px; border:1px solid var(--border-2); border-radius:3px;">⌘K</span>
+  </button>
+
+  <div id="archive-controls" style="display:flex; gap:8px;">
+    <button class="primary" id="start-btn" onclick="startDownload()"
+            data-tip="Run every performer in config">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      <span id="start-btn-label">Start all</span>
+    </button>
+    <button class="danger" id="stop-btn" onclick="stopDownload()" disabled
+            data-tip="Kill the running subprocess">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+      Stop
+    </button>
+    <button onclick="runDedup()" data-tip="Scan + delete duplicate files">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Dedup
+    </button>
+    <button class="ghost" onclick="refreshAll()" aria-label="Refresh"
+            data-tip="Reload config / sites / history">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    </button>
+  </div>
+  <div id="live-controls" style="display:none; gap:8px;">
+    <button class="success" onclick="liveToggleAll(true)" data-tip="Start polling every model">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+      Start all live
+    </button>
+    <button class="danger" onclick="liveToggleAll(false)" data-tip="Stop polling every model">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+      Stop all
+    </button>
+    <button class="ghost" onclick="liveRepairAll()" data-tip="Check + repair every recording across all models">
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:2px;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      Repair all
+    </button>
+    <button class="ghost" onclick="liveRefresh()" aria-label="Refresh">
+      <svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+    </button>
+  </div>
+</header>
+
+<div id="toast-stack" role="status" aria-live="polite" aria-atomic="false"></div>
+
+<div class="modal-backdrop" id="preview-modal" onclick="closePreview(event)">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <div class="top">
+      <div class="title" id="preview-title"></div>
+      <button class="xs" onclick="closePreview()">✕</button>
+    </div>
+    <video id="preview-video" controls></video>
+  </div>
+</div>
+
+<div class="container">
+
+<section id="page-archive" class="page" role="tabpanel" aria-labelledby="tab-archive">
+
+  <!-- Header stats strip -->
+  <div class="stats">
+    <div class="stat-box"><div class="value" id="stat-perf">–</div><div class="label">Performers</div></div>
+    <div class="stat-box good"><div class="value" id="stat-hist">–</div><div class="label">Downloaded</div></div>
+    <div class="stat-box bad"><div class="value" id="stat-fail">–</div><div class="label">Permanently Failed</div></div>
+    <div class="stat-box warn"><div class="value" id="stat-disk">–</div><div class="label">Total Size</div></div>
+  </div>
+
+  <!-- Active downloads progress -->
+  <div class="card progress-card" id="progress-card" style="display:none;">
+    <h2>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      Active downloads
+      <span id="progress-session" class="muted" style="text-transform:none; letter-spacing:0; margin-left:auto; font-weight:normal;"></span>
+    </h2>
+    <div id="progress-list"></div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Performers -->
+    <div class="card">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Performers
+      </h2>
+      <div class="add-row">
+        <input id="new-perf" type="text" placeholder="Add performer (e.g. blondie_254)"
+               aria-label="Performer username"
+               onkeydown="if(event.key==='Enter'){addPerformer();}" />
+        <button class="primary" onclick="addPerformer()" data-tip="Add one performer">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Add
+        </button>
+        <button class="ghost" onclick="openBulkAdd()" data-tip="Paste a list or import a JSON config"
+                aria-label="Bulk add / Import">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15h6"/></svg>
+          Bulk
+        </button>
+      </div>
+      <div class="perf-list" id="perf-list"></div>
+      <div class="flex" style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 12px;">
+        <button class="success" onclick="runSinglePerformer()">▶ Run selected</button>
+        <span class="muted">Click a performer to select</span>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="card">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </h2>
+      <table class="config-table">
+        <!-- Placeholders carry the built-in default. An unset key used to render
+             as a blank box, which reads as "broken / not configured" rather than
+             "using the default", and gave no clue what value would apply. -->
+        <tr><td>Output dir</td><td><input id="cfg-output-dir" type="text" placeholder="downloads"/></td></tr>
+        <tr><td>Max videos per site</td><td><input id="cfg-max-videos" type="text" placeholder="200"/></td></tr>
+        <tr><td>Max parallel downloads</td><td><input id="cfg-max-parallel" type="text" placeholder="3"/></td></tr>
+        <tr><td>aria2c connections</td><td><input id="cfg-aria2c-conn" type="text" placeholder="16"/></td></tr>
+        <tr><td>Min disk GB</td><td><input id="cfg-min-disk" type="text" placeholder="5"/></td></tr>
+        <tr><td>Min duration (s)</td><td><input id="cfg-min-dur" type="text" placeholder="30"/></td></tr>
+        <tr><td>Rate limit</td><td><input id="cfg-rate" type="text" placeholder="e.g. 500K, 2M, blank = unlimited"/></td></tr>
+        <tr><td>Cookies file</td><td><input id="cfg-cookies" type="text" placeholder="Path to cookies.txt (Netscape)"/></td></tr>
+        <tr><td>Impersonate</td><td><input id="cfg-imp" type="text" placeholder="chrome"/></td></tr>
+        <tr><td>Download proxy</td><td>
+          <div style="display:flex; gap:6px; align-items:center;">
+            <input id="cfg-proxy" type="text" placeholder="http://host:port, socks5://127.0.0.1:9055 (Tor), blank = none" style="flex:1;"/>
+            <button class="xs" onclick="enableTor()" data-tip="Auto-start embedded Tor and fill in SOCKS URL">Use Tor</button>
+          </div>
+        </td></tr>
+        <tr><td>CamSmut user</td><td><input id="cfg-cs-user" type="text" placeholder="(empty = skip camsmut)"/></td></tr>
+        <tr><td>CamSmut password</td><td><input id="cfg-cs-pass" type="password" placeholder=""/></td></tr>
+      </table>
+
+      <div style="margin-top: 12px;">
+        <button class="primary" onclick="saveSettings()">Save settings</button>
+      </div>
+
+      <!-- Danger zone: reset history per performer or all -->
+      <h3 class="danger-zone-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:13px; height:13px; color:var(--bad);"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Danger zone
+      </h3>
+      <p class="muted" style="font-size: 12px; margin: 4px 0 10px 0;">
+        Reset history to re-download videos that were already recorded as OK.
+        Useful after deleting files from disk, or when testing scraper changes.
+      </p>
+      <div class="danger-zone">
+        <div class="danger-row">
+          <div style="flex:1;">
+            <select id="reset-performer-select" style="width:100%;">
+              <option value="">Pick a performer…</option>
+            </select>
+          </div>
+          <button class="danger" onclick="resetHistoryOne()" data-tip="Clear this performer's download + failure history">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+            Reset this one
+          </button>
+        </div>
+        <div class="danger-row" style="margin-top: 8px;">
+          <div class="muted" style="flex:1; font-size:12px;">
+            Reset <b>ALL</b> performers' history – next run will re-probe every site.
+          </div>
+          <button class="danger" onclick="resetHistoryAll()">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Reset everything
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sites picker with category tabs -->
+    <div class="card">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Sites to scrape <span class="muted" style="margin-left:auto; font-weight:normal;" id="sites-count"></span>
+      </h2>
+      <div class="site-tabs" id="site-tabs">
+        <div class="tab active" data-cat="all" onclick="setSiteCat('all')">All</div>
+        <div class="tab" data-cat="mainstream" onclick="setSiteCat('mainstream')">Mainstream</div>
+        <div class="tab" data-cat="adult" onclick="setSiteCat('adult')">Adult</div>
+        <div class="tab" data-cat="cam" onclick="setSiteCat('cam')">Cam archives</div>
+        <div class="tab" data-cat="mirror" onclick="setSiteCat('mirror')">Mirrors</div>
+        <div class="tab" data-cat="archive" onclick="setSiteCat('archive')">Archive</div>
+      </div>
+      <div class="flex mb">
+        <button class="xs" onclick="setSitesAll(true)">Select all visible</button>
+        <button class="xs" onclick="setSitesAll(false)">Clear visible</button>
+        <span class="muted" style="margin-left:auto;"><span style="color: var(--warn)">●</span> = needs cookies</span>
+      </div>
+      <div class="site-list" id="sites-list"></div>
+    </div>
+
+    <!-- Live log -->
+    <div class="card">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        Live log
+        <span class="muted" style="font-weight: normal; margin-left:auto;">
+          <label style="display:inline-flex; align-items:center; gap:4px;">
+            <input type="checkbox" id="log-autoscroll" checked style="width:12px; height:12px; margin:0;"/>
+            auto-scroll
+          </label>
+        </span>
+      </h2>
+      <div class="log-viewer" id="log-viewer"></div>
+    </div>
+
+    <!-- Auth setup (full width) -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Authentication &amp; paid accounts
+        <span class="muted" style="font-weight:normal; margin-left:auto;" id="auth-summary"></span>
+      </h2>
+      <div id="auth-list"></div>
+    </div>
+
+    <!-- Storage / Disk Management -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        Storage
+        <span class="muted" style="margin-left:auto; font-weight:normal;" id="disk-summary"></span>
+      </h2>
+
+      <!-- Drive status bar -->
+      <div id="disk-drive-bar" class="drive-bar">
+        <div class="seg seg-archive" id="disk-seg-archive"
+             data-tip="Harvestr downloads"></div>
+        <div class="seg seg-used" id="disk-seg-other"
+             data-tip="Other files on this drive"></div>
+        <div class="seg seg-free" id="disk-seg-free" data-tip="Free"></div>
+      </div>
+      <div class="drive-legend muted">
+        <span><span class="sw sw-archive"></span> <span id="disk-lbl-archive">–</span> Harvestr</span>
+        <span><span class="sw sw-used"></span> <span id="disk-lbl-other">–</span> Other</span>
+        <span><span class="sw sw-free"></span> <span id="disk-lbl-free">–</span> Free</span>
+        <span style="margin-left:auto;" id="disk-lbl-warn"></span>
+      </div>
+
+      <!-- Cleanup actions -->
+      <div class="filter-row" style="margin-top: 14px;" role="toolbar" aria-label="Cleanup actions">
+        <button onclick="diskPruneOlder()" data-tip="Remove files older than N days">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Prune older than…
+        </button>
+        <button onclick="diskPruneToFree()" data-tip="Delete oldest until N GB free">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          Free up space…
+        </button>
+        <button onclick="runDedup()" data-tip="Content-based dedup scan">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="10" height="10" rx="1"/><rect x="11" y="11" width="10" height="10" rx="1"/></svg>
+          Dedup
+        </button>
+        <div style="margin-left:auto; display:flex; gap:6px; align-items:center;">
+          <span class="muted" style="font-size:11.5px;">Sort:</span>
+          <button class="chip" data-disk-sort="size" onclick="diskSetSort('size')">size</button>
+          <button class="chip" data-disk-sort="count" onclick="diskSetSort('count')">count</button>
+          <button class="chip" data-disk-sort="name" onclick="diskSetSort('name')">name</button>
+          <button class="chip" data-disk-sort="newest" onclick="diskSetSort('newest')">newest</button>
+        </div>
+      </div>
+
+      <!-- Per-performer usage -->
+      <div id="disk-performers" style="margin-top:10px;"></div>
+    </div>
+
+    <!-- Downloaded videos -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Downloaded (<span id="hist-count">0</span>)
+      </h2>
+      <div class="filter-row">
+        <input id="hist-filter" type="text" placeholder="Search performer or title..." oninput="renderHistory()" style="min-width:240px;"/>
+        <select id="hist-site" onchange="renderHistory()"><option value="">All sites</option></select>
+        <select id="hist-sort" onchange="renderHistory()">
+          <option value="date-desc">Newest first</option>
+          <option value="date-asc">Oldest first</option>
+          <option value="size-desc">Largest first</option>
+          <option value="size-asc">Smallest first</option>
+          <option value="perf">By performer</option>
+        </select>
+      </div>
+      <div style="max-height: 480px; overflow-y: auto;">
+        <table>
+          <thead>
+            <tr><th>Performer</th><th>Site</th><th>Title</th><th style="text-align:right;">Size</th><th>Date</th><th></th></tr>
+          </thead>
+          <tbody id="hist-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Failed / skipped -->
+    <div class="card" style="grid-column: 1 / -1;">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Failed / Skipped (<span id="fail-count">0</span>)
+      </h2>
+      <div class="filter-row">
+        <select id="fail-perm-filter" onchange="renderFailed()">
+          <option value="">All</option>
+          <option value="perm">Permanent only</option>
+          <option value="retry">Retry-able only</option>
+        </select>
+        <input id="fail-filter" type="text" placeholder="Search by reason or ID..." oninput="renderFailed()" style="min-width:240px;"/>
+      </div>
+      <div style="max-height: 320px; overflow-y: auto;">
+        <table>
+          <thead>
+            <tr><th>ID</th><th>Site</th><th>Reason</th><th>Attempts</th><th></th></tr>
+          </thead>
+          <tbody id="fail-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section><!-- /page-archive -->
+
+<section id="page-live" class="page" role="tabpanel" aria-labelledby="tab-live" hidden>
+  <!-- Shown while the Live manager restores the tracked fleet. At ~1450 models
+       that takes minutes, and it is NOT an error — the old UI showed the
+       failure card below for the whole window. -->
+  <div id="live-booting" class="card" style="display:none;">
+    <h2>
+      <svg class="icon spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+      Starting Live recorder
+    </h2>
+    <p class="muted" style="font-size:13px;">
+      Restoring tracked models and reconnecting to each site. Recording starts
+      automatically as models come online — you can leave this page.
+    </p>
+    <p id="live-boot-elapsed" class="muted" style="font-size:12px;"></p>
+  </div>
+
+  <div id="live-unavailable" class="card" style="display:none;">
+    <h2>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Live recording failed to start
+    </h2>
+    <p class="muted" style="font-size:13px;">
+      The vendored Live backend (<code>live_backend/streamonitor/</code>) failed
+      to import. This is unusual – run
+      <code>python -c "from live_recording import available; print(available)"</code>
+      to see the error, or check <code>downloads/universal.log</code>.
+    </p>
+    <p id="live-error" class="muted" style="font-size:12px; color: var(--bad);"></p>
+  </div>
+
+  <div id="live-available">
+    <!-- RAG health light -->
+    <div id="live-health" class="health-pill green" data-tip="Overall recorder health (disk, data flow, coverage, errors)">
+      <span class="hp-dot"></span><span id="live-health-text">System healthy</span>
+      <span id="live-uptime" class="hp-uptime"></span>
+    </div>
+    <!-- Live stats strip -->
+    <div class="stats">
+      <div class="stat-box"><div class="value" id="live-stat-total">–</div><div class="label">Models tracked</div></div>
+      <div class="stat-box accent"><div class="value" id="live-stat-running">–</div><div class="label">Polling</div></div>
+      <div class="stat-box good"><div class="value" id="live-stat-recording">–</div><div class="label">Recording now</div></div>
+      <div class="stat-box accent"><div class="value" id="live-stat-speed">–</div><div class="label">Network ↓</div></div>
+      <div class="stat-box accent"><div class="value" id="live-stat-avgspeed">–</div><div class="label">Avg network</div></div>
+      <div class="stat-box warn"><div class="value" id="live-stat-size">–</div><div class="label">Recorded size</div></div>
+      <div class="stat-box" id="live-stat-disk-box"><div class="value" id="live-stat-disk">–</div><div class="label" id="live-stat-disk-label">Free on disk</div></div>
+    </div>
+
+    <!-- Monitor widgets: sparkline + VPN + per-site dots -->
+    <div class="mon-row">
+      <div class="mon-card">
+        <div class="mon-title">Write speed <span id="mon-spark-cur" class="mon-cur"></span></div>
+        <svg id="mon-sparkline" class="mon-spark" viewBox="0 0 300 46" preserveAspectRatio="none">
+          <polyline id="mon-spark-line" fill="none" stroke="var(--accent)" stroke-width="1.6" points=""></polyline>
+        </svg>
+        <div class="mon-sub" id="mon-continuity">–</div>
+      </div>
+      <div class="mon-card">
+        <div class="mon-title">VPN exit</div>
+        <div id="mon-vpn" class="mon-vpn">–</div>
+      </div>
+      <div class="mon-card">
+        <div class="mon-title">Sites <span class="muted" style="text-transform:none;letter-spacing:0">— click to record on/off</span></div>
+        <div id="mon-site-dots" class="mon-site-dots">–</div>
+      </div>
+    </div>
+    <!-- Alerts feed + top recorders -->
+    <div class="mon-row">
+      <div class="mon-card mon-grow">
+        <div class="mon-title">Recent events</div>
+        <div id="mon-alerts" class="mon-list">–</div>
+      </div>
+      <div class="mon-card mon-grow">
+        <div class="mon-title">Top recorders (live)</div>
+        <div id="mon-top" class="mon-list">–</div>
+      </div>
+    </div>
+
+    <!-- Add model + site picker -->
+    <div class="card">
+      <h2>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        Track a model
+        <button class="ghost" style="margin-left:auto; padding:5px 10px; font-size:12px;"
+                onclick="openNetSettings()" data-tip="Proxy &amp; VPN rotation settings"
+                aria-label="Open network settings">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Network
+        </button>
+        <button class="ghost" style="padding:5px 10px; font-size:12px;"
+                onclick="openLiveSettings()" data-tip="Live recording settings"
+                aria-label="Open live settings">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Settings
+        </button>
+      </h2>
+      <div class="add-row">
+        <input id="live-new-username" type="text" placeholder="Model username"
+               aria-label="Model username to add"
+               onkeydown="if(event.key==='Enter'){liveAdd()}"/>
+        <select id="live-new-site" aria-label="Cam site">
+          <option value="">– Site –</option>
+        </select>
+        <button class="primary" id="live-add-btn" onclick="liveAdd()"
+                data-tip="Auto-resolves the room ID from username">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          Track
+        </button>
+        <button class="ghost" onclick="openLiveBulkAdd()" data-tip="Paste list or import JSON"
+                aria-label="Bulk add live models">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6M9 15h6"/></svg>
+          Bulk
+        </button>
+      </div>
+      <p class="muted" style="margin-top: 8px; font-size: 12px;" id="live-site-hint"></p>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-row" role="toolbar" aria-label="Model filters">
+      <input id="live-filter" type="text" placeholder="Filter by username..."
+             oninput="renderLiveModels()" style="min-width:220px;"
+             aria-label="Filter models"/>
+      <select id="live-site-filter" onchange="renderLiveModels()" aria-label="Filter by site">
+        <option value="">All sites</option>
+      </select>
+      <select id="live-status-filter" onchange="renderLiveModels()" aria-label="Filter by status">
+        <option value="">All states</option>
+        <option value="PUBLIC">Recording (PUBLIC)</option>
+        <option value="PRIVATE">Private</option>
+        <option value="OFFLINE,LONG_OFFLINE">Offline</option>
+        <option value="ONLINE">Connecting</option>
+        <option value="RATELIMIT,CLOUDFLARE,RESTRICTED,ERROR">Problems</option>
+        <option value="NOTRUNNING">Not polling</option>
+      </select>
+      <div style="margin-left:auto; display:flex; gap:6px;">
+        <button class="chip" data-sort="status"  onclick="liveSetSort('status')">by status</button>
+        <button class="chip" data-sort="name"    onclick="liveSetSort('name')">by name</button>
+        <button class="chip" data-sort="site"    onclick="liveSetSort('site')">by site</button>
+        <button class="chip" data-sort="size"    onclick="liveSetSort('size')">by size</button>
+      </div>
+    </div>
+
+    <!-- Repair progress banner (shown while a repair job is running) -->
+    <div id="live-repair-banner" class="repair-banner" hidden>
+      <div class="repair-banner-inner">
+        <div class="repair-banner-head">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"
+               class="repair-spin">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          <span class="repair-banner-title" id="repair-banner-title">Repairing...</span>
+          <span class="repair-banner-pct" id="repair-banner-pct">0%</span>
+          <span class="repair-banner-elapsed" id="repair-banner-elapsed"></span>
+        </div>
+        <div class="repair-progress-bar"><div class="fill" id="repair-bar-fill"></div></div>
+        <div class="repair-banner-body">
+          <div class="repair-current" id="repair-current">–</div>
+          <div class="repair-counts" id="repair-counts"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Model grid -->
+    <div id="live-models" class="live-grid"></div>
+  </div>
+</section><!-- /page-live -->
+
+</div>
+
+<!-- Command palette -->
+<div class="modal-backdrop" id="palette-modal" onclick="closePalette(event)" role="dialog" aria-label="Command palette" aria-modal="true">
+  <div class="modal-card palette" onclick="event.stopPropagation()">
+    <input id="palette-input" type="text" placeholder="Type a command or search..."
+           autocomplete="off" oninput="paletteFilter()"
+           onkeydown="paletteKey(event)"/>
+    <div id="palette-list" role="listbox"></div>
+    <div class="palette-footer muted">
+      <span>↑↓ navigate</span> · <span>↵ run</span> · <span>Esc close</span>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm / prompt dialog (replaces native alert/confirm/prompt) -->
+<div class="modal-backdrop" id="dialog-modal" onclick="closeDialog(event)"
+     role="alertdialog" aria-modal="true" aria-labelledby="dialog-title">
+  <div class="modal-card dialog" onclick="event.stopPropagation()">
+    <div class="dialog-head" id="dialog-head">
+      <div class="icon-wrap" id="dialog-icon"></div>
+      <h3 id="dialog-title"></h3>
+      <p class="msg" id="dialog-msg"></p>
+    </div>
+    <div class="dialog-input-wrap" id="dialog-input-wrap" hidden>
+      <input id="dialog-input" type="text" autocomplete="off"
+             onkeydown="if(event.key==='Enter'){dialogConfirm()}"/>
+    </div>
+    <div class="dialog-actions">
+      <button class="ghost" onclick="dialogCancel()" id="dialog-cancel-btn">Cancel</button>
+      <button class="primary" onclick="dialogConfirm()" id="dialog-ok-btn">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- Live settings modal (Live-tab only) -->
+<div class="modal-backdrop" id="livesettings-modal" onclick="closeLiveSettings(event)"
+     role="dialog" aria-modal="true" aria-labelledby="livesettings-title">
+  <div class="modal-card livesettings-card" onclick="event.stopPropagation()">
+    <div class="livesettings-head">
+      <div>
+        <h3 id="livesettings-title">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+               style="vertical-align: -2px; color: var(--accent);">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Live recording settings
+        </h3>
+        <p class="muted" style="font-size: 12px; margin: 3px 0 0 0;">
+          Applied to new recordings on the next poll cycle. No restart needed.
+        </p>
+      </div>
+      <button class="xs ghost" onclick="closeLiveSettings()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="livesettings-body">
+      <div class="ls-section">
+        <div class="ls-section-title">Storage</div>
+        <div class="ls-row" style="grid-template-columns: auto 1fr;">
+          <label for="cfg-live-output-dir" data-tip="Where live recordings go. Separate from Archive downloads.">Recording folder</label>
+          <input id="cfg-live-output-dir" type="text" style="width:100%; text-align:left;"
+                 placeholder="(default: <downloads>/_live)"/>
+        </div>
+      </div>
+
+      <div class="ls-section">
+        <div class="ls-section-title">Segmentation</div>
+        <div class="ls-row">
+          <label for="cfg-live-break-mb" data-tip="Max file size per segment. Recorder rolls to a new file when reached.">Break size
+            <span class="ls-unit">MB</span></label>
+          <input id="cfg-live-break-mb" type="number" min="0" step="100" placeholder="0 = unlimited"/>
+        </div>
+        <div class="ls-row">
+          <label for="cfg-live-break-min" data-tip="Max recording length before forcing a new segment.">Break length
+            <span class="ls-unit">min</span></label>
+          <input id="cfg-live-break-min" type="number" min="0" step="5" placeholder="0 = unlimited"/>
+        </div>
+      </div>
+
+      <div class="ls-section">
+        <div class="ls-section-title">Network</div>
+        <div class="ls-row">
+          <label for="cfg-live-poll-int" data-tip="How often to re-check each model's online status.">Poll interval
+            <span class="ls-unit">s</span></label>
+          <input id="cfg-live-poll-int" type="number" min="5" step="5" placeholder="30"/>
+        </div>
+        <div class="ls-row">
+          <label for="cfg-live-retry-delay" data-tip="Delay after a failed stream before trying again.">Retry delay
+            <span class="ls-unit">s</span></label>
+          <input id="cfg-live-retry-delay" type="number" min="1" step="5" placeholder="5"/>
+        </div>
+        <div class="ls-row">
+          <label for="cfg-live-min-speed" data-tip="If the HLS download speed falls below this, log a warning. 0 = no check.">Min speed
+            <span class="ls-unit">KB/s</span></label>
+          <input id="cfg-live-min-speed" type="number" min="0" step="10" placeholder="0"/>
+        </div>
+      </div>
+
+      <div class="ls-section">
+        <div class="ls-section-title">Reliability</div>
+        <div class="ls-row">
+          <label for="cfg-live-max-errors" data-tip="Max consecutive errors before auto-pausing. Reset on success.">Max errors → pause</label>
+          <input id="cfg-live-max-errors" type="number" min="1" step="1" placeholder="10"/>
+        </div>
+        <div class="ls-row switch-row">
+          <label for="cfg-live-autoresume" data-tip="Auto-resume paused recorders when they come online again.">Auto-resume on online</label>
+          <label class="switch"><input id="cfg-live-autoresume" type="checkbox"/><span class="slider"></span></label>
+        </div>
+      </div>
+
+      <div class="ls-section">
+        <div class="ls-section-title">Post-processing</div>
+        <div class="ls-row switch-row">
+          <label for="cfg-live-postprocess" data-tip="Convert .ts to .mp4 automatically after each session.">Post-process to MP4</label>
+          <label class="switch"><input id="cfg-live-postprocess" type="checkbox"/><span class="slider"></span></label>
+        </div>
+        <div class="ls-row">
+          <label for="cfg-live-keep-n" data-tip="Keep only the last N recorded files per model. 0 = keep all.">Keep last N per model</label>
+          <input id="cfg-live-keep-n" type="number" min="0" step="1" placeholder="0 = keep all"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="livesettings-actions">
+      <button class="ghost" onclick="closeLiveSettings()">Cancel</button>
+      <button class="primary" onclick="saveLiveSettings()">Save live settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- Network settings modal (per-site proxy + Mullvad VPN rotation) -->
+<div class="modal-backdrop" id="netsettings-modal" onclick="closeNetSettings(event)" role="dialog" aria-modal="true" aria-labelledby="netsettings-title">
+  <div class="modal-card livesettings-card" onclick="event.stopPropagation()">
+    <div class="livesettings-head">
+      <div>
+        <h3 id="netsettings-title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Network · Proxy &amp; VPN
+        </h3>
+        <p class="muted">Pin high-volume sites to a residential proxy, and/or auto-rotate Mullvad on rate-limit. Saved locally only — never pushed.</p>
+      </div>
+      <button class="xs ghost" onclick="closeNetSettings()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="livesettings-body">
+      <div class="ls-section">
+        <div class="ls-section-title">Per-site residential proxy</div>
+        <p class="muted" style="font-size:12px; margin:0 0 8px;">Route one site through a dedicated exit IP. Format <code>http://user:pass@host:port</code>. Applies to newly added / restarted bots.</p>
+        <div id="net-proxy-rows"></div>
+        <button class="ghost xs" onclick="addProxyRow()" style="margin-top:6px;">+ Add site proxy</button>
+      </div>
+
+      <div class="ls-section">
+        <div class="ls-section-title">Mullvad VPN auto-rotation</div>
+        <div class="ls-row">
+          <label for="net-vpn-enabled">Enabled</label>
+          <input id="net-vpn-enabled" type="checkbox"/>
+        </div>
+        <div class="ls-row">
+          <label for="net-vpn-locations">Locations <span class="muted">(comma-sep Mullvad codes; empty = off)</span></label>
+          <input id="net-vpn-locations" type="text" placeholder="nl, se, de, gb, ch, us"/>
+        </div>
+        <div class="ls-row">
+          <label for="net-vpn-restart-thr">Tier 1 — restart bots after N rate-limits</label>
+          <input id="net-vpn-restart-thr" type="number" min="1" placeholder="10"/>
+        </div>
+        <div class="ls-row">
+          <label for="net-vpn-rotate-thr">Tier 2 — rotate VPN after N rate-limits</label>
+          <input id="net-vpn-rotate-thr" type="number" min="1" placeholder="25"/>
+        </div>
+        <div class="ls-row">
+          <label for="net-vpn-window">Rate-limit window (sec)</label>
+          <input id="net-vpn-window" type="number" min="10" placeholder="120"/>
+        </div>
+        <div class="ls-row">
+          <label for="net-vpn-restart-cd">Restart cooldown (sec)</label>
+          <input id="net-vpn-restart-cd" type="number" min="0" placeholder="60"/>
+        </div>
+        <div class="ls-row">
+          <label for="net-vpn-rotate-cd">Rotate cooldown (sec)</label>
+          <input id="net-vpn-rotate-cd" type="number" min="0" placeholder="300"/>
+        </div>
+        <p class="muted" id="net-vpn-clistatus" style="font-size:12px; margin:6px 0 0;"></p>
+        <button class="ghost xs" onclick="rotateNow()" style="margin-top:8px;" data-tip="Force-switch the Mullvad exit now; active recordings ride through the gap">Rotate exit now</button>
+      </div>
+    </div>
+
+    <div class="livesettings-actions">
+      <button class="ghost" onclick="resetNetSettings()" style="margin-right:auto;" data-tip="Reset all fields to the shipped defaults">Reset to defaults</button>
+      <button class="ghost" onclick="closeNetSettings()">Cancel</button>
+      <button class="primary" onclick="saveNetSettings()">Save network settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk add / import modal (shared between Archive + Live) -->
+<div class="modal-backdrop" id="bulkadd-modal" onclick="closeBulkAdd(event)" role="dialog" aria-modal="true" aria-labelledby="bulkadd-title">
+  <div class="modal-card bulkadd" onclick="event.stopPropagation()">
+    <div class="bulkadd-head">
+      <div>
+        <h3 id="bulkadd-title">Bulk add</h3>
+        <p class="muted" id="bulkadd-sub">Paste one username per line, or upload a JSON config.</p>
+      </div>
+      <button class="xs ghost" onclick="closeBulkAdd()" aria-label="Close">✕</button>
+    </div>
+    <textarea id="bulkadd-text" rows="10"
+              placeholder="alice_example&#10;bob_example&#10;# lines starting with # are comments"
+              aria-label="Bulk list"></textarea>
+    <div class="bulkadd-actions">
+      <label class="file-btn">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+        Upload JSON
+        <input type="file" accept=".json,application/json"
+               onchange="bulkaddLoadFile(event)" hidden/>
+      </label>
+      <div style="flex:1"></div>
+      <button class="ghost" onclick="closeBulkAdd()">Cancel</button>
+      <button class="primary" onclick="bulkaddSubmit()">Add all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ────────────────────────────────────────────────────────────────
+let _config = {};
+let _sites = [];                    // [{name, category, backend, needs_auth, auth_info, notes}, ...]
+let _history = {};
+let _failed = {};
+let _auth = {};                     // cookie diagnostics
+let _selectedPerformer = null;
+let _siteCat = 'all';
+
+// ── Helpers ──────────────────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const stack = document.getElementById('toast-stack');
+  const item = document.createElement('div');
+  item.className = 'toast-item ' + (type || 'info');
+  const icons = {
+    success: '<svg class="icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+    error:   '<svg class="icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    info:    '<svg class="icon-small" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  };
+  item.innerHTML = (icons[type] || icons.info) + '<span>' + escapeHtml(msg) + '</span>';
+  stack.appendChild(item);
+  // Keep a rolling max of 5 toasts
+  while (stack.children.length > 5) stack.removeChild(stack.firstChild);
+  setTimeout(() => {
+    item.classList.add('hide');
+    setTimeout(() => item.remove(), 300);
+  }, 3500);
+}
+// ── Icons ────────────────────────────────────────────────────────────────
+// One inline-SVG set for the whole UI. Previously about half the controls
+// used unicode glyphs as icons (▶ ■ ↻ ⌥ ✕ ↗ 👁 🛰 📋 ⬇ ⏳ ⚠). Those render at
+// a different weight, size and baseline than the SVG icons next to them, and
+// on Windows several fall back to the emoji font and turn up multicoloured —
+// so the toolbar never looked like one set. These are stroke-based on
+// currentColor, so they inherit button colour and disabled state for free.
+const ICONS = {
+  play:    '<polygon points="6 3 20 12 6 21 6 3"/>',
+  stop:    '<rect x="5" y="5" width="14" height="14" rx="2"/>',
+  refresh: '<polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>',
+  dedup:   '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  close:   '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+  external:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+  eye:     '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+  satellite:'<circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10M12 6a6 6 0 0 1 6 6"/><path d="M4.9 19.1 9 15M2 22l3-3"/>',
+  list:    '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
+  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+  check:   '<polyline points="20 6 9 17 4 12"/>',
+  clock:   '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+  alert:   '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  x:       '<circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>',
+};
+// size: px. Inline-block so it sits on the text baseline inside buttons.
+function ico(name, size = 14, extra = '') {
+  const body = ICONS[name];
+  if (!body) return '';
+  return `<svg class="ic" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none"`
+    + ` stroke="currentColor" stroke-width="2" stroke-linecap="round"`
+    + ` stroke-linejoin="round" aria-hidden="true" ${extra}>${body}</svg>`;
+}
+
+function escapeHtml(s) {
+  return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function bytesHuman(n) {
+  if (!n && n !== 0) return '–';
+  const u = ['B','KB','MB','GB','TB']; let i=0; let x=n;
+  while (x >= 1024 && i < u.length-1) { x /= 1024; i++; }
+  return (i === 0 ? x : x.toFixed(x < 10 ? 2 : 1)) + ' ' + u[i];
+}
+function secsHuman(n) {
+  if (!n || n < 0) return '–';
+  if (n < 60) return n + 's';
+  if (n < 3600) return Math.floor(n/60) + 'm ' + (n%60).toString().padStart(2,'0') + 's';
+  const h = Math.floor(n/3600); const m = Math.floor((n%3600)/60);
+  return h + 'h ' + m + 'm';
+}
+async function api(path, opts={}) {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  return r.json();
+}
+
+// 2026-05-09: defensive POST helper for handlers that just need
+// "did the server accept this" – not the parsed JSON body. Some browser
+// extensions (cookie-extractor, password managers) inject content
+// scripts that wrap fetch and break r.json() mid-promise, throwing
+// "Cannot read properties of undefined (reading 'useCache')". With the
+// regular api() helper that throw collapses callers' success branches
+// (toast, counter refresh, modal close) even though the POST itself
+// succeeded server-side. apiPostOk bypasses JSON parsing entirely and
+// returns a simple {ok, status, error} so callers can react to the
+// HTTP result without depending on response-body parsing.
+async function apiPostOk(path, body) {
+  let ok = false, status = 0, error = '';
+  try {
+    const r = await fetch(path, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: typeof body === 'string' ? body : JSON.stringify(body),
+    });
+    status = r.status;
+    ok = r.ok;
+    if (!r.ok) error = `HTTP ${r.status} ${r.statusText}`;
+  } catch (e) {
+    error = (e && e.message) || String(e);
+  }
+  return { ok, status, error };
+}
+
+// ── Status + live log ────────────────────────────────────────────────────
+async function refreshStatus() {
+  try {
+    const s = await api('/api/status');
+    const dot = document.getElementById('status-dot');
+    const txt = document.getElementById('status-text');
+
+    // Build a compact activity label.
+    //
+    // Deliberately does NOT repeat the recording count — that number already
+    // sits in the "Live" tab badge a few pixels away, and showing "58" twice
+    // in one header reads as a bug. This pill answers "what is it doing and
+    // how fast", the badge answers "how many". Different questions.
+    const bits = [];
+    if (s.live_recording > 0) {
+      const bps = window._liveWriteBps || 0;
+      bits.push(`<span style="color:var(--good);">recording</span>`
+        + (bps > 0 ? ` <span class="muted">${bytesHuman(bps)}/s</span>` : ''));
+    } else if (s.live_running > 0) {
+      bits.push(`<span class="muted">${s.live_running.toLocaleString()} armed</span>`);
+    }
+    if (s.archive_running) {
+      const p = s.archive_progress || {};
+      if (p.total) {
+        bits.push(`<span style="color:var(--accent);">${escapeHtml(p.performer || 'archive')} ${p.done}/${p.total}</span>`);
+      } else {
+        bits.push(`<span style="color:var(--accent);">${escapeHtml(p.performer || 'archive')}</span>`);
+      }
+    }
+
+    if (s.any_busy) {
+      dot.className = 'status-dot running';
+      txt.innerHTML = bits.length ? bits.join(' · ') : 'running...';
+    } else {
+      dot.className = 'status-dot';
+      txt.textContent = 'idle';
+    }
+    // Start button enabled only when NO archive job is running anywhere.
+    // Also SAY so: a greyed-out button alone doesn't distinguish "downloading
+    // right now" from "unavailable", which is the whole question the user is
+    // asking when they look at this control. Swap the label and pulse it.
+    const startBtn = document.getElementById('start-btn');
+    const startLbl = document.getElementById('start-btn-label');
+    const archiveBusy = !!(s.archive_running || s.running);
+    startBtn.disabled = archiveBusy;
+    document.getElementById('stop-btn').disabled = !archiveBusy;
+    startBtn.classList.toggle('is-active', archiveBusy);
+    if (startLbl) {
+      const p = s.archive_progress || {};
+      startLbl.textContent = archiveBusy
+        ? (p.total ? `Downloading ${p.done}/${p.total}` : 'Downloading…')
+        : 'Start all';
+    }
+    startBtn.setAttribute('data-tip', archiveBusy
+      ? `Downloading${s.current_performer ? ' ' + s.current_performer : ''} — use Stop to cancel`
+      : 'Run every performer in config');
+
+    // Live log
+    const lv = document.getElementById('log-viewer');
+    const autoScroll = document.getElementById('log-autoscroll').checked;
+    const shouldScroll = autoScroll && (lv.scrollTop + lv.clientHeight >= lv.scrollHeight - 20);
+    lv.innerHTML = (s.log_tail || []).map(line => {
+      let cls = '';
+      if (line.includes('ERROR')) cls = 'ERROR';
+      else if (line.includes('WARN')) cls = 'WARN';
+      else if (line.includes('DEBUG')) cls = 'DEBUG';
+      return `<span class="${cls}">${escapeHtml(line)}</span>`;
+    }).join('\n');
+    if (shouldScroll || (autoScroll && s.running)) lv.scrollTop = lv.scrollHeight;
+  } catch (e) { console.error(e); }
+}
+
+// ── Progress ─────────────────────────────────────────────────────────────
+async function refreshProgress() {
+  try {
+    const p = await api('/api/progress');
+    const card = document.getElementById('progress-card');
+    const listEl = document.getElementById('progress-list');
+    const sessEl = document.getElementById('progress-session');
+    const active = p.active || [];
+    const sess = p.session || {};
+    if (!sess.running && active.length === 0) {
+      card.style.display = 'none';
+      return;
+    }
+    card.style.display = 'block';
+
+    // Session summary (top-right of the card header)
+    const bits = [];
+    if (sess.performer) bits.push('<b>' + escapeHtml(sess.performer) + '</b>');
+    if (sess.total_queued) bits.push(`${sess.ok||0}/${sess.total_queued} done`);
+    else if ((sess.ok||0) > 0 || (sess.fail||0) > 0) bits.push(`${sess.ok||0} ok`);
+    if (sess.fail) bits.push(`<span style="color:var(--bad)">${sess.fail} failed</span>`);
+    if (sess.skip) bits.push(`<span style="color:var(--warn)">${sess.skip} skipped</span>`);
+    sessEl.innerHTML = bits.join(' · ');
+
+    // Phase / activity summary
+    const phase = sess.phase || '';
+    const phaseIcon = ico({probing: 'satellite', enumerating: 'list',
+                           downloading: 'download', done: 'check'}[phase] || 'clock', 13);
+    let phaseHtml = '';
+    if (phase === 'probing' && sess.probe_total) {
+      const pct = Math.min(100, Math.floor(100 * (sess.probe_done||0) / sess.probe_total));
+      phaseHtml = `<div class="phase-panel">
+        <div class="phase-line">
+          <span class="phase-label">${phaseIcon} ${escapeHtml(sess.phase_label || 'Probing sites...')}</span>
+          <span class="phase-meta">${sess.probe_done||0} / ${sess.probe_total} probes · ${pct}%${sess.current_site ? ' · latest <code>'+escapeHtml(sess.current_site)+'</code>' : ''}</span>
+        </div>
+        <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+      </div>`;
+    } else if (phase === 'enumerating') {
+      phaseHtml = `<div class="phase-panel">
+        <div class="phase-line">
+          <span class="phase-label">${phaseIcon} ${escapeHtml(sess.phase_label || 'Enumerating hits...')}</span>
+          <span class="phase-meta">${sess.videos_found||0} videos found so far</span>
+        </div>
+      </div>`;
+    } else if (phase === 'downloading' && sess.total_queued) {
+      const done = (sess.ok||0) + (sess.fail||0) + (sess.skip||0);
+      const pct = Math.min(100, Math.floor(100 * done / sess.total_queued));
+      phaseHtml = `<div class="phase-panel">
+        <div class="phase-line">
+          <span class="phase-label">${phaseIcon} ${escapeHtml(sess.phase_label || 'Downloading...')}</span>
+          <span class="phase-meta">${done} / ${sess.total_queued} videos · ${pct}%</span>
+        </div>
+        <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+      </div>`;
+    } else if (phase === 'done') {
+      phaseHtml = `<div class="phase-panel done">
+        <span class="phase-label">${phaseIcon} ${escapeHtml(sess.phase_label || 'Done')}</span>
+      </div>`;
+    }
+
+    // Hits summary: which sites found content
+    let hitsHtml = '';
+    if ((sess.sites_hit || []).length > 0) {
+      hitsHtml = `<div class="hits-row"><span class="hits-label">Sites with videos:</span> ` +
+        sess.sites_hit.slice().sort((a,b) => (b.count||0) - (a.count||0))
+          .map(h => {
+            const url = h.url || '';
+            const tip = url
+              ? `Open ${escapeHtml(h.site)} page for '${escapeHtml(sess.performer || '')}' in new tab – verify it's the right ${h.count} videos`
+              : '';
+            const inner = `${escapeHtml(h.site)} · ${h.count}`;
+            if (url) {
+              return `<a class="pill hit-pill hit-pill-link" href="${escapeHtml(url)}"
+                         target="_blank" rel="noopener noreferrer"
+                         data-tip="${tip}">${inner}
+                         <svg class="ext-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                           <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+                         </svg></a>`;
+            }
+            return `<span class="pill hit-pill">${inner}</span>`;
+          })
+          .join(' ') + '</div>';
+    }
+
+    // Active downloads rows
+    let activeHtml = '';
+    if (active.length) {
+      activeHtml = active.map(a => {
+        const pct = Math.min(100, Math.max(0, a.percent || 0));
+        const done = bytesHuman(a.bytes_done || 0);
+        const total = a.bytes_total ? bytesHuman(a.bytes_total) : '?';
+        const speed = a.speed_bps ? bytesHuman(a.speed_bps) + '/s' : '–';
+        const eta = a.eta_seconds ? secsHuman(a.eta_seconds) : '–';
+        const slot = (a.slot !== undefined && a.slot !== null) ? a.slot : -1;
+        const cancelling = (p.cancelled_slots || []).includes(slot);
+        const btnTitle = cancelling ? 'Cancelling…' : 'Skip this download';
+        // Video-verify link: if we know the source URL, title becomes clickable
+        const vurl = a.video_url || '';
+        const titleText = escapeHtml(a.title || a.video_id || '');
+        const titleFull = escapeHtml(a.title || '');
+        const titleEl = vurl
+          ? `<a class="title clickable" href="${escapeHtml(vurl)}" target="_blank"
+                rel="noopener noreferrer" title="${titleFull}"
+                data-tip="Open on ${escapeHtml(a.site || '')} in new tab – verify this is ${escapeHtml(sess.performer || 'the right performer')}">${titleText}</a>`
+          : `<span class="title" title="${titleFull}">${titleText}</span>`;
+        return `<div class="dl-active${cancelling ? ' cancelling' : ''}" data-slot="${slot}">
+          <div class="top">
+            <span class="pill ${a.backend === 'yt-dlp' ? 'ytdlp' : 'custom'}">${escapeHtml(a.site || '?')}</span>
+            ${titleEl}
+            <span class="meta">${done} / ${total} · ${speed} · ETA ${eta} · ${pct.toFixed(1)}%</span>
+            <button class="dl-cancel" title="${btnTitle}" aria-label="${btnTitle}"
+                    ${slot < 0 || cancelling ? 'disabled' : ''}
+                    onclick="cancelSlot(${slot}, event)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <div class="progress-bar"><div class="fill" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('');
+    } else if (phase === 'downloading') {
+      activeHtml = '<div class="dl-empty">Queue ready – waiting for next slot…</div>';
+    } else if (!phase || phase === 'idle') {
+      activeHtml = '<div class="dl-empty">Session starting – initializing scrapers…</div>';
+    }
+
+    listEl.innerHTML = phaseHtml + hitsHtml + activeHtml;
+  } catch (e) { console.error('progress', e); }
+}
+
+// Cancel one active download (skip it, keep the session running)
+async function cancelSlot(slot, ev) {
+  if (ev) { ev.preventDefault(); ev.stopPropagation(); }
+  if (slot === undefined || slot === null || slot < 0) return;
+  const row = document.querySelector('.dl-active[data-slot="' + slot + '"]');
+  const titleEl = row ? row.querySelector('.title') : null;
+  const title = titleEl ? titleEl.textContent.trim() : 'this download';
+
+  const ok = await confirmDialog(
+    'Skip <b>' + escapeHtml(title.slice(0, 80)) + '</b>? It will be marked as skipped and the queue will move to the next video.',
+    {title: 'Skip download?', tone: 'warn', confirmLabel: 'Skip', cancelLabel: 'Keep'}
+  );
+  if (!ok) return;
+
+  // Optimistic UI – grey out the row immediately
+  if (row) {
+    row.classList.add('cancelling');
+    const btn = row.querySelector('.dl-cancel');
+    if (btn) { btn.disabled = true; btn.title = 'Cancelling…'; }
+  }
+  try {
+    const res = await fetch('/api/progress/cancel', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({slot})
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({error: 'failed'}));
+      if (row) row.classList.remove('cancelling');
+      await confirmDialog('Could not cancel: ' + escapeHtml(err.error || 'unknown error'),
+        {title: 'Cancel failed', tone: 'danger', confirmLabel: 'OK', hideCancel: true});
+    }
+  } catch (e) {
+    console.error('cancelSlot', e);
+    if (row) row.classList.remove('cancelling');
+  }
+}
+
+// ── Config ───────────────────────────────────────────────────────────────
+async function loadConfig() {
+  _config = await api('/api/config');
+  const g = (id) => document.getElementById(id);
+  g('cfg-output-dir').value = _config.output_dir || '';
+  g('cfg-max-videos').value = _config.max_videos_per_site || '';
+  g('cfg-max-parallel').value = _config.max_parallel_downloads || '';
+  g('cfg-aria2c-conn').value = _config.aria2c_connections || '';
+  g('cfg-min-disk').value = _config.min_disk_gb || '';
+  g('cfg-min-dur').value = _config.min_duration_seconds || '';
+  g('cfg-rate').value = _config.rate_limit || '';
+  g('cfg-cookies').value = _config.cookies_file || '';
+  g('cfg-imp').value = _config.impersonate_target || '';
+  g('cfg-proxy').value = _config.download_proxy || '';
+  g('cfg-cs-user').value = _config.camsmut_username || '';
+  g('cfg-cs-pass').value = _config.camsmut_password || '';
+  // Live recording settings
+  const live = _config.live || {};
+  g('cfg-live-break-mb').value      = live.break_size_mb ?? '';
+  g('cfg-live-break-min').value     = live.break_length_min ?? '';
+  g('cfg-live-poll-int').value      = live.poll_interval_s ?? '';
+  g('cfg-live-retry-delay').value   = live.retry_delay_s ?? '';
+  g('cfg-live-max-errors').value    = live.max_errors ?? '';
+  g('cfg-live-min-speed').value     = live.min_speed_kbps ?? '';
+  g('cfg-live-autoresume').checked  = !!(live.auto_resume ?? true);
+  g('cfg-live-postprocess').checked = !!(live.post_process_mp4 ?? false);
+  // Populate the "reset history" performer dropdown in the Danger zone
+  const rsel = g('reset-performer-select');
+  if (rsel) {
+    const cur = rsel.value;
+    rsel.innerHTML = '<option value="">Pick a performer…</option>' +
+      (_config.performers || []).map(p =>
+        `<option value="${escapeHtml(p)}">${escapeHtml(p)}</option>`).join('');
+    if (cur) rsel.value = cur;
+  }
+  renderPerformers();
+  renderSites();
+}
+
+// ── Live settings modal ────────────────────────────────────────────────
+function openLiveSettings() {
+  // Re-populate from the latest config (loadConfig has already run at boot)
+  const g = (id) => document.getElementById(id);
+  const live = (_config && _config.live) || {};
+  g('cfg-live-output-dir').value    = live.live_output_dir ?? '';
+  g('cfg-live-break-mb').value      = live.break_size_mb ?? '';
+  g('cfg-live-break-min').value     = live.break_length_min ?? '';
+  g('cfg-live-poll-int').value      = live.poll_interval_s ?? '';
+  g('cfg-live-retry-delay').value   = live.retry_delay_s ?? '';
+  g('cfg-live-max-errors').value    = live.max_errors ?? '';
+  g('cfg-live-min-speed').value     = live.min_speed_kbps ?? '';
+  g('cfg-live-autoresume').checked  = !!(live.auto_resume ?? true);
+  g('cfg-live-postprocess').checked = !!(live.post_process_mp4 ?? false);
+  g('cfg-live-keep-n').value        = live.keep_last_n ?? '';
+  document.getElementById('livesettings-modal').classList.add('show');
+  setTimeout(() => g('cfg-live-output-dir').focus(), 40);
+}
+function closeLiveSettings(e) {
+  if (e && e.target && e.target.id !== 'livesettings-modal') return;
+  document.getElementById('livesettings-modal').classList.remove('show');
+}
+async function saveLiveSettings() {
+  const g = (id) => document.getElementById(id);
+  // Deliberately sends ONLY the fields this modal owns. Other live.* keys
+  // (notably disabled_sites, written by the per-site toggles) are preserved
+  // server-side by /api/config's deep merge. Spreading a cached _config.live
+  // here instead would post a stale disabled_sites and silently switch parked
+  // sites back on.
+  const liveCfg = {
+    live_output_dir:  g('cfg-live-output-dir').value.trim(),
+    break_size_mb:    parseInt(g('cfg-live-break-mb').value)    || 0,
+    break_length_min: parseInt(g('cfg-live-break-min').value)   || 0,
+    poll_interval_s:  parseInt(g('cfg-live-poll-int').value)    || 30,
+    retry_delay_s:    parseInt(g('cfg-live-retry-delay').value) || 5,
+    max_errors:       parseInt(g('cfg-live-max-errors').value)  || 10,
+    min_speed_kbps:   parseInt(g('cfg-live-min-speed').value)   || 0,
+    auto_resume:      !!g('cfg-live-autoresume').checked,
+    post_process_mp4: !!g('cfg-live-postprocess').checked,
+    keep_last_n:      parseInt(g('cfg-live-keep-n').value)      || 0,
+  };
+  const merged = {..._config, live: liveCfg};
+  // Use raw fetch + manual status check rather than the api() helper.
+  // 2026-05-09: some browser extensions (cookie-extractor, password
+  // managers) inject content scripts that wrap fetch and throw
+  // `useCache` / "receiving end does not exist" errors mid-promise.
+  // The api() helper's `r.json()` call gets caught by that and the
+  // success branch never runs – so the modal stays open and no toast
+  // appears even though the POST itself succeeded server-side.
+  // Detect success via HTTP status alone, then run each UI update in
+  // its own try/catch so an extension-induced sync throw can't take
+  // out the whole chain.
+  let savedOK = false;
+  let errMsg = '';
+  try {
+    const r = await fetch('/api/config', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(merged),
+    });
+    savedOK = r.ok;
+    if (!r.ok) errMsg = `HTTP ${r.status} ${r.statusText}`;
+  } catch (e) {
+    errMsg = (e && e.message) || String(e);
+  }
+  if (savedOK) {
+    try { _config = merged; } catch(_) {}
+    try { toast('Live settings saved', 'success'); } catch(_) {}
+    try { closeLiveSettings(); } catch(_) {}
+  } else {
+    try { toast('Error: ' + errMsg, 'error'); } catch(_) {}
+  }
+}
+
+// ── Network settings modal (per-site proxy + Mullvad VPN rotation) ─────
+let _netDefaults = null;
+let _netSiteLabels = {CB:'Chaturbate',SC:'StripChat',CS:'CamSoda',SM:'Stripcaster',BC:'BongaCams',C4:'Cam4',XLC:'XLoveCam'};
+
+async function openNetSettings() {
+  let data = null, err = '';
+  try {
+    const r = await fetch('/api/live/netconfig');
+    if (r.ok) data = await r.json(); else err = 'HTTP ' + r.status;
+  } catch (e) { err = (e && e.message) || String(e); }
+  if (!data) { try { toast('Could not load network settings: ' + err, 'error'); } catch(_){} return; }
+  _netDefaults = data.defaults || {vpn:{}, site_proxies:{}};
+  if (data.site_labels && Object.keys(data.site_labels).length) _netSiteLabels = data.site_labels;
+  _netFill(data.site_proxies || {}, data.vpn || {});
+  const cs = document.getElementById('net-vpn-clistatus');
+  if (cs) {
+    cs.textContent = data.vpn_configured
+      ? ('✓ Mullvad detected · ' + (data.vpn_status || 'ready'))
+      : 'Mullvad CLI not detected or no locations set — rotation is off (no-op). See VPN_SETUP.md.';
+  }
+  document.getElementById('netsettings-modal').classList.add('show');
+}
+function closeNetSettings(e) {
+  if (e && e.target && e.target.id !== 'netsettings-modal') return;
+  document.getElementById('netsettings-modal').classList.remove('show');
+}
+function _netFill(proxies, vpn) {
+  const wrap = document.getElementById('net-proxy-rows');
+  wrap.innerHTML = '';
+  const entries = Object.entries(proxies || {});
+  if (!entries.length) addProxyRow();
+  else entries.forEach(([slug, url]) => addProxyRow(slug, url));
+  const g = (id) => document.getElementById(id);
+  g('net-vpn-enabled').checked = !!(vpn.enabled ?? true);
+  const locs = vpn.rotate_locations;
+  g('net-vpn-locations').value = Array.isArray(locs) ? locs.join(', ') : (locs || '');
+  g('net-vpn-restart-thr').value = vpn.restart_threshold ?? '';
+  g('net-vpn-rotate-thr').value  = vpn.rotate_threshold ?? '';
+  g('net-vpn-window').value      = vpn.ratelimit_window_sec ?? '';
+  g('net-vpn-restart-cd').value  = vpn.restart_cooldown_sec ?? '';
+  g('net-vpn-rotate-cd').value   = vpn.rotate_cooldown_sec ?? '';
+}
+function addProxyRow(slug, url) {
+  const wrap = document.getElementById('net-proxy-rows');
+  const row = document.createElement('div');
+  row.className = 'net-proxy-row';
+  row.style.cssText = 'display:flex; gap:6px; margin-bottom:6px; align-items:center;';
+  let opts = '';
+  Object.entries(_netSiteLabels).forEach(([k, label]) => {
+    opts += '<option value="' + k + '"' + (k === slug ? ' selected' : '') + '>' + escapeHtml(label) + ' (' + k + ')</option>';
+  });
+  row.innerHTML =
+    '<select class="net-proxy-site" style="flex:0 0 160px;">' + opts + '</select>'
+    + '<input class="net-proxy-url" type="text" placeholder="http://user:pass@host:port" value="' + escapeHtml(url || '') + '" style="flex:1;"/>'
+    + '<button class="ghost xs" onclick="this.parentNode.remove()" aria-label="Remove proxy" title="Remove">✕</button>';
+  wrap.appendChild(row);
+}
+function _netCollect() {
+  const proxies = {};
+  document.querySelectorAll('#net-proxy-rows .net-proxy-row').forEach(row => {
+    const slug = row.querySelector('.net-proxy-site').value;
+    const url = row.querySelector('.net-proxy-url').value.trim();
+    if (slug && url) proxies[slug] = url;
+  });
+  const g = (id) => document.getElementById(id);
+  return {
+    site_proxies: proxies,
+    vpn: {
+      enabled: !!g('net-vpn-enabled').checked,
+      rotate_locations: g('net-vpn-locations').value,
+      restart_threshold:   parseInt(g('net-vpn-restart-thr').value) || 10,
+      rotate_threshold:    parseInt(g('net-vpn-rotate-thr').value)  || 25,
+      ratelimit_window_sec:parseInt(g('net-vpn-window').value)      || 120,
+      restart_cooldown_sec:parseInt(g('net-vpn-restart-cd').value)  || 60,
+      rotate_cooldown_sec: parseInt(g('net-vpn-rotate-cd').value)   || 300,
+    },
+  };
+}
+async function saveNetSettings() {
+  const payload = _netCollect();
+  let ok = false, err = '';
+  try {
+    const r = await fetch('/api/live/netconfig', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+    });
+    ok = r.ok;
+    if (!r.ok) err = 'HTTP ' + r.status + ' ' + r.statusText;
+  } catch (e) { err = (e && e.message) || String(e); }
+  if (ok) {
+    try { toast('Network settings saved · VPN applied live, proxy on next (re)start', 'success'); } catch(_){}
+    try { closeNetSettings(); } catch(_){}
+  } else {
+    try { toast('Error: ' + err, 'error'); } catch(_){}
+  }
+}
+function resetNetSettings() {
+  const d = _netDefaults || {vpn:{}, site_proxies:{}};
+  _netFill(d.site_proxies || {}, d.vpn || {});
+  try { toast('Reset to defaults — click Save to apply', 'info'); } catch(_){}
+}
+async function rotateNow() {
+  let proceed = true;
+  try { proceed = await confirmDialog('Rotate the Mullvad exit now? Active recordings ride through the ~10s gap (same file, no split).'); } catch(_) { proceed = true; }
+  if (!proceed) return;
+  let ok = false, err = '', resp = null;
+  try {
+    const r = await fetch('/api/live/netconfig/rotate', {method: 'POST'});
+    ok = r.ok;
+    try { resp = await r.json(); } catch(_){}
+    if (!r.ok) err = (resp && resp.error) || ('HTTP ' + r.status);
+  } catch (e) { err = (e && e.message) || String(e); }
+  if (ok) { try { toast('Rotating Mullvad exit… (~10–30s, recordings ride through)', 'info'); } catch(_){} }
+  else    { try { toast('Rotate failed: ' + err, 'error'); } catch(_){} }
+}
+
+// ── History reset (danger zone) ───────────────────────────────────────
+async function resetHistoryOne() {
+  const sel = document.getElementById('reset-performer-select');
+  const name = (sel && sel.value || '').trim();
+  if (!name) { toast('Pick a performer first', 'error'); return; }
+  const ok = await confirmDialog(
+    `Clear download + failure history for <b>${escapeHtml(name)}</b>?<br><br>` +
+    `Files on disk stay, but Harvestr will treat every video as "never seen" – ` +
+    `next run will re-probe every site and re-download anything new. ` +
+    `Useful if you deleted files from disk or you're testing scraper changes.`,
+    {title: 'Reset history for one performer', tone: 'warn',
+     confirmLabel: 'Reset', cancelLabel: 'Keep'});
+  if (!ok) return;
+  try {
+    const r = await api('/api/history/reset', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({performer: name, include_failed: true})
+    });
+    toast(`Cleared ${r.removed_history} history + ${r.removed_failed} failed`, 'success');
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+async function resetHistoryAll() {
+  const cnt = (_config.performers || []).length;
+  const ok = await confirmDialog(
+    `Clear history for <b>ALL ${cnt}</b> performers?<br><br>` +
+    `This wipes history.json AND failed.json completely. Next full run ` +
+    `will re-probe every site for every performer and re-download anything ` +
+    `not already on disk. <b>This cannot be undone</b>.`,
+    {title: 'Reset ALL history', tone: 'danger',
+     confirmLabel: 'Reset everything', cancelLabel: 'Cancel'});
+  if (!ok) return;
+  try {
+    const r = await api('/api/history/reset', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({all: true, include_failed: true})
+    });
+    toast(`Cleared ${r.removed_history} history + ${r.removed_failed} failed`, 'success');
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+async function resetHistoryFor(name) {
+  // Called from per-performer row button
+  const ok = await confirmDialog(
+    `Clear <b>${escapeHtml(name)}</b>'s history so the next run re-downloads everything new?`,
+    {title: 'Reset performer history', tone: 'warn',
+     confirmLabel: 'Reset', cancelLabel: 'Keep'});
+  if (!ok) return;
+  try {
+    const r = await api('/api/history/reset', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({performer: name, include_failed: true})
+    });
+    toast(`Cleared ${r.removed_history} history + ${r.removed_failed} failed`, 'success');
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+// ── Performers ───────────────────────────────────────────────────────────
+function renderPerformers() {
+  const list = document.getElementById('perf-list');
+  const perfs = _config.performers || [];
+  if (!perfs.length) {
+    list.innerHTML = '<div class="muted" style="padding:16px; text-align:center;">No performers. Add a username above.</div>';
+  } else {
+    list.innerHTML = perfs.map(p => {
+      const hist_count = Object.keys(_history[p.toLowerCase()] || {}).length;
+      const isSel = (p === _selectedPerformer);
+      return `<div class="perf-row ${isSel ? 'selected' : ''}" onclick="togglePerf('${escapeHtml(p)}')">
+        <span class="name">${escapeHtml(p)}</span>
+        <span class="count">${hist_count} videos</span>
+        <button class="xs" onclick="runSingleByName('${escapeHtml(p)}'); event.stopPropagation()" data-tip="Run just this one">▶</button>
+        <button class="xs" onclick="resetHistoryFor('${escapeHtml(p)}'); event.stopPropagation()"
+                data-tip="Reset history so next run re-downloads everything" aria-label="Reset history">
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <button class="xs danger" onclick="removePerformer('${escapeHtml(p)}'); event.stopPropagation()">✕</button>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('stat-perf').textContent = perfs.length;
+}
+function togglePerf(name) {
+  _selectedPerformer = (_selectedPerformer === name) ? null : name;
+  renderPerformers();
+}
+async function addPerformer() {
+  const name = document.getElementById('new-perf').value.trim();
+  if (!name) return;
+  try {
+    await api('/api/config/performer/add', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name})
+    });
+    document.getElementById('new-perf').value = '';
+    toast('Added ' + name, 'success');
+    loadConfig();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+async function removePerformer(name) {
+  if (!await confirmDialog(
+        `Remove <code>${escapeHtml(name)}</code> from the performer list?`,
+        {title: 'Remove performer', tone: 'warn',
+         confirmLabel: 'Remove', cancelLabel: 'Keep'})) return;
+  try {
+    await api('/api/config/performer/remove', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name})
+    });
+    toast('Removed ' + name);
+    loadConfig();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+// ── Sites ────────────────────────────────────────────────────────────────
+async function loadSites() {
+  const d = await api('/api/sites/detailed');
+  _sites = d.sites || [];
+}
+function setSiteCat(cat) {
+  _siteCat = cat;
+  document.querySelectorAll('#site-tabs .tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.cat === cat);
+  });
+  renderSites();
+}
+function _visibleSites() {
+  if (_siteCat === 'all') return _sites;
+  return _sites.filter(s => s.category === _siteCat);
+}
+function renderSites() {
+  const el = document.getElementById('sites-list');
+  const enabled = new Set(_config.enabled_sites || []);
+  const isEmpty = enabled.size === 0;
+  const visible = _visibleSites();
+  document.getElementById('sites-count').textContent =
+    visible.length + ' sites · ' + (isEmpty ? 'all enabled' : `${enabled.size} selected`);
+  if (!visible.length) {
+    el.innerHTML = '<div class="muted" style="padding:20px; text-align:center;">No sites in this category.</div>';
+    return;
+  }
+  const authReport = _auth.sites || {};
+  el.innerHTML = visible.map(s => {
+    const isOn = isEmpty || enabled.has(s.name);
+    let authHtml = '';
+    if (s.needs_auth) {
+      const rep = authReport[s.name];
+      const st = rep ? rep.status : 'none';
+      const tip = s.auth_info ? s.auth_info.why.replace(/"/g, '&quot;')
+                               : 'Some features require cookie auth';
+      authHtml = `<span class="auth-icon" data-status="${st}" data-tip="${tip}">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17a2 2 0 0 1-2-2V11a2 2 0 1 1 4 0v4a2 2 0 0 1-2 2zm6-6V8a6 6 0 0 0-12 0v3H4v10h16V11h-2zm-10-3a4 4 0 0 1 8 0v3H8V8z"/></svg>
+      </span>`;
+    }
+    const badge = s.backend === 'custom' ? `<span class="site-badge" data-tip="Custom scraper">custom</span>`
+                                         : `<span class="site-badge" data-tip="yt-dlp extractor">yt-dlp</span>`;
+    return `<div class="site-row" onclick="toggleSite('${s.name}', this)">
+      <input type="checkbox" ${isOn ? 'checked' : ''} onclick="event.stopPropagation()" onchange="toggleSite('${s.name}', this)"/>
+      <span class="site-name">${escapeHtml(s.name)}</span>
+      ${authHtml}
+      ${badge}
+    </div>`;
+  }).join('');
+}
+function toggleSite(name, target) {
+  const enabled = new Set(_config.enabled_sites || []);
+  const isEmpty = enabled.size === 0;
+  if (isEmpty) _sites.forEach(s => enabled.add(s.name));
+  // Toggle based on the checkbox if passed target, else flip
+  let cb;
+  if (target && target.tagName === 'INPUT') cb = target;
+  else cb = target && target.querySelector ? target.querySelector('input[type="checkbox"]') : null;
+  if (cb && !(target && target.tagName === 'INPUT')) cb.checked = !cb.checked;
+  if (cb ? cb.checked : !enabled.has(name)) enabled.add(name);
+  else enabled.delete(name);
+  const arr = (enabled.size === _sites.length) ? [] : Array.from(enabled);
+  _config.enabled_sites = arr;
+  clearTimeout(window._sitesSaveT);
+  window._sitesSaveT = setTimeout(saveSettings, 500);
+  renderSites();
+}
+function setSitesAll(on) {
+  const enabled = new Set(_config.enabled_sites || []);
+  const wasEmpty = enabled.size === 0;
+  if (wasEmpty) _sites.forEach(s => enabled.add(s.name));
+  const visible = _visibleSites();
+  visible.forEach(s => { if (on) enabled.add(s.name); else enabled.delete(s.name); });
+  const arr = (enabled.size === _sites.length) ? [] : Array.from(enabled);
+  _config.enabled_sites = arr;
+  saveSettings();
+  renderSites();
+}
+
+// ── Settings save ────────────────────────────────────────────────────────
+async function saveSettings() {
+  const g = (id) => document.getElementById(id);
+  const cfg = {..._config,
+    output_dir: g('cfg-output-dir').value,
+    max_videos_per_site: parseInt(g('cfg-max-videos').value) || 10,
+    max_parallel_downloads: parseInt(g('cfg-max-parallel').value) || 3,
+    aria2c_connections: parseInt(g('cfg-aria2c-conn').value) || 16,
+    min_disk_gb: parseFloat(g('cfg-min-disk').value) || 5.0,
+    min_duration_seconds: parseFloat(g('cfg-min-dur').value) || 30.0,
+    rate_limit: g('cfg-rate').value,
+    cookies_file: g('cfg-cookies').value,
+    impersonate_target: g('cfg-imp').value,
+    download_proxy: g('cfg-proxy').value,
+    camsmut_username: g('cfg-cs-user').value,
+    camsmut_password: g('cfg-cs-pass').value,
+    // Live settings: preserved as-is (edited via the Live tab's gear modal,
+    // not from this Archive-side Settings panel).
+    live: _config.live || {},
+  };
+  try {
+    await api('/api/config', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(cfg)
+    });
+    _config = cfg;
+    toast('Settings saved', 'success');
+    // Re-check auth status after cookie file change
+    loadAuth();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+// ── Auth panel ───────────────────────────────────────────────────────────
+async function loadAuth() {
+  _auth = await api('/api/auth');
+  renderAuth();
+  renderSites();  // re-render to update auth indicators
+}
+function renderAuth() {
+  const el = document.getElementById('auth-list');
+  const summary = document.getElementById('auth-summary');
+  const sites = _auth.sites || {};
+  const total = Object.keys(sites).length;
+  const ok = Object.values(sites).filter(s => s.status === 'ok').length;
+  summary.textContent = `${ok} of ${total} auth sites configured · cookies: ${_auth.cookies_file_exists ? 'loaded' : 'none'}`;
+
+  // Ordered list of site keys with their info
+  const siteMeta = {
+    recume:        {label:'Recu.me / Recurbate',
+                    why:'Cloudflare-blocked without cookies. Free account = ~5 plays/day; premium = unlimited + official downloads.',
+                    signup:'https://recu.me/account/signup',
+                    paid:'https://recu.me/account/subscribe',
+                    howto:`<ol>
+  <li>Sign up at <a href="https://recu.me/account/signup" target="_blank" rel="noopener noreferrer">recu.me/account/signup</a> (free, email only).</li>
+  <li><b>For unlimited access</b>, buy a premium plan at <a href="https://recu.me/account/subscribe" target="_blank" rel="noopener noreferrer">recu.me/account/subscribe</a> ($10-$20/month).</li>
+  <li>Log into recu.me in Chrome/Firefox.</li>
+  <li>Install the "Get cookies.txt LOCALLY" extension, click it → Export.</li>
+  <li>Save the file somewhere (e.g. <code>C:\\Users\\&lt;you&gt;\\harvestr\\cookies.txt</code>).</li>
+  <li>In Settings above, paste the path into <b>Cookies file</b>, then save.</li>
+</ol>
+<p class="muted">The <code>cf_clearance</code> cookie expires in 30-60 min. If scraping stops working, just re-export from your browser.</p>`},
+    xcom:          {label:'X.com / Twitter',
+                    why:'Premium X = 10× daily quota + long videos + full timeline history. Without auth you get ~1k posts/day, capped at 3200 lifetime per user (X-wide limit).',
+                    signup:'https://x.com/i/flow/signup',
+                    paid:'https://x.com/i/premium_sign_up',
+                    howto:`<ol>
+  <li>Log in at <a href="https://x.com" target="_blank" rel="noopener noreferrer">x.com</a> with your <b>premium</b> account (free works too but with much stricter limits).</li>
+  <li>Export cookies using "Get cookies.txt LOCALLY" extension.</li>
+  <li>Append the exported file to your existing cookies.txt (or use a separate one).</li>
+  <li>In Settings, point <b>Cookies file</b> at the path.</li>
+</ol>
+<p class="muted">Required cookies: <code>auth_token</code>, <code>ct0</code>. Optional but helpful: <code>guest_id</code>, <code>personalization_id</code>.</p>`},
+    camwhores_tv:  {label:'camwhores.tv (private videos)',
+                    why:'Public videos work without auth. Private/friend-locked uploads require you to be a "friend" of the uploader.',
+                    signup:'https://www.camwhores.tv/signup/',
+                    howto:`<ol>
+  <li>Create account at <a href="https://www.camwhores.tv/signup/" target="_blank" rel="noopener noreferrer">camwhores.tv</a>.</li>
+  <li>Upload at least 1 video yourself to become a "member" (required to request friends).</li>
+  <li>Add the uploader as a friend (they must accept).</li>
+  <li>Log in, export cookies, add to <b>Cookies file</b>.</li>
+</ol>`},
+    camvault:      {label:'camvault.to',
+                    why:'Premium members get full downloads; free accounts see 10-second previews only.',
+                    paid:'https://camvault.to/premium'},
+    archivebate:   {label:'archivebate.com',
+                    why:'HD stream access sometimes requires a logged-in session.'},
+    camsmut:       {label:'camsmut.com',
+                    why:'Video pages return 404 without a logged-in session. Free account works (no premium tier needed). Harvestr logs in automatically for you when you supply username + password in Settings above.',
+                    signup:'https://camsmut.com/register',
+                    howto:`<ol>
+  <li>Create a free account at <a href="https://camsmut.com/register" target="_blank" rel="noopener noreferrer">camsmut.com/register</a>.</li>
+  <li>Come back here → <b>Settings</b> (above) → fill <b>CamSmut user</b> and <b>CamSmut password</b>.</li>
+  <li>Click <b>Save settings</b>. Harvestr will auto-login on the next scrape.</li>
+</ol>
+<p class="muted">No cookies.txt required – credentials are stored in <code>config.json</code>. Delete them anytime by clearing those fields and saving.</p>`},
+  };
+
+  // Build cards in our preferred order
+  const order = ['recume','xcom','camsmut','camwhores_tv','camvault','archivebate'];
+  el.innerHTML = order.map(key => {
+    if (!sites[key]) return '';
+    const rep = sites[key];
+    const meta = siteMeta[key] || {};
+    const statusLabel = {ok:'Cookies OK', partial:'Partial cookies', none:'No cookies'}[rep.status];
+    return `<div class="auth-site">
+      <div class="header">
+        <span class="title">${escapeHtml(meta.label || rep.label)}</span>
+        ${meta.paid ? `<a href="${meta.paid}" target="_blank" rel="noopener noreferrer" class="pill info">Buy premium ${ico('external', 10)}</a>` : ''}
+        ${meta.signup ? `<a href="${meta.signup}" target="_blank" rel="noopener noreferrer" class="pill">Free signup ${ico('external', 10)}</a>` : ''}
+        <span class="status ${rep.status}">${statusLabel}</span>
+      </div>
+      <div class="why">${escapeHtml(meta.why || '')}</div>
+      <div class="cookies">
+        <b>Required:</b>
+        ${(rep.cookies_required||[]).map(c => {
+          const found = (rep.cookies_found||[]).map(x => x.toLowerCase()).includes(c.toLowerCase());
+          return `<code style="color:${found?'var(--good)':'var(--bad)'}">${escapeHtml(c)}${found?' ✓':' ✗'}</code>`;
+        }).join(' · ')}
+      </div>
+      ${meta.howto ? `<details>
+        <summary>Show cookie-export instructions</summary>
+        <div style="padding: 6px 0; color: var(--text-2); font-size: 12.5px;">${meta.howto}</div>
+      </details>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── History ──────────────────────────────────────────────────────────────
+async function loadHistory() {
+  _history = await api('/api/history');
+  _failed = await api('/api/failed');
+  _populateHistSites();
+  renderHistory();
+  renderFailed();
+  // Performer counts depend on history – re-render so each row shows
+  // its real video count instead of 0.
+  renderPerformers();
+}
+function _populateHistSites() {
+  const sel = document.getElementById('hist-site');
+  const existing = new Set(Array.from(sel.options).map(o => o.value));
+  const sites = new Set();
+  for (const entries of Object.values(_history)) {
+    for (const info of Object.values(entries)) {
+      if (info.site) sites.add(info.site);
+    }
+  }
+  Array.from(sites).sort().forEach(s => {
+    if (!existing.has(s)) {
+      const o = document.createElement('option'); o.value = s; o.textContent = s;
+      sel.appendChild(o);
+    }
+  });
+}
+function renderHistory() {
+  const filter = document.getElementById('hist-filter').value.toLowerCase();
+  const siteFilter = document.getElementById('hist-site').value;
+  const sort = document.getElementById('hist-sort').value;
+  const tbody = document.getElementById('hist-body');
+  let rows = [];
+  let totalSize = 0;
+  for (const [perf, entries] of Object.entries(_history)) {
+    for (const [gid, info] of Object.entries(entries)) {
+      if (filter && !perf.toLowerCase().includes(filter) &&
+          !(info.title || '').toLowerCase().includes(filter)) continue;
+      if (siteFilter && info.site !== siteFilter) continue;
+      rows.push({perf, ...info, gid});
+      totalSize += info.filesize || 0;
+    }
+  }
+  const sorts = {
+    'date-desc': (a,b) => (b.date || '').localeCompare(a.date || ''),
+    'date-asc':  (a,b) => (a.date || '').localeCompare(b.date || ''),
+    'size-desc': (a,b) => (b.filesize||0) - (a.filesize||0),
+    'size-asc':  (a,b) => (a.filesize||0) - (b.filesize||0),
+    'perf':      (a,b) => a.perf.localeCompare(b.perf),
+  };
+  rows.sort(sorts[sort] || sorts['date-desc']);
+  const totalCount = Object.values(_history).reduce((a, v) => a + Object.keys(v).length, 0);
+  document.getElementById('stat-hist').textContent = totalCount;
+  document.getElementById('hist-count').textContent = rows.length;
+  document.getElementById('stat-disk').textContent = bytesHuman(totalSize);
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="6" class="muted" style="text-align:center;padding:20px;">
+      No downloads yet – start one above.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.slice(0, 500).map(r => `
+    <tr>
+      <td><b>${escapeHtml(r.perf)}</b></td>
+      <td><span class="pill">${escapeHtml(r.site || '')}</span></td>
+      <td title="${escapeHtml(r.title||'')}">${escapeHtml((r.title||'').slice(0,100))}</td>
+      <td style="text-align:right;" class="mono">${bytesHuman(r.filesize||0)}</td>
+      <td class="mono">${escapeHtml((r.date||'').slice(0,16).replace('T',' '))}</td>
+      <td>
+        <button class="xs" onclick="playVideo(${JSON.stringify(r.output || '').replace(/"/g, '&quot;')}, ${JSON.stringify(r.title || '').replace(/"/g, '&quot;')})" data-tip="Play in-browser">▶</button>
+      </td>
+    </tr>
+  `).join('');
+  if (rows.length > 500) {
+    tbody.innerHTML += `<tr><td colspan="6" class="muted" style="text-align:center;">
+      ...+${rows.length - 500} more (filter to narrow)</td></tr>`;
+  }
+}
+
+function renderFailed() {
+  const tbody = document.getElementById('fail-body');
+  const filter = document.getElementById('fail-filter').value.toLowerCase();
+  const permF = document.getElementById('fail-perm-filter').value;
+  let rows = Object.entries(_failed).map(([gid, info]) => ({gid, ...info}));
+  if (permF === 'perm') rows = rows.filter(r => r.permanent);
+  else if (permF === 'retry') rows = rows.filter(r => !r.permanent);
+  if (filter) rows = rows.filter(r =>
+    (r.gid || '').toLowerCase().includes(filter) ||
+    (r.reason || '').toLowerCase().includes(filter) ||
+    (r.site || '').toLowerCase().includes(filter));
+  const permCount = Object.values(_failed).filter(r => r.permanent).length;
+  document.getElementById('stat-fail').textContent = permCount;
+  document.getElementById('fail-count').textContent = rows.length;
+  rows.sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="muted" style="text-align:center;padding:20px;">
+      Nothing failed. Nice.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = rows.slice(0, 500).map(r => `
+    <tr>
+      <td class="mono">${escapeHtml(r.gid)}</td>
+      <td><span class="pill">${escapeHtml(r.site || '')}</span></td>
+      <td>${escapeHtml((r.reason||'').slice(0,80))}</td>
+      <td class="mono">${r.fail_count || 0}</td>
+      <td>${r.permanent ? '<span class="pill fail">permanent</span>' : '<span class="pill">retry</span>'}</td>
+    </tr>
+  `).join('');
+}
+
+// ── Video preview modal ──────────────────────────────────────────────────
+function playVideo(path, title) {
+  if (!path) { toast('No file path', 'error'); return; }
+  const modal = document.getElementById('preview-modal');
+  const vid = document.getElementById('preview-video');
+  document.getElementById('preview-title').textContent = title || 'Preview';
+  vid.src = '/file?path=' + encodeURIComponent(path);
+  modal.classList.add('show');
+  vid.play().catch(()=>{});
+}
+function closePreview(e) {
+  if (e && e.target && e.target.id !== 'preview-modal') return;
+  document.getElementById('preview-modal').classList.remove('show');
+  document.getElementById('preview-video').pause();
+  document.getElementById('preview-video').src = '';
+}
+
+// ── Run / stop ───────────────────────────────────────────────────────────
+async function startDownload() {
+  const perfs = _config.performers || [];
+  if (!perfs.length) { toast('No performers configured', 'error'); return; }
+  if (!await confirmDialog(
+        `This will probe every enabled site for <b>${perfs.length}</b> performers and download any new videos found.`,
+        {title: 'Start all downloads', tone: 'info',
+         confirmLabel: 'Start', cancelLabel: 'Cancel'})) return;
+  try {
+    await api('/api/run', {method: 'POST'});
+    toast('Started', 'success');
+    setTimeout(refreshStatus, 600);
+    setTimeout(refreshProgress, 600);
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+async function runSinglePerformer() {
+  if (!_selectedPerformer) { toast('Click a performer to select first', 'error'); return; }
+  runSingleByName(_selectedPerformer);
+}
+async function runSingleByName(name) {
+  try {
+    await api('/api/run', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({performer: name})});
+    toast('Started ' + name, 'success');
+    setTimeout(refreshStatus, 600);
+    setTimeout(refreshProgress, 600);
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+async function stopDownload() {
+  if (!await confirmDialog(
+        'Kill the current download subprocess? Partial files in progress will be deleted.',
+        {title: 'Stop download', tone: 'danger',
+         confirmLabel: 'Stop now', cancelLabel: 'Keep running'})) return;
+  try {
+    await api('/api/stop', {method:'POST'});
+    toast('Stopped');
+    setTimeout(refreshStatus, 800);
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+async function enableTor() {
+  toast('Starting Tor... this takes 20-60s on first run', 'info');
+  try {
+    const r = await api('/api/tor', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({action:'start'})});
+    if (r.proxy) {
+      document.getElementById('cfg-proxy').value = r.proxy;
+      _config.download_proxy = r.proxy;
+      toast('Tor running → ' + r.proxy, 'success');
+      loadConfig();
+    } else {
+      toast('Tor start failed: ' + (r.error || 'unknown'), 'error');
+    }
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+
+async function runDedup() {
+  if (!await confirmDialog(
+        'Scan every performer folder for duplicate video files (using byte-level fingerprints) and <b>delete</b> the extras. Keeps the most descriptive filename.',
+        {title: 'Run dedup', tone: 'warn',
+         confirmLabel: 'Run dedup', cancelLabel: 'Cancel'})) return;
+  try {
+    const r = await api('/api/dedup', {method:'POST'});
+    toast(r.message || 'Dedup complete', 'success');
+    loadHistory();
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+}
+async function refreshAll() {
+  await Promise.all([loadSites(), loadAuth(), loadConfig(), loadHistory(),
+                     refreshStatus(), refreshProgress(), loadDisk(true)]);
+  toast('Refreshed');
+}
+
+// ── Tab switching ────────────────────────────────────────────────────────
+let _currentPage = 'archive';
+let _liveSort = 'status';
+
+function switchTab(page) {
+  _currentPage = page;
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const active = btn.dataset.page === page;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-selected', active ? 'true' : 'false');
+  });
+  document.getElementById('page-archive').hidden = page !== 'archive';
+  document.getElementById('page-live').hidden = page !== 'live';
+  document.getElementById('archive-controls').style.display = page === 'archive' ? 'flex' : 'none';
+  document.getElementById('live-controls').style.display = page === 'live' ? 'flex' : 'none';
+  if (page === 'live') {
+    liveLoadSites();
+    liveRefresh();
+    // Resume progress banner if a repair job is already running
+    _checkExistingRepair();
+  }
+  // Update URL hash so it's shareable / refresh-friendly
+  if (history.replaceState) history.replaceState(null, '', '#' + page);
+}
+
+// ── Live recording ───────────────────────────────────────────────────────
+let _liveSnapshot = {available: false, models: [], summary: {}};
+let _liveSites = [];
+
+async function liveLoadSites() {
+  console.debug('[live] liveLoadSites');
+  if (_liveSites.length) return;
+  try {
+    const d = await api('/api/live/sites');
+    _liveSites = d.sites || [];
+    console.debug('[live] sites loaded:', _liveSites.length);
+    const sel = document.getElementById('live-new-site');
+    const fsel = document.getElementById('live-site-filter');
+    if (!sel) { console.error('[live] live-new-site element missing'); return; }
+    if (!fsel) { console.error('[live] live-site-filter element missing'); return; }
+    _liveSites.forEach(s => {
+      const o1 = document.createElement('option');
+      o1.value = s.name; o1.textContent = `${s.name} (${s.slug})`;
+      if (s.needs_room_id) o1.dataset.needsRoomId = '1';
+      sel.appendChild(o1);
+      const o2 = document.createElement('option');
+      o2.value = s.name; o2.textContent = s.name;
+      fsel.appendChild(o2);
+    });
+    sel.onchange = () => {
+      const opt = sel.options[sel.selectedIndex];
+      const needsRoomId = opt && opt.dataset.needsRoomId === '1';
+      document.getElementById('live-site-hint').textContent = needsRoomId
+        ? "We'll auto-resolve the room ID from the username – no extra input needed."
+        : '';
+    };
+  } catch(e) {
+    console.error('liveLoadSites', e);
+  }
+}
+
+async function liveRefresh() {
+  // 2026-05-10: bypass api() helper which calls r.json() – browser
+  // extensions (cookie-extractors, password managers) wrap fetch and
+  // sometimes throw mid-parse on the larger Live response (660 KB).
+  // When that happens the catch returns early, so renderLiveModels()
+  // never runs and the table stays empty even though the request
+  // succeeded server-side. Fall back to manual JSON.parse on r.text()
+  // to bypass whatever the extension monkey-patched onto Response.
+  try {
+    const r = await fetch('/api/live/status');
+    if (!r.ok) throw new Error(`HTTP ${r.status} ${r.statusText}`);
+    let data;
+    try {
+      data = await r.json();
+    } catch (parseErr) {
+      // Extension-induced parse failure – try the raw text path
+      try {
+        const txt = await r.text();
+        data = JSON.parse(txt);
+      } catch (rawErr) {
+        console.error('liveRefresh: both r.json() and JSON.parse(r.text()) failed',
+                      parseErr, rawErr);
+        // Don't return – keep the previous _liveSnapshot so the UI
+        // doesn't blank out on a single transient extension hiccup.
+        renderLiveModels();
+        return;
+      }
+    }
+    _liveSnapshot = data;
+  } catch(e) {
+    console.error('liveRefresh failed', e);
+    renderLiveModels();
+    return;
+  }
+  console.debug('[live] status: total=' + (_liveSnapshot.summary?.total ?? 0)
+                + ' running=' + (_liveSnapshot.summary?.running ?? 0)
+                + ' recording=' + (_liveSnapshot.summary?.recording ?? 0));
+  // Three states, not two: ready / still starting / genuinely broken.
+  const booting = !!_liveSnapshot.booting;
+  const avail = !!_liveSnapshot.available && !booting;
+  document.getElementById('live-available').style.display = avail ? '' : 'none';
+  document.getElementById('live-booting').style.display = booting ? '' : 'none';
+  document.getElementById('live-unavailable').style.display =
+    (!avail && !booting) ? '' : 'none';
+  if (booting) {
+    const el = document.getElementById('live-boot-elapsed');
+    const secs = _liveSnapshot.boot_elapsed_s || 0;
+    if (el) el.textContent = secs ? `Starting for ${durHuman(secs)}…` : '';
+    return;
+  }
+  if (!avail) {
+    document.getElementById('live-error').textContent =
+      (_liveSnapshot.boot_error || _liveSnapshot.import_error)
+        ? 'Error: ' + (_liveSnapshot.boot_error || _liveSnapshot.import_error) : '';
+    return;
+  }
+  _liveApplyStats(_liveSnapshot.summary || {});
+  renderLiveModels();
+}
+
+// Apply header stats + disk gauge + tab badge from a summary object. Shared by
+// the full liveRefresh and the lightweight liveSummaryRefresh.
+function _liveApplyStats(s) {
+  s = s || {};
+  document.getElementById('live-stat-total').textContent = s.total ?? 0;
+  document.getElementById('live-stat-running').textContent = s.running ?? 0;
+  document.getElementById('live-stat-recording').textContent = s.recording ?? 0;
+  document.getElementById('live-stat-size').textContent = bytesHuman(s.total_bytes || 0);
+  { const sp = document.getElementById('live-stat-speed');
+    const nb = (s.network_bps != null ? s.network_bps : s.download_bps);  // true off-the-wire rate; fall back to write speed
+    if (sp) sp.textContent = (nb && nb > 0) ? (bytesHuman(nb) + '/s') : '0 B/s'; }
+  { const a = document.getElementById('live-stat-avgspeed');
+    const na = (s.network_bps_avg != null ? s.network_bps_avg : s.download_bps_avg);
+    if (a) a.textContent = (na && na > 0) ? (bytesHuman(na) + '/s') : '0 B/s'; }
+  // Free disk on the recordings drive, color-coded by how full it is.
+  try {
+    const box = document.getElementById('live-stat-disk-box');
+    const val = document.getElementById('live-stat-disk');
+    const free = s.disk_free_bytes, usedPct = s.disk_used_pct;
+    if (val) val.textContent = (free != null) ? bytesHuman(free) : '–';
+    if (box) {
+      box.classList.remove('good', 'warn', 'bad');
+      const lowGb = (free != null) && free < 10 * 1024 * 1024 * 1024;
+      if (usedPct != null) {
+        if (usedPct >= 92 || lowGb) box.classList.add('bad');
+        else if (usedPct >= 80) box.classList.add('warn');
+        else box.classList.add('good');
+      }
+      // Warn once when the recordings drive is critically full.
+      const crit = (usedPct != null && usedPct >= 92) || lowGb;
+      if (crit && !window._lowDiskWarned) {
+        window._lowDiskWarned = true;
+        try { toast('Recording drive almost full: captures may fail soon', 'error'); } catch (_) {}
+      } else if (!crit) {
+        window._lowDiskWarned = false;
+      }
+    }
+  } catch (_) {}
+  // RAG health pill + uptime
+  try {
+    const h = s.health || { level: 'healthy', reasons: [] };
+    const pill = document.getElementById('live-health');
+    const txt = document.getElementById('live-health-text');
+    if (pill && txt) {
+      const map = { healthy: ['green', 'System healthy'], degraded: ['amber', 'Degraded'], problem: ['red', 'Problem'] };
+      const m = map[h.level] || map.healthy;
+      pill.className = 'health-pill ' + m[0];
+      txt.textContent = (h.reasons && h.reasons.length) ? (m[1] + ' — ' + h.reasons.join('; ')) : m[1];
+    }
+    const up = document.getElementById('live-uptime');
+    if (up && s.uptime_s != null) up.textContent = '· up ' + durHuman(s.uptime_s);
+  } catch (_) {}
+  // Disk-fill ETA -> disk box tooltip + label hint
+  try {
+    const box = document.getElementById('live-stat-disk-box');
+    const lbl = document.getElementById('live-stat-disk-label');
+    const eta = s.disk_full_eta_s;
+    if (box) box.setAttribute('data-tip', (eta != null) ? ('~' + durHuman(eta) + ' until full at current net write rate') : 'Not filling — merger/cleanup keeping pace');
+    if (lbl) lbl.textContent = (eta != null && eta < 24 * 3600) ? ('Free · full in ~' + durHuman(eta)) : 'Free on disk';
+  } catch (_) {}
+  // Top bar "Live" tab badge (only show count when > 0)
+  const badge = document.getElementById('tab-live-badge');
+  if (badge) {
+    if ((s.recording || 0) > 0) { badge.textContent = s.recording; badge.hidden = false; }
+    else { badge.hidden = true; }
+  }
+  try { _liveApplyMonitor(s); } catch (_) {}
+}
+
+// Compact duration formatter (uptime, disk-full ETA)
+function durHuman(sec) {
+  sec = Math.max(0, Math.round(sec || 0));
+  if (sec < 90) return sec + 's';
+  const m = Math.round(sec / 60);
+  if (m < 90) return m + 'm';
+  const h = sec / 3600;
+  if (h < 48) return (h < 10 ? h.toFixed(1) : Math.round(h)) + 'h';
+  return Math.round(h / 24) + 'd';
+}
+
+// ── Monitor widgets: sparkline / continuity / per-site / alerts / top / RED alert
+let _lastHealthLevel = 'healthy';
+function _liveApplyMonitor(s) {
+  // Speed sparkline
+  try {
+    const cur = document.getElementById('mon-spark-cur');
+    if (cur) cur.textContent = (s.download_bps > 0 ? bytesHuman(s.download_bps) + '/s' : '');
+    const hist = s.speed_hist || [], line = document.getElementById('mon-spark-line');
+    if (line && hist.length > 1) {
+      const max = Math.max(1, ...hist), n = hist.length;
+      line.setAttribute('points', hist.map((v, i) =>
+        ((i / (n - 1)) * 300).toFixed(1) + ',' + (44 - (v / max) * 42).toFixed(1)).join(' '));
+    }
+  } catch (_) {}
+  // Continuity
+  try {
+    const c = document.getElementById('mon-continuity');
+    if (c) c.textContent = 'avg fragment ' + (s.avg_fragment_mb ? Math.round(s.avg_fragment_mb) + ' MB' : '–') +
+      ' · avg ' + (s.download_bps_avg > 0 ? bytesHuman(s.download_bps_avg) + '/s' : '0 B/s');
+  } catch (_) {}
+  // Per-site RAG dots
+  try {
+    const el = document.getElementById('mon-site-dots'), sites = s.sites || [];
+    if (el) el.innerHTML = sites.length ? sites.map(x => {
+      // enabled may be absent on an older backend — treat that as ON.
+      const on = (x.enabled !== false);
+      const tip = on
+        ? `${x.recording}/${x.public} recording, ${x.error} error — click to STOP recording ${x.site}`
+        : `${x.site} recording is OFF — click to resume`;
+      return `<span class="site-dot tog ${on ? '' : 'disabled'}" role="button" tabindex="0"`
+        + ` data-site="${escapeHtml(x.site)}" data-on="${on ? 1 : 0}" data-tip="${escapeHtml(tip)}">`
+        + `<span class="d ${on ? x.level : 'off'}"></span>`
+        + `<span class="nm">${escapeHtml(x.site)}</span> `
+        + (on ? x.recording : '<span class="off-tag">OFF</span>')
+        + `</span>`;
+    }).join('') : '<span class="muted">–</span>';
+  } catch (_) {}
+  // Alerts feed
+  try {
+    const el = document.getElementById('mon-alerts'), a = s.alerts || [];
+    if (el) el.innerHTML = a.length ? a.map(ev => {
+      const t = new Date(ev.ts * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      return `<div class="ev ${ev.level}"><span class="t">${t}</span><span class="m" data-tip="${escapeHtml(ev.msg)}">${escapeHtml(ev.msg)}</span></div>`;
+    }).join('') : '<span class="muted">no recent warnings</span>';
+  } catch (_) {}
+  // Top recorders
+  try {
+    const el = document.getElementById('mon-top'), t = s.top_recorders || [];
+    if (el) el.innerHTML = t.length ? t.map(r =>
+      `<div class="toprow"><span class="nm">${escapeHtml(r.username)} <span class="muted">${escapeHtml(r.site)}</span></span><span class="mb">${r.mb} MB</span></div>`).join('')
+      : '<span class="muted">–</span>';
+  } catch (_) {}
+  // RED desktop + sound alert (only on transition INTO problem)
+  try {
+    const lvl = (s.health && s.health.level) || 'healthy';
+    if (lvl === 'problem' && _lastHealthLevel !== 'problem')
+      _notifyRed('Harvestr problem — ' + (((s.health || {}).reasons || []).join('; ') || 'recorder needs attention'));
+    _lastHealthLevel = lvl;
+  } catch (_) {}
+}
+async function pollVpnStatus() {
+  try {
+    // A failed poll (503 while the fleet boots) mustn't count as fresh, or the
+    // panel sits on its "–" placeholder for the full 30s interval.
+    const r = await fetch('/api/live/vpnstatus'); if (!r.ok) { window._lastVpnPoll = 0; return; }
+    const v = await r.json(), el = document.getElementById('mon-vpn'); if (!el) return;
+    if (!v.configured && !v.exit_ip) { el.innerHTML = '<span class="muted">VPN not detected</span>'; return; }
+    const flag = v.country ? _countryFlag(v.country) : '';
+    const on = v.enabled !== false;
+    // "armed" needs BOTH the switch on and a usable CLI+locations; say which
+    // is missing rather than a bare "off" the user can't act on.
+    const rot = !on ? 'rotation OFF'
+              : v.account_expired ? 'rotation paused · Mullvad account expired'
+              : v.other_vpn ? ('rotation paused · ' + v.other_vpn + ' is the active VPN')
+              : (v.configured ? ('rotation armed · ' + (v.locations || []).join('/'))
+                              : 'rotation on, but Mullvad CLI/locations missing');
+    const last = (v.last_rotate_ago_s != null) ? ('last rotate ' + durHuman(v.last_rotate_ago_s) + ' ago') : 'no rotations yet';
+    el.innerHTML =
+      `<div><b>${flag} ${v.country || '?'}</b> <span class="muted">${escapeHtml([v.provider, v.relay].filter(Boolean).join(' · '))}</span></div>` +
+      `<div>${escapeHtml(v.exit_ip || '–')} <span class="muted">${v.connected ? 'connected' : (v.provider ? 'reconnecting' : 'no VPN')}</span></div>` +
+      `<div class="vpn-rot-row">` +
+        `<button class="vpn-toggle ${on ? 'on' : 'off'}" id="vpn-rot-toggle"` +
+        ` role="switch" aria-checked="${on}"` +
+        ` data-tip="${on ? 'Auto-rotate the exit IP when a site rate-limits. Click to disable.'
+                         : 'Auto-rotation disabled. Click to enable.'}">` +
+          `<span class="knob"></span></button>` +
+        `<span class="muted">${rot}</span>` +
+      `</div>` +
+      `<div class="muted">${last}</div>`;
+    const tg = document.getElementById('vpn-rot-toggle');
+    if (tg) tg.onclick = () => vpnToggleRotation(!on);
+  } catch (_) {}
+}
+async function vpnToggleRotation(enable) {
+  const tg = document.getElementById('vpn-rot-toggle');
+  if (tg) tg.disabled = true;            // stop a double-click racing the poll
+  try {
+    const r = await api('/api/live/vpn/rotation', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({enabled: enable})});
+    toast('VPN auto-rotation ' + (enable ? 'enabled' : 'disabled')
+          + (r && r.applied_live === false ? ' (saved; restart to apply)' : ''),
+          enable ? 'success' : 'info');
+  } catch (e) {
+    toast('Could not change rotation: ' + (e.message || e), 'error');
+  } finally {
+    if (tg) tg.disabled = false;
+    window._lastVpnPoll = 0;             // force an immediate refresh
+    try { await pollVpnStatus(); } catch (_) {}
+  }
+}
+function _countryFlag(cc) { try { return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0))); } catch (_) { return ''; } }
+function _notifyRed(msg) {
+  try { toast(msg, 'error'); } catch (_) {}
+  try {
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') new Notification('Harvestr', { body: msg });
+      else if (Notification.permission !== 'denied') Notification.requestPermission();
+    }
+  } catch (_) {}
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination); o.frequency.value = 660; g.gain.value = 0.08;
+    o.start(); o.frequency.setValueAtTime(440, ctx.currentTime + 0.15); o.stop(ctx.currentTime + 0.3);
+  } catch (_) {}
+}
+
+// Fast stats-only refresh via /api/live/summary (no model list, no card
+// re-render) for snappy header updates between the heavier full refreshes.
+let _liveLastSig = '';
+async function liveSummaryRefresh() {
+  try {
+    const r = await fetch('/api/live/summary');
+    if (!r.ok) return;
+    const data = await r.json();
+    if (!data || data.available === false) return;
+    const s = data.summary || {};
+    // Share the write rate with the header status pill, which polls a
+    // different endpoint (/api/status) that has no throughput field.
+    window._liveWriteBps = s.download_bps_avg || 0;
+    _liveApplyStats(s);
+    // VPN exit panel: poll its own endpoint at most every 30s (external IP lookup).
+    // Only while the panel is on screen: a poll made from the Archive tab found
+    // no panel to fill yet still reset the timer, leaving "–" on switching over.
+    const _vpnEl = document.getElementById('mon-vpn');
+    if (_vpnEl && _vpnEl.offsetParent !== null
+        && Date.now() - (window._lastVpnPoll || 0) > 30000) { window._lastVpnPoll = Date.now(); pollVpnStatus(); }
+    // Refresh cards immediately on STRUCTURAL changes (model added/removed or
+    // started/stopped polling). Deliberately excludes the recording count,
+    // which flickers constantly at scale and would force a full re-render every
+    // tick; the ~12s floor handles recording-state card updates.
+    const sig = `${s.total}|${s.running}`;
+    if (sig !== _liveLastSig) {
+      _liveLastSig = sig;
+      if (_currentPage === 'live') liveRefresh();
+    }
+  } catch (_) {}
+}
+
+function liveSetSort(mode) {
+  _liveSort = mode;
+  document.querySelectorAll('.chip[data-sort]').forEach(el => {
+    el.classList.toggle('active', el.dataset.sort === mode);
+  });
+  renderLiveModels();
+}
+
+function renderLiveModels() {
+  const root = document.getElementById('live-models');
+  let models = [...(_liveSnapshot.models || [])];
+  const filter = document.getElementById('live-filter').value.toLowerCase();
+  const siteF = document.getElementById('live-site-filter').value;
+  const statusF = document.getElementById('live-status-filter').value;
+  if (filter) models = models.filter(m => m.username.toLowerCase().includes(filter));
+  if (siteF) models = models.filter(m => m.site === siteF);
+  if (statusF) {
+    const ok = new Set(statusF.split(','));
+    models = models.filter(m => ok.has(m.status));
+  }
+  const statusRank = {PUBLIC:0, PRIVATE:1, ONLINE:2, OFFLINE:3, LONG_OFFLINE:4,
+                      RATELIMIT:5, CLOUDFLARE:5, RESTRICTED:5, ERROR:6,
+                      DELETED:7, NOTEXIST:7, NOTRUNNING:8, UNKNOWN:9};
+  const sorts = {
+    status: (a,b) => (statusRank[a.status]||9) - (statusRank[b.status]||9) || a.username.localeCompare(b.username),
+    name:   (a,b) => a.username.localeCompare(b.username),
+    site:   (a,b) => a.site.localeCompare(b.site) || a.username.localeCompare(b.username),
+    size:   (a,b) => b.size_bytes - a.size_bytes,
+  };
+  models.sort(sorts[_liveSort] || sorts.status);
+
+  if (!models.length) {
+    root.innerHTML = `<div class="empty-state" style="grid-column: 1 / -1;">
+      <svg class="big-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9" opacity=".35"/></svg>
+      <div>No models tracked. Add one above.</div>
+    </div>`;
+    return;
+  }
+
+  // 2026-05-10: render each model card inside its own try/catch so a
+  // single record with unexpected data shape (null tags, missing
+  // status_color, etc.) can't crash the whole list and leave the UI
+  // empty. Failed cards become a small placeholder showing the user
+  // SOMETHING for that key with a console error for debugging.
+  const renderOne = (m) => {
+    const dot = `<span class="state-dot ${m.status_color}" aria-hidden="true"></span>`;
+    const cls = [];
+    if (m.recording) cls.push('recording');
+    if (m.status === 'PUBLIC') cls.push('live-now');
+    if (m.status === 'ERROR' || m.status === 'NOTEXIST' || m.status === 'DELETED') cls.push('error-state');
+    if (!m.running && (m.status === 'OFFLINE' || m.status === 'NOTRUNNING')) cls.push('paused-state');
+    const size = m.size_bytes ? bytesHuman(m.size_bytes) : '–';
+
+    // Hero thumbnail
+    const hero = m.thumb_url || m.avatar_url;
+    const heroHtml = hero
+      ? `<div class="hero${m.avatar_url && !m.thumb_url ? ' small' : ''}"
+              style="background-image: url('${escapeHtml(hero)}');"></div>`
+      : '';
+
+    // Badges: country / age / gender / language / viewers / duration
+    const badges = [];
+    if (m.country) badges.push(`<span class="badge country" data-tip="Country">${_flagEmoji(m.country)} ${escapeHtml(m.country)}</span>`);
+    if (m.gender) badges.push(`<span class="badge" data-tip="Gender">${_genderIcon(m.gender)} ${escapeHtml(m.gender)}</span>`);
+    if (m.age) badges.push(`<span class="badge age" data-tip="Age">${m.age}</span>`);
+    if (m.language) badges.push(`<span class="badge language">${escapeHtml(m.language)}</span>`);
+    if (m.spectators != null && m.status === 'PUBLIC')
+      badges.push(`<span class="badge viewers" data-tip="Viewers now">${ico('eye', 11)} ${numHuman(m.spectators)}</span>`);
+    if (m.stream_duration_s && m.status === 'PUBLIC')
+      badges.push(`<span class="badge duration" data-tip="Streaming for">${secsHuman(m.stream_duration_s)}</span>`);
+    const badgesHtml = badges.length
+      ? `<div class="badges">${badges.join('')}</div>` : '';
+
+    // Tags (top 5)
+    const tags = (m.tags || []).slice(0, 5);
+    const tagsHtml = tags.length
+      ? `<div class="tags">${tags.map(t =>
+          `<span class="tag-chip">#${escapeHtml(t)}</span>`).join('')}</div>`
+      : '';
+
+    // Frequency / history
+    const lastOn = m.last_online_ts ? relTime(m.last_online_ts) : '–';
+    const nextPred = m.next_predicted_ts ? relTime(m.next_predicted_ts) : '–';
+    // Coerce stats to numbers before arithmetic – the backend can serialize
+    // these as strings for some models, and `"5.2".toFixed` throws, which was
+    // the Chaturbate-card "render error" root cause.
+    const _hrs = Number(m.online_hours_7d) || 0;
+    const hoursW = _hrs ? _hrs.toFixed(1) + 'h' : '–';
+    const sessW = Number(m.online_sessions_7d) || 0;
+    const _avg = Number(m.avg_session_minutes) || 0;
+    const avgMin = _avg ? Math.round(_avg) + 'm' : '–';
+    const lastOnClass = m.last_online_ts ? 'good' : '';
+    const freqGrid = (m.last_online_ts || m.next_predicted_ts || sessW > 0)
+      ? `<div class="freq-grid">
+          <span class="k">Last online</span>
+          <span class="v ${lastOnClass}" title="${escapeHtml(m.last_online_ts || '')}">${lastOn}</span>
+          <span class="k">Next (pred.)</span>
+          <span class="v accent" title="${escapeHtml(m.next_predicted_ts || '')}">${nextPred}</span>
+          <span class="k">Sessions/7d</span>
+          <span class="v">${sessW}</span>
+          <span class="k">Hours/7d</span>
+          <span class="v">${hoursW}</span>
+          <span class="k">Avg session</span>
+          <span class="v">${avgMin}</span>
+          <span class="k">Total recorded</span>
+          <span class="v good">${size}</span>
+        </div>`
+      : '';
+
+    // Actions: state-appropriate
+    // running + recording → Pause (stops recording, keeps polling) + Stop
+    // running + not recording (polling) → Pause + Stop
+    // not running → Resume (= Start polling)
+    const u = escapeHtml(m.username);
+    const s = escapeHtml(m.site);
+    let actions = '';
+    if (m.running) {
+      actions = `
+        <button class="warn" onclick="livePause('${u}','${s}')"
+                data-tip="Pause polling (can resume later)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="4" x2="6" y2="20"/><line x1="18" y1="4" x2="18" y2="20"/></svg>
+          Pause
+        </button>
+        <button class="danger" onclick="liveStop('${u}','${s}')"
+                data-tip="Stop + close any active recording">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="1"/></svg>
+          Stop
+        </button>`;
+    } else {
+      actions = `
+        <button class="success" onclick="liveStart('${u}','${s}')"
+                data-tip="Resume polling">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Start
+        </button>`;
+    }
+    // Folder – opens live_dir/<user> [SITE]/ in explorer
+    actions += `
+      <button class="ghost icon-only" onclick="liveOpenFolder('${u}','${escapeHtml(m.site_slug || m.site)}')"
+              data-tip="Open recordings folder on disk" aria-label="Open folder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      </button>`;
+    // Repair – checks every recorded file in this model's folder, fixes
+    // what it can (remux or re-encode) and flags the hopeless ones.
+    actions += `
+      <button class="ghost icon-only" onclick="liveRepair('${u}','${s}')"
+              data-tip="Check + repair recordings (ffprobe validate, ffmpeg fix)" aria-label="Repair recordings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </button>`;
+    actions += `
+      <button class="ghost icon-only" onclick="liveRemove('${u}','${s}')"
+              data-tip="Remove from tracking (X)" aria-label="Remove">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>`;
+
+    return `<div class="live-card ${cls.join(' ')}">
+      ${heroHtml}
+      <div class="top">
+        <span class="username" title="${escapeHtml(m.username)}">${escapeHtml(m.username)}</span>
+        <span class="site-chip" data-tip="Site slug: ${escapeHtml(m.site_slug)}">${escapeHtml(m.site)}</span>
+      </div>
+      <div class="status-row">
+        ${dot}
+        <span class="state-label ${m.status_color}">${escapeHtml(m.status_label)}</span>
+        <span style="flex:1"></span>
+        ${m.followers != null ? `<span class="meta" data-tip="Followers">♥ ${numHuman(m.followers)}</span>` : ''}
+      </div>
+      ${badgesHtml}
+      ${tagsHtml}
+      ${freqGrid}
+      <div class="actions">${actions}</div>
+    </div>`;
+  };
+
+  root.innerHTML = models.map(m => {
+    try {
+      return renderOne(m);
+    } catch (err) {
+      console.error('renderLiveModels: card failed for', m && m.key, err);
+      // Never show a broken "render error" stub. Fall back to a clean,
+      // in-design card so the model stays visible and controllable even when
+      // an optional field (badges/history/thumbnail) has an odd shape.
+      const u = escapeHtml((m && m.username) || '?');
+      const s = escapeHtml((m && m.site) || '?');
+      const sl = escapeHtml((m && m.status_label) || 'offline');
+      const sc = (m && m.status_color) || 'text-3';
+      const act = (m && m.running)
+        ? `<button class="danger" onclick="liveStop('${u}','${s}')" data-tip="Stop">Stop</button>`
+        : `<button class="success" onclick="liveStart('${u}','${s}')" data-tip="Start polling">Start</button>`;
+      return `<div class="live-card">
+        <div class="top">
+          <span class="username" title="${u}">${u}</span>
+          <span class="site-chip">${s}</span>
+        </div>
+        <div class="status-row">
+          <span class="state-dot ${sc}" aria-hidden="true"></span>
+          <span class="state-label ${sc}">${sl}</span>
+        </div>
+        <div class="actions">${act}
+          <button class="ghost icon-only" onclick="liveRemove('${u}','${s}')" data-tip="Remove" aria-label="Remove">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>`;
+    }
+  }).join('');
+}
+
+function _flagEmoji(cc) {
+  if (!cc || cc.length !== 2) return '🌐';
+  const base = 0x1F1E6;
+  const A = 'A'.charCodeAt(0);
+  return String.fromCodePoint(base + (cc.toUpperCase().charCodeAt(0) - A))
+       + String.fromCodePoint(base + (cc.toUpperCase().charCodeAt(1) - A));
+}
+function _genderIcon(g) {
+  const s = (g || '').toLowerCase();
+  return s.startsWith('f') ? '♀'
+       : s.startsWith('m') ? '♂'
+       : s.startsWith('t') ? '⚧'
+       : s.startsWith('c') || s.startsWith('b') ? '⚤'
+       : '';
+}
+
+function numHuman(n) {
+  if (n == null) return '';
+  if (n >= 1e6) return (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1).replace(/\.0$/,'') + 'k';
+  return '' + Math.round(n);
+}
+
+function relTime(iso) {
+  if (!iso) return '–';
+  const now = Date.now();
+  const t = new Date(iso).getTime();
+  if (isNaN(t)) return '–';
+  const diffSec = Math.floor((t - now) / 1000);
+  const future = diffSec > 0;
+  const d = Math.abs(diffSec);
+  let out;
+  if (d < 60) out = 'now';
+  else if (d < 3600) out = Math.floor(d/60) + 'm';
+  else if (d < 86400) out = Math.floor(d/3600) + 'h';
+  else if (d < 7*86400) out = Math.floor(d/86400) + 'd';
+  else out = Math.floor(d/86400) + 'd';
+  return future ? 'in ' + out : out + ' ago';
+}
+
+// Optimistic Live-tab updates: patch the local snapshot for instant feedback,
+// then reconcile with the server in the background. Avoids a full re-fetch +
+// re-render of every model on each click.
+function _liveLocalPatch(username, site, fn) {
+  try {
+    if (!_liveSnapshot || !Array.isArray(_liveSnapshot.models)) return;
+    const key = username + '|' + site;
+    const i = _liveSnapshot.models.findIndex(m =>
+      m.key === key || (m.username === username && m.site === site));
+    if (i < 0) return;
+    if (fn(_liveSnapshot.models[i]) === false) _liveSnapshot.models.splice(i, 1);
+    renderLiveModels();
+  } catch (_) {}
+}
+function _liveReconcile(ms) { try { setTimeout(liveRefresh, ms || 1200); } catch (_) {} }
+
+async function liveAdd() {
+  const username = document.getElementById('live-new-username').value.trim();
+  const site = document.getElementById('live-new-site').value;
+  if (!username || !site) { toast('Pick a site + enter username', 'error'); return; }
+  const btn = document.getElementById('live-add-btn');
+  const orig = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Resolving…';
+  const res = await apiPostOk('/api/live/add', {username, site});
+  if (res.ok) {
+    try { toast(`Tracking ${username} [${site}]`, 'success'); } catch(_){}
+    try { document.getElementById('live-new-username').value = ''; } catch(_){}
+    // Optimistic: show the new model card immediately, reconcile shortly after.
+    try {
+      if (_liveSnapshot && Array.isArray(_liveSnapshot.models)) {
+        const key = username + '|' + site;
+        if (!_liveSnapshot.models.some(m => m.key === key)) {
+          _liveSnapshot.models.unshift({
+            key, username, site, site_slug: (res.site_slug || site),
+            status: 'NOTRUNNING', status_label: 'starting…', status_color: 'text-3',
+            running: true, recording: false, size_bytes: 0, tags: []
+          });
+          if (_liveSnapshot.summary)
+            _liveSnapshot.summary.total = (_liveSnapshot.summary.total || 0) + 1;
+          renderLiveModels();
+        }
+      }
+    } catch(_){}
+    _liveReconcile(900);
+  } else {
+    try { toast('Could not add: ' + res.error, 'error'); } catch(_){}
+  }
+  try { btn.disabled = false; btn.innerHTML = orig; } catch(_){}
+}
+async function liveRemove(username, site) {
+  if (!await confirmDialog(
+        `Stop tracking <b>${escapeHtml(username)}</b> on <b>${escapeHtml(site)}</b>? Existing recorded files stay on disk.`,
+        {title: 'Remove live model', tone: 'warn',
+         confirmLabel: 'Remove', cancelLabel: 'Keep'})) return;
+  const res = await apiPostOk('/api/live/remove', {username, site});
+  if (res.ok) {
+    try { toast(`Removed ${username}`); } catch(_){}
+    _liveLocalPatch(username, site, () => false);
+    _liveReconcile();
+  } else {
+    try { toast('Error: ' + res.error, 'error'); } catch(_){}
+  }
+}
+async function liveStart(username, site) {
+  const res = await apiPostOk('/api/live/start', {username, site});
+  if (res.ok) {
+    try { toast(`Started ${username}`, 'success'); } catch(_){}
+    _liveLocalPatch(username, site, m => { m.running = true; });
+    _liveReconcile();
+  } else {
+    try { toast('Error: ' + res.error, 'error'); } catch(_){}
+  }
+}
+async function liveStop(username, site) {
+  const res = await apiPostOk('/api/live/stop', {username, site});
+  if (res.ok) {
+    try { toast(`Stopped ${username}`); } catch(_){}
+    _liveLocalPatch(username, site, m => { m.running = false; m.recording = false; });
+    _liveReconcile();
+  } else {
+    try { toast('Error: ' + res.error, 'error'); } catch(_){}
+  }
+}
+async function livePause(username, site) {
+  // Soft-stop: keep the model in the tracking list but stop polling.
+  // Resume via the Start button. Backend just calls stop() without
+  // removing – same endpoint, different UX framing.
+  const res = await apiPostOk('/api/live/pause', {username, site});
+  if (res.ok) {
+    try { toast(`Paused ${username}`); } catch(_){}
+    _liveLocalPatch(username, site, m => { m.running = false; m.recording = false; });
+    _liveReconcile();
+  } else {
+    try { toast('Error: ' + res.error, 'error'); } catch(_){}
+  }
+}
+async function liveOpenFolder(username, site) {
+  // Backend resolves the real recordings folder (on whatever drive
+  // live_output_dir points at, e.g. E:\F\Recordings) and opens it.
+  try {
+    const res = await apiPostOk('/api/live/open', {username, site});
+    if (res.ok) toast(`Opened folder for ${username}`);
+    else toast('Could not open: ' + (res.error || 'no recordings yet?'), 'error');
+  } catch(e) { toast('Could not open folder', 'error'); }
+}
+
+// ── Live repair: 3-tier ffmpeg pipeline (check → remux → re-encode → delete)
+let _repairPollTimer = null;
+
+function _repairCountsHtml(c) {
+  const parts = [];
+  if (c.ok)        parts.push(`<span class="repair-chip ok">${c.ok} ok</span>`);
+  if (c.remuxed)   parts.push(`<span class="repair-chip remuxed">${c.remuxed} remuxed</span>`);
+  if (c.reencoded) parts.push(`<span class="repair-chip reencoded">${c.reencoded} re-encoded</span>`);
+  if (c.deleted)   parts.push(`<span class="repair-chip deleted">${c.deleted} deleted</span>`);
+  if (c.failed)    parts.push(`<span class="repair-chip failed">${c.failed} still broken</span>`);
+  return parts.join('');
+}
+
+function _repairSummaryText(s) {
+  const c = s.counts || {};
+  const parts = [];
+  if (c.ok)        parts.push(`${c.ok} already ok`);
+  if (c.remuxed)   parts.push(`<b style="color:var(--good)">${c.remuxed} remuxed</b>`);
+  if (c.reencoded) parts.push(`<b style="color:#7fd0ff">${c.reencoded} re-encoded</b>`);
+  if (c.deleted)   parts.push(`<b style="color:var(--bad)">${c.deleted} deleted</b>`);
+  if (c.failed)    parts.push(`<b style="color:var(--warn)">${c.failed} still broken</b>`);
+  if (!parts.length) parts.push('no files found to repair');
+  return `Scanned <b>${s.total || 0}</b> files · ` + parts.join(' · ');
+}
+
+function _fmtElapsed(startIso, endIso) {
+  if (!startIso) return '';
+  const start = new Date(startIso).getTime();
+  const end = endIso ? new Date(endIso).getTime() : Date.now();
+  const sec = Math.max(0, Math.floor((end - start) / 1000));
+  if (sec < 60) return sec + 's';
+  const m = Math.floor(sec / 60), s = sec % 60;
+  return m + 'm ' + (s < 10 ? '0' : '') + s + 's';
+}
+
+async function _pollRepair() {
+  try {
+    const s = await api('/api/live/repair/status');
+    const banner = document.getElementById('live-repair-banner');
+    // Stage: idle → nothing to show (but keep last-finished snapshot briefly)
+    if (!s.active && s.stage !== 'finished' && s.stage !== 'error') {
+      banner.hidden = true;
+      if (_repairPollTimer) { clearInterval(_repairPollTimer); _repairPollTimer = null; }
+      return;
+    }
+    banner.hidden = false;
+    banner.classList.remove('done', 'error');
+    const title = document.getElementById('repair-banner-title');
+    const pct = document.getElementById('repair-banner-pct');
+    const elapsed = document.getElementById('repair-banner-elapsed');
+    const fill = document.getElementById('repair-bar-fill');
+    const cur = document.getElementById('repair-current');
+    const counts = document.getElementById('repair-counts');
+
+    const scopeLabel = s.scope === 'all' ? 'Repairing all recordings'
+                     : s.scope.startsWith('model:') ? 'Repairing ' + s.scope.slice(6).split('|')[0]
+                     : 'Repair';
+    const stageLabel = {
+      starting: 'starting…', listing: 'scanning folder…',
+      start: 'processing', done: 'processing',
+      finished: 'done', error: 'error',
+    }[s.stage] || s.stage;
+
+    title.textContent = `${scopeLabel} – ${stageLabel}`;
+    const p = s.total > 0 ? Math.min(100, Math.round(100 * s.current / s.total)) : 0;
+    pct.textContent = s.total ? `${s.current}/${s.total} (${p}%)` : '';
+    elapsed.textContent = _fmtElapsed(s.started_at, s.finished_at);
+    fill.style.width = p + '%';
+    cur.textContent = s.current_file || (s.stage === 'listing' ? 'listing files…' : '');
+    counts.innerHTML = _repairCountsHtml(s.counts || {});
+
+    if (s.stage === 'finished') {
+      banner.classList.add('done');
+      fill.style.width = '100%';
+      // Show a summary toast once
+      if (_repairPollTimer) { clearInterval(_repairPollTimer); _repairPollTimer = null; }
+      toast('Repair complete', 'success');
+      // Auto-hide the banner after 15s (leave it visible so user can read counts)
+      setTimeout(() => { if (!_repairPollTimer) banner.hidden = true; }, 15000);
+    } else if (s.stage === 'error') {
+      banner.classList.add('error');
+      if (_repairPollTimer) { clearInterval(_repairPollTimer); _repairPollTimer = null; }
+      toast('Repair failed – see log', 'error');
+    }
+  } catch (e) {
+    console.error('repair poll', e);
+  }
+}
+function _startRepairPolling() {
+  if (_repairPollTimer) clearInterval(_repairPollTimer);
+  _pollRepair();   // immediate first call
+  _repairPollTimer = setInterval(_pollRepair, 700);
+}
+
+async function liveRepair(username, site) {
+  const ok = await confirmDialog(
+    `Check every recording for <b>${escapeHtml(username)}</b> on <b>${escapeHtml(site)}</b>?<br><br>` +
+    `<b>Tier 1</b> (ffprobe): validate playability.<br>` +
+    `<b>Tier 2</b> (ffmpeg remux): fix missing moov atoms – no quality loss.<br>` +
+    `<b>Tier 3</b> (ffmpeg re-encode): last-resort full re-encode.<br>` +
+    `<br>Progress appears at the top of the Live tab. ` +
+    `Files the recorder is currently writing to are skipped.`,
+    {title: 'Repair recordings', tone: 'info',
+     confirmLabel: 'Repair', cancelLabel: 'Cancel'});
+  if (!ok) return;
+  try {
+    const r = await api('/api/live/repair', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({username, site, delete_if_unfixable: false})});
+    if (r.error) { toast('Error: ' + r.error, 'error'); return; }
+    _startRepairPolling();
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+async function liveRepairAll() {
+  const deleteUnfixable = await confirmDialog(
+    `Sweep every model's recording folder and repair every video.<br><br>` +
+    `<b>Delete unfixable files?</b><br>` +
+    `<b>YES</b> – files that even a full re-encode can't save are deleted (truncated header stubs etc).<br>` +
+    `<b>NO</b> – broken files stay on disk, flagged in the counts only.<br><br>` +
+    `Files currently being recorded are skipped either way.`,
+    {title: 'Repair all recordings', tone: 'warn',
+     confirmLabel: 'YES – delete unfixable', cancelLabel: 'Keep broken files'});
+  // User chose: confirmLabel → true (delete); cancelLabel → false (keep);
+  // backdrop/escape → false (treated as "keep", not a cancel of the whole
+  // operation – adjust below if you'd rather treat escape as cancel).
+  try {
+    const r = await api('/api/live/repair_all', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({delete_if_unfixable: !!deleteUnfixable})});
+    if (r.error) { toast('Error: ' + r.error, 'error'); return; }
+    _startRepairPolling();
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+// Start polling on page load if a job is already running (e.g. after refresh)
+async function _checkExistingRepair() {
+  try {
+    const s = await api('/api/live/repair/status');
+    if (s.active || s.stage === 'finished' || s.stage === 'error') {
+      _startRepairPolling();
+    }
+  } catch(e) { /* no live backend */ }
+}
+async function openLocalPath(path) {
+  // Generic "open this file/folder on disk" helper used across the UI.
+  try {
+    await api('/api/open-folder', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({path})});
+  } catch(e) { toast(e.message || 'Could not open', 'error'); }
+}
+async function liveToggleAll(on) {
+  if (!await confirmDialog(
+        on ? 'Start polling every tracked model. Recording will begin automatically when any of them go live.'
+           : 'Stop polling all models. Running recordings will be terminated.',
+        {title: on ? 'Start all live' : 'Stop all live',
+         tone: on ? 'info' : 'danger',
+         confirmLabel: on ? 'Start all' : 'Stop all'})) return;
+  try {
+    const r = await api('/api/live/toggle_all', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({running: on})});
+    toast(`${on ? 'Started' : 'Stopped'} ${r.count} models`
+      + (r.skipped_disabled_sites ? ` (${r.skipped_disabled_sites} skipped — site off)` : ''), 'success');
+    setTimeout(liveRefresh, 500);
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+// ── Per-site recording switch ────────────────────────────────────────────
+// Click a dot in the per-site RAG strip to stop/resume recording for that
+// whole site. Takes effect immediately — turning a site off kills its
+// in-flight ffmpeg captures; no restart of Harvestr involved.
+async function liveToggleSite(site, on) {
+  if (!on && !await confirmDialog(
+        `Stop recording ${site} entirely. Any capture in progress on ${site} `
+        + `ends now, and its models stay tracked but idle until you switch it `
+        + `back on.`,
+        {title: `Turn off ${site}`, tone: 'danger', confirmLabel: 'Turn off'})) return;
+  try {
+    const r = await api('/api/live/toggle_site', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({site, enabled: on})});
+    const stopped = r.stopped_recording
+      ? `, ${r.stopped_recording} recording${r.stopped_recording === 1 ? '' : 's'} stopped` : '';
+    toast(`${site} ${on ? 'ON' : 'OFF'} — ${r.models} model${r.models === 1 ? '' : 's'}${stopped}`,
+          on ? 'success' : 'info');
+    setTimeout(liveRefresh, 400);
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+// Delegated: the strip's innerHTML is rebuilt on every stats poll, so binding
+// per-dot listeners would be lost (and leak) on each refresh.
+document.addEventListener('DOMContentLoaded', () => {
+  const strip = document.getElementById('mon-site-dots');
+  if (!strip) return;
+  const fire = (ev) => {
+    const dot = ev.target.closest('.site-dot.tog');
+    if (!dot || dot.classList.contains('busy')) return;
+    ev.preventDefault();
+    // Mark busy so the next poll's re-render can't double-fire the request.
+    dot.classList.add('busy');
+    liveToggleSite(dot.dataset.site, dot.dataset.on !== '1');
+  };
+  strip.addEventListener('click', fire);
+  strip.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter' || ev.key === ' ') fire(ev);
+  });
+});
+
+// ── Disk / Storage ───────────────────────────────────────────────────────
+let _diskSnapshot = null;
+let _diskSort = 'size';
+
+async function loadDisk(force = false) {
+  try {
+    _diskSnapshot = await api('/api/disk' + (force ? '?force=1' : ''));
+    renderDisk();
+  } catch(e) { console.error('loadDisk', e); }
+}
+
+function diskSetSort(mode) {
+  _diskSort = mode;
+  document.querySelectorAll('[data-disk-sort]').forEach(el => {
+    el.classList.toggle('active', el.dataset.diskSort === mode);
+  });
+  renderDisk();
+}
+
+function renderDisk() {
+  if (!_diskSnapshot) return;
+  const d = _diskSnapshot;
+  const drv = d.drive || {};
+  const total = drv.total_bytes || 1;
+  const archivePct = 100 * (drv.archive_bytes || 0) / total;
+  const otherPct = 100 * ((drv.used_bytes || 0) - (drv.archive_bytes || 0)) / total;
+  const freePct = 100 * (drv.free_bytes || 0) / total;
+
+  document.getElementById('disk-seg-archive').style.width = archivePct + '%';
+  document.getElementById('disk-seg-other').style.width = Math.max(0, otherPct) + '%';
+  document.getElementById('disk-seg-free').style.width = freePct + '%';
+
+  document.getElementById('disk-lbl-archive').textContent = bytesHuman(drv.archive_bytes || 0);
+  document.getElementById('disk-lbl-other').textContent = bytesHuman(Math.max(0, (drv.used_bytes||0) - (drv.archive_bytes||0)));
+  document.getElementById('disk-lbl-free').textContent = bytesHuman(drv.free_bytes || 0);
+
+  // Free-space warning
+  const warn = document.getElementById('disk-lbl-warn');
+  const freeGB = (drv.free_bytes || 0) / (1024**3);
+  warn.className = '';
+  if (freeGB < 2) {
+    warn.textContent = `⚠ only ${freeGB.toFixed(1)} GB free`;
+    warn.classList.add('bad');
+  } else if (freeGB < 10) {
+    warn.textContent = `low space: ${freeGB.toFixed(1)} GB free`;
+    warn.classList.add('warn');
+  } else {
+    warn.textContent = '';
+  }
+
+  // Summary top-right
+  document.getElementById('disk-summary').textContent =
+    `${d.performers.length} performers · ${bytesHuman(drv.archive_bytes || 0)} archived`;
+
+  // Per-performer bars
+  const perfs = [...d.performers];
+  const sorts = {
+    size:   (a,b) => b.bytes - a.bytes,
+    count:  (a,b) => b.files - a.files,
+    name:   (a,b) => a.name.localeCompare(b.name),
+    newest: (a,b) => (b.newest || '').localeCompare(a.newest || ''),
+  };
+  perfs.sort(sorts[_diskSort] || sorts.size);
+  const maxBytes = perfs.length ? perfs[0].bytes || 1 : 1;
+
+  const root = document.getElementById('disk-performers');
+  root.innerHTML = perfs.map(p => {
+    const pct = Math.min(100, 100 * p.bytes / maxBytes);
+    return `<div class="disk-perf-row">
+      <span class="pname" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</span>
+      <div class="pmeter"><div class="pmeter-fill" style="width:${pct}%"></div></div>
+      <span class="psize">${bytesHuman(p.bytes)}</span>
+      <span class="pcount">${p.files} files</span>
+      <button class="xs danger" onclick="diskWipe('${escapeHtml(p.name).replace(/'/g,'&#39;')}')"
+              data-tip="Delete all videos for this performer" aria-label="Delete ${escapeHtml(p.name)}">✕</button>
+    </div>`;
+  }).join('') || `<div class="empty-state">No downloads yet.</div>`;
+}
+
+async function diskWipe(performer) {
+  if (!await confirmDialog(
+        `Permanently delete every video for <b>${escapeHtml(performer)}</b>?<br><br>` +
+        `This also removes matching entries from <code>history.json</code>, ` +
+        `so the next run will re-download from scratch. This cannot be undone.`,
+        {title: 'Wipe performer', tone: 'danger',
+         confirmLabel: 'Delete all', cancelLabel: 'Cancel'})) return;
+  try {
+    const r = await api('/api/disk/wipe', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({performer, confirm: true})});
+    toast(`Removed ${r.removed} files · freed ${bytesHuman(r.bytes_freed)}`, 'success');
+    loadDisk(true);
+    loadHistory();
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+async function diskPruneOlder() {
+  const raw = await promptDialog(
+    'Delete videos older than how many days? (We will show a dry-run preview before anything is deleted.)',
+    {title: 'Prune by age', tone: 'warn',
+     defaultValue: '90', inputType: 'number', placeholder: 'days',
+     confirmLabel: 'Preview'});
+  if (raw === null || raw === '') return;
+  const days = parseInt(raw, 10);
+  if (!days || days < 1) { toast('Enter a positive integer', 'error'); return; }
+  try {
+    const preview = await api('/api/disk/prune_older', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({days})});
+    if (preview.file_count === 0) { toast('Nothing older than ' + days + ' days'); return; }
+    if (!await confirmDialog(
+          `Found <b>${preview.file_count}</b> files older than ${days} days.<br>` +
+          `This would free <b>${bytesHuman(preview.would_free_bytes)}</b>.`,
+          {title: 'Confirm prune', tone: 'danger',
+           confirmLabel: 'Delete them', cancelLabel: 'Cancel'})) return;
+    const r = await api('/api/disk/prune_older', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({days, apply: true})});
+    toast(`Removed ${r.removed} files · freed ${bytesHuman(r.bytes_freed)}`, 'success');
+    loadDisk(true); loadHistory();
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+async function diskPruneToFree() {
+  const raw = await promptDialog(
+    'Delete oldest videos until how many GB are free on this drive? (Dry-run first.)',
+    {title: 'Free up space', tone: 'warn',
+     defaultValue: '25', inputType: 'number', placeholder: 'GB',
+     confirmLabel: 'Preview'});
+  if (raw === null || raw === '') return;
+  const gb = parseFloat(raw);
+  if (!gb || gb <= 0) { toast('Enter a positive number', 'error'); return; }
+  try {
+    const preview = await api('/api/disk/prune_to_free', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({target_free_gb: gb})});
+    if (preview.nothing_to_do) {
+      toast(`Already have ${preview.already_free_gb.toFixed(1)} GB free – no action needed`);
+      return;
+    }
+    const shortfall = preview.still_needed_bytes > 0
+      ? `<br><br><span style="color: var(--warn)">Not enough old content – would still be ${bytesHuman(preview.still_needed_bytes)} short of target.</span>` : '';
+    if (!await confirmDialog(
+          `Would delete <b>${preview.would_delete}</b> files to free <b>${bytesHuman(preview.would_free_bytes)}</b>.${shortfall}`,
+          {title: 'Confirm free-up', tone: 'danger',
+           confirmLabel: 'Delete oldest', cancelLabel: 'Cancel'})) return;
+    const r = await api('/api/disk/prune_to_free', {method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({target_free_gb: gb, apply: true})});
+    toast(`Removed ${r.removed} files · freed ${bytesHuman(r.bytes_freed)}`, 'success');
+    loadDisk(true); loadHistory();
+  } catch(e) { toast('Error: '+e.message, 'error'); }
+}
+
+// ── Professional confirm / prompt modal ─────────────────────────────────
+// Replaces native window.confirm / window.prompt with a themed dialog.
+// Returns a Promise that resolves to bool (confirm) or string|null (prompt).
+const _dialogIcons = {
+  danger: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  warn:   `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  info:   `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+};
+let _dialogResolver = null;
+
+function showDialog(opts) {
+  // opts: {title, message, tone: 'danger'|'warn'|'info', confirmLabel, cancelLabel,
+  //        prompt: bool, defaultValue: str}
+  const tone = opts.tone || 'info';
+  const head = document.getElementById('dialog-head');
+  head.className = 'dialog-head ' + tone;
+  document.getElementById('dialog-icon').innerHTML = _dialogIcons[tone] || _dialogIcons.info;
+  document.getElementById('dialog-title').textContent = opts.title || 'Confirm';
+  document.getElementById('dialog-msg').innerHTML = opts.message || '';
+
+  const inputWrap = document.getElementById('dialog-input-wrap');
+  const input = document.getElementById('dialog-input');
+  if (opts.prompt) {
+    inputWrap.hidden = false;
+    input.value = opts.defaultValue || '';
+    input.placeholder = opts.placeholder || '';
+    input.type = opts.inputType || 'text';
+  } else {
+    inputWrap.hidden = true;
+  }
+
+  const ok = document.getElementById('dialog-ok-btn');
+  const cancel = document.getElementById('dialog-cancel-btn');
+  ok.textContent = opts.confirmLabel || 'OK';
+  cancel.textContent = opts.cancelLabel || 'Cancel';
+  cancel.style.display = opts.hideCancel ? 'none' : '';
+  ok.className = tone === 'danger' ? 'danger'
+                : tone === 'warn' ? 'warn' : 'primary';
+
+  document.getElementById('dialog-modal').classList.add('show');
+  setTimeout(() => (opts.prompt ? input : ok).focus(), 60);
+
+  return new Promise((resolve) => { _dialogResolver = resolve; });
+}
+
+function dialogConfirm() {
+  const inputWrap = document.getElementById('dialog-input-wrap');
+  const value = inputWrap.hidden ? true : document.getElementById('dialog-input').value;
+  // Snapshot + clear resolver FIRST, so closeDialog doesn't see it as a
+  // backdrop-cancel and resolve the promise with `false` instead of our value.
+  const resolver = _dialogResolver;
+  _dialogResolver = null;
+  document.getElementById('dialog-modal').classList.remove('show');
+  if (resolver) resolver(value);
+}
+function dialogCancel() {
+  const inputWrap = document.getElementById('dialog-input-wrap');
+  const value = inputWrap.hidden ? false : null;
+  const resolver = _dialogResolver;
+  _dialogResolver = null;
+  document.getElementById('dialog-modal').classList.remove('show');
+  if (resolver) resolver(value);
+}
+function closeDialog(e) {
+  // Called by backdrop click or Escape key. Ignore clicks that landed on
+  // the dialog body itself (only the outer #dialog-modal backdrop counts).
+  if (e && e.target && e.target.id !== 'dialog-modal') return;
+  document.getElementById('dialog-modal').classList.remove('show');
+  if (_dialogResolver) {
+    // Backdrop/Escape close counts as cancel
+    const inputWrap = document.getElementById('dialog-input-wrap');
+    const resolver = _dialogResolver;
+    _dialogResolver = null;
+    resolver(inputWrap.hidden ? false : null);
+  }
+}
+
+// Convenience shims
+async function confirmDialog(message, {title='Confirm', tone='info', confirmLabel='Confirm', cancelLabel='Cancel', hideCancel=false} = {}) {
+  return !!(await showDialog({title, message, tone, confirmLabel, cancelLabel, hideCancel}));
+}
+async function promptDialog(message, {title='Enter value', defaultValue='', tone='info', inputType='text', placeholder='', confirmLabel='OK'} = {}) {
+  return showDialog({title, message, tone, prompt:true, defaultValue, inputType, placeholder, confirmLabel});
+}
+
+// ── Bulk add / import modal (shared Archive + Live) ─────────────────────
+let _bulkaddMode = 'archive';   // 'archive' | 'live'
+
+function openBulkAdd() {
+  _bulkaddMode = 'archive';
+  document.getElementById('bulkadd-title').textContent = 'Bulk add performers';
+  document.getElementById('bulkadd-sub').innerHTML =
+    'One username per line.<br>' +
+    'Or upload a <code>config.json</code> export – we merge <code>performers</code> + enabled sites.';
+  document.getElementById('bulkadd-text').placeholder =
+    'alice_example\nbob_example\n# lines starting with # are comments';
+  document.getElementById('bulkadd-modal').classList.add('show');
+  setTimeout(() => document.getElementById('bulkadd-text').focus(), 30);
+}
+
+function openLiveBulkAdd() {
+  _bulkaddMode = 'live';
+  document.getElementById('bulkadd-title').textContent = 'Bulk add live models';
+  document.getElementById('bulkadd-sub').innerHTML =
+    'One per line: <code>username Site</code> – room IDs auto-resolved.<br>' +
+    'Or upload a JSON array like <code>[{"username":"alice","site":"Chaturbate"}]</code>.';
+  document.getElementById('bulkadd-text').placeholder =
+    'alice Chaturbate\nbob StripChat\n# username site (one per line)';
+  document.getElementById('bulkadd-modal').classList.add('show');
+  setTimeout(() => document.getElementById('bulkadd-text').focus(), 30);
+}
+
+function closeBulkAdd(e) {
+  if (e && e.target && e.target.id !== 'bulkadd-modal') return;
+  document.getElementById('bulkadd-modal').classList.remove('show');
+  document.getElementById('bulkadd-text').value = '';
+}
+
+function bulkaddLoadFile(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const text = ev.target.result;
+    try {
+      const parsed = JSON.parse(text);
+      // If it's the full config with performers[], pretty-fill
+      if (parsed && typeof parsed === 'object') {
+        if (_bulkaddMode === 'archive') {
+          const perfs = Array.isArray(parsed.performers) ? parsed.performers
+                         : Array.isArray(parsed) ? parsed : [];
+          document.getElementById('bulkadd-text').value = perfs.join('\n');
+          // Stash the full parsed object for submit to use (merge mode)
+          window._bulkaddImportedConfig = parsed.performers ? parsed : null;
+        } else {
+          const entries = Array.isArray(parsed) ? parsed
+                         : Array.isArray(parsed.models) ? parsed.models : [];
+          // Render as textarea-editable lines
+          document.getElementById('bulkadd-text').value =
+            entries.map(e => `${e.username||''} ${e.site||''}${e.room_id ? ' '+e.room_id : ''}`).join('\n');
+          window._bulkaddImportedEntries = entries;
+        }
+        toast(`Loaded ${f.name}`, 'success');
+      }
+    } catch (err) {
+      // Not JSON – treat as plaintext
+      document.getElementById('bulkadd-text').value = text;
+      toast(`Loaded ${f.name} (plaintext)`);
+    }
+  };
+  reader.readAsText(f);
+}
+
+async function bulkaddSubmit() {
+  const text = document.getElementById('bulkadd-text').value.trim();
+  if (!text) { toast('Nothing to add', 'error'); return; }
+  try {
+    if (_bulkaddMode === 'archive') {
+      // If we loaded a full config object, use the /import endpoint for
+      // merge semantics. Otherwise just bulk-add the names.
+      if (window._bulkaddImportedConfig) {
+        const r = await api('/api/config/import', {method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({config: window._bulkaddImportedConfig})});
+        toast(`Imported config: +${r.performers_added} performers, updated ${r.fields_updated.length} fields`, 'success');
+        window._bulkaddImportedConfig = null;
+      } else {
+        const r = await api('/api/config/performer/bulk_add', {method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({text})});
+        toast(`Added ${r.added.length} performers (total ${r.total})`, 'success');
+      }
+      loadConfig();
+    } else {
+      // Live: prefer explicit entries if a JSON file was loaded
+      const body = (window._bulkaddImportedEntries && window._bulkaddImportedEntries.length)
+        ? {entries: window._bulkaddImportedEntries}
+        : {text};
+      const r = await api('/api/live/bulk_add', {method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(body)});
+      let msg = `Added ${r.added} live models (total ${r.total})`;
+      if (r.errors && r.errors.length) msg += ` · ${r.errors.length} errors`;
+      toast(msg, r.errors && r.errors.length ? 'info' : 'success');
+      if (r.errors && r.errors.length) console.warn('bulk-add errors:', r.errors);
+      window._bulkaddImportedEntries = null;
+      liveRefresh();
+    }
+    closeBulkAdd();
+  } catch (e) { toast('Error: ' + e.message, 'error'); }
+}
+
+// ── Command palette (Ctrl+K) ─────────────────────────────────────────────
+const _paletteCmds = [
+  {label:'Refresh everything',  kbd:'F5',     run:() => refreshAll()},
+  {label:'Start all downloads', kbd:'',       run:() => startDownload()},
+  {label:'Stop download',       kbd:'',       run:() => stopDownload()},
+  {label:'Run dedup',           kbd:'',       run:() => runDedup()},
+  {label:'Refresh storage',     kbd:'',       run:() => { switchTab('archive'); loadDisk(true); }},
+  {label:'Prune old videos…',   kbd:'',       run:() => { switchTab('archive'); diskPruneOlder(); }},
+  {label:'Free up disk space…', kbd:'',       run:() => { switchTab('archive'); diskPruneToFree(); }},
+  {label:'Open Archive tab',    kbd:'1',      run:() => switchTab('archive')},
+  {label:'Open Live tab',       kbd:'2',      run:() => switchTab('live')},
+  {label:'Focus add-performer',  kbd:'',      run:() => {switchTab('archive'); document.getElementById('new-perf').focus();}},
+  {label:'Bulk add performers…', kbd:'',      run:() => {switchTab('archive'); openBulkAdd();}},
+  {label:'Focus add-live-model', kbd:'',      run:() => {switchTab('live'); document.getElementById('live-new-username').focus();}},
+  {label:'Bulk add live models…',kbd:'',      run:() => {switchTab('live'); openLiveBulkAdd();}},
+  {label:'Import JSON config…',  kbd:'',      run:() => {switchTab('archive'); openBulkAdd();}},
+  {label:'Start all live models', kbd:'',     run:() => liveToggleAll(true)},
+  {label:'Stop all live models',  kbd:'',     run:() => liveToggleAll(false)},
+  {label:'Enable Tor',           kbd:'',      run:() => enableTor()},
+];
+let _paletteSelected = 0;
+
+function openPalette() {
+  const m = document.getElementById('palette-modal');
+  m.classList.add('show');
+  const inp = document.getElementById('palette-input');
+  inp.value = ''; inp.focus();
+  paletteFilter();
+}
+function closePalette(e) {
+  if (e && e.target && e.target.id !== 'palette-modal') return;
+  document.getElementById('palette-modal').classList.remove('show');
+}
+function paletteFilter() {
+  const q = document.getElementById('palette-input').value.trim().toLowerCase();
+  const matches = _paletteCmds.filter(c =>
+    !q || c.label.toLowerCase().includes(q) || (c.kbd && c.kbd.toLowerCase().includes(q)));
+  _paletteSelected = 0;
+  document.getElementById('palette-list').innerHTML = matches.map((c, i) => `
+    <div class="pcmd ${i === 0 ? 'selected' : ''}" data-idx="${i}"
+         onclick="paletteRun(${_paletteCmds.indexOf(c)})">
+      <span>${escapeHtml(c.label)}</span>
+      ${c.kbd ? `<span class="kbd">${escapeHtml(c.kbd)}</span>` : ''}
+    </div>`).join('');
+  window._paletteMatches = matches;
+}
+function paletteKey(e) {
+  const matches = window._paletteMatches || [];
+  if (e.key === 'Escape') { closePalette(); return; }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault(); _paletteSelected = (_paletteSelected + 1) % matches.length;
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault(); _paletteSelected = (_paletteSelected - 1 + matches.length) % matches.length;
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const cmd = matches[_paletteSelected];
+    if (cmd) { closePalette(); cmd.run(); }
+    return;
+  } else return;
+  document.querySelectorAll('#palette-list .pcmd').forEach((el, i) => {
+    el.classList.toggle('selected', i === _paletteSelected);
+  });
+}
+function paletteRun(idx) {
+  const cmd = _paletteCmds[idx];
+  if (cmd) { closePalette(); cmd.run(); }
+}
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault(); openPalette();
+  } else if (e.key === 'Escape') {
+    // Close whichever modal is open (dialog first – it returns a Promise)
+    const dlg = document.getElementById('dialog-modal');
+    if (dlg && dlg.classList.contains('show')) { dialogCancel(); return; }
+    ['palette-modal','bulkadd-modal','preview-modal'].forEach(id => {
+      const m = document.getElementById(id);
+      if (m && m.classList.contains('show')) m.classList.remove('show');
+    });
+  } else if (!e.ctrlKey && !e.metaKey && !e.altKey
+             && document.activeElement && document.activeElement.tagName !== 'INPUT'
+             && document.activeElement.tagName !== 'TEXTAREA') {
+    if (e.key === '1') switchTab('archive');
+    else if (e.key === '2') switchTab('live');
+  }
+});
+
+// ── Initial load + polling ───────────────────────────────────────────────
+(async () => {
+  await loadSites();
+  await loadAuth();
+  await loadConfig();
+  await loadHistory();
+  await refreshStatus();
+  await refreshProgress();
+  await loadDisk();
+  setInterval(refreshStatus, 2000);
+  setInterval(refreshProgress, 700);   // fast cadence for progress bar
+  setInterval(loadHistory, 15000);
+  setInterval(loadAuth, 30000);
+  setInterval(loadDisk, 20000);        // disk snapshot every 20s
+  // Live polling – only every 3s and only when Live tab visible
+  // Fast cheap stats poll (/api/live/summary) every 3s; the heavy full card
+  // refresh (/api/live/status) every ~12s as a floor, plus immediately whenever
+  // liveSummaryRefresh detects the counts changed. Stops re-rendering 1000+
+  // cards every 3s while keeping the header and new recordings prompt.
+  let _liveTick = 0;
+  setInterval(() => {
+    if (_currentPage !== 'live') return;
+    _liveTick++;
+    if (_liveTick % 4 === 0) liveRefresh();
+    else liveSummaryRefresh();
+  }, 3000);
+  // Always pull ONCE so the "Live" tab badge can update even from Archive tab
+  setInterval(async () => {
+    if (_currentPage !== 'live') {
+      try {
+        const d = await api('/api/live/status');
+        const rec = (d.summary||{}).recording || 0;
+        const badge = document.getElementById('tab-live-badge');
+        if (rec > 0) { badge.textContent = rec; badge.hidden = false; }
+        else { badge.hidden = true; }
+      } catch(e) { /* silent */ }
+    }
+  }, 8000);
+
+  // Respect URL hash (#live → open Live tab)
+  const initial = (location.hash || '').replace('#', '').toLowerCase();
+  if (initial === 'live') switchTab('live');
+})();
+</script>
+</body>
+</html>
+"""
+
+
+# ── Background runner ────────────────────────────────────────────────────────
+def _tail_log():
+    """Continuously read tail of universal.log into _state['log_tail']."""
+    last_size = 0
+    while True:
+        try:
+            if LOG_PATH.exists():
+                size = LOG_PATH.stat().st_size
+                if size < last_size:
+                    last_size = 0  # log rotated
+                if size > last_size:
+                    with open(LOG_PATH, "rb") as f:
+                        f.seek(last_size)
+                        new_data = f.read()
+                        last_size = size
+                    for line in new_data.decode("utf-8", errors="replace").splitlines():
+                        with _state_lock:
+                            _state["log_tail"].append(line)
+                            # Try to extract current performer
+                            if "Searching for: " in line or "───" in line:
+                                # ─── performer ───
+                                m = line.strip().replace("─", "").strip()
+                                if m and len(m) < 50:
+                                    _state["current_performer"] = m
+        except Exception:
+            pass
+        time.sleep(1.5)
+
+
+_tail_thread = threading.Thread(target=_tail_log, daemon=True)
+_tail_thread.start()
+
+
+def _monitor_subprocess():
+    """Monitor the download subprocess and update _state when done."""
+    global _runner_thread
+    while True:
+        with _state_lock:
+            proc = _runner_thread
+        if proc is not None:
+            proc.wait()
+            with _state_lock:
+                _state["running"] = False
+                _state["pid"] = None
+                _runner_thread = None
+        time.sleep(0.5)
+
+
+threading.Thread(target=_monitor_subprocess, daemon=True).start()
+
+
+# ── API routes ───────────────────────────────────────────────────────────────
+@app.route("/")
+def index():
+    """Serve the SPA. Cache-Control headers force the browser to revalidate
+    on every load – the inline JS is large and changes frequently, and a
+    stale cache from an earlier session causes silent rendering failures
+    (UI loads but stays blank because the JS expects a different DOM
+    shape or API response than what's now served)."""
+    resp = make_response(render_template_string(INDEX_HTML))
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
+
+
+@app.route("/api/status")
+def api_status():
+    """Combined activity signal for the header pill.
+
+    _state["running"] only tracks archive jobs started BY this webui
+    process. If the user started the downloader directly from the CLI
+    (or before we restarted) we wouldn't see it – so we also check the
+    shared _progress.json (written by any downloader process) and the
+    live manager for recording models. Any of these means "not idle"."""
+    with _state_lock:
+        ours_running = bool(_state["running"])
+        current_performer = _state["current_performer"]
+        started_at = _state["started_at"]
+        pid = _state["pid"]
+        log_tail = list(_state["log_tail"])[-200:]
+
+    # Is ANY downloader subprocess writing to _progress.json?
+    archive_running = False
+    archive_perf = ""
+    archive_progress = {}
+    try:
+        pp = DOWNLOADS_DIR / "_progress.json"
+        if pp.exists():
+            data = json.loads(pp.read_text(encoding="utf-8"))
+            sess = data.get("session") or {}
+            if sess.get("running"):
+                archive_running = True
+                archive_perf = sess.get("performer", "") or ""
+                total = int(sess.get("total_queued", 0))
+                done = int(sess.get("ok", 0)) + int(sess.get("fail", 0)) + int(sess.get("skip", 0))
+                archive_progress = {
+                    "performer": archive_perf,
+                    "phase": sess.get("phase", ""),
+                    "done": done, "total": total,
+                    "ok": int(sess.get("ok", 0)),
+                    "fail": int(sess.get("fail", 0)),
+                    "skip": int(sess.get("skip", 0)),
+                }
+    except Exception:
+        pass
+
+    # Any Live recorders running / recording right now?
+    live_running = 0
+    live_recording = 0
+    if _live:
+        try:
+            # The header polls this on every tab (~1/s). It used to build the
+            # full 1650-model snapshot inline just to read two counts, and each
+            # build could start a 25 MB live-history rewrite (~6 MB/s to C:).
+            # The background builder keeps health / write speed fresh instead.
+            _ensure_snap_builder()
+            summ = _live.live_summary()  # cheap, cached ~1.5 s
+            live_running = int(summ.get("running", 0))
+            live_recording = int(summ.get("recording", 0))
+        except Exception:
+            pass
+
+    any_busy = ours_running or archive_running or live_recording > 0
+
+    return jsonify({
+        # Backwards-compat: `running` = "this webui launched a job"
+        "running": ours_running,
+        "pid": pid,
+        "started_at": started_at,
+        "current_performer": current_performer or archive_perf,
+        # New: broader activity signal the header can render
+        "any_busy": any_busy,
+        "archive_running": archive_running,
+        "archive_progress": archive_progress,
+        "live_running": live_running,
+        "live_recording": live_recording,
+        "log_tail": log_tail,
+    })
+
+
+@app.route("/api/config", methods=["GET", "POST"])
+def api_config():
+    if request.method == "POST":
+        new_cfg = request.get_json(force=True)
+        # Merge (don't wipe fields we don't know about)
+        cur = load_config()
+        # ...and merge one level deeper for `live`. A plain update() would swap
+        # the whole sub-dict, so a client that posted a `live` block assembled
+        # before the per-site toggles last wrote `disabled_sites` would silently
+        # re-enable every parked site. Keys the client DID send still win.
+        if isinstance(new_cfg, dict) and isinstance(new_cfg.get("live"), dict):
+            merged_live = dict(cur.get("live") or {})
+            merged_live.update(new_cfg["live"])
+            new_cfg = {**new_cfg, "live": merged_live}
+        cur.update(new_cfg)
+        save_config(cur)
+        return jsonify({"ok": True})
+    return jsonify(load_config())
+
+
+@app.route("/api/live/netconfig", methods=["GET", "POST"])
+def api_live_netconfig():
+    """Per-site residential proxy + Mullvad VPN rotation config.
+
+    GET  -> current config (proxy passwords masked) + defaults + Mullvad status.
+    POST -> {site_proxies:{SLUG:url}, vpn:{...}} -> writes both gitignored files
+            and hot-reloads the rotator + proxy pool (VPN applies live; proxy
+            applies to newly added / restarted bots)."""
+    if request.method == "POST":
+        body = request.get_json(force=True) or {}
+        # --- per-site proxies ---
+        cur_proxies = load_site_proxies()
+        out_proxies = {}
+        try:
+            for slug, url in (body.get("site_proxies") or {}).items():
+                slug = str(slug).upper().strip()
+                url = (url or "").strip()
+                if not slug or not url:
+                    continue
+                out_proxies[slug] = _unmask_proxy(url, cur_proxies.get(slug, ""))
+            save_site_proxies(out_proxies)
+        except Exception as e:
+            return jsonify({"error": f"bad proxies: {e}"}), 400
+        # --- vpn rotation ---
+        vpn_in = body.get("vpn") or {}
+        cur_vpn = load_vpn_config()
+        try:
+            locs = vpn_in.get("rotate_locations")
+            if isinstance(locs, str):
+                locs = [x.strip() for x in locs.split(",") if x.strip()]
+            if not isinstance(locs, list):
+                locs = cur_vpn.get("rotate_locations", [])
+            cur_vpn.update({
+                "enabled": bool(vpn_in.get("enabled", cur_vpn.get("enabled", True))),
+                "rotate_locations": locs,
+                "restart_threshold": int(vpn_in.get("restart_threshold", cur_vpn["restart_threshold"])),
+                "rotate_threshold": int(vpn_in.get("rotate_threshold", cur_vpn["rotate_threshold"])),
+                "ratelimit_window_sec": int(vpn_in.get("ratelimit_window_sec", cur_vpn["ratelimit_window_sec"])),
+                "restart_cooldown_sec": int(vpn_in.get("restart_cooldown_sec", cur_vpn["restart_cooldown_sec"])),
+                "rotate_cooldown_sec": int(vpn_in.get("rotate_cooldown_sec", cur_vpn["rotate_cooldown_sec"])),
+            })
+            if "cli_path" in vpn_in:
+                cur_vpn["cli_path"] = vpn_in.get("cli_path") or None
+            save_vpn_config(cur_vpn)
+        except Exception as e:
+            return jsonify({"error": f"bad vpn config: {e}"}), 400
+        # --- hot-reload both subsystems ---
+        applied = {"vpn_reloaded": False, "proxy_reloaded": False}
+        try:
+            from streamonitor.utils import vpn_rotator as _vpn
+            _vpn.reload(); applied["vpn_reloaded"] = True
+        except Exception:
+            pass
+        try:
+            from streamonitor.utils import proxy_pool as _pp
+            _pp.reload(); applied["proxy_reloaded"] = True
+        except Exception:
+            pass
+        return jsonify({"ok": True, "applied": applied})
+
+    # GET
+    masked = {k: _mask_proxy(v) for k, v in load_site_proxies().items()}
+    vpn = load_vpn_config()
+    configured, vpn_status = False, ""
+    try:
+        from streamonitor.utils import vpn_rotator as _vpn
+        configured = bool(_vpn.configured())
+        if configured:
+            st = (_vpn.status_text() or "").splitlines()
+            vpn_status = st[0] if st else ""
+    except Exception:
+        pass
+    return jsonify({
+        "site_proxies": masked,
+        "vpn": vpn,
+        "defaults": {"site_proxies": {}, "vpn": _VPN_DEFAULTS},
+        "site_labels": NET_SITE_LABELS,
+        "vpn_configured": configured,
+        "vpn_status": vpn_status,
+    })
+
+
+@app.route("/api/live/vpnstatus")
+def api_vpn_status():
+    """Current Mullvad exit (country / IP / relay) + rotation state for the UI VPN
+    panel. Cached ~30s in the rotator (the IP lookup is an external call)."""
+    try:
+        from streamonitor.utils import vpn_rotator as _vpn
+        return jsonify(_vpn.exit_info())
+    except Exception as e:
+        return jsonify({"configured": False, "error": str(e)})
+
+
+@app.route("/api/live/vpn/rotation", methods=["POST"])
+def api_live_vpn_rotation():
+    """Turn VPN auto-rotation on/off from the dashboard.
+
+    Persists to vpn_config.json and applies immediately -- vpn_rotator.reload()
+    drops its cached config, so no restart is needed. Turning rotation OFF does
+    not disconnect the VPN; it only stops Harvestr rotating the exit on a
+    rate-limit storm.
+    """
+    # Deliberately NO _live guard: this only reads/writes vpn_config.json and
+    # reloads the rotator's cached config. Requiring the live manager made the
+    # toggle return 503 during the (multi-minute) fleet restore, which is
+    # exactly when someone might want to turn rotation off.
+    body = request.get_json(silent=True) or {}
+    if "enabled" not in body:
+        return jsonify({"error": "enabled required (true/false)"}), 400
+    want = bool(body.get("enabled"))
+    try:
+        cfg = load_vpn_config()
+        cfg["enabled"] = want
+        save_vpn_config(cfg)
+        try:
+            from streamonitor.utils import vpn_rotator as _vr
+            _vr.reload()
+        except Exception as e:
+            # Saved, but the running rotator kept its cached copy.
+            return jsonify({"ok": True, "enabled": want,
+                            "applied_live": False, "reason": str(e)})
+        return jsonify({"ok": True, "enabled": want, "applied_live": True})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/live/netconfig/rotate", methods=["POST"])
+def api_live_netconfig_rotate():
+    """Manually rotate the Mullvad exit now. Also exercises the ride-through
+    grace, so active recordings survive the disconnect/reconnect gap (same file).
+    Runs in a background thread (the rotate blocks ~10-40s); returns at once."""
+    try:
+        from streamonitor.utils import vpn_rotator as _vpn
+    except Exception as e:
+        return jsonify({"error": f"vpn_rotator unavailable: {e}"}), 500
+    if not _vpn.configured():
+        return jsonify({"error": "VPN rotation not configured (need Mullvad locations + the CLI)"}), 400
+    import threading as _th
+    import logging as _lg
+    _log = _lg.getLogger("webui")
+    def _do():
+        try:
+            loc = _vpn.rotate(reason="manual (UI)", log=lambda m: _log.warning(m))
+            _log.warning(f"[vpn] manual rotation complete -> {loc}")
+            if loc and _live:
+                # exit IP changed -> restart IP-bound (StripChat) captures so they
+                # fetch a fresh token now instead of stalling ~60s.
+                try:
+                    _live.restart_ip_bound_recordings()
+                except Exception:
+                    pass
+        except Exception as e:
+            _log.warning(f"[vpn] manual rotation failed: {e}")
+    _th.Thread(target=_do, name="vpn-manual-rotate", daemon=True).start()
+    return jsonify({"ok": True, "started": True})
+
+
+@app.route("/api/config/performer/add", methods=["POST"])
+def api_add_performer():
+    name = (request.get_json(force=True).get("name") or "").strip()
+    if not name:
+        return jsonify({"error": "empty name"}), 400
+    cfg = load_config()
+    perfs = cfg.setdefault("performers", [])
+    if name not in perfs:
+        perfs.append(name)
+        save_config(cfg)
+    return jsonify({"ok": True, "performers": perfs})
+
+
+@app.route("/api/config/performer/remove", methods=["POST"])
+def api_remove_performer():
+    name = (request.get_json(force=True).get("name") or "").strip()
+    cfg = load_config()
+    perfs = cfg.get("performers", [])
+    cfg["performers"] = [p for p in perfs if p != name]
+    save_config(cfg)
+    return jsonify({"ok": True, "performers": cfg["performers"]})
+
+
+@app.route("/api/config/performer/bulk_add", methods=["POST"])
+def api_bulk_add_performers():
+    """Add many performers at once. Accepts:
+       - names: ["alice", "bob", ...]     (explicit list)
+       - text: "alice\nbob\ncharlie"      (whitespace/comma separated)
+    Duplicates (case-insensitive) are silently skipped."""
+    body = request.get_json(force=True) or {}
+    names: list[str] = []
+    if isinstance(body.get("names"), list):
+        names = [str(n).strip() for n in body["names"]]
+    if body.get("text"):
+        for chunk in str(body["text"]).replace(",", "\n").splitlines():
+            names.append(chunk.strip())
+    # Clean + dedup
+    cfg = load_config()
+    existing = {p.lower() for p in (cfg.get("performers") or [])}
+    added = []
+    for n in names:
+        if not n or n.startswith("#"):
+            continue
+        if n.lower() in existing:
+            continue
+        existing.add(n.lower())
+        cfg.setdefault("performers", []).append(n)
+        added.append(n)
+    if added:
+        save_config(cfg)
+    return jsonify({"ok": True, "added": added, "total": len(cfg.get("performers", []))})
+
+
+@app.route("/api/config/import", methods=["POST"])
+def api_config_import():
+    """Merge a JSON config blob into the current config.json.
+
+    Accepts the same schema as config.json itself, OR a simpler shape:
+      {"performers": ["a", "b"], "enabled_sites": [...], "max_videos_per_site": 100}
+    Overrides top-level scalars; unions list fields (performers + enabled_sites).
+    """
+    body = request.get_json(force=True) or {}
+    data = body.get("config") or body
+    if not isinstance(data, dict):
+        return jsonify({"error": "config must be a JSON object"}), 400
+    cfg = load_config()
+    merged_changes = {"performers_added": 0, "fields_updated": []}
+
+    # Union-merge list fields
+    for field in ("performers", "enabled_sites"):
+        if field in data and isinstance(data[field], list):
+            current = list(cfg.get(field) or [])
+            existing = {p.lower() if isinstance(p, str) else p for p in current}
+            for n in data[field]:
+                if isinstance(n, str):
+                    if n.strip() and n.strip().lower() not in existing:
+                        existing.add(n.strip().lower())
+                        current.append(n.strip())
+                        if field == "performers":
+                            merged_changes["performers_added"] += 1
+            cfg[field] = current
+
+    # Scalar overrides
+    for k, v in data.items():
+        if k in ("performers", "enabled_sites"):
+            continue
+        if k in cfg or isinstance(v, (str, int, float, bool)):
+            cfg[k] = v
+            merged_changes["fields_updated"].append(k)
+
+    save_config(cfg)
+    return jsonify({"ok": True, **merged_changes,
+                    "total_performers": len(cfg.get("performers", []))})
+
+
+@app.route("/api/sites")
+def api_sites():
+    return jsonify({"sites": load_sites()})
+
+
+@app.route("/api/sites/detailed")
+def api_sites_detailed():
+    return jsonify({"sites": load_sites_detailed()})
+
+
+@app.route("/api/auth")
+def api_auth():
+    return jsonify(cookies_diagnostics())
+
+
+@app.route("/api/progress")
+def api_progress():
+    return jsonify(read_progress())
+
+
+@app.route("/api/progress/cancel", methods=["POST"])
+def api_progress_cancel():
+    """Cancel a specific active download by its slot id. Kills the
+    underlying aria2c / curl / ffmpeg subprocess; the download loop
+    catches the failure and treats the video as skip (not fail),
+    then continues to the next queued item.
+
+    Note: the download subprocess runs in a DIFFERENT process than
+    the webui (python universal_downloader.py), so we can't call
+    tracker.cancel_slot() directly. Instead we write the cancel
+    request into the shared progress JSON file, and the downloader
+    watches for it on each update cycle.
+    """
+    body = request.get_json(silent=True) or {}
+    try:
+        slot = int(body.get("slot", -1))
+    except Exception:
+        return jsonify({"error": "slot must be an integer"}), 400
+    if slot < 0:
+        return jsonify({"error": "slot required"}), 400
+
+    # Persist cancel request in _progress.json so the downloader sees it
+    progress_path = DOWNLOADS_DIR / "_progress.json"
+    try:
+        data = json.loads(progress_path.read_text(encoding="utf-8")) if progress_path.exists() else {}
+    except Exception:
+        data = {}
+    cancelled = set(data.get("cancelled_slots") or [])
+    cancelled.add(slot)
+    data["cancelled_slots"] = sorted(cancelled)
+    # Atomic write
+    tmp = progress_path.with_suffix(".json.tmp")
+    try:
+        tmp.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        import os as _os
+        _os.replace(tmp, progress_path)
+    except Exception as e:
+        return jsonify({"error": f"write: {e}"}), 500
+    return jsonify({"ok": True, "slot": slot})
+
+
+@app.route("/api/history")
+def api_history():
+    return jsonify(load_json(HISTORY_PATH))
+
+
+@app.route("/api/failed")
+def api_failed():
+    return jsonify(load_json(FAILED_PATH))
+
+
+@app.route("/api/open-folder", methods=["POST"])
+def api_open_folder():
+    """Open a folder (or the parent of a file) in the native file explorer.
+
+    Body: {"path": "<absolute or relative-to-downloads path>"}
+
+    Security: we refuse to open anything outside DOWNLOADS_DIR or SCRIPT_DIR
+    so a malicious request can't navigate your whole filesystem."""
+    body = request.get_json(silent=True) or {}
+    raw = (body.get("path") or "").strip()
+    if not raw:
+        return jsonify({"error": "path required"}), 400
+    try:
+        p = Path(raw)
+        if not p.is_absolute():
+            # Relative → interpret under downloads/
+            p = DOWNLOADS_DIR / raw
+        p = p.resolve()
+    except Exception as e:
+        return jsonify({"error": f"bad path: {e}"}), 400
+
+    # Security: stay within our downloads tree (or script dir) — plus the live
+    # recordings root, which may live on another drive (e.g. E:\F\Recordings)
+    # and would otherwise be wrongly blocked.
+    roots = [DOWNLOADS_DIR.resolve(), SCRIPT_DIR.resolve()]
+    try:
+        if _live and getattr(_live, "live_dir", None):
+            roots.append(Path(_live.live_dir).resolve())
+    except Exception:
+        pass
+    if not any(str(p).lower().startswith(str(r).lower()) for r in roots):
+        return jsonify({"error": "path outside allowed directories"}), 403
+
+    # If the path doesn't exist but a parent does, open the nearest parent
+    target = p if p.exists() else (p.parent if p.parent.exists() else None)
+    if target is None:
+        return jsonify({"error": f"not found: {p}"}), 404
+
+    # If target is a file, open its parent folder (and highlight it on Windows)
+    try:
+        if sys.platform == "win32":
+            if target.is_file():
+                subprocess.Popen(["explorer", "/select,", str(target)])
+            else:
+                subprocess.Popen(["explorer", str(target)])
+        elif sys.platform == "darwin":
+            subprocess.Popen(["open", str(target if target.is_dir() else target.parent)])
+        else:
+            subprocess.Popen(["xdg-open", str(target if target.is_dir() else target.parent)])
+    except Exception as e:
+        return jsonify({"error": f"open: {e}"}), 500
+    return jsonify({"ok": True, "opened": str(target)})
+
+
+@app.route("/api/live/open", methods=["POST"])
+def api_live_open():
+    """Open a live model's recordings folder in the file explorer.
+
+    Recordings live wherever live_output_dir points (e.g. E:\\F\\Recordings),
+    which /api/open-folder refuses because it's outside the project dir. This
+    resolves the real folder via the live manager and is confined to the live
+    recordings root."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(silent=True) or {}
+    username = (body.get("username") or "").strip()
+    site = (body.get("site") or "").strip()
+    if not username or not site:
+        return jsonify({"error": "username + site required"}), 400
+    try:
+        folder = Path(_live.model_folder(username, site)).resolve()
+        root = Path(_live.live_dir).resolve()
+    except Exception as e:
+        return jsonify({"error": f"resolve: {e}"}), 400
+    # Security: confine to the live recordings root.
+    if not str(folder).lower().startswith(str(root).lower()):
+        return jsonify({"error": "path outside live recordings dir"}), 403
+    # Open the model's folder, or the live root if it doesn't exist yet.
+    target = folder if folder.exists() else root
+    if not target.exists():
+        return jsonify({"error": f"not found: {folder}"}), 404
+    try:
+        if sys.platform == "win32":
+            subprocess.Popen(["explorer", str(target)])
+        elif sys.platform == "darwin":
+            subprocess.Popen(["open", str(target)])
+        else:
+            subprocess.Popen(["xdg-open", str(target)])
+    except Exception as e:
+        return jsonify({"error": f"open: {e}"}), 500
+    return jsonify({"ok": True, "opened": str(target)})
+
+
+@app.route("/api/history/reset", methods=["POST"])
+def api_history_reset():
+    """Reset the download-history ledger so videos get re-downloaded even
+    if files were previously recorded as OK.
+
+    Body:
+      {"performer": "<name>"}  → clear only this performer's entries
+      {"performer": "<name>", "sites": ["youtube", ...]} → only on these sites
+      {"all": true}            → clear every performer (requires explicit flag)
+      {"include_failed": true} → also clear failed.json for this performer
+
+    Returns counts of entries removed."""
+    body = request.get_json(silent=True) or {}
+    performer = (body.get("performer") or "").strip()
+    sites_filter = body.get("sites") or []
+    clear_all = bool(body.get("all", False))
+    include_failed = bool(body.get("include_failed", True))
+
+    if not performer and not clear_all:
+        return jsonify({"error": "performer required (or pass {all:true})"}), 400
+
+    # Load
+    history = load_json(HISTORY_PATH) or {}
+    failed = load_json(FAILED_PATH) or {} if include_failed else {}
+
+    removed_history = 0
+    removed_failed = 0
+
+    def _clear_performer(perf_key: str) -> None:
+        nonlocal removed_history, removed_failed
+        entries = history.get(perf_key) or {}
+        if isinstance(entries, dict):
+            if sites_filter:
+                keep = {}
+                for k, v in entries.items():
+                    site = (v or {}).get("site") or (k.split("|")[0] if "|" in k else "")
+                    if site in sites_filter:
+                        removed_history += 1
+                    else:
+                        keep[k] = v
+                history[perf_key] = keep
+            else:
+                removed_history += len(entries)
+                history.pop(perf_key, None)
+        if include_failed and isinstance(failed, dict):
+            f_entries = failed.get(perf_key) or {}
+            if isinstance(f_entries, dict):
+                if sites_filter:
+                    keep_f = {}
+                    for k, v in f_entries.items():
+                        site = (v or {}).get("site") or (k.split("|")[0] if "|" in k else "")
+                        if site in sites_filter:
+                            removed_failed += 1
+                        else:
+                            keep_f[k] = v
+                    failed[perf_key] = keep_f
+                else:
+                    removed_failed += len(f_entries)
+                    failed.pop(perf_key, None)
+
+    if clear_all:
+        for perf_key in list(history.keys()):
+            _clear_performer(perf_key)
+    else:
+        # Case-insensitive match across known keys
+        target_lower = performer.lower()
+        matched = [k for k in history.keys() if k.lower() == target_lower]
+        for perf_key in matched:
+            _clear_performer(perf_key)
+        # Also clear in failed.json even if no history row existed
+        if include_failed and not matched:
+            for f_key in list(failed.keys()):
+                if f_key.lower() == target_lower:
+                    _clear_performer(f_key)
+
+    # Persist atomically
+    try:
+        save_json(HISTORY_PATH, history)
+        if include_failed:
+            save_json(FAILED_PATH, failed)
+    except Exception as e:
+        return jsonify({"error": f"write: {e}"}), 500
+
+    return jsonify({
+        "ok": True,
+        "performer": performer or "(all)",
+        "removed_history": removed_history,
+        "removed_failed": removed_failed,
+        "sites_filter": sites_filter,
+    })
+
+
+@app.route("/api/site-health")
+def api_site_health():
+    """Per-site success/fail history + drift classification. The UI uses
+    this to flag sites that used to work but now fail every download."""
+    path = DOWNLOADS_DIR / "_site_health.json"
+    if not path.exists():
+        return jsonify({"sites": {}, "updated_at": ""})
+    try:
+        return jsonify(json.loads(path.read_text(encoding="utf-8")))
+    except Exception as e:
+        return jsonify({"error": f"read: {e}", "sites": {}}), 500
+
+
+@app.route("/api/run", methods=["POST"])
+def api_run():
+    """Start the archive download subprocess.
+
+    Mutual exclusion: stops every running Live bot before launching the
+    archive subprocess. The two modes can't be active at once – a running
+    archive saturates the same network/CPU/disk pipes Live needs to keep
+    its open RTMP/HLS streams from dropping segments."""
+    global _runner_thread
+    with _mode_lock:
+        with _state_lock:
+            if _state["running"]:
+                return jsonify({"error": "already running"}), 400
+
+        # Stop any active Live bots first (mutual exclusion).
+        live_stopped = _stop_all_live_bots()
+
+        # Optional: specific performer
+        try:
+            body = request.get_json(silent=True) or {}
+        except Exception:
+            body = {}
+        performer = body.get("performer")
+
+        cmd = [sys.executable, str(SCRIPT_DIR / "universal_downloader.py")]
+        if performer:
+            cmd.append(performer)
+        else:
+            cmd.append("--all")
+
+        try:
+            proc = subprocess.Popen(
+                cmd, cwd=str(SCRIPT_DIR),
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
+            )
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+        with _state_lock:
+            _state["running"] = True
+            _state["pid"] = proc.pid
+            _state["started_at"] = datetime.now().isoformat()
+            _state["current_performer"] = performer or "(all)"
+            _runner_thread = proc
+    return jsonify({"ok": True, "pid": proc.pid, "live_stopped": live_stopped})
+
+
+@app.route("/api/stop", methods=["POST"])
+def api_stop():
+    """Stop the archive subprocess. Always clears _progress.json's running
+    flag so the UI updates immediately – otherwise the front-end keeps
+    showing 'probing' even after the process is dead, and Start stays
+    disabled. Also handles the case where the subprocess was started from
+    the CLI (not by us) by reading the PID out of _progress.json."""
+    # _kill_archive_subprocess is idempotent – it kills our tracked process
+    # AND any external PID found in _progress.json, then clears the flag.
+    killed = _kill_archive_subprocess(timeout=10.0)
+    if not killed and not _archive_is_running():
+        # Nothing was running and nothing was killed – but also nothing's
+        # stuck. Still return OK so the UI can re-enable Start cleanly.
+        return jsonify({"ok": True, "was_running": False})
+    return jsonify({"ok": True, "was_running": True, "killed": killed})
+
+
+@app.route("/api/disk")
+def api_disk():
+    """Snapshot: per-performer bytes, per-site totals, free space on drive.
+    Cached for 3 s on the backend – safe to poll aggressively."""
+    if not _disk:
+        return jsonify({"error": "disk manager unavailable"}), 500
+    force = request.args.get("force") == "1"
+    return jsonify(_disk.snapshot(force=force))
+
+
+@app.route("/api/disk/wipe", methods=["POST"])
+def api_disk_wipe():
+    """Delete every video for one performer. Hard op – requires confirm."""
+    if not _disk:
+        return jsonify({"error": "disk manager unavailable"}), 500
+    body = request.get_json(force=True) or {}
+    performer = (body.get("performer") or "").strip()
+    if not performer:
+        return jsonify({"error": "performer required"}), 400
+    if not body.get("confirm"):
+        return jsonify({"error": "confirm=true required for destructive op"}), 400
+    return jsonify(_disk.wipe_performer(performer))
+
+
+@app.route("/api/disk/delete", methods=["POST"])
+def api_disk_delete():
+    """Delete a specific list of paths."""
+    if not _disk:
+        return jsonify({"error": "disk manager unavailable"}), 500
+    body = request.get_json(force=True) or {}
+    paths = body.get("paths") or []
+    if not isinstance(paths, list) or not paths:
+        return jsonify({"error": "paths[] required"}), 400
+    if not body.get("confirm"):
+        return jsonify({"error": "confirm=true required"}), 400
+    return jsonify(_disk.delete_files(paths))
+
+
+@app.route("/api/disk/prune_older", methods=["POST"])
+def api_disk_prune_older():
+    if not _disk:
+        return jsonify({"error": "disk manager unavailable"}), 500
+    body = request.get_json(force=True) or {}
+    days = int(body.get("days") or 0)
+    if days < 1:
+        return jsonify({"error": "days must be >= 1"}), 400
+    return jsonify(_disk.prune_older_than(days, apply=bool(body.get("apply"))))
+
+
+@app.route("/api/disk/prune_to_free", methods=["POST"])
+def api_disk_prune_to_free():
+    if not _disk:
+        return jsonify({"error": "disk manager unavailable"}), 500
+    body = request.get_json(force=True) or {}
+    target = float(body.get("target_free_gb") or 0.0)
+    if target <= 0:
+        return jsonify({"error": "target_free_gb must be > 0"}), 400
+    return jsonify(_disk.prune_to_free(target, apply=bool(body.get("apply"))))
+
+
+@app.route("/api/disk/enforce_cap", methods=["POST"])
+def api_disk_enforce_cap():
+    if not _disk:
+        return jsonify({"error": "disk manager unavailable"}), 500
+    body = request.get_json(force=True) or {}
+    performer = (body.get("performer") or "").strip()
+    cap = float(body.get("max_gb") or 0.0)
+    if not performer or cap <= 0:
+        return jsonify({"error": "performer + max_gb required"}), 400
+    return jsonify(_disk.enforce_performer_cap(performer, cap,
+                                               apply=bool(body.get("apply"))))
+
+
+@app.route("/api/live/sites")
+def api_live_sites():
+    """Supported cam sites from StreaMonitor."""
+    if not _live:
+        return jsonify({**_live_boot_state(), "sites": []})
+    return jsonify({"available": _live_available, "sites": _live.list_sites()})
+
+
+# Short-lived cache for the heavy live snapshot. Rebuilding it iterates 1000+
+# bots (+ history + metadata) and pegged CPU under frequent / multi-tab polling;
+# a ~1.5 s TTL dedupes bursts with negligible staleness for a dashboard.
+_live_snap_cache = {"ts": 0.0, "data": None}
+_live_snap_lock = threading.Lock()
+_live_last_request = {"ts": 0.0}
+_live_snap_builder_started = False
+
+
+def _live_snapshot_builder_loop():
+    """Rebuild the heavy full snapshot OFF the request path. At 1000+ models
+    get_snapshot() is GIL-heavy (competing with every bot thread) and a single
+    build can exceed an HTTP timeout, so /api/live/status must never build
+    inline. This daemon rebuilds on a loop -- only while the dashboard is being
+    polled -- and the endpoint returns the most recent pre-built copy instantly
+    (stale by at most one build cycle, which is fine for a dashboard)."""
+    import time as _t
+    last_build = 0.0
+    while True:
+        now = _t.monotonic()
+        # Every ~2 s while the Live tab is polled; otherwise every 30 s, so
+        # health, write speed and history stay current on every tab without
+        # the header rebuilding the snapshot on each request.
+        if now - _live_last_request["ts"] < 30.0 or now - last_build >= 30.0:
+            try:
+                data = _live.get_snapshot()
+                with _live_snap_lock:
+                    _live_snap_cache["data"] = data
+                    _live_snap_cache["ts"] = _t.monotonic()
+            except Exception:
+                pass
+            last_build = _t.monotonic()
+        _t.sleep(2.0)
+
+
+def _ensure_snap_builder():
+    global _live_snap_builder_started
+    if _live_snap_builder_started or not _live:
+        return
+    _live_snap_builder_started = True
+    threading.Thread(target=_live_snapshot_builder_loop,
+                     name="live-snapshot-builder", daemon=True).start()
+
+
+def _live_snapshot_cached():
+    import time as _t
+    _live_last_request["ts"] = _t.monotonic()
+    _ensure_snap_builder()
+    with _live_snap_lock:
+        data = _live_snap_cache["data"]
+    if data is not None:
+        return data
+    # First poll before the builder produced a snapshot: return a placeholder
+    # instantly (the builder fills it within a cycle) rather than blocking the
+    # request on a full 1000+ model build.
+    return {"available": True, "models": [], "summary": {}, "building": True}
+
+
+@app.route("/api/live/status")
+def api_live_status():
+    """Snapshot of every live model and its current state (cached ~1.5 s)."""
+    if not _live:
+        # Distinguish "still starting" from "not installed" — during the boot
+        # window the fleet is restoring, and reporting available:false made the
+        # UI show a hard error for something that fixes itself.
+        return jsonify({**_live_boot_state(), "models": [], "summary": {}})
+    return jsonify(_live_snapshot_cached())
+
+
+@app.route("/api/live/summary")
+def api_live_summary():
+    """Lightweight Live stats only (counts + disk + status histogram), no model
+    list and no per-model metadata rebuild. Lets the header poll fast + cheap
+    without the full ~660 KB snapshot."""
+    if not _live:
+        return jsonify({**_live_boot_state(), "summary": {}})
+    return jsonify({"available": True, "summary": _live.live_summary()})
+
+
+@app.route("/api/live/bulk_add", methods=["POST"])
+def api_live_bulk_add():
+    """Bulk-add live models. Accepts:
+      - entries: [{username, site, room_id?}, ...]
+      - text: "alice Chaturbate\nbob StripChat 12345\n# comments ok"
+             (whitespace-separated: username, site, optional room_id)
+    Unknown sites skipped with an error, dupes skipped silently."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    entries: list[dict] = []
+    # A bare JSON array is the obvious thing to POST here (it's what the export
+    # format itself looks like), and it used to blow up as an opaque HTTP 500
+    # on body.get() before reaching any error handling. Accept it.
+    if isinstance(body, list):
+        body = {"entries": body}
+    if not isinstance(body, dict):
+        return jsonify({"error": "expected an object with 'entries'/'text', "
+                                 "or a bare list of entries"}), 400
+    # Explicit list
+    if isinstance(body.get("entries"), list):
+        entries.extend(body["entries"])
+    # Free-text paste
+    if body.get("text"):
+        available_sites = {s["name"].lower(): s["name"] for s in (_live.list_sites() or [])}
+        for line in str(body["text"]).splitlines():
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            parts = line.split()
+            if len(parts) < 2:
+                continue
+            user = parts[0]
+            site_raw = parts[1]
+            # Case-insensitive site match
+            site = available_sites.get(site_raw.lower(), site_raw)
+            room_id = parts[2] if len(parts) >= 3 else None
+            entries.append({"username": user, "site": site, "room_id": room_id})
+    try:
+        return jsonify(_live.bulk_add(entries))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+
+@app.route("/api/live/add", methods=["POST"])
+def api_live_add():
+    if not _live:
+        return jsonify({"error": "live recording unavailable (StreaMonitor not installed)"}), 503
+    body = request.get_json(force=True) or {}
+    try:
+        r = _live.add_model(body.get("username", ""), body.get("site", ""),
+                             room_id=body.get("room_id") or None)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify(r)
+
+
+@app.route("/api/live/remove", methods=["POST"])
+def api_live_remove():
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    try:
+        r = _live.remove_model(body.get("username", ""), body.get("site", ""))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify(r)
+
+
+@app.route("/api/live/start", methods=["POST"])
+def api_live_start():
+    """Start one Live bot. Mutual exclusion: kills any running Archive
+    subprocess first so the two don't fight for bandwidth/disk."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    archive_killed = False
+    with _mode_lock:
+        if _archive_is_running():
+            archive_killed = _kill_archive_subprocess(timeout=10.0)
+        try:
+            r = _live.start_model(body.get("username", ""), body.get("site", ""))
+        except Exception as e:
+            return jsonify({"error": str(e)}), 400
+    if archive_killed and isinstance(r, dict):
+        r["archive_killed"] = True
+    return jsonify(r)
+
+
+@app.route("/api/live/stop", methods=["POST"])
+def api_live_stop():
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    try:
+        r = _live.stop_model(body.get("username", ""), body.get("site", ""))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify(r)
+
+
+@app.route("/api/live/pause", methods=["POST"])
+def api_live_pause():
+    """Pause is a soft-stop: model stays in the list, thread stops, the UI
+    shows a 'PAUSED' chip and a Start button to resume. Internally the
+    same as stop_model() – the UI just presents it differently."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    try:
+        r = _live.stop_model(body.get("username", ""), body.get("site", ""))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+    return jsonify(r)
+
+
+@app.route("/api/live/toggle_all", methods=["POST"])
+def api_live_toggle_all():
+    """Start/stop all Live bots. When starting, kills any running Archive
+    subprocess first (mutual exclusion). Stopping is a no-op for Archive."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    running = bool(body.get("running", True))
+    archive_killed = False
+    with _mode_lock:
+        if running and _archive_is_running():
+            archive_killed = _kill_archive_subprocess(timeout=10.0)
+        result = _live.toggle_all(running)
+    if archive_killed and isinstance(result, dict):
+        result["archive_killed"] = True
+    return jsonify(result)
+
+
+@app.route("/api/live/prepare_shutdown", methods=["POST"])
+def api_live_prepare_shutdown():
+    """Drain recorders before the process is killed, WITHOUT persisting the
+    stopped state -- so the next start comes back recording by itself."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    try:
+        return jsonify(_live.stop_all_for_shutdown())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/live/toggle_site", methods=["POST"])
+def api_live_toggle_site():
+    """Enable/disable Live recording for one whole site, without a restart.
+
+    Turning a site OFF stops its in-flight captures immediately (Bot.stop()
+    kills the running ffmpeg) and keeps it off across restarts; models stay in
+    the list so turning it back ON resumes them."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    site = (body.get("site") or "").strip()
+    if not site:
+        return jsonify({"error": "site required"}), 400
+    if "enabled" not in body and "running" not in body:
+        return jsonify({"error": "enabled required"}), 400
+    enabled = bool(body.get("enabled", body.get("running")))
+    archive_killed = False
+    with _mode_lock:
+        # Same mutual exclusion as the other start paths: bringing a site back
+        # online must not race the Archive downloader for bandwidth/disk.
+        if enabled and _archive_is_running():
+            archive_killed = _kill_archive_subprocess(timeout=10.0)
+        try:
+            result = _live.toggle_site(site, enabled)
+        except (ValueError, RuntimeError) as e:
+            return jsonify({"error": str(e)}), 400
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+    if archive_killed and isinstance(result, dict):
+        result["archive_killed"] = True
+    return jsonify(result)
+
+
+@app.route("/api/live/repair", methods=["POST"])
+def api_live_repair():
+    """Kick off a repair job for one model. Returns immediately – the UI
+    polls /api/live/repair/status for progress."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(force=True) or {}
+    u = (body.get("username") or "").strip()
+    s = (body.get("site") or "").strip()
+    if not u or not s:
+        return jsonify({"error": "username + site required"}), 400
+    delete = bool(body.get("delete_if_unfixable", False))
+    try:
+        return jsonify(_live.repair_model(u, s, delete_if_unfixable=delete))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/live/repair_all", methods=["POST"])
+def api_live_repair_all():
+    """Kick off a full-sweep repair. Returns immediately – poll
+    /api/live/repair/status for progress (current file, counts so far)."""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    body = request.get_json(silent=True) or {}
+    delete = bool(body.get("delete_if_unfixable", False))
+    recent = float(body.get("only_recent_hours", 0))
+    try:
+        return jsonify(_live.repair_all(
+            delete_if_unfixable=delete, only_recent_hours=recent))
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/live/repair/status")
+def api_live_repair_status():
+    """Current repair job progress. The UI polls this while a job is running.
+
+    Response shape:
+      {
+        active: bool,
+        scope: "model:<u>|<site>" | "all" | "",
+        stage: "idle" | "listing" | "start" | "done" | "finished" | "error",
+        current: int, total: int,
+        current_file: str,
+        started_at: ISO, finished_at: ISO,
+        counts: {ok, remuxed, reencoded, deleted, failed},
+        last_result: RepairResult | null,
+        results: [RepairResult] | null (populated on finish)
+      }"""
+    if not _live:
+        return jsonify({"error": "live recording unavailable"}), 503
+    return jsonify(_live.repair_progress())
+
+
+@app.route("/api/tor", methods=["POST"])
+def api_tor():
+    """Start the embedded Tor helper, wait for bootstrap, return the SOCKS
+    URL. Called by the UI when user clicks "Use Tor" in the auth panel –
+    the returned URL is auto-filled into config.download_proxy.
+
+    Also supports action=stop to kill tor.exe and action=status for a
+    cheap ping. Long-running on first --start (20-60 s bootstrap)."""
+    body = request.get_json(silent=True) or {}
+    action = body.get("action", "start")
+    try:
+        if action == "stop":
+            r = subprocess.run(
+                [sys.executable, str(SCRIPT_DIR / "tor_helper.py"), "--stop"],
+                capture_output=True, text=True, timeout=10,
+            )
+            return jsonify({"ok": True, "stopped": True, "stdout": (r.stdout or r.stderr)[-500:]})
+
+        if action == "status":
+            r = subprocess.run(
+                [sys.executable, str(SCRIPT_DIR / "tor_helper.py"), "--status"],
+                capture_output=True, text=True, timeout=5,
+            )
+            if r.returncode == 0 and r.stdout.strip().startswith("socks5://"):
+                return jsonify({"ok": True, "running": True, "proxy": r.stdout.strip()})
+            return jsonify({"ok": True, "running": False})
+
+        # action == "start"
+        r = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "tor_helper.py"), "--start"],
+            capture_output=True, text=True, timeout=180,
+        )
+        proxy = r.stdout.strip()
+        if r.returncode != 0 or not proxy.startswith("socks5://"):
+            return jsonify({
+                "error": "Tor failed to start",
+                "stderr": (r.stderr or r.stdout)[-800:],
+            }), 500
+
+        # Auto-save to config so subsequent runs use it
+        cfg = load_config()
+        cfg["download_proxy"] = proxy
+        save_config(cfg)
+        return jsonify({"ok": True, "proxy": proxy,
+                        "message": f"Tor running at {proxy}; saved to config.download_proxy"})
+    except subprocess.TimeoutExpired:
+        return jsonify({"error": "Tor bootstrap timed out after 3 minutes"}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/dedup", methods=["POST"])
+def api_dedup():
+    try:
+        r = subprocess.run(
+            [sys.executable, str(SCRIPT_DIR / "dedupe.py"), "--apply"],
+            capture_output=True, text=True, cwd=str(SCRIPT_DIR), timeout=600,
+        )
+        # Parse last "GRAND TOTAL" line
+        out = r.stdout or ""
+        message = "Dedup complete."
+        for line in out.splitlines():
+            if "GRAND TOTAL" in line or "freed" in line:
+                message = line.strip()
+        return jsonify({"ok": True, "message": message, "stdout": out[-2000:]})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/file")
+def api_file():
+    """Serve a video file from disk (for inline playback)."""
+    path = request.args.get("path", "")
+    if not path:
+        return "path required", 400
+    # Safety: only allow files inside downloads/
+    p = Path(path).resolve()
+    if not str(p).startswith(str(DOWNLOADS_DIR.resolve())):
+        return "access denied", 403
+    if not p.exists() or not p.is_file():
+        return "not found", 404
+    return send_file(str(p))
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--host", default="127.0.0.1")
+    ap.add_argument("--port", type=int, default=7860)
+    args = ap.parse_args()
+    # Force UTF-8 output on Windows cp1252 consoles
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+    msg = f"\n==  Harvestr UI running at http://{args.host}:{args.port}  ==\n"
+    try:
+        print(msg)
+    except UnicodeEncodeError:
+        print(msg.encode("ascii", "replace").decode("ascii"))
+    app.run(host=args.host, port=args.port, debug=False, threaded=True)
+
+
+if __name__ == "__main__":
+    main()

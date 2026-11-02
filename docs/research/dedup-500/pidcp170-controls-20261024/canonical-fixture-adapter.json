@@ -1,0 +1,9 @@
+{
+  "scope": "Only test fixture adaptation: import realpathSync and canonicalize mkdtempSync directory; production and test case files unchanged. Needed because macOS /var temporary path aliases /private/var and original source snapshot refuses symlink aliases.",
+  "original_fixture": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/_jev-fixtures.ts",
+  "replacement": {
+    "before": "const cwd = mkdtempSync(join(tmpdir(), \"jev-source-\"));",
+    "after": "const cwd = realpathSync(mkdtempSync(join(tmpdir(), \"jev-source-\")));"
+  },
+  "raw_original_run": "original-selection-benchmark-results.txt"
+}

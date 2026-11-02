@@ -1,0 +1,49 @@
+{
+  "repository": "KevinStreetCoder/harvestr",
+  "commit": "3ba21f673d6e52970c2a1f7d7b5c93d252753aa1",
+  "previous_audit": "docs/research/dedup-500/harvestr117-source-review-v1-20261024.json",
+  "whole_files_read": [
+    {
+      "path": "dedupe.py",
+      "git_blob": "ffe72eaeea2962e78bbfac7574ded7a42b7525bf",
+      "sha256": "23e172d3ba4e7c6dd04235bf0e729e5d1b419c9e3bf50857303b826d183b1563",
+      "whole_text_read": true
+    },
+    {
+      "path": "disk_manager.py",
+      "git_blob": "7b97ab2f81e5420e939fad7be42593a6a0cbe64f",
+      "sha256": "397e01435deed46f1ab8a7f1b80db29b06c131dc5d04c1e6d2aede0ac19d93ac",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "0f12227a75520461b34ae89c72c0b69584366544",
+      "sha256": "0155e7c7f03940fe80136af923fa77edf619d998a659de121132d21a327c18e6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "tracked_blobs": 171,
+  "whole_repo_complete": false,
+  "authored_controls_total_distinct": 6,
+  "new_authored_controls": 2,
+  "upstream_tests_run": false,
+  "harness": "docs/research/dedup-500/harvestr117-controls-20261024",
+  "finding": {
+    "source_sha256": "397e01435deed46f1ab8a7f1b80db29b06c131dc5d04c1e6d2aede0ac19d93ac",
+    "controls_passed": 2,
+    "finding": "Mixed allowed/skipped paths: outside file survives, but its history is removed because requested paths rather than successfully removed paths drive sync. Single successful path positive preserves unrelated history.",
+    "result": {
+      "removed": 1,
+      "skipped": 1,
+      "bytes_freed": 5,
+      "errors": [
+        "outside downloads_dir: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/harvestr117-20261024/disk-owned-ypsx53wm/keep.mp4"
+      ]
+    },
+    "scope": "Original disk manager, real owned temp files only; no external files or production application",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/harvestr117-20261024/disk-owned-ypsx53wm"
+  },
+  "license": "Root MIT read; nested live_backend license remains unreviewed",
+  "production_changes": false
+}

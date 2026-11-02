@@ -1,0 +1,128 @@
+{
+  "scope": "local disposable APFS; remount-cold VFS, not physical disk cache or network FS",
+  "pairs": [
+    {
+      "pair": 0,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=228463375 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.25s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=46096792 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.05s\n\n"
+    },
+    {
+      "pair": 0,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=47232291 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.05s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=6887208 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 1,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=17970458 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.02s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=7150875 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 1,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=149310208 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.15s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=26967875 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 2,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=187839583 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.19s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=26572208 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 2,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=33764709 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=6923000 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 3,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=42379958 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.04s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=8106458 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 3,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=207528417 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.21s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=28937875 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 4,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=234531125 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.23s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=33613083 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 4,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=21686667 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.02s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=7650875 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 5,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=29735000 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=9140375 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 5,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=169018458 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.17s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=32321042 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 6,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=156686709 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.16s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=27161417 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 6,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=31498625 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=7212334 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 7,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=33938250 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=7167042 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 7,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=175140458 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.18s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=25692833 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 8,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=115892583 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.12s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=26096458 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 8,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=18181500 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.02s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=6724250 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 9,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=31753875 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=6126792 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    },
+    {
+      "pair": 9,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=198552000 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.20s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=25068792 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    }
+  ],
+  "errors": [],
+  "create": "created: /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-cover-volume-_lw3hfjt/cover.dmg\n",
+  "attach": "/dev/disk6          \tGUID_partition_scheme          \t\n/dev/disk6s1        \tApple_APFS                     \t\n/dev/disk7          \tEF57347C-0000-11AA-AA11-0030654\t\n/dev/disk7s1        \t41504653-0000-11AA-AA11-0030654\t/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-cover-volume-_lw3hfjt/mounted\n"
+}

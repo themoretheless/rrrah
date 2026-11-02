@@ -1,0 +1,59 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 47.75s
+     Running unittests src/main.rs (target/debug/deps/rrrah-e72ec188da58a5e5)
+
+running 35 tests
+test edit_store::tests::atomic_write_crash_helper ... ignored, subprocess helper; invoked by atomic_documents_survive_process_kill
+test edit_store::tests::legacy_lock_is_never_stolen_and_non_regular_v2_locks_are_refused ... ok
+test edit_store::tests::completed_writer_releases_lock_with_duplicated_descriptor_alive ... ok
+test edit_store::tests::source_hash_cancellation_does_not_open_obsolete_paths_or_publish_partial_identity ... ok
+test edit_store::tests::source_content_change_with_same_length_and_mtime_is_refused ... ok
+test edit_store::tests::oversized_and_non_regular_sidecars_are_refused ... ok
+test edit_store::tests::errors_keep_typed_conflict_and_io_categories ... ok
+test edit_store::tests::restart_refuses_changed_journal_source_and_backup_collision ... ok
+test edit_store::tests::concurrent_writers_are_refused_and_persistent_lock_is_reusable ... ok
+test editor::tests::decode_admission_identity_refuses_changed_source_before_any_persistence ... ok
+test editor::tests::conflicting_recovery_and_sidecar_are_retained_without_implicit_overwrite ... ok
+test edit_store::tests::recovery_refuses_corruption_new_source_and_unknown_version_without_deleting ... ok
+test edit_store::tests::xmp_preserves_unknown_fields_and_pages_and_refuses_external_change ... ok
+test edit_store::tests::curve_values_round_trip_exactly_before_recovery_checksum_verification ... ok
+test edit_store::tests::restart_process_kill_keeps_both_refused_record_and_retained_backup ... ok
+test edit_store::tests::restart_preserves_exact_backup_and_reuses_it_without_overwriting ... ok
+test foreground_loader_tests::raster_thumbnail_uses_shared_budget_and_last_owner_credit ... ok
+test editor::tests::stale_open_reply_cannot_initialize_new_decode_generation ... ok
+test editor::tests::unavailable_decode_identity_is_read_only_and_never_falls_back_to_current_file ... ok
+test editor::tests::documents_keep_separate_history_and_latest_edit_recovers_after_restart ... ok
+test model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit ... ignored, requires actual GPU for bounded model worker qualification
+test gpr_preload_tests::prepared_cr3_invalid_source_releases_encoded_credit ... ok
+test editor::tests::shutdown_deadline_bounds_stalled_actor_without_joining_it ... ok
+test raster_viewport::tests::cancelled_generation_lod_filter_and_upload_preserve_old_frame_and_release_credit ... ignored, actual Metal stale-generation LOD filtering and queued upload cancellation
+test editor::tests::conflict_choice_does_not_authorize_overwriting_a_later_external_xmp_edit ... ok
+test editor::tests::reload_reuses_history_only_after_matching_content_and_persisted_state ... ok
+test editor::tests::restart_succeeds_when_existing_history_uses_the_entire_budget ... ok
+test editor::tests::curve_drag_is_one_undo_and_restores_across_document_reload ... ok
+test edit_store::tests::orphan_cleanup_removes_only_committed_duplicates_and_caps_unique_files ... ok
+test editor::tests::explicit_conflict_choices_update_recovery_but_require_save_for_xmp ... ok
+test edit_store::tests::backup_limit_preserves_refused_journal_and_existing_backups ... ok
+test editor::tests::external_xmp_choice_retains_local_state_until_explicit_resolution ... ok
+test editor::tests::refused_recovery_requires_explicit_restart_and_retains_exact_bytes ... ok
+test model_swap_viewer_tests::native_model_eviction_restores_before_decoder_and_preserves_managed_credit ... ok
+test edit_store::tests::atomic_documents_survive_process_kill ... ok
+
+test result: ok. 32 passed; 0 failed; 3 ignored; 0 measured; 357 filtered out; finished in 0.86s
+

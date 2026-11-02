@@ -1,0 +1,866 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package dvdmenus
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"image"
+	"image/color"
+	"image/png"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+	"time"
+
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+
+	"github.com/autobrr/upbrr/internal/dvdvideo/engine"
+	"github.com/autobrr/upbrr/internal/dvdvideo/graph"
+	"github.com/autobrr/upbrr/internal/dvdvideo/render"
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	paths "github.com/autobrr/upbrr/internal/pathing/layout"
+	"github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+type capabilityRunner struct {
+	calls              int
+	missingMenuOptions bool
+}
+
+type dvdMenuRecordingLogger struct {
+	entries []string
+}
+
+func (l *dvdMenuRecordingLogger) add(level, format string, args ...any) {
+	l.entries = append(l.entries, level+" "+fmt.Sprintf(format, args...))
+}
+
+func (l *dvdMenuRecordingLogger) Tracef(format string, args ...any) {
+	l.add("TRACE", format, args...)
+}
+
+func (l *dvdMenuRecordingLogger) Debugf(format string, args ...any) {
+	l.add("DEBUG", format, args...)
+}
+
+func (l *dvdMenuRecordingLogger) Infof(format string, args ...any) {
+	l.add("INFO", format, args...)
+}
+
+func (l *dvdMenuRecordingLogger) Warnf(format string, args ...any) {
+	l.add("WARN", format, args...)
+}
+
+func (l *dvdMenuRecordingLogger) Errorf(format string, args ...any) {
+	l.add("ERROR", format, args...)
+}
+
+func (l *dvdMenuRecordingLogger) Contains(expected string) bool {
+	for _, entry := range l.entries {
+		if strings.Contains(entry, expected) {
+			return true
+		}
+	}
+	return false
+}
+
+func (l *dvdMenuRecordingLogger) Count(expected string) int {
+	count := 0
+	for _, entry := range l.entries {
+		if strings.Contains(entry, expected) {
+			count++
+		}
+	}
+	return count
+}
+
+func (r *capabilityRunner) Run(_ context.Context, _ string, args []string, _ int) (render.Output, error) {
+	r.calls++
+	joined := strings.Join(args, " ")
+	if strings.Contains(joined, "demuxer=dvdvideo") {
+		if r.missingMenuOptions {
+			return render.Output{Stdout: []byte("dvdvideo -menu")}, nil
+		}
+		return render.Output{Stdout: []byte("dvdvideo -menu -menu_lu -menu_vts -pgc -pg")}, nil
+	}
+	if strings.Contains(joined, "-version") {
+		return render.Output{Stdout: []byte("ffmpeg version example\n")}, nil
+	}
+	return render.Output{}, errors.New("unexpected FFmpeg call")
+}
+
+func TestCaptureRerunListAndDeletePreserveManualMenus(t *testing.T) {
+	t.Parallel()
+
+	repo := openTestRepository(t)
+	tmpRoot := t.TempDir()
+	discRoot := t.TempDir()
+	videoTS := filepath.Join(discRoot, "VIDEO_TS")
+	if err := os.Mkdir(videoTS, 0o700); err != nil {
+		t.Fatalf("create VIDEO_TS: %v", err)
+	}
+	executable := filepath.Join(t.TempDir(), "ffmpeg-example")
+	if err := os.WriteFile(executable, []byte("example"), 0o600); err != nil {
+		t.Fatalf("write FFmpeg identity: %v", err)
+	}
+
+	meta := dvdMenuTestSubject(discRoot)
+	managedDir, _, err := paths.ReleaseTempDirFor(tmpRoot, meta.SourcePath, api.ReleaseInfo{})
+	if err != nil {
+		t.Fatalf("managed dir: %v", err)
+	}
+	manualPath := filepath.Join(managedDir, "manual-dvd-menu-example.png")
+	writePNG(t, manualPath, color.NRGBA{
+		R: 20,
+		G: 40,
+		B: 60,
+		A: 255,
+	})
+	now := time.Now().UTC()
+	if err := repo.AppendManualMenuScreenshots(context.Background(), meta.MediaBinding,
+		[]api.Screenshot{{
+			SourcePath: meta.SourcePath,
+			ImagePath:  manualPath,
+			Width:      2,
+			Height:     2,
+			Purpose:    api.ScreenshotPurposeMenu,
+			CapturedAt: now,
+		}},
+		[]api.ScreenshotFinalSelection{{
+			SourcePath: meta.SourcePath,
+			ImagePath:  manualPath,
+			Source:     api.ScreenshotSelectionSourceMenu,
+			SelectedAt: now,
+		}},
+	); err != nil {
+		t.Fatalf("seed manual menu: %v", err)
+	}
+
+	captures := []engine.Capture{
+		{Image: solidImage(color.NRGBA{
+			R: 200,
+			G: 10,
+			B: 10,
+			A: 255,
+		}), Discovery: graph.DiscoveryReachable},
+		{Image: solidImage(color.NRGBA{
+			R: 10,
+			G: 200,
+			B: 10,
+			A: 255,
+		}), Discovery: graph.DiscoveryStructural},
+	}
+	progressUpdates := make([]api.DVDMenuProgressUpdate, 0)
+	progressCtx := api.WithDVDMenuProgressReporter(context.Background(), func(update api.DVDMenuProgressUpdate) {
+		progressUpdates = append(progressUpdates, update)
+	})
+	runner := &capabilityRunner{}
+	logger := &dvdMenuRecordingLogger{}
+	service := newService(logger, tmpRoot, repo, runner, func() (string, error) { return executable, nil },
+		func(_ context.Context, root string, _ render.Runner, _ string, options engine.Options) (engine.Result, error) {
+			rootInfo, err := os.Stat(root)
+			if err != nil {
+				t.Fatal("capture root is unavailable")
+			}
+			videoTSInfo, err := os.Stat(videoTS)
+			if err != nil {
+				t.Fatal("expected VIDEO_TS directory is unavailable")
+			}
+			if !os.SameFile(rootInfo, videoTSInfo) {
+				t.Fatal("capture root does not identify the expected VIDEO_TS directory")
+			}
+			if options.Capability == nil || !options.Capability.Available {
+				t.Fatal("capture did not receive cached capability")
+			}
+			if options.Logger == nil {
+				t.Fatal("capture did not receive logger")
+			}
+			if options.Progress != nil {
+				options.Progress(engine.Progress{
+					Phase:          "capturing",
+					Inventoried:    len(captures),
+					VisitedStates:  4,
+					VisitedButtons: 3,
+					Captured:       len(captures),
+				})
+			}
+			return engine.Result{
+				EngineVersion:  engine.Version,
+				Captures:       append([]engine.Capture(nil), captures...),
+				Inventoried:    len(captures),
+				Selected:       len(captures),
+				VisitedStates:  4,
+				VisitedButtons: 3,
+				Partial:        true,
+				Warnings: []graph.Warning{{
+					Code:    "unsupported_pre_link",
+					Message: "menu pre-command target was not resolved",
+				}},
+			}, nil
+		})
+
+	first, err := service.Capture(progressCtx, meta, 6)
+	if err != nil {
+		t.Fatalf("first capture: %v", err)
+	}
+	if len(first.Images) != 2 || first.Images[0].Purpose != api.ScreenshotPurposeMenu || first.Images[1].Discovery != api.DVDMenuDiscoveryStructural {
+		t.Fatalf("first capture result = %#v", first)
+	}
+	if !hasWarning(first.Warnings, "structural_discovery") {
+		t.Fatalf("missing structural warning: %#v", first.Warnings)
+	}
+	for _, expected := range []string{
+		"DEBUG DVD menus: capture requested disc_type=DVD discs=1 max_items=6",
+		"DEBUG DVD menus: FFmpeg capability probe complete dvdvideo=true options=5",
+		"INFO DVD menus: capture started discs=1 language=en region=0",
+		"DEBUG DVD menus: progress disc_id= phase=capturing",
+		"DEBUG DVD menus: warning recorded disc_id= code=unsupported_pre_link",
+		"DEBUG DVD menus: persistence started images=2",
+		"DEBUG DVD menus: persistence complete stored=2",
+		"WARN DVD menus: capture incomplete captured=2",
+		"INFO DVD menus: capture complete captured=2 discovered=2 states=4 buttons=3 complete=false",
+	} {
+		if !logger.Contains(expected) {
+			t.Fatalf("missing DVD menu service log event %q", expected)
+		}
+	}
+	if logger.Contains(discRoot) || logger.Contains(executable) {
+		t.Fatal("DVD menu service logs exposed a local path")
+	}
+	if got := logger.Count("INFO DVD menus:"); got != 2 {
+		t.Fatalf("DVD menu capture INFO logs = %d, want start and completion only", got)
+	}
+	assertProgressPhases(t, progressUpdates, []string{"preflight", "capturing", "persisting", "complete"})
+	firstAutoPaths := []string{first.Images[0].Path, first.Images[1].Path}
+	assertSelectionSources(t, repo, meta.MediaBinding, []string{
+		api.ScreenshotSelectionSourceDVDMenu,
+		api.ScreenshotSelectionSourceDVDMenu,
+		api.ScreenshotSelectionSourceMenu,
+	})
+
+	captures = captures[:1]
+	second, err := service.Capture(context.Background(), meta, 6)
+	if err != nil {
+		t.Fatalf("second capture: %v", err)
+	}
+	if len(second.Images) != 1 {
+		t.Fatalf("second images = %d, want 1", len(second.Images))
+	}
+	for _, oldPath := range firstAutoPaths {
+		if _, err := os.Stat(oldPath); !errors.Is(err, os.ErrNotExist) {
+			t.Fatalf("replaced capture still exists: %v", err)
+		}
+	}
+	if _, err := os.Stat(manualPath); err != nil {
+		t.Fatalf("manual image removed by rerun: %v", err)
+	}
+
+	listed, err := service.List(context.Background(), meta)
+	if err != nil {
+		t.Fatalf("list: %v", err)
+	}
+	if len(listed) != 2 || listed[0].Path != second.Images[0].Path || listed[1].Path != manualPath {
+		t.Fatalf("listed images = %#v", listed)
+	}
+	for _, listedImage := range listed {
+		if listedImage.Purpose != api.ScreenshotPurposeMenu {
+			t.Fatalf("listed purpose = %q", listedImage.Purpose)
+		}
+	}
+
+	if err := repo.SaveUploadedImages(context.Background(), meta.MediaBinding, "example-host", []api.UploadedImageLink{{
+		SourcePath: meta.SourcePath,
+		ImagePath:  second.Images[0].Path,
+		Host:       "example-host",
+		UsageScope: "global",
+		RawURL:     "https://example.invalid/dvd-menu.png",
+		UploadedAt: now,
+	}}); err != nil {
+		t.Fatalf("save upload link: %v", err)
+	}
+	if err := service.Delete(context.Background(), meta, second.Images[0].Path); err != nil {
+		t.Fatalf("delete automatic menu: %v", err)
+	}
+	if _, err := os.Stat(second.Images[0].Path); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("deleted image stat = %v", err)
+	}
+	assertSelectionSources(t, repo, meta.MediaBinding, []string{api.ScreenshotSelectionSourceMenu})
+}
+
+func TestCaptureDistributesCollectionCapAcrossDVDs(t *testing.T) {
+	t.Parallel()
+
+	repo := openTestRepository(t)
+	collectionRoot := t.TempDir()
+	discARoot := filepath.Join(collectionRoot, "Disc 1")
+	discBRoot := filepath.Join(collectionRoot, "Disc 2")
+	videoTSA := filepath.Join(discARoot, "VIDEO_TS")
+	videoTSB := filepath.Join(discBRoot, "VIDEO_TS")
+	for _, root := range []string{videoTSA, videoTSB} {
+		if err := os.MkdirAll(root, 0o700); err != nil {
+			t.Fatalf("create VIDEO_TS: %v", err)
+		}
+	}
+	executable := filepath.Join(t.TempDir(), "ffmpeg-example")
+	if err := os.WriteFile(executable, []byte("example"), 0o600); err != nil {
+		t.Fatalf("write FFmpeg identity: %v", err)
+	}
+
+	service := newService(api.NopLogger{}, t.TempDir(), repo, &capabilityRunner{}, func() (string, error) { return executable, nil },
+		func(_ context.Context, root string, _ render.Runner, _ string, _ engine.Options) (engine.Result, error) {
+			if !sameExistingPath(t, root, videoTSA) && !sameExistingPath(t, root, videoTSB) {
+				t.Fatalf("capture root = %q", root)
+			}
+			return engine.Result{
+				Complete:    true,
+				Inventoried: 2,
+				Captures: []engine.Capture{
+					{Image: solidImage(color.NRGBA{R: 40, A: 255}), Discovery: graph.DiscoveryReachable},
+					{Image: solidImage(color.NRGBA{G: 40, A: 255}), Discovery: graph.DiscoveryReachable},
+				},
+			}, nil
+		})
+	subject := dvdMenuTestSubject(collectionRoot)
+	subject.Discs = []api.DVDMenuDiscSubject{
+		{
+			ID:   "disc-a",
+			Name: "Disc 1",
+			Root: discARoot,
+		},
+		{
+			ID:   "disc-b",
+			Name: "Disc 2",
+			Root: discBRoot,
+		},
+	}
+
+	result, err := service.Capture(context.Background(), subject, 3)
+	if err != nil {
+		t.Fatalf("capture: %v", err)
+	}
+	if len(result.Images) != 3 || !result.Truncated || result.Partial || result.Complete {
+		t.Fatalf("capture result = %#v", result)
+	}
+	for index, wantDiscID := range []string{"disc-a", "disc-b", "disc-a"} {
+		if result.Images[index].DiscID != wantDiscID || !strings.Contains(filepath.Base(result.Images[index].Path), "disc-"+wantDiscID+"-") {
+			t.Fatalf("image[%d] = %#v, want disc %q", index, result.Images[index], wantDiscID)
+		}
+	}
+}
+
+func TestCaptureRedistributesQuotaPastEmptyDVD(t *testing.T) {
+	t.Parallel()
+
+	repo := openTestRepository(t)
+	collectionRoot := t.TempDir()
+	discARoot := filepath.Join(collectionRoot, "Disc 1")
+	discBRoot := filepath.Join(collectionRoot, "Disc 2")
+	videoTSA := filepath.Join(discARoot, "VIDEO_TS")
+	videoTSB := filepath.Join(discBRoot, "VIDEO_TS")
+	for _, root := range []string{videoTSA, videoTSB} {
+		if err := os.MkdirAll(root, 0o700); err != nil {
+			t.Fatalf("create VIDEO_TS: %v", err)
+		}
+	}
+	executable := filepath.Join(t.TempDir(), "ffmpeg-example")
+	if err := os.WriteFile(executable, []byte("example"), 0o600); err != nil {
+		t.Fatalf("write FFmpeg identity: %v", err)
+	}
+
+	service := newService(api.NopLogger{}, t.TempDir(), repo, &capabilityRunner{}, func() (string, error) { return executable, nil },
+		func(_ context.Context, root string, _ render.Runner, _ string, _ engine.Options) (engine.Result, error) {
+			if sameExistingPath(t, root, videoTSA) {
+				return engine.Result{}, nil
+			}
+			if !sameExistingPath(t, root, videoTSB) {
+				t.Fatalf("capture root = %q", root)
+			}
+			return engine.Result{Captures: []engine.Capture{
+				{Image: solidImage(color.NRGBA{B: 40, A: 255}), Discovery: graph.DiscoveryReachable},
+				{Image: solidImage(color.NRGBA{
+					R: 40,
+					B: 40,
+					A: 255,
+				}), Discovery: graph.DiscoveryReachable},
+				{Image: solidImage(color.NRGBA{
+					G: 40,
+					B: 40,
+					A: 255,
+				}), Discovery: graph.DiscoveryReachable},
+			}}, nil
+		})
+	subject := dvdMenuTestSubject(collectionRoot)
+	subject.Discs = []api.DVDMenuDiscSubject{
+		{
+			ID:   "disc-a",
+			Name: "Disc 1",
+			Root: discARoot,
+		},
+		{
+			ID:   "disc-b",
+			Name: "Disc 2",
+			Root: discBRoot,
+		},
+	}
+
+	result, err := service.Capture(context.Background(), subject, 2)
+	if err != nil {
+		t.Fatalf("capture: %v", err)
+	}
+	if len(result.Images) != 2 || !result.Partial || !result.Truncated {
+		t.Fatalf("capture result = %#v", result)
+	}
+	for index, image := range result.Images {
+		if image.DiscID != "disc-b" {
+			t.Fatalf("image[%d] = %#v", index, image)
+		}
+	}
+	if !hasDiscWarning(result.Warnings, "disc-a") {
+		t.Fatalf("missing uncovered warning for disc-a: %#v", result.Warnings)
+	}
+}
+
+func assertProgressPhases(t *testing.T, updates []api.DVDMenuProgressUpdate, want []string) {
+	t.Helper()
+	got := make([]string, 0, len(updates))
+	for _, update := range updates {
+		got = append(got, update.Phase)
+	}
+	if strings.Join(got, ",") != strings.Join(want, ",") {
+		t.Fatalf("progress phases = %#v, want %#v", got, want)
+	}
+}
+
+func TestCaptureRollsBackCreatedFilesWhenPersistenceFails(t *testing.T) {
+	t.Parallel()
+
+	baseRepo := openTestRepository(t)
+	repo := &failingCaptureRepository{SQLiteRepository: baseRepo}
+	tmpRoot := t.TempDir()
+	discRoot := t.TempDir()
+	if err := os.Mkdir(filepath.Join(discRoot, "VIDEO_TS"), 0o700); err != nil {
+		t.Fatalf("create VIDEO_TS: %v", err)
+	}
+	executable := filepath.Join(t.TempDir(), "ffmpeg-example")
+	if err := os.WriteFile(executable, []byte("example"), 0o600); err != nil {
+		t.Fatalf("write FFmpeg identity: %v", err)
+	}
+	service := newService(api.NopLogger{}, tmpRoot, repo, &capabilityRunner{}, func() (string, error) { return executable, nil },
+		func(context.Context, string, render.Runner, string, engine.Options) (engine.Result, error) {
+			return engine.Result{Captures: []engine.Capture{{Image: solidImage(color.NRGBA{R: 50, A: 255}), Discovery: graph.DiscoveryReachable}}}, nil
+		})
+
+	_, err := service.Capture(context.Background(), dvdMenuTestSubject(discRoot), 1)
+	if err == nil || !strings.Contains(err.Error(), "persist capture") {
+		t.Fatalf("capture error = %v", err)
+	}
+	managedDir, _, err := paths.ReleaseTempDir(tmpRoot, preparationstate.State{}, discRoot)
+	if err != nil {
+		t.Fatalf("managed dir: %v", err)
+	}
+	matches, err := filepath.Glob(filepath.Join(managedDir, "*-dvd-menu-*.png"))
+	if err != nil {
+		t.Fatalf("glob captures: %v", err)
+	}
+	if len(matches) != 0 {
+		t.Fatalf("rollback retained captures: %#v", matches)
+	}
+}
+
+func TestDeleteRejectsOriginalOutsideManagedDirectory(t *testing.T) {
+	t.Parallel()
+
+	repo := openTestRepository(t)
+	tmpRoot := t.TempDir()
+	discRoot := t.TempDir()
+	original := filepath.Join(t.TempDir(), "original-menu.png")
+	writePNG(t, original, color.NRGBA{B: 200, A: 255})
+	meta := dvdMenuTestSubject(discRoot)
+	if err := repo.SaveFinalSelections(context.Background(), meta.MediaBinding, []api.ScreenshotFinalSelection{{
+		SourcePath: discRoot,
+		ImagePath:  original,
+		Source:     api.ScreenshotSelectionSourceMenu,
+		SelectedAt: time.Now().UTC(),
+	}}); err != nil {
+		t.Fatalf("save original selection: %v", err)
+	}
+	service := NewService(api.NopLogger{}, tmpRoot, repo)
+	err := service.Delete(context.Background(), meta, original)
+	if err == nil || !strings.Contains(err.Error(), "outside the managed release directory") {
+		t.Fatalf("delete error = %v", err)
+	}
+	if _, err := os.Stat(original); err != nil {
+		t.Fatalf("original image changed: %v", err)
+	}
+}
+
+func TestDeleteRestoresFileAndRecordsWhenFinalRemoveFails(t *testing.T) {
+	t.Parallel()
+
+	repo := openTestRepository(t)
+	tmpRoot := t.TempDir()
+	discRoot := t.TempDir()
+	meta := dvdMenuTestSubject(discRoot)
+	managedDir, _, err := paths.ReleaseTempDirFor(tmpRoot, meta.SourcePath, api.ReleaseInfo{})
+	if err != nil {
+		t.Fatal("create managed directory failed")
+	}
+	imagePath := filepath.Join(managedDir, "Example.Release.2026-dvd-menu-01.png")
+	writePNG(t, imagePath, color.NRGBA{
+		R: 20,
+		G: 40,
+		B: 60,
+		A: 255,
+	})
+	now := time.Now().UTC()
+	if err := repo.AppendManualMenuScreenshots(context.Background(), meta.MediaBinding,
+		[]api.Screenshot{{
+			SourcePath: meta.SourcePath,
+			ImagePath:  imagePath,
+			Width:      2,
+			Height:     2,
+			Purpose:    api.ScreenshotPurposeMenu,
+			CapturedAt: now,
+		}},
+		[]api.ScreenshotFinalSelection{{
+			SourcePath: meta.SourcePath,
+			ImagePath:  imagePath,
+			Source:     api.ScreenshotSelectionSourceMenu,
+			SelectedAt: now,
+		}},
+	); err != nil {
+		t.Fatal("seed menu screenshot failed")
+	}
+	if err := repo.SaveUploadedImages(context.Background(), meta.MediaBinding, "example-host", []api.UploadedImageLink{{
+		SourcePath: meta.SourcePath,
+		ImagePath:  imagePath,
+		Host:       "example-host",
+		UsageScope: "global",
+		RawURL:     "https://example.invalid/dvd-menu.png",
+		UploadedAt: now,
+	}}); err != nil {
+		t.Fatal("seed menu upload record failed")
+	}
+	if err := repo.ReplaceScreenshotSlots(context.Background(), meta.MediaBinding, []api.ScreenshotSlot{{
+		SourcePath: meta.SourcePath,
+		SlotOrder:  0,
+		ImagePath:  imagePath,
+		Variants: []api.ScreenshotSlotVariant{{
+			SourcePath: meta.SourcePath,
+			SlotOrder:  0,
+			Host:       "example-host",
+			UsageScope: "global",
+			ImagePath:  imagePath,
+			RawURL:     "https://example.invalid/dvd-menu.png",
+			UploadedAt: now,
+		}},
+	}}); err != nil {
+		t.Fatal("seed menu screenshot slot failed")
+	}
+
+	service := NewService(api.NopLogger{}, tmpRoot, repo)
+	service.removeFile = func(string) error { return errors.New("synthetic remove failure") }
+	err = service.Delete(context.Background(), meta, imagePath)
+	if err == nil || !strings.Contains(err.Error(), "deletion rolled back") {
+		t.Fatal("expected final remove failure to roll back deletion")
+	}
+	if _, err := os.Stat(imagePath); err != nil {
+		t.Fatal("expected rolled-back image at its original path")
+	}
+	listed, err := service.List(context.Background(), meta)
+	if err != nil {
+		t.Fatal("list rolled-back menu image failed")
+	}
+	if len(listed) != 1 || listed[0].Path != imagePath {
+		t.Fatal("rolled-back image is not recoverable through the menu list")
+	}
+	uploads, err := repo.ListUploadedImagesByPath(context.Background(), meta.MediaBinding)
+	if err != nil {
+		t.Fatal("list rolled-back upload association failed")
+	}
+	restoredUpload := false
+	for _, uploaded := range uploads {
+		if uploaded.ImagePath == imagePath {
+			restoredUpload = true
+			break
+		}
+	}
+	if !restoredUpload {
+		t.Fatal("rolled-back upload association was not restored")
+	}
+	slots, err := repo.ListScreenshotSlotsByPath(context.Background(), meta.MediaBinding)
+	if err != nil || len(slots) != 1 || slots[0].ImagePath != imagePath || len(slots[0].Variants) != 1 {
+		t.Fatal("rolled-back screenshot slot associations were not restored")
+	}
+	pending, err := filepath.Glob(imagePath + ".delete-*")
+	if err != nil || len(pending) != 0 {
+		t.Fatal("rolled-back delete left a staged image behind")
+	}
+}
+
+// TestDeleteConvergesOnlyWhenFileAndRecordAreBothGone pins where menu deletion
+// decides idempotency. A repeat with nothing left to remove succeeds, while a
+// missing record whose file is still present stays an error so the caller keeps
+// owning the artifact instead of dropping it over a surviving file.
+func TestDeleteConvergesOnlyWhenFileAndRecordAreBothGone(t *testing.T) {
+	t.Parallel()
+
+	tmpRoot := t.TempDir()
+	discRoot := t.TempDir()
+	meta := dvdMenuTestSubject(discRoot)
+	managedDir, _, err := paths.ReleaseTempDirFor(tmpRoot, meta.SourcePath, api.ReleaseInfo{})
+	if err != nil {
+		t.Fatal("create managed directory failed")
+	}
+	imagePath := filepath.Join(managedDir, "Example.Release.2026-dvd-menu-01.png")
+	service := NewService(api.NopLogger{}, tmpRoot, openTestRepository(t))
+
+	if err := service.Delete(context.Background(), meta, imagePath); err != nil {
+		t.Fatalf("repeated delete of an absent menu image: %v", err)
+	}
+	if _, err := os.Stat(imagePath); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("absent menu image reappeared: %v", err)
+	}
+
+	writePNG(t, imagePath, color.NRGBA{
+		R: 20,
+		G: 40,
+		B: 60,
+		A: 255,
+	})
+	if err := service.Delete(context.Background(), meta, imagePath); !errors.Is(err, internalerrors.ErrNotFound) {
+		t.Fatalf("delete error = %v, want not found", err)
+	}
+	if _, err := os.Stat(imagePath); err != nil {
+		t.Fatalf("menu image without a record was not restored: %v", err)
+	}
+	pending, err := filepath.Glob(imagePath + ".delete-*")
+	if err != nil || len(pending) != 0 {
+		t.Fatalf("failed delete left a staged image behind: %v %#v", err, pending)
+	}
+}
+
+// TestDeleteFailsWhenMissingRecordAlsoFailsRestore keeps a joined not-found and
+// restore failure an error. Local state did not converge there, so reporting
+// success would drop the artifact while its staged file survives.
+func TestDeleteFailsWhenMissingRecordAlsoFailsRestore(t *testing.T) {
+	t.Parallel()
+
+	tmpRoot := t.TempDir()
+	discRoot := t.TempDir()
+	meta := dvdMenuTestSubject(discRoot)
+	managedDir, _, err := paths.ReleaseTempDirFor(tmpRoot, meta.SourcePath, api.ReleaseInfo{})
+	if err != nil {
+		t.Fatal("create managed directory failed")
+	}
+	imagePath := filepath.Join(managedDir, "Example.Release.2026-dvd-menu-01.png")
+	writePNG(t, imagePath, color.NRGBA{
+		R: 20,
+		G: 40,
+		B: 60,
+		A: 255,
+	})
+	repo := &restoreBlockingRepository{SQLiteRepository: openTestRepository(t)}
+	service := NewService(api.NopLogger{}, tmpRoot, repo)
+
+	err = service.Delete(context.Background(), meta, imagePath)
+	if !errors.Is(err, internalerrors.ErrNotFound) || !strings.Contains(err.Error(), "restore local image") {
+		t.Fatalf("delete error = %v, want joined not-found and restore failure", err)
+	}
+	staged, err := filepath.Glob(imagePath + ".delete-*")
+	if err != nil || len(staged) != 1 {
+		t.Fatalf("staged image after failed restore = %v %#v", err, staged)
+	}
+}
+
+func TestCapabilityRetainsFFmpegVersionWithoutMenuSupport(t *testing.T) {
+	t.Parallel()
+	executable := filepath.Join(t.TempDir(), "ffmpeg-example")
+	if err := os.WriteFile(executable, []byte("example"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	runner := &capabilityRunner{missingMenuOptions: true}
+	service := newService(api.NopLogger{}, "", nil, runner, func() (string, error) { return executable, nil }, nil)
+	info, err := service.Capability(t.Context())
+	if err == nil || info.FFmpegDVDVideo || info.FFmpegVersion != "ffmpeg version example" {
+		t.Fatalf("incompatible capability = %#v, err=%v", info, err)
+	}
+	if strings.Join(info.MissingFFmpegOptions, ",") != "-menu_lu,-menu_vts,-pgc,-pg" || info.EngineVersion == "" {
+		t.Fatalf("missing engine diagnostics: %#v", info)
+	}
+}
+
+func TestCapabilityCacheInvalidatesWhenExecutableIdentityChanges(t *testing.T) {
+	t.Parallel()
+
+	repo := openTestRepository(t)
+	executable := filepath.Join(t.TempDir(), "ffmpeg-example")
+	if err := os.WriteFile(executable, []byte("first"), 0o600); err != nil {
+		t.Fatalf("write FFmpeg identity: %v", err)
+	}
+	runner := &capabilityRunner{}
+	service := newService(api.NopLogger{}, t.TempDir(), repo, runner, func() (string, error) { return executable, nil }, nil)
+
+	for range 2 {
+		info, err := service.Capability(context.Background())
+		if err != nil {
+			t.Fatalf("capability: %v", err)
+		}
+		if !info.FFmpegDVDVideo || info.FFmpegVersion != "ffmpeg version example" {
+			t.Fatalf("capability info = %#v", info)
+		}
+	}
+	if runner.calls != 2 {
+		t.Fatalf("cached probe calls = %d, want 2", runner.calls)
+	}
+	if err := os.WriteFile(executable, []byte("second identity"), 0o600); err != nil {
+		t.Fatalf("change FFmpeg identity: %v", err)
+	}
+	if _, err := service.Capability(context.Background()); err != nil {
+		t.Fatalf("capability after identity change: %v", err)
+	}
+	if runner.calls != 4 {
+		t.Fatalf("invalidated probe calls = %d, want 4", runner.calls)
+	}
+}
+
+func TestMissingFFmpegOptionsReturnsEveryReportedOption(t *testing.T) {
+	t.Parallel()
+
+	missing := missingFFmpegOptions(errors.New("FFmpeg capability: missing -menu_lu, -menu_vts, -pgc, -pg"))
+	if strings.Join(missing, ",") != "-menu_lu,-menu_vts,-pgc,-pg" {
+		t.Fatalf("missing options = %#v", missing)
+	}
+}
+
+type failingCaptureRepository struct {
+	*db.SQLiteRepository
+}
+
+// restoreBlockingRepository occupies the original image path before reporting a
+// missing menu record, so the service's compensating restore cannot succeed.
+type restoreBlockingRepository struct {
+	*db.SQLiteRepository
+}
+
+func (*restoreBlockingRepository) DeleteDiscMenuScreenshot(
+	_ context.Context,
+	_ api.PreparedMediaBinding,
+	imagePath string,
+) (api.DiscMenuDeleteResult, error) {
+	if err := os.MkdirAll(imagePath, 0o700); err != nil {
+		return api.DiscMenuDeleteResult{}, fmt.Errorf("occupy the original image path: %w", err)
+	}
+	return api.DiscMenuDeleteResult{}, internalerrors.ErrNotFound
+}
+
+func (r *failingCaptureRepository) ReplaceDVDMenuScreenshots(
+	context.Context,
+	api.PreparedMediaBinding,
+	[]api.Screenshot,
+	[]api.ScreenshotFinalSelection,
+) ([]string, error) {
+	return nil, errors.New("synthetic persistence failure")
+}
+
+func openTestRepository(t *testing.T) *db.SQLiteRepository {
+	t.Helper()
+	repo, err := db.Open(":memory:")
+	if err != nil {
+		t.Fatalf("open repository: %v", err)
+	}
+	t.Cleanup(func() { _ = repo.Close() })
+	if err := repo.Migrate(); err != nil {
+		t.Fatalf("migrate repository: %v", err)
+	}
+	return repo
+}
+
+func solidImage(fill color.NRGBA) *image.NRGBA {
+	result := image.NewNRGBA(image.Rect(0, 0, 2, 2))
+	for y := range 2 {
+		for x := range 2 {
+			result.SetNRGBA(x, y, fill)
+		}
+	}
+	return result
+}
+
+func sameExistingPath(t *testing.T, left string, right string) bool {
+	t.Helper()
+	leftInfo, err := os.Stat(left)
+	if err != nil {
+		t.Fatalf("stat path %q: %v", left, err)
+	}
+	rightInfo, err := os.Stat(right)
+	if err != nil {
+		t.Fatalf("stat path %q: %v", right, err)
+	}
+	return os.SameFile(leftInfo, rightInfo)
+}
+
+func writePNG(t *testing.T, path string, fill color.NRGBA) {
+	t.Helper()
+	file, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o600)
+	if err != nil {
+		t.Fatalf("create PNG: %v", err)
+	}
+	if err := png.Encode(file, solidImage(fill)); err != nil {
+		_ = file.Close()
+		t.Fatalf("encode PNG: %v", err)
+	}
+	if err := file.Close(); err != nil {
+		t.Fatalf("close PNG: %v", err)
+	}
+}
+
+func assertSelectionSources(t *testing.T, repo *db.SQLiteRepository, binding api.PreparedMediaBinding, expected []string) {
+	t.Helper()
+	selections, err := repo.ListFinalSelections(context.Background(), binding)
+	if err != nil {
+		t.Fatalf("list final selections: %v", err)
+	}
+	if len(selections) != len(expected) {
+		t.Fatalf("selection count = %d, want %d: %#v", len(selections), len(expected), selections)
+	}
+	for index, source := range expected {
+		if selections[index].Source != source || selections[index].Order != index {
+			t.Fatalf("selection[%d] = %#v, want source %q order %d", index, selections[index], source, index)
+		}
+	}
+}
+
+func dvdMenuTestSubject(sourcePath string) api.DVDMenuSubject {
+	return api.DVDMenuSubject{
+		MediaBinding: api.PreparedMediaBinding{
+			SourcePath:               sourcePath,
+			PreparedMediaFingerprint: "test-prepared-media",
+			PreparedGeneration:       1,
+		},
+		SourcePath: sourcePath,
+		DiscType:   "DVD",
+	}
+}
+
+func hasWarning(warnings []api.DVDMenuCaptureWarning, code string) bool {
+	for _, warning := range warnings {
+		if warning.Code == code {
+			return true
+		}
+	}
+	return false
+}
+
+func hasDiscWarning(warnings []api.DVDMenuCaptureWarning, discID string) bool {
+	for _, warning := range warnings {
+		if warning.DiscID == discID {
+			return true
+		}
+	}
+	return false
+}

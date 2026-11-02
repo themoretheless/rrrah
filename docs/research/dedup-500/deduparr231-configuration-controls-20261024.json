@@ -1,0 +1,29 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original setup/config route bodies with in-memory row/query/commit adapters and failed scheduler stub. No Pydantic/FastAPI, real SQL, scheduler, secrets or configuration writes executed.",
+  "authored_controls": [
+    {
+      "name": "empty optional config cannot clear existing value",
+      "passed": true,
+      "observed": "fixture-old"
+    },
+    {
+      "name": "generic nullable update makes scheduler getter fail",
+      "passed": true,
+      "observed": {
+        "error": "TypeError",
+        "value": null
+      }
+    },
+    {
+      "name": "failed restart occurs after configuration commit",
+      "passed": true,
+      "observed": {
+        "commits": 1,
+        "stored": "true",
+        "error": "ValueError: fixture restart failed"
+      }
+    }
+  ]
+}

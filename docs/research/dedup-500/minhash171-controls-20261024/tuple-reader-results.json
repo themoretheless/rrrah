@@ -1,0 +1,16 @@
+{
+  "scope": "Unchanged original read_tuples_from_file function, actual stdlib byte streams.",
+  "source_sha256": "a7ebcff242cbae0bcfdec7e573cd37336ab003c5f8928c4af5b64d20e2558b57",
+  "authored_controls_run": 4,
+  "original_tests_run": 0,
+  "observations": [
+    "aligned buffered input yields all3 little-endian records",
+    "unlimited mode yields same3 records",
+    {
+      "case": "valid complete stream with short5-byte reads raises instead of accumulating one8-byte record",
+      "error": "iterative unpacking requires a buffer of a multiple of 8 bytes",
+      "qualification": "generic stream boundary; actual fsspec/local read semantics and distributed pipeline not qualified"
+    },
+    "zero buffer count rejected with ValueError"
+  ]
+}

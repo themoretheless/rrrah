@@ -1,0 +1,12 @@
+{
+  "command": "CARGO_TARGET_DIR=.dedup-work/exact117-target-20261024 cargo test -p rrrah-dedup --locked --offline --test exact_path_identity",
+  "exit_code": 0,
+  "passed": 1,
+  "failed": 0,
+  "test_file": "crates/rrrah-dedup/tests/exact_path_identity.rs",
+  "test_sha256": "8cd0ba93f8f5231564052061e916adc86dd531105190e9238831f3f5d023620a",
+  "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+  "scope": "Unix real physical backslash/separator paths,2 content families,same size/mtime,overlapping directory/file roots,bothinputorders,scan+scan_verified;not Windows qualification",
+  "implementation_changes": false,
+  "regression_added": true
+}

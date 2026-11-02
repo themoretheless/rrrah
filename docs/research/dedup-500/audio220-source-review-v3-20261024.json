@@ -1,0 +1,152 @@
+{
+  "index": 220,
+  "repository": "Ryuk17/AudioDeduplication",
+  "commit": "e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb",
+  "tracked_blob_count": 22,
+  "whole_file_reads": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/00-README.md",
+      "sha256": "a5d3a19478f96b3b8c29de6bd7013f7c9aed35208d0e1a7728312aece66e5502",
+      "git_blob_sha1": "1f602a87da1f9a746a53b979cfbfe70756f760e7"
+    },
+    {
+      "path": "test/test.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/05-test.cpp",
+      "sha256": "c974aa8bd2c84ece58d9f5fbcd87880f172103af5e75ad8a85e23e309a92671d",
+      "git_blob_sha1": "407f900cb36c00e53d43702a41e90833975e9b98"
+    },
+    {
+      "path": "src/audiophash.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/02-audiophash.cpp",
+      "sha256": "91f8ec3cd39c4e1642877ac267a7833c8a934143c8c10909e981da4352e2fb13",
+      "git_blob_sha1": "624257360f974075c228b5c87b71788a569c3fdc"
+    },
+    {
+      "path": "src/audiophash.h",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/03-audiophash.h",
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "git_blob_sha1": "3838473d39f58af14618e2f6d1f64717d3c75224"
+    },
+    {
+      "path": "src/ph_fft.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/src/ph_fft.cpp",
+      "sha256": "3df3b3fd5aa266d9dd266a5019a16fd27de01333ac0f0ddf48b5ca25d05e9849",
+      "git_blob_sha1": "db2615769378c050b5cdf2a32400631c9a9b8bce"
+    },
+    {
+      "path": "src/ph_fft.h",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/src/ph_fft.h",
+      "sha256": "aa6696c84a94d856b1f6a64fef2ed2b53f7869d1dcd1d50140056318baea3c46",
+      "git_blob_sha1": "69ece097da6eb8d457fa9149057c0418acbaaed4"
+    },
+    {
+      "path": "Makefile",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/Makefile",
+      "sha256": "c580496f1ab09966f5279099ee7211857112a96191374ca28bcdff9138590126",
+      "git_blob_sha1": "4f2e22760cc2f5354b40137ddb14315a0322acb9"
+    },
+    {
+      "path": "script/plot_hash.py",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/plot_hash.py",
+      "sha256": "1ca8a5700539103ba5d3122d5b229015de8c45909391121e236bec96f787837d",
+      "git_blob_sha1": "c3bb8beed6d3b9c58f556ff5cb29290f7f56a5be"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/.gitignore",
+      "sha256": "3ba2020da55f76620d61950cb88f0d6cc0d5852eae7b2c03f8487a64c87da959",
+      "git_blob_sha1": "259148fa18f9fb7ef58563f4ff15fc7b172339fb"
+    }
+  ],
+  "whole_file_read_count": 9,
+  "original_tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "findings": [
+    "Test-named file is demonstration main printing audio comparison values, no assertions or expected decision.",
+    "Fixed reference/source WAV paths; degraded fixture not used by this main.",
+    "Mono-only reader rejects multichannel audio; read-failure path inspects channels after null result, potentially uninitialized if decoder leaves it unset. Static only.",
+    "save_hash prints uint32_t with percent-lu rather than matching fixed-width format; no file-open check. Static only.",
+    "Test source explicitly carries GPL3-or-later pHash header while root screening license Apache2; nested provenance distinct before adoption.",
+    "Native pHash/ASAN execution intentionally skipped per user instruction. Source/demo review does not restart that item."
+  ],
+  "remaining": [
+    {
+      "path": "LICENSE",
+      "bytes": 11357
+    },
+    {
+      "path": "sample/ref.wav",
+      "bytes": 165712
+    },
+    {
+      "path": "sample/src.wav",
+      "bytes": 135488
+    },
+    {
+      "path": "sample/src_degraded.wav",
+      "bytes": 171574
+    },
+    {
+      "path": "script/ref.hash",
+      "bytes": 6513
+    },
+    {
+      "path": "script/ref.png",
+      "bytes": 918262
+    },
+    {
+      "path": "script/ref_hash.png",
+      "bytes": 92386
+    },
+    {
+      "path": "script/src.hash",
+      "bytes": 5283
+    },
+    {
+      "path": "script/src.png",
+      "bytes": 879740
+    },
+    {
+      "path": "script/src_hash.png",
+      "bytes": 123240
+    },
+    {
+      "path": "src/dr_wav.h",
+      "bytes": 241117
+    },
+    {
+      "path": "src/pHash.cpp",
+      "bytes": 6414
+    },
+    {
+      "path": "src/pHash.h",
+      "bytes": 12104
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/audio220-source-review-v2-20261024.json",
+  "audio_hash_review": {
+    "native_execution": false,
+    "observations": [
+      "4096sample frames,128sample hop,33Bark filters produce32bit frame signatures; approximate temporal/spectral features, not byte equality.",
+      "No input validation for null buffer, negative/short length, invalid sample rate or allocation failure before writes.",
+      "Distance uses integer block count and discards remainder; exact-multiple loop can leave last allocated distance element unwritten before aggregation. Static source finding only.",
+      "Zero/small blocks and short hashes lack explicit validation before block access or division.",
+      "Distance returns new[] allocation while demo main releases with free; allocation ownership mismatch source-only.",
+      "FFT error path returns before freeing frame/filter/hash buffers.",
+      "Native pHash/ASAN run remains intentionally skipped; no reproducer or compiled code executed."
+    ]
+  },
+  "fft_build_plot_review": {
+    "execution": false,
+    "observations": [
+      "FFT allocates twiddle factors and work buffer on every audio frame; potential reuse opportunity requires benchmark/parity validation before adoption.",
+      "FFT recursion assumes valid power-of-two positive N without explicit validation; current caller fixed4096.",
+      "Makefile discovers *.c but tracked implementation uses *.cpp; alternate rule uses *.cc and no corresponding object list. Test main not included. Source build recipe not proof of compilable project.",
+      "Plot reader logs malformed lines and skips them, so visualized hash sequence can be incomplete without failure status.",
+      "Bit conversion extracts low32bits without range checking; plot is display helper, not matching validation.",
+      "No native compile/ASAN run, benchmark, matplotlib display or production edit performed."
+    ]
+  }
+}

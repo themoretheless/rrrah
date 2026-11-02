@@ -1,0 +1,23 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "container",
+    "indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges",
+    "--",
+    "--exact"
+  ],
+  "exit_code": 101,
+  "elapsed_seconds": 43.920221041946206,
+  "test_source_sha256_before": "a5a5e1d8ad45ff788a5ae0fe43159774be64225e8cd39de2fc12aab0738b4008",
+  "test_source_sha256_after": "a5a5e1d8ad45ff788a5ae0fe43159774be64225e8cd39de2fc12aab0738b4008",
+  "stdout": "",
+  "stderr": "warning: hiding a lifetime that's elided elsewhere is confusing\n   --> vendor/jxl-color/src/icc/parse.rs:229:38\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {\n    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here\n    |                                      |\n    |                                      the lifetime is elided here\n    |\n    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing\n    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default\nhelp: use `'_` for type paths\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {\n    |                                                                 ++++\n\nwarning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)\n   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\nerror[E0609]: no field `comparisons` on type `DirectoryPresentationGroups`\n    --> crates/rrrah-dedup/tests/container.rs:1019:35\n     |\n1019 |     assert!(explicit_retry.result.comparisons.issues.is_empty());\n     |                                   ^^^^^^^^^^^ unknown field\n     |\nhelp: one of the expressions' fields has a field of the same name\n     |\n1019 |     assert!(explicit_retry.result.result.comparisons.issues.is_empty());\n     |                                   +++++++\n\nerror[E0609]: no field `comparisons` on type `DirectoryPresentationGroups`\n    --> crates/rrrah-dedup/tests/container.rs:1020:35\n     |\n1020 |     assert!(explicit_retry.result.comparisons.different.is_empty());\n     |                                   ^^^^^^^^^^^ unknown field\n     |\nhelp: one of the expressions' fields has a field of the same name\n     |\n1020 |     assert!(explicit_retry.result.result.comparisons.different.is_empty());\n     |                                   +++++++\n\nerror[E0609]: no field `comparisons` on type `DirectoryPresentationGroups`\n    --> crates/rrrah-dedup/tests/container.rs:1022:31\n     |\n1022 |         explicit_retry.result.comparisons.equal,\n     |                               ^^^^^^^^^^^ unknown field\n     |\nhelp: one of the expressions' fields has a field of the same name\n     |\n1022 |         explicit_retry.result.result.comparisons.equal,\n     |                               +++++++\n\nerror[E0609]: no field `grouping` on type `DirectoryPresentationGroups`\n    --> crates/rrrah-dedup/tests/container.rs:1025:38\n     |\n1025 |     assert_eq!(explicit_retry.result.grouping.groups, vec![vec![0, 1, 2]]);\n     |                                      ^^^^^^^^ unknown field\n     |\nhelp: one of the expressions' fields has a field of the same name\n     |\n1025 |     assert_eq!(explicit_retry.result.result.grouping.groups, vec![vec![0, 1, 2]]);\n     |                                      +++++++\n\nFor more information about this error, try `rustc --explain E0609`.\nerror: could not compile `rrrah-dedup` (test \"container\") due to 4 previous errors\n",
+  "scope": "Authored three-animation fixture: explicit and auto low-memory refusal, both retry APIs and memory release; not RSS or all-platform qualification"
+}

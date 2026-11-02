@@ -1,0 +1,127 @@
+{
+  "id": "openclaw-neatmem",
+  "name": "Memory (NeatMem)",
+  "description": "NeatMem memory backend for OpenClaw — local, controllable, mem0-compatible. Injects recalled memories into agent context (auto-recall) and extracts facts after each turn (auto-capture). Both configurable via autoRecall/autoCapture settings.",
+  "version": "2.0.0",
+  "kind": "memory",
+  "contracts": {
+    "tools": [
+      "memory_search", "memory_get", "memory_list",
+      "memory_update", "memory_delete"
+    ]
+  },
+  "providerAuthEnvVars": {
+    "neatmem": ["NEATMEM_API_KEY"]
+  },
+  "providerAuthChoices": [
+    {
+      "provider": "neatmem",
+      "method": "api-key",
+      "choiceId": "neatmem-api-key",
+      "choiceLabel": "NeatMem API key",
+      "choiceHint": "For a local NeatMem server any token works, e.g. neatmem-local.",
+      "groupId": "neatmem",
+      "groupLabel": "NeatMem",
+      "optionKey": "apiKey",
+      "cliFlag": "--neatmem-api-key",
+      "cliOption": "--neatmem-api-key <key>",
+      "cliDescription": "NeatMem server API token"
+    }
+  ],
+  "uiHints": {
+    "apiKey": {
+      "label": "NeatMem API Key",
+      "sensitive": true,
+      "placeholder": "neatmem-local",
+      "help": "Use a SecretRef ({\"source\":\"env\",\"provider\":\"default\",\"id\":\"NEATMEM_API_KEY\"}) or ${NEATMEM_API_KEY} instead of storing the key directly."
+    },
+    "userId": {
+      "label": "Default User ID",
+      "placeholder": "default",
+      "help": "User ID for scoping memories"
+    },
+    "autoCapture": {
+      "label": "Auto-Capture",
+      "help": "Automatically store conversation context after each agent turn"
+    },
+    "autoRecall": {
+      "label": "Auto-Recall",
+      "help": "Automatically inject relevant memories before each agent turn"
+    },
+    "customInstructions": {
+      "label": "Custom Instructions",
+      "placeholder": "Only store user preferences and important facts...",
+      "help": "Natural language rules for what NeatMem should store or exclude"
+    },
+    "customCategories": {
+      "label": "Custom Categories",
+      "advanced": true,
+      "help": "Map of category names to descriptions sent to the extraction model as hints. Sensible defaults are built in."
+    },
+    "searchThreshold": {
+      "label": "Search Threshold",
+      "placeholder": "0.1",
+      "help": "Minimum similarity score for search results (0-1). Default: 0.1"
+    },
+    "topK": {
+      "label": "Top K Results",
+      "placeholder": "5",
+      "help": "Maximum number of memories to retrieve"
+    },
+    "recall": {
+      "label": "Recall Tuning",
+      "advanced": true,
+      "help": "Fine-tune recall/search behavior: threshold, rerank, keywordSearch, filterMemories."
+    }
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "apiKey": {
+        "type": "string"
+      },
+      "baseUrl": {
+        "type": "string",
+        "description": "Custom NeatMem server base URL"
+      },
+      "userId": {
+        "type": "string"
+      },
+      "userEmail": {
+        "type": "string"
+      },
+      "autoCapture": {
+        "type": "boolean"
+      },
+      "autoRecall": {
+        "type": "boolean"
+      },
+      "customInstructions": {
+        "type": "string"
+      },
+      "customCategories": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
+      "searchThreshold": {
+        "type": "number"
+      },
+      "topK": {
+        "type": "number"
+      },
+      "recall": {
+        "type": "object",
+        "properties": {
+          "rerank": { "type": "boolean" },
+          "keywordSearch": { "type": "boolean" },
+          "filterMemories": { "type": "boolean" },
+          "threshold": { "type": "number" }
+        }
+      }
+    },
+    "required": []
+  }
+}

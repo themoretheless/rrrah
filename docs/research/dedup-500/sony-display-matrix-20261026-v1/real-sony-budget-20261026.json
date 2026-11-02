@@ -1,0 +1,53 @@
+{
+  "binary_sha256": "fa824549f100a178bf3db0af65a0d31cf7342413849b3246cb8aa953ced2882e",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+  },
+  "rows": [
+    {
+      "budget_mib": 1000,
+      "exit_code": 0,
+      "seconds": 25.407091875036713,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-budget-1000-20261026.log",
+      "log_sha256": "c66cfb2637643d82683dd95a1916654d9763f08ead165405f033b32f42d0101a",
+      "candidates": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "managed_peak_bytes": 1017069952,
+      "managed_released": true,
+      "issues_empty": true
+    },
+    {
+      "budget_mib": 900,
+      "exit_code": 0,
+      "seconds": 5.084640374989249,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-budget-900-20261026.log",
+      "log_sha256": "dccf7a513db4b66c0dc26671515f291c6bc614a77425f712be5fd65ec490ad0d",
+      "candidates": [],
+      "managed_peak_bytes": 632917952,
+      "managed_released": true,
+      "issues_empty": false,
+      "incomplete_due_to_budget": true,
+      "diagnostic_summary": "indexed_features=990 descriptor_hits=292112 proposed_pairs=1 pixel_verification_pairs=0 analysed=[1, 3] file_issues=[(2, Decode(Decode(Develop(Buffer(Capacity { requested: 384000000, used: 632841952, limit: 943718400 }))))), (4, Decode(Decode(Develop(Buffer(Capacity { requested: 384000000, used: 632917952, limit: 943718400 })))))] pair_issues=[] source_issues=[]"
+    }
+  ],
+  "scope": "TIFF-first four-file Sony collection: 1000 MiB admits both expected pairs; 900 MiB isolates RAW allocation failures and produces an incomplete report with no accepted candidates. Both release managed memory without exceeding the cap.",
+  "limitations": [
+    "Research example exits zero even for a report with per-file failures; inspect diagnostics, not exit code alone.",
+    "Managed accounting is not process RSS.",
+    "Two scenes and finite budgets only."
+  ],
+  "probe_source_sha256": "8b7281cb1f0b300f6a6b4a2332b30f695d95b30a9c292325065c4e115ed54a4d"
+}

@@ -1,0 +1,8 @@
+import fs from 'node:fs';import vm from 'node:vm';import path from 'node:path';import assert from 'node:assert/strict';
+const source=fs.readFileSync('docs/research/dedup-500/evidence/botnick--telegram-media-downloader/02-dedup.js','utf8');
+let hashCalls=0,pageCalls=0;const events=[];
+const db={prepare(sql){if(sql.includes('COUNT(*) AS n'))return{get:()=>({n:3})};if(sql.includes('COUNT(DISTINCT'))return{get:()=>({n:0})};if(sql.startsWith('UPDATE'))return{run(){throw Error('unexpected update')}};return{all(){pageCalls++;return[]}};}};
+const ctx=vm.createContext({fs,path,process,setImmediate,getDb:()=>db,getDownloadsDir:()=>'/owned/no-files',sha256OfFile:async()=>{hashCalls++;throw Error('unexpected hash')}});
+vm.runInContext(source.replace(/^import .*;\s*$/gm,'').replace(/export /g,''),ctx);ctx.options={signal:{aborted:true},onProgress:e=>events.push(e)};
+const result=await vm.runInContext('findDuplicates(options)',ctx);assert.equal(hashCalls,0);assert.equal(pageCalls,0);assert.equal(result.hashed,0);assert.equal(result.scanned,3);assert.equal(events.at(-1).stage,'done');assert.equal(events.at(-1).processed,3);
+fs.writeFileSync('docs/research/dedup-500/telegram198-controls-20261024/abort-control-results.json',JSON.stringify({cases:1,scope:'Complete unchanged original module body in Node VM;DB count/statement adapters and already-aborted signal. No filesystem mutation,real DB/hash/core.',observed:{result,events,hashCalls,pageCalls},finding:'Already-aborted scan emits done processed3/total3 despite zero hash/page calls;scanned is planned row count. No explicit aborted status in return.'},null,2)+'\n');console.log('Already-aborted progress mismatch reproduced');

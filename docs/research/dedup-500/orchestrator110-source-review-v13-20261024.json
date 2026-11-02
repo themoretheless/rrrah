@@ -1,0 +1,40 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v12-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "1be3f929be8998777a70ac432c8a6e89bb06e1a5a3d657fcb94da19adc58c91f",
+      "git_blob": "cc8f49ba06ea32641b4b280d40f9b43d955420ad",
+      "whole_text_read": true
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "08-Cargo.toml",
+      "sha256": "699d1c61aa178189622796d5aaf80f5cd7d1fa2cc79a55455c61fa3fcd4f1c6b",
+      "git_blob": "e503abf1468fa3f26ffe8184a3ebd76f242bf642",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 17,
+  "whole_repo_complete": false,
+  "runtime_requalification": {
+    "pipeline_original_tests_passed": 26,
+    "owned_unicode_controls_passed": 2,
+    "dependency": "thiserror1.0.69originalcompatible1.0range",
+    "manifest_dir": "docs/research/dedup-500/orchestrator110-pipeline-dependencies-v2-20261024",
+    "scope": "Previousownedharnessmistakenlyusedthiserror2;correctedandrerunall28pipelinechecks. Distincttestcountsunchanged."
+  },
+  "findings": [
+    "READMEarchitectureexplicitlysaysdedupoptionalworkerwrapper;absencefromdefaultstagesisconsistentwiththatsection,notnewwiringdefect. Openingbroadclaimrequireswrapper/HTTPcontext.",
+    "READMEnumbers3calls12requestsandsemanticmodelscoresareupstreamexamplesnotcurrentreproducedbenchmarks.",
+    "Rustminimum1.88declaredbutoptionalrigrequires1.95andtantivy1.90permanifestcomments;current1.98.1isolatedtestsnotMSRVqualification.",
+    "Featuresdefaultempty;fulldoesnotmeanalloptionalfeatures. Noallfeaturesbuildclaim.",
+    "READMErecommendations/commandsreviewedassourcematerialonly,noinstallorproviderrequestsrun."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

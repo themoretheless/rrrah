@@ -1,0 +1,37 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 23.18s
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-842a9faad03c0b91)
+
+running 1 test
+test raw_split_comparison_matches_baseline_and_edit_without_another_atlas ... RAW split comparison adapter: Metal Apple M4 Max
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 2.12s
+

@@ -1,0 +1,2405 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package metadata
+
+import (
+	"context"
+	"fmt"
+	"os"
+	"path/filepath"
+	"regexp"
+	"slices"
+	"sort"
+	"strconv"
+	"strings"
+	"time"
+	"unicode"
+
+	"github.com/autobrr/upbrr/internal/logging"
+
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+
+	"github.com/autobrr/rls/taginfo"
+
+	"github.com/autobrr/upbrr/internal/languageutil"
+	"github.com/autobrr/upbrr/internal/mediafacts"
+	"github.com/autobrr/upbrr/internal/metadata/discparse"
+	"github.com/autobrr/upbrr/internal/metadata/metautil"
+	pathutil "github.com/autobrr/upbrr/internal/pathing"
+	"github.com/autobrr/upbrr/internal/redaction"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+var repackPattern = regexp.MustCompile(`(?i)\b(?:REPACK\d?|RERIP|PROPER\d?|V[2-4])\b`)
+var editionWordPattern = regexp.MustCompile(`(?i)\bedition\b`)
+var editionBadTokenPattern = regexp.MustCompile(`(?i)\b(?:internal|limited|retail|version|remastered)\b`)
+var editionWhitespacePattern = regexp.MustCompile(`\s+`)
+var durationTokenPattern = regexp.MustCompile(`(?i)(\d+(?:\.\d+)?)\s*(milliseconds?|msecs?|ms|hours?|hrs?|h|minutes?|mins?|min|seconds?|secs?|sec|s)\b`)
+var numericPattern = regexp.MustCompile(`\d+`)
+var releaseTokenSeparatorPattern = regexp.MustCompile(`[^A-Z0-9]+`)
+
+func videoBitrateAssessment(doc mediaInfoDoc) api.VideoBitrateAssessment {
+	generalTracks, videoTracks, audioTracks := splitMediaInfoTracks(doc)
+	directBitrateInvalid := false
+	for _, track := range videoTracks {
+		raw, ok := track["BitRate"]
+		if !ok {
+			continue
+		}
+		bitrate, parsed := parseMediaInfoBitrate(raw)
+		if parsed && bitrate > 0 {
+			return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusPresent, BitsPerSecond: bitrate}
+		}
+		directBitrateInvalid = true
+	}
+	var overall int64
+	found := false
+	for _, track := range generalTracks {
+		if raw, ok := track["OverallBitRate"]; ok {
+			found = true
+			overall, _ = parseMediaInfoBitrate(raw)
+			break
+		}
+	}
+	if !found {
+		if directBitrateInvalid {
+			return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusInvalid}
+		}
+		return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusUnavailable}
+	}
+	if overall <= 0 {
+		return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusInvalid}
+	}
+	var audio int64
+	audioBitrateFullyKnown := true
+	for _, track := range audioTracks {
+		raw, ok := track["BitRate"]
+		if !ok {
+			audioBitrateFullyKnown = false
+			continue
+		}
+		if bitrate, parsed := parseMediaInfoBitrate(raw); parsed && bitrate > 0 {
+			audio += bitrate
+		} else {
+			audioBitrateFullyKnown = false
+		}
+	}
+	if !audioBitrateFullyKnown {
+		return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusUnavailable}
+	}
+	video := overall - audio
+	if video <= 0 {
+		return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusInvalid}
+	}
+	return api.VideoBitrateAssessment{Status: api.VideoBitrateStatusPresent, BitsPerSecond: video}
+}
+
+// deriveMediaFacts enriches prepared evidence from MediaInfo, BDInfo, and filename
+// tokens, overrides, and tracker rules, then rebuilds the release name.
+func (s *Service) deriveMediaFacts(ctx context.Context, meta preparationstate.State) (preparationstate.State, error) {
+	logger := logging.FromContext(ctx, s.logger)
+
+	select {
+	case <-ctx.Done():
+		return preparationstate.State{}, fmt.Errorf("context canceled: %w", ctx.Err())
+	default:
+	}
+
+	miDoc, err := loadMediaInfoDoc(meta.MediaInfoJSONPath)
+	if err != nil {
+		return preparationstate.State{}, err
+	}
+
+	meta.MediaInfoUniqueID, meta.MediaInfoUniqueIDPresent = validateMediaInfoUniqueID(meta, miDoc)
+	meta.VideoBitrate = videoBitrateAssessment(miDoc)
+	if !meta.MediaInfoUniqueIDPresent {
+		logger.Warnf("metadata: mediainfo validation failed (missing unique id)")
+	}
+	meta.MediaTracks, meta.PrimaryAudioTrackID, meta.TrackAudioLanguages, meta.TrackSubtitleLanguages, err = mediaTrackFacts(meta, miDoc)
+	if err != nil {
+		return preparationstate.State{}, err
+	}
+	meta.TrackCoverageComplete = len(meta.Discs) <= 1 && len(meta.FileList) <= 1 && len(meta.SelectedBDMVPlaylists) <= 1
+	meta.AudioLanguages = append([]string(nil), meta.TrackAudioLanguages...)
+	meta.SubtitleLanguages = append([]string(nil), meta.TrackSubtitleLanguages...)
+
+	bdinfo := loadBDInfo(meta)
+	bdAudioLanguages, bdSubtitleLanguages := extractBDInfoLanguages(bdinfo)
+	if len(meta.AudioLanguages) == 0 {
+		meta.AudioLanguages = bdAudioLanguages
+	}
+	if len(meta.SubtitleLanguages) == 0 {
+		meta.SubtitleLanguages = bdSubtitleLanguages
+	}
+	if len(meta.AudioLanguages) > 0 || len(meta.SubtitleLanguages) > 0 {
+		logger.Debugf("metadata: media languages audio=%v subs=%v", meta.AudioLanguages, meta.SubtitleLanguages)
+	}
+
+	meta.Container = containerFromMeta(meta)
+	logger.Debugf("metadata: media details container=%q", meta.Container)
+
+	audio, channels, hasCommentary := audioFromMedia(meta, miDoc, bdinfo)
+	meta.Audio = audio
+	meta.Channels = channels
+	meta.HasCommentary = hasCommentary
+	logger.Debugf("metadata: media details audio=%q channels=%q commentary=%t", meta.Audio, meta.Channels, meta.HasCommentary)
+
+	meta.Is3D = threeDFromMedia(miDoc, bdinfo)
+	logger.Debugf("metadata: media details 3d=%q", meta.Is3D)
+
+	source, typeValue := sourceAndType(meta, miDoc)
+	if source != "" {
+		meta.Source = source
+		meta.Release.Source = source
+	}
+	if typeValue != "" {
+		meta.Type = typeValue
+		meta.Release.Type = typeValue
+	}
+	if strings.EqualFold(meta.DiscType, "DVD") {
+		dvdDetails := extractDVDMediaInfo(meta)
+		if strings.TrimSpace(dvdDetails.Resolution) != "" && !strings.EqualFold(dvdDetails.Resolution, "OTHER") {
+			meta.Release.Resolution = dvdDetails.Resolution
+		}
+		dvdDetails.SourcePath = meta.SourcePath
+		dvdDetails.IFOPath = meta.DVDIFOPath
+		dvdDetails.VOBPath = meta.DVDVOBPath
+		dvdDetails.VOBSet = meta.DVDVOBSet
+		dvdDetails.MediaInfoJSON = meta.MediaInfoJSONPath
+		dvdDetails.MediaInfoText = meta.MediaInfoTextPath
+		dvdDetails.VOBMediaInfoRaw = metautil.FirstNonEmptyTrimmed(strings.TrimSpace(meta.DVDVOBMediaInfoText), strings.TrimSpace(meta.DVDVOBMediaInfoJSON))
+		dvdDetails.UpdatedAt = time.Now().UTC()
+		if err := s.repo.SaveDVDMediaInfo(ctx, dvdDetails); err != nil {
+			return preparationstate.State{}, fmt.Errorf("metadata: persist dvd mediainfo details: %w", err)
+		}
+	}
+	// For non-DVD content, if rls did not parse a resolution from the filename,
+	// fall back to deriving it from the MediaInfo video track dimensions —
+	// matching the Python get_resolution() behaviour.
+	if strings.TrimSpace(meta.Release.Resolution) == "" && !strings.EqualFold(meta.DiscType, "DVD") {
+		if res := resolutionFromMediaInfo(miDoc, meta.SourcePath); res != "" {
+			meta.Release.Resolution = res
+			logger.Debugf("metadata: resolution derived from mediainfo %q", res)
+		}
+	}
+	logger.Debugf("metadata: media details source=%q type=%q resolution=%q", meta.Source, meta.Type, meta.Release.Resolution)
+
+	meta.UHD = uhdFromMeta(meta)
+	meta.HDRFacts = hdrFactsFromMedia(miDoc, bdinfo, meta)
+	meta.HDR = hdrFactsDisplay(meta.HDRFacts)
+	logger.Debugf("metadata: media details uhd=%q hdr=%q", meta.UHD, meta.HDR)
+
+	meta = s.applyBlurayMetadata(ctx, meta, bdinfo)
+	if err := ctx.Err(); err != nil {
+		return preparationstate.State{}, fmt.Errorf("metadata: blu-ray provider refresh canceled: %w", err)
+	}
+	if meta.ProviderMetadata.Bluray != nil {
+		logger.Debugf(
+			"metadata: blu-ray.com candidates=%d selected=%q score=%.1f threshold=%.1f",
+			len(meta.ProviderMetadata.Bluray.Candidates),
+			meta.ProviderMetadata.Bluray.SelectedReleaseID,
+			meta.ProviderMetadata.Bluray.BestScore,
+			meta.ProviderMetadata.Bluray.Threshold,
+		)
+	}
+
+	meta.Distributor = normalizeDistributor(meta.Distributor)
+	logger.Debugf("metadata: media details distributor=%q", meta.Distributor)
+
+	if strings.EqualFold(meta.DiscType, "BDMV") {
+		meta.Region = regionFromBDInfo(bdinfo, meta.Region)
+		meta.VideoCodec = videoCodecFromBDInfo(bdinfo)
+		if bdinfo != nil && len(bdinfo.Video) > 0 {
+			meta.BitDepth = numericPattern.FindString(bdinfo.Video[0].BitDepth)
+		}
+	} else {
+		meta.VideoEncode, meta.VideoCodec, meta.HasEncodeSettings, meta.BitDepth = videoEncodeFromMedia(miDoc, meta.Type)
+	}
+	logger.Debugf(
+		"metadata: media details region=%q video_encode=%q video_codec=%q bit_depth=%q",
+		meta.Region,
+		meta.VideoEncode,
+		meta.VideoCodec,
+		meta.BitDepth,
+	)
+
+	parts := editionFromMeta(meta, miDoc)
+	meta.EditionSet, meta.Cut, meta.Edition, meta.Presentation, meta.Repack = parts.Set, parts.Cut, parts.Edition, parts.Presentation, parts.Repack
+	meta.WebDV = false
+	logger.Debugf("metadata: media details edition=%q repack=%q webdv=%t", meta.Edition, meta.Repack, meta.WebDV)
+
+	meta.MediaInfoEncodeSettingsPresent = true
+	if !strings.EqualFold(meta.DiscType, "BDMV") && strings.EqualFold(meta.Type, "ENCODE") && !strings.EqualFold(meta.VideoCodec, "AV1") {
+		meta.MediaInfoEncodeSettingsPresent = validateMediaInfoSettings(miDoc)
+		if !meta.MediaInfoEncodeSettingsPresent {
+			logger.Warnf("metadata: mediainfo validation failed (missing encode settings)")
+		}
+	}
+
+	if meta.StreamOptimized != 0 {
+		meta.StreamOptimized = 1
+	}
+	logger.Debugf("metadata: media details stream_optimized=%d", meta.StreamOptimized)
+
+	service, longName, filename := resolveService(meta)
+	if meta.Service == "" && service != "" {
+		meta.Service = service
+	}
+	if meta.ServiceLongName == "" && longName != "" {
+		meta.ServiceLongName = longName
+	}
+	if meta.Filename == "" && filename != "" {
+		meta.Filename = filename
+	}
+	logger.Debugf("metadata: media details service=%q service_longname=%q", meta.Service, meta.ServiceLongName)
+
+	if err := applyMetadataOverrides(&meta); err != nil {
+		return preparationstate.State{}, err
+	}
+	meta.Audio = applyAudioLanguagePrefix(meta.Audio, meta)
+	RebuildReleaseName(&meta, logger)
+
+	// Scene detection runs here — after external IDs are resolved and the release
+	// name is rebuilt — so the srrdb imdb: lookup has a resolved IMDb id and full
+	// normalized metadata, and so rename/scene fields are populated before tracker
+	// rules (which read meta.Scene / meta.SceneNFOPath / meta.SceneRenamed).
+	meta, err = s.applySceneDetection(ctx, meta)
+	if err != nil {
+		return preparationstate.State{}, err
+	}
+	if !strings.EqualFold(meta.DiscType, "BDMV") {
+		// Encode spelling follows the final naming type, including corrections,
+		// while the measured codec and other media evidence remain unchanged.
+		effective := meta
+		applyReleaseNameValueOverrides(&effective)
+		typeValue := releaseNameRequestFromMeta(effective, logger).Type
+		meta.VideoEncode, _, _, _ = videoEncodeFromMedia(miDoc, typeValue)
+	}
+	captureAvailableGeneratedName(&meta, logger)
+	// Fold fact-producing name instructions into canonical prepared state
+	// exactly once, after all evidence resolution, so explicit values and
+	// clears win over derived evidence and the final name cannot diverge from
+	// the facts every downstream projection consumes.
+	applyReleaseNameValueOverrides(&meta)
+	// Scene detection can supply the service (from the NFO), which WEB release
+	// names embed, so rebuild once more to fold in scene-derived metadata and
+	// the effective instruction values.
+	RebuildReleaseName(&meta, logger)
+
+	return meta, nil
+}
+
+// applySceneDetection runs srrdb scene/rename detection and copies the result
+// onto meta. It is best-effort for transient srrdb/network failures (skip scene,
+// never block the upload), but context cancellation/deadline is propagated so the
+// pipeline aborts rather than continuing into tracker rules. Detection is gated
+// by config (scene_detection) via a nil detector.
+func (s *Service) applySceneDetection(ctx context.Context, meta preparationstate.State) (preparationstate.State, error) {
+	logger := logging.FromContext(ctx, s.logger)
+
+	if s.scene == nil {
+		return meta, nil
+	}
+	result, err := s.scene.Detect(ctx, meta)
+	if err != nil {
+		switch {
+		case isContextError(ctx, err):
+			return meta, fmt.Errorf("metadata: scene detect: %w", err)
+		case isSceneNFOError(err):
+			logger.Warnf("metadata: scene nfo side effect failed: %s", redaction.RedactValue(err.Error(), nil))
+			// The primary match may still be present alongside a recoverable NFO
+			// side-effect error; apply it when it carries data.
+			if !sceneResultHasData(result) {
+				return meta, nil
+			}
+		default:
+			// Transient srrdb/network failure: skip scene, never block the upload.
+			logger.Debugf("metadata: scene detect skipped: %s", redaction.RedactValue(err.Error(), nil))
+			return meta, nil
+		}
+	}
+	applySceneResult(&meta, result)
+	// Backfill scene-discovered IMDb only when resolution found none and no
+	// explicit provider anchor or IMDb clear constrains the identity.
+	effectiveOverrides := effectiveProviderOverrides(meta.ExternalIDOverrides, meta.Identity)
+	if meta.Identity.IMDBID == 0 && result.IMDBID > 0 && !clearedProviderOverride(effectiveOverrides.IMDBID) &&
+		!hasPositiveProviderOverride(effectiveOverrides) {
+		meta.Identity.IMDBID = result.IMDBID
+	}
+	if meta.Scene {
+		logger.Debugf("metadata: scene release detected name=%q imdb=%d renamed=%t", meta.SceneName, meta.SceneIMDB, meta.SceneRenamed)
+	}
+	if meta.SceneNFOPath != "" {
+		if meta.SceneNFONew {
+			logger.Debugf("metadata: scene nfo downloaded %s", meta.SceneNFOPath)
+		} else {
+			logger.Debugf("metadata: scene nfo found %s", meta.SceneNFOPath)
+		}
+	}
+	return meta, nil
+}
+
+func applyMetadataOverrides(meta *preparationstate.State) error {
+	if meta == nil {
+		return nil
+	}
+
+	overrides := meta.MetadataOverrides
+	if overrides.Distributor != nil {
+		meta.Distributor = normalizeDistributor(*overrides.Distributor)
+	}
+	if err := applyTrackLanguageOverrides(meta, overrides.TrackLanguages); err != nil {
+		return err
+	}
+	trackAudioLanguages := aggregateTrackLanguages(meta.MediaTracks, api.MediaTrackAudio)
+	trackSubtitleLanguages := aggregateTrackLanguages(meta.MediaTracks, api.MediaTrackSubtitle)
+	meta.TrackAudioLanguages = append([]string(nil), trackAudioLanguages...)
+	meta.TrackSubtitleLanguages = append([]string(nil), trackSubtitleLanguages...)
+	if len(trackAudioLanguages) > 0 || slices.ContainsFunc(meta.MediaTracks, func(track api.MediaTrackFacts) bool {
+		return track.Kind == api.MediaTrackAudio && track.LanguageProvenance.IsManual()
+	}) {
+		meta.AudioLanguages = trackAudioLanguages
+	}
+	if len(trackSubtitleLanguages) > 0 || slices.ContainsFunc(meta.MediaTracks, func(track api.MediaTrackFacts) bool {
+		return track.Kind == api.MediaTrackSubtitle && track.LanguageProvenance.IsManual()
+	}) {
+		meta.SubtitleLanguages = trackSubtitleLanguages
+	}
+	meta.AudioLanguagesProvenance = api.FactProvenanceAutomatic
+	meta.SubtitleLanguagesProvenance = api.FactProvenanceAutomatic
+	if overrides.AudioLanguages != nil {
+		meta.AudioLanguages = languageutil.NormalizeLanguageList(*overrides.AudioLanguages)
+		meta.AudioLanguagesProvenance = factProvenanceForList(meta.AudioLanguages)
+	}
+	if overrides.SubtitleLanguages != nil {
+		meta.SubtitleLanguages = languageutil.NormalizeLanguageList(*overrides.SubtitleLanguages)
+		meta.SubtitleLanguagesProvenance = factProvenanceForList(meta.SubtitleLanguages)
+	}
+	meta.HardcodedSubs = hasHardcodedSubtitleMarker(meta.SourcePath)
+	meta.HardcodedSubsProvenance = api.FactProvenanceAutomatic
+	meta.HardcodedSubtitleLanguages = nil
+	meta.HardcodedSubtitleCoverage = nil
+	meta.HardcodedSubtitleLanguagesProvenance = api.FactProvenanceAutomatic
+	if overrides.HardcodedSubtitleLanguages != nil {
+		for _, value := range languageutil.NormalizeLanguageList(*overrides.HardcodedSubtitleLanguages) {
+			language, coverage := languageutil.SubtitleLanguageParts(value)
+			meta.HardcodedSubtitleLanguages = append(meta.HardcodedSubtitleLanguages, language)
+			meta.HardcodedSubtitleCoverage = append(meta.HardcodedSubtitleCoverage, api.SubtitleLanguageCoverage{
+				Language: language,
+				Coverage: api.SubtitleCoverage(strings.ToLower(coverage)),
+			})
+		}
+		meta.HardcodedSubtitleLanguages = languageutil.NormalizeLanguageList(meta.HardcodedSubtitleLanguages)
+		meta.HardcodedSubtitleLanguagesProvenance = factProvenanceForList(meta.HardcodedSubtitleLanguages)
+		meta.HardcodedSubs = len(meta.HardcodedSubtitleLanguages) > 0
+		meta.HardcodedSubsProvenance = api.FactProvenanceManual
+	}
+	// Keep legacy explicit false authoritative; bare -hc can explicitly enable
+	// unknown hardcoded languages for a later tracker-scoped question.
+	if overrides.HardcodedSubs != nil {
+		meta.HardcodedSubs = *overrides.HardcodedSubs
+		meta.HardcodedSubsProvenance = api.FactProvenanceManual
+	}
+	if !meta.HardcodedSubs && len(meta.HardcodedSubtitleLanguages) > 0 {
+		meta.HardcodedSubtitleLanguages = nil
+		meta.HardcodedSubtitleCoverage = nil
+		meta.HardcodedSubtitleLanguagesProvenance = api.FactProvenanceAutomatic
+	}
+	if overrides.PersonalRelease != nil {
+		meta.PersonalRelease = *overrides.PersonalRelease
+	}
+	if overrides.Commentary != nil {
+		meta.HasCommentary = *overrides.Commentary
+	}
+	if overrides.WebDV != nil {
+		meta.WebDV = *overrides.WebDV
+	}
+	if overrides.StreamOptimized != nil {
+		if *overrides.StreamOptimized {
+			meta.StreamOptimized = 1
+		} else {
+			meta.StreamOptimized = 0
+		}
+	}
+	if overrides.Anime != nil {
+		meta.Anime = *overrides.Anime
+	}
+	return nil
+}
+
+func loadBDInfo(meta preparationstate.State) *discparse.BDInfo {
+	if !strings.EqualFold(meta.DiscType, "BDMV") {
+		return nil
+	}
+	for _, disc := range meta.Discs {
+		for _, report := range disc.Reports {
+			if summary := strings.TrimSpace(report.Summary); summary != "" {
+				return discparse.ParseBDInfoSummary(summary, "", meta.SourcePath)
+			}
+		}
+	}
+	return nil
+}
+
+func containerFromMeta(meta preparationstate.State) string {
+	switch strings.ToUpper(strings.TrimSpace(meta.DiscType)) {
+	case "BDMV":
+		return "m2ts"
+	case "HDDVD":
+		return "evo"
+	case "DVD":
+		return "vob"
+	}
+	if len(meta.FileList) == 0 {
+		ext := strings.TrimPrefix(filepath.Ext(meta.SourcePath), ".")
+		return strings.ToLower(ext)
+	}
+	largest := meta.FileList[0]
+	largestSize := int64(-1)
+	for _, path := range meta.FileList {
+		info, err := os.Stat(path)
+		if err != nil {
+			continue
+		}
+		if size := info.Size(); size > largestSize {
+			largestSize = size
+			largest = path
+		}
+	}
+	ext := strings.TrimPrefix(filepath.Ext(largest), ".")
+	return strings.ToLower(ext)
+}
+
+// audioFromMedia derives the primary audio label, channel count, and
+// commentary presence from BDInfo or MediaInfo. Object-audio markers such as
+// Atmos are emitted after the channel count to match release-name ordering.
+// MediaInfo title-derived markers such as Auro3D come from the selected
+// primary audio track.
+func audioFromMedia(meta preparationstate.State, doc mediaInfoDoc, bdinfo *discparse.BDInfo) (string, string, bool) {
+	if bdinfo != nil && len(bdinfo.Audio) > 0 {
+		track := bdinfo.Audio[0]
+		codec := normalizeAudioFormat(map[string]any{
+			"Format_Commercial": track.Codec,
+			"Format":            track.Codec,
+		})
+		codec = strings.TrimSpace(codec)
+		channels := strings.TrimSpace(track.Channels)
+		if channels == "" {
+			channels = "Unknown"
+		}
+		extra := ""
+		if track.Atmos != "" && !strings.Contains(strings.ToLower(codec), "atmos") {
+			extra = "Atmos"
+		}
+		return strings.Join(strings.Fields(strings.Join([]string{codec, channels, extra}, " ")), " "), channels, false
+	}
+
+	_, _, audioTracks := splitMediaInfoTracks(doc)
+	if len(audioTracks) == 0 {
+		return "", "", false
+	}
+	track := selectPrimaryAudioTrack(audioTracks)
+	primaryAudioTitle := strings.ToLower(audioTrackTitle(track))
+	format := normalizeAudioFormat(track)
+	additional := trackString(track, "Format_AdditionalFeatures", "Format_AdditionalFeatures_String", "Format_AdditionalFeatures_Original")
+	formatSettings := normalizeAudioFormatSettings(trackString(track, "Format_Settings"))
+	format = applyDTSAudioAdditional(format, additional)
+	channels := determineChannelCount(
+		trackString(track, "Channels_Original", "Channels", "Channel_s_", "Channel_s__Original"),
+		trackString(track, "ChannelLayout", "ChannelLayout_Original", "ChannelPositions", "ChannelPositions_Original"),
+		additional,
+		trackString(track, "Format", "Format_String"),
+	)
+	if channels == "" {
+		channels = "Unknown"
+	}
+
+	formatLower := strings.ToLower(format)
+	extra := ""
+	if isAtmosAudio(additional, formatLower, trackString(track, "ChannelLayout", "ChannelPositions")) && !strings.Contains(formatLower, "atmos") {
+		extra = "Atmos"
+	}
+	if isDTSXAudio(additional, formatLower) && !strings.Contains(strings.ToLower(format), "dts:x") {
+		if strings.EqualFold(format, "DTS") {
+			format = "DTS:X"
+		} else {
+			format = strings.TrimSpace(format + " DTS:X")
+		}
+	}
+	if strings.EqualFold(format, "DD") && channels == "7.1" {
+		format = "DD+"
+	}
+	if formatSettings == "EX" && channels != "5.1" {
+		formatSettings = ""
+	}
+	if extra == "" && strings.Contains(primaryAudioTitle, "auro3d") {
+		extra = "Auro3D"
+	}
+	commentary := false
+	for _, audioTrack := range audioTracks {
+		title := strings.ToLower(audioTrackTitle(audioTrack))
+		if strings.Contains(title, "commentary") {
+			commentary = true
+			break
+		}
+	}
+	prefix := ""
+	if strings.TrimSpace(meta.DiscType) == "" {
+		prefix = audioLanguagePrefix(meta, audioTracks)
+	}
+	return strings.Join(strings.Fields(strings.Join([]string{prefix, format, formatSettings, channels, extra}, " ")), " "), channels, commentary
+}
+
+func normalizeAudioFormatSettings(value string) string {
+	trimmed := strings.TrimSpace(value)
+	if strings.EqualFold(trimmed, "Explicit") {
+		return ""
+	}
+	if strings.EqualFold(trimmed, "Dolby Surround EX") {
+		return "EX"
+	}
+	return ""
+}
+
+// audioTrackTitle returns the first MediaInfo title field used to identify
+// commentary or compatibility tracks before audio language classification.
+func audioTrackTitle(track map[string]any) string {
+	return trackString(track, "Title", "title", "Title_String", "Title_String2", "Title_String3")
+}
+
+func audioLanguagePrefix(meta preparationstate.State, tracks []map[string]any) string {
+	filtered := make([]map[string]any, 0, len(tracks))
+	for _, track := range tracks {
+		if isCommentaryOrCompatibilityAudioValue(audioTrackTitle(track)) {
+			continue
+		}
+		filtered = append(filtered, track)
+	}
+	if len(filtered) == 0 {
+		return ""
+	}
+
+	languages := make([]string, 0, len(filtered))
+	for _, track := range filtered {
+		languages = append(languages, trackString(track, "Language", "Language_String", "Language_String2", "Language_String3"))
+	}
+	return audioLanguagePrefixFromLanguages(meta, languages)
+}
+
+func audioLanguagePrefixFromLanguages(meta preparationstate.State, languages []string) string {
+	if len(languages) == 0 {
+		return ""
+	}
+
+	original := canonicalAudioLanguage(originalAudioLanguage(meta))
+	if original == "" || original == "unknown" {
+		return ""
+	}
+
+	hasEnglish := false
+	hasOriginal := false
+	hasOther := false
+	for _, value := range languages {
+		language := canonicalAudioLanguage(value)
+		if language == "" || language == "unknown" {
+			continue
+		}
+		if language == "english" {
+			hasEnglish = true
+		}
+		if language == original {
+			hasOriginal = true
+		}
+		if language != "english" && language != original {
+			hasOther = true
+		}
+	}
+
+	if len(languages) > 1 && ((hasEnglish && (hasOriginal || hasOther)) || (hasOriginal && hasOther)) {
+		return "Dual-Audio"
+	}
+	if hasEnglish && !hasOriginal && original != "english" {
+		return "Dubbed"
+	}
+	return ""
+}
+
+func originalAudioLanguage(meta preparationstate.State) string {
+	if meta.MetadataOverrides.OriginalLanguage != nil {
+		return *meta.MetadataOverrides.OriginalLanguage
+	}
+	switch {
+	case meta.ProviderMetadata.TMDB != nil && strings.TrimSpace(meta.ProviderMetadata.TMDB.OriginalLanguage) != "":
+		return meta.ProviderMetadata.TMDB.OriginalLanguage
+	case meta.ProviderMetadata.IMDB != nil && strings.TrimSpace(meta.ProviderMetadata.IMDB.OriginalLanguage) != "":
+		return meta.ProviderMetadata.IMDB.OriginalLanguage
+	case meta.ProviderMetadata.TVDB != nil && strings.TrimSpace(meta.ProviderMetadata.TVDB.OriginalLanguage) != "":
+		return meta.ProviderMetadata.TVDB.OriginalLanguage
+	case meta.ProviderMetadata.TVmaze != nil && strings.TrimSpace(meta.ProviderMetadata.TVmaze.Language) != "":
+		return meta.ProviderMetadata.TVmaze.Language
+	default:
+		return ""
+	}
+}
+
+func canonicalAudioLanguage(value string) string {
+	token := strings.ToLower(strings.TrimSpace(value))
+	if token == "" {
+		return ""
+	}
+	for _, separator := range []string{"-", "_", ",", " "} {
+		if index := strings.Index(token, separator); index >= 0 {
+			token = token[:index]
+			break
+		}
+	}
+	switch token {
+	case "en", "eng", "english":
+		return "english"
+	case "zh", "zho", "chi", "cn", "cmn", "chinese", "mandarin":
+		return "chinese"
+	case "no", "nor", "nb", "nob", "norwegian":
+		return "norwegian"
+	case "zxx", "xx", "und":
+		return "unknown"
+	}
+	if normalized := languageutil.NormalizeLanguageLabel(value); normalized != "" {
+		return strings.ToLower(normalized)
+	}
+	if normalized := strings.ToLower(strings.TrimSpace(languageutil.NormalizeLanguageDisplay(value))); normalized != "" {
+		return normalized
+	}
+	return token
+}
+
+func isCommentaryOrCompatibilityAudioValue(value string) bool {
+	lower := strings.ToLower(strings.TrimSpace(value))
+	return strings.Contains(lower, "commentary") || strings.Contains(lower, "compatibility")
+}
+
+// RebuildReleaseName regenerates the prepared release-name fields from the
+// current metadata and the naming-only override controls. Fact-producing
+// instruction values are already part of the metadata by the final rebuild. It
+// is a no-op for nil input and replaces ResolvedNaming, all name variants, and
+// missing-field hints in place without rewriting the detached Release evidence.
+// Title and original-title overrides are ignored. TV year uses only a matching
+// TVDB alias year; ResolvedNaming.Category records the category used for naming.
+func RebuildReleaseName(meta *preparationstate.State, logger api.Logger) {
+	if meta == nil {
+		return
+	}
+
+	nameRequest := releaseNameRequestFromMeta(*meta, logger)
+	nameRequest = applyMetadataNamingOverrides(nameRequest, meta.MetadataOverrides)
+	nameRequest = applyReleaseNameOverrides(nameRequest, meta.ReleaseNameOverrides, logger)
+	namingCategory, _ := api.NormalizeCanonicalCategory(nameRequest.Category)
+	meta.EffectiveMetadata = effectiveMetadata(*meta, nameRequest)
+	meta.ResolvedNaming = preparationstate.ResolvedNaming{
+		Category:       namingCategory,
+		Type:           nameRequest.Type,
+		Title:          meta.EffectiveMetadata.Title,
+		AlternateTitle: meta.EffectiveMetadata.AlternateTitle,
+		OriginalTitle:  meta.EffectiveMetadata.OriginalTitle,
+		Year:           meta.EffectiveMetadata.Year,
+		Source:         nameRequest.Source,
+		Resolution:     nameRequest.Resolution,
+		Genre:          strings.Join(meta.EffectiveMetadata.Genres, ", "),
+		EpisodeTitle:   resolvedEpisodeTitle(*meta),
+	}
+	meta.ReleaseNamePresentation = api.ReleaseNamePresentation{
+		Version:            api.ReleaseNamePresentationVersionV1,
+		OmitAlternateTitle: nameRequest.NoAKA,
+		OmitYear:           nameRequest.NoYear,
+		OmitSeasonEpisode:  nameRequest.NoSeason,
+		UseDailyDate:       nameRequest.ManualDate,
+	}
+	nameResult := BuildReleaseName(nameRequest, logger)
+	mergeGeneratedNameAvailability(nameResult.GeneratedName, meta.AvailableGeneratedName, meta, nameRequest)
+	meta.ReleaseNameNoTag = nameResult.NameNoTag
+	meta.ReleaseName = nameResult.Name
+	meta.ReleaseNameClean = nameResult.CleanName
+	meta.GeneratedName = nameResult.GeneratedName.Clone()
+	meta.GeneratedReleaseNames = nameResult.GeneratedVariants
+	meta.ReleaseNameMissing = append([]string{}, nameResult.MissingFields...)
+	if logger != nil && nameResult.Name != "" {
+		logger.Tracef("metadata: release name resolved %q", nameResult.Name)
+	}
+}
+
+func captureAvailableGeneratedName(meta *preparationstate.State, logger api.Logger) {
+	if meta == nil {
+		return
+	}
+	available := *meta
+	available.ReleaseNameOverrides = releaseNameAvailabilityOverrides(meta.ReleaseNameOverrides)
+	applyReleaseNameValueOverrides(&available)
+	request := releaseNameRequestFromMeta(available, logger)
+	request = applyMetadataNamingOverrides(request, available.MetadataOverrides)
+	request = applyReleaseNameOverrides(request, available.ReleaseNameOverrides, logger)
+	meta.AvailableGeneratedName = BuildReleaseName(request, logger).GeneratedName.Clone()
+}
+
+// releaseNameAvailabilityOverrides retains fact-producing instructions while
+// removing presentation-only controls. The availability snapshot uses the
+// resolved value before an omission hides it from the public effective facts.
+func releaseNameAvailabilityOverrides(overrides api.ReleaseNameOverrides) api.ReleaseNameOverrides {
+	overrides.NoSeason = nil
+	overrides.NoYear = nil
+	overrides.NoAKA = nil
+	overrides.NoTag = nil
+	overrides.NoEpisodeTitle = nil
+	overrides.NoDistributor = nil
+	overrides.NoEdition = nil
+	overrides.NoDub = nil
+	overrides.NoDual = nil
+	return overrides
+}
+
+func mergeGeneratedNameAvailability(
+	document, available *api.ReleaseNameDocument,
+	meta *preparationstate.State,
+	request api.ReleaseNameRequest,
+) {
+	if document == nil {
+		return
+	}
+	if available != nil {
+		for _, source := range available.Components {
+			if _, exists := document.Component(source.Role); exists {
+				continue
+			}
+			source.Present = false
+			document.Components = insertRetainedReleaseNameComponent(document.Components, source)
+		}
+	}
+	ensureManualGeneratedNameComponents(document, meta, request)
+	for index := range document.Components {
+		component := &document.Components[index]
+		if source, ok := available.Component(component.Role); ok {
+			component.AvailableValue = source.Value
+		}
+		component.Manual = releaseNameRoleIsManual(component.Role, meta.ReleaseNameOverrides) || releaseNameRoleUsesManualFact(component.Role, meta, request)
+	}
+	alignAudioMarkerLayout(document, available)
+}
+
+func ensureManualGeneratedNameComponents(document *api.ReleaseNameDocument, meta *preparationstate.State, request api.ReleaseNameRequest) {
+	if document == nil {
+		return
+	}
+	for _, role := range []api.ReleaseNameRole{
+		api.NameRoleTitle, api.NameRoleAlternateTitle, api.NameRoleYear, api.NameRoleSeason, api.NameRoleEpisode, api.NameRoleDailyDate, api.NameRoleEpisodeTitle,
+		api.NameRoleEditionSet, api.NameRoleCut, api.NameRoleEdition, api.NameRolePresentation, api.NameRoleHybrid, api.NameRoleRepack, api.NameRoleRegion, api.NameRoleSource, api.NameRoleService, api.NameRoleResolution,
+		api.NameRoleDVDSystem, api.NameRoleVideoFormat, api.NameRoleDubbed, api.NameRoleDualAudio, api.NameRoleGroup,
+	} {
+		manual := releaseNameRoleIsManual(role, meta.ReleaseNameOverrides) || releaseNameRoleUsesManualFact(role, meta, request)
+		if _, exists := document.Component(role); exists || !manual {
+			continue
+		}
+		document.Components = insertRetainedReleaseNameComponent(document.Components, api.ReleaseNameComponent{
+			Role:   role,
+			Join:   " ",
+			Manual: true,
+		})
+	}
+}
+
+func releaseNameRoleUsesManualFact(
+	role api.ReleaseNameRole,
+	meta *preparationstate.State,
+	request api.ReleaseNameRequest,
+) bool {
+	overrides := meta.ReleaseNameOverrides
+	facts := meta.EffectiveMetadata
+	switch role {
+	case api.NameRoleTitle:
+		return facts.TitleProvenance.IsManual()
+	case api.NameRoleAlternateTitle:
+		return facts.AlternateTitleProvenance.IsManual()
+	case api.NameRoleYear:
+		return facts.YearProvenance.IsManual() || overrides.ManualYear != nil
+	case api.NameRoleSeason:
+		return overrides.Season != nil
+	case api.NameRoleEpisode:
+		return overrides.Episode != nil
+	case api.NameRoleEpisodeTitle:
+		return request.ManualEpisodeTitle || overrides.EpisodeTitle != nil
+	case api.NameRoleDailyDate:
+		return overrides.ManualDate != nil
+	case api.NameRoleEditionSet, api.NameRoleCut, api.NameRoleEdition, api.NameRolePresentation:
+		return overrides.Edition != nil
+	case api.NameRoleHybrid:
+		return overrides.Edition != nil || meta.MetadataOverrides.WebDV != nil
+	case api.NameRoleDubbed, api.NameRoleDualAudio:
+		return meta.MetadataOverrides.OriginalLanguage != nil || manualAudioLanguages(*meta)
+	case api.NameRoleRegion:
+		return overrides.Region != nil
+	case api.NameRoleSource:
+		return overrides.Source != nil
+	case api.NameRoleDVDSystem:
+		return overrides.Source != nil
+	case api.NameRoleService:
+		return overrides.Service != nil
+	case api.NameRoleResolution:
+		return overrides.Resolution != nil
+	case api.NameRoleVideoFormat:
+		return overrides.Type != nil
+	case api.NameRoleGroup:
+		return overrides.Tag != nil
+	case api.NameRolePart, api.NameRoleThreeD, api.NameRoleRepack,
+		api.NameRoleUHD, api.NameRoleDVDSize, api.NameRoleHDR,
+		api.NameRoleVideoCodec, api.NameRoleVideoEncode, api.NameRoleAudio,
+		api.NameRoleLanguageMarker, api.NameRoleLocale, api.NameRoleDistributor,
+		api.NameRoleSubtitleMarker, api.NameRoleOriginalGroup:
+		return false
+	default:
+		return false
+	}
+}
+
+func alignAudioMarkerLayout(document, available *api.ReleaseNameDocument) {
+	if document == nil || available == nil {
+		return
+	}
+	for _, role := range []api.ReleaseNameRole{api.NameRoleDubbed, api.NameRoleDualAudio} {
+		sourceIndex, source := releaseNameComponentIndex(available, role)
+		targetIndex, target := releaseNameComponentIndex(document, role)
+		if sourceIndex < 0 || targetIndex < 0 || !source.Present || target.Present {
+			continue
+		}
+		sourceAudioIndex, _ := releaseNameComponentIndex(available, api.NameRoleAudio)
+		targetAudioIndex, _ := releaseNameComponentIndex(document, api.NameRoleAudio)
+		if sourceAudioIndex < 0 || targetAudioIndex < 0 || (sourceIndex < sourceAudioIndex) == (targetIndex < targetAudioIndex) {
+			continue
+		}
+		component := document.Components[targetIndex]
+		document.Components = slices.Delete(document.Components, targetIndex, targetIndex+1)
+		if sourceIndex < sourceAudioIndex {
+			targetAudioIndex, _ = releaseNameComponentIndex(document, api.NameRoleAudio)
+			document.Components = slices.Insert(document.Components, targetAudioIndex, component)
+			continue
+		}
+		targetAudioIndex, _ = releaseNameComponentIndex(document, api.NameRoleAudio)
+		targetAudioIndex++
+		document.Components = slices.Insert(document.Components, targetAudioIndex, component)
+	}
+}
+
+func releaseNameComponentIndex(document *api.ReleaseNameDocument, role api.ReleaseNameRole) (int, api.ReleaseNameComponent) {
+	if document == nil {
+		return -1, api.ReleaseNameComponent{}
+	}
+	for index, component := range document.Components {
+		if component.Role == role {
+			return index, component
+		}
+	}
+	return -1, api.ReleaseNameComponent{}
+}
+
+func releaseNameRoleIsManual(role api.ReleaseNameRole, overrides api.ReleaseNameOverrides) bool {
+	switch role {
+	case api.NameRoleAlternateTitle:
+		return overrides.NoAKA != nil
+	case api.NameRoleYear:
+		return overrides.ManualYear != nil || overrides.NoYear != nil
+	case api.NameRoleSeason:
+		return overrides.Season != nil || overrides.ManualDate != nil || overrides.UseSeasonEpisode != nil || overrides.NoSeason != nil
+	case api.NameRoleEpisode:
+		return overrides.Episode != nil || overrides.ManualDate != nil || overrides.UseSeasonEpisode != nil || overrides.NoSeason != nil
+	case api.NameRoleDailyDate:
+		return overrides.ManualDate != nil || overrides.UseSeasonEpisode != nil
+	case api.NameRoleEpisodeTitle:
+		return overrides.EpisodeTitle != nil || overrides.NoEpisodeTitle != nil
+	case api.NameRoleEditionSet, api.NameRoleCut, api.NameRoleEdition, api.NameRolePresentation, api.NameRoleHybrid:
+		return overrides.Edition != nil || overrides.NoEdition != nil
+	case api.NameRoleRepack:
+		return overrides.Repack != nil || overrides.NoEdition != nil
+	case api.NameRoleRegion:
+		return overrides.Region != nil
+	case api.NameRoleSource:
+		return overrides.Source != nil
+	case api.NameRoleService:
+		return overrides.Service != nil
+	case api.NameRoleResolution:
+		return overrides.Resolution != nil
+	case api.NameRoleAudio:
+		return false
+	case api.NameRoleDubbed:
+		return overrides.NoDub != nil
+	case api.NameRoleDualAudio:
+		return overrides.NoDual != nil || overrides.DualAudio != nil
+	case api.NameRoleGroup:
+		return overrides.Tag != nil || overrides.NoTag != nil
+	case api.NameRoleTitle, api.NameRolePart, api.NameRoleThreeD,
+		api.NameRoleUHD, api.NameRoleDVDSystem, api.NameRoleDVDSize, api.NameRoleVideoFormat, api.NameRoleHDR,
+		api.NameRoleVideoCodec, api.NameRoleVideoEncode, api.NameRoleLanguageMarker,
+		api.NameRoleLocale, api.NameRoleDistributor, api.NameRoleSubtitleMarker, api.NameRoleOriginalGroup:
+		return false
+	default:
+		return false
+	}
+}
+
+func applyAudioLanguagePrefix(audio string, meta preparationstate.State) string {
+	base, existingMarkers := splitReleaseNameAudioMarkers(audio)
+
+	if strings.TrimSpace(meta.DiscType) != "" {
+		return renderReleaseNameAudioMarkers(base, existingMarkers)
+	}
+
+	filteredLanguages := make([]string, 0, len(meta.AudioLanguages))
+	for _, language := range meta.AudioLanguages {
+		if isCommentaryOrCompatibilityAudioValue(language) {
+			continue
+		}
+		filteredLanguages = append(filteredLanguages, language)
+	}
+
+	if len(filteredLanguages) == 0 || strings.TrimSpace(base) == "" {
+		if manualAudioLanguages(meta) {
+			// A language clear invalidates markers derived before corrections were applied.
+			return base
+		}
+		return renderReleaseNameAudioMarkers(base, existingMarkers)
+	}
+	markers := releaseNameAudioMarkers{}
+	switch audioLanguagePrefixFromLanguages(meta, filteredLanguages) {
+	case "Dubbed":
+		markers.Dubbed = true
+	case "Dual-Audio":
+		markers.DualAudio = true
+		markers.DualAudioFirst = true
+	}
+	return renderReleaseNameAudioMarkers(base, markers)
+}
+
+func manualAudioLanguages(meta preparationstate.State) bool {
+	return meta.MetadataOverrides.AudioLanguages != nil || meta.AudioLanguagesProvenance.IsManual() ||
+		slices.ContainsFunc(meta.MediaTracks, func(track api.MediaTrackFacts) bool {
+			return track.Kind == api.MediaTrackAudio && !track.Commentary && track.LanguageProvenance.IsManual()
+		})
+}
+
+func resolveAudioBloatPolicyWithRegistry(
+	meta preparationstate.State,
+	candidateTrackers []string,
+	registry *trackers.Registry,
+) (map[string][]string, map[string][]string) {
+	if trackers.IsDiscType(meta.DiscType) {
+		return nil, nil
+	}
+	original := canonicalAudioLanguage(originalAudioLanguage(meta))
+	if original == "" || original == "unknown" {
+		return nil, nil
+	}
+
+	languages := make([]string, 0, len(meta.AudioLanguages))
+	seenLanguages := make(map[string]struct{}, len(meta.AudioLanguages))
+	hasEnglish := false
+	hasOther := false
+	for _, value := range meta.AudioLanguages {
+		canonical := canonicalAudioLanguage(value)
+		if canonical == "" || canonical == "unknown" {
+			continue
+		}
+		if _, ok := seenLanguages[canonical]; ok {
+			continue
+		}
+		seenLanguages[canonical] = struct{}{}
+		languages = append(languages, canonical)
+		if canonical == "english" {
+			hasEnglish = true
+		}
+		if canonical != "english" && canonical != original {
+			hasOther = true
+		}
+	}
+	if len(languages) == 0 || !hasOther {
+		return nil, nil
+	}
+
+	resolvedTrackers := uniqueUpperTrackers(candidateTrackers)
+	if len(resolvedTrackers) == 0 {
+		return nil, nil
+	}
+
+	trackerPolicies := make(map[string]trackers.AudioPolicy, len(resolvedTrackers))
+	for _, tracker := range resolvedTrackers {
+		if policy, ok := registry.LookupAudioPolicy(tracker); ok {
+			trackerPolicies[tracker] = policy
+		}
+	}
+	isEnglishOriginalWithNonEnglish := original == "english" && hasEnglish && hasOther
+
+	blocked := make(map[string][]string)
+	warned := make(map[string][]string)
+	for _, language := range languages {
+		if language == "english" || language == original {
+			continue
+		}
+		for _, tracker := range resolvedTrackers {
+			policy := trackerPolicies[tracker]
+			if policy.AllowBloat {
+				continue
+			}
+			if containsCanonicalLanguage(policy.AllowedLanguages, language) {
+				continue
+			}
+			if isEnglishOriginalWithNonEnglish && policy.BlockEnglishOriginalWithForeign {
+				blocked[tracker] = appendUniqueString(blocked[tracker], languageutil.NormalizeLanguageLabel(language))
+				continue
+			}
+			warned[tracker] = appendUniqueString(warned[tracker], languageutil.NormalizeLanguageLabel(language))
+		}
+	}
+	if len(blocked) == 0 {
+		blocked = nil
+	}
+	if len(warned) == 0 {
+		warned = nil
+	}
+	return blocked, warned
+}
+
+// EvaluateAudioBloatPolicy returns tracker-scoped disallowed and warning-only
+// extra audio languages for an exact workflow upload subject.
+func EvaluateAudioBloatPolicy(
+	subject api.UploadSubject,
+	candidateTrackers []string,
+	registry *trackers.Registry,
+) (map[string][]string, map[string][]string) {
+	return resolveAudioBloatPolicyWithRegistry(preparationstate.State{
+		DiscType:         subject.DiscType,
+		AudioLanguages:   append([]string(nil), subject.AudioLanguages...),
+		ProviderMetadata: subject.ProviderMetadata,
+	}, candidateTrackers, registry)
+}
+
+func appendUniqueString(values []string, value string) []string {
+	trimmed := strings.TrimSpace(value)
+	if trimmed == "" {
+		return values
+	}
+	for _, existing := range values {
+		if strings.EqualFold(strings.TrimSpace(existing), trimmed) {
+			return values
+		}
+	}
+	return append(values, trimmed)
+}
+
+func containsCanonicalLanguage(values []string, target string) bool {
+	for _, value := range values {
+		if strings.EqualFold(strings.TrimSpace(value), strings.TrimSpace(target)) {
+			return true
+		}
+	}
+	return false
+}
+
+// selectPrimaryAudioTrack returns the track used to derive the release audio
+// label, excluding commentary and compatibility tracks when possible. This
+// intentionally diverges from the Python reference, which selects from all
+// tracks, to avoid fallback tracks representing the release.
+func selectPrimaryAudioTrack(tracks []map[string]any) map[string]any {
+	index := selectPrimaryAudioTrackIndex(tracks)
+	if index < 0 {
+		return nil
+	}
+	return tracks[index]
+}
+
+func selectPrimaryAudioTrackIndex(tracks []map[string]any) int {
+	if len(tracks) == 0 {
+		return -1
+	}
+	eligible := make([]int, 0, len(tracks))
+	for index, track := range tracks {
+		if !isCommentaryOrCompatibilityAudioValue(audioTrackTitle(track)) {
+			eligible = append(eligible, index)
+		}
+	}
+	if len(eligible) == 0 {
+		eligible = make([]int, len(tracks))
+		for index := range tracks {
+			eligible[index] = index
+		}
+	}
+	for _, key := range []string{"StreamOrder", "ID"} {
+		selectedIndex := -1
+		selectedValue := 0
+		for _, index := range eligible {
+			value, ok := trackFirstInt(tracks[index], key)
+			if !ok {
+				continue
+			}
+			if selectedIndex < 0 || value < selectedValue {
+				selectedIndex = index
+				selectedValue = value
+			}
+		}
+		if selectedIndex >= 0 {
+			return selectedIndex
+		}
+	}
+	return eligible[0]
+}
+
+func trackFirstInt(track map[string]any, key string) (int, bool) {
+	raw, ok := track[key]
+	if !ok || raw == nil {
+		return 0, false
+	}
+	value := strings.TrimSpace(fmtSprint(raw))
+	if value == "" {
+		return 0, false
+	}
+	matched := numericPattern.FindString(value)
+	if matched == "" {
+		return 0, false
+	}
+	parsed, err := strconv.Atoi(matched)
+	if err != nil {
+		return 0, false
+	}
+	return parsed, true
+}
+
+func normalizeAudioFormat(track map[string]any) string {
+	commercial := trackString(track, "Format_Commercial", "Format_Commercial_IfAny")
+	format := trackString(track, "Format", "Format_String")
+	formatProfile := trackString(track, "Format_Profile", "Format_Profile_String")
+	if commercial != "" {
+		lowerCommercial := strings.ToLower(commercial)
+		switch {
+		case strings.Contains(lowerCommercial, "dts-hd master audio"):
+			return "DTS-HD MA"
+		case strings.Contains(lowerCommercial, "dts-hd high"):
+			return "DTS-HD HRA"
+		case strings.Contains(lowerCommercial, "dts-es"):
+			return "DTS-ES"
+		case strings.Contains(lowerCommercial, "dolby digital plus"):
+			return "DD+"
+		case strings.Contains(lowerCommercial, "dolby truehd"):
+			return "TrueHD"
+		case strings.Contains(lowerCommercial, "dolby digital"):
+			return "DD"
+		case strings.Contains(lowerCommercial, "free lossless audio codec"):
+			return "FLAC"
+		}
+	}
+	switch strings.ToLower(strings.TrimSpace(format)) {
+	case "dts":
+		return "DTS"
+	case "aac", "aac lc":
+		return "AAC"
+	case "adpcm":
+		return "ADPCM"
+	case "ac-3":
+		return "DD"
+	case "e-ac-3", "a_eac3", "enhanced ac-3":
+		return "DD+"
+	case "mlp fba":
+		return "TrueHD"
+	case "flac":
+		return "FLAC"
+	case "opus":
+		return "Opus"
+	case "vorbis":
+		return "VORBIS"
+	case "pcm", "lpcm audio":
+		return "LPCM"
+	case "dolby digital audio":
+		return "DD"
+	case "dolby digital plus audio", "dolby digital plus":
+		return "DD+"
+	case "dolby truehd audio":
+		return "TrueHD"
+	case "dts audio":
+		return "DTS"
+	case "dts-hd master audio":
+		return "DTS-HD MA"
+	case "dts-hd high-res audio":
+		return "DTS-HD HRA"
+	case "dts:x master audio":
+		return "DTS:X"
+	case "mpeg audio":
+		switch {
+		case strings.Contains(strings.ToLower(formatProfile), "layer 2"):
+			return "MP2"
+		case strings.Contains(strings.ToLower(formatProfile), "layer 3"):
+			return "MP3"
+		}
+	}
+	value := metautil.FirstNonEmptyTrimmed(commercial, format)
+	lower := strings.ToLower(value)
+
+	switch {
+	case strings.Contains(lower, "dts:x"):
+		return "DTS:X"
+	case strings.Contains(lower, "dolby digital plus"):
+		return "DD+"
+	case strings.Contains(lower, "dolby digital"):
+		return "DD"
+	case strings.Contains(lower, "mlp fba"):
+		return "TrueHD"
+	case strings.Contains(lower, "truehd"):
+		return "TrueHD"
+	case strings.Contains(lower, "dts-hd master"):
+		return "DTS-HD MA"
+	case strings.Contains(lower, "dts-hd high"):
+		return "DTS-HD HRA"
+	case strings.Contains(lower, "dts-es"):
+		return "DTS-ES"
+	case strings.Contains(lower, "dts"):
+		return "DTS"
+	case strings.Contains(lower, "aac"):
+		return "AAC"
+	case strings.Contains(lower, "flac"):
+		return "FLAC"
+	case strings.Contains(lower, "opus"):
+		return "Opus"
+	case strings.Contains(lower, "vorbis"):
+		return "VORBIS"
+	case strings.Contains(lower, "lpcm"), strings.Contains(lower, "pcm"):
+		return "LPCM"
+	case strings.Contains(lower, "mp3"):
+		return "MP3"
+	}
+	if value == "" || strings.EqualFold(value, "audio") {
+		codecID := trackString(track, "CodecID", "CodecID_Compatible")
+		lower = strings.ToLower(codecID)
+		switch {
+		case strings.Contains(lower, "eac3"), strings.Contains(lower, "e-ac-3"):
+			return "DD+"
+		case strings.Contains(lower, "ac3"), strings.Contains(lower, "ac-3"):
+			return "DD"
+		case strings.Contains(lower, "truehd"):
+			return "TrueHD"
+		case strings.Contains(lower, "dts"):
+			return "DTS"
+		case strings.Contains(lower, "aac"):
+			return "AAC"
+		case strings.Contains(lower, "flac"):
+			return "FLAC"
+		case strings.Contains(lower, "opus"):
+			return "Opus"
+		case strings.Contains(lower, "vorbis"):
+			return "VORBIS"
+		case strings.Contains(lower, "mp3"), strings.Contains(lower, "mpeg/l3"):
+			return "MP3"
+		case strings.Contains(lower, "mp2"), strings.Contains(lower, "mpeg/l2"):
+			return "MP2"
+		case strings.Contains(lower, "lpcm"), strings.Contains(lower, "pcm"):
+			return "LPCM"
+		}
+	}
+	return value
+}
+
+func determineChannelCount(channelsValue, channelLayout, additional, formatValue string) string {
+	s := strings.TrimSpace(channelsValue)
+	if s == "" {
+		return ""
+	}
+	channelLayout = strings.TrimSpace(channelLayout)
+
+	channels := firstNumericToken(s)
+	if channels == 0 {
+		return ""
+	}
+
+	if isAtmosAudio(additional, strings.ToLower(formatValue), channelLayout) && channelLayout != "" {
+		bed, lfe, height := parseAtmosLayout(channelLayout)
+		if height > 0 {
+			if lfe > 0 {
+				return fmt.Sprintf("%d.%d.%d", bed, lfe, height)
+			}
+			return fmt.Sprintf("%d.0.%d", bed, height)
+		}
+		return parseChannelLayout(channels, channelLayout)
+	}
+	if channelLayout != "" {
+		return parseChannelLayout(channels, channelLayout)
+	}
+	return fallbackChannelCount(channels)
+}
+
+func firstNumericToken(value string) int {
+	for field := range strings.FieldsSeq(value) {
+		if num := parseLeadingInt(field); num > 0 {
+			return num
+		}
+	}
+	return parseLeadingInt(value)
+}
+
+func parseLeadingInt(value string) int {
+	digits := strings.Builder{}
+	for _, r := range value {
+		if r < '0' || r > '9' {
+			break
+		}
+		digits.WriteRune(r)
+	}
+	if digits.Len() == 0 {
+		return 0
+	}
+	var parsed int
+	_, _ = fmt.Sscanf(digits.String(), "%d", &parsed)
+	return parsed
+}
+
+func isAtmosAudio(additional, formatValue, channelLayout string) bool {
+	lowerAdditional := strings.ToLower(additional)
+	lowerFormat := strings.ToLower(formatValue)
+	if strings.Contains(lowerAdditional, "joc") || strings.Contains(lowerAdditional, "atmos") || strings.Contains(lowerAdditional, "16-ch") {
+		return true
+	}
+	if strings.Contains(lowerFormat, "atmos") || strings.Contains(lowerFormat, "16-ch") {
+		return true
+	}
+	layoutLower := strings.ToLower(channelLayout)
+	return strings.Contains(layoutLower, "top") || strings.Contains(layoutLower, "height") || strings.Contains(layoutLower, "tfl")
+}
+
+func isDTSXAudio(additional, formatValue string) bool {
+	lowerAdditional := strings.ToLower(additional)
+	lowerFormat := strings.ToLower(formatValue)
+	if strings.Contains(lowerAdditional, "dts:x") || strings.Contains(lowerAdditional, "xll x") {
+		return true
+	}
+	if strings.Contains(lowerFormat, "dts:x") {
+		return true
+	}
+	return strings.Contains(lowerFormat, "dts") && strings.HasSuffix(strings.TrimSpace(lowerAdditional), "x")
+}
+
+func applyDTSAudioAdditional(codec, additional string) string {
+	upperCodec := strings.ToUpper(strings.TrimSpace(codec))
+	upperAdditional := strings.ToUpper(strings.TrimSpace(additional))
+	if !strings.HasPrefix(upperCodec, "DTS") {
+		return codec
+	}
+	switch {
+	case strings.Contains(upperAdditional, "XLL X"):
+		return "DTS:X"
+	case strings.Contains(upperAdditional, "XLL") && strings.EqualFold(codec, "DTS"):
+		return "DTS-HD MA"
+	case upperAdditional == "ES" && strings.EqualFold(codec, "DTS"):
+		return "DTS-ES"
+	default:
+		return codec
+	}
+}
+
+func parseAtmosLayout(layout string) (bed int, lfe int, height int) {
+	upper := strings.ToUpper(layout)
+	parts := strings.FieldsSeq(upper)
+	for part := range parts {
+		if strings.Contains(part, "LFE") {
+			lfe++
+			continue
+		}
+		switch {
+		case strings.Contains(part, "TFC"), strings.Contains(part, "TFL"), strings.Contains(part, "TFR"),
+			strings.Contains(part, "TBL"), strings.Contains(part, "TBR"), strings.Contains(part, "TBC"),
+			strings.Contains(part, "VHC"), strings.Contains(part, "VHL"), strings.Contains(part, "VHR"),
+			strings.Contains(part, "CH"), strings.Contains(part, "LH"), strings.Contains(part, "RH"),
+			strings.Contains(part, "CHR"), strings.Contains(part, "LHR"), strings.Contains(part, "RHR"),
+			strings.Contains(part, "TSL"), strings.Contains(part, "TSR"), strings.Contains(part, "TLS"), strings.Contains(part, "TRS"):
+			height++
+		default:
+			bed++
+		}
+	}
+	return bed, lfe, height
+}
+
+func parseChannelLayout(channels int, layout string) string {
+	upper := strings.ToUpper(layout)
+	lfe := strings.Count(upper, "LFE")
+	if lfe == 0 && strings.Contains(upper, "LFE") {
+		lfe = 1
+	}
+	if lfe > 1 {
+		return fmt.Sprintf("%d.%d", channels-lfe, lfe)
+	}
+	if lfe == 1 {
+		return fmt.Sprintf("%d.1", channels-1)
+	}
+	if strings.Contains(strings.ToLower(layout), "object") && channels > 7 {
+		return fmt.Sprintf("%d.1", channels-1)
+	}
+	if channels <= 2 {
+		return fmt.Sprintf("%d.0", channels)
+	}
+	if strings.Contains(upper, "MONO") || channels == 1 {
+		return "1.0"
+	}
+	if channels == 2 {
+		return "2.0"
+	}
+	return fmt.Sprintf("%d.0", channels)
+}
+
+func fallbackChannelCount(channels int) string {
+	switch channels {
+	case 1:
+		return "1.0"
+	case 2:
+		return "2.0"
+	case 3:
+		return "2.1"
+	case 4:
+		return "3.1"
+	case 5:
+		return "4.1"
+	case 6:
+		return "5.1"
+	case 7:
+		return "6.1"
+	case 8:
+		return "7.1"
+	default:
+		return fmt.Sprintf("%d.1", channels-1)
+	}
+}
+
+// threeDFromMedia uses BDInfo's primary video when available; otherwise, it
+// requires multiple views on MediaInfo's primary video to report 3D.
+func threeDFromMedia(doc mediaInfoDoc, info *discparse.BDInfo) string {
+	if info != nil && len(info.Video) > 0 {
+		if strings.TrimSpace(info.Video[0].ThreeD) != "" {
+			return "3D"
+		}
+		return ""
+	}
+	_, video, _ := splitMediaInfoTracks(doc)
+	if len(video) == 0 {
+		return ""
+	}
+	views, err := strconv.Atoi(trackString(video[0], "MultiView_Count"))
+	if err == nil && views > 1 {
+		return "3D"
+	}
+	return ""
+}
+
+func sourceAndType(meta preparationstate.State, doc mediaInfoDoc) (string, string) {
+	source := strings.TrimSpace(meta.Release.Source)
+	typeValue := strings.TrimSpace(meta.Release.Type)
+	if isCategoryType(typeValue) {
+		typeValue = ""
+	}
+	if typeValue == "" || isCategoryType(typeValue) {
+		if inferred := inferReleaseTypeFromSource(source); inferred != "" {
+			typeValue = inferred
+		}
+	}
+	if typeValue == "" || isCategoryType(typeValue) {
+		if inferred := inferReleaseTypeFromName(meta.SourcePath); inferred != "" {
+			typeValue = inferred
+		}
+	}
+	if typeValue == "" && (strings.EqualFold(meta.DiscType, "BDMV") || strings.EqualFold(meta.DiscType, "DVD") || strings.EqualFold(meta.DiscType, "HDDVD")) {
+		typeValue = "DISC"
+	}
+	if source == "" || !isKnownReleaseSource(source) {
+		if inferred := inferReleaseSourceFromName(meta.SourcePath, typeValue); inferred != "" {
+			source = inferred
+		}
+	}
+	if strings.EqualFold(meta.DiscType, "BDMV") {
+		switch typeValue {
+		case "DISC":
+			source = "Blu-ray"
+		case "ENCODE", "REMUX":
+			source = "BluRay"
+		}
+	}
+	if strings.EqualFold(meta.DiscType, "DVD") {
+		system := dvdSystemFromMedia(doc)
+		if typeValue == "REMUX" && system != "" {
+			system = strings.TrimSpace(system + " DVD")
+		}
+		if system != "" {
+			source = system
+		}
+	}
+	if strings.EqualFold(meta.DiscType, "HDDVD") {
+		source = "HD DVD"
+		if typeValue == "ENCODE" || typeValue == "REMUX" {
+			source = "HDDVD"
+		}
+	}
+	switch normalizeReleaseType(typeValue) {
+	case "WEBDL":
+		typeValue = "WEBDL"
+		source = "Web"
+	case "WEBRIP":
+		typeValue = "WEBRIP"
+		source = "Web"
+	}
+	if webType := webReleaseTypeFromSignals(typeValue, source, meta.SourcePath); webType != "" {
+		typeValue = webType
+		source = "Web"
+	}
+	if strings.EqualFold(source, "Ultra HDTV") {
+		source = "UHDTV"
+	}
+	// Unknown evidence remains missing so Input can request a correction.
+	return source, typeValue
+}
+
+func dvdSystemFromMedia(doc mediaInfoDoc) string {
+	generalTracks, videoTracks, _ := splitMediaInfoTracks(doc)
+	for _, track := range append(generalTracks, videoTracks...) {
+		standard := strings.ToUpper(trackString(track, "Standard"))
+		if standard == "PAL" || standard == "NTSC" {
+			return standard
+		}
+		frameRate := trackString(track, "FrameRate", "FrameRate_Original", "FrameRate_Num")
+		if strings.Contains(frameRate, "25") || strings.Contains(frameRate, "50") {
+			return "PAL"
+		}
+		if frameRate != "" {
+			return "NTSC"
+		}
+	}
+	return ""
+}
+
+func uhdFromMeta(meta preparationstate.State) string {
+	upperPath := strings.ToUpper(meta.SourcePath)
+	if strings.Contains(upperPath, "UHD") {
+		return "UHD"
+	}
+	for _, value := range meta.Release.Other {
+		if strings.EqualFold(strings.TrimSpace(value), "Ultra HD") {
+			return "UHD"
+		}
+	}
+	if meta.Type == "DISC" || meta.Type == "REMUX" || meta.Type == "ENCODE" && !isWebSourceValue(meta.Source) && !isWebSourceValue(meta.Release.Source) {
+		if strings.EqualFold(meta.Release.Resolution, "2160p") {
+			return "UHD"
+		}
+	}
+	if strings.Contains(strings.ToLower(meta.Release.Source), "ultra") {
+		return "UHD"
+	}
+	return ""
+}
+
+// hdrFromMedia prefers BDInfo and MediaInfo HDR evidence, including Dolby
+// Vision HDR10/HDR10+ compatibility markers, then falls back to normalized
+// filename tokens from the current source path or parsed release. Bare PQ
+// transfer metadata is normalized to HDR only when BT.2020 primaries confirm
+// the HDR color space.
+func hdrFromMedia(doc mediaInfoDoc, bdinfo *discparse.BDInfo, meta preparationstate.State) string {
+	return hdrFactsDisplay(hdrFactsFromMedia(doc, bdinfo, meta))
+}
+
+func hdrFactsFromMedia(doc mediaInfoDoc, bdinfo *discparse.BDInfo, meta preparationstate.State) api.HDRFacts {
+	if bdinfo != nil && len(bdinfo.Video) > 0 {
+		facts := api.HDRFacts{
+			Origin:       api.HDREvidenceBDInfo,
+			Status:       api.HDREvidenceComplete,
+			SourceFields: []string{"video.hdr_dv"},
+		}
+		for _, video := range bdinfo.Video {
+			upper := strings.ToUpper(strings.TrimSpace(video.HDRDV))
+			if strings.Contains(upper, "DOLBY VISION") {
+				mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatDolbyVision)
+				if profile := mediafacts.DolbyVisionProfile(video.Profile + " " + video.HDRDV); profile != "" {
+					facts.DolbyVisionProfile = profile
+				}
+			}
+			if strings.Contains(upper, "HDR10+") {
+				mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHDR10Plus)
+			} else if strings.Contains(upper, "HDR10") {
+				mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHDR10)
+			}
+			if strings.Contains(upper, "HLG") {
+				mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHLG)
+			}
+			if strings.Contains(upper, "HDR VIVID") || strings.Contains(upper, "CUVA") {
+				mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHDRVivid)
+			}
+			if strings.Contains(upper, "PQ") {
+				mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatPQ10)
+			}
+		}
+		mediafacts.AddHDRFallbacks(&facts)
+		if len(facts.Formats) == 0 {
+			facts.Formats = []api.HDRFormat{api.HDRFormatSDR}
+		}
+		return withHDRContradiction(facts, filenameHDRFacts(meta))
+	}
+
+	facts := mediafacts.HDRFromMediaInfoDocument(doc)
+	if facts.Status == api.HDREvidenceMissing {
+		return filenameHDRFacts(meta)
+	}
+	return withHDRContradiction(facts, filenameHDRFacts(meta))
+}
+
+// filenameHDRFromMeta returns normalized HDR tokens from SourcePath before
+// falling back to previously parsed release tokens.
+func filenameHDRFromMeta(meta preparationstate.State) string {
+	return hdrFactsDisplay(filenameHDRFacts(meta))
+}
+
+func filenameHDRFacts(meta preparationstate.State) api.HDRFacts {
+	tokens := ParseReleaseInfo(meta.SourcePath).HDR
+	origin := api.HDREvidenceContentFilename
+	sourceField := "source_path"
+	if len(tokens) == 0 {
+		tokens = meta.Release.HDR
+		origin = api.HDREvidenceReleaseName
+		sourceField = "release.hdr"
+	}
+	facts := api.HDRFacts{
+		Origin: origin,
+		Status: api.HDREvidencePartial,
+	}
+	for _, token := range tokens {
+		switch strings.ToUpper(strings.TrimSpace(token)) {
+		case "DV", "DOVI", "DOLBY VISION":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatDolbyVision)
+		case "HDR10+", "HDR+", "HDR10PLUS":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHDR10Plus)
+		case "HDR", "HDR10":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHDR10)
+		case "HLG":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHLG)
+		case "PQ10":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatPQ10)
+		case "HDR VIVID", "HDRVIVID":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatHDRVivid)
+		case "SDR":
+			mediafacts.AddHDRFormat(&facts.Formats, api.HDRFormatSDR)
+		}
+	}
+	if len(facts.Formats) == 0 {
+		facts.Origin = api.HDREvidenceUnknown
+		facts.Status = api.HDREvidenceMissing
+		return facts
+	}
+	facts.SourceFields = []string{sourceField}
+	mediafacts.AddHDRFallbacks(&facts)
+	return facts
+}
+
+func hdrFactsDisplay(facts api.HDRFacts) string {
+	parts := make([]string, 0, len(facts.Formats))
+	if hasHDRFormat(facts.Formats, api.HDRFormatDolbyVision) {
+		parts = append(parts, "DV")
+	}
+	for _, format := range facts.Formats {
+		switch format {
+		case api.HDRFormatDolbyVision, api.HDRFormatSDR:
+		case api.HDRFormatHDR10:
+			parts = append(parts, "HDR")
+		case api.HDRFormatHDR10Plus:
+			parts = append(parts, "HDR10+")
+		case api.HDRFormatHLG:
+			parts = append(parts, "HLG")
+		case api.HDRFormatPQ10:
+			parts = append(parts, "PQ10")
+		case api.HDRFormatHDRVivid:
+			parts = append(parts, "HDR Vivid")
+		case api.HDRFormatWCG:
+			parts = append(parts, "WCG")
+		}
+	}
+	return strings.Join(parts, " ")
+}
+
+func hasHDRFormat(formats []api.HDRFormat, want api.HDRFormat) bool {
+	return slices.Contains(formats, want)
+}
+
+func withHDRContradiction(authoritative api.HDRFacts, fallback api.HDRFacts) api.HDRFacts {
+	if fallback.Status == api.HDREvidenceMissing || !filenameHDRContradicts(authoritative, fallback) {
+		return authoritative
+	}
+	authoritative.Status = api.HDREvidenceContradictory
+	authoritative.Contradictions = append(authoritative.Contradictions, "release_name_hdr_differs")
+	return authoritative
+}
+
+func filenameHDRContradicts(authoritative api.HDRFacts, fallback api.HDRFacts) bool {
+	for _, asserted := range fallback.Formats {
+		switch asserted {
+		case api.HDRFormatHDR10:
+			if hasHDRFormat(authoritative.Formats, api.HDRFormatHDR10) ||
+				hasHDRFormat(authoritative.Formats, api.HDRFormatHDR10Plus) ||
+				hasHDRFormat(authoritative.FallbackFormats, api.HDRFormatHDR10) {
+				continue
+			}
+		case api.HDRFormatHDR10Plus:
+			if hasHDRFormat(authoritative.Formats, api.HDRFormatHDR10Plus) ||
+				hasHDRFormat(authoritative.FallbackFormats, api.HDRFormatHDR10Plus) {
+				continue
+			}
+		case api.HDRFormatSDR, api.HDRFormatDolbyVision, api.HDRFormatHLG, api.HDRFormatPQ10, api.HDRFormatHDRVivid,
+			api.HDRFormatWCG:
+			if hasHDRFormat(authoritative.Formats, asserted) {
+				continue
+			}
+		}
+		return true
+	}
+	return false
+}
+
+func normalizeDistributor(input string) string {
+	trimmed := strings.TrimSpace(input)
+	if trimmed == "" {
+		return ""
+	}
+	return trimmed
+}
+
+func regionFromBDInfo(info *discparse.BDInfo, existing string) string {
+	if strings.TrimSpace(existing) != "" {
+		return strings.ToUpper(strings.TrimSpace(existing))
+	}
+	if info == nil {
+		return ""
+	}
+	label := strings.ToUpper(strings.ReplaceAll(info.Label, ".", " "))
+	if label == "" {
+		label = strings.ToUpper(strings.ReplaceAll(info.Title, ".", " "))
+	}
+	if label == "" {
+		label = strings.ToUpper(strings.ReplaceAll(info.Path, ".", " "))
+	}
+	return detectRegionCode(label)
+}
+
+func detectRegionCode(label string) string {
+	fields := strings.FieldsSeq(label)
+	for field := range fields {
+		code := strings.TrimSpace(field)
+		if len(code) == 3 {
+			return code
+		}
+	}
+	return ""
+}
+
+func videoCodecFromBDInfo(info *discparse.BDInfo) string {
+	if info == nil || len(info.Video) == 0 {
+		return ""
+	}
+	switch info.Video[0].Codec {
+	case "MPEG-2 Video":
+		return "MPEG-2"
+	case "MPEG-4 AVC Video":
+		return "AVC"
+	case "MPEG-H HEVC Video":
+		return "HEVC"
+	case "VC-1 Video":
+		return "VC-1"
+	default:
+		return strings.TrimSpace(info.Video[0].Codec)
+	}
+}
+
+func videoEncodeFromMedia(doc mediaInfoDoc, typeValue string) (string, string, bool, string) {
+	_, videoTracks, _ := splitMediaInfoTracks(doc)
+	if len(videoTracks) == 0 {
+		return "", "", false, ""
+	}
+	track := videoTracks[0]
+	format := trackString(track, "Format")
+	profile := trackString(track, "Format_Profile", "Format_Profile_Original")
+	encodedSettings := trackString(track, "Encoded_Library_Settings")
+	bitDepth := "0"
+	if parsedBitDepth := trackString(track, "BitDepth"); parsedBitDepth != "" {
+		bitDepth = parsedBitDepth
+	}
+	library := trackString(track, "Encoded_Library_Name")
+	codec := ""
+	videoCodec := format
+
+	switch format {
+	case "AV1", "VP9", "VC-1":
+		codec = format
+	case "AVC":
+		switch typeValue {
+		case "ENCODE", "WEBRIP", "DVDRIP":
+			codec = "x264"
+		case "WEBDL", "HDTV":
+			codec = "H.264"
+		}
+	case "HEVC":
+		switch typeValue {
+		case "ENCODE", "WEBRIP", "DVDRIP":
+			codec = "x265"
+		case "WEBDL", "HDTV":
+			codec = "H.265"
+		}
+	case "MPEG-4 Visual":
+		if typeValue == "ENCODE" || typeValue == "WEBRIP" || typeValue == "DVDRIP" {
+			lowerLib := strings.ToLower(library)
+			if strings.Contains(lowerLib, "xvid") {
+				codec = "XviD"
+			} else if strings.Contains(lowerLib, "divx") {
+				codec = "DivX"
+			}
+		}
+	}
+	if typeValue == "HDTV" && encodedSettings != "" {
+		codec = strings.ReplaceAll(codec, "H.", "x")
+	}
+	profileTag := ""
+	if profile == "High 10" {
+		profileTag = "Hi10P"
+	}
+	videoEncode := strings.TrimSpace(strings.TrimSpace(profileTag + " " + codec))
+	if videoCodec == "MPEG Video" {
+		version := trackString(track, "Format_Version")
+		if version != "" {
+			videoCodec = "MPEG-" + version
+		}
+	}
+	return videoEncode, videoCodec, encodedSettings != "", bitDepth
+}
+
+// releaseEditionParts keeps evidence categories separate until name rendering.
+// Manual edition wording remains an authoritative whole value, never classified.
+type releaseEditionParts struct {
+	Set          string
+	Cut          string
+	Edition      string
+	Presentation string
+	Repack       string
+}
+
+var releaseCutTags = taginfo.Find(taginfo.All()["cut"]...)
+var releaseEditionTags = taginfo.Find(taginfo.All()["edition"]...)
+
+// editionFromMeta prefers explicit wording, then filename edition evidence.
+// Provider runtime labels are fallback evidence; selected multi-edition sets
+// retain their independent structural identity regardless of filename wording.
+func editionFromMeta(meta preparationstate.State, doc mediaInfoDoc) releaseEditionParts {
+	applyAnimeOverride(&meta)
+	parts := releaseEditionParts{Cut: canonicalCutLabel(meta.Release.Cut), Edition: strings.TrimSpace(meta.Edition)}
+	filenameEvidence := parts.Cut != "" || parts.Edition != "" || len(meta.Release.Edition) > 0 || meta.Release.Collection == "IMAX"
+	if parts.Edition == "" {
+		var editions []string
+		for _, value := range meta.Release.Edition {
+			if info := releaseEditionTags(value); info != nil && info.Tag() == "Open.Matte" {
+				parts.Presentation = "Open Matte"
+			} else {
+				editions = append(editions, value)
+			}
+		}
+		parts.Edition = strings.Join(editions, " ")
+	}
+	if meta.Release.Collection == "IMAX" {
+		parts.Presentation = strings.TrimSpace("IMAX " + parts.Presentation)
+	}
+	repack := repackFromMeta(meta, parts.Edition)
+	parts.Edition = cleanEditionText(repackPattern.ReplaceAllString(parts.Edition, ""))
+	if !hasManualEditionOverride(meta.ReleaseNameOverrides) {
+		multi := resolveMultiPlaylistEdition(meta)
+		if !filenameEvidence {
+			parts = resolveIMDbEditionFromMediaDuration(meta, doc)
+			if parts == (releaseEditionParts{}) {
+				parts = multi
+			}
+		}
+		parts.Set = multi.Set
+	}
+	if containsExactHybrid(meta.Release.Other) && !containsExactHybrid(strings.Fields(parts.Edition)) {
+		parts.Edition = strings.TrimSpace(parts.Edition + " Hybrid")
+	}
+	parts.Repack = strings.ToUpper(repack)
+	return parts
+}
+
+// canonicalCutLabel renders already classified parser cut tags using the
+// dependency's display titles, retaining unknown typed values verbatim.
+func canonicalCutLabel(cuts []string) string {
+	labels := make([]string, 0, len(cuts))
+	for _, value := range cuts {
+		value = strings.TrimSpace(value)
+		if info := releaseCutTags(value); info != nil {
+			value = strings.ReplaceAll(info.Tag(), ".", " ")
+			if strings.HasSuffix(info.Tag(), ".Cut") {
+				value = info.Title() + " Cut"
+			}
+		}
+		if value != "" {
+			labels = append(labels, value)
+		}
+	}
+	return strings.Join(labels, " ")
+}
+
+// imdbEditionParts classifies individual provider attributes before they are
+// joined. The existing parser vocabulary supplies cut identities; unknown
+// provider labels remain editions instead of being guessed from substrings.
+func imdbEditionParts(attributes []string) releaseEditionParts {
+	var cuts, editions, presentations []string
+	for _, attribute := range attributes {
+		value := strings.TrimSpace(attribute)
+		if value == "" {
+			continue
+		}
+		switch {
+		case releaseCutTags(value) != nil:
+			cuts = append(cuts, cleanIMDbEditionText(smartEditionTitle(value)))
+		case strings.EqualFold(value, "IMAX"):
+			presentations = append(presentations, "IMAX")
+		default:
+			if info := releaseEditionTags(value); info != nil && info.Tag() == "Open.Matte" {
+				presentations = append(presentations, "Open Matte")
+			} else {
+				editions = append(editions, cleanIMDbEditionText(smartEditionTitle(value)))
+			}
+		}
+	}
+	return releaseEditionParts{
+		Cut:          strings.Join(cuts, " "),
+		Edition:      strings.Join(editions, " "),
+		Presentation: strings.Join(presentations, " "),
+	}
+}
+
+func containsExactHybrid(values []string) bool {
+	return slices.ContainsFunc(values, func(value string) bool {
+		return strings.EqualFold(strings.TrimSpace(value), "Hybrid")
+	})
+}
+
+// repackFromMeta scans source basenames and parsed release tokens so repack
+// markers do not depend on guessit/rls placing them in the edition field.
+func repackFromMeta(meta preparationstate.State, edition string) string {
+	return repackFromText(
+		pathutil.Base(meta.SourcePath),
+		pathutil.Base(meta.VideoPath),
+		edition,
+		strings.Join(meta.Release.Edition, " "),
+		strings.Join(meta.Release.Other, " "),
+	)
+}
+
+// repackFromText returns the highest-priority repack/proper marker present in
+// release tokens, matching Upload Assistant's V2/V3/V4 repack aliases.
+func repackFromText(values ...string) string {
+	tokens := releaseTokens(values...)
+	repack := ""
+	if hasReleaseToken(tokens, "REPACK") || hasReleaseToken(tokens, "V2") {
+		repack = "REPACK"
+	}
+	if hasReleaseToken(tokens, "REPACK2") || hasReleaseToken(tokens, "V3") {
+		repack = "REPACK2"
+	}
+	if hasReleaseToken(tokens, "REPACK3") || hasReleaseToken(tokens, "V4") {
+		repack = "REPACK3"
+	}
+	if hasReleaseToken(tokens, "PROPER") {
+		repack = "PROPER"
+	}
+	if hasReleaseToken(tokens, "PROPER2") {
+		repack = "PROPER2"
+	}
+	if hasReleaseToken(tokens, "PROPER3") {
+		repack = "PROPER3"
+	}
+	if hasReleaseToken(tokens, "RERIP") {
+		repack = "RERIP"
+	}
+	return repack
+}
+
+// releaseTokens splits release-name text into uppercase tokens using
+// punctuation, whitespace, and path separators as boundaries.
+func releaseTokens(values ...string) map[string]struct{} {
+	tokens := make(map[string]struct{})
+	for _, value := range values {
+		for _, token := range releaseTokenSeparatorPattern.Split(strings.ToUpper(value), -1) {
+			if token == "" {
+				continue
+			}
+			tokens[token] = struct{}{}
+		}
+	}
+	return tokens
+}
+
+// hasReleaseToken reports whether a normalized token set contains value.
+func hasReleaseToken(tokens map[string]struct{}, value string) bool {
+	_, ok := tokens[value]
+	return ok
+}
+
+func resolveMultiPlaylistEdition(meta preparationstate.State) releaseEditionParts {
+	if !strings.EqualFold(strings.TrimSpace(meta.DiscType), "BDMV") || len(meta.SelectedBDMVPlaylists) < 2 ||
+		meta.ProviderMetadata.IMDB == nil || len(meta.ProviderMetadata.IMDB.EditionDetails) == 0 {
+		return releaseEditionParts{}
+	}
+	matched := make(map[string]releaseEditionParts)
+	withoutAttributes := false
+	for _, playlist := range meta.SelectedBDMVPlaylists {
+		if playlist.Duration <= 0 {
+			continue
+		}
+		matches := imdbEditionMatches(playlist.Duration, meta.ProviderMetadata.IMDB.EditionDetails, true)
+		if len(matches) == 0 {
+			continue
+		}
+		if best := matches[0]; best.hasAttribute {
+			matched[best.name] = best.parts
+		} else {
+			withoutAttributes = true
+		}
+	}
+	if len(matched) == 0 {
+		return releaseEditionParts{}
+	}
+	names := make([]string, 0, len(matched))
+	for name := range matched {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	var cuts, editions, presentations []string
+	if withoutAttributes {
+		cuts = append(cuts, "Theatrical")
+	}
+	for _, name := range names {
+		parts := matched[name]
+		for _, item := range []struct {
+			value  string
+			values *[]string
+		}{
+			{parts.Cut, &cuts}, {parts.Edition, &editions}, {parts.Presentation, &presentations},
+		} {
+			if item.value != "" && !slices.Contains(*item.values, item.value) {
+				*item.values = append(*item.values, item.value)
+			}
+		}
+	}
+	labels := append([]string(nil), names...)
+	if withoutAttributes {
+		labels = append([]string{"Theatrical"}, labels...)
+	}
+	set := ""
+	switch count := len(labels); {
+	case count == 2:
+		set = "2in1"
+	case count > 2:
+		set = cleanIMDbEditionText(fmt.Sprintf("%din1 %s", count, strings.Join(labels, " / ")))
+	}
+	return releaseEditionParts{
+		Set:          set,
+		Cut:          strings.Join(cuts, " / "),
+		Edition:      strings.Join(editions, " / "),
+		Presentation: strings.Join(presentations, " / "),
+	}
+}
+
+type imdbEditionMatch struct {
+	name          string
+	parts         releaseEditionParts
+	differenceSec float64
+	hasAttribute  bool
+	minutes       int
+}
+
+func resolveIMDbEditionFromMediaDuration(meta preparationstate.State, doc mediaInfoDoc) releaseEditionParts {
+	if strings.EqualFold(strings.TrimSpace(meta.DiscType), "BDMV") || !isMovieMetadata(meta) || meta.Anime ||
+		meta.ProviderMetadata.IMDB == nil || len(meta.ProviderMetadata.IMDB.EditionDetails) <= 1 {
+		return releaseEditionParts{}
+	}
+	duration := mediaDurationSeconds(doc)
+	if duration <= 0 {
+		return releaseEditionParts{}
+	}
+	matches := imdbEditionMatches(duration, meta.ProviderMetadata.IMDB.EditionDetails, true)
+	if len(matches) == 0 || !matches[0].hasAttribute {
+		return releaseEditionParts{}
+	}
+	return matches[0].parts
+}
+
+func mediaDurationSeconds(doc mediaInfoDoc) float64 {
+	generalTracks, _, _ := splitMediaInfoTracks(doc)
+	for _, track := range generalTracks {
+		if value := trackString(track, "Duration"); value != "" {
+			if seconds := parseMediaDurationValue(value); seconds > 0 {
+				return seconds
+			}
+		}
+		if value := trackString(track, "Duration/String3", "Duration/String2", "Duration/String"); value != "" {
+			if seconds := parseMediaDurationValue(value); seconds > 0 {
+				return seconds
+			}
+		}
+	}
+	return 0
+}
+
+func parseMediaDurationValue(value string) float64 {
+	trimmed := strings.TrimSpace(value)
+	if trimmed == "" {
+		return 0
+	}
+	if strings.Contains(trimmed, ":") {
+		return parseMediaDurationColonValue(trimmed)
+	}
+	if seconds := parseMediaDurationTokens(trimmed); seconds > 0 {
+		return seconds
+	}
+	parsed, err := strconv.ParseFloat(strings.ReplaceAll(trimmed, ",", ""), 64)
+	if err != nil || parsed <= 0 {
+		return 0
+	}
+	return parsed
+}
+
+func parseMediaDurationTokens(value string) float64 {
+	var total float64
+	for _, match := range durationTokenPattern.FindAllStringSubmatch(value, -1) {
+		if len(match) != 3 {
+			continue
+		}
+		amount, err := strconv.ParseFloat(strings.ReplaceAll(match[1], ",", ""), 64)
+		if err != nil || amount <= 0 {
+			continue
+		}
+		switch strings.ToLower(match[2]) {
+		case "h", "hr", "hrs", "hour", "hours":
+			total += amount * 3600
+		case "m", "min", "mins", "minute", "minutes":
+			total += amount * 60
+		case "s", "sec", "secs", "second", "seconds":
+			total += amount
+		case "ms", "msec", "msecs", "millisecond", "milliseconds":
+			total += amount / 1000
+		}
+	}
+	return total
+}
+
+func parseMediaDurationColonValue(value string) float64 {
+	parts := strings.Split(strings.TrimSpace(value), ":")
+	if len(parts) < 2 {
+		parsed, err := strconv.ParseFloat(strings.ReplaceAll(strings.TrimSpace(value), ",", ""), 64)
+		if err != nil || parsed <= 0 {
+			return 0
+		}
+		return parsed
+	}
+	var seconds float64
+	multiplier := 1.0
+	for _, part := range slices.Backward(parts) {
+		part := strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		amount, err := strconv.ParseFloat(strings.ReplaceAll(part, ",", ""), 64)
+		if err != nil {
+			return 0
+		}
+		seconds += amount * multiplier
+		multiplier *= 60
+	}
+	return seconds
+}
+
+func imdbEditionMatches(duration float64, details map[string]api.IMDBEditionDetail, includeTheatrical bool) []imdbEditionMatch {
+	const leewaySeconds = 50.0
+	matches := make([]imdbEditionMatch, 0)
+	for _, detail := range details {
+		if detail.Seconds <= 0 {
+			continue
+		}
+		diff := absFloat(duration - float64(detail.Seconds))
+		if diff > leewaySeconds {
+			continue
+		}
+		name := imdbEditionAttributeName(detail.Attributes)
+		hasAttribute := name != ""
+		if !hasAttribute {
+			if !includeTheatrical {
+				continue
+			}
+			name = fmt.Sprintf("%d Minute Version (Theatrical)", detail.Minutes)
+		}
+		matches = append(matches, imdbEditionMatch{
+			name:          name,
+			parts:         imdbEditionParts(detail.Attributes),
+			differenceSec: diff,
+			hasAttribute:  hasAttribute,
+			minutes:       detail.Minutes,
+		})
+	}
+	sort.Slice(matches, func(i, j int) bool {
+		if matches[i].differenceSec == matches[j].differenceSec {
+			if matches[i].hasAttribute != matches[j].hasAttribute {
+				return matches[i].hasAttribute
+			}
+			if matches[i].name == matches[j].name {
+				return matches[i].minutes < matches[j].minutes
+			}
+			return matches[i].name < matches[j].name
+		}
+		return matches[i].differenceSec < matches[j].differenceSec
+	})
+	return matches
+}
+
+func imdbEditionAttributeName(attributes []string) string {
+	names := make([]string, 0, len(attributes))
+	for _, attr := range attributes {
+		name := smartEditionTitle(attr)
+		if name != "" {
+			names = append(names, name)
+		}
+	}
+	return strings.TrimSpace(strings.Join(names, " "))
+}
+
+func smartEditionTitle(value string) string {
+	fields := strings.Fields(strings.TrimSpace(value))
+	if len(fields) == 0 {
+		return ""
+	}
+	for idx, field := range fields {
+		fields[idx] = smartEditionWord(field)
+	}
+	return strings.Join(fields, " ")
+}
+
+func smartEditionWord(value string) string {
+	if value == "" {
+		return ""
+	}
+	if isAllUpperEditionWord(value) {
+		return value
+	}
+	lower := strings.ToLower(value)
+	runes := []rune(lower)
+	runes[0] = unicode.ToUpper(runes[0])
+	return string(runes)
+}
+
+func isAllUpperEditionWord(value string) bool {
+	hasLetter := false
+	for _, r := range value {
+		if !unicode.IsLetter(r) {
+			continue
+		}
+		hasLetter = true
+		if unicode.IsLower(r) {
+			return false
+		}
+	}
+	return hasLetter
+}
+
+// cleanEditionText normalizes parser-derived edition text and drops filename
+// tokens that are not meaningful release-name editions.
+func cleanEditionText(edition string) string {
+	return cleanEditionTextWithOptions(edition, cleanEditionTextOptions{
+		shouldDrop: func(edition string) bool {
+			return len(edition) < 6
+		},
+		stripBadTokens: true,
+	})
+}
+
+// cleanIMDbEditionText normalizes IMDb runtime edition attributes while
+// preserving IMDb-specific labels that the parser cleanup would otherwise drop.
+func cleanIMDbEditionText(edition string) string {
+	return cleanEditionTextWithOptions(edition, cleanEditionTextOptions{})
+}
+
+type cleanEditionTextOptions struct {
+	shouldDrop     func(string) bool
+	stripBadTokens bool
+}
+
+// cleanEditionTextWithOptions applies preprocessing shared by parser and IMDb
+// edition normalization before final residue cleanup.
+func cleanEditionTextWithOptions(edition string, opts cleanEditionTextOptions) string {
+	edition = strings.TrimSpace(strings.ReplaceAll(edition, ",", " "))
+	if edition == "" {
+		return ""
+	}
+	lower := strings.ToLower(edition)
+	if lower == "cut" || lower == "approximate" || opts.shouldDrop != nil && opts.shouldDrop(edition) {
+		return ""
+	}
+	if strings.Contains(lower, "edition") {
+		edition = editionWordPattern.ReplaceAllString(edition, "")
+	}
+	lower = strings.ToLower(edition)
+	if strings.Contains(lower, "extended") && !strings.Contains(lower, "in1") && !strings.Contains(edition, "/") {
+		edition = "Extended"
+	}
+	if opts.stripBadTokens {
+		edition = editionBadTokenPattern.ReplaceAllString(edition, "")
+	}
+	return cleanEditionResidue(edition)
+}
+
+// cleanEditionResidue removes separator-only leftovers after edition token
+// cleanup, such as ". ." from stripped "Limited.Edition" markers.
+func cleanEditionResidue(edition string) string {
+	edition = editionWhitespacePattern.ReplaceAllString(edition, " ")
+	edition = strings.Trim(edition, " ._-+/()[]{}")
+	return strings.TrimSpace(edition)
+}
+
+func applyAnimeOverride(meta *preparationstate.State) {
+	if meta == nil || meta.MetadataOverrides.Anime == nil {
+		return
+	}
+	meta.Anime = *meta.MetadataOverrides.Anime
+}
+
+func hasManualEditionOverride(overrides api.ReleaseNameOverrides) bool {
+	return overrides.Edition != nil
+}
+
+func isMovieMetadata(meta preparationstate.State) bool {
+	category := normalizeNamingCategory(string(meta.Identity.Category))
+	if category == "" {
+		category = normalizeNamingCategory(meta.MediaInfoCategory)
+	}
+	if category == "" {
+		category = normalizeNamingCategory(meta.Release.Category)
+	}
+	if category == "" {
+		category = inferCategoryFromMetadata(meta)
+	}
+	return strings.EqualFold(category, "MOVIE")
+}
+
+func absFloat(value float64) float64 {
+	if value < 0 {
+		return -value
+	}
+	return value
+}
+
+func validateMediaInfoSettings(doc mediaInfoDoc) bool {
+	_, videoTracks, _ := splitMediaInfoTracks(doc)
+	for _, track := range videoTracks {
+		settings := trackString(track, "Encoded_Library_Settings")
+		if settings != "" {
+			return true
+		}
+	}
+	return false
+}

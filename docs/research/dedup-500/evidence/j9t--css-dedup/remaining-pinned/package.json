@@ -1,0 +1,64 @@
+{
+  "author": "Jens Oliver Meiert",
+  "bin": {
+    "css-dedup": "bin/css-dedup.js"
+  },
+  "dependencies": {
+    "postcss": "^8.5.28"
+  },
+  "description": "CSS declaration deduplicator for maintainability and performance optimization",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./plugin": {
+      "types": "./src/plugin.d.ts",
+      "default": "./src/plugin.js"
+    }
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "funding": "https://github.com/j9t/css-dedup?sponsor=1",
+  "homepage": "https://github.com/j9t/css-dedup",
+  "keywords": [
+    "css",
+    "deduplication",
+    "dry",
+    "maintainability",
+    "optimization",
+    "performance",
+    "quality",
+    "refactoring",
+    "udjo"
+  ],
+  "license": "MIT",
+  "name": "css-dedup",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j9t/css-dedup.git"
+  },
+  "scripts": {
+    "benchmark": "node test/benchmark.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prepare": "git config core.hooksPath .githooks || true",
+    "start": "node ./bin/css-dedup.js",
+    "test": "npm run test:types && node --test \"test/**/*.test.js\"",
+    "test:types": "tsc"
+  },
+  "type": "module",
+  "types": "src/index.d.ts",
+  "version": "1.13.3"
+}

@@ -1,0 +1,58 @@
+{
+  "runtime": "v22.23.4",
+  "controls_passed": 3,
+  "boundary": {
+    "schemaVersion": "sipcode-benchmark-compare/1",
+    "before": {
+      "label": "before",
+      "medianSavingsPct": 50
+    },
+    "after": {
+      "label": "after",
+      "medianSavingsPct": 48.04
+    },
+    "deltaPct": -2,
+    "regressed": true,
+    "perTask": [
+      {
+        "taskId": "same",
+        "beforePct": 50,
+        "afterPct": 48,
+        "deltaPct": -2
+      }
+    ]
+  },
+  "disjoint": {
+    "schemaVersion": "sipcode-benchmark-compare/1",
+    "before": {
+      "label": "before",
+      "medianSavingsPct": 50
+    },
+    "after": {
+      "label": "after",
+      "medianSavingsPct": 80
+    },
+    "deltaPct": 30,
+    "regressed": false,
+    "perTask": [
+      {
+        "taskId": "new",
+        "beforePct": 0,
+        "afterPct": 80,
+        "deltaPct": 80
+      },
+      {
+        "taskId": "old",
+        "beforePct": 50,
+        "afterPct": 0,
+        "deltaPct": -50
+      }
+    ]
+  },
+  "findings": [
+    "Raw1.96pp drop roundedto2pp then classifiedregression",
+    "Disjointtasksets accepted,missingtaskside replacedwith0;summarymedian30ppgain acceptedwithoutcorpusmatch",
+    "Same-task3ppdrop positive regression control"
+  ],
+  "scope": "Original unchanged compareRuns renamedmts;owned synthetic resultobjects,norealbenchmark/model/performanceclaim"
+}

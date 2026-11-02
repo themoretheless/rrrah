@@ -1,0 +1,608 @@
+{
+  "repository": "Davidcreador/pi-dcp",
+  "commit": "848689ad96a5f2d615aac4d9d28367a2307d1549",
+  "reviewed_whole_files": [
+    {
+      "path": "lib/strategies/deduplication.ts",
+      "sha256": "09ddb9fb0de3339177dfc7175fa8ba35ab2fb6b32662bd6d578de1a83059a76e",
+      "git_blob_sha1": "fe75b1ed9669643df5abd7dd7d2a97c5c6b6ffaa",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/strategies/overlap-dedup.ts",
+      "sha256": "e8963df703c46260645ac7f18a4b83257376939928a69f6118ec5384e211303b",
+      "git_blob_sha1": "6ca4af2f26aae7a4adf032aad73e344b521a10b1",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/overlap-dedup.test.ts",
+      "sha256": "f2058ccdff4d0baceb712de45a450b852892abde78f5f95a76ebdf71e89607ea",
+      "git_blob_sha1": "4ec6e55c6b4d5a4e10dfb4b9f80defb3db6dc652",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/messages.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/messages.ts",
+      "sha256": "5abfe43d74f24b29cd35e242fa609f83377016c847618ef1347cd09c0029e610",
+      "git_blob_sha1": "ca7c35407fddae1d52f6173ba33f4c10dbef00cf",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/state.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/state.ts",
+      "sha256": "f028b2e18a521f9963747091810920208b6fb9dc09f64c766c545bece16ccdf9",
+      "git_blob_sha1": "de9933b67b1e0b2be9408c2a0ac4e048f85fd5ee",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/config.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/config.ts",
+      "sha256": "a619b8c65af8acb5fd24601da4869a44a8a9e8a9a0be49af63aeaa6d261812d6",
+      "git_blob_sha1": "79ffc3e8565ffec8453366119771da5c42f37922",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/tokens.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/tokens.ts",
+      "sha256": "30edbb643dfe00505ee167e80af094108b32cb6e3222c7aae5803d30dbd46293",
+      "git_blob_sha1": "90453c4b47dca4099dd4b0859fc43bc150e5cdb9",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/_helpers.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/_helpers.ts",
+      "sha256": "d8e30aca30303b9a63b9df21b9cf72c61caaa34c44e942d5c27121a2b60a1884",
+      "git_blob_sha1": "4008c3767930bbe5fe66dfcf85642d773cb730ab",
+      "whole_file_read": true
+    },
+    {
+      "path": "package.json",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/package.json",
+      "sha256": "f84f132c61bb37fd0424dd8aa667a456b1d9786f68ce5615dc6f8c28f1fd487a",
+      "git_blob_sha1": "2ba59d14cfff31215b2bcec8604ffe84da177381",
+      "whole_file_read": true
+    },
+    {
+      "path": "index.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/04-index.ts",
+      "sha256": "fb8b6369a67e8dcb1f3cc0c377ec4bf0b5421e3ed1266283b820a1c56901e1e7",
+      "git_blob_sha1": "9e01bfc3534214833bec9f651e4b45d7368b7278",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/pipeline.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/pipeline.ts",
+      "sha256": "6f57dbd9c0d800014785c826fa016bac7de22ce307165809b23af23d894af6b0",
+      "git_blob_sha1": "c6d8d11060b373b859041ecc8033db2c0ca6ebf8",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/telemetry.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/telemetry.ts",
+      "sha256": "27c36a6a2297456765e3cca74a0b69858ddc7883f521e8a902737e1a2667c788",
+      "git_blob_sha1": "891843707c711c0ec1ceab9401e49389cda38a61",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/strategies/supersession.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/strategies/supersession.ts",
+      "sha256": "9b05d5daecf4cb952fcaeaacc526b63404a0ad6619d8704cb534c03ce1c620ec",
+      "git_blob_sha1": "d7e66411d180ae55c42ff327215473744e005442",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/strategies/size-age-decay.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/strategies/size-age-decay.ts",
+      "sha256": "1345e83fec379b5d64d5f84fe4d9dd52659777f7d1e589be8a540e298fb5ca36",
+      "git_blob_sha1": "c1fad76621ac60cd86419de0675cfe9f85522259",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/strategies/purge-errors.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/strategies/purge-errors.ts",
+      "sha256": "b343a68e749601a3636049cb1be2d9c1f82bb7c6d6bf4b8114d6d1562ae7b92c",
+      "git_blob_sha1": "183675c6da3187f230fe1c388dfdaabdca850b81",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/protection.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/protection.ts",
+      "sha256": "462a8e04f2c8046dbb179643cb5cf875b724979bb26b01a8b1e375a565330690",
+      "git_blob_sha1": "27223466b18d193272582be8adfff4f7a5817161",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/pipeline.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/pipeline.test.ts",
+      "sha256": "351707213fbeffce0f519db21c044bed34a091ad521e54c741b605ae8df9bf4f",
+      "git_blob_sha1": "44f73ae2a0e324cea6660d927e0f5a5ab3925ac1",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/persistence.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/persistence.ts",
+      "sha256": "0d3da903f3c29148569dd3a189ae544957db7a32f063dfbd23bdfbe421e5a672",
+      "git_blob_sha1": "6bfd9949bdafffca1fae21ae5cf57f41fdbbe8ef",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/stats.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/stats.ts",
+      "sha256": "af34f0ce6d69722b50f674a3e02f1a5f8d94d9bb771a4dd99f1e15f7579af7b8",
+      "git_blob_sha1": "b98b88a1602f65b968cd473990bc0616ab7e3dfb",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/tools/recall.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/tools/recall.ts",
+      "sha256": "1f83fbef917ab80977b84c7f79b89566568b45ea939a0962d5f28ad4694df856",
+      "git_blob_sha1": "fd77b8f4fe8527613ebb490a1f9d571e75ba8daa",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/tools/shared.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/tools/shared.ts",
+      "sha256": "0553bbb686be7e63db39d428e114ebc020615068e3610b28b5d26a636f2034fb",
+      "git_blob_sha1": "ac128d710bcbab1769b33a33663e6324c85f52dd",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/tools/compress-message.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/tools/compress-message.ts",
+      "sha256": "6a731e199d578c4274b7e5e75afd336212d73098e2f4d4ffca3768f82bbddd67",
+      "git_blob_sha1": "28d883879721b7e64e24a2b4df219a8094a1147e",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/tools/compress-range.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/tools/compress-range.ts",
+      "sha256": "4de8238b727fd5f02fd2db136517e8198f46e08191d3aafe37eae40fc28385d2",
+      "git_blob_sha1": "de311f18c6718757380f7058b733ab3c21fe0a68",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/recall.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/recall.test.ts",
+      "sha256": "c7c109458b8f58a5fd4e212eca195eab146cbbcc1d31e8206022802b2461fb0d",
+      "git_blob_sha1": "8fd9e25be3cd6328e45335103947c715bda0d20f",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/supersession.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/supersession.test.ts",
+      "sha256": "9c648148e58969c89dc1207b26728c514b89c5b8d34cd71ed2c225750e02f472",
+      "git_blob_sha1": "b25ef941708601537816bd1ca9e6abd334e9bacb",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/size-age-decay.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/size-age-decay.test.ts",
+      "sha256": "2bb59c46d48360b35dbc2e7392663958c43c589eb087d4b9a0ef4df7faed90c8",
+      "git_blob_sha1": "c107ec3a80819f377721af67d431d34f7d72ca33",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/commands/decompress.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/commands/decompress.ts",
+      "sha256": "643a91c082f59b45c2d0d3c711732096a3baadc5cb306ecaa78f0954effcccde",
+      "git_blob_sha1": "14b6c4604e29895634aa5d48914110e23ac13edb",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/commands/sweep.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/commands/sweep.ts",
+      "sha256": "08223fc3f155109032fd42cc5c37b9c071de18bc9a48f631a02e260d08db96b2",
+      "git_blob_sha1": "8e6edc14b11a2047784bc3644ec55f862d1c8c2a",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/commands/manual.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/commands/manual.ts",
+      "sha256": "dbc4b091d98b18e78c1aa6fbbb0d095101c5c1c921a1dbaec38c8f013cb58832",
+      "git_blob_sha1": "7af79816378711aeeb51fc84bc3d4e1ff0b9f12d",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/commands/help.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/commands/help.ts",
+      "sha256": "6bfb56337a3d4494ed5678acc68f4725766281fe54c5988036aed03b7645e394",
+      "git_blob_sha1": "300626fb2ba5c04432767508bf35a158e1c721ee",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/commands/context.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/commands/context.ts",
+      "sha256": "a7e33f8393c70897f36217e541971ca1c8048c62ed4acb3404fa2c6029d2537d",
+      "git_blob_sha1": "229dad7df42060506d33924a9e1a03bf5aed149e",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/commands/stats.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/commands/stats.ts",
+      "sha256": "e874cc8393bc26106a56d4750d845564dad429800e6f715344fe4008a66f8aa1",
+      "git_blob_sha1": "b5a9a7bdf2876b17a91ff996d7a41e0c4f47b474",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/logger.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/logger.ts",
+      "sha256": "d78b77c1c588ea212cc61f9aff5e70168443ea681e2e971b78b07be38f749953",
+      "git_blob_sha1": "61af42982c45ac630efc2e88633ea20d5a3f0c1f",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/notifications.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/notifications.ts",
+      "sha256": "e2fc93e3086b71339777c66efe278b713def500fd1e3bd09617ce631886b7977",
+      "git_blob_sha1": "144fe3416979059e18bb9f0335970870df00e45a",
+      "whole_file_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/00-README.md",
+      "sha256": "619e33b5c219182d93b614654fd350223c4f5efaded79d2bdd9b32f43500b32e",
+      "git_blob_sha1": "7cc94c54db02409639b4c287086d30c124fdc637",
+      "whole_file_read": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/.github/workflows/ci.yml",
+      "sha256": "b78e1f2462e25e686f98c1a6690c71deb76009ac26a36caf85461bcb74c6919b",
+      "git_blob_sha1": "d934b43e4ad434124ca4a8bfcfe17b37e25801fc",
+      "whole_file_read": true
+    },
+    {
+      "path": ".github/workflows/npm-publish.yml",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/.github/workflows/npm-publish.yml",
+      "sha256": "8382d4ba9742ff01487394c64e4db1df26855785c537c740a04312f9b1426ec3",
+      "git_blob_sha1": "a730c9b0e3e5c08f3ae54ab5e00e8de33389dc7c",
+      "whole_file_read": true
+    },
+    {
+      "path": ".github/workflows/release.yml",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/.github/workflows/release.yml",
+      "sha256": "27a79cf8f5966f86a58b806afb7953777a9cfe7cfe6a53256024dd5b602d342d",
+      "git_blob_sha1": "8c7f8870b0446a4099460a29af602d61068e7637",
+      "whole_file_read": true
+    },
+    {
+      "path": "tsconfig.json",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/tsconfig.json",
+      "sha256": "235b1fcd4fc14556edd17c761c809c9ff264fe54ca31827f9e16910d858a5888",
+      "git_blob_sha1": "3242b2a2f9be61eec525e96c8150a4f758057849",
+      "whole_file_read": true
+    },
+    {
+      "path": "tsconfig.tests.json",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/tsconfig.tests.json",
+      "sha256": "6b3a941333fcccb06ed24e459cf59fce1ebfb2e224b0e4cd98dd316e04fa18cb",
+      "git_blob_sha1": "e9ed7618aab0fbb687bd5fe21bdcfcd2f03602ed",
+      "whole_file_read": true
+    },
+    {
+      "path": "config.example.json",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/config.example.json",
+      "sha256": "b39d4d1af9f859852bb82d8eef3a6b90d9fd04ba954477db82f1fe8954094b33",
+      "git_blob_sha1": "a109243992eac2ccd973f5ec02bb9b9e092a77fd",
+      "whole_file_read": true
+    },
+    {
+      "path": "UBIQUITOUS_LANGUAGE.md",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/UBIQUITOUS_LANGUAGE.md",
+      "sha256": "5b88fdabda2677167ce5932b572ca6f3a7e1d036c68c00e78aa26993684ceb63",
+      "git_blob_sha1": "b5bb0cc1a8449632ce641c12d50e0b8ae873622f",
+      "whole_file_read": true
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/.gitignore",
+      "sha256": "4c75db8cd92c9037880cdd2ff2f8d3e46f2e7d351677dde0aa357993b8ebfcb1",
+      "git_blob_sha1": "199f046a4e86b9c284c322e74b73fe9308755b46",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/nudges.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/nudges.ts",
+      "sha256": "2de291c09bccffdd89dc49e8de683c76e2eabfd0ae79141fe9a9d85637bea017",
+      "git_blob_sha1": "2090932dd5c050714fd7307b2fbeb8257faceb18",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/prompts/index.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/prompts/index.ts",
+      "sha256": "08f8595142b15a9b4263442d7efb73532ff45b0bff7782f8d9478d7799585b78",
+      "git_blob_sha1": "ec6a99a5b9648fd7f290db9289ee8a3b149104bf",
+      "whole_file_read": true
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/CONTRIBUTING.md",
+      "sha256": "f9b3f65a47cd8b51d0cbfc095d67d401e7612d9efc56258c5e4f61e750b49378",
+      "git_blob_sha1": "e5123894490f0a6b877024c244403f8c92030428",
+      "whole_file_read": true
+    },
+    {
+      "path": "skills/pi-dcp/SKILL.md",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/skills/pi-dcp/SKILL.md",
+      "sha256": "d0dbd1a5d663a85a685143d2f4620a1557698f0ed112fc772019140cb52f1435",
+      "git_blob_sha1": "d071df76e3caed18b5f92e177f2449ef7ce91350",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/ui/toast.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/ui/toast.ts",
+      "sha256": "165c345cc06016128bb6cc076e749a26e888f4ed2f7c73259de2e15b2bd6bac7",
+      "git_blob_sha1": "157633bccc0120334facebe6e6e72d4d28a701eb",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/ui/info-panel.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/ui/info-panel.ts",
+      "sha256": "71c300e1f93b66d8e75f831d029cf2c763524e4eba9d896eeb69083c9c5d2aba",
+      "git_blob_sha1": "4cd8570bde94bda5f2c15649d286f87224add7ec",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/protection.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/protection.test.ts",
+      "sha256": "2a6c28d97784002a98dd48f2a85ac39de796eff403e94a607c55bc136aec49a9",
+      "git_blob_sha1": "6be93d068f94fd53020fb8cec9a09e52a9400e76",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/_jev-fixtures.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/_jev-fixtures.ts",
+      "sha256": "0b395c6b0d6d493199a58ccfbc9ac798e5ad4f97ded416ecee15616d6d7ef366",
+      "git_blob_sha1": "ce691d68c444152366c30ceb8b10f6dfe3c45f81",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/misc.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/misc.test.ts",
+      "sha256": "c365becfa5c99c3e39445c207cf53cbf50dbf2dca2a975903643460028814436",
+      "git_blob_sha1": "71fa224d989b3985a0d09d3c19902ed5908e5e4d",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/parity.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/parity.test.ts",
+      "sha256": "547b685b400345b18194503abc2c4e07e90976b72971b46996114a5273750649",
+      "git_blob_sha1": "ee711f7ace1569e14f792813669c25a965b80ebe",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/audit.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/audit.test.ts",
+      "sha256": "b01d384b78038d68b16a8f1e56e99e44ef0eda1c6aa414d8058c4f051b66161b",
+      "git_blob_sha1": "6193815b9b2643eb8ba8e7851f62f4425f971cb7",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/features.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/features.test.ts",
+      "sha256": "c0c22239859296149dfeab4bcdc635b9b1ec76ec5c97d6eb22f6a3ec9697fb0f",
+      "git_blob_sha1": "e0aa427a21dae5d1af0763edd2e2ee095dad7de9",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/jev-client.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/jev-client.ts",
+      "sha256": "ba8fe9a0acd417ddcdb13afae4dca84ab75c8d5170a51bb5de9708ea1a4b4b48",
+      "git_blob_sha1": "ca73751a84382af66521c6145e9647653a3aeb85",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/jev-client.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/jev-client.test.ts",
+      "sha256": "b30c4a3099190d1568c85cc285637746ea181ca4240eeb71a74ffa10a8258d8d",
+      "git_blob_sha1": "4c5541180703ee69ee6053ef6a3014a6ba2ec25d",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/jev-config.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/jev-config.test.ts",
+      "sha256": "4c6e5eb096cdad98e3f974ad2996adf32a695423d3aaf8ebb0331b4b187854cb",
+      "git_blob_sha1": "2a17f18d1b9a8466c57c155ce2973142dd50c0a9",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/jev-selection.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/jev-selection.ts",
+      "sha256": "eb3cb945c49b8defd5475f2c98c2859677cf0b8cd12ac91fe1dea991db93b43e",
+      "git_blob_sha1": "dbb8328985b204e1d88325e62ff9657b550f2a01",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/jev-selection.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/jev-selection.test.ts",
+      "sha256": "11fba56e6a91adb5d55fdc5d6c0aae9c477890697fddca4152aae38e4bb20ddd",
+      "git_blob_sha1": "8008a2a69a1d7d1dded60c100692d2ff3de191ff",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/jev-benchmark.test.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/jev-benchmark.test.ts",
+      "sha256": "fdbdbdcbaeb68fef204ed187d4652f54da1e2420772760c21036dd9495302407",
+      "git_blob_sha1": "d08237e7af6b44229c6c5ca8444653f0482ba8b6",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 61,
+  "tree_blob_count": 71,
+  "full_repository_read": false,
+  "authored_controls_run": 46,
+  "original_tests_run": 87,
+  "original_tests_read": 8,
+  "controls": [
+    "docs/research/dedup-500/pidcp170-controls-20261024/read-range-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/strategy-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-test-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/pipeline-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-pipeline-test-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/protection-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/persistence-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/compression-shared-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-supersession-decay-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/image-decay-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/command-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/reporting-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/prompt-nudge-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-protection-test-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/protection-test-scope.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-misc-parity-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/client-schema-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-client-test-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/unscored-policy-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-protection-full-fixture-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-config-selected-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-selection-benchmark-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/canonical-fixture-selection-benchmark-results.txt",
+    "docs/research/dedup-500/pidcp170-controls-20261024/canonical-fixture-adapter.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/unscored-policy-canonical-results.json"
+  ],
+  "runtime_scope": "Complete original strategy/messages/config/state/token modules and original test helper; real tokenizer0.0.4 dependency installed, though these paths use original character-based estimates. No config loading, host pipeline, real files, providers or shell actions.",
+  "findings": [
+    "Shell variable path remains literal; cat --help is treated as reading a file named --help.",
+    "Zero read limit creates reversed interval; NaN offsets survive. Host tool validation not qualified.",
+    "Ordinary bounded read and pipeline-command rejection positive controls pass.",
+    "Source: range containment does not compare content or file version; lossless historical-content claim requires host mutation/size semantics not established by these tests.",
+    "Source: exact-call dedup compares signature, not output; unlike overlap it does not skip isError results. No full-pipeline runtime reproduction.",
+    "Executed exact-call strategy: different outputs with same args prune earlier output; latest errored result prunes earlier successful result.",
+    "Executed overlap strategy: range containment prunes differing historical output; file/content version not checked.",
+    "Executed short repeat: OK length2 replaced by length73 placeholder; tokensSaved=0 floors negative character savings. No actual token-savings measurement.",
+    "Executed original full runPipeline with default config: recent repeat/error pair protected; four subsequent user boundaries age it out and earlier successful output is pruned in favor of latest errored result.",
+    "Executed original full runPipeline fresh-original repeat: purgeErrors first pass replaces aged failed-call arguments; second pass with same session state skips rewrite and exposes original arguments again. Config disables other strategies to isolate purge; no Pi host lifecycle claim.",
+    "Pipeline cloning preserves owned original messages in these controls.",
+    "Original pipeline idempotency test checks counters only; original purge test does not run another fresh-original pass after successful purge. These passing tests do not cover the separately reproduced argument-restoration failure.",
+    "Executed original protection.ts: valid SHA256-bound call/result pins replay; changing result bytes invalidates pin; multiple results per callId rejected; archived recall labelled and bounded by token budget.",
+    "Protection/pin mechanism is useful reference for snapshot binding, not media identity proof or end-to-end host recovery qualification.",
+    "Executed original persistence with owned-directory constant: purgedErrorCallIds and turnIndex survive save/restore. No actual host restart claim.",
+    "Malformed restore original code returns false after mutating nextCompressionId=77 and turnIndex=55, contradicting source comment that state is untouched on malformed input.",
+    "Distinct fixture IDs owned/a and owned:a sanitize to same owned_a.json; last save overwrites first. Original restore sessionId check prevents using wrong state, but first saved state is lost. Actual host ID format not qualified.",
+    "Original lifetime stats source explicitly permits last-writer-wins lost deltas; no multi-process test executed.",
+    "Only tracked image visually inspected: promotional text; numerical savings shown there not accepted as measured evidence.",
+    "Source-only: createRecallTool uses first matching toolCallId on branch; does not call SHA256/unique-pair findResult/prepareRecovery helpers. Three original recall test bodies read, not executed; duplicate-ID host behavior not reproduced.",
+    "Source-only: normal recall drops images with omission note; text-verbatim contract is narrower than all-content restoration.",
+    "Executed original shared preflight denies disabled compression and manual-mode requests; branch range helper filters protected write records.",
+    "Executed original storeCompression plus pipeline: replacement contains topic but not stored summary; owned protected compress-call arguments preserve summary. This does not establish summary loss across whole context.",
+    "Source-only: message compression deduplicates nonempty supplied IDs but lacks direct existence/protected-tool check; recency guard only when enabled. No full SDK compression-tool execution.",
+    "17 additional original tests pass: successful/failed edit distinction, different paths, read ordering, protection, decay age/size/minified boundaries, immutability.",
+    "Executed original decay with owned long text plus synthetic image block: replacement is one text excerpt; image removed without explicit image-omission note. No actual media decoding/provider qualification.",
+    "Image-only owned result of eight image blocks remains unexcerpted in negative control.",
+    "Prior source reading shows ordinary recall also omits images; complete image recovery through the Pi host remains unqualified.",
+    "Executed original decompress parser/handler: 9007199254740993 rounds to9007199254740992 and can suspend an owned record at rounded ID; ordinary malformed 5abc rejected. This edge uses synthetic oversized state IDs, not evidence normal sessions reach them.",
+    "Executed original sweep with invalid5abc limit: warning emitted, but default selection stages all three owned eligible tool results since last user message. No actual Pi/user context modified.",
+    "Executed original decompress with failing protection callback: exception propagates and record stays active; positive failure-ordering control.",
+    "Source-only manual/help modules read; runtime manual flag is explicitly nonpersistent.",
+    "Executed original pipeline/telemetry/notifications: two owned OK results grow character-estimated context12->30; telemetry reports -150% removed while cumulative footer says ~0 saved and detailed notice ~0 tokens. This is chars/4 reporting, not provider-token or throughput evidence.",
+    "Notification off/minimal/detailed behavior checked through explicit footer/toast observers, no physical UI qualification.",
+    "Source: context/stats panels label cumulative saved tokens as estimated; per-call telemetry is also heuristic despite token wording. Panel rendering not executed.",
+    "Source: logger errors write even when debug=false; source comment says so. Logger not executed; no user log access.",
+    "README wholly read: experimental context selection explicitly has no established accuracy, real-cost or latency benefit; estimate counters not invoices/performance evidence.",
+    "CI workflows wholly read: Node22/24 unit/typecheck matrix, normal tsc project excludes test files, separate test tsconfig not invoked in shown workflows. Host integration is separate documentation, not proof current review ran it.",
+    "Config example JSON compared with actual unchanged DEFAULT_CONFIG: exact deep equality. No loadConfig/user settings access.",
+    "README detailed notification described reserved although implemented behavior was executed in prior reporting controls; source wins.",
+    "README claims ordinary failed inputs purge on every outbound request; earlier fresh-original repeat control contradicts persistent clearing after first application.",
+    "README host verification/source disclosure instructions are untrusted upstream documentation, not authorization to read user credentials or contact external scoring services. No host workflow/publish/network scoring executed.",
+    "Executed original PromptStore with explicit owned path: enabled empty override returns empty string, contrary nonempty read() comment; disabled overrides retain built-in text; cache remains stable after file edit as documented.",
+    "Executed original nudge handler with threshold8, tokens0 and assistant-only branch lengths8..80: fires every8 through64; bounded scan caps since at64, so72/80 do not re-fire. Long-turn continuity gap; no live Pi lifecycle test.",
+    "Upstream skill documentation wholly read as repository data only, not applied: states message-mode default and purge turns4, but pinned DEFAULT_CONFIG is range-mode and turns2.",
+    "No upstream instructions to compress, install, alter local settings, or send source/task payloads followed.",
+    "Six unchanged original protection tests pass with documented fixture subset: branch/body/args binding, reason-specific release, compaction metadata, recovery states, protection precedence and suspended compression. This is original test-body execution, not full original import graph/host suite.",
+    "UI toast/info-panel source read wholly: overlay/fallback paths, width handling and close keys; no actual TUI rendering validation. Native UI imports intentionally not replaced in viewed evidence; runtime command/report controls continue explicit observer adapters.",
+    "26 additional unchanged original misc/parity tests pass: percent and model-limit resolution, malformed ordinary IDs, soft/hard/manual nudges, recency step cap and protection precedence.",
+    "Reviewed ordinary-ID parser tests do not cover unsafe integers; iteration tests cover initial threshold/disabled trigger, not repeated firing after bounded scan cap saturation. Earlier authored edge results remain unrebutted.",
+    "Source: audit.test iteration re-fire test checks since3,4,5,6; does not cover cap saturation reproduced at64 and72/80. Bounded-scan claim in test header is not evidence that post-cap continued triggering works.",
+    "Both complete audit/features test files wholly read but not executed: runtime SDK/schema-dependent compression registration paths remain unqualified, rather than counted green.",
+    "Executed unchanged original makeRequest/decodeResponse: valid payload/response, duplicate IDs, UTF8 byte limit, extra fields and NaN rejection controls pass. No key lookup or transport invoked.",
+    "Client source enforces request/response byte bounds and cancellation deadline; source-only for transport streaming and cancellation in this audit, not live provider evidence.",
+    "Six unchanged client tests pass: payload/schema boundaries, supplied transport request options/body, stream byte bound, pre-cancellation, hanging headers/stream deadlines, response-body cancellation, invalid UTF8, bounded literal fixture parsing. No real provider or private config touched.",
+    "jev-config tests wholly read but not executed; depend on remaining JevSelection module and a subprocess-owned configuration fixture. No claim owner/project config isolation verified by this read.",
+    "Whole JevSelection source read: snapshot binds dev/inode/size/mtimeNs/ctimeNs and SHA256 call/content; subsequent current() checks metadata and branch binding, not repeated file reread. Actual recall/scoring host lifecycle not executed.",
+    "Executed enabled unscored policy with original source fixture: hold=false keep empty; ordinary original pipeline still prunes earlier observed unscored read against same-argument later read. Contradicts README promise that conservative mode retains unapproved/uncertain results against legacy dedup. No scoring/network/credentials invoked.",
+    "One unchanged original auto-config decoding test passes; separate global/project isolation test intentionally not executed and not credited.",
+    "Six original protection tests rerun after original full _jev-fixtures.ts/JevSelection graph restored:6/6 pass. Earlier shortened-fixture evidence retained historically; this rerun removes that fixture seam, not lifetime-stat storage adapter.",
+    "Raw unchanged original selection/benchmark suite:10 cases,4pass6fail on macOS because mkdtemp path aliases /private/var and snapshot disallows symlink aliases. Raw failures preserved; not attributed to inference quality.",
+    "Exactly one fixture change canonicalizes its temporary root with realpathSync (plus import); production and test case files unchanged. Adapted fixture run10/10pass. These are bounded original-body controls with fixture adaptation, not unchanged whole-suite success.",
+    "Correction to earlier observed-unscored wording: raw noncanonical fixture did not prove source observation accepted. Canonical requalification now returns declined rather than no-candidates before inference, proving eligibility; subsequent ordinary pipeline still prunes unscored earlier result. Prior raw evidence retained.",
+    "Benchmark numbers are synthetic injected-judgment one-shot transformations; no measured real accuracy, cost, cache or workflow latency claim."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "62/71 artifacts inspected:61 whole text files and1 image;9 paths remain;full SDK/Pi host/provider unqualified",
+  "deferred": "Native pHash.org/ASAN unchanged",
+  "original_test_scope": "87 unique original test bodies exercised. New10 selection/benchmark cases: raw original fixture4pass6fail; canonical-path fixture adapter10pass. Prior77 scopes preserved in previous audits; no full Pi/SDK/live service qualification.",
+  "runtime_verified_original_files": [
+    "lib/messages.ts",
+    "lib/state.ts",
+    "lib/config.ts",
+    "lib/tokens.ts",
+    "test/_helpers.ts",
+    "lib/strategies/deduplication.ts",
+    "lib/strategies/overlap-dedup.ts",
+    "test/overlap-dedup.test.ts",
+    "lib/pipeline.ts",
+    "lib/telemetry.ts",
+    "lib/strategies/supersession.ts",
+    "lib/strategies/size-age-decay.ts",
+    "lib/strategies/purge-errors.ts",
+    "lib/protection.ts",
+    "test/pipeline.test.ts",
+    "lib/tools/shared.ts",
+    "test/supersession.test.ts",
+    "test/size-age-decay.test.ts",
+    "lib/commands/decompress.ts",
+    "lib/commands/sweep.ts",
+    "lib/commands/manual.ts",
+    "lib/commands/help.ts",
+    "lib/notifications.ts",
+    "lib/nudges.ts",
+    "lib/prompts/index.ts",
+    "test/protection.test.ts",
+    "test/misc.test.ts",
+    "test/parity.test.ts",
+    "lib/jev-client.ts",
+    "test/jev-client.test.ts",
+    "lib/jev-selection.ts",
+    "test/_jev-fixtures.ts",
+    "test/jev-config.test.ts",
+    "test/jev-selection.test.ts",
+    "test/jev-benchmark.test.ts"
+  ],
+  "previous_audit": "docs/research/dedup-500/pidcp170-source-review-v16-20261024.json",
+  "pipeline_runtime_scope": "Complete original runPipeline and imported strategy/messages/config/state/token modules; lifetime-stat persistence replaced by explicit in-memory bumpLifetime adapter and logger observer. Owned message fixtures, no config loading, user storage, host Pi or provider execution.",
+  "runtime_seams": [
+    "lib/stats.ts: bumpLifetime appends to owned in-memory array instead of accessing user lifetime-stat storage",
+    "logger.info observer"
+  ],
+  "images_visually_inspected": [
+    {
+      "path": "assets/preview.png",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/assets/preview.png",
+      "git_blob_sha1": "99300caf0cc7770ad59571a82b3c8378dd048da1",
+      "sha256": "8350e62c016c7fa7c744c795e75641bb7e6dd6acf6af984697304a58a4c0ba12",
+      "observation": "Dark pi-dcp promo card; orange heading, dynamic context pruning subtitle, installation command and illustrative ~24,310 tokens/3 compressions text. Not measured performance evidence or duplicate-image fixture."
+    }
+  ],
+  "tracked_artifacts_inspected": 62,
+  "persistence_runtime_scope": "Original persistence module with exactly one import-to-constant substitution for an owned storage directory; actual native fs write/rename/read. No user config/session files, pruning, real Pi process restart or concurrent processes.",
+  "command_runtime_scope": "Original complete command modules with explicit toast observer, owned branch/session fixtures; no actual UI, host command dispatch, durable pin writes or user session modification",
+  "reporting_runtime_scope": "Original complete pipeline, telemetry and notifications modules; lifetime-stat and UI toast adapters as recorded; owned messages and footer observer, no real UI/provider/tokenizer measurement",
+  "config_example_check": "docs/research/dedup-500/pidcp170-controls-20261024/config-example-comparison.json",
+  "prompt_runtime_scope": "Original PromptStore/nudge/config/state modules, actual filesystem only under explicit owned promptsDir; no user prompts/config or live agent system-prompt modification",
+  "remaining_tracked_paths": [
+    ".agent/tasks/jev-context-selection/TASK.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "lib/jev.ts",
+    "package-lock.json",
+    "test/check-host.mjs",
+    "test/host-integration.mjs",
+    "test/jev-commands.test.ts",
+    "test/jev-lifecycle.test.ts"
+  ],
+  "client_schema_runtime_scope": "Original complete client module pure makeRequest/decodeResponse only; no readKey/literalKey/requestJev invocation, environment/config credential reads, transport, network or scoring",
+  "runtime_fixture_changes": [
+    "test/_jev-fixtures.ts now uses canonical-temp-root adapter; full original fixture remains in evidence",
+    "Earlier unchanged-fixture checks refer to recorded prior state, not current adapted runtime file"
+  ]
+}

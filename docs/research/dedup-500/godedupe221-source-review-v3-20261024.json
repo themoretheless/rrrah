@@ -1,0 +1,330 @@
+{
+  "index": 221,
+  "repository": "alexgQQ/dedupe",
+  "commit": "7f2b3d411e4919010c1af41821aa041835358f40",
+  "tracked_blob_count": 65,
+  "whole_file_reads": [
+    {
+      "path": "dedupe.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/02-dedupe.go",
+      "sha256": "064083a3f78d4a7885936b1c452d5a2a8c8a7b6daf26f4a71c63a2643b660092",
+      "git_blob_sha1": "f2599a7ccbe8327546d88bed94f1b635a2bf6218"
+    },
+    {
+      "path": "hash/hash.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/03-hash.go",
+      "sha256": "f5a7a5bcb5fc6724adc914e73d59b39a23e5adc19333194e261ba98b05073a99",
+      "git_blob_sha1": "0faf1b8c79ecc3bee5401a4f101c353667aeb9ce"
+    },
+    {
+      "path": "hash/hash_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/05-hash_test.go",
+      "sha256": "519e682abdab7721dc8a2206432665e8baf4e4759f988d35fc725d88b6ce0f10",
+      "git_blob_sha1": "053b6ebf7437bbd3011c289e547fda72666423aa"
+    },
+    {
+      "path": "vptree/vptree.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/vptree.go",
+      "sha256": "f0a05267c804ce5a6996cd3789dcbd221455190d6eb15c67a186e17f4f635a05",
+      "git_blob_sha1": "66a27e9b41b068b05a18ae8825cdb55f6a4303d4"
+    },
+    {
+      "path": "vptree/queue.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/queue.go",
+      "sha256": "3a1c664e2e27307c1477cce0e51fd1325c62e3b43cfbb849d9ae869e9651e34e",
+      "git_blob_sha1": "d19ea1566b05f7ff85dff835164c4974ebe4be22"
+    },
+    {
+      "path": "utils/file.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/utils/file.go",
+      "sha256": "c0557f7c39110bd90e7520a24fdf177e38bf22dd1f079c8b64f2d047a644bbd2",
+      "git_blob_sha1": "944f4f3d521158cf8b94b0c19139ea1fe16d59dd"
+    },
+    {
+      "path": "cmd/dedupe/main.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/04-main.go",
+      "sha256": "30521b9a6fcd0c8cbabe1ecccd1301be3a86288f572110f392fbfdc6b8b617f9",
+      "git_blob_sha1": "9c0e8269f8e156e8a844c7254f2919a5240e22b2"
+    },
+    {
+      "path": "vptree/vptree_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/vptree_test.go",
+      "sha256": "8c9db9223c693859259699c14916b626252b5b5f180292a1c757727ab47f87ce",
+      "git_blob_sha1": "1b449d1ba0ba6c2931d4a0e50b31983a1b248d15"
+    },
+    {
+      "path": "vptree/queue_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/vptree/queue_test.go",
+      "sha256": "4dc75e99d12f806fb1f47a79669e8d50d610da2c51ddd956632c93401f0d4168",
+      "git_blob_sha1": "01ebada3aec114054fac5d7b4db659204a2c18ff"
+    },
+    {
+      "path": "utils/file_test.go",
+      "local": "docs/research/dedup-500/evidence/alexgQQ--dedupe/remaining-pinned/utils/file_test.go",
+      "sha256": "bff209792bb27d4d83c5823a32f782f4af96269cee4ad2cfea99b0b1b2a5d776",
+      "git_blob_sha1": "015ae57d8bb2a9e0034fb2b230fbdffb27e81f0e"
+    }
+  ],
+  "whole_file_read_count": 10,
+  "original_tests_source_read": 9,
+  "original_tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "findings": [
+    "Worker count GOMAXPROCS-2 can become zero/nonpositive, leaving nonempty work channel with no consumers. Static source finding, not reproduced.",
+    "Error accumulator goroutine is not joined before returning err; result collection completion alone does not synchronize accumulator completion.",
+    "Duplicates skips previously selected roots but does not filter found members already used in other groups; overlap/count semantics require tree inspection and runtime validation.",
+    "DCT uses coefficient coordinates1..8 in both axes, not usual0..7block with only DC excluded; distinct preprocessing contract.",
+    "Perceptual thresholds10/22 heuristics, comments admit nonduplicates at18..20. No calibration proof.",
+    "Six hash tests cover five Hamming properties/examples and uniform-white dHash; no DCT fixture or image accuracy test.",
+    "No Go execution, production changes or image viewing yet."
+  ],
+  "remaining": [
+    {
+      "path": ".github/CODEOWNERS",
+      "bytes": 16
+    },
+    {
+      "path": ".github/workflows/builds.yml",
+      "bytes": 1362
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 247
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1066
+    },
+    {
+      "path": "Makefile",
+      "bytes": 492
+    },
+    {
+      "path": "README.md",
+      "bytes": 6177
+    },
+    {
+      "path": "go.mod",
+      "bytes": 42
+    },
+    {
+      "path": "go.sum",
+      "bytes": 0
+    },
+    {
+      "path": "testimages/06d8ab52-f423-4507-8555-ca105db9e820.jpg",
+      "bytes": 16713
+    },
+    {
+      "path": "testimages/17be544c-8296-46b1-a981-6ea6a5a508d1.jpg",
+      "bytes": 58408
+    },
+    {
+      "path": "testimages/2ff44cfe-bc96-49cc-8ad2-dc1631393a6a.jpg",
+      "bytes": 15856
+    },
+    {
+      "path": "testimages/346170b4-3d4b-48e4-ad20-05148fdfa709.jpg",
+      "bytes": 74400
+    },
+    {
+      "path": "testimages/3850626a-cc11-4a08-88df-20e00cfc6bbd.jpeg",
+      "bytes": 27324
+    },
+    {
+      "path": "testimages/3a0de73a-66ed-4020-bed5-4015bcf35f83.jpg",
+      "bytes": 15643
+    },
+    {
+      "path": "testimages/4ddbaff9-005d-49da-978b-46009e87bc36.jpeg",
+      "bytes": 23737
+    },
+    {
+      "path": "testimages/4e3a8f9b-9778-4ba0-b257-95f2cfe7a232.jpg",
+      "bytes": 29666
+    },
+    {
+      "path": "testimages/5f57a082-a7fb-4cf1-bbba-68ba03f9437a.jpeg",
+      "bytes": 29611
+    },
+    {
+      "path": "testimages/6495e3ec-150d-4ec6-bc0f-beeb67291b11.jpeg",
+      "bytes": 49846
+    },
+    {
+      "path": "testimages/656d02a1-9116-4743-8a7b-148629f46b1e.jpeg",
+      "bytes": 16258
+    },
+    {
+      "path": "testimages/76b06f16-949a-4154-9ce9-90494e92c853.jpeg",
+      "bytes": 212395
+    },
+    {
+      "path": "testimages/87242e81-e02a-42d5-9c5c-30352f9c61a3.jpeg",
+      "bytes": 120786
+    },
+    {
+      "path": "testimages/90c6f0b4-baae-448a-a7e7-33a9b60645e3.jpg",
+      "bytes": 363973
+    },
+    {
+      "path": "testimages/9453cf8c-251d-492c-87b2-4320c701fcd7.jpeg",
+      "bytes": 6451
+    },
+    {
+      "path": "testimages/9d478e30-a8e7-45fd-bc14-79ecfbdb4581.jpeg",
+      "bytes": 15010
+    },
+    {
+      "path": "testimages/a2c7342f-e793-4df0-919e-b3634d2f9861.jpeg",
+      "bytes": 224324
+    },
+    {
+      "path": "testimages/a455e0ac-d2fc-415d-8840-dcebf1aef85e.jpg",
+      "bytes": 58408
+    },
+    {
+      "path": "testimages/a572db63-d361-4635-8d94-009aea9f9b43.jpeg",
+      "bytes": 205460
+    },
+    {
+      "path": "testimages/abbee063-3963-47ad-be61-0bba171eb8ab.jpg",
+      "bytes": 39645
+    },
+    {
+      "path": "testimages/adbfc484-fb8a-47b5-91a0-169a85d4fcc3.jpg",
+      "bytes": 18511
+    },
+    {
+      "path": "testimages/ba3685e6-50ad-40a6-9c91-634ef5cde7d5.jpg",
+      "bytes": 126729
+    },
+    {
+      "path": "testimages/bd827ddc-24d6-4468-861f-eeb3715486ca.jpg",
+      "bytes": 137623
+    },
+    {
+      "path": "testimages/c2484942-ad52-4789-bbc1-455ede5b2c9d.jpg",
+      "bytes": 19985
+    },
+    {
+      "path": "testimages/c315ebe5-e19e-47c9-b30e-3591c143794a.jpeg",
+      "bytes": 165717
+    },
+    {
+      "path": "testimages/c449116d-59e9-434d-9ff0-1719771be4ed.jpg",
+      "bytes": 11869
+    },
+    {
+      "path": "testimages/cats/cat-dark.jpg",
+      "bytes": 38401
+    },
+    {
+      "path": "testimages/cats/cat-distorted.jpg",
+      "bytes": 63566
+    },
+    {
+      "path": "testimages/cats/cat-greyscale.jpg",
+      "bytes": 28334
+    },
+    {
+      "path": "testimages/cats/cat-inverted.jpg",
+      "bytes": 41295
+    },
+    {
+      "path": "testimages/cats/cat-on-couch.jpg",
+      "bytes": 60918
+    },
+    {
+      "path": "testimages/cats/cat-saturated.jpg",
+      "bytes": 43755
+    },
+    {
+      "path": "testimages/cats/cat-shrink.jpg",
+      "bytes": 18517
+    },
+    {
+      "path": "testimages/cats/cat-skewed.jpg",
+      "bytes": 38363
+    },
+    {
+      "path": "testimages/cats/cat-upscaled.jpg",
+      "bytes": 56715
+    },
+    {
+      "path": "testimages/cats/cat.jpg",
+      "bytes": 29718
+    },
+    {
+      "path": "testimages/cats/copy-of-kitten.jpg",
+      "bytes": 35944
+    },
+    {
+      "path": "testimages/cats/kitten-looking-up.jpg",
+      "bytes": 16788
+    },
+    {
+      "path": "testimages/cats/kitten-resized.jpg",
+      "bytes": 19067
+    },
+    {
+      "path": "testimages/cats/kitten.jpg",
+      "bytes": 35944
+    },
+    {
+      "path": "testimages/d4737782-7010-4fd5-a12b-d2fadd6637b3.jpeg",
+      "bytes": 9803
+    },
+    {
+      "path": "testimages/ddce8825-7fd4-4552-86b1-6e559eae7d2b.jpg",
+      "bytes": 83444
+    },
+    {
+      "path": "testimages/e945ded0-0d6d-49cc-bd9b-df1d5b3e555d.jpeg",
+      "bytes": 19147
+    },
+    {
+      "path": "testimages/fe87ff2c-ae4a-432f-9fea-2f970e6f37d8.jpg",
+      "bytes": 18511
+    },
+    {
+      "path": "utils/resize.go",
+      "bytes": 19347
+    },
+    {
+      "path": "utils/resize_test.go",
+      "bytes": 6234
+    },
+    {
+      "path": "utils/version.go",
+      "bytes": 208
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/godedupe221-source-review-v2-20261024.json",
+  "tree_io_review": {
+    "execution": false,
+    "observations": [
+      "Within uses strict distance<radius; zero threshold excludes even identical hashes. Max-heap emits farthest-first, not closest-first.",
+      "Tree build partitions around distance to arbitrary midpoint item, not median-selected distance; no guaranteed balancing. Identical hashes can create deeply skewed recursion.",
+      "File IDs assigned under mutex in worker completion order; randomized tree roots and grouping traversal can affect reproducibility.",
+      "FindImages discards WalkDir returned error; missing/inaccessible traversal can look like empty/partial success.",
+      "Extension matching case-sensitive jpg/jpeg/png; GIF decoder registered but scanner excludes.gif.",
+      "CopyFiles creates hard links, not independent copies; MoveFiles uses basename destination without explicit overwrite prevention or preflight. Functions reviewed, never executed.",
+      "No byte comparison, source identity/mutation check, cancellation or image dimension budget visible in these helpers."
+    ]
+  },
+  "cli_tests_review": {
+    "execution": false,
+    "observations": [
+      "VPtree test compares2568bit values to exhaustive strict-radius reference for one random target/threshold; useful finite oracle, no run performed.",
+      "No original mutation/overlapping-group/cancellation tests in reviewed3additional test files.",
+      "Compare-mode result group excludes target; delete branch keeps first matched result and deletes only remaining matches when deleteAll false. Thus survivor choice does not simply mean preserve target and remove all matches.",
+      "delete-all flag alone does not enter delete branch, which is gated on delete flag.",
+      "CLI continues to mutation phase even when dedup returned an error and some groups; no source revalidation or byte confirmation. Source-only observation; no mutation executed.",
+      "stdin splits paths on spaces and ignores Scanner.Err; output Flush error not checked.",
+      "quiet/output redirect opens os.DevNull read-only using os.Open, while subsequent writes errors ignored.",
+      "Invalid hash option logs and falls backDCT rather than failing; zero/negative threshold ignored."
+    ]
+  }
+}

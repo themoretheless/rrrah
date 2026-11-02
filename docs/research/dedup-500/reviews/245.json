@@ -2,9 +2,9 @@
   "index": 245,
   "repository": "francetem/deduper",
   "commit": "6ddec2c426312468606bde72813ce20bbddeb316",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reference",
-  "finding": "Java generic deduper with ImagePHash module and tests; inspect image math as independent oracle.",
+  "review_scope": "All95 pinned blobs assessed:93text whole-read,1JPEG visual+structural,1serialized model header/hash only; no Java/Maven/model/DB runtime",
+  "decision": "reference_only_no_code_adoption",
+  "finding": "Entity-resolution framework with49bit pHash; failed fetch EMPTY matching, mutable feature math and incomplete candidate/group state preclude adoption as validated file/image duplicate engine. All pinned files assessed with explicit binary/model limits.",
   "available_source_evidence": [
     {
       "path": "src/main/java/org/ehu/dedupe/classifier/Deduper.java",
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root Apache-2.0 text whole-read; nested attributed pHash/DCT/Princeton provenance not fully qualified; no implementation adopted",
   "tests_detected": 30,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -74,5 +74,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/francetem245-source-review-v10-20261025.json",
+  "full_repository_read": false,
+  "all_repository_files_assessed": true,
+  "whole_runtime_qualified": false
 }

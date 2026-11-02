@@ -1,0 +1,63 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v27-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/proxy/rewriters/git.test.ts",
+      "local": "lastrewriter-tests_modules_proxy_rewriters_git.test.ts",
+      "git_blob": "dfc3522d35b2cb92c697c1221014843d91e796da",
+      "sha256": "3d90d9d7d5c71ab310661d94c910b58f4b3da0141366c1272564603d640f34c6",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/grep.test.ts",
+      "local": "lastrewriter-tests_modules_proxy_rewriters_grep.test.ts",
+      "git_blob": "85c6786945f99954b7f084c4057027c13b145b10",
+      "sha256": "9d06ca90c1bc289c4ec8afc05bb70a17aabe1eefb144a393827bc17164317865",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/npm.test.ts",
+      "local": "lastrewriter-tests_modules_proxy_rewriters_npm.test.ts",
+      "git_blob": "09c8f0f1829c9d9d6d2b3dd209179f3205f110e7",
+      "sha256": "ba6dfd71496b13e3e728863c339a430759a8ba397b5d05d0d046ec82cbd8f812",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 99,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 360,
+    "numPassedTests": 360,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 46,
+  "authored_upstream_controls_total_distinct": 59,
+  "new_authored_controls": 2,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "source_reconciliation": "docs/research/dedup-500/sipcode120-reviewed-source-reconciliation-20261024.json",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 2,
+    "original": "swapped line\n",
+    "rewritten": "1\n",
+    "findings": [
+      "rg-risreplacementflag,butrewriterinterpretsasrecursiveandcollapsesto-c counts",
+      "Explicitgrep-rnpositivepreservesnumberedmatchunderlinecap"
+    ],
+    "scope": "Originalgrep/basecodewithimportlocationschanged;actualrg/grep/bash/awk onownedfixture;noexternalfilecontent",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/rg-owned-f2LNDI"
+  },
+  "findings": [
+    "Actualrg-rreplacementoutputswappedline becomes1countafteroriginalrewriteradds-c;grep-randrg-rsemanticsconflated.",
+    "Actualgrep-rnpositivekeepsnumberedmatch.",
+    "OriginalrgtestonlyassertsrewriterName,nocommandexecutionandnosemanticscheck.",
+    "Prior96wholefileclaimsuniquelyreconciledwithpinnedGitblobs,0duplicatecredits;now99with3newwhole-readtests."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

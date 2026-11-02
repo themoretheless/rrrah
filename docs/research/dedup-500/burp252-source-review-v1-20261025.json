@@ -1,0 +1,90 @@
+{
+  "index": 252,
+  "repository": "titaniumtushar/burp-mcp-plus",
+  "commit": "4c0ed1e06726a812359797a3067888144532063b",
+  "tracked_blob_count": 17,
+  "whole_file_reads": [
+    {
+      "path": "src/burp_mcp_plus/dedup.py",
+      "local": "docs/research/dedup-500/evidence/titaniumtushar--burp-mcp-plus/02-dedup.py",
+      "sha256": "236064611ef6c274c1a7a10a084591020876aefb3ba4f9f7078fa71be7f6dac7",
+      "git_blob_sha1": "b7b3271a5f1a7bc14837d760ae78f1585f0b5bd2"
+    }
+  ],
+  "whole_file_read_count": 1,
+  "remaining": [
+    {
+      "path": ".gitignore",
+      "bytes": 406
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1083
+    },
+    {
+      "path": "README.md",
+      "bytes": 15063
+    },
+    {
+      "path": "assets/architecture.svg",
+      "bytes": 4305
+    },
+    {
+      "path": "assets/logo.svg",
+      "bytes": 2646
+    },
+    {
+      "path": "burp-extension/deduped_history.py",
+      "bytes": 38060
+    },
+    {
+      "path": "examples/claude_desktop_config.json",
+      "bytes": 844
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 1583
+    },
+    {
+      "path": "src/burp_mcp_plus/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "src/burp_mcp_plus/builder.py",
+      "bytes": 9947
+    },
+    {
+      "path": "src/burp_mcp_plus/burp_client.py",
+      "bytes": 4079
+    },
+    {
+      "path": "src/burp_mcp_plus/jsfiles.py",
+      "bytes": 8001
+    },
+    {
+      "path": "src/burp_mcp_plus/server.py",
+      "bytes": 29905
+    },
+    {
+      "path": "tests/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "tests/test_builder.py",
+      "bytes": 6008
+    },
+    {
+      "path": "uv.lock",
+      "bytes": 127487
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "findings": [
+    {
+      "path": "src/burp_mcp_plus/dedup.py",
+      "confirmed": "Whole215lines read. Local exported HTTP text parser, not duplicate-file scanner. Unbounded whole file read/split and regex searches; replacement decoding loses byte identity. Delimiter strings inside request/response payload can split/truncate entries, no length framing or parse-completeness outcome. Metadata search scans approximate trailing region and can select prior response metadata. Registry name replaces existing source without collision warning, no sizebound/lock. Actual synthetic control limit0 returns1 because limit checked after append. host_path regex not standards URL parser; no network/client/history operations, no adoption.",
+      "controls": "docs/research/dedup-500/burp252-zero-limit-control-20261025.json"
+    }
+  ]
+}

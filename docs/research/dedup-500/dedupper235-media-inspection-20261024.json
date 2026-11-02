@@ -1,0 +1,57 @@
+{
+  "scope": "Pillow strict image decode and full-frame fit contact; MKV raw-byte prefix assessment only, no video decoding.",
+  "images": [
+    {
+      "path": "firefox.bmp",
+      "size": [
+        250,
+        240
+      ],
+      "mode": "RGB",
+      "strict_decode": true
+    },
+    {
+      "path": "firefox.jpg",
+      "size": [
+        500,
+        479
+      ],
+      "mode": "RGB",
+      "strict_decode": true
+    },
+    {
+      "path": "firefox.png",
+      "size": [
+        250,
+        240
+      ],
+      "mode": "RGBA",
+      "strict_decode": true
+    },
+    {
+      "path": "firefox_small.jpg",
+      "size": [
+        200,
+        191
+      ],
+      "mode": "RGB",
+      "strict_decode": true
+    },
+    {
+      "path": "wikipe-tan.png",
+      "size": [
+        315,
+        599
+      ],
+      "mode": "RGBA",
+      "strict_decode": true
+    },
+    {
+      "path": "firefox_corrupt.jpg",
+      "strict_decode": false,
+      "error": "image file is truncated (35 bytes not processed)"
+    }
+  ],
+  "mkv_corrupt_is_prefix": true,
+  "jpg_corrupt_is_prefix": true
+}

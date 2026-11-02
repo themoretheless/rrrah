@@ -1,0 +1,33 @@
+{
+  "index": 199,
+  "repository": "eiler2005/maxgram",
+  "commit": "3a3670f05f1246898e611e43fe0298ece2ee5c97",
+  "whole_file_reads": [
+    {
+      "path": "src/bridge/mapping.py",
+      "local": "docs/research/dedup-500/evidence/eiler2005--maxgram/remaining-pinned/src/bridge/mapping.py",
+      "sha256": "e5f4b06505c6d0a8c9e834645dda63604f3618298b5670fa2b73aca3f664a015"
+    },
+    {
+      "path": "src/bridge/delivery.py",
+      "local": "docs/research/dedup-500/evidence/eiler2005--maxgram/remaining-pinned/src/bridge/delivery.py",
+      "sha256": "6338e3750c77f623fa12b0a26112444d396adcced68cdb4010a0e73fd68df9e1"
+    },
+    {
+      "path": "src/bridge/retry_policy.py",
+      "local": "docs/research/dedup-500/evidence/eiler2005--maxgram/remaining-pinned/src/bridge/retry_policy.py",
+      "sha256": "b151d0bd9c4c45609382ba1cce4567a913ba2a570755ec1d440079bb05e2af80"
+    }
+  ],
+  "whole_file_read_count": 3,
+  "tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Inbound idempotency stores MAX message/chat IDs before Telegram send; delivery mapping adds Telegram IDs. This is event delivery identity, not file-byte or perceptual image equality.",
+    "Retry policy computes bounded exponential delay and message-age expiry; it provides no duplicate-file index or image matching contract.",
+    "Optional repository transaction helper yields without transaction when adapter lacks it; no runtime durability/bridge qualification performed."
+  ],
+  "remaining": "Other tracked files, tests and media not fully reviewed. Domain rejection is not a full500 completion credit."
+}

@@ -1,0 +1,61 @@
+{
+  "repository": "dedupeio/dedupe-geocoder",
+  "commit": "ed1506a36e1a153737adab51144911cbd3ab3112",
+  "whole_file_count": 5,
+  "tree_blob_count": 22,
+  "reviewed_whole_files": [
+    {
+      "path": "geocoder/deduper.py",
+      "sha256": "d029d32eaf01761278f80538e5531bb58289b20a120fde45e6f9f0c928bef033",
+      "git_blob_sha1": "4fed6e3321fcd6b4d28ff49da92728ffba48b837",
+      "whole_file_read": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "031677f370bbce3752e7fe7a7475e41b75e780b53eb810fc84a40c0455f35531",
+      "git_blob_sha1": "23202c479c73809bdf1d4259639accbac0134166",
+      "whole_file_read": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "050b7ee773ad206b2c75f2a3bbe9b24ca177e0364aafd34e830975a6d38d0a85",
+      "git_blob_sha1": "49757915e11fb519047566f6806e41df1220e38a",
+      "whole_file_read": true
+    },
+    {
+      "path": "linkNewData.py",
+      "sha256": "bb75998b75ebc735232c525d666896778374264bfb884e88c500c5502aeced88",
+      "git_blob_sha1": "aa7ce12288cf8107622b8c8203a47a50b3d40d92",
+      "whole_file_read": true
+    },
+    {
+      "path": "loadAddresses.py",
+      "sha256": "7573c47dc58047d0fad6bc1d17e1ce8f4de7e063be50686659a6010c63135c29",
+      "git_blob_sha1": "78a05425648dacc1687de22f3346e1db22c68044",
+      "whole_file_read": true
+    }
+  ],
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "original_tests_run": 0,
+  "authored_controls_run": 6,
+  "controls": [
+    "docs/research/dedup-500/geocoder168-controls-20261024/results.json",
+    "docs/research/dedup-500/geocoder168-controls-20261024/csv-results.json"
+  ],
+  "runtime_scope": "Original preProcess method plus original CSV writer block and leading next(f) statement AST-selected; owned StringIO fixtures with open seam; no SQL, psycopg2, dedupe, training, real data or full CLI execution",
+  "findings": [
+    "Normalization is not idempotent: alpha newline space beta -> alpha two spaces beta -> alpha one space beta.",
+    "Case/outer whitespace intentionally merged; tabs not mapped to spaces.",
+    "Source: createMatchBlocksTable exposes primary_key argument but row iterator hardcodes row[id]. Not database-runtime verified.",
+    "Source: drawSample SELECT orders all canonical addresses randomly without LIMIT; sample_size passed downstream, not SQL. No workload/performance benchmark.",
+    "Address fuzzy matching and database block keys do not establish file or image equality.",
+    "Executed original CSV writer writes no header; original leading next(f) discards first accepted match. Two rows -> one remains; one row -> none remains.",
+    "Executed original writer with all confidences below threshold creates empty CSV; original next(f) raises StopIteration.",
+    "Source: checkForTable(engine,table_name) reads global args.name instead of table_name; imported-call contract unqualified.",
+    "Source: trainIncoming writes geocoder/dedupe.settings while blockIncoming reads geocoder/data/dedupe.settings; different artifacts. No full retraining execution."
+  ],
+  "remaining": "Other tracked files and full database/matching pipeline not reviewed/executed.",
+  "deferred": "pHash.org/ASAN unchanged",
+  "previous_audit": "docs/research/dedup-500/geocoder168-source-review-v1-20261024.json"
+}

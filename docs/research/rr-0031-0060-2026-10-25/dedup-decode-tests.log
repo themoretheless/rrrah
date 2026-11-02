@@ -1,0 +1,405 @@
+   Compiling rrrah-raw v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-raw)
+   Compiling image v0.25.10 (/Users/themoretheless/Documents/Sources/rrrah/vendor/image)
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling jxl-oxide v0.12.6 (/Users/themoretheless/Documents/Sources/rrrah/vendor/jxl-oxide)
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+   Compiling rrrah-vfx v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vfx)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4m 01s
+     Running tests/anchor_rank.rs (target/debug/deps/anchor_rank-7c7c6af1c3bf502a)
+
+running 5 tests
+test exact_aggregate_limits_and_every_observed_cancellation_release_credits ... ok
+test geometry_selected_windows_aggregate_information_and_reject_inverted_or_flat_pixels ... ok
+test independent_textures_reject_even_with_exact_bidirectional_geometry ... ok
+test overlap_bounds_aliases_and_inconsistent_geometry_are_not_hidden ... ok
+test published_bounds_follow_selected_original_windows_and_exclude_bad_geometry ... ok
+
+successes:
+
+successes:
+    exact_aggregate_limits_and_every_observed_cancellation_release_credits
+    geometry_selected_windows_aggregate_information_and_reject_inverted_or_flat_pixels
+    independent_textures_reject_even_with_exact_bidirectional_geometry
+    overlap_bounds_aliases_and_inconsistent_geometry_are_not_hidden
+    published_bounds_follow_selected_original_windows_and_exclude_bad_geometry
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/anchor_rank_file.rs (target/debug/deps/anchor_rank_file-656c4148b293f209)
+
+running 3 tests
+test aggregate_work_refuses_before_missing_source_io ... ok
+test files_match_views_and_cancel_or_mutation_discard_evidence ... ok
+test invalid_anchor_policy_refuses_before_missing_source_io ... ok
+
+successes:
+
+successes:
+    aggregate_work_refuses_before_missing_source_io
+    files_match_views_and_cancel_or_mutation_discard_evidence
+    invalid_anchor_policy_refuses_before_missing_source_io
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/bank_partition.rs (target/debug/deps/bank_partition-91620221e4580729)
+
+running 6 tests
+test a_single_component_is_not_split_to_manufacture_validation_and_empty_ids_survive ... ok
+test all_work_and_payload_are_prepaid_and_output_credit_follows_last_owner ... ok
+test connected_components_match_independent_graph_flood_fill_on_seeded_banks ... ok
+test cross_bank_transitive_chains_keep_all_conflicting_alternatives_and_origins ... ok
+test every_one_shot_cancel_checkpoint_discards_assignments_and_retry_is_identical ... ok
+test malformed_suffixes_and_policy_release_every_reservation ... ok
+
+successes:
+
+successes:
+    a_single_component_is_not_split_to_manufacture_validation_and_empty_ids_survive
+    all_work_and_payload_are_prepaid_and_output_credit_follows_last_owner
+    connected_components_match_independent_graph_flood_fill_on_seeded_banks
+    cross_bank_transitive_chains_keep_all_conflicting_alternatives_and_origins
+    every_one_shot_cancel_checkpoint_discards_assignments_and_retry_is_identical
+    malformed_suffixes_and_policy_release_every_reservation
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/gradient.rs (target/debug/deps/gradient-5e9898c830d3b5b6)
+
+running 9 tests
+test dominant_gradient_orientation_analytic_angles_flat_and_limits ... ok
+test extracted_gradients_identity_unrelated_work_and_cancel ... ok
+test gradient_affine_light_flat_refusals_and_cancel ... ok
+test gradient_matching_mutual_ties_admission_and_cancel ... ok
+test gradient_pyramid_independent_double_size_coordinates_and_work ... ok
+test independently_rotated_texture_and_alpha_refusal ... ok
+test managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner ... ok
+test rotated_uniform_patches_never_create_descriptors ... ok
+test spatial_gradient_selection_preserves_recipe_and_cell_limits ... ok
+
+successes:
+
+successes:
+    dominant_gradient_orientation_analytic_angles_flat_and_limits
+    extracted_gradients_identity_unrelated_work_and_cancel
+    gradient_affine_light_flat_refusals_and_cancel
+    gradient_matching_mutual_ties_admission_and_cancel
+    gradient_pyramid_independent_double_size_coordinates_and_work
+    independently_rotated_texture_and_alpha_refusal
+    managed_spatial_pyramid_matches_unmanaged_and_releases_last_owner
+    rotated_uniform_patches_never_create_descriptors
+    spatial_gradient_selection_preserves_recipe_and_cell_limits
+
+test result: ok. 9 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+     Running tests/gradient_collection.rs (target/debug/deps/gradient_collection-788149ed31f45b61)
+
+running 1 test
+test gradient_collection_matches_direct_pairs_and_atomic_admission ... ok
+
+successes:
+
+successes:
+    gradient_collection_matches_direct_pairs_and_atomic_admission
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.90s
+
+     Running tests/gradient_distinct_locations.rs (target/debug/deps/gradient_distinct_locations-e503c8d909b57872)
+
+running 4 tests
+test distinct_location_results_equal_independent_sorted_distance_oracle ... ok
+test distinct_location_work_validation_and_atomic_cancellation ... ok
+test managed_distinct_match_admission_last_owner_and_cancellation ... ok
+test nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity ... ok
+
+successes:
+
+successes:
+    distinct_location_results_equal_independent_sorted_distance_oracle
+    distinct_location_work_validation_and_atomic_cancellation
+    managed_distinct_match_admission_last_owner_and_cancellation
+    nearby_scale_duplicates_preserve_distinct_landmarks_and_reject_ambiguity
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/local_collection.rs (target/debug/deps/local_collection-7d1f07d14286f152)
+
+running 20 tests
+test display_projection_collection_matches_pairs_and_preserves_strict_evidence ... ok
+test early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication ... ok
+test final_callback_mutation_cannot_publish_incident_local_pairs ... ok
+test final_directory_callback_mutation_cannot_publish_incident_local_pairs ... ok
+test indexed_arbitrary_angles_and_intermediate_scales_keep_labelled_pairs ... ok
+test indexed_collection_changed_before_decode_is_invalidated_without_losing_healthy_pair ... ok
+test indexed_collection_final_generation_and_one_shot_cancel_discard_report ... ok
+test indexed_collection_reports_bad_and_insufficient_sources_and_admission_errors ... ok
+test indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair ... ok
+test indexed_watermark_and_large_edit_preserve_pixel_policy ... ok
+test ranged_fit_collection_matches_pair_results_and_exposes_selected_domain ... ok
+test recursive_collection_preserves_aliases_errors_and_request_settings ... ok
+test recursive_spatial_collection_preserves_requests_and_rejects_substitution ... ok
+test reflected_collection_discards_changed_sources_batch_wide ... ok
+test reflected_collection_retrieves_labelled_pairs_and_cancels_without_report ... ok
+test reflected_file_pair_confirms_pixels_and_releases_managed_features ... ok
+test reflected_ranged_modes_validate_before_consuming_sources ... ok
+test reflected_recursive_collection_keeps_aliases_paths_and_request_policy ... ok
+test reflected_spatial_collection_matches_spatial_file_oracle ... ok
+test spatial_collection_matches_exhaustive_spatial_pair_acceptance ... ok
+
+successes:
+
+---- indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair stdout ----
+features=1395 hits=44837 proposed=6 pixel_verifications=3 exhaustive=6
+
+
+successes:
+    display_projection_collection_matches_pairs_and_preserves_strict_evidence
+    early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication
+    final_callback_mutation_cannot_publish_incident_local_pairs
+    final_directory_callback_mutation_cannot_publish_incident_local_pairs
+    indexed_arbitrary_angles_and_intermediate_scales_keep_labelled_pairs
+    indexed_collection_changed_before_decode_is_invalidated_without_losing_healthy_pair
+    indexed_collection_final_generation_and_one_shot_cancel_discard_report
+    indexed_collection_reports_bad_and_insufficient_sources_and_admission_errors
+    indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair
+    indexed_watermark_and_large_edit_preserve_pixel_policy
+    ranged_fit_collection_matches_pair_results_and_exposes_selected_domain
+    recursive_collection_preserves_aliases_errors_and_request_settings
+    recursive_spatial_collection_preserves_requests_and_rejects_substitution
+    reflected_collection_discards_changed_sources_batch_wide
+    reflected_collection_retrieves_labelled_pairs_and_cancels_without_report
+    reflected_file_pair_confirms_pixels_and_releases_managed_features
+    reflected_ranged_modes_validate_before_consuming_sources
+    reflected_recursive_collection_keeps_aliases_paths_and_request_policy
+    reflected_spatial_collection_matches_spatial_file_oracle
+    spatial_collection_matches_exhaustive_spatial_pair_acceptance
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 31.62s
+
+     Running tests/model_compare.rs (target/debug/deps/model_compare-5cbc71ad095d3c5d)
+
+running 47 tests
+test bidirectional_exposure_collection_prepays_reverse_before_input ... ok
+test bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix ... ok
+test bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch ... ok
+test bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs ... ok
+test both_generations_and_ignored_provider_cancellation_are_sticky ... ok
+test either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers ... ok
+test exposure_collection_admits_all_totals_suffix_and_storage_before_iteration ... ok
+test exposure_collection_final_pair_mutation_of_prior_source_and_owner_discards_batch ... ok
+test exposure_collection_keeps_unknown_pairs_and_recovers_with_shared_provider ... ok
+test exposure_collection_preserves_primary_support_scheduling_and_owned_report_credit ... ok
+test exposure_recovery_advances_only_after_primary_miss_with_one_shared_provider ... ok
+test exposure_recovery_last_secondary_mutation_and_both_owners_are_atomic ... ok
+test exposure_recovery_preserves_primary_support_and_skips_secondary_provider ... ok
+test exposure_recovery_primary_success_still_checks_final_outer_weights_and_owners ... ok
+test exposure_recovery_validates_suffix_cumulative_caps_and_overflow_before_io ... ok
+test extracted_bank_empty_is_explicit_and_every_cancel_checkpoint_releases_credit ... ok
+test extracted_bank_refuses_changed_source_or_weights_after_provider ... ok
+test extracted_crop_bank_retains_mapped_points_and_last_clone_credit_without_geometry ... ok
+test file_bank_coverage_admits_all_radii_before_io_and_cancel_has_priority ... ok
+test file_bank_coverage_keeps_flat_and_inverted_pixels_inconclusive ... ok
+test file_bank_coverage_recovers_after_insufficient_windows_without_repeating_inference ... ok
+test file_bank_empty_is_inconclusive_and_cancelled_provider_discards_retained_prefix ... ok
+test file_bank_multiple_contexts_discard_last_provider_source_change_and_cancel ... ok
+test file_bank_multiple_rank_contexts_do_not_confirm_flat_or_inverted_pixels ... ok
+test file_bank_pixel_context_preflight_rejects_overflow_work_and_cancel_before_io ... ok
+test file_bank_pixel_contexts_share_extraction_and_report_selected_context ... ok
+test file_bank_pixels_refuse_flat_or_inverted_even_with_consistent_provider_geometry ... ok
+test file_bank_search_extracts_all_windows_and_confirms_original_pixels ... ok
+test file_bank_work_refuses_before_io_and_late_source_change_discards_banks ... ok
+test final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test global_and_both_request_tokens_cancel_mid_and_final_publication ... ok
+test joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation ... ok
+test joint_model_keeps_original_pixel_confirmation_and_releases_on_cancelled_retry ... ok
+test joint_model_projection_admission_precedes_io_and_cancellation_has_priority ... ok
+test joint_region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test joint_shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test malformed_regions_refuse_before_weight_io_or_provider_and_global_cancel_wins ... ok
+test model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence ... ok
+test overlap_exposure_admits_cumulative_calibration_before_io_and_cancel_wins ... ok
+test overlap_exposure_flat_and_inverted_pixels_keep_compact_miss_unconfirmed ... ok
+test overlap_exposure_last_provider_mutation_and_owner_cancel_discard_all_banks ... ok
+test overlap_exposure_search_shares_nine_banks_and_retains_selected_metadata ... ok
+test policy_preflight_and_proposal_count_refuse_without_partial_evidence ... ok
+test provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners ... ok
+test region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations ... ok
+test shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error ... ok
+test supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses ... ok
+
+successes:
+
+successes:
+    bidirectional_exposure_collection_prepays_reverse_before_input
+    bidirectional_exposure_collection_preserves_direction_and_skips_supported_suffix
+    bidirectional_exposure_collection_reverse_final_mutation_and_cancel_discard_batch
+    bidirectional_exposure_final_reverse_invalidates_previously_supported_pairs
+    both_generations_and_ignored_provider_cancellation_are_sticky
+    either_source_or_model_mutation_during_provider_refuses_and_restored_retry_recovers
+    exposure_collection_admits_all_totals_suffix_and_storage_before_iteration
+    exposure_collection_final_pair_mutation_of_prior_source_and_owner_discards_batch
+    exposure_collection_keeps_unknown_pairs_and_recovers_with_shared_provider
+    exposure_collection_preserves_primary_support_scheduling_and_owned_report_credit
+    exposure_recovery_advances_only_after_primary_miss_with_one_shared_provider
+    exposure_recovery_last_secondary_mutation_and_both_owners_are_atomic
+    exposure_recovery_preserves_primary_support_and_skips_secondary_provider
+    exposure_recovery_primary_success_still_checks_final_outer_weights_and_owners
+    exposure_recovery_validates_suffix_cumulative_caps_and_overflow_before_io
+    extracted_bank_empty_is_explicit_and_every_cancel_checkpoint_releases_credit
+    extracted_bank_refuses_changed_source_or_weights_after_provider
+    extracted_crop_bank_retains_mapped_points_and_last_clone_credit_without_geometry
+    file_bank_coverage_admits_all_radii_before_io_and_cancel_has_priority
+    file_bank_coverage_keeps_flat_and_inverted_pixels_inconclusive
+    file_bank_coverage_recovers_after_insufficient_windows_without_repeating_inference
+    file_bank_empty_is_inconclusive_and_cancelled_provider_discards_retained_prefix
+    file_bank_multiple_contexts_discard_last_provider_source_change_and_cancel
+    file_bank_multiple_rank_contexts_do_not_confirm_flat_or_inverted_pixels
+    file_bank_pixel_context_preflight_rejects_overflow_work_and_cancel_before_io
+    file_bank_pixel_contexts_share_extraction_and_report_selected_context
+    file_bank_pixels_refuse_flat_or_inverted_even_with_consistent_provider_geometry
+    file_bank_search_extracts_all_windows_and_confirms_original_pixels
+    file_bank_work_refuses_before_io_and_late_source_change_discards_banks
+    final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation
+    global_and_both_request_tokens_cancel_mid_and_final_publication
+    joint_final_caller_checkpoint_cannot_publish_a_model_result_after_source_or_weight_mutation
+    joint_model_keeps_original_pixel_confirmation_and_releases_on_cancelled_retry
+    joint_model_projection_admission_precedes_io_and_cancellation_has_priority
+    joint_region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations
+    joint_shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error
+    malformed_regions_refuse_before_weight_io_or_provider_and_global_cancel_wins
+    model_mutation_during_fresh_pixel_confirmation_discards_supported_evidence
+    overlap_exposure_admits_cumulative_calibration_before_io_and_cancel_wins
+    overlap_exposure_flat_and_inverted_pixels_keep_compact_miss_unconfirmed
+    overlap_exposure_last_provider_mutation_and_owner_cancel_discard_all_banks
+    overlap_exposure_search_shares_nine_banks_and_retains_selected_metadata
+    policy_preflight_and_proposal_count_refuse_without_partial_evidence
+    provider_cancellation_error_is_typed_cancelled_for_global_and_both_owners
+    region_lifecycle_refuses_whole_source_mutation_and_both_request_cancellations
+    shifted_crop_domains_confirm_the_same_original_pixels_without_a_translation_error
+    supplied_provider_supports_original_pixels_empty_is_explicit_and_errors_do_not_become_misses
+
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 16.00s
+
+     Running tests/model_projected_tiles.rs (target/debug/deps/model_projected_tiles-69a7f3d360a05cb1)
+
+running 8 tests
+test all_25_equal_hdr_projections_are_rejected_by_originals ... ok
+test all_seven_work_caps_and_ledger_refuse_before_missing_io_and_cancel_wins ... ok
+test alpha_copies_support_and_equal_black_projections_with_different_alpha_exhaust ... ok
+test different_nonzero_crop_origins_map_proposals_to_full_original_coordinates ... ok
+test global_and_both_owner_generations_cancel_first_middle_and_final_checkpoints ... ok
+test hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger ... ok
+test last_caller_source_and_weight_mutations_cannot_publish_a_negative_ledger ... ok
+test source_weights_and_provider_failures_after_a_miss_remain_terminal_and_release ... ok
+
+successes:
+
+successes:
+    all_25_equal_hdr_projections_are_rejected_by_originals
+    all_seven_work_caps_and_ledger_refuse_before_missing_io_and_cancel_wins
+    alpha_copies_support_and_equal_black_projections_with_different_alpha_exhaust
+    different_nonzero_crop_origins_map_proposals_to_full_original_coordinates
+    global_and_both_owner_generations_cancel_first_middle_and_final_checkpoints
+    hdr_regions_recover_after_whole_miss_with_original_domain_mapping_and_shared_ledger
+    last_caller_source_and_weight_mutations_cannot_publish_a_negative_ledger
+    source_weights_and_provider_failures_after_a_miss_remain_terminal_and_release
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+
+     Running tests/model_tiles.rs (target/debug/deps/model_tiles-6dea59009466c4c6)
+
+running 21 tests
+test all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io ... ok
+test complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+test final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test geometry_without_original_pixel_support_does_not_stop_the_tile_sequence ... ok
+test insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle ... ok
+test insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test joint_complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner ... ok
+test joint_exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster ... ok
+test joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish ... ok
+test joint_final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry ... ok
+test joint_insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal ... ok
+test joint_projection_total_is_admitted_before_io_even_if_first_tile_could_support ... ok
+test joint_source_tolerance_square_overflow_and_underflow_refuse_before_io ... ok
+test joint_whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+test late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts ... ok
+test late_provider_failures_source_mutations_and_both_generations_discard_all_attempts ... ok
+test repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit ... ok
+test tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions ... ok
+test whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels ... ok
+
+successes:
+
+successes:
+    all_eight_work_caps_overflow_invalid_policy_and_storage_refuse_before_io
+    complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner
+    exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster
+    final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish
+    final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry
+    geometry_without_original_pixel_support_does_not_stop_the_tile_sequence
+    insufficient_anchor_geometry_keeps_the_attempt_and_recovers_on_a_later_rectangle
+    insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal
+    joint_complete_fixed_order_visits_all_twenty_five_regions_and_shared_credit_follows_last_owner
+    joint_exhausted_insufficient_geometry_is_typed_and_retains_the_complete_managed_roster
+    joint_final_caller_checkpoint_mutation_cancellation_and_request_change_never_publish
+    joint_final_source_mutation_takes_precedence_over_exhausted_insufficient_geometry
+    joint_insufficient_geometry_does_not_swallow_a_later_proposal_work_refusal
+    joint_projection_total_is_admitted_before_io_even_if_first_tile_could_support
+    joint_source_tolerance_square_overflow_and_underflow_refuse_before_io
+    joint_whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels
+    late_preparation_memory_refusal_discards_cached_inputs_and_all_attempts
+    late_provider_failures_source_mutations_and_both_generations_discard_all_attempts
+    repeated_regions_reuse_identical_managed_inputs_and_retained_owners_keep_credit
+    tiny_decoded_domains_omit_empty_quadrants_and_duplicate_full_regions
+    whole_support_stops_at_one_and_late_crop_support_stops_only_after_original_pixels
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.85s
+
+     Running tests/opposite_native.rs (target/debug/deps/opposite_native-8a7af63fc7d7cebc)
+
+running 6 tests
+test joint_opposite_original_pixels_support_and_release ... ok
+test joint_opposite_preflight_and_unknown_do_not_publish_negative ... ok
+test opposite_final_callback_mutation_cannot_publish ... ok
+test opposite_preflight_swap_work_overflow_memory_and_cancel_before_io ... ok
+test opposite_real_fixture_support_reflection_and_release ... ok
+test opposite_unknown_is_preserved_and_releases ... ok
+
+successes:
+
+successes:
+    joint_opposite_original_pixels_support_and_release
+    joint_opposite_preflight_and_unknown_do_not_publish_negative
+    opposite_final_callback_mutation_cannot_publish
+    opposite_preflight_swap_work_overflow_memory_and_cancel_before_io
+    opposite_real_fixture_support_reflection_and_release
+    opposite_unknown_is_preserved_and_releases
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 9.44s
+

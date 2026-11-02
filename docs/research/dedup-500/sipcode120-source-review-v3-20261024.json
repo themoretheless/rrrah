@@ -1,0 +1,68 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v2-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/read-cache.ts",
+      "local": "cache-src_modules_proxy_read-cache.ts",
+      "git_blob": "20d1cca735d04b9ce4838b9decd0199256df4a1b",
+      "sha256": "a64f95bc130315398f786dd3ccf92e49d84152c0294344177750a03ce7ab05a0",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/path-normalize.ts",
+      "local": "cache-src_lib_path-normalize.ts",
+      "git_blob": "13c07c26fbaa957dd833ddafb65a59a340dc49f3",
+      "sha256": "50b63ef36179a5ca72f8460f3b197a9dcacf7c8edf912a1d93a9161f26b327d8",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/dedupRead.test.ts",
+      "local": "cache-tests_modules_proxy_rewriters_dedupRead.test.ts",
+      "git_blob": "ad5350fa2af363fb51bb27075d43572754ea62ed",
+      "sha256": "375e3d56f0e0530dc062df7badeb417c9c144222573f51cde73d766a3b3b0738",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/read-cache.test.ts",
+      "local": "cache-tests_modules_proxy_read-cache.test.ts",
+      "git_blob": "9089de97aa6179a273162de8dff0a0d155fdb7d0",
+      "sha256": "30b09cee47b46988056ca6f56609a879f9419c64d8bedd74e5c70daf580ea96d",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest_results": {
+    "numTotalTests": 24,
+    "numPassedTests": 24,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "original_test_scope": "Two unchanged original test files and2originalruntime modules;isolatedVitest4.1.0 from prior harness;not full app/config/dependencies",
+  "authored_controls_total_distinct": 8,
+  "new_authored_controls": 1,
+  "requalified_prior_controls": 1,
+  "persistent_result": {
+    "runtime": "v22.23.4",
+    "requalified_prior_controls": 1,
+    "new_controls_passed": 1,
+    "findings": [
+      "Original persistent cache reproduces pre-tool record then denial with zero completed reads",
+      "Parseable incomplete cache entry accepted;decision denies and producesNaN token estimate"
+    ],
+    "scope": "Original full hook,decision,path normalizer,cache and real filesystem;runtime import locations changed;only prewarm stubbed and not reached;owned home/file/cache only;no actual Claude tool execution",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/persistent-owned-8ubZtj"
+  },
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-original-tests-20261024",
+  "findings": [
+    "Premature PreToolUse record reproduced with real original disk cache/path normalization;no completed actual Read tools.",
+    "Cache loader only validates path/hash/mtime;missingestimatedTokens/turn accepted and denies withNaN savings.",
+    "Original cache tests missing-fields example omits hash/mtime,doesnot cover incomplete metadata usedbydecision."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

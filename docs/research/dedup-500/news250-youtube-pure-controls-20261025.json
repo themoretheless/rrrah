@@ -1,0 +1,37 @@
+{
+  "method": "unchanged AST pure functions; no imports of upstream modules, browser or network",
+  "cases": [
+    {
+      "case": "valid_url",
+      "input": "https://www.youtube.com/watch?v=abcdefghijk",
+      "return": "abcdefghijk"
+    },
+    {
+      "case": "foreign_host",
+      "input": "https://example.invalid/youtube.com/watch?v=abcdefghijk",
+      "return": "abcdefghijk"
+    },
+    {
+      "case": "overlong_id",
+      "input": "https://youtu.be/abcdefghijklmnop",
+      "return": "abcdefghijk"
+    },
+    {
+      "case": "nested_xml",
+      "input": "<transcript><text>Hello <b>world</b> tail</text></transcript>",
+      "return": "Hello"
+    },
+    {
+      "case": "wrong_json_shape",
+      "input": "{\"events\":[null]}",
+      "exception": "AttributeError",
+      "message": "'NoneType' object has no attribute 'get'"
+    },
+    {
+      "case": "ordinary_json",
+      "input": "{\"events\":[{\"segs\":[{\"utf8\":\"hello\"}]}]}",
+      "return": "hello"
+    }
+  ],
+  "original_tests_run": false
+}

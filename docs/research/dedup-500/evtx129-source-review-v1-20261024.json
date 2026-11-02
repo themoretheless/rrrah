@@ -1,0 +1,42 @@
+{
+  "repository": "Silv3rHorn/evtx2json",
+  "commit": "5508294355be1939dd84f419be8911bdc5824074",
+  "whole_files_read": [
+    {
+      "path": "evtl_selector.py",
+      "local": "02-evtl_selector.py",
+      "git_blob": "61453ae81ff513e4ff74ae158817911550bdeb39",
+      "sha256": "a9c6ca7eb9b48b0ddc6ae1e0e7763b1a63cd8fda30a2c442a3d4357ed1d669c2",
+      "whole_text_read": true
+    },
+    {
+      "path": "evtx2json.py",
+      "local": "03-evtx2json.py",
+      "git_blob": "789036c80201e6f5a4aee732b7b77d7ad533aa9d",
+      "sha256": "4d402ffcd07d63629eef8a98efa61d8f336000b1f24459928bd28e29d05a1813",
+      "whole_text_read": true
+    },
+    {
+      "path": "evtxtract_formatter.py",
+      "local": "04-evtxtract_formatter.py",
+      "git_blob": "1492ca4e8ca0b4a6b6c0fdb31852774bff6788ce",
+      "sha256": "47a11f0a7820833b2d08def8c7b5a78500db119a1d2c3181f1af8199aa145741",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "tracked_blobs": 12,
+  "whole_repo_complete": false,
+  "authored_controls_passed": 4,
+  "original_upstream_tests_run": false,
+  "controls": "evtx129-controls-20261024/results.json",
+  "scope": "Original selected AST functions;real mmh3 5.2.0;owned fixtures only;no event-log parsing or full CLI",
+  "findings": [
+    "Different JSON records with same32bit Murmur hash suppressed as duplicates.",
+    "Repeated identical text suppressed.",
+    "Separate channel keeps independent hash sets.",
+    "Global LOGS retains prior input;second missing-file validation returns true."
+  ],
+  "decision": "reject-domain",
+  "production_adoption": false
+}

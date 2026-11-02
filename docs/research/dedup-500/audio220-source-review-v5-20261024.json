@@ -1,0 +1,229 @@
+{
+  "index": 220,
+  "repository": "Ryuk17/AudioDeduplication",
+  "commit": "e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb",
+  "tracked_blob_count": 22,
+  "whole_file_reads": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/00-README.md",
+      "sha256": "a5d3a19478f96b3b8c29de6bd7013f7c9aed35208d0e1a7728312aece66e5502",
+      "git_blob_sha1": "1f602a87da1f9a746a53b979cfbfe70756f760e7"
+    },
+    {
+      "path": "test/test.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/05-test.cpp",
+      "sha256": "c974aa8bd2c84ece58d9f5fbcd87880f172103af5e75ad8a85e23e309a92671d",
+      "git_blob_sha1": "407f900cb36c00e53d43702a41e90833975e9b98"
+    },
+    {
+      "path": "src/audiophash.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/02-audiophash.cpp",
+      "sha256": "91f8ec3cd39c4e1642877ac267a7833c8a934143c8c10909e981da4352e2fb13",
+      "git_blob_sha1": "624257360f974075c228b5c87b71788a569c3fdc"
+    },
+    {
+      "path": "src/audiophash.h",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/03-audiophash.h",
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "git_blob_sha1": "3838473d39f58af14618e2f6d1f64717d3c75224"
+    },
+    {
+      "path": "src/ph_fft.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/src/ph_fft.cpp",
+      "sha256": "3df3b3fd5aa266d9dd266a5019a16fd27de01333ac0f0ddf48b5ca25d05e9849",
+      "git_blob_sha1": "db2615769378c050b5cdf2a32400631c9a9b8bce"
+    },
+    {
+      "path": "src/ph_fft.h",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/src/ph_fft.h",
+      "sha256": "aa6696c84a94d856b1f6a64fef2ed2b53f7869d1dcd1d50140056318baea3c46",
+      "git_blob_sha1": "69ece097da6eb8d457fa9149057c0418acbaaed4"
+    },
+    {
+      "path": "Makefile",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/Makefile",
+      "sha256": "c580496f1ab09966f5279099ee7211857112a96191374ca28bcdff9138590126",
+      "git_blob_sha1": "4f2e22760cc2f5354b40137ddb14315a0322acb9"
+    },
+    {
+      "path": "script/plot_hash.py",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/plot_hash.py",
+      "sha256": "1ca8a5700539103ba5d3122d5b229015de8c45909391121e236bec96f787837d",
+      "git_blob_sha1": "c3bb8beed6d3b9c58f556ff5cb29290f7f56a5be"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/.gitignore",
+      "sha256": "3ba2020da55f76620d61950cb88f0d6cc0d5852eae7b2c03f8487a64c87da959",
+      "git_blob_sha1": "259148fa18f9fb7ef58563f4ff15fc7b172339fb"
+    }
+  ],
+  "whole_file_read_count": 9,
+  "original_tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "findings": [
+    "Test-named file is demonstration main printing audio comparison values, no assertions or expected decision.",
+    "Fixed reference/source WAV paths; degraded fixture not used by this main.",
+    "Mono-only reader rejects multichannel audio; read-failure path inspects channels after null result, potentially uninitialized if decoder leaves it unset. Static only.",
+    "save_hash prints uint32_t with percent-lu rather than matching fixed-width format; no file-open check. Static only.",
+    "Test source explicitly carries GPL3-or-later pHash header while root screening license Apache2; nested provenance distinct before adoption.",
+    "Native pHash/ASAN execution intentionally skipped per user instruction. Source/demo review does not restart that item."
+  ],
+  "remaining": [
+    {
+      "path": "LICENSE",
+      "bytes": 11357
+    },
+    {
+      "path": "src/dr_wav.h",
+      "bytes": 241117
+    },
+    {
+      "path": "src/pHash.cpp",
+      "bytes": 6414
+    },
+    {
+      "path": "src/pHash.h",
+      "bytes": 12104
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/audio220-source-review-v4-20261024.json",
+  "audio_hash_review": {
+    "native_execution": false,
+    "observations": [
+      "4096sample frames,128sample hop,33Bark filters produce32bit frame signatures; approximate temporal/spectral features, not byte equality.",
+      "No input validation for null buffer, negative/short length, invalid sample rate or allocation failure before writes.",
+      "Distance uses integer block count and discards remainder; exact-multiple loop can leave last allocated distance element unwritten before aggregation. Static source finding only.",
+      "Zero/small blocks and short hashes lack explicit validation before block access or division.",
+      "Distance returns new[] allocation while demo main releases with free; allocation ownership mismatch source-only.",
+      "FFT error path returns before freeing frame/filter/hash buffers.",
+      "Native pHash/ASAN run remains intentionally skipped; no reproducer or compiled code executed."
+    ]
+  },
+  "fft_build_plot_review": {
+    "execution": false,
+    "observations": [
+      "FFT allocates twiddle factors and work buffer on every audio frame; potential reuse opportunity requires benchmark/parity validation before adoption.",
+      "FFT recursion assumes valid power-of-two positive N without explicit validation; current caller fixed4096.",
+      "Makefile discovers *.c but tracked implementation uses *.cpp; alternate rule uses *.cc and no corresponding object list. Test main not included. Source build recipe not proof of compilable project.",
+      "Plot reader logs malformed lines and skips them, so visualized hash sequence can be incomplete without failure status.",
+      "Bit conversion extracts low32bits without range checking; plot is display helper, not matching validation.",
+      "No native compile/ASAN run, benchmark, matplotlib display or production edit performed."
+    ]
+  },
+  "visual_reviews": [
+    {
+      "path": "script/ref.png",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/ref.png",
+      "sha256": "6606876de16c68652222908d75f02ba5973a0bcf2f377e069acfd6a704569d35",
+      "git_blob_sha1": "4710c9fb5ff848b9942ba381971b343fcc725a53",
+      "method": "tools.view_image full PNG inspected"
+    },
+    {
+      "path": "script/ref_hash.png",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/ref_hash.png",
+      "sha256": "c10b7d0f0548a9dc5c792c4f41d66dbf550a32365efdefa250488072e9253740",
+      "git_blob_sha1": "005a1f85d37253782331ddaaa8336784e1f019c2",
+      "method": "tools.view_image full PNG inspected"
+    },
+    {
+      "path": "script/src.png",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/src.png",
+      "sha256": "6bbc6bf5498d10f9b26d3018483da6735fe298834af43ea404d096541229ba8e",
+      "git_blob_sha1": "ca3f176184e4fef36c14e0d26a66a4d60169d1ef",
+      "method": "tools.view_image full PNG inspected"
+    },
+    {
+      "path": "script/src_hash.png",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/src_hash.png",
+      "sha256": "8e44949a1f8043a5f3b01a4d7da4a60c8cdfbc660d7fbe2c0d451cfaef89568c",
+      "git_blob_sha1": "40a2844aaa992d50ff39fe8941a617bd3e50ae9d",
+      "method": "tools.view_image full PNG inspected"
+    }
+  ],
+  "visual_findings": [
+    "Reference waveform/spectrogram spans roughly5seconds, source roughly4.1seconds; distinct duration visible, not exact duplicate proof.",
+    "Hash plots label32x616 and32x498 signatures, respectively; no alignment-score curve, threshold decision, negative control or accuracy measurement.",
+    "All4tracked PNGs reviewed; audio files not listened to or decoded in this step, hashes not regenerated.",
+    "Images are historical assets and not current end-to-end validation."
+  ],
+  "structural_reviews": [
+    {
+      "path": "sample/ref.wav",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/sample/ref.wav",
+      "sha256": "3c996e2fad625ecabe7ef9314f1aff9b3ff06d9f1114ca9ca2b066d87058b815",
+      "git_blob_sha1": "ea96a2d08655d11ba0f26101ea45c83c155cca29",
+      "scope": "complete structured parse, not manual text read or perceptual audio listening",
+      "analysis": {
+        "channels": 1,
+        "sample_rate": 16000,
+        "sample_width_bytes": 2,
+        "frames": 82834,
+        "duration_seconds": 5.177125,
+        "expected_hash_frames_4096_hop128": 616
+      }
+    },
+    {
+      "path": "sample/src.wav",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/sample/src.wav",
+      "sha256": "fa2eb78791d9da7f0615d41abe1be52a35a4def8a8dfe6f345ac8dfe5d75170a",
+      "git_blob_sha1": "2e22ff3c2d0cdb98dd9c2ef62599dfd6a3a10a47",
+      "scope": "complete structured parse, not manual text read or perceptual audio listening",
+      "analysis": {
+        "channels": 1,
+        "sample_rate": 16000,
+        "sample_width_bytes": 2,
+        "frames": 67722,
+        "duration_seconds": 4.232625,
+        "expected_hash_frames_4096_hop128": 498
+      }
+    },
+    {
+      "path": "sample/src_degraded.wav",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/sample/src_degraded.wav",
+      "sha256": "c33d3782ce8a7c24cad58dd253e7b8bffd4d2b2bc3a14bab5c6745de44116e13",
+      "git_blob_sha1": "7a0b060edc4fc88a847d326a115eaddf267b4b6f",
+      "scope": "complete structured parse, not manual text read or perceptual audio listening",
+      "analysis": {
+        "channels": 1,
+        "sample_rate": 16000,
+        "sample_width_bytes": 2,
+        "frames": 85765,
+        "duration_seconds": 5.3603125,
+        "expected_hash_frames_4096_hop128": 639
+      }
+    },
+    {
+      "path": "script/ref.hash",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/ref.hash",
+      "sha256": "6b36ca97bf103e8182e3da47d3b18e2f3160fe67c47ab1592d49571d9fdd588f",
+      "git_blob_sha1": "14782a507f514d8d96c3c77afb5b2b572c86d327",
+      "scope": "complete structured parse, not manual text read or perceptual audio listening",
+      "analysis": {
+        "hashes": 616,
+        "all_u32": true,
+        "unique_hashes": 526
+      }
+    },
+    {
+      "path": "script/src.hash",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/remaining-pinned/script/src.hash",
+      "sha256": "f9d53c50267b698e451e4f0185fdda1257c9d6c7ed5a78840fe9f7bf3081ee61",
+      "git_blob_sha1": "6fb2359eb5cbff6ef70ef1791ac1ccc7bfa6a5ca",
+      "scope": "complete structured parse, not manual text read or perceptual audio listening",
+      "analysis": {
+        "hashes": 498,
+        "all_u32": true,
+        "unique_hashes": 434
+      }
+    }
+  ],
+  "fixture_findings": [
+    "Three WAV headers: mono16kHz16bit PCM, durations5.177125/4.232625/5.3603125seconds. Audio not played and pHash not run.",
+    "Stored ref616 and src498 hash values match expected frame counts and chart labels. Counts alone do not prove hash correctness or matching accuracy.",
+    "Degraded WAV has639expected frames, but no stored degraded hash or comparison decision in tracked tree.",
+    "All stored hash values within unsigned32bit range; no reference/regeneration parity claimed."
+  ]
+}

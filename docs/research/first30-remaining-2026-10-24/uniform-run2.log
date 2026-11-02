@@ -1,0 +1,66 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.18s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-78bcd0e347a5a9c3)
+
+running 1 test
+test raster::tile_admission_tests::view_uniform_full_frame_pairs ... FRAME_UNIFORM_ADAPTER AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+FRAME_UNIFORM control=true pair=0 mode=1 p50_ns=385416 p95_ns=446125 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=0 mode=0 p50_ns=374416 p95_ns=399708 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=1 mode=0 p50_ns=381750 p95_ns=443584 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=1 mode=1 p50_ns=379833 p95_ns=467708 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=2 mode=1 p50_ns=380208 p95_ns=426750 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=2 mode=0 p50_ns=383875 p95_ns=469708 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=3 mode=0 p50_ns=376959 p95_ns=495583 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=3 mode=1 p50_ns=376375 p95_ns=495084 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=4 mode=1 p50_ns=386083 p95_ns=417792 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=4 mode=0 p50_ns=384250 p95_ns=485417 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=5 mode=0 p50_ns=384458 p95_ns=517083 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=5 mode=1 p50_ns=384292 p95_ns=407500 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=6 mode=1 p50_ns=390333 p95_ns=451375 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=6 mode=0 p50_ns=380084 p95_ns=450417 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=7 mode=0 p50_ns=378875 p95_ns=478375 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=7 mode=1 p50_ns=375792 p95_ns=405000 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=8 mode=1 p50_ns=375333 p95_ns=420583 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=8 mode=0 p50_ns=382041 p95_ns=458458 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=9 mode=0 p50_ns=391458 p95_ns=419292 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=true pair=9 mode=1 p50_ns=383625 p95_ns=465000 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=0 mode=1 p50_ns=385083 p95_ns=472208 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=0 mode=0 p50_ns=416500 p95_ns=544750 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=1 mode=0 p50_ns=419791 p95_ns=543375 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=1 mode=1 p50_ns=388375 p95_ns=462750 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=2 mode=1 p50_ns=382417 p95_ns=398292 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=2 mode=0 p50_ns=444042 p95_ns=537583 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=3 mode=0 p50_ns=420583 p95_ns=496292 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=3 mode=1 p50_ns=392041 p95_ns=488542 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=4 mode=1 p50_ns=384042 p95_ns=418084 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=4 mode=0 p50_ns=427459 p95_ns=476916 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=5 mode=0 p50_ns=413042 p95_ns=503500 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=5 mode=1 p50_ns=381750 p95_ns=430167 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=6 mode=1 p50_ns=385250 p95_ns=459667 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=6 mode=0 p50_ns=417459 p95_ns=469959 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=7 mode=0 p50_ns=421334 p95_ns=494459 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=7 mode=1 p50_ns=384625 p95_ns=407625 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=8 mode=1 p50_ns=383791 p95_ns=412959 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=8 mode=0 p50_ns=412709 p95_ns=440625 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=9 mode=0 p50_ns=403250 p95_ns=424166 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM control=false pair=9 mode=1 p50_ns=382625 p95_ns=405958 frames=30 native_peak=18661376 source_budget=65536
+FRAME_UNIFORM_COMPLETE managed_final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 80 filtered out; finished in 2.77s
+

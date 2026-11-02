@@ -1,0 +1,92 @@
+[project]
+name = "bib-dedupe"
+version = "0.11.0"
+description = "Identify and merge duplicates in bibliographic records"
+authors = [
+    { name = "Gerit Wagner", email = "gerit.wagner@uni-bamberg.de" },
+]
+license = {file = "LICENSE"}
+readme = "README.md"
+keywords = ["de-duplication", "duplicate", "meta-analysis", "research", "reproducible research", "open science", "literature", "literature review", "systematic review", "systematic literature review"]
+classifiers = [
+   "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.2.3",
+    "numpy>=2.1.2",
+    "rapidfuzz>=3.10.0",
+    "number-parser>=0.3.2",
+    "requests>=2.32.3",
+    "tqdm>=4.66.1",
+]
+
+[project.urls]
+"Source" = "https://github.com/CoLRev-Environment/bib-dedupe"
+"Documentation" = "https://colrev-environment.github.io/bib-dedupe/"
+
+[project.optional-dependencies]
+dev = [
+    "pylint==3.0.1",
+    "pytest>=7.2.1",
+    "coverage[toml]>=7.3.2",
+    "pytest-skip-slow>=0.0.5",
+]
+docs = [
+    "sphinx-rtd-theme>=3.0.0",
+    "sphinx-copybutton>=0.5.2",
+]
+
+[project.scripts]
+bib-dedupe = "bib_dedupe.cli:main"
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = [
+    "pkg_resources.*",
+    "requests.*",
+    "requests"
+]
+ignore_missing_imports = true
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["R0801"]
+
+[tool.coverage.report]
+omit = [
+    "/usr/*", # omit everything in /usr
+    "/tmp/*",
+    "tests/*",
+]
+
+[tool.coverage.run]
+omit = [
+    "/usr/*", # omit everything in /usr
+    "/tmp/*",
+    "tests/*",
+]
+
+[tool.ruff]
+line-length = 160
+
+[tool.ruff.per-file-ignores]
+"tests/*" = ["E501"]
+"docs/*" = ["E501"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

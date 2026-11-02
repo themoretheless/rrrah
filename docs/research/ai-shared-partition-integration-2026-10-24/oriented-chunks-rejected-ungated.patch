@@ -1,0 +1,13 @@
+--- a/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
++++ b/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
+@@ -84,9 +84,7 @@
+         // An unknown support can be interned by the ordinary overlay even
+         // when its final intersection is empty. Keep that path so future
+         // canonical line identities remain identical to the flat backend.
+-        if !self.known_edges
+-            || cut.incoming[..cut.len].contains(&0)
+-            || self.axis == [0.; 2]
++        if self.axis == [0.; 2]
+             || !self.projection.iter().all(|v| v.is_finite())
+         {
+             return Ok(false);

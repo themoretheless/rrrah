@@ -1,0 +1,64 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v14-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/canonicalPath.test.mjs",
+      "local": "27-canonicalPath.test.mjs",
+      "sha256": "eb2bc7651e0f64c1c2cb14469bc89394e20e63bc9c45750c3f0905136b5d80c9",
+      "git_blob": "6a2579a815e6bbc78e5e2047b3bdae9abcf6f3e1",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/warningSink.test.mjs",
+      "local": "28-warningSink.test.mjs",
+      "sha256": "35ff1bfb42097c7ca4059dc108f57e60de3fe7ed186593b58b08936e80c3d64d",
+      "git_blob": "2b39ee3320a49b73d85a442e7a6323a9479ab34e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 28,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 101,
+    "new_original_counts": {
+      "canonicalPath.test.mjs": 89,
+      "warningSink.test.mjs": 12
+    },
+    "original_tests_total_distinct": 356,
+    "new_authored_controls_passed": 2,
+    "total_authored_controls_distinct": 42,
+    "original_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "owned_harness": "docs/research/dedup-500/zotero116-canonical-context-controls-20261024",
+    "scope": "Original unchanged canonicalPath89 andwarningSink12 unit cases with originalsetup/config; isolatednpm dependency lock. Own context sequence on original canonical module via owned pref/collection read adapters; no real preferences UI or Zotero."
+  },
+  "findings": [
+    {
+      "finding": "All89 canonical mapping and12 warning cases pass. Original library-mode test explicitly asserts shortest path beats earlier nested membership, so prior first-seen mismatch is documentation/contract discrepancy; native behavior intentionally tested.",
+      "evidence": "original Vitest result and full test review"
+    },
+    {
+      "finding": "Existing explicit-library test passes the same library as configured prefs and only checks output, so doesnot demonstrate bypassing root lookup as its title claims. Owned control with explicit1/configured2 resolves configured2 on cache miss and stores under1 namespace. Whether actual callers pass mismatched IDs remains unreviewed.",
+      "evidence": "native owned context control and test scope"
+    },
+    {
+      "finding": "Switch library scope to collection scope in same library without invalidation leaves oldcached Root/Child while uncached returnsChild; explicit invalidation restoresChild. Settings invalidation wiring not yet reviewed, so not a live settings defect claim.",
+      "evidence": "native owned context control"
+    },
+    {
+      "finding": "Original disk mapping tests sanitize names independently but do not resolve sanitized path back to original colliding names. Prior native Topic?/Topic* alias remains unqualified as whole workflow.",
+      "evidence": "whole original tests read"
+    }
+  ],
+  "remaining": [
+    "72blobs not whole-read",
+    "Review settings/collection-notifier invalidation wiring",
+    "Full original suite/actual Zotero/dependencies and licenses incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

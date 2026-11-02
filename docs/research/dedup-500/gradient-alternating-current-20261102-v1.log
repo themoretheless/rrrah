@@ -1,0 +1,23 @@
+
+running 2 tests
+test gradient::batch_tests::alternating_matcher_timing ... matcher_timing sparse=false batched=false seconds=0.058304625
+matcher_timing sparse=false batched=true seconds=0.024997833
+matcher_timing sparse=false batched=true seconds=0.013830083
+matcher_timing sparse=false batched=false seconds=0.030977125
+matcher_timing sparse=true batched=false seconds=0.031792375
+matcher_timing sparse=true batched=true seconds=0.014512792
+matcher_timing sparse=true batched=true seconds=0.014007750
+matcher_timing sparse=true batched=false seconds=0.031364500
+ok
+test gradient::matching_tests::alternating_matcher_timing ... matcher_timing sparse=false bounded=false seconds=0.031146375
+matcher_timing sparse=false bounded=true seconds=0.047276292
+matcher_timing sparse=false bounded=true seconds=0.047053916
+matcher_timing sparse=false bounded=false seconds=0.030749334
+matcher_timing sparse=true bounded=false seconds=0.030415958
+matcher_timing sparse=true bounded=true seconds=0.021615250
+matcher_timing sparse=true bounded=true seconds=0.021738375
+matcher_timing sparse=true bounded=false seconds=0.030660209
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 134 filtered out; finished in 0.61s
+

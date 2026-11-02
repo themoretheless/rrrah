@@ -1,0 +1,106 @@
+{
+  "decoder_sha256": "556e9655309c3be5f0ad30433a30c984e44ce730af75c2ce1aa33950a324a6b7",
+  "build_sources": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "47a2b21d24f732d7002afc016d1c682d66b379e93d0216f283f518ee4898fcf0",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "68a4b16b85db5766d457587748f4cb35496b6264b54fbb780cffc70da948fa50",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "bef553b4eb3d37b997a64c330df3a33ee97aaf030bec14c7a2234e578d0eb773"
+  },
+  "default_decoder_sha256": "1295f5ae6196f3b0d050ee777178151233372abcf9ab16df304a11d15fa216b1",
+  "default_dependency_graph": {
+    "command": "cargo tree --offline --locked -p rrrah-decode -e features",
+    "sha256": "4e8c87d38d3fa4106d36bcb536ec5ecfa161b67c60869f2983734faeb10b6d80",
+    "experimental_shared_partitions": false
+  },
+  "final_sources": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "47a2b21d24f732d7002afc016d1c682d66b379e93d0216f283f518ee4898fcf0",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "68a4b16b85db5766d457587748f4cb35496b6264b54fbb780cffc70da948fa50",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "fca9cba6a9793b7478019ea41cba1b82c104015ca22996a85ce430415b0f7089",
+    "Cargo.lock": "a020e36e00203badaca46653a7f4a9d1285f48800abdd730692a49fecc139b0f",
+    "scripts/verify-ordered-triangle-union.py": "2b1a32ca88dcb527a9078ad91d1294ec16e5f0640a2297298333982b040a83ce",
+    "tests/fixtures/geometry/coverage-cell-103.rs": "b2e9c82e93ef503e9bdc6d3526678faba0baaf0fd218755cb6f7de8c8ddd4cbd"
+  },
+  "post_build_changes": "Only tests: exhaustive repair rollback, exact 76/77-prefix assertions and formatting. Production geometry and sampler byte-identical to frozen feature build.",
+  "tests": {
+    "bounded-cut-ordered.log": {
+      "passed": 57,
+      "failed": 0,
+      "ignored": 3
+    },
+    "bounded-cut-default-ordered.log": {
+      "passed": 56,
+      "failed": 0,
+      "ignored": 3
+    },
+    "bounded-cut-full-encode.log": {
+      "passed": 93,
+      "failed": 0,
+      "ignored": 4
+    },
+    "bounded-cut-rollback.log": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    "bounded-cut-feature-vector.log": {
+      "passed": 256,
+      "failed": 0,
+      "ignored": 11
+    },
+    "bounded-cut-default-vector.log": {
+      "passed": 256,
+      "failed": 0,
+      "ignored": 11
+    },
+    "bounded-cut-exact-prefixes.log": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    }
+  },
+  "permutation_receipts": 120,
+  "repair_fault_counts": [
+    [
+      "[139, 174, 39]",
+      "false",
+      "4",
+      "211",
+      "211"
+    ],
+    [
+      "[139, 174, 39]",
+      "true",
+      "5",
+      "211",
+      "211"
+    ],
+    [
+      "[166, 182, 131, 144]",
+      "false",
+      "10",
+      "232",
+      "232"
+    ],
+    [
+      "[166, 182, 131, 144]",
+      "true",
+      "11",
+      "232",
+      "232"
+    ]
+  ],
+  "qualification": "Captured geometry defects fixed; actual AI qualification remains negative: four calls exhaust unchanged 100M, one.ai page0 2522 different pixels/max58, page1 exact. Alternative ordering remains test-only.",
+  "artifacts": {
+    "bounded-cut-full-encode.log": "a53c386fc207e7252d50ca89096876aedf4726ca32301ae30b31df7438dea787",
+    "bounded-cut-poppler.json": "04ada907c97f40bdac6ff31984179348ccee06ca6828fde088f4e4fc2600b29d",
+    "bounded-cut-ordered.log": "f0639f1381424d0fbd18bd7512b7a60b515edc0a9abb10159d6227eda027ed6f",
+    "bounded-cut-permutations.json": "1719f90978bf5ed14fb94f1410436445f1a364068466f3c30921278ba094ff48",
+    "bounded-cut-rollback.log": "594485e3a9bef04974170ca0bdececa82f58ec3f182467cfe23d653441bc2e18",
+    "bounded-cut-default-ordered.log": "7f2f7ee7d69310fd20dae6391921fd8d0bd778859b79aa1306aa84118deb9476",
+    "bounded-cut-default-build.log": "f290f41eaa46fc546f4dbd9be4dc49704c485be5bbb444b393f050033a079f65",
+    "bounded-cut-feature-build.log": "ffe4d4d73da15d989214466b540e78e945863edccae5667ad78835cdcf1cf2d2",
+    "bounded-cut-exact-prefixes.log": "577515c06ac1581f9a83d36027e2bbb1e5f60413f5f17a5313585709a5177b7e",
+    "bounded-cut-feature-vector.log": "f0fd762dba0664fe2ba931d21eaba8dcb6dd930155bf7042a5f297b5a86bd173",
+    "bounded-cut-default-vector.log": "4ac0dfa23fd31ca5710a61158bf84839127da6d9771473525b7967977ad84c1f",
+    "bounded-cut-order-probe.log": "569d6ca87d2acca68984aec06647c29e8a08ff7819a717a96213aa0c3ee5aa03"
+  }
+}

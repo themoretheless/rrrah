@@ -2,7 +2,7 @@
   "index": 114,
   "repository": "rpcpool/yellowstone-grpc-kafka",
   "commit": "1daa7fd50461c31a2c6fe5d547bda2c3515620ac",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "24/25 whole files; Cargo.lock structured-only;6 distinct authored native controls; full project unqualified",
   "decision": "reject-domain",
   "finding": "Solana/Kafka slot/hash message deduplication; application event identity.",
   "available_source_evidence": [
@@ -48,7 +48,7 @@
     }
   ],
   "license_metadata": "AGPL-3.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root GNU AGPLv3 full text read; README selects v3 only; dependencies not license-reviewed; no adoption",
   "tests_detected": 0,
   "upstream_tests_run": false,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
@@ -74,5 +74,21 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "full_repository_read": false,
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/yellowstone114-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/yellowstone114-source-review-v2-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/yellowstone114-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    }
+  ],
+  "authored_controls_passed": 6
 }

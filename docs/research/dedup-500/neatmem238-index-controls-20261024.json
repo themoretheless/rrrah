@@ -1,0 +1,39 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original add_memories orchestration with injected DedupResult, empty search, recording-only memory and BM25 adapters. No model, real index/store, network or persisted data. Confirms this function branch only; backend compensation untested.",
+  "authored_controls": [
+    {
+      "name": "update-only",
+      "passed": true,
+      "indexed": []
+    },
+    {
+      "name": "mixed-update",
+      "passed": true,
+      "indexed": [
+        [
+          "added",
+          "new item"
+        ],
+        [
+          "old",
+          "new"
+        ]
+      ]
+    },
+    {
+      "name": "mixed-skip",
+      "passed": true,
+      "indexed": [
+        [
+          "added",
+          "new item"
+        ],
+        [
+          "old",
+          "new"
+        ]
+      ]
+    }
+  ]
+}

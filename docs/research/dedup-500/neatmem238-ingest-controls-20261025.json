@@ -1,0 +1,15 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "commit": "a8d173d41b7cbd04d69de937d675dfd0e2141664",
+  "scope": "Original NeatMemADD.process_conversation AST; fake client and failing worker; actual stdlib threads; no HTTP/import side effects",
+  "controls_passed": 1,
+  "observed": {
+    "worker_errors": [
+      "synthetic write failure",
+      "synthetic write failure"
+    ],
+    "parent_returned_normally": true,
+    "delete_calls_fake": 2
+  },
+  "upstream_test_suite_run": false
+}

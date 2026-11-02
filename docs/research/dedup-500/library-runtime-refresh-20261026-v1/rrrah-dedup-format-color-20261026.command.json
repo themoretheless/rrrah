@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "jpeg_orientation",
+    "--test",
+    "png_alpha_channels",
+    "--test",
+    "raster_equality",
+    "--test",
+    "raw_selected",
+    "--test",
+    "tiny_raster"
+  ],
+  "suites": [
+    "jpeg_orientation",
+    "png_alpha_channels",
+    "raster_equality",
+    "raw_selected",
+    "tiny_raster"
+  ]
+}

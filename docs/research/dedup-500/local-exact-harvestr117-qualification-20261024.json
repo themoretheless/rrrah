@@ -1,0 +1,22 @@
+{
+  "command": "CARGO_TARGET_DIR=.dedup-work/exact117-target-20261024 cargo test -p rrrah-dedup --locked --offline --test exact_large_files --test exact_repeated_metadata",
+  "exit_code": 0,
+  "observed_tests": {
+    "exact_large_files": {
+      "passed": 4,
+      "failed": 0
+    },
+    "exact_repeated_metadata": {
+      "passed": 2,
+      "failed": 0
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_large_files.rs": "9c0f47f9b2ea40ba964ce806425c38da33c3f80b4cb2f6c2832e7ac174ba60ac",
+    "crates/rrrah-dedup/tests/exact_repeated_metadata.rs": "c6d2e3662a6729114ca745869267c63aaf3f532a12364607014b6ac3ee8b9828",
+    "Cargo.lock": "43dfb866b1bd53a87c1585f108121272b461c831515219a38984107a5c74484f"
+  },
+  "scope": "Current worktree, default features; dense66MiB differing-middle case; metadata-restoration and rename/recreation; sparse logical limits/cancellation do not prove full multiGiB equality",
+  "production_changes": false
+}

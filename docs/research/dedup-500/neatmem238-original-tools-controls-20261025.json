@@ -1,0 +1,179 @@
+{
+  "scope": "Original tools.test.ts callbacks and actual tool modules transpiled unmodified; minimal Vitest mock/assert adapters; TypeBox schema constructor stub, schema validation excluded; fake providers only",
+  "original_callbacks_passed": 43,
+  "results": [
+    {
+      "name": "calls api.registerTool exactly 5 times",
+      "passed": true
+    },
+    {
+      "name": "registers tools with the correct names",
+      "passed": true
+    },
+    {
+      "name": "registers tools without a second argument (required, not optional)",
+      "passed": true
+    },
+    {
+      "name": "returns an object with name, label, description, parameters, and execute",
+      "passed": true
+    },
+    {
+      "name": "returns an object with name, label, description, parameters, and execute",
+      "passed": true
+    },
+    {
+      "name": "returns an object with name, label, description, parameters, and execute",
+      "passed": true
+    },
+    {
+      "name": "returns an object with name, label, description, parameters, and execute",
+      "passed": true
+    },
+    {
+      "name": "returns an object with name, label, description, parameters, and execute",
+      "passed": true
+    },
+    {
+      "name": "returns formatted results when provider returns matches",
+      "passed": true
+    },
+    {
+      "name": "returns 'no relevant memories' when provider returns empty",
+      "passed": true
+    },
+    {
+      "name": "handles errors gracefully",
+      "passed": true
+    },
+    {
+      "name": "calls resolveUserId with provided agentId and userId",
+      "passed": true
+    },
+    {
+      "name": "passes limit to buildSearchOptions",
+      "passed": true
+    },
+    {
+      "name": "searches only session scope when scope='session' and session exists",
+      "passed": true
+    },
+    {
+      "name": "deduplicates results in 'all' scope",
+      "passed": true
+    },
+    {
+      "name": "calls provider.add with the text and returns stored result",
+      "passed": true
+    },
+    {
+      "name": "returns error when no text or facts are provided",
+      "passed": true
+    },
+    {
+      "name": "supports facts array",
+      "passed": true
+    },
+    {
+      "name": "handles errors gracefully",
+      "passed": true
+    },
+    {
+      "name": "stores directly with infer=false (verbatim, effective immediately)",
+      "passed": true
+    },
+    {
+      "name": "blocks subagent sessions from storing",
+      "passed": true
+    },
+    {
+      "name": "does not perform plugin-side dedup search before adding in legacy mode",
+      "passed": true
+    },
+    {
+      "name": "calls provider.get with the memoryId and returns formatted result",
+      "passed": true
+    },
+    {
+      "name": "handles errors gracefully",
+      "passed": true
+    },
+    {
+      "name": "deletes by memoryId via provider.delete",
+      "passed": true
+    },
+    {
+      "name": "searches and auto-deletes single high-confidence match by query",
+      "passed": true
+    },
+    {
+      "name": "returns candidates when query matches multiple ambiguous results",
+      "passed": true
+    },
+    {
+      "name": "returns no matching memories when query yields empty results",
+      "passed": true
+    },
+    {
+      "name": "requires confirm:true for bulk delete (all)",
+      "passed": true
+    },
+    {
+      "name": "performs bulk delete when all:true and confirm:true",
+      "passed": true
+    },
+    {
+      "name": "returns error when no mode param is specified",
+      "passed": true
+    },
+    {
+      "name": "blocks subagent sessions from deleting",
+      "passed": true
+    },
+    {
+      "name": "handles errors gracefully",
+      "passed": true
+    },
+    {
+      "name": "calls provider.getAll and returns formatted list",
+      "passed": true
+    },
+    {
+      "name": "returns 'no memories stored' when provider returns empty",
+      "passed": true
+    },
+    {
+      "name": "handles errors gracefully",
+      "passed": true
+    },
+    {
+      "name": "resolves userId from agentId",
+      "passed": true
+    },
+    {
+      "name": "deduplicates results in 'all' scope",
+      "passed": true
+    },
+    {
+      "name": "only fetches session memories when scope='session'",
+      "passed": true
+    },
+    {
+      "name": "calls provider.update and returns success",
+      "passed": true
+    },
+    {
+      "name": "truncates long text in response",
+      "passed": true
+    },
+    {
+      "name": "blocks subagent sessions",
+      "passed": true
+    },
+    {
+      "name": "handles errors gracefully",
+      "passed": true
+    }
+  ],
+  "full_vitest_suite_run": false
+}

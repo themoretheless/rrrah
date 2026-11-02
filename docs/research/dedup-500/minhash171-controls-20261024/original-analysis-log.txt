@@ -1,0 +1,127 @@
+test_all_documents_removed_skips_histogram (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_all_documents_removed_skips_histogram) ... 2026-10-24 07:20:50.651 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2056 - No retained documents; skipping signature analysis
+ok
+test_doc_ids_are_scoped_to_reader (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_doc_ids_are_scoped_to_reader) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 4023.31it/s]
+2026-10-24 07:20:50.677 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.411 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=4, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.411 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 4 docs (>1 capped)
+2026-10-24 07:20:51.411 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.411 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 0
+2026-10-24 07:20:51.411 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 6
+ok
+test_duplicate_ids_with_unchanged_counts_are_rejected (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_duplicate_ids_with_unchanged_counts_are_rejected) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 4696.87it/s]
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 4064.25it/s]
+ok
+test_duplicate_reader_file_is_rejected (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_duplicate_reader_file_is_rejected) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 4410.41it/s]
+ok
+test_empty_signature_files_skip_histogram (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_empty_signature_files_skip_histogram) ... 2026-10-24 07:20:51.439 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2056 - No retained documents; skipping signature analysis
+ok
+test_independently_sorted_bands_preserve_close_pair (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_independently_sorted_bands_preserve_close_pair) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10754.63it/s]
+2026-10-24 07:20:51.446 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.447 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.447 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.447 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.447 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.447 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10305.42it/s]
+2026-10-24 07:20:51.453 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.453 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.453 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.453 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.453 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.453 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10255.02it/s]
+2026-10-24 07:20:51.459 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.459 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.459 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.459 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.459 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.459 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10106.76it/s]
+2026-10-24 07:20:51.464 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.465 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.465 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.465 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.465 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.465 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+ok
+test_missing_reader_file_is_rejected (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_missing_reader_file_is_rejected) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 6177.18it/s]
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 6786.90it/s]
+ok
+test_missing_retained_id_is_rejected (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_missing_retained_id_is_rejected) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 5029.14it/s]
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 4563.99it/s]
+ok
+test_removing_documents_preserves_close_pair (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_removing_documents_preserves_close_pair) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10538.45it/s]
+2026-10-24 07:20:51.495 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.496 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.496 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.496 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.496 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.496 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10155.70it/s]
+2026-10-24 07:20:51.502 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.502 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.502 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.502 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.502 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.502 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+ok
+test_sampling_uses_aligned_signatures (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_sampling_uses_aligned_signatures) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 10472.67it/s]
+2026-10-24 07:20:51.511 | WARNING  | minhash_dedup.minhash:analyze_cluster_signature:2145 - analyze_clustering: n_docs=3 exceeds max_docs_exact=2. Using sampled analysis on 2 docs (seed=42), scale factor 3.000
+2026-10-24 07:20:51.511 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.511 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=2, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.512 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2204 - Reported counts are scaled estimates from sampled analysis: sample_docs=2, total_docs=3
+2026-10-24 07:20:51.512 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.512 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.512 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 0
+2026-10-24 07:20:51.512 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 3
+ok
+test_single_retained_document_has_no_pairs (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_single_retained_document_has_no_pairs) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 11125.47it/s]
+2026-10-24 07:20:51.518 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.518 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=1, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.518 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 1 docs (>1 capped)
+2026-10-24 07:20:51.518 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.518 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 0
+2026-10-24 07:20:51.518 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 0
+ok
+test_strict_validates_unmatched_removals (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_strict_validates_unmatched_removals) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 8338.58it/s]
+2026-10-24 07:20:51.525 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.526 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.526 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.526 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.526 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.526 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures: 100%|██████████| 2/2 [00:00<00:00, 7577.79it/s]
+2026-10-24 07:20:51.533 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2175 - analyze_clustering compare backend: numba
+2026-10-24 07:20:51.533 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2189 - analyze_clustering compare setup: docs=3, sigs=4, dtype=uint64, block_size=2, threads=1, threading_layer=workqueue, in_memory=True
+2026-10-24 07:20:51.533 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2211 - Minhash diff distribution among 3 docs (>1 capped)
+2026-10-24 07:20:51.533 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  0: 0
+2026-10-24 07:20:51.533 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2216 -  1: 1
+2026-10-24 07:20:51.533 | INFO     | minhash_dedup.minhash:analyze_cluster_signature:2214 -  >2: 2
+ok
+test_unknown_id_with_unchanged_counts_is_rejected (upstream_minhash171_analysis_tests.TestMinhashAnalysis.test_unknown_id_with_unchanged_counts_is_rejected) ... Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 5497.12it/s]
+Loading bucket signatures:   0%|          | 0/2 [00:00<?, ?it/s]Loading bucket signatures:  50%|█████     | 1/2 [00:00<00:00, 5584.96it/s]
+ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.897s
+
+OK
+{
+  "scope": "Run complete unchanged upstream analysis test module against original package.",
+  "test_source_sha256": "44504061dce9b39de0a35689144db4cdf5d7082060f5ff0baaafdfc4c0dc0458",
+  "original_tests_run": 13,
+  "passed": 13,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "compiled_numba_signatures": [
+    "(Array(uint64, 2, 'C', False, aligned=True), int64, int64, int64, int64, Array(int64, 1, 'C', False, aligned=True), Array(int64, 1, 'C', False, aligned=True))"
+  ],
+  "runtime_versions": {
+    "numba": "0.68.0",
+    "llvmlite": "0.50.0",
+    "numpy": "2.5.4",
+    "fsspec": "2026.9.0"
+  },
+  "qualification": "Actual original full package graph and original full unittest module; real Numba JIT, local signature files and memmaps; no method adapters,corpus-scale performance,S3 or scheduler"
+}

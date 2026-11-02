@@ -1,0 +1,60 @@
+{
+  "scope": "Current-turn local macOS regression evidence; finite suites, no performance/platform/universal coverage claim.",
+  "completed_runs": [
+    {
+      "evidence": "docs/research/dedup-500/rrrah-default-integration-result-20261026-v1.json",
+      "passed": 316,
+      "failed": 0,
+      "ignored": 2,
+      "scope": "Default features on this macOS host only. Zero-test harnesses do not qualify feature-gated implementations. Manual performance controls ignored. Initial library output recorded separately; integration output collected from first harness result onward. No full contract, platform or performance claim."
+    },
+    {
+      "evidence": "docs/research/dedup-500/rrrah-pixel-search-result-20261026-v1.json",
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "Focused decode-enabled pixel-search integration tests on this macOS host; permission-denial preflight confirmed; not full corpus, all platforms or all contract qualification."
+    },
+    {
+      "evidence": "docs/research/dedup-500/rrrah-containers-result-20261026-v1.json",
+      "passed": 32,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "Focused decode-enabled integration suites on current macOS host only. Finite fixtures do not prove all disposal/container/profile inputs, all platforms or full library contract."
+    },
+    {
+      "evidence": "docs/research/dedup-500/rrrah-raster-color-result-20261026-v1.json",
+      "passed": 11,
+      "failed": 0,
+      "ignored": 0,
+      "scope": "Focused finite decode-enabled cross-encoding/alpha/ICC/EXIF suites on macOS; not all formats, profiles, cameras, platforms or complete library contract."
+    }
+  ],
+  "passed_test_invocations": 379,
+  "failed": 0,
+  "ignored": 2,
+  "pending_run": {
+    "evidence": "docs/research/dedup-500/rrrah-scan-lifecycle-launch-20261026-v1.json",
+    "session_id": 26109,
+    "result": "pending; poll same handle"
+  },
+  "research": {
+    "repository": "autobrr/upbrr",
+    "review": "docs/research/dedup-500/upbrr267-source-review-v524-20261026.json",
+    "whole_file_reads": 860,
+    "remaining": 980,
+    "all_500_complete": false
+  },
+  "unqualified_requirements": [
+    "Native Windows filesystem identity/hardlinks/replacement and broader platform corpus",
+    "Held-out real crop/burst/look-alike precision and remaining crop recall",
+    "Broader RAW camera/development/color corpus",
+    "Large real collection scaling and cancellation latency within underlying decoders",
+    "Full 500-repository source review and acceptance of applicable improvements"
+  ],
+  "next_steps": [
+    "Finish active scan lifecycle run and inspect any failure",
+    "Continue remaining pinned repository evidence without credit for unread files",
+    "Use contract-specific real fixtures to address unqualified requirements, not just repeat passing suites"
+  ]
+}

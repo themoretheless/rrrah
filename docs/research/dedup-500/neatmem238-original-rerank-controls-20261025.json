@@ -1,0 +1,96 @@
+{
+  "scope": "Unmodified original callbacks via AST, unittest.mock patches, minimal monkeypatch/raises adapters; rerank imports replaced by fake httpx, default prompt loader and response-text adapter; no providers/models/network",
+  "passed": 22,
+  "results": [
+    {
+      "name": "test_dispatch_off_truncates",
+      "passed": true
+    },
+    {
+      "name": "test_dispatch_llm_listwise",
+      "passed": true
+    },
+    {
+      "name": "test_dispatch_llm_pointwise",
+      "passed": true
+    },
+    {
+      "name": "test_dispatch_cross_encoder",
+      "passed": true
+    },
+    {
+      "name": "test_pointwise_sorts_by_score",
+      "passed": true
+    },
+    {
+      "name": "test_pointwise_parse_failure_sinks_to_bottom",
+      "passed": true
+    },
+    {
+      "name": "test_pointwise_empty_input",
+      "passed": true
+    },
+    {
+      "name": "test_call_realigns_scores_by_index",
+      "passed": true
+    },
+    {
+      "name": "test_call_rejects_empty_docs",
+      "passed": true
+    },
+    {
+      "name": "test_call_rejects_missing_api_key",
+      "passed": true
+    },
+    {
+      "name": "test_call_quota_exhausted_2056_no_retry",
+      "passed": true
+    },
+    {
+      "name": "test_call_429_retries_3_times_then_fails",
+      "passed": true
+    },
+    {
+      "name": "test_call_5xx_retries_then_succeeds",
+      "passed": true
+    },
+    {
+      "name": "test_call_detects_silent_drop",
+      "passed": true
+    },
+    {
+      "name": "test_call_missing_index_raises",
+      "passed": true
+    },
+    {
+      "name": "test_call_non_siliconflow_skips_error_envelope",
+      "passed": true
+    },
+    {
+      "name": "test_cross_encoder_head_tail_split",
+      "passed": true
+    },
+    {
+      "name": "test_cross_encoder_threshold_filter",
+      "passed": true
+    },
+    {
+      "name": "test_cross_encoder_mem0_style_no_filter",
+      "passed": true
+    },
+    {
+      "name": "test_cross_encoder_empty_input",
+      "passed": true
+    },
+    {
+      "name": "test_cross_encoder_local_dispatch",
+      "passed": true
+    },
+    {
+      "name": "test_local_rerank_uses_sentence_transformers",
+      "passed": true
+    }
+  ],
+  "excluded": "Five env reload validation tests; no pytest runner or complete upstream suite",
+  "full_upstream_suite_run": false
+}

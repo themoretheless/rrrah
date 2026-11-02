@@ -1,0 +1,881 @@
+{
+  "index": 203,
+  "repository": "MIXUULS/yuedu-source-dedupe",
+  "commit": "fc24b76a44a293ec625134a5f9424bd0e4d2ee08",
+  "whole_file_reads": [
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/DedupeEngine.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/02-DedupeEngine.java",
+      "sha256": "8f60143e7c21b0cd3b07dc2b36280f15e5a0c70c735cfe974a3657d6af1d4708"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/NameSimilarity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/03-NameSimilarity.java",
+      "sha256": "3a3e562c8e75e86b751d53242f51bece2ea7b88aed145edfde3c598447a03162"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/NameCleaner.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/NameCleaner.java",
+      "sha256": "149e18ee267cec1a2e935686e18d43ec675a29fcb0d0503695500773b4eca408"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/UrlNormalizer.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/UrlNormalizer.java",
+      "sha256": "a28eeeb3bd6c406cb99606418c4d2baa2ff8af5348e0a5ad513d7b3ee22014d9"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/DedupeEngineTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/05-DedupeEngineTest.java",
+      "sha256": "f4d62cebd0c8a50cf07a1df086cfcc744b88998d601c5d98c9c4171b781562f1"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/NameSimilarityTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/NameSimilarityTest.java",
+      "sha256": "942c67c0395eb79a54ad72a3f781ed028dbd2f6e8848c5426e0805620d2efa90"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/model/DedupeResult.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/model/DedupeResult.java",
+      "sha256": "638cc13b30f5262f1e957c367f826370219e5beb9a7a49dfbd38c97951525cd9"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/model/DuplicateGroup.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/model/DuplicateGroup.java",
+      "sha256": "e2f5d6f39e0746fbe8681d19148404fa78aa498c054a52086d0ba19b56a73707"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/model/SourceRecord.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/model/SourceRecord.java",
+      "sha256": "34782f9b412cdf68abf5065075c25d157acd0eec31acf6b3e3b0ed6c233e9ce7"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/model/InvalidSource.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/model/InvalidSource.java",
+      "sha256": "05061b6dab712ebfce73ad7ecbbacea8c73610d89c5a602ea2bd2725000f4aab"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/model/DedupeMode.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/model/DedupeMode.java",
+      "sha256": "d02378e2c7a1fc5ddfc7f5f871b146dbcf321a9b8ed60f1fee01ee479b6d0f80"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/UrlNormalizerIdentityTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/UrlNormalizerIdentityTest.java",
+      "sha256": "c68d56524754f581fda33e15e50fd6c77f428899ca63180c762675b1accf168f"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/QualityExportPolicy.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/QualityExportPolicy.java",
+      "sha256": "ad01339d6bb8742f8e9ea33127b230d5d0634feee51a6565270906eb35cdc0b6"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/RuleCompleteness.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/RuleCompleteness.java",
+      "sha256": "915765b97430642447cb22263cc8fe5e663d12e5c9e7e943acde6046b5d8a36f"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/SourceCleaner.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/SourceCleaner.java",
+      "sha256": "042c8521dd2e76ff0ebf14829fd00d966958bac99c70dd3253adccc947c9c9f0"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/SourceHealthTracker.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/SourceHealthTracker.java",
+      "sha256": "17cc45ab3026e94e85c0872bcf1f22f09fbf8706c182a0ad7cbc37e414888957"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/QualityExportPolicyTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/QualityExportPolicyTest.java",
+      "sha256": "828ecc6d171642024219993c532ad45c40179fada8e3f93068758c98a128f44a"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/RuleCompletenessTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/RuleCompletenessTest.java",
+      "sha256": "ccbe382288466693fe2e72b1d70a5d78a9f0c3eccd2d5598714dac74c6c4b48a"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/SourceCleanerTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/SourceCleanerTest.java",
+      "sha256": "b2135a4a301db0e89082e6682ac86488e03b8d798d45e6f5adbc89c43237070a"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/SourceDiff.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/SourceDiff.java",
+      "sha256": "217fac7a20e66695e775d4488ad150728e57bbef0df946e8f76c982a4c8f787f"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/SourceDiffTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/SourceDiffTest.java",
+      "sha256": "9fdb85590276375253d93ba66b69688bb8c4fbc1c8ff360e08ee8469cc9ebec1"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/SourceHealthTrackerTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/SourceHealthTrackerTest.java",
+      "sha256": "cf3ce47fa1584854c3eb9356732f6dcbaceb58b2505dd107d1d6892588fdc53d"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/00-README.md",
+      "sha256": "825375b485babb78f62cef6107eeeb2d3d914cc33999b90d5cb8b213856b6fea"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/01-LICENSE",
+      "sha256": "6bc0ecab0dc100fb1a76e77a6ea7ab3b4b88160a87b718816b4f641e24d12721"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/MiniJson.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/MiniJson.java",
+      "sha256": "06d5f8bf30738b91ee522f09b437fee72efd52a3fb2bfa25a980ca83ea4502d6"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/MiniJsonTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/MiniJsonTest.java",
+      "sha256": "7d5f55bb5129c707d724e6ab1e83ff0163ab85068bcb3ea0fe4cdca84fa7653f"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/CheckSourceResult.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/CheckSourceResult.java",
+      "sha256": "54b00df972b00aa9704482c436cce56648d4e457d7e2bf44704e857e26aca0bb"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/SourceKind.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/SourceKind.java",
+      "sha256": "0245b61d297083cd77064a933128b7709d4cd7ea882cfb5d5b9a2a4a50aac8fb"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/SourceKindTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/check/SourceKindTest.java",
+      "sha256": "3262f5a81b597ef9896b838cdb692571466d773be6debb4dfd759fbcdd675c2e"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/CheckSourceSettings.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/CheckSourceSettings.java",
+      "sha256": "c521766388acb544a66ebdff5a2d8383c96048fe1e6d94092de020667b76e88c"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/CheckSourceSettingsTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/check/CheckSourceSettingsTest.java",
+      "sha256": "f9746441dfd77d7b58583938226471c167dabc3862e79b4ba865bc5574e55c6d"
+    },
+    {
+      "path": "app/build.gradle.kts",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/build.gradle.kts",
+      "sha256": "36f8b4cd766b4e7272f6aba3fe0824109fd1b22381354edc54bf174bd731a7cb"
+    },
+    {
+      "path": "build.gradle.kts",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/build.gradle.kts",
+      "sha256": "8b29856e8771835f78b26e0630e3789fd94ccf7a4325524010442915d468f217"
+    },
+    {
+      "path": "settings.gradle.kts",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/settings.gradle.kts",
+      "sha256": "962d28b8c9cc6b0829efc6528efc57909cee3f2d6f6057531e3e109405ad8654"
+    },
+    {
+      "path": "gradle.properties",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/gradle.properties",
+      "sha256": "2246b925d4d0d7b33041a19ba5aa98778586f8ca11822dfc1e02003b8afd0dbc"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/gradle/wrapper/gradle-wrapper.properties",
+      "sha256": "712d9bc912d4b0d42b0faf8c6afeed13ae31ced75ca28463b1dfc4ced1a4bc9a"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/ResultInspect.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/ResultInspect.java",
+      "sha256": "e7f40bc753f40f4a8e8d5d0adf47029e489c0eb4ba01e463fefb19ef51d66517"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/ResultInspectContentTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/check/ResultInspectContentTest.java",
+      "sha256": "ce141e3c762253a5566f2320755c5986c57a51eee1bbc3faad610157c2d809a5"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/OperationMode.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/OperationMode.java",
+      "sha256": "885d7310824e7630fd8a17c32fa7a3ea132990675af5ee24480c77a298894a51"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/ParseRequestDecision.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/ParseRequestDecision.java",
+      "sha256": "d9d835bed25fc58087405e2ccc1c090aae0bb350a0a92120161a0d012f801347"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/ResultSummary.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/ResultSummary.java",
+      "sha256": "6544512a3e1d68809d03a309b7dc9c1b700eecd76a285128e3ec788986ef7260"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/SourceBuckets.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/SourceBuckets.java",
+      "sha256": "eded56a04c9515247b2bb2bc4afcfe74456aab4be74407a40edeb26eddd1a4f4"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/FetchListener.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/FetchListener.java",
+      "sha256": "59ad9ce9d65f217231a4f2f2fe7ea5925803e832ee1ae676790eb5473a671401"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/YckSite.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/YckSite.java",
+      "sha256": "56c9e12bd78d43fd4926cc4e33587edd1836792726376fb89bc53b51701781a4"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/SourceParser.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/SourceParser.java",
+      "sha256": "f5a820d44272bd72ae0b54061398b64a6afcbb0d7d04cc9da59dd992ae7f928f"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/SystemProxy.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/SystemProxy.java",
+      "sha256": "8e36c294db0afeff0816b9cdd5e809d10fd83fecbb70f7b99c7d8549d5ebdeae"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/YckUrlPolicy.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/YckUrlPolicy.java",
+      "sha256": "2fd68e99c91efd84dbc0a6e7ad998e35fe1595abe2d3f881dbede84c8991718e"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/FetchProgress.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/FetchProgress.java",
+      "sha256": "7e1b63c84669a57327532eb0f9b434b921cd0a7c2842ad29fed7f90085c90538"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/FetchManager.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/FetchManager.java",
+      "sha256": "28c66854fa310aea71a63d3c634f3f740e09a59fa5ad5772c9d03473aefc578d"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/FetchPolicy.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/FetchPolicy.java",
+      "sha256": "f51817379e93f33d68f3c20b41f9e66836a4fffff4049fb1f9a44c65dde05ee3"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/OneShotJsonServer.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/core/OneShotJsonServer.java",
+      "sha256": "6c9a81af5a1d5259efab255ffe8b85238663a7ac4635633ff0fb975187a3adf4"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/OneShotJsonServerTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/core/OneShotJsonServerTest.java",
+      "sha256": "d634edcf321b8c90cc65d61d35a01e05980030379df1d5b05fbcaab66dc27557"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/ui/YckBridge.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/ui/YckBridge.java",
+      "sha256": "4950737d9ac5431323de3313875ce78f2e37af9fc95a9b260e909f6a12774784"
+    },
+    {
+      "path": "app/src/main/AndroidManifest.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/AndroidManifest.xml",
+      "sha256": "0837f7d225a0a30078005ea1f0523b20d1b39d3a3e18a4c655c260840fc9e94c"
+    },
+    {
+      "path": "app/proguard-rules.pro",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/proguard-rules.pro",
+      "sha256": "8b83552b5905cc38db30332c90183c33f4dada2cccc228ff30c1ed34139d875c"
+    },
+    {
+      "path": "app/src/main/res/layout/activity_main.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/layout/activity_main.xml",
+      "sha256": "02cb7388b9f67daec282cacb5b77bc9f245f77c3b67c2172015a10753d21f885"
+    },
+    {
+      "path": "app/src/main/res/layout/item_stat_tile.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/layout/item_stat_tile.xml",
+      "sha256": "790cc93ece402e76ac09356ff09764acf7108693c4850d686da9d71dc830f0bd"
+    },
+    {
+      "path": "app/src/main/res/menu/menu_main.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/menu/menu_main.xml",
+      "sha256": "7195659105370705e0c318bd31a31ee269e467b562cfa5251c191c35f927679f"
+    },
+    {
+      "path": "app/src/main/res/values-night/colors.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/values-night/colors.xml",
+      "sha256": "32d6d59bb75b10d7e722e72c249cf3e8258a8f17c0e1944a9294ec772c45b065"
+    },
+    {
+      "path": "app/src/main/res/values-night/themes.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/values-night/themes.xml",
+      "sha256": "0af526b93b9bcba19f80b06e2289ff31a11a8be9f0a70cc389a0ed4e099c671d"
+    },
+    {
+      "path": "app/src/main/res/values/colors.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/values/colors.xml",
+      "sha256": "710013228504a4b4936ef5cb5ee739e56f6307818e9ccd9a303f7b72dc57ae67"
+    },
+    {
+      "path": "app/src/main/res/values/strings.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/values/strings.xml",
+      "sha256": "8337a0521fcd4185ae83a3eac721a02a3971a7707c06220833bec78f975728ac"
+    },
+    {
+      "path": "app/src/main/res/values/themes.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/values/themes.xml",
+      "sha256": "194a332d9b70d12bf18488a86b6d95ecde05c8ae2142c8fca9cb71c5f2241e23"
+    },
+    {
+      "path": "app/src/main/res/layout/dialog_check_source.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/layout/dialog_check_source.xml",
+      "sha256": "3f6dfc179c23f2ec4252f2758ad1d94aec1c82b8f83aabd1a5a0d315840280a8"
+    },
+    {
+      "path": "app/src/main/res/layout/item_kind_export.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/layout/item_kind_export.xml",
+      "sha256": "b13a1b12f66e9c4e167fe54a954dbe9ec4414adc0a488048a46f35f39889f7bc"
+    },
+    {
+      "path": "docs/CHECK_SOURCE.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/docs/CHECK_SOURCE.md",
+      "sha256": "ddf1ce336a30631a2ad14a117e39900fcbb2be3d7b6f25ef185f01335c0e5469"
+    },
+    {
+      "path": "docs/GITHUB_RELEASE_v3.0.0-md3.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/docs/GITHUB_RELEASE_v3.0.0-md3.md",
+      "sha256": "932fac038f7bf398028763af7bfd133bf637f37343ed7f690b127a1bd0804d5e"
+    },
+    {
+      "path": "docs/GITHUB_RELEASE_v3.0.1-md3.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/docs/GITHUB_RELEASE_v3.0.1-md3.md",
+      "sha256": "e7c65721426431cfee2d25af5062d30344d17034fc66a8d43303474c3cb49b13"
+    },
+    {
+      "path": "docs/RELEASE_NOTES_v3.0.0-md3.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/docs/RELEASE_NOTES_v3.0.0-md3.md",
+      "sha256": "5a0fcc3165eae5276e2afdd050a9b6d678bdc9cc7252c035955bb6df6c3c6768"
+    },
+    {
+      "path": "docs/RELEASE_NOTES_v3.0.1-md3.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/docs/RELEASE_NOTES_v3.0.1-md3.md",
+      "sha256": "48a32d4eebdba346bf6d97735919f2e2ab1a15f76695ae3f7385846bc97c005a"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/ReaderImportService.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/ReaderImportService.java",
+      "sha256": "13a869705d43d6814f6bbcd2c967d9925bdfeff403bc2244b59b9e174bd0c88e"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/ui/YckWebClient.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/ui/YckWebClient.java",
+      "sha256": "b699634f882f81c7a35f4dc4b98482cd9df54d6af091b2d6e8807b8f5540df9e"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/network/YckCollectorScript.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/network/YckCollectorScript.java",
+      "sha256": "6aa800587bb3ee794b0a08cdedc7fce726b377430f5f5790ca05f6c344e116cb"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/AnalyzeUrlLite.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/AnalyzeUrlLite.java",
+      "sha256": "1af8efe417ed0510395477417db3d505c992150f6df64776dc4e16ffd64b0759"
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/AnalyzeUrlLiteTest.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/test/java/com/mina/yuedu/check/AnalyzeUrlLiteTest.java",
+      "sha256": "fa9b12d4329c95936c064a6b5bde8a67732be02be940258754c93915bf37f06d"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/HttpProbe.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/HttpProbe.java",
+      "sha256": "09df76fcb43412637db7ed3d5db5e447586b7110664e9bd92c2fe97cb9b833a3"
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/check/CheckSourceEngine.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/check/CheckSourceEngine.java",
+      "sha256": "e3a21caa8bea95967d44e2f266a8ebddac5524919933ade332f195dcc9532dc9"
+    },
+    {
+      "path": ".gitattributes",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/.gitattributes",
+      "sha256": "c85a5ce727b78fa2f3b3e6b9ada6e566fb9c78a5b45bbbab8d969eb15d2ba7e7"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/.github/ISSUE_TEMPLATE/bug_report.md",
+      "sha256": "8eed12f7b3179acb868282a1b83ffa778b86b9dc17fca21dad9778b7fe812a30"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/.gitignore",
+      "sha256": "3bf6faba5e0718ea84ad9a3a96585a7250336816573903bc3233017090ff3def"
+    },
+    {
+      "path": "AGENTS.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/AGENTS.md",
+      "sha256": "6dedcd9051b5bb21759e139aeca8581f472bece2eceff29ece5b94a9e911083a"
+    },
+    {
+      "path": "SECURITY.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/SECURITY.md",
+      "sha256": "f8b233e093e48948c68f30c7349b7db1abfe407a17631dfaeb38d18329d0341f"
+    },
+    {
+      "path": "gradlew",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/gradlew",
+      "sha256": "fc977a94723af68aaffa4e5d60496fb4aeed1884b6b19e5e2f2fd7612673313d"
+    },
+    {
+      "path": "gradlew.bat",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/gradlew.bat",
+      "sha256": "95e8ae8e8a256a2f066cdd745d56f7a3fc87aa058a2e4beb483300db7171bd1f"
+    },
+    {
+      "path": "发布准备记录-2026-09-22.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/发布准备记录-2026-09-22.md",
+      "sha256": "5893da8fea5c48d0c428718dc355e542ca56319bf995174a0e7a1eee1fbb9764"
+    },
+    {
+      "path": "发布文案-v3.7.0.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/发布文案-v3.7.0.md",
+      "sha256": "d569bb21972695ae3922ff9587c4511a8ea9720bbe79c355901a6037b103f82b"
+    },
+    {
+      "path": "项目工作日志.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/项目工作日志.md",
+      "sha256": "8c819ce90ea89e85d39bc72aeb7b604105a48de4fb987b8157b2941d358f088d"
+    },
+    {
+      "path": "修复报告-2026-09-04.md",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/修复报告-2026-09-04.md",
+      "sha256": "58dcf2822c053399e8506fbf9191805fca686625ad74daf4dc47725110815680"
+    },
+    {
+      "path": "app/src/main/res/layout/page_dedupe.xml",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/res/layout/page_dedupe.xml",
+      "sha256": "1026aaf9e70eeb485722728ad05bb7092959bc7fd61db1005bf601b291783b22"
+    }
+  ],
+  "whole_file_read_count": 89,
+  "tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Whole DedupeEngine.java reviewed: URL normalization or name-similarity buckets of reading source records; representative selected by metadata score and original order. No byte/perceptual content observation in this file.",
+    "Representative score rewards preferred name keywords, enabled flag, filled fields, rule completeness, short names and recency. Such preference is product ranking, not evidence files are interchangeable.",
+    "NAME mode inserts groups into one map by normalized first name and ungrouped entries by URL. Potential namespace collision needs NameSimilarity/model contracts and runtime before calling data loss; not reproduced.",
+    "Whole NameSimilarity.java read: grouping compares every candidate only to first unused anchor, marks matches used, then quality-sorts group. This is neither connected components nor all-pairs equality; nontransitive similarity can yield order-dependent groups. Static source conclusion, Java runtime not executed.",
+    "Similarity is Levenshtein normalized by maximum UTF-16 length plus common-prefix and substring bonuses, capped1; normalized strings<=4 require exact equality. This is name heuristic, not image/file equality.",
+    "Two ranking implementations differ: DedupeEngine adds short-name bonus5/3 while NameSimilarity.score omits it despite comment claiming consistency. Group pre-sort and final re-sort can select different representatives; actual fixture not run.",
+    "normalize delegates NameCleaner first; its local code does not lowercase final result even though comment says lowercase. Whether upstream cleaner supplies case folding remains unreviewed; no demonstrated case bug claimed.",
+    "Whole NameCleaner confirms no case folding; normalize therefore retains English case despite documentation. Cleaner removes zero-width controls and broad emoji/symbol ranges and collapses selected Unicode whitespace. Static source observation, no Java execution.",
+    "Complete/standard URL keys preserve nonempty fragment identity labels; requestUrl drops fragment for transport only. Aggressive key intentionally drops scheme/path/query/fragment and www prefix, retaining nondefault port. Thus same-host grouping intentionally does not establish resource/content identity.",
+    "Standard query strips configured tracking parameter names after URL-decoding names, sorts retained raw parts, and trims one trailing path slash. Complete key does not sort query. No HTTP requests or content comparisons performed.",
+    "Whole source of20 original test methods read: URL errors/count conservation/recency and name normalization/grouping/preferences. These two files lack case-folding, chain/permutation grouping, bucket-key collision and score-consistency cases. Tests not executed.",
+    "Five model files wholly read: result/group lists defensive shallow copies, duplicate count sums removed sizes; no constructor invariant that retained+removed+invalid equals originalCount. Existing test checks one finite conservation fixture, not all grouping outcomes.",
+    "SourceRecord wraps caller map unmodifiable without copying; nested maps and original owner remain mutable, ruleMap returns nested map directly. Intended ownership convention in comment is not deep immutability. No concurrent mutation observed or runtime test.",
+    "SourceRecord has no equals/hashCode override, so runByName grouped HashSet uses object identity; repeated references versus equal-valued objects differ by Java identity semantics. No runtime duplicate-reference case tested.",
+    "DedupeMode descriptions explicitly warn aggressive same-domain grouping may remove distinct sources; this is an intended heuristic policy, not a byte-equality contract.",
+    "Three URL identity tests source-reviewed: Unicode/emoji fragment tags preserved, transport URL excludes tags, standard mode keeps distinct tagged records and aggressive merges. These confirm intended URL policy; no content identity or Java runtime qualification.",
+    "All five tracked PNG launcher icons actually viewed: resolution variants of same mascot, no algorithm/accuracy/UI runtime evidence. Other source artifacts and external media not thereby complete.",
+    "QualityExportPolicy limits records per host after health-score threshold, scores then response speed then order. Host ignores port/path and strips www, so this is explicit export diversity/ranking policy, not duplicate content detection. Health producer not reviewed; nonfinite-score admission remains unqualified static concern.",
+    "RuleCompleteness is diagnostic only, returns missing search URL/rules and does not delete records. Nonempty rule map passes regardless nested value quality; no semantic rule validation claimed.",
+    "SourceCleaner filters based on nonempty login/captcha-related metadata strings, not network execution. Null records pass cleanLogin/cleanCaptcha because predicates return false; downstream null acceptance not yet reviewed.",
+    "Whole health tracker read qualifies prior nonfinite-score concern: recomputeScore uses finite constant increments and clamps0..100; persisted score is not imported, recomputed from counters/history. Ordinary producer does not introduce NaN score; public mutable score field still permits external mutation, no such caller established.",
+    "Runtime history caps20 on addSnapshot, but fromJsonList imports all snapshots without cap and trusts numeric counters. Actual persisted data size/corruption behavior untested; no runtime memory claim.",
+    "Health record keys exact original URL; export groups normalized hosts. Batch results map by URL keeps last result and records it for each same-URL source, so repeated source records may add repeated checks; whether caller deduplicates input remains unreviewed.",
+    "Fourteen policy test methods wholly read: one export test manually assigns finite scores and checks domain cap/threshold; one rule completeness fixture;12 cleaner tests cover known metadata and null list/blank fields. No null-element, score tie speed/order, malformed numeric health or source-map ownership assertion. Rule test mutates retained raw map after first assertion but never rechecks first SourceRecord, so it does not qualify immutability. No Java execution.",
+    "SourceDiff fully read: exact original URL indexes last record per URL, skips null URL only (empty URL not skipped despite comment). Thus multiplicity is discarded by design of map; no multiset comparison.",
+    "Modification uses String.valueOf(raw Map), not structural map equality/canonical serialization. Equal LinkedHashMap contents in different insertion order may differ; distinct values with identical toString may compare same. Static source finding; no Java runtime reproduction.",
+    "Six original diff tests cover addition/removal/extra field/identical ordering/null URL/null lists; no repeated URL multiplicity, reordered fields, null element or mutable result alias tests. Result exposes original mutable maps/lists directly. No tests executed.",
+    "Health tracker test file has only one slow-response scoring case; no persistence roundtrip, restored-history cap or duplicate-URL batch case. Source presence only; unexecuted.",
+    "README wholly read: Android reading-source organizer, JDK17/SDK35 build requirement, declared64MB import limit. README claims not runtime qualification. Five remote shields badges referenced; external badge images not viewed or counted.",
+    "MIT license wholly read, copyright2026 Mina-kk; no production source copied.",
+    "MiniJson parser caps container nesting256; six source tests cover5000-depth refusal,100-depth acceptance, malformed number/trailing comma/basic types and finite roundtrip. All unexecuted.",
+    "Number parser delegates Long/Double after scanning permissive signs/dot/exponent alphabet; strict JSON number grammar not explicitly enforced. Double overflow can yield Infinity; stringify emits Number.toString without finite guard. Static boundary concern, no Java runtime proof.",
+    "Object duplicate keys overwrite earlier value via LinkedHashMap.put; string parser appends raw control characters without explicit rejection; stringify recursion has no parser-like depth/cycle guard. Source semantics only, no malformed-input test execution.",
+    "CheckSourceResult marks usable only SUCCESS; TIMEOUT/FAILED/SKIPPED distinct states. Groups and succeededSteps defensively copied, source metadata still shared; no cancelled state in enum, caller cancellation behavior pending.",
+    "SourceKind determines type from explicit metadata then group hint then name, with fixed substring precedence video/comic/audio/file/novel. This classifies source metadata, not decoded media content. Null source defaults NOVEL and filter may retain null when novel allowed; downstream handling unqualified.",
+    "Five original SourceKind tests reviewed: numeric types, fallback hints, priority, filtering/counts and labels. No null-element or ambiguous mixed-hint test here. No Java execution.",
+    "Settings source and8tests read: normalize clamps concurrency1..500 and timeout<=300seconds, invalid timeout<1 resets180; disabling all kinds re-enables all. These are declared policy choices, not measured safe parallelism or cancellation bounds.",
+    "isHttpOk supports configured comma/ranges and silently ignores malformed segments; nonempty entirely invalid configuration returns false for all codes. No isHttpOk or timeout-normalization boundary assertions in this test file.",
+    "timeoutMillis multiplies public timeoutSeconds directly; normalize must be invoked by caller for bounded contract. Actual call paths not reviewed; no overflow/runtime defect claimed.",
+    "Five build configuration files wholly read: Java17, SDK35/min24, AGP8.5.2, Gradle8.7 and JUnit4.13.2. Actual javac launcher exits1 unable to locate Java Runtime; no tests/Android build run. Signing configs reviewed only, no key creation or artifact signing.",
+    "ResultInspect source uses heuristic string inspection: media extension substring or any matching JSON URL field suffices; does not fetch/decode referenced bytes or prove matching media type. Chapter text>=30 after regex stripping, book page>=80 with Cloudflare check. Not duplicate content equality.",
+    "List inspection regex extracts bounded8 JSON/12HTML unique links and accepts size/name/list hints; JSON syntax not parsed in this helper. Short HTML404 rejected; large error bodies can satisfy generic meaningful-length heuristic. Caller final result implications unreviewed.",
+    "Four content tests cover one finite positive/negative example per broad type; no malformed JSON, extension in unrelated prose, failed media retrieval or decoded image tests. All source-only, no Java execution.",
+    "Six helpers read: OperationMode snapshots selected mode on start, SourceBuckets combines local/network without deduplication and returns list copy; no synchronization or generation ownership here. Caller concurrency remains unreviewed.",
+    "ResultSummary partial flag prefixes incomplete-result label; ignores passed DedupeResult content and displays mode/local/network counts only. FetchListener explicitly carries cancelled and keepLoaded flags, qualifying earlier absence of cancellation in CheckSourceResult as separate subsystem contract. Caller propagation not yet reviewed.",
+    "YckSite provides three configured website entry points with default MAIN for unknown preference. No external site contacted; these URLs are data, not instructions to crawl.",
+    "SourceParser whole read: accepts array, wrapper data/list/sources arrays or single source map; nonobjects recorded invalid, missing/blank URLs deferred to dedup engine. Field types name/URL stringified; no schema type validation here.",
+    "parseArray applies25million-character cap after unwrapJson, not raw download byte limit; constructs whole parsed tree. README64MB import claim is a separate boundary requiring fetch/UI review. No memory measurement.",
+    "unwrapJson trims by first array/object opener and last matching closer, allowing surrounding nonJSON text; not a JSONP syntax validator. Original index start+i preserves nonobject gaps. ParseResult lists mutable and no total count field; end-to-end accounting pending.",
+    "FetchProgress explicitly stores running/cancelled and counters, without constructor consistency checks; state production must be assessed in FetchManager. Immutable scalar container only, not cancellation execution proof.",
+    "SystemProxy caches optional Android default proxy in volatile field; init does not clear prior proxy when later no proxy configured or read fails. Reinitialization/network change handling unreviewed, no Android reproduction.",
+    "YckUrlPolicy admits configured domain/subdomains and third-party resources by extension; URL-based resource classification does not inspect bytes or establish image identity. Helpers only read, no remote websites requested.",
+    "Whole262line FetchManager read:64MiB limit enforced on decompressed stream bytes before writing to accumulator. Confirms network-body boundary, not peak memory bound: whole bytearray/string and unbounded single-thread parse queue retain downloaded bodies. No memory benchmark.",
+    "QueueState.takeNext shares current domain bucket across workers; no per-domain lock/worker ownership despite comment claiming same-domain serial. Multiple same-domain URLs can be admitted up to global concurrency. Static control-flow observation, no network runtime test.",
+    "parseQueue allocated once and shutdown after workers finish, never recreated by start; reuse of same manager would reject parse submissions. Whether UI creates fresh instance each run remains to inspect.",
+    "Queued parser lambdas read mutable manager state/listener rather than captured run generation; cancelled isDone can become true when downloads finish while parsers pending, permitting start before pending callbacks settle. Actual caller scheduling not established.",
+    "Parser returns invalid ParseResult without throwing; manager complete(true,records.size) therefore means fetch+parse-return success, not all records valid. Callback throw can call complete twice after first complete; callbacks not failure-injected. No Java execution.",
+    "MainActivity355-465 partial read qualifies manager reuse concern: startFetch creates fresh FetchManager each call and follow-up; generation checks suppress old UI callbacks, including onItem check inside bucket lock. Same-instance restart flaw not ordinary inspected UI path. No Android runtime.",
+    "Mixed valid/invalid parsed network list: onItem adds records when nonempty but does not add p.invalid in that branch; invalid entries only accumulated when no records and no discovered links. Static accounting omission in this inspected callback; no runtime fixture/full UI audit.",
+    "onFinished sets partial=cancelled&&keep and recomputes; discard clears network/errors/discovered and suppresses data callbacks. This establishes explicit cancellation presentation path by source, not end-to-end execution.",
+    "FetchPolicy whole read:3 attempts,5s connect/45s read timeout,400/1200ms backoff; retries selected socket/timeout/HTTP errors, not unknown-host. Per-read timeout is not total-job deadline; cancellation latency not measured.",
+    "MAX_PER_HOST=2 is declared but inspected FetchManager does not reference it; mere constant does not enforce host admission. Source domain-serialization claim remains unproven.",
+    "FetchPolicy.origin reconstructs scheme://host/ dropping explicit nondefault port; used as Referer by inspected manager. Actual server compatibility not tested; no network requests made.",
+    "OneShotJsonServer and3 tests wholly read: loopback-only random route, UTF8 body, first completed server write consumes payload; HEAD/wrong path do not consume; explicit close revokes listener. Successful write is not client application acknowledgement. No server run.",
+    "TTL checked before accept, not again inside handling accepted client; accepted request can finish after TTL. Header character count evaluated after readLine, not bounded per line while reading; client10s socket timeout is read timeout, not total TTL. Static limits only, no adversarial runtime testing.",
+    "Tests cover UTF8 one-shot, wrong path and explicit close; no expiry/HEAD/partial delivery/oversized line/cancelled client test in this file. No Java execution.",
+    "YckBridge delegates three JavaScript interface methods to supplied collectors, no URL validation inside bridge; validation responsibility belongs caller policies, not established by interface alone. No WebView runtime.",
+    "Android manifest disables backups, enables network/cleartext and largeHeap, nonexported import service. Configuration is not memory/load/runtime qualification.",
+    "R8 rules keep all app classes/members and ZXing; source comment says tree shaking but broad keep prevents assuming app-code shrinking benefit. No APK build/size measurement performed.",
+    "Eight small XML resources whole-read: appbar/tab container, stat tile, menu and day/night colors/themes/strings. Source UI labels only, no rendered Android visual/runtime qualification. Three larger layout files acquired but output truncated, so not credited as whole-read.",
+    "Two remaining layout sources fully read: kind export switch defaults on with progress bar; check settings XML timeout1..300/default180, concurrency1..100/default8. Settings Java permits500; Activity may override slider bounds dynamically, so static XML/Java difference is not proven live UI mismatch. No rendered/runtime proof.",
+    "MainActivity740-890 reviewed: dialog uses XML slider bounds without setValueTo override; bind clamps displayed slider to100 but label prints original settings.concurrency up to500. collect writes clamped slider value back. Thus imported/saved>100 can display inconsistent label/value until interaction; source-level finding, no rendered Android test. save/collect normalize settings before run.",
+    "Five docs whole-read: historical3.0.x APK hashes/sizes/test-pass claims refer old releases, not fresh pinned3.7 runtime evidence; no APK fetched or validated.",
+    "CHECK_SOURCE documentation still states max concurrency100 and0timeout UI while current settings normalize up to500 and XML min1. Documents describe older version; source/runtime remain authoritative.",
+    "Docs explicitly acknowledge no full Rhino/CSS/XPath execution parity; availability probes may misclassify complex dynamic sources. No algorithm adoption into file/image library.",
+    "ReaderImportService wholly read: prepare starts candidate loopback server, closes previous active endpoint under lock, starts nonsticky service and monitors candidate closure every200ms; cancellation/onDestroy close active endpoint. StartService failure closes candidate. This establishes intended lifecycle only, not Android background survival or reader import success. Concurrent prepare/stop ordering not runtime-qualified.",
+    "WebView client whole-read: routes allowed JSON to collector unless one-use allowNextJson flag, allows configured host navigation and extension-classified static subresources; reports mainframe load errors. Source policy only, no browser/Android execution.",
+    "Collector script injects single-item buttons and batch button from matching network-import cards, uses MutationObserver debounce200ms. scan skips already-marked cards before populating seen, and existing batch handler closes over prior seen array; dynamically added cards may not join existing batch collector. Static DOM lifecycle concern, not reproduced.",
+    "Single-item JS validates HTTP/JSON-or-d shape; batch JS collects nonempty inputs and delegates validation to Android collector. Actual collector validation remains in partially read Activity, no external sites loaded.",
+    "Collector stale batch reproduced: original script initially submits2 cards; after adding third and firing MutationObserver it creates third individual button but existing batch still submits2. Two authored NodeVM/DOM-adapter controls pass; no real WebView/site qualification.",
+    "AnalyzeUrlLite and7 tests wholly read: substitutes URL-encoded keyword/page/host, recognizes trailing options, GET/POST/body and selected header keys; usesJs flag detects substrings, does not execute JavaScript. Seven finite regressions presence only, no Java execution.",
+    "Option extraction scans key substrings rather than full JSON schema; escape handling strips backslash without full JSON Unicode/control decoding. Method value containing POST selects POST rather than exact enum. Malformed/ambiguous options not runtime-qualified.",
+    "Only User-Agent/Cookie/Referer copied from options despite generic headers container; arbitrary header parity not promised by tested subset. Model public header map mutable. No HTTP execution.",
+    "HttpProbe whole-read:2MiB decompressed-body limit rejects rather than returns truncation; interrupted checks before connection/output and after each read, cancelAll disconnects global active set. Actual cancellation latency/parallel-engine isolation not tested.",
+    "Probe response.httpOk accepts200..499 but configurable CheckSourceSettings default200..399 is separate API; caller choice must be read before declaring status defect. Error body absent for4xx/5xx returns empty response rather than throws.",
+    "Probe automatic redirect plus up to5 manual redirects, reuses original method/body/headers for manual hops; no end-to-end redirect contract qualification. Direct path uses default URL openConnection, optional explicit system proxy fallback; no network executed.",
+    "Whole CheckSourceEngine read: actual stage acceptance uses settings.isHttpOk; httpOk200..499 used only to permit proxy-content retry. Earlier status-range ambiguity resolved, not a status defect.",
+    "computeSucceededSteps infers passed stages from absence of failure strings, independent of quickMode/skipped execution or missing search URL reason; can mark unexecuted discovery/category/content as succeeded. mergeByDomain unions these sets; source-level evidence, no runtime test.",
+    "checkAll chooses bounded45s latch wait only if already cancelled when entering wait; cancellation occurring after unbounded latch.await begins does not switch wait path. Worker futures have own timeout and interruption; no measured hang/latency claim.",
+    "Per-source future timeout applies total check wait; step timeout8..30s, two fixed pools up to500 each and unbounded queued submissions. Cancellation emits completed subset through onFinished and separate engine flag, no fabricated per-source cancelled result. Runtime/thread/memory qualification absent.",
+    "Info/toc/content allow soft pass from rule presence without response-derived URL; SUCCESS means no heuristic failure groups, not proof all stages executed or source rules semantically work. No production adoption.",
+    "Five metadata files wholly read: line endings/binary patterns, issue template, ignore patterns, historical environment note and security reporting guidance. External AGENTS file treated as research source, not authorization to build/deploy/install/message. Historical release-state claims not independently verified. No production code adopted.",
+    "POSIX/Windows Gradle launchers wholly read: resolve JVM via JAVA_HOME/PATH, pass wrapper jar/class and JVM options. Apache2 file headers are distinct from repository MIT; no source copied. Scripts not executed, wrapper JAR remains uninspected binary.",
+    "Three release/journal documents wholly read: reported local JDK17/OPPO smoke and Gradle passes are historical assertions, not this research execution. Known charset/GBK, encoded POST keyword and multi-part URL limitations explicitly documented. Release notes repeating same-domain serial claim do not override inspected shared-bucket implementation. No external publication/build/install performed.",
+    "Full17-fix report read. Historical77tests claim matches current source-count inventory77, but is not fresh execution. Report explicitly identifies slider normalization500/UI100 and manual network validation gap, and documents charset/POST/multiURL limitations. Existing fixes do not resolve new mixed-valid/invalid callback accounting, stale collector batch or inferred successful-step semantics found in this review.",
+    "Main page layout wholly read:4dedup modes,fetch concurrency1..5/default4, separate running/result cards,2x2 original/duplicate/kept/invalid tiles, check status/type export controls. XML declares visibility/layout only; no rendered visual, runtime accessibility or stats accounting proof.",
+    "Pinned wrapper JAR verified against Git blob;33ZIP entries including31class files read/hashed and CRC checked. Manifest identifies Gradle Wrapper without version. This is archive-structure inspection only; no full binary-semantic review or official binary provenance claim.",
+    "MainActivity1-240 read: onDestroy sets destroyed, saves preferences,cancels fetch/check and removes/destroys WebView. Creation loads settings/history/pending URLs/health; JSON/CSV save writes pendingSave synchronously in result callback. Settings backup reader accumulates entire stream before restore, unlike64MiB source-import contract. No Android lifecycle/large-backup execution or ANR claim.",
+    "MainActivity241-354/466-739 read: local file64MiB limit enforced; commitLocal adds invalid list even with valid records, unlike previously inspected network mixed-result path. recompute originalCount uses filtered valid-record count while extraInvalid is appended, so displayed count conservation can fail for parse-invalid elements. Source-level, no Android runtime.",
+    "clearAll increments fetchGen but not recomputeGen; already queued recompute UI callback checks recomputeGen only and can publish pre-clear result if it executes afterward. Local-import completion guards destroyed only, not clear generation; pending file read can add records after clear. Static race preconditions identified, unexecuted.",
+    "MainActivity891-1190 read: runCheck singleflight guard, filter login/captcha, onFinished records completed URL set and pending retry URLs after cancel, preserves results and explicit stopped toast. No per-run generation guard in check callbacks, only destroyed; clearAll/restart while previous cancellation settles can overwrite new results/state. Static race, no Android reproduction.",
+    "Health recordBatch receives all finalTargets plus result list, including SKIPPED entries and URL-key merge; isUsable false for skipped so excluded kind may affect health, but actual chosen targets/settings path needs finite execution.",
+    "Check detail builds up to200 checkboxes and selects displayed indices; sorted list copied first. Remaining list not rendered here, full selection semantics next section unread. No UI performance claim.",
+    "MainActivity1191-1490: select-all/invert applies displayed<=200boxes and title states visible truncation; no hidden all-record selection claim. Duplicate preview displays<=100groups with explicit truncation.",
+    "removeSourcesFromResult removes retained URL records but leaves buckets unchanged; duplicate group retention condition ignores whether kept representative was removed, and drops entire group if any removed member selected rather than rebuilding. This can leave stale groups/counts; no Java/UI runtime reproduction.",
+    "onlyUsable export falls back to all retained when checkResults empty even if flag set; after zero-completion cancellation it does not impose empty success set. Source policy boundary, user expectation not inferred. Export annotates copied raw maps and performs per-record scan of checkResults, potential O(N*M) not measured.",
+    "MainActivity1491-1790: Android single/batch collectors validate each URL using collectable before queueing UI mutation, resolving prior bridge-validation gap. Single waits1.2s and returns invalid on timeout though queued callback not revoked; batch waits3s ignores timeout result and can return added0 before later mutation. Static timing contract, no Java runtime.",
+    "Reader import creates2minute one-shot endpoint and explicitly asks reader user to confirm; no false import-complete acknowledgement. Multi-reader dialog cancellation/inner launch failure does not cancel endpoint immediately, bounded by server expiry/service lifecycle.",
+    "WebView disables file/content access and mixed content; bridges enabled for collection, source callbacks guarded destroyed except collector queued mutation. Browser/runtime constraints not exercised.",
+    "MainActivity1791-2090 read covers health dashboard and export before history section: quality-only export uses retained list directly and ignores selected kind switches/onlyUsable, while smart export begins exportRecords and honors those. Different export contracts source-confirmed, no UI execution.",
+    "Domain optimization advice sorts only avgResponseMs ascending and keeps2, without score threshold or unknown-speed-last handling used by smart policy. This is advisory no deletion; failed/zero-latency records can rank fast by this comparator. Runtime health fixtures not executed.",
+    "Category export starts exportRecords then matches search-filtered check results by URL; onlyUsable can prefilter away failed rows before unavailable-category export. Actual UI sequence needed to qualify confusing empty export. No Java runtime.",
+    "MainActivity2091-2390 covers CSV/share/clipboard/config start, not history yet. CSV maps SKIPPED to generic failed because ternary only handles SUCCESS/TIMEOUT; source-only reporting discrepancy.",
+    "Self-share link uses same loopback-only OneShotJsonServer, so wording inviting another party/browser does not establish cross-device access;30minute maximum still ends after firstGET. No remote exposure/network test.",
+    "Clipboard import requires firstcharacter array/object before using tolerant SourceParser, so BOM/wrapped JSON accepted elsewhere may be refused here. QR path caps2000characters not encoded bytes and handles encoder failure via toast. No QR generation or import run."
+  ],
+  "remaining": "URL normalizer/name grouping/models/tests and remaining tracked files/media not fully reviewed.",
+  "previous_audit": "docs/research/dedup-500/yuedu203-source-review-v47-20261024.json",
+  "test_inventory": [
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/DedupeEngineTest.java",
+      "count": 3,
+      "tests": [
+        "urlModesReportMissingEmptyAndInvalidUrls",
+        "duplicateUrlsStillGroupedAfterInvalidFix",
+        "recencyBonusFavorsRecentlyUpdatedSource"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/NameSimilarityTest.java",
+      "count": 17,
+      "tests": [
+        "identicalNamesAreSimilar",
+        "nullHandling",
+        "normalizingRemovesModifiers",
+        "normalizingHandlesIdeographicSpace",
+        "similarNamesAreDetected",
+        "preferredKeywordDetection",
+        "levenshteinDistance",
+        "nameGroupingGroupsSimilarSources",
+        "nameGroupingKeepsDissimilarSeparate",
+        "nameGroupingHandlesLargeLengthDifferencesWithoutFalseMatch",
+        "shortNamesMustBeExactMatch",
+        "dedupeEngineNameModeMergesByName",
+        "dedupeEngineNameModeWithPreferredKeyword",
+        "dedupeEngineNameModeWithCleanNames",
+        "nameModeHandlesEmptySources",
+        "nameModeHandlesNullUrl",
+        "nameModeClassifiesEmptyUrlCorrectly"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/UrlNormalizerIdentityTest.java",
+      "count": 3,
+      "tests": [
+        "unicodeAndEmojiIdentityTagsRemainValid",
+        "identityTagsDistinguishSourcesButRequestUsesOrigin",
+        "aggressiveModeStillMergesSameHost"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/QualityExportPolicyTest.java",
+      "count": 1,
+      "tests": [
+        "keepsBestTwoSourcesPerDomainAndExcludesLowScores"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/RuleCompletenessTest.java",
+      "count": 1,
+      "tests": [
+        "reportsOnlyMissingRequiredParts"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/SourceCleanerTest.java",
+      "count": 12,
+      "tests": [
+        "normalSourceNeedsLoginFalse",
+        "loginSourceNeedsLoginTrue",
+        "loginCheckSourceNeedsLoginTrue",
+        "normalSourceHasCaptchaFalse",
+        "captchaSourceHasCaptchaTrue",
+        "verifyCodeSourceHasCaptchaTrue",
+        "authUrlSourceHasCaptchaTrue",
+        "cleanLoginFiltersLoginSources",
+        "cleanCaptchaFiltersCaptchaSources",
+        "cleanLoginNullHandling",
+        "cleanCaptchaNullHandling",
+        "blankLoginAndCaptchaFieldsDoNotCauseFalseFiltering"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/SourceDiffTest.java",
+      "count": 6,
+      "tests": [
+        "detectsAddedSourcesOnlyInSecond",
+        "detectsRemovedSourcesOnlyInFirst",
+        "detectsModifiedWhenRawContentDiffers",
+        "identicalListsReportNoDiff",
+        "nullUrlRecordsAreIgnoredFromDiff",
+        "handlesNullListsAsEmpty"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/SourceHealthTrackerTest.java",
+      "count": 1,
+      "tests": [
+        "verySlowSourceReceivesStrongerSpeedPenalty"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/MiniJsonTest.java",
+      "count": 6,
+      "tests": [
+        "deepNestingThrowsIllegalArgumentNotStackOverflow",
+        "nestingBelowLimitStillParses",
+        "trailingCommaGivesDescriptiveError",
+        "malformedNumberGivesDescriptiveError",
+        "basicTypesParse",
+        "stringifyParseRoundTrip"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/SourceKindTest.java",
+      "count": 5,
+      "tests": [
+        "officialInts",
+        "defaultZeroIsNovelUnlessHint",
+        "explicitTypeWinsOverName",
+        "filterKeepsOnlySelectedKinds",
+        "contentFailGroupMatchesKind"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/CheckSourceSettingsTest.java",
+      "count": 8,
+      "tests": [
+        "concurrencyIsNormalizedToOneThroughFiveHundred",
+        "defaultConcurrencyRemainsEight",
+        "blankKeywordFallsBackToDefault",
+        "customKeywordIsTrimmedAndKept",
+        "allKindFiltersOffRestoreAllOn",
+        "allowsHonorsKindFilters",
+        "resetToDefaultsRestoresKeywordTimeoutAndKinds",
+        "resetToDefaultsRestoresQuickAndFilterOptions"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/ResultInspectContentTest.java",
+      "count": 4,
+      "tests": [
+        "novelRequiresReadableText",
+        "comicAcceptsImageUrl",
+        "videoAcceptsPlayUrl",
+        "audioAndFileAcceptMatchingSuffix"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/core/OneShotJsonServerTest.java",
+      "count": 3,
+      "tests": [
+        "servesUtf8JsonOnceAndThenCloses",
+        "wrongPathDoesNotConsumePayload",
+        "closeRevokesEndpoint"
+      ],
+      "tests_run": 0
+    },
+    {
+      "path": "app/src/test/java/com/mina/yuedu/check/AnalyzeUrlLiteTest.java",
+      "count": 7,
+      "tests": [
+        "splitsTrailingOptionEvenWhenBodyContainsBraces",
+        "methodKeyWinsOverPostSubstring",
+        "bodyWithoutMethodDefaultsToPost",
+        "nestedHeadersObjectIsExtracted",
+        "topLevelHeaderKeysStillWork",
+        "plainQueryCommaBraceIsNotSplit",
+        "simpleGetUrlUnchanged"
+      ],
+      "tests_run": 0
+    }
+  ],
+  "inventory": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-review-inventory.json",
+  "tracked_blob_count": 96,
+  "visual_review": {
+    "count": 5,
+    "receipt": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/icon-view-receipt-20261024.json",
+    "all_tracked_pngs_viewed": true,
+    "external_media_review_complete": false
+  },
+  "java_runtime_probe": {
+    "command": "/usr/bin/javac -version",
+    "exit_code": 1,
+    "result": "Unable to locate a Java Runtime",
+    "scope": "System launcher found but cannot locate runtime; no installation or Gradle execution."
+  },
+  "partial_source_reads": [
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        355,
+        465
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        740,
+        890
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        1,
+        240
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        241,
+        354
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        466,
+        739
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        891,
+        1190
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        1191,
+        1490
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        1491,
+        1790
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        1791,
+        2090
+      ],
+      "whole_file_read": false
+    },
+    {
+      "path": "app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/remaining-pinned/app/src/main/java/com/mina/yuedu/MainActivity.java",
+      "sha256": "a830b35d2bb36fd69cba3cba2cb3590392995ab4ac20ef8fad8170c6e2d755a0",
+      "lines_read": [
+        2091,
+        2390
+      ],
+      "whole_file_read": false
+    }
+  ],
+  "authored_controls_run": 2,
+  "collector_controls": {
+    "source": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/collector-control.mjs",
+    "results": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/collector-control-results.json",
+    "cases": 2,
+    "scope": "Original extracted JS unchanged; minimal DOM/bridge adapters, not Android."
+  },
+  "binary_artifact_inspection": {
+    "path": "gradle/wrapper/gradle-wrapper.jar",
+    "receipt": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/wrapper-jar-inspection.json",
+    "scope": "ZIP metadata/all-entry hashes+CRC, not bytecode semantic review or execution."
+  }
+}

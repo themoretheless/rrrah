@@ -1,0 +1,446 @@
+[
+  {
+    "name": "texture",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-texture",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "96",
+        "0",
+        "3"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "mesh",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-mesh",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "57",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "scientific",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-scientific",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "58",
+        "0",
+        "10"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "develop",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-develop",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "102",
+        "0",
+        "2"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "vfx",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-vfx",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "52",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "layered",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-layered",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "78",
+        "0",
+        "2"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "animation",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-animation",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "36",
+        "0",
+        "1"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "cr2",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-raw",
+      "--lib",
+      "camtiff::cr2",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "10",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "mng",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-decode",
+      "--lib",
+      "mng::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "16",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "heif",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-decode",
+      "--lib",
+      "heif::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "8",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "wmf",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-vector",
+      "--lib",
+      "wmf::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "7",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "pdf",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-vector",
+      "--lib",
+      "pdf::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "46",
+        "0",
+        "1"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "cache-swap",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--lib",
+      "swap::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "30",
+        "0",
+        "1"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "dedup-model",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-dedup",
+      "--lib",
+      "model_banks::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": false
+  },
+  {
+    "name": "dedup-gradient",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-dedup",
+      "--lib",
+      "gradient::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "9",
+        "0",
+        "2"
+      ]
+    ],
+    "executed_nonzero": true
+  },
+  {
+    "name": "dedup-anchor",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-dedup",
+      "--lib",
+      "anchor_rank",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": false
+  },
+  {
+    "name": "dedup-collection",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-dedup",
+      "--lib",
+      "local_collection::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "0",
+        "0",
+        "0"
+      ]
+    ],
+    "executed_nonzero": false
+  },
+  {
+    "name": "gallery",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--bin",
+      "rrrah",
+      "gallery::tests::",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "53",
+        "0",
+        "17"
+      ]
+    ],
+    "executed_nonzero": true
+  }
+]

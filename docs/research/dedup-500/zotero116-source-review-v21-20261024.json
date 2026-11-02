@@ -1,0 +1,60 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v20-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/mirrorExecutor.mjs",
+      "local": "module-inventory/mirrorExecutor.mjs",
+      "sha256": "1b12e46272382d82be6350ec1519190c1dc7e60b477415ef54dcfaee616e33b3",
+      "git_blob": "9929e3b04f5d1946a110e28095289cac2dd0e310",
+      "whole_text_read": true,
+      "scope": "Prior partial1-55/90-180/1080-1230 plus56-89 and181-1079 now cover complete source."
+    }
+  ],
+  "whole_files_read_total": 39,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 4,
+    "total_authored_controls_distinct": 53,
+    "original_tests_total_distinct": 453,
+    "new_original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-freshness-controls-20261024",
+    "scope": "Original complete mirrorExecutor and imported original modules; actual owned Node files plus WebCrypto, owned IOUtils/attachment read adapters. Cache primedAAA, bytes replacedBBB with exact same size/mtime. No move/trash/delete API invoked."
+  },
+  "findings": [
+    {
+      "finding": "canSafelyMove andcanSafelyTrashZoteroAttachment recompute full digest directly and reject modifiedBBB although original cache returns staleAAA. Earlier candidate identity failures do not imply these deletion-freshness gates also trust cache.",
+      "evidence": "two native original gate controls"
+    },
+    {
+      "finding": "Both gates accept actual baseline matching bytes, and both reject injected readfailure.",
+      "evidence": "two positive/error native controls"
+    },
+    {
+      "finding": "_moveFolder rewrites by attachment-key latest record rather than each localPath: canonical/shadow multi-record handling must be qualified with original executor tests. No new shadow-move runtime claim in this step.",
+      "evidence": "whole source read"
+    },
+    {
+      "finding": "_moveWithFallback catches any move error, not only cross-FS; fallback copy has no explicitnoOverwrite option, and failure cleanup removes destination. Need actual platform/collision semantics before claiming overwrite/deletion.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Local folder deletion catches item lookup failures asnull and can remove tracking; child saveTx failure also followed by tracking removal. No actual fault-injected deletion workflow run.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Executor module header says it doesnotread mode, but folder-deletion handlers actuallyreadmode. Documentation not evidence of missing mode guard.",
+      "evidence": "whole source read"
+    }
+  ],
+  "remaining": [
+    "61blobs not whole-read",
+    "Original mirrorExecutor suites,baseline/index/preferences remainder",
+    "Full plugin/actual Gecko filesystem and license/release qualification incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

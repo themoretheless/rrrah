@@ -1,0 +1,77 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v7-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/fileRenamer.mjs",
+      "local": "19-fileRenamer.mjs",
+      "sha256": "d4a49ddfa69a799d44a2d3c8ade2951e39982cda313a423a1a433a9a5d0dc1e7",
+      "git_blob": "4a516c11ea0e96daab10e685f9a174aa7bde0f40",
+      "whole_text_read": true
+    }
+  ],
+  "partial_files_read": [
+    {
+      "path": "content/watchFolder.mjs",
+      "new_read_ranges": [
+        [
+          811,
+          1150
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          1150
+        ],
+        [
+          2262,
+          2420
+        ]
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "whole_files_read_total": 15,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 3,
+    "total_authored_controls_distinct": 28,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-stamps-controls-20261024",
+    "scope": "Original full utils/cache/detector modules; owned filesystem/WebCrypto plus Zotero parent/search adapters; source path and attachment copy have different actual bytes. No entire metadata callback, import engine or real Zotero database execution.",
+    "harness_note": "Initial owned script parse error corrected before successful execution; failed parse runs zero tests, not counted."
+  },
+  "findings": [
+    {
+      "finding": "Deferred stampHashWhenPossible uses captured finalPath source, not resolved attachment file path. Original storeContentHash hashes the supplied path even if attachment points to different actual bytes. A BBB source yields BBB parent stamp while retained attachment bytes are AAA; no attachment-path check. Actual full callback timing not executed.",
+      "evidence": "native original-method control plus source caller"
+    },
+    {
+      "finding": "Missing supplied source makes original getFileHash null and storeContentHash false, leaving parent stamp unchanged. Caller helper awaits but ignores boolean return. PostImport delete uses original source path as finalPath fallback, making missing path source-reachable; actual full delete/import path not run.",
+      "evidence": "native control plus source-only caller"
+    },
+    {
+      "finding": "Storing second hash on same parent removes previous hash stamp. Original findByHash then misses first content and finds second via owned Search adapter; no tracking-store fallback evaluated.",
+      "evidence": "native control"
+    },
+    {
+      "finding": "Metadata success callback stamps before rename, then updates renamed flag at captured finalRelKey; no localPath rewrite in this callback. Linked attachment rename path semantics require actual API/caller review.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "fileRenamer builds sanitized base name from metadata and awaits renameAttachmentFile without inspecting returned value; actual API success/failure convention unqualified. Max filename limit applied to base then original extension appended.",
+      "evidence": "whole source review only"
+    }
+  ],
+  "remaining": [
+    "85blobs not whole-read including watchFolder remainder",
+    "Original suite and full metadata/import/rename behavior in Zotero unqualified",
+    "License/dependency and release qualification incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

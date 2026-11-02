@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/d4ncboz/threads-affiliate/schemas/post-result.schema.json",
+  "title": "Post Result Schema",
+  "description": "Schema for PostResult dataclass returned by ThreadsPoster.post()",
+  "type": "object",
+  "required": ["success"],
+  "properties": {
+    "success": {
+      "type": "boolean",
+      "description": "Whether the post was successfully submitted to Threads"
+    },
+    "product": {
+      "type": "string",
+      "description": "Product name from input"
+    },
+    "affiliate_link": {
+      "type": "string",
+      "description": "Affiliate URL from input"
+    },
+    "hook_category": {
+      "type": "string",
+      "enum": ["edukasi", "validasi_mental", "storytelling", "problem_solving", "hook_pancingan", "transformasi", "social_proof", "urgency", "controversy"]
+    },
+    "hook_text": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "num_posts": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 3
+    },
+    "post_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to verified post on Threads (empty if username not provided)"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if success=false"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "examples": [
+    {
+      "success": true,
+      "product": "SKINTIFIC 5X Ceramide",
+      "affiliate_link": "https://s.shopee.co.id/XXXXX",
+      "hook_category": "edukasi",
+      "hook_text": "Skincare hidden gem yang bakal lo sesalin...",
+      "num_posts": 3,
+      "post_url": "https://www.threads.com/@username",
+      "error": "",
+      "timestamp": "2026-06-29T08:00:00"
+    },
+    {
+      "success": false,
+      "product": "Product X",
+      "affiliate_link": "https://s.shopee.co.id/YYYYY",
+      "error": "Cookies not found at /Users/x/.threads_poster/cookies/session.json. Run setup --extract-cookies first.",
+      "timestamp": "2026-06-29T13:00:00"
+    }
+  ]
+}

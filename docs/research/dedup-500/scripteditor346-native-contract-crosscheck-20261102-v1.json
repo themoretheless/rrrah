@@ -1,0 +1,52 @@
+{
+  "scope": "Current source and regression-definition crosscheck only; no new native test run. Full decode process96509 confirmed live. Existing tests are evidence of intended assertions, not fresh pass claims.",
+  "upstream_reference": "docs/research/dedup-500/scripteditor346-source-review-v13-20261102.json",
+  "files": [
+    {
+      "path": "crates/rrrah-dedup/src/exact.rs",
+      "sha256": "e18ba5bbd33a0d04d0b3f19adadf5980b23f53b5752708114dd66f49068673f5"
+    },
+    {
+      "path": "crates/rrrah-dedup/src/decode.rs",
+      "sha256": "4ee9af2e3768420aff054eed216131a7fd96e88c5b48f68052796a55ed20c6d5"
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/exact_files.rs",
+      "sha256": "d196fd060f16b98e8c9bd78130c44759656649b58b8da9750a0b39488b66d9c1"
+    },
+    {
+      "path": "crates/rrrah-dedup/tests/decode.rs",
+      "sha256": "319105d8e9c892da57fba87f14124bdd62a17c92888e3bfbd8f82ece28385fb4"
+    }
+  ],
+  "mapping": [
+    {
+      "risk": "second-resolution size/mtime cache misses edits",
+      "native_source": "Stamp retains SystemTime; Unix ctime and nanoseconds plus physical identity. Decode cache hit verifies ContentSnapshot before returning.",
+      "regressions": [
+        "restored_modified_time_does_not_hide_same_length_snapshot_edit",
+        "restored_modified_time_does_not_hide_same_inode_edit_during_scan",
+        "memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime"
+      ],
+      "limitation": "Windows stamp differs; all-platform qualification and full active decode run remain pending."
+    },
+    {
+      "risk": "directory symlink cycle repeats same physical file",
+      "regressions": [
+        "hardlink_aliases_and_followed_symlink_cycles",
+        "physical_hardlinks_are_aliases_while_copied_bytes_are_separate_files"
+      ],
+      "native_source": "Physical identities distinguish aliases; equal/deeper directory revisits terminate.",
+      "limitation": "Regression source inspected; no fresh rerun in this crosscheck."
+    },
+    {
+      "risk": "cancel yields ordinary success with partial groups",
+      "native_source": "Report.cancelled and complete() explicit; verified API regression sweeps one-shot cancellation checkpoints and requires empty groups.",
+      "regressions": [
+        "verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint"
+      ],
+      "limitation": "Applies to verified API; broader scan lifecycle and platform gates remain distinct."
+    }
+  ],
+  "outcome": "Existing implementation/regression definitions address these upstream failure patterns. No production edit warranted from this comparison alone; current full run outcome unproven."
+}

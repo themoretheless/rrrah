@@ -1,0 +1,21 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--lib",
+    "exact::interrupted_read_tests::"
+  ],
+  "started_at": "2026-11-02T00:00:17.603774+00:00",
+  "finished_at": "2026-11-02T00:00:36.366105+00:00",
+  "exit_code": 0,
+  "source": "crates/rrrah-dedup/src/exact.rs",
+  "source_sha256_before": "f0474ac1833d5371719d643138e0164b516b6d56c26a38cc155f191e23c322d4",
+  "source_sha256_after": "f0474ac1833d5371719d643138e0164b516b6d56c26a38cc155f191e23c322d4",
+  "source_unchanged": true,
+  "output": "   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n    Finished `test` profile [optimized + debuginfo] target(s) in 15.23s\n     Running unittests src/lib.rs (target/debug/deps/rrrah_dedup-020833db79babe1c)\n\nrunning 4 tests\ntest exact::interrupted_read_tests::interrupted_reads_observe_cancellation_before_retry ... ok\ntest exact::interrupted_read_tests::read_cancelled_before_first_attempt_does_not_touch_reader ... ok\ntest exact::interrupted_read_tests::short_reads_and_interruptions_preserve_content_and_eof_errors ... ok\ntest exact::interrupted_read_tests::every_partial_read_failure_preserves_typed_error_and_unread_tail ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 48 filtered out; finished in 0.00s\n\n",
+  "scope": "Four existing short-read, Interrupted, cancellation and typed partial-error unit tests; not whole-library or filesystem snapshot qualification."
+}

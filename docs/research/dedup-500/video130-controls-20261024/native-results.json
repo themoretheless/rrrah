@@ -1,0 +1,12 @@
+{
+  "controls_passed": 5,
+  "scope": "Both original wrapper class bodies unchanged;actual Annoy1.17.3 native C++ index and NumPy2.5.4;500-dimensional synthetic vectors;no model or video execution",
+  "findings": [
+    "Positive close-pair detected and self/far excluded.",
+    "Threshold0 excludes exact distinct vectors.",
+    "Default cap/approximate index returned2 of21 zero-distance neighbors for separate query.",
+    "optimize_trees=True raises TypeError due extra argument to __optimize__.",
+    "Empty needles raises ValueError."
+  ],
+  "optimize_error": "AnnoyNNeighbors.__optimize__() takes 2 positional arguments but 3 were given"
+}

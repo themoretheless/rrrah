@@ -1,0 +1,24 @@
+{
+  "source": "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/images/kiara_1_dawn_4k.hdr",
+  "source_sha256": "61f024d80f21bc9800bfdd5bf5d4034bc36d7a10494da73185edc40e1b81dc8b",
+  "preview": "docs/research/dedup-500/room265-hdr-sdr-preview-20261026.png",
+  "argv": [
+    "/opt/homebrew/bin/ffmpeg",
+    "-v",
+    "error",
+    "-xerror",
+    "-i",
+    "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/blender files/images/kiara_1_dawn_4k.hdr",
+    "-frames:v",
+    "1",
+    "-vf",
+    "scale=1600:-1",
+    "-pix_fmt",
+    "rgb24",
+    "-y",
+    "docs/research/dedup-500/room265-hdr-sdr-preview-20261026.png"
+  ],
+  "exit_code": 0,
+  "stderr": "",
+  "scope": "Diagnostic SDR RGB24 downscaled preview, default FFmpeg conversion, no calibrated tonemapping or HDR luminance/color accuracy qualification"
+}

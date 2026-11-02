@@ -1,0 +1,39 @@
+test_all_outputs_close_even_when_one_close_fails (test_support.TestFileIO.test_all_outputs_close_even_when_one_close_fails) ... ok
+test_managed_gzip_output_and_closing (test_support.TestFileIO.test_managed_gzip_output_and_closing) ... ok
+test_open_files_closes_partial_success_on_error (test_support.TestFileIO.test_open_files_closes_partial_success_on_error) ... ok
+test_paths_and_filesystem_forms (test_support.TestFileIO.test_paths_and_filesystem_forms) ... ok
+test_paths_file_sharding (test_support.TestFileIO.test_paths_file_sharding) ... ok
+test_sorted_listing_and_stride_shards (test_support.TestFileIO.test_sorted_listing_and_stride_shards) ... ok
+test_no_files_differs_from_unassigned_rank (test_support.TestJsonl.test_no_files_differs_from_unassigned_rank) ... 2026-10-24 07:33:54.505 | WARNING  | minhash_dedup.jsonl:run:120 - No files found on /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/tmpncli0xfz for rank=1
+ok
+test_reader_custom_adapter_gzip_and_path_order (test_support.TestJsonl.test_reader_custom_adapter_gzip_and_path_order) ... 2026-10-24 07:33:54.524 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file b.jsonl.gz, 1/2
+2026-10-24 07:33:54.531 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file a.jsonl.gz, 2/2
+ok
+test_reader_skips_preserve_physical_line_ids_and_metadata (test_support.TestJsonl.test_reader_skips_preserve_physical_line_ids_and_metadata) ... 2026-10-24 07:33:54.532 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file a.jsonl, 1/2
+2026-10-24 07:33:54.532 | WARNING  | minhash_dedup.jsonl:read_file:95 - Error when reading `a.jsonl`: invalid literal, expected 'null': line 1 column 1 (char 0)
+2026-10-24 07:33:54.532 | WARNING  | minhash_dedup.jsonl:get_document_from_dict:77 - Skipping a document without text in a.jsonl
+2026-10-24 07:33:54.532 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file b.jsonl, 2/2
+2026-10-24 07:33:54.532 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file a.jsonl, 1/2
+2026-10-24 07:33:54.532 | WARNING  | minhash_dedup.jsonl:read_file:95 - Error when reading `a.jsonl`: invalid literal, expected 'null': line 1 column 1 (char 0)
+2026-10-24 07:33:54.532 | WARNING  | minhash_dedup.jsonl:get_document_from_dict:77 - Skipping a document without text in a.jsonl
+2026-10-24 07:33:54.532 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file b.jsonl, 2/2
+2026-10-24 07:33:54.532 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file a.jsonl, 1/2
+2026-10-24 07:33:54.532 | WARNING  | minhash_dedup.jsonl:read_file:95 - Error when reading `a.jsonl`: invalid literal, expected 'null': line 1 column 1 (char 0)
+2026-10-24 07:33:54.532 | WARNING  | minhash_dedup.jsonl:get_document_from_dict:77 - Skipping a document without text in a.jsonl
+2026-10-24 07:33:54.533 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file b.jsonl, 1/1
+ok
+test_writer_constructor_adapter_and_metadata_expansion (test_support.TestJsonl.test_writer_constructor_adapter_and_metadata_expansion) ... ok
+test_writer_default_metadata_and_roundtrip (test_support.TestJsonl.test_writer_default_metadata_and_roundtrip) ... 2026-10-24 07:33:54.535 | INFO     | minhash_dedup.jsonl:run:133 - Reading input file 00003.jsonl.gz, 1/1
+ok
+test_writer_labels_adapters_and_split_names (test_support.TestJsonl.test_writer_labels_adapters_and_split_names) ... ok
+test_document_defaults_are_isolated (test_support.TestRuntime.test_document_defaults_are_isolated) ... ok
+test_metrics_and_timing_on_failure (test_support.TestRuntime.test_metrics_and_timing_on_failure) ... ok
+test_hash_definitions_for_both_widths (test_support.TestSignatureHelpers.test_hash_definitions_for_both_widths) ... ok
+test_record_buffering_and_truncation (test_support.TestSignatureHelpers.test_record_buffering_and_truncation) ... ok
+test_seek_to_first_matching_hash (test_support.TestSignatureHelpers.test_seek_to_first_matching_hash) ... ok
+test_xxhash_matches_previous_string_hashes (test_support.TestSignatureHelpers.test_xxhash_matches_previous_string_hashes) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.042s
+
+OK

@@ -1,0 +1,81 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v16-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/folderEventDetector.mjs",
+      "local": "module-inventory/folderEventDetector.mjs",
+      "sha256": "10b25e6d91ab5bda2d08aecd1c817997b41cde920b0b237586a3a313e43e8a3d",
+      "git_blob": "69a0fc41b0d2771166caefa85c0327aa76acc1a6",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/watchRootGuard.mjs",
+      "local": "module-inventory/watchRootGuard.mjs",
+      "sha256": "bee63ab06990c493c40aeede52ce97545a865312ade9938b7296cf9bdebb079a",
+      "git_blob": "b3702d769bb21583b8786229e72767d9f869b09a",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/watchRootGuard.test.mjs",
+      "local": "31-watchRootGuard.test.mjs",
+      "sha256": "2a68d66c68f4ddbfb429d256088872fb380ed4a7896751d7b1208f563b243c96",
+      "git_blob": "e06cb0c3a2ccd7d11b037b623e611aae0f0eaa1c",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/folderEventDetector.test.mjs",
+      "local": "32-folderEventDetector.test.mjs",
+      "sha256": "373a1d2f1ef33f8e0cac1b2a127048672ffb3d475a5b4b41e7876a3178f5a36b",
+      "git_blob": "c6818dbdbba98033161853ef5aac2af805e9a87f",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 34,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 39,
+    "new_original_counts": {
+      "watchRootGuard.test.mjs": 14,
+      "folderEventDetector.test.mjs": 25
+    },
+    "original_tests_total_distinct": 395,
+    "new_authored_controls_passed": 3,
+    "total_authored_controls_distinct": 45,
+    "retained_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "scope": "Original complete guard/detector and unchanged original unit tests; upstream test mocks replace root availability/canonical lookup/mirror executor, guard logic real. Own three probes use same source with owned error injection. Executor records proposals only: no real disk/Zotero deletion."
+  },
+  "findings": [
+    {
+      "finding": "All39 original guard/detector tests pass incl root unavailable, aggregate caps, suppressed folders, clean-cycle fingerprint and known orphan cases.",
+      "evidence": "native original Vitest report"
+    },
+    {
+      "finding": "With healthy count4/current3 and suppressed-missing collection, synchronous collection lookup exception is caught and treatednull; code continues as orphan then records baselinecount3. This contradicts comment that lookup failure retains conservative stale baseline.",
+      "evidence": "native owned error-injection control"
+    },
+    {
+      "finding": "When collection lookup succeeds and collection still exists, same suppressed-missing cycle doesnot refresh baseline.",
+      "evidence": "native positive owned control"
+    },
+    {
+      "finding": "With available root (mockedtrue), IOUtils.exists(child) throwingEACCES is treatedfalse; single clean collection leads localFolderDeleted proposal. Actual mirror executor may independently reject/refuse and has not been qualified here.",
+      "evidence": "native owned control; no deletion consequence claim"
+    },
+    {
+      "finding": "Guard fingerprint includes count/namesHash but collapse test uses count only; readFingerprint accepts numeric count without finite/nonnegative validation. No additional malformed-value control executed.",
+      "evidence": "whole source read"
+    }
+  ],
+  "remaining": [
+    "66blobs not whole-read",
+    "Full original suite and real mirror executor/Gecko runtime unqualified",
+    "Root/dependency license and release checks incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

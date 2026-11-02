@@ -1,0 +1,20 @@
+{
+  "scope": "Original ReaderPlan/StageCheckpoints, actual local fsspec and owned files.\n\nTests metadata binding only, not stale-filter deletion or distributed recovery.\n",
+  "owned_fixture_root": "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/minhash171-snapshot-owned-d96csdu0",
+  "authored_controls_run": 4,
+  "original_tests_run": 0,
+  "observations": [
+    "unchanged reader-plan shard accepted",
+    "different-size input rejected",
+    {
+      "case": "same-size changed input content accepted by ReaderPlan.shard",
+      "original_sha256": "aba3c6e629d607b714ee435fef660b391772430f444b6f54fb3d77043caa3eb4",
+      "changed_sha256": "d05a2bcb737bb42b9b30c35b66db9d7691a9d4ccdbaa028c5ad915137fc66a63"
+    },
+    {
+      "case": "changed output with same size and restored mtime accepted by StageCheckpoints",
+      "generation_unchanged": true,
+      "qualification": "metadata-only inventory is documented; no actual corrupted stage/real corpus execution"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "purpose": "same basename and size must not prove duplicate; renamed byte-identical copy must match",
+  "binary": "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/scan_folder",
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "scope": "existing release binary controlled integration run, not fresh-source qualification or universal proof",
+  "inputs": [
+    {
+      "path": "a/01.mkv",
+      "bytes": 4096,
+      "sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1"
+    },
+    {
+      "path": "b/01.mkv",
+      "bytes": 4096,
+      "sha256": "725bcd6c66d02acf6ebeab9c92410e010ea22e336876256aaf05a211f4ce1902"
+    },
+    {
+      "path": "c/renamed.bin",
+      "bytes": 4096,
+      "sha256": "6896d9ea3f73a4434f5832bc65714e7d066f177373f36f34dc8a6f735daa41b1"
+    }
+  ],
+  "expected_groups": [
+    [
+      "a/01.mkv",
+      "c/renamed.bin"
+    ]
+  ],
+  "actual_groups": [
+    [
+      "a/01.mkv",
+      "c/renamed.bin"
+    ]
+  ],
+  "exit_code": 0,
+  "stdout": "Group 1: 2 files, 4096 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-identity-control-tslecoal/a/01.mkv\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-identity-control-tslecoal/c/renamed.bin\"\n",
+  "stderr": "Scan complete: 3 files observed, 1 duplicate groups, 86016 bytes read, 0 diagnostics\n",
+  "passed": true
+}

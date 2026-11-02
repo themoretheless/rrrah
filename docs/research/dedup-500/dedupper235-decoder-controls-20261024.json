@@ -1,0 +1,41 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "scope": "Original FFProbeService selected bodies through Flow AST, exec stub resolved/rejected promises and captured-output strings. No subprocess, codec, actual media decoding, native pHash or Jest/app execution.",
+  "authored_controls": [
+    {
+      "name": "valid probe output positive control",
+      "passed": true,
+      "observed": {
+        "width": 320,
+        "height": 240,
+        "ratio": 1.3333333333333333,
+        "damaged": false
+      }
+    },
+    {
+      "name": "generic execution error parsed as undamaged zero dimensions",
+      "passed": true,
+      "observed": {
+        "width": 0,
+        "height": 0,
+        "ratio": 0,
+        "damaged": false
+      }
+    },
+    {
+      "name": "audio catch object does not handle rejected execution",
+      "passed": true,
+      "observed": "rejected"
+    },
+    {
+      "name": "empty successful output lacks dimensions yet marked undamaged",
+      "passed": true,
+      "observed": {
+        "width": 0,
+        "height": 0,
+        "ratio": 0,
+        "damaged": false
+      }
+    }
+  ]
+}

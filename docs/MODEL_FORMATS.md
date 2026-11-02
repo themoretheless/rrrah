@@ -787,3 +787,7 @@ Current whole-file low-level API plus output management versus shared streaming 
 ## Current mixed-window navigation and prefetch (2026-10-16)
 
 Four native Metal App EXR→STL/OBJ/PLY/OFF→EXR roundtrips passed on authored subset fixtures. Actual arrow navigation preserves configured previous2/next1 plans, three retained neighbours per generation including model leases, and activates model rendering before returning to the raster renderer. Cached EXR return succeeds while fallback decode is forbidden. Eight distinct presentations,36retained-neighbour attempts and source/binary/log hashes are retained in research/live-mixed-model-prefetch-2026-10-16/result.json. This does not qualify materials, textures, transparency, broader model formats, exact framebuffer output, physical HDR or interaction latency.
+
+### Retained model prefetch under transient restore pressure — 2026-10-24
+
+STL/OBJ/OFF/PLY retained background prefetch now stops after transient swap-memory admission refusal, preserving the visible model and immutable swap entry rather than entering native decode/decode-gate work. A later attempt restores exact payloads and actual M4 Max SDR/HDR frames after pressure releases. Permanently too-small configured restore caps still allow native fallback when shared memory permits. Full app330/85ignored and required focused Metal1/0ignored pass; material/texture and physical-display qualification remain separate. [Evidence](research/model-partial-swap-admission-2026-10-19/REPORT.md#transient-shared-root-restore-refusal--2026-10-24).

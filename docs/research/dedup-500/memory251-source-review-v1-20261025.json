@@ -1,0 +1,57 @@
+{
+  "index": 251,
+  "repository": "reescalder/agent-memory-supabase",
+  "commit": "b711e6d76009d0713c5d5c211c2ab5c83d01ca53",
+  "tracked_blob_count": 9,
+  "whole_file_reads": [
+    {
+      "path": "src/client.js",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/02-client.js",
+      "sha256": "7d4fc585b22b4444a863d08eca97c471fd84ef227f0d90522983da94ef731992",
+      "git_blob_sha1": "0621da4e9d35853eda1b1fe2e02d5392bae81649"
+    }
+  ],
+  "whole_file_read_count": 1,
+  "remaining": [
+    {
+      "path": ".env.example",
+      "bytes": 314
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 52
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1068
+    },
+    {
+      "path": "README.md",
+      "bytes": 10607
+    },
+    {
+      "path": "examples/quickstart.js",
+      "bytes": 2211
+    },
+    {
+      "path": "package.json",
+      "bytes": 860
+    },
+    {
+      "path": "sql/rls.sql",
+      "bytes": 2048
+    },
+    {
+      "path": "sql/schema.sql",
+      "bytes": 20432
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "findings": [
+    {
+      "path": "src/client.js",
+      "confirmed": "Whole257lines read, no imports/client construction/credentials/model/DB calls. Semantic text memory dedup, not file identity. Duplicate update ignores returned error and falls back to old dupe while action updated; updates content/tags/metadata/importance without updating embedding/entities/source/expiry, potential stale representation. Check then insert separate RPC/mutations, concurrent semantic duplicates possible. Supersedes old memory deactivated before insert; insert failure leaves prior inactive, updates/link errors ignored, no transaction. Dedup fastpath ignores supersedes/expiry. Embedding no explicit deadline/retry/input budget/dimension/finite schema validation. Entity failure conflates empty extraction with error; only array shape validated. SQL project filtering semantics pending schema review; no adoption."
+    }
+  ]
+}

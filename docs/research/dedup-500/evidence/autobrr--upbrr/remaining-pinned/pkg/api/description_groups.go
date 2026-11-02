@@ -1,0 +1,31 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+import "strings"
+
+// Source returns the preferred editable BBCode source for the group. Legacy
+// callers that only populate Description remain supported.
+func (g DescriptionBuilderGroup) Source() string {
+	if strings.TrimSpace(g.RawDescription) != "" {
+		return g.RawDescription
+	}
+	return g.Description
+}
+
+// CloneDescriptionBuilderGroups deep-copies the reference-typed fields used by
+// DescriptionBuilderGroup so callers can safely reuse cached or queued values.
+func CloneDescriptionBuilderGroups(groups []DescriptionBuilderGroup) []DescriptionBuilderGroup {
+	if len(groups) == 0 {
+		return nil
+	}
+	cloned := make([]DescriptionBuilderGroup, len(groups))
+	for idx, group := range groups {
+		cloned[idx] = group
+		cloned[idx].Trackers = append([]string(nil), group.Trackers...)
+		cloned[idx].ImageHost.AllowedHosts = append([]string(nil), group.ImageHost.AllowedHosts...)
+		cloned[idx].ImageHost.Warnings = append([]ImageHostWarning(nil), group.ImageHost.Warnings...)
+	}
+	return cloned
+}

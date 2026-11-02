@@ -1,0 +1,10 @@
+{
+  "cases": 3,
+  "passed": 3,
+  "scope": "Original cache body unchanged; only env-paths default resolver replaced with throwing guard. Real owned temp filesystem, explicit cache dir and controlled clock, no network.",
+  "checks": [
+    "fresh persisted data+etag",
+    "TTL boundary stale",
+    "corrupt JSON becomes cache miss"
+  ]
+}

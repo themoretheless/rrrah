@@ -1,0 +1,23 @@
+{
+  "scope": "local disposable APFS; remount-cold VFS, not physical disk cache or network FS",
+  "pairs": [
+    {
+      "pair": 0,
+      "mode": "baseline",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=118413959 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.12s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=28219875 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.03s\n\n"
+    },
+    {
+      "pair": 0,
+      "mode": "candidate",
+      "remount_cold": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=18432291 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.02s\n\n",
+      "warm": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=7458916 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\n"
+    }
+  ],
+  "errors": [
+    "TimeoutExpired(['/Users/themoretheless/Documents/Sources/rrrah/target/debug/deps/rrrah-ae18d7943590843b', 'gallery::tests::cover_directory_probe', '--exact', '--ignored', '--show-output', '--test-threads=1'], 20)"
+  ],
+  "create": "created: /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-cover-volume-_uby2np3/cover.dmg\n",
+  "attach": "/dev/disk6          \tGUID_partition_scheme          \t\n/dev/disk6s1        \tApple_APFS                     \t\n/dev/disk7          \tEF57347C-0000-11AA-AA11-0030654\t\n/dev/disk7s1        \t41504653-0000-11AA-AA11-0030654\t/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-cover-volume-_uby2np3/mounted\n",
+  "detach": "\"disk6\" ejected.\n"
+}

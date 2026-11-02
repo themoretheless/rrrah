@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minhash-dedup"
+version = "0.1.0"
+description = "Bucket-feasible MinHash/LSH deduplication for text corpora: keeps one document per duplicate bucket, not one per connected component"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{name = "Cody Wu"}]
+license = {text = "Apache-2.0"}
+keywords = ["minhash", "lsh", "deduplication", "text"]
+dependencies = [
+    "fsspec>=2023.12.2",
+    "loguru>=0.7.0",
+    "numpy>=2.0.0",
+    "nltk",
+    "orjson",
+    "tqdm",
+    "xxhash",
+]
+
+[project.optional-dependencies]
+analysis = ["numba>=0.59"]
+io = ["zstandard"]
+s3 = ["s3fs>=2023.12.2"]
+hf = ["huggingface-hub>=0.17.0"]
+testing = ["pytest>=8"]
+dev = ["build", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["minhash_dedup", "minhash_dedup.*"]
+namespaces = false
+
+[tool.setuptools]
+license-files = ["LICENSE", "NOTICE"]
+
+[tool.ruff]
+line-length = 119
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]

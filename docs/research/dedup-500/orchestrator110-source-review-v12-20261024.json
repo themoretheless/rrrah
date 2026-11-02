@@ -1,0 +1,34 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v11-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "src/semantic_cache.rs",
+      "local": "16-semantic_cache.rs",
+      "sha256": "e6266c5def4e2999e50aa3d5ce6ee68c975844f258eb489b1163442538b5dbfb",
+      "git_blob": "396ac1f7a57f30457b0491ef0b0746994aa00c3d",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 15,
+  "whole_repo_complete": false,
+  "runtime": {
+    "original_tests_passed": 11,
+    "authored_controls_passed": 4,
+    "harness": "docs/research/dedup-500/orchestrator110-semcache-controls-20261024.rs",
+    "scope": "Originalunchangedfullmoduleprefixcompiledrustc1.98.1--testedition2021,noexternaldependenciesorservices"
+  },
+  "findings": [
+    "Timestampstorednotchecked,noTTLcontractconstructorparameter. LRUcapacityonly.",
+    "Nativewordorderpermutationidenticalembeddingandcachedanswerat0.99;bagofwordsnotsemanticidentity.",
+    "Native65ownedtokenstringsfindsameFNVmod64bucket,distincttokensidenticalembedding/cachedanswerat1.0. FinitedimensioncollisionnotfullFNVcollision.",
+    "Nativecapacity0stores1entry;notunboundedgrowthclaim.",
+    "Nativeemptypromptselflookupmissesat0.99becausezerovectorcosine0.",
+    "HeaderTFIDF-styleactualtermcounts+L2,noinverse-document-frequencycorpusweights.",
+    "Thresholdnotvalidated,publiccosineunequallengthonlydebugasserts;releasebehaviornotexercised."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

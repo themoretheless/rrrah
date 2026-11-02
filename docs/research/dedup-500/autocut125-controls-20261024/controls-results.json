@@ -1,0 +1,11 @@
+{
+  "controls_passed": 7,
+  "scope": "Original core module,synthetic text/clip records;no FFmpeg,Premiere,LLM or media files",
+  "findings": [
+    "Malformed numeric silence dot becomes NaN and survives plan without frame snapping.",
+    "NaN speed bypasses nonunit-speed rejection.",
+    "Healthy range mapping and finite2x-speed rejection pass.",
+    "Original analysisPaths skips constructor,toString,__proto__ via inherited object keys;ordinary distinct paths and repeated-path controls pass."
+  ],
+  "runtime": "v22.23.4"
+}

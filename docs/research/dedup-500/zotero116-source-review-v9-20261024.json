@@ -1,0 +1,74 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v8-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [],
+  "whole_files_read_total": 15,
+  "whole_repo_complete": false,
+  "partial_files_read": [
+    {
+      "path": "content/watchFolder.mjs",
+      "local": "14-watchFolder.mjs",
+      "sha256": "eb9f5b669fd29fd4a1f84994773448778020726974637e0cca29f5b2304d2def",
+      "new_read_ranges": [
+        [
+          1151,
+          1555
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          1555
+        ],
+        [
+          2262,
+          2420
+        ]
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 6,
+    "total_authored_controls_distinct": 34,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-folder-policy-controls-20261024",
+    "scope": "Exact extracted original _detectFolderRenames/_waitForFileStable/_looksLikeCompletePdf methods; original real hash/cache/store modules; owned IOUtils files and listing, actual one-second timers. _renameTrackedCollection replaced with recorder: proposals tested, actual rename and descendant mutation not executed."
+  },
+  "findings": [
+    {
+      "finding": "One matching same-tail anchor among2 tracked files causes folder rename proposal even with other tracked file absent from candidate. No minimum coverage fraction required.",
+      "evidence": "native extracted-method control"
+    },
+    {
+      "finding": "Two candidate folders with equal score selected by onDiskDirs enumeration order; reversing list reverses selected destination. No ambiguity refusal at positive score.",
+      "evidence": "native control"
+    },
+    {
+      "finding": "Same content hash at different relative tail does not produce rename proposal.",
+      "evidence": "native positive control"
+    },
+    {
+      "finding": "Actual service _waitForFileStable differs from exported scanner helper: same-size changed mtime rejected in2attempts. Earlier size-only helper result must not be generalized to actual main import gate.",
+      "evidence": "native positive control and qualification correction"
+    },
+    {
+      "finding": "Service stability gate accepts stable PDF with header and EOF and rejects stable PDF without EOF. This is explicitly shallow completeness screening, not structural PDF parser verification.",
+      "evidence": "two native controls"
+    },
+    {
+      "finding": "_renameTrackedCollection source updates collection name then rewrites all descendant localPath/canonicalLocalPath; actual mutation/canonical-shadow effects not tested.",
+      "evidence": "source-only"
+    }
+  ],
+  "remaining": [
+    "85blobs not whole-read including watchFolder remainder",
+    "Actual folder rename/descendant rewrites/full plugin unqualified",
+    "Original tests/license/dependency/release checks incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

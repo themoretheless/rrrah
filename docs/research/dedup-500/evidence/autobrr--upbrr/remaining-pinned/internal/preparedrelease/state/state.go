@@ -1,0 +1,328 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+// Package preparationstate contains mutable evidence while a prepared release
+// is being collected. State is private to preparation and must never cross a
+// transport, operation-module, or persistence boundary.
+package preparationstate
+
+import (
+	"path/filepath"
+	"strings"
+	"time"
+
+	"github.com/autobrr/upbrr/internal/sourcelayout"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+// Request is the complete preparation-only handoff to the evidence pipeline.
+// It contains no workflow request or tracker selection.
+type Request struct {
+	// Input contains normalized preparation choices for this evidence pass.
+	Input api.PrepareInput
+	// Manifest is the validated source snapshot bound to the request.
+	Manifest api.SourceManifest
+	// Layout exposes preparation-only derived resource roots for the same source.
+	Layout sourcelayout.Layout
+	// SourceFingerprint binds repository-backed selection to the inspected inventory.
+	SourceFingerprint string
+	// IdentityResetFields suppresses legacy explicit pins after a persisted Auto reset.
+	IdentityResetFields []api.CorrectionField
+	// RetainedClientEvidence is compatible evidence from this process's current
+	// generation. Local corrections and provider enrichment reuse it when the
+	// source resources and client-search policy remain compatible.
+	RetainedClientEvidence *ClientEvidenceSnapshot
+}
+
+// DiscReportResource contains private paths and text for one selected BDMV report.
+type DiscReportResource struct {
+	Playlist        api.PlaylistInfo
+	Summary         string
+	ExtSummary      string
+	FullSummary     string
+	SummaryPath     string
+	ExtSummaryPath  string
+	FullSummaryPath string
+}
+
+// DiscResource contains all preparation-private evidence for one source disc.
+type DiscResource struct {
+	ID                  string
+	Name                string
+	Type                string
+	Root                string
+	SelectedPlaylists   []api.PlaylistInfo
+	VideoPath           string
+	FileList            []string
+	Reports             []DiscReportResource
+	MediaInfoJSONPath   string
+	MediaInfoTextPath   string
+	DVDIFOPath          string
+	DVDVOBPath          string
+	DVDVOBSet           string
+	DurationSeconds     float64
+	DVDVOBMediaInfoJSON string
+	DVDVOBMediaInfoText string
+}
+
+// ResolvedNaming contains the naming fields selected from canonical provider,
+// media, and parser evidence before presentation-only omissions are applied.
+// EpisodeTitle honors explicit title and omission controls, including clearing.
+type ResolvedNaming struct {
+	// Category records the naming decision before final identity resolution.
+	Category       api.CanonicalCategory
+	Type           string
+	Title          string
+	AlternateTitle string
+	OriginalTitle  string
+	Year           int
+	Source         string
+	Resolution     string
+	Genre          string
+	EpisodeTitle   string
+}
+
+// ReleaseAssessments projects concrete source-derived validation facts from
+// private collection state into their canonical typed form.
+func (s State) ReleaseAssessments() api.ReleaseAssessments {
+	uniqueID := api.UniqueIDStatusMissing
+	if !s.requiresMediaInfoUniqueID() {
+		uniqueID = api.UniqueIDStatusNotApplicable
+	} else if s.MediaInfoUniqueIDPresent {
+		uniqueID = api.UniqueIDStatusPresent
+	}
+
+	encodeSettings := api.EncodeSettingsStatusMissing
+	if strings.EqualFold(s.DiscType, "BDMV") || !strings.EqualFold(s.Type, "ENCODE") || strings.EqualFold(s.VideoCodec, "AV1") {
+		encodeSettings = api.EncodeSettingsStatusNotApplicable
+	} else if s.MediaInfoEncodeSettingsPresent {
+		encodeSettings = api.EncodeSettingsStatusPresent
+	}
+
+	return api.ReleaseAssessments{
+		MediaInfoUniqueID:       uniqueID,
+		MediaInfoEncodeSettings: encodeSettings,
+		VideoBitrate:            s.VideoBitrate,
+	}
+}
+
+func (s State) requiresMediaInfoUniqueID() bool {
+	if strings.TrimSpace(s.DiscType) != "" {
+		return false
+	}
+	if len(s.FileList) == 0 {
+		return strings.EqualFold(filepath.Ext(s.SourcePath), ".mkv")
+	}
+	for _, path := range s.FileList {
+		if strings.EqualFold(filepath.Ext(path), ".mkv") {
+			return true
+		}
+	}
+	return false
+}
+
+// State is mutable, source-scoped collection evidence used only during
+// preparation. Release remains detached parser evidence; ResolvedNaming is
+// rebuilt from Release and current canonical evidence whenever the release name
+// changes. State contains no upload outcome, tracker-selection result, client
+// instruction, or transport state. Callers must project it into canonical fact
+// groups or operation-owned subjects before it leaves this boundary.
+type State struct {
+	MetadataRequirements  api.MetadataRequirementSet
+	ExternalFreshness     api.ExternalFreshness
+	SourceFingerprint     string
+	SourcePath            string
+	SourceLookupURL       string
+	SourceLookupActive    bool
+	SourceLookupMode      string
+	SourceLookupTracker   string
+	SourceLookupTrackerID string
+	// BlurayReleaseID reapplies a manual selection after cached catalogue rescoring.
+	BlurayReleaseID         string
+	LookupWarnings          []string
+	Paths                   []string
+	DiscType                string
+	Discs                   []DiscResource
+	VideoPath               string
+	FileList                []string
+	SourceSize              int64
+	MediaInfoJSONPath       string
+	MediaInfoTextPath       string
+	DVDIFOPath              string
+	DVDVOBPath              string
+	DVDVOBSet               string
+	DVDVOBMediaInfoJSON     string
+	DVDVOBMediaInfoText     string
+	MediaInfoUniqueID       string
+	Scene                   bool
+	SceneName               string
+	SceneTMDBID             int
+	SceneIMDB               int
+	SceneTVDBID             int
+	SceneTVmazeID           int
+	SceneMALID              int
+	SceneNFOPath            string
+	SceneNFONew             bool
+	SceneRenamed            bool
+	SceneRenamedReason      string
+	EvidenceTrackers        []string
+	Policy                  CollectionPolicy
+	MatchedEvidenceTrackers []string
+	Tag                     string
+	Release                 api.ReleaseInfo
+	ResolvedNaming          ResolvedNaming
+	TagOverride             *api.TagOverride
+	MetadataOverrides       api.MetadataOverrides
+	EffectiveMetadata       api.EffectiveMetadata
+	PersonalRelease         bool
+	InfoHash                string
+	// ClientEvidence retains the complete detached preparation-owned client snapshot.
+	ClientEvidence ClientEvidenceSnapshot
+	// DiscoveredTorrentPath is a reusable local metainfo path found during client discovery.
+	DiscoveredTorrentPath                string
+	TrackerIDs                           map[string]string
+	FoundTrackerMatch                    bool
+	TorrentComments                      []api.TorrentMatch
+	DescriptionTemplate                  string
+	PieceSizeConstraint                  string
+	FoundPreferredPiece                  string
+	StoredInfoHash                       string
+	StoredUpdatedAt                      time.Time
+	StoredDataFresh                      bool
+	TrackerData                          []api.TrackerMetadata
+	MediaInfoCategory                    string
+	MediaInfoTMDBID                      int
+	MediaInfoIMDBID                      int
+	MediaInfoTVDBID                      int
+	ArrSource                            string
+	ArrTMDBID                            int
+	ArrIMDBID                            int
+	ArrTVDBID                            int
+	ArrTVmazeID                          int
+	ArrYear                              int
+	ArrGenres                            []string
+	ArrReleaseGroup                      string
+	MismatchedMediaInfoTMDBID            int
+	MismatchedMediaInfoIMDBID            int
+	MismatchedMediaInfoTVDBID            int
+	ExternalIDOverrides                  api.ExternalIDOverrides
+	IdentityResetFields                  []api.CorrectionField
+	ReleaseNameOverrides                 api.ReleaseNameOverrides
+	SeasonInt                            int
+	EpisodeInt                           int
+	SeasonStr                            string
+	EpisodeStr                           string
+	TVDBAiredDate                        string
+	TVDBAirsDays                         []string
+	TVDBAirsTime                         string
+	TVDBAirsTimezone                     string
+	TVDBAirsTimezoneSource               string
+	TVPack                               bool
+	DailyEpisodeDate                     string
+	TMDBDateMatch                        bool
+	Anime                                bool
+	MALID                                int
+	EpisodeTitle                         string
+	EpisodeOverview                      string
+	EpisodeYear                          int
+	SelectedBDMVPlaylists                []api.PlaylistInfo
+	Identity                             api.ExternalIdentity
+	ExternalIdentityCandidates           []api.ExternalIdentityCandidate
+	ProviderMetadata                     api.SourceScopedMetadata
+	AudioLanguages                       []string
+	SubtitleLanguages                    []string
+	TrackAudioLanguages                  []string
+	TrackSubtitleLanguages               []string
+	MediaTracks                          []api.MediaTrackFacts
+	PrimaryAudioTrackID                  string
+	TrackCoverageComplete                bool
+	AudioLanguagesProvenance             api.FactProvenance
+	SubtitleLanguagesProvenance          api.FactProvenance
+	HardcodedSubs                        bool
+	HardcodedSubtitleLanguages           []string
+	HardcodedSubtitleCoverage            []api.SubtitleLanguageCoverage
+	HardcodedSubsProvenance              api.FactProvenance
+	HardcodedSubtitleLanguagesProvenance api.FactProvenance
+	Container                            string
+	Audio                                string
+	Channels                             string
+	HasCommentary                        bool
+	Is3D                                 string
+	Source                               string
+	Type                                 string
+	UHD                                  string
+	HDR                                  string
+	HDRFacts                             api.HDRFacts
+	Distributor                          string
+	Region                               string
+	VideoCodec                           string
+	VideoEncode                          string
+	HasEncodeSettings                    bool
+	BitDepth                             string
+	EditionSet                           string
+	Cut                                  string
+	Presentation                         string
+	Edition                              string
+	Repack                               string
+	WebDV                                bool
+	MediaInfoUniqueIDPresent             bool
+	MediaInfoEncodeSettingsPresent       bool
+	VideoBitrate                         api.VideoBitrateAssessment
+	StreamOptimized                      int
+	Service                              string
+	ServiceLongName                      string
+	Filename                             string
+	ReleaseName                          string
+	ReleaseNameNoTag                     string
+	ReleaseNameClean                     string
+	AvailableGeneratedName               *api.ReleaseNameDocument
+	GeneratedName                        *api.ReleaseNameDocument
+	GeneratedReleaseNames                api.GeneratedReleaseNameVariants
+	ReleaseNamePresentation              api.ReleaseNamePresentation
+	ReleaseNameMissing                   []string
+	BDInfo                               map[string]any
+}
+
+// CollectionPolicy contains preparation-only controls used while gathering
+// evidence. It excludes upload, tracker-selection, and client instructions.
+type CollectionPolicy struct {
+	OnlyID          bool
+	KeepFolder      bool
+	KeepImages      bool
+	InteractionMode api.InteractionMode
+}
+
+// CanonicalSeasonEpisode returns the provider-resolved TV season/episode.
+func (s State) CanonicalSeasonEpisode() (int, int) {
+	return s.SeasonInt, s.EpisodeInt
+}
+
+// SeasonEpisodeWithParsedFallback returns canonical values with independent
+// parsed-name fallback for classification and evidence lookup only.
+func (s State) SeasonEpisodeWithParsedFallback() (int, int) {
+	season, episode := s.CanonicalSeasonEpisode()
+	if season <= 0 {
+		season = s.Release.Season
+	}
+	if episode <= 0 {
+		episode = s.Release.Episode
+	}
+	return season, episode
+}
+
+// HasTVSeasonEpisodeSignal reports whether canonical or parsed naming evidence
+// carries a season or episode hint.
+func (s State) HasTVSeasonEpisodeSignal() bool {
+	season, episode := s.SeasonEpisodeWithParsedFallback()
+	return season > 0 || episode > 0
+}
+
+// LocalizedPTBR returns source-scoped Brazilian Portuguese TMDB data.
+func (s State) LocalizedPTBR() api.TMDBLocalizedData {
+	if s.ProviderMetadata.TMDB != nil && s.ProviderMetadata.TMDB.Localized != nil {
+		if value, ok := s.ProviderMetadata.TMDB.Localized["pt-BR"]; ok {
+			return value
+		}
+	}
+	return api.TMDBLocalizedData{}
+}

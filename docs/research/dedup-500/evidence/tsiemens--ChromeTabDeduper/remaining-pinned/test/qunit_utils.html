@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>QUnit - ChromeTabDeduper Utils</title>
+  <link rel="stylesheet" href="vendor/qunit.css">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  <script>
+    // Disable QUnit autostart before it loads
+    window.QUnit = {
+      config: {
+        autostart: false
+      }
+    };
+  </script>
+  <script src="vendor/qunit.js"></script>
+  <script src="vendor/sinon-chrome.js"></script>
+  <script>
+    // Wait for window load, then load and start tests
+    window.addEventListener('load', async function() {
+      console.log('Window loaded, loading tests...');
+      try {
+        await import('./utils_test.js');
+        console.log('Tests loaded, starting QUnit');
+        QUnit.start();
+      } catch (e) {
+        console.error('Failed to load tests:', e);
+      }
+    });
+  </script>
+</body>
+</html>

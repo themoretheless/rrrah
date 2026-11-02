@@ -1,0 +1,29 @@
+{
+  "scope": "Original RSS process_feed and MCP client, fake config/requests/feedparser/triage/tracker; no network, real tracker writes, env secrets or services",
+  "resolved_tool_error_counted_as_capture": {
+    "stats": {
+      "fetched": 1,
+      "skipped": 0,
+      "captured": 1,
+      "failed": 0
+    },
+    "seen": {
+      "1": "rss-fixture"
+    },
+    "request_args": {
+      "content": "[Newsletter: fixture] fixture\n\nSummary: \n\nCategory: unknown\nActionability: low\nTopics: \n\nContent excerpt:\ncontent\n\nPublished: \nSource: \nCaptured: 2026-10-25T10:30:53Z"
+    }
+  },
+  "dry_run_marks_old_entries": {
+    "stats": {
+      "fetched": 7,
+      "skipped": 0,
+      "captured": 5,
+      "failed": 0
+    },
+    "seen": {
+      "5": "rss-fixture-skipped",
+      "6": "rss-fixture-skipped"
+    }
+  }
+}

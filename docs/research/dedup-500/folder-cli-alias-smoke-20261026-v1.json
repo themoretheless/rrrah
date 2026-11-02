@@ -1,0 +1,24 @@
+{
+  "binary_sha256": "08965263ff191eec3199302820b0573e67ee6af60df0fcd0cba8a220ea0545b8",
+  "cases": [
+    {
+      "name": "root",
+      "stdout": "Group 1: 2 files, 27 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/copy\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/hardlink\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/hardlink\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/original\"]\n",
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/loop\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/symbolic\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 432 bytes read, 2 diagnostics\n",
+      "exit_code": 0
+    },
+    {
+      "name": "overlap",
+      "stdout": "Group 1: 2 files, 27 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/copy\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/hardlink\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/hardlink\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/original\"]\n",
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/loop\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/symbolic\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 432 bytes read, 2 diagnostics\n",
+      "exit_code": 0
+    },
+    {
+      "name": "repeated",
+      "stdout": "Group 1: 2 files, 27 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/copy\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/hardlink\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/nested/hardlink\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/original\"]\n",
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/loop\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-alias-cli-fuwhl62h/symbolic\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 432 bytes read, 2 diagnostics\n",
+      "exit_code": 0
+    }
+  ],
+  "scope": "macOS local filesystem; hardlink aliases, overlap and skipped symlinks; no Windows/network filesystem qualification"
+}

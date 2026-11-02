@@ -1,0 +1,11 @@
+{
+  "scope": "Original AST orchestrator manifest/count helpers; temporary synthetic JSON files; provenance/prompt resolver stubs; no env/credentials, subprocess, server or downloads",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Changed dataset bytes/hash accepted by resume: old manifest returned without comparison",
+    "Changed resolved prompt hash accepted by resume: old prompt record retained",
+    "One empty conversation counts as complete one-conversation search by resume helper",
+    "Different QA content with equal eligible counts is indistinguishable to judge resume helper"
+  ],
+  "full_pipeline_run": false
+}

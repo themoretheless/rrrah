@@ -1,0 +1,22 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original class with object base, record-shaped Qdrant models and constructor bypass; filter output structure only, no backend semantic evaluation/network/storage.",
+  "authored_controls": [
+    {
+      "name": "duplicate logical aliases retain first value in insertion order",
+      "passed": true,
+      "observed": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "wildcard-only filter becomes no filter",
+      "passed": true
+    },
+    {
+      "name": "multiple nonrange operators choose eq only",
+      "passed": true
+    }
+  ]
+}

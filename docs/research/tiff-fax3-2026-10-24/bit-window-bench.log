@@ -1,0 +1,40 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.15s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 1 test
+test raster::tiff_fax::mixed::tests::bit_window_alternating_microbenchmark ... FAX_WINDOW pair=0 fast=false ns=8949875 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=0 fast=true ns=3414334 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=1 fast=true ns=3420000 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=1 fast=false ns=8820416 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=2 fast=false ns=8825292 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=2 fast=true ns=3416458 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=3 fast=true ns=3406375 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=3 fast=false ns=8790292 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=4 fast=false ns=8804334 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=4 fast=true ns=3423250 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=5 fast=true ns=3436458 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=5 fast=false ns=8871500 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=6 fast=false ns=8830667 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=6 fast=true ns=3402125 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=7 fast=true ns=3425833 queries=1048576 checksum=4294377472
+FAX_WINDOW pair=7 fast=false ns=8811000 queries=1048576 checksum=4294377472
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 249 filtered out; finished in 0.10s
+

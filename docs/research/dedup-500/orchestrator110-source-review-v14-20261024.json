@@ -1,0 +1,40 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v13-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "examples/llm_pipeline.rs",
+      "local": "18-llm_pipeline.rs",
+      "sha256": "13986ffc2580f62ca5abae560ea29364f5dc45c51db4fd5e80cf77d784775739",
+      "git_blob": "c64569be67ce189e92dfc05115d84df38f0806ab",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 18,
+  "whole_repo_complete": false,
+  "partial_files": [
+    {
+      "path": "src/worker.rs",
+      "local": "17-worker.rs",
+      "scope": "identifier search only; not whole-read"
+    }
+  ],
+  "runtime": {
+    "original_tests_total_distinct": 88,
+    "authored_rust_controls_total_distinct": 21,
+    "new_controls_passed": 2,
+    "retained_harness": "docs/research/dedup-500/orchestrator110-frontline-controls-20261024",
+    "scope": "Original Frontline and decode extracted unchanged, owned ModelWorker trait/error variants and mock backend; real Deduplicator; serde_json1.0.154; offline native Rust; no providers/network/full pipeline."
+  },
+  "findings": [
+    "Cached repeated prompt returns same answer with one actual backend call; positive native control.",
+    "A deterministically subscribed waiting Frontline request receives failure sentinel and returns JSON expected-value error, with zero backend retry calls; reproduced using manual initial future poll then real Deduplicator.fail.",
+    "InProgress None fallback calls backend without incrementing backend_calls or registering ownership; source-only branch, not forced by control.",
+    "Example intentionally uses globally shared prompt key and empty metadata; no semantic API calls.",
+    "Example prints output/DLQ counts after bounded waits without asserting expected counts; no full example execution."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

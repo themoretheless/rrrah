@@ -1,0 +1,37 @@
+{
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "76910f82adb01575a079d28cce83bd05373f0a1f1a19b36848b0a89e7ff794dd",
+    "crates/rrrah-dedup/Cargo.toml": "933ca1d09cf5a6b2eaa5919720ef122a3501bbcdfb9137a11a08a69494132fcb",
+    "Cargo.lock": "a020e36e00203badaca46653a7f4a9d1285f48800abdd730692a49fecc139b0f"
+  },
+  "runs": [
+    {
+      "command": "cargo +1.98.1 test --offline -p rrrah-dedup --test exact_files block_boundary_lengths_keep_exact_copies_and_distinguish_interior_changes -- --exact",
+      "session": 81670,
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 0.47,
+      "scope": "15 lengths 1500..8388608, positive copies plus middle/end single-byte edits, normal/verified and both root orders. Includes >1MiB files with equal first MiB and tail difference."
+    },
+    {
+      "command": "cargo +1.98.1 test --offline -p rrrah-dedup --lib exact::tests::colliding_samples_and_full_hashes_still_partition_by_bytes -- --exact",
+      "session": 12996,
+      "exit_code": 0,
+      "passed": 0,
+      "filtered": 51,
+      "scope": "Incorrect module filter; zero tests ran, not validation."
+    },
+    {
+      "command": "cargo +1.98.1 test --offline -p rrrah-dedup --lib colliding_samples_and_full_hashes_still_partition_by_bytes",
+      "exit_code": 0,
+      "passed": 1,
+      "failed": 0,
+      "seconds": 0.01,
+      "actual_test": "exact::collision_tests::colliding_samples_and_full_hashes_still_partition_by_bytes",
+      "scope": "Injected constant sample and full digest; byte confirmation partitions empty, one-byte and multiblock files correctly."
+    }
+  ],
+  "conclusion": "Existing exact scanner regressions reject sampled-prefix equality and even forced full-hash collisions as sufficient duplicate proof. No implementation/test additions needed for these covered cases. Does not close visual RAW or full filesystem/platform/corpus coverage."
+}

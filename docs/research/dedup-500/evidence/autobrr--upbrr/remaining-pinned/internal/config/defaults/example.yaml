@@ -1,0 +1,480 @@
+main_settings:
+  update_notification: true
+  verbose_notification: false
+  tmdb_api: ""
+  tracker_pass_checks: 1
+  input_history_limit: 20
+  db_path: ""
+  scene_detection: true
+
+image_hosting:
+  img_host_1: ""
+  img_host_2: ""
+  img_host_3: ""
+  img_host_4: ""
+  img_host_5: ""
+  img_host_6: ""
+  imgbb_api: ""
+  lensdump_api: ""
+  ptscreens_api: ""
+  onlyimage_api: ""
+  dalexni_api: ""
+  passtheima_ge_api: ""
+  zipline_url: ""
+  zipline_api_key: ""
+  seedpool_cdn_api: ""
+  samaritano_enabled: false
+  samaritano_api_key: ""
+  sharex_url: ""
+  sharex_api_key: ""
+  utppm_api: ""
+  lostimg_enabled: false
+  lostimg_api: ""
+  reelflix_enabled: false
+  reelflix_api: ""
+
+metadata:
+  btn_api: ""
+  skip_auto_torrent: false
+  skip_tracker_filename_lookup: false
+  use_largest_playlist: false
+  keep_images: true
+  only_id: false
+  user_overrides: false
+  ping_unit3d: false
+  get_bluray_info: false
+  bluray_score: 94.5
+  bluray_single_score: 89.5
+  check_predb: false
+
+screenshot_handling:
+  screens: 4
+  # Automatic DVD menu capture is opt-in. This caps stored distinct menu screens (1-32).
+  max_menu_items: 6
+  # When an image host drops some uploads, the batch still counts as usable once
+  # this many images are published. Zero requires every image to succeed.
+  min_successful_image_uploads: 3
+  cutoff_screens: 1
+  frame_overlay: false
+  overlay_text_size: 18
+  process_limit: 2
+  max_concurrent_uploads: 6
+  ffmpeg_limit: false
+  tone_map: true
+  use_libplacebo: false
+  ffmpeg_compression: 6
+  algorithm: "mobius"
+  desat: 10.0
+
+description_settings:
+  add_logo: false
+  logo_size: 300
+  logo_language: ""
+  thumbnail_size: 350
+  screens_per_row: ""
+  episode_overview: false
+  tonemapped_header: "[center][code] Screenshots have been tonemapped for reference [/code][/center]"
+  multiScreens: 2
+  pack_thumb_size: 300
+  charLimit: 14000
+  fileLimit: 2
+  processLimit: 10
+  custom_description_header: ""
+  screenshot_header: ""
+  disc_menu_header: ""
+  custom_signature: ""
+  add_bluray_link: false
+  use_bluray_images: false
+  bluray_image_size: 250
+
+client_setup:
+  default_torrent_client: ""
+  injecting_client_list: []
+  searching_client_list: []
+
+arr_integration:
+  use_sonarr: false
+  sonarr_url: "http://localhost:8989"
+  sonarr_api_key: ""
+  sonarr_url_1: "http://my-second-instance:8989"
+  sonarr_api_key_1: ""
+  sonarr_url_2: ""
+  sonarr_api_key_2: ""
+  sonarr_url_3: ""
+  sonarr_api_key_3: ""
+  use_radarr: false
+  radarr_url: "http://localhost:7878"
+  radarr_api_key: ""
+  radarr_url_1: "http://my-second-instance:7878"
+  radarr_api_key_1: ""
+  radarr_url_2: ""
+  radarr_api_key_2: ""
+  radarr_url_3: ""
+  radarr_api_key_3: ""
+  emby_dir: ""
+  emby_tv_dir: ""
+
+torrent_creation:
+  mkbrr_threads: 0
+  prefer_max_16_torrent: false
+  rehash_cooldown: 0
+
+post_upload:
+  inject_delay: 0
+  show_upload_duration: true
+  print_tracker_messages: false
+  print_tracker_links: true
+  max_concurrent_tracker_uploads: 4
+  search_requests: false
+  cross_seeding: true
+  cross_seed_check_everything: false
+
+logging:
+  level: "info"
+  file_enabled: false
+  max_total_size_mb: 20
+  max_files: 3
+
+trackers:
+  default_trackers: []
+  preferred_tracker: ""
+  ACM:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+    anon: false
+  AITHER:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  ANT:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+    anon: false
+  AR:
+    link_dir_name: ""
+    username: ""
+    password: ""
+    announce_url: ""
+  ASC:
+    link_dir_name: ""
+    uploader_status: false
+    custom_layout: "2"
+    announce_url: ""
+  AZ:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+    check_for_rules: true
+  BHD:
+    link_dir_name: ""
+    api_key: ""
+    bhd_rss_key: ""
+    announce_url: ""
+    draft_default: false
+    anon: false
+  BHDTV:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+    my_announce_url: ""
+    anon: false
+  BJS:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+    show_group_if_anon: true
+  BLU:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  BT:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+  BTN:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+    username: ""
+    password: ""
+    otp_uri: ""
+  CBR:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+    tag_for_custom_release: ""
+  CZ:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+    check_for_rules: true
+  CZT:
+    link_dir_name: ""
+    passkey: ""
+  DC:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    use_metadata_name: false
+  DP:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  DVL:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  EMUW:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    use_spanish_title: false
+  FF:
+    link_dir_name: ""
+    username: ""
+    password: ""
+    announce_url: ""
+    check_requests: false
+    full_mediainfo: false
+  FL:
+    link_dir_name: ""
+    username: ""
+    passkey: ""
+    uploader_name: ""
+    anon: false
+  FRIKI:
+    link_dir_name: ""
+    api_key: ""
+  GPW:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+  HDB:
+    link_dir_name: ""
+    username: ""
+    passkey: ""
+    announce_url: ""
+    img_rehost: true
+  HDS:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+    full_mediainfo: false
+  HDT:
+    link_dir_name: ""
+    anon: false
+    announce_url: ""
+    full_mediainfo: false
+  HHD:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  IHD:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  IS:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+  ITT:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  LCD:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  LDU:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  LST:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+    draft: false
+  LT:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  LUME:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  MNS:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  NBL:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+  OE:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  OTW:
+    link_dir_name: ""
+    api_key: ""
+    modq: false
+    anon: false
+  PHD:
+    link_dir_name: ""
+    announce_url: ""
+    anon: false
+    check_for_rules: true
+  PT:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  PTP:
+    link_dir_name: ""
+    add_web_source_to_desc: true
+    ApiUser: ""
+    ApiKey: ""
+    username: ""
+    password: ""
+    announce_url: ""
+    otp_uri: ""
+  PTS:
+    link_dir_name: ""
+    announce_url: ""
+  PTT:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  R4E:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+    anon: false
+  RAS:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  RF:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  RHD:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  RMC:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  RTF:
+    link_dir_name: ""
+    username: ""
+    password: ""
+    api_key: ""
+    announce_url: ""
+    anon: true
+  SAM:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    tag_for_custom_release: ""
+  SHRI:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    use_italian_title: false
+  SP:
+    link_dir_name: ""
+    api_key: ""
+  SPD:
+    link_dir_name: ""
+    api_key: ""
+    channel: ""
+  STC:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  TIK:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  TL:
+    link_dir_name: ""
+    api_upload: true
+    passkey: ""
+    anon: false
+    img_rehost: false
+    full_mediainfo: false
+  TLZ:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  TOS:
+    link_dir_name: ""
+    api_key: ""
+    announce_url: ""
+    anon: false
+    exclusive: false
+  TTR:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  TVC:
+    link_dir_name: ""
+    image_count: 2
+    api_key: ""
+    announce_url: ""
+    anon: false
+  ULCX:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+  UTP:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  YUS:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+  ZNTH:
+    link_dir_name: ""
+    api_key: ""
+    anon: false
+    modq: false
+torrent_clients:
+  qbittorrent:
+    qui_proxy_url: ""
+    use_tracker_as_tag: false
+    qbit_tag: ""
+    qbit_cat: ""
+    # Optional qBittorrent overrides for dupe-check cross-seed torrents.
+    # Normal upload injections continue to use qbit_tag/qbit_cat.
+    qbit_cross_tag: ""
+    qbit_cross_cat: ""
+    # Optional qBittorrent staging mode: "", "hardlink", "reflink", or "symlink".
+    # Reflink uses Linux FICLONE or Windows ReFS block cloning and requires source and linked_folder on the same supported filesystem.
+    linking: ""
+    allow_fallback: true
+    linked_folder:
+      - ""
+    local_path:
+      - ""
+    remote_path:
+      - ""
+    # Enable qBittorrent automatic torrent management when the original save path matches an entry.
+    # Automatic management stays disabled for hardlink, reflink, and symlink staging.
+    automatic_management_paths:
+      - ""
+    verify_webui_certificate: true

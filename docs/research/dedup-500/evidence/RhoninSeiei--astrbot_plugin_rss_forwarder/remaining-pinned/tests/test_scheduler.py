@@ -1,0 +1,1306 @@
+import asyncio
+import hashlib
+import sys
+import types
+import unittest
+from importlib.util import module_from_spec, spec_from_file_location
+from pathlib import Path
+
+
+astrbot_module = types.ModuleType("astrbot")
+astrbot_api_module = types.ModuleType("astrbot.api")
+astrbot_api_module.logger = types.SimpleNamespace(
+    info=lambda *a, **k: None,
+    warning=lambda *a, **k: None,
+    error=lambda *a, **k: None,
+)
+sys.modules.setdefault("astrbot", astrbot_module)
+sys.modules["astrbot.api"] = astrbot_api_module
+
+ROOT = Path(__file__).resolve().parents[1]
+PACKAGE_NAME = "astrbot_rss_testpkg"
+package_module = types.ModuleType(PACKAGE_NAME)
+package_module.__path__ = [str(ROOT)]
+sys.modules[PACKAGE_NAME] = package_module
+
+
+def _load_module(module_name: str):
+    full_name = f"{PACKAGE_NAME}.{module_name}"
+    spec = spec_from_file_location(full_name, ROOT / f"{module_name}.py")
+    module = module_from_spec(spec)
+    sys.modules[full_name] = module
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+_load_module("config")
+dispatcher_module = _load_module("dispatcher")
+_load_module("fetcher")
+_load_module("parser")
+_load_module("pipeline")
+_load_module("storage")
+config_module = sys.modules[f"{PACKAGE_NAME}.config"]
+RSSScheduler = _load_module("scheduler").RSSScheduler
+DispatchResult = dispatcher_module.DispatchResult
+RSSConfig = config_module.RSSConfig
+DailyDigestConfig = config_module.DailyDigestConfig
+
+
+class RSSSchedulerTests(unittest.TestCase):
+    def test_config_defaults_startup_delay_to_45_seconds(self):
+        config = RSSConfig.from_context(
+            {
+                "feeds": [{"id": "feed-1", "url": "https://example.com/rss", "enabled": True}],
+                "targets": [
+                    {
+                        "id": "target-1",
+                        "platform": "qq",
+                        "unified_msg_origin": "qq:group:1",
+                        "enabled": True,
+                    }
+                ],
+                "jobs": [
+                    {
+                        "id": "job-1",
+                        "feed_ids": ["feed-1"],
+                        "target_ids": ["target-1"],
+                        "interval_seconds": 300,
+                        "enabled": True,
+                    }
+                ],
+            }
+        )
+
+        self.assertEqual(config.startup_delay_seconds, 45)
+
+    def test_history_items_are_suppressed_when_older_than_last_success(self):
+        item = {
+            "feed_id": "feed-1",
+            "published_at": "2026-03-15T00:00:00+00:00",
+        }
+        feed_state_map = {"feed-1": {"last_success_time": 1773536400}}
+
+        self.assertTrue(RSSScheduler._should_mark_history_only(item, feed_state_map))
+
+    def test_newer_items_are_not_suppressed(self):
+        item = {
+            "feed_id": "feed-1",
+            "published_at": "2026-03-15T03:00:01+00:00",
+        }
+        feed_state_map = {"feed-1": {"last_success_time": 1773536400}}
+
+        self.assertFalse(RSSScheduler._should_mark_history_only(item, feed_state_map))
+
+    def test_items_without_timestamp_are_not_suppressed(self):
+        item = {"feed_id": "feed-1", "published_at": ""}
+        feed_state_map = {"feed-1": {"last_success_time": 1773536400}}
+
+        self.assertFalse(RSSScheduler._should_mark_history_only(item, feed_state_map))
+
+
+class SchedulerPermanentFailureTests(unittest.IsolatedAsyncioTestCase):
+    async def test_job_batch_size_limits_successful_dispatches_per_run(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+                self.updated = False
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"]]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                self.updated = True
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [
+                    {
+                        "feed_id": "feed-1",
+                        "guid": f"guid-{index}",
+                        "title": f"Title {index}",
+                        "published_at": "",
+                    }
+                    for index in range(1, 6)
+                ]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.items = []
+
+            async def dispatch(self, item):
+                self.items.append(item)
+                return DispatchResult(success_count=1)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+            targets=[],
+        )
+        job = types.SimpleNamespace(
+            id="job-1",
+            feed_ids=["feed-1"],
+            target_ids=[],
+            enabled=True,
+            interval_seconds=300,
+            batch_size=2,
+            dedup_ttl_seconds=0,
+            semantic_dedup_enabled=False,
+        )
+        storage = FakeStorage()
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual([item["guid"] for item in dispatcher.items], ["guid-1", "guid-2"])
+        self.assertEqual(storage.marked, [("guid-1", 123), ("guid-2", 123)])
+        self.assertTrue(storage.updated)
+
+    async def test_permanent_target_failures_are_not_marked_seen(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            async def has_seen(self, item_id):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [{"feed_id": "feed-1", "guid": "item-1", "published_at": ""}]
+
+        class FakeDispatcher:
+            async def dispatch(self, item):
+                return DispatchResult(permanent_failure_count=1)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+        )
+        job = types.SimpleNamespace(id="job-1", feed_ids=["feed-1"], enabled=True, interval_seconds=300)
+        storage = FakeStorage()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=FakeDispatcher(),
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(storage.marked, [])
+
+    async def test_job_level_dedup_ttl_overrides_global_default(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            async def has_seen(self, item_id):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [{"feed_id": "feed-1", "guid": "item-1", "published_at": ""}]
+
+        class FakeDispatcher:
+            async def dispatch(self, item):
+                return DispatchResult(success_count=1)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+        )
+        job = types.SimpleNamespace(
+            id="job-1",
+            feed_ids=["feed-1"],
+            enabled=True,
+            interval_seconds=300,
+            dedup_ttl_seconds=3888000,
+        )
+        storage = FakeStorage()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=FakeDispatcher(),
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(storage.marked, [("item-1", 3888000)])
+
+    async def test_job_level_dedup_ttl_is_used_when_checking_seen_records(self):
+        class FakeStorage:
+            def __init__(self):
+                self.seen_calls = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                self.seen_calls.append((item_id, ttl_seconds))
+                return True
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                raise AssertionError("seen item should not be marked again")
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [{"feed_id": "feed-1", "guid": "item-1", "published_at": ""}]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.count = 0
+
+            async def dispatch(self, item):
+                self.count += 1
+                return DispatchResult(success_count=1)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+        )
+        job = types.SimpleNamespace(
+            id="job-1",
+            feed_ids=["feed-1"],
+            enabled=True,
+            interval_seconds=300,
+            dedup_ttl_seconds=3888000,
+        )
+        storage = FakeStorage()
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(storage.seen_calls, [("item-1", 3888000)])
+        self.assertEqual(dispatcher.count, 0)
+
+    async def test_job_compact_mode_is_forwarded_to_dispatcher(self):
+        class FakeStorage:
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                return None
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [{"feed_id": "feed-1", "guid": "item-1", "published_at": ""}]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.items = []
+
+            async def dispatch(self, item):
+                self.items.append(item)
+                return DispatchResult(success_count=1)
+
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=types.SimpleNamespace(
+                jobs=[],
+                dedup_ttl_seconds=123,
+                poll_interval_seconds=300,
+            ),
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=FakeStorage(),
+            pipeline=None,
+        )
+        job = types.SimpleNamespace(
+            id="job-compact",
+            feed_ids=["feed-1"],
+            enabled=True,
+            interval_seconds=300,
+            compact_mode_enabled=True,
+            compact_mode_send_images=True,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertTrue(dispatcher.items[0]["compact_mode_enabled"])
+        self.assertTrue(dispatcher.items[0]["compact_mode_send_images"])
+
+
+class SchedulerTaskCleanupTests(unittest.IsolatedAsyncioTestCase):
+    async def test_start_cancels_stale_job_tasks(self):
+        async def stale_loop():
+            try:
+                await asyncio.sleep(30)
+            except asyncio.CancelledError:
+                raise
+
+        stale_task = asyncio.create_task(stale_loop(), name="rss-job-stale")
+        stale_digest_task = asyncio.create_task(stale_loop(), name="rss-digest-send-stale")
+        await asyncio.sleep(0)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+            startup_delay_seconds=0,
+        )
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=types.SimpleNamespace(),
+            parser=types.SimpleNamespace(),
+            dispatcher=types.SimpleNamespace(),
+            storage=types.SimpleNamespace(),
+            pipeline=None,
+        )
+
+        await scheduler.start()
+
+        self.assertTrue(stale_task.cancelled() or stale_task.done())
+        self.assertTrue(stale_digest_task.cancelled() or stale_digest_task.done())
+
+
+class SchedulerDailyDigestTests(unittest.IsolatedAsyncioTestCase):
+    async def test_collect_digest_feed_once_archives_items(self):
+        class FakeStorage:
+            def __init__(self):
+                self.archived = []
+                self.updated = []
+
+            async def archive_digest_items(self, items):
+                self.archived.extend(items)
+
+            async def update_feed_state(self, *args, **kwargs):
+                self.updated.append((args, kwargs))
+                return {}
+
+        class FakeFetcher:
+            async def fetch_feed_ids(self, feed_ids):
+                return [{"feed_id": feed_ids[0], "body": "<rss/>", "etag": "etag", "last_modified": ""}]
+
+        class FakeParser:
+            def parse(self, raw_items, job=None):
+                return [
+                    {
+                        "feed_id": raw_items[0]["feed_id"],
+                        "guid": "guid-1",
+                        "title": "Title",
+                        "feed_title": "Feed",
+                        "summary": "Summary",
+                        "published_at": "2026-03-28T00:00:00+00:00",
+                    }
+                ]
+
+        scheduler = RSSScheduler(
+            config=types.SimpleNamespace(
+                jobs=[],
+                daily_digests=[],
+                poll_interval_seconds=300,
+                startup_delay_seconds=0,
+                timezone="Asia/Shanghai",
+            ),
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=types.SimpleNamespace(),
+            storage=FakeStorage(),
+            pipeline=None,
+        )
+
+        await scheduler._collect_digest_feed_once("feed-1")
+
+        self.assertEqual(len(scheduler.storage.archived), 1)
+        self.assertEqual(scheduler.storage.archived[0]["guid"], "guid-1")
+
+    async def test_run_daily_digest_once_builds_and_dispatches(self):
+        class FakeStorage:
+            def __init__(self):
+                self.status_updates = []
+
+            async def list_digest_items(self, feed_ids, **kwargs):
+                return [
+                    {
+                        "feed_id": "feed-1",
+                        "feed_title": "Feed",
+                        "title": "Title",
+                        "summary": "Summary",
+                        "link": "https://example.com/post/1",
+                        "published_at": "2026-03-28T00:00:00+00:00",
+                    }
+                ]
+
+            async def update_daily_digest_status(self, digest_id, **fields):
+                self.status_updates.append((digest_id, fields))
+                return fields
+
+            async def get_daily_digest_status(self, digest_id):
+                return {}
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.digests = []
+
+            async def dispatch_daily_digest(self, digest):
+                self.digests.append(digest)
+                return DispatchResult(success_count=1)
+
+        class FakePipeline:
+            async def build_daily_digest_content(self, digest, items, unified_msg_origin=""):
+                self.last_digest = digest
+                self.last_items = items
+                self.last_origin = unified_msg_origin
+                return {"content": "1. [Feed] Title", "engine": "llm", "llm_reason": "ok"}
+
+        digest = DailyDigestConfig(
+            id="digest-1",
+            title="芯片日报",
+            feed_ids=["feed-1"],
+            target_ids=["target-1"],
+            llm_timeout_seconds=90,
+            enabled=True,
+        )
+        scheduler = RSSScheduler(
+            config=types.SimpleNamespace(
+                jobs=[],
+                daily_digests=[digest],
+                poll_interval_seconds=300,
+                startup_delay_seconds=0,
+                timezone="Asia/Shanghai",
+                targets=[
+                    types.SimpleNamespace(
+                        id="target-1",
+                        enabled=True,
+                        unified_msg_origin="qq:group:1",
+                    )
+                ],
+            ),
+            fetcher=types.SimpleNamespace(),
+            parser=types.SimpleNamespace(),
+            dispatcher=FakeDispatcher(),
+            storage=FakeStorage(),
+            pipeline=FakePipeline(),
+        )
+
+        await scheduler.run_daily_digest_once("digest-1")
+
+        self.assertEqual(len(scheduler._dispatcher.digests), 1)
+        self.assertEqual(scheduler._dispatcher.digests[0]["title"], "芯片日报")
+        self.assertEqual(scheduler._dispatcher.digests[0]["item_count"], 1)
+        self.assertEqual(scheduler._pipeline.last_digest["llm_timeout_seconds"], 90)
+
+    async def test_run_daily_digest_once_merges_semantic_items_before_pipeline(self):
+        class FakeStorage:
+            def __init__(self):
+                self.status_updates = []
+
+            async def list_digest_items(self, feed_ids, **kwargs):
+                return [
+                    {
+                        "feed_id": "feed-1",
+                        "feed_title": "Tom's Hardware",
+                        "title": "RTX 6090 specs leak",
+                        "summary": "Specs leaked.",
+                        "link": "https://example.com/tom",
+                        "published_at": "2026-03-28T00:00:00+00:00",
+                    },
+                    {
+                        "feed_id": "feed-2",
+                        "feed_title": "VideoCardz",
+                        "title": "RTX 6090 specifications appear",
+                        "summary": "The same specs appeared.",
+                        "link": "https://example.com/vc",
+                        "published_at": "2026-03-28T00:10:00+00:00",
+                    },
+                ]
+
+            async def update_daily_digest_status(self, digest_id, **fields):
+                self.status_updates.append((digest_id, fields))
+                return fields
+
+            async def get_daily_digest_status(self, digest_id):
+                return {}
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.digests = []
+
+            async def dispatch_daily_digest(self, digest):
+                self.digests.append(digest)
+                return DispatchResult(success_count=1)
+
+        class FakePipeline:
+            async def build_daily_digest_content(self, digest, items, unified_msg_origin=""):
+                self.last_items = items
+                return {"content": "1. [Tom's Hardware / VideoCardz] RTX 6090 specs", "engine": "llm", "llm_reason": "ok"}
+
+        class FakeSemanticDeduper:
+            async def merge_digest_items(self, digest, items, unified_msg_origin=""):
+                return {
+                    "items": [
+                        {
+                            "feed_title": "Tom's Hardware / VideoCardz",
+                            "title": "RTX 6090 specs",
+                            "summary": "Merged specs coverage.",
+                            "link": "https://example.com/tom",
+                            "source_items": items,
+                            "merged_count": 2,
+                        }
+                    ],
+                    "reason": "ok",
+                    "merged_count": 1,
+                    "input_count": 2,
+                    "output_count": 1,
+                }
+
+        digest = DailyDigestConfig(
+            id="digest-merge",
+            title="芯片日报",
+            feed_ids=["feed-1", "feed-2"],
+            target_ids=["target-1"],
+            semantic_merge_enabled=True,
+            enabled=True,
+        )
+        storage = FakeStorage()
+        scheduler = RSSScheduler(
+            config=types.SimpleNamespace(
+                jobs=[],
+                daily_digests=[digest],
+                poll_interval_seconds=300,
+                startup_delay_seconds=0,
+                timezone="Asia/Shanghai",
+                targets=[
+                    types.SimpleNamespace(
+                        id="target-1",
+                        enabled=True,
+                        unified_msg_origin="qq:group:1",
+                    )
+                ],
+            ),
+            fetcher=types.SimpleNamespace(),
+            parser=types.SimpleNamespace(),
+            dispatcher=FakeDispatcher(),
+            storage=storage,
+            pipeline=FakePipeline(),
+            semantic_deduper=FakeSemanticDeduper(),
+        )
+
+        await scheduler.run_daily_digest_once("digest-merge")
+
+        self.assertEqual(len(scheduler._pipeline.last_items), 1)
+        self.assertEqual(scheduler._pipeline.last_items[0]["title"], "RTX 6090 specs")
+        self.assertEqual(scheduler._dispatcher.digests[0]["item_count"], 1)
+        self.assertEqual(len(scheduler._dispatcher.digests[0]["links"]), 2)
+        final_status = storage.status_updates[-1][1]
+        self.assertEqual(final_status["last_raw_item_count"], 2)
+        self.assertEqual(final_status["last_semantic_merge_reason"], "ok")
+        self.assertEqual(final_status["last_semantic_merged_count"], 1)
+
+    async def test_run_daily_digest_once_skips_empty_window(self):
+        class FakeStorage:
+            def __init__(self):
+                self.status_updates = []
+
+            async def list_digest_items(self, feed_ids, **kwargs):
+                return []
+
+            async def update_daily_digest_status(self, digest_id, **fields):
+                self.status_updates.append((digest_id, fields))
+                return fields
+
+            async def get_daily_digest_status(self, digest_id):
+                return {}
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.calls = 0
+
+            async def dispatch_daily_digest(self, digest):
+                self.calls += 1
+                return DispatchResult(success_count=1)
+
+        digest = DailyDigestConfig(
+            id="digest-empty",
+            title="空日报",
+            feed_ids=["feed-1"],
+            target_ids=["target-1"],
+            enabled=True,
+        )
+        storage = FakeStorage()
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=types.SimpleNamespace(
+                jobs=[],
+                daily_digests=[digest],
+                poll_interval_seconds=300,
+                startup_delay_seconds=0,
+                timezone="Asia/Shanghai",
+                targets=[],
+            ),
+            fetcher=types.SimpleNamespace(),
+            parser=types.SimpleNamespace(),
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler.run_daily_digest_once("digest-empty")
+
+        self.assertEqual(dispatcher.calls, 0)
+        self.assertEqual(len(storage.status_updates), 1)
+        self.assertEqual(storage.status_updates[0][1]["last_skipped_reason"], "empty_window")
+
+
+class SchedulerBatchDedupTests(unittest.IsolatedAsyncioTestCase):
+    async def test_duplicate_items_in_same_batch_are_dispatched_once(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"]]
+
+            async def has_seen(self, item_id):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [
+                    {"feed_id": "feed-1", "guid": "dup-1", "title": "Same Item", "published_at": ""},
+                    {"feed_id": "feed-1", "guid": "dup-1", "title": "Same Item", "published_at": ""},
+                ]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.calls = 0
+
+            async def dispatch(self, item):
+                self.calls += 1
+                return DispatchResult(success_count=1)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+        )
+        job = types.SimpleNamespace(id="job-1", feed_ids=["feed-1"], enabled=True, interval_seconds=300)
+        storage = FakeStorage()
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(dispatcher.calls, 1)
+        self.assertEqual(storage.marked, [("dup-1", 123)])
+
+    async def test_same_link_with_different_guid_is_dispatched_once(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+                self.seen = set()
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"], f"link:{item['link']}"]
+
+            async def has_seen(self, item_id):
+                return item_id in self.seen
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.seen.add(item_id)
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def __init__(self):
+                self._calls = 0
+
+            def parse(self, raw_items, job):
+                self._calls += 1
+                if self._calls == 1:
+                    return [
+                        {
+                            "feed_id": "feed-1",
+                            "guid": "guid-1",
+                            "link": "https://example.com/news/1",
+                            "title": "Same Link",
+                            "published_at": "",
+                        }
+                    ]
+                return [
+                    {
+                        "feed_id": "feed-1",
+                        "guid": "guid-2",
+                        "link": "https://example.com/news/1",
+                        "title": "Same Link",
+                        "published_at": "",
+                    }
+                ]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.calls = 0
+
+            async def dispatch(self, item):
+                self.calls += 1
+                return DispatchResult(success_count=1)
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+        )
+        job = types.SimpleNamespace(id="job-1", feed_ids=["feed-1"], enabled=True, interval_seconds=300)
+        storage = FakeStorage()
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(dispatcher.calls, 1)
+        self.assertEqual(
+            storage.marked,
+            [("guid-1", 123), ("link:https://example.com/news/1", 123)],
+        )
+
+
+class SchedulerSemanticDedupTests(unittest.IsolatedAsyncioTestCase):
+    async def test_semantic_duplicate_marks_seen_and_skips_dispatch(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"]]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [
+                    {
+                        "feed_id": "feed-1",
+                        "guid": "guid-1",
+                        "title": "NVIDIA unveils RTX 6090",
+                        "summary": "NVIDIA introduced a new GPU.",
+                        "published_at": "",
+                    }
+                ]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.calls = 0
+
+            async def dispatch(self, item):
+                self.calls += 1
+                return DispatchResult(success_count=1)
+
+        class FakeSemanticDeduper:
+            def __init__(self):
+                self.remembered = []
+
+            async def check(self, job, item, unified_msg_origin=""):
+                return types.SimpleNamespace(
+                    duplicate=True,
+                    matched_record_id="record-1",
+                    confidence=0.91,
+                    reason="same_event",
+                )
+
+            async def remember(self, job, item, seen_keys, ttl_seconds):
+                self.remembered.append((job.id, item.get("guid")))
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+            targets=[],
+        )
+        job = types.SimpleNamespace(
+            id="job-1",
+            feed_ids=["feed-1"],
+            target_ids=[],
+            enabled=True,
+            interval_seconds=300,
+            dedup_ttl_seconds=123,
+            semantic_dedup_enabled=True,
+        )
+        storage = FakeStorage()
+        dispatcher = FakeDispatcher()
+        semantic = FakeSemanticDeduper()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=None,
+            semantic_deduper=semantic,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(dispatcher.calls, 0)
+        self.assertEqual(storage.marked, [("guid-1", 123)])
+        self.assertEqual(semantic.remembered, [])
+
+    async def test_successful_dispatch_records_semantic_candidate(self):
+        class FakeStorage:
+            def __init__(self):
+                self.marked = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"]]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                return False
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [
+                    {
+                        "feed_id": "feed-1",
+                        "guid": "guid-1",
+                        "title": "NVIDIA unveils RTX 6090",
+                        "summary": "NVIDIA introduced a new GPU.",
+                        "published_at": "",
+                    }
+                ]
+
+        class FakeDispatcher:
+            async def dispatch(self, item):
+                return DispatchResult(success_count=1)
+
+        class FakeSemanticDeduper:
+            def __init__(self):
+                self.remembered = []
+
+            async def check(self, job, item, unified_msg_origin=""):
+                return types.SimpleNamespace(
+                    duplicate=False,
+                    matched_record_id="",
+                    confidence=0.0,
+                    reason="not_duplicate",
+                )
+
+            async def remember(self, job, item, seen_keys, ttl_seconds):
+                self.remembered.append((job.id, item.get("guid"), tuple(seen_keys), ttl_seconds))
+
+        config = types.SimpleNamespace(
+            jobs=[],
+            dedup_ttl_seconds=123,
+            poll_interval_seconds=300,
+            targets=[],
+        )
+        job = types.SimpleNamespace(
+            id="job-1",
+            feed_ids=["feed-1"],
+            target_ids=[],
+            enabled=True,
+            interval_seconds=300,
+            dedup_ttl_seconds=123,
+            semantic_dedup_enabled=True,
+        )
+        semantic = FakeSemanticDeduper()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=FakeDispatcher(),
+            storage=FakeStorage(),
+            pipeline=None,
+            semantic_deduper=semantic,
+        )
+
+        await scheduler._run_job_once_guarded(job)
+
+        self.assertEqual(semantic.remembered, [("job-1", "guid-1", ("guid-1",), 123)])
+
+
+class SchedulerTranslationTest(unittest.IsolatedAsyncioTestCase):
+    async def test_test_translation_returns_pipeline_error_when_missing(self):
+        config = types.SimpleNamespace(jobs=[])
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=types.SimpleNamespace(),
+            parser=types.SimpleNamespace(),
+            dispatcher=types.SimpleNamespace(),
+            storage=types.SimpleNamespace(),
+            pipeline=None,
+        )
+
+        result = await scheduler.test_translation(sample_text="hello")
+
+        self.assertEqual(result.get("error"), "pipeline_not_configured")
+
+    async def test_test_translation_returns_report_and_config_snapshot(self):
+        class FakePipeline:
+            async def diagnose_translation(self, entry):
+                self.entry = entry
+                return {
+                    "input_chars": len(entry.get("summary", "")),
+                    "llm": {"ok": True, "latency_ms": 10, "provider_id": "p"},
+                    "github": {"ok": False, "latency_ms": 12, "error": "token_missing"},
+                    "google": {"ok": False, "latency_ms": 20, "error": "no_key"},
+                }
+
+        pipeline = FakePipeline()
+        config = types.SimpleNamespace(
+            jobs=[],
+            llm_enabled=True,
+            llm_timeout_seconds=15,
+            llm_proxy_mode="system",
+            github_models_enabled=True,
+            github_models_model="openai/gpt-4o-mini",
+            github_models_timeout_seconds=18,
+            github_models_proxy_mode="custom",
+            google_translate_enabled=True,
+            google_translate_target_lang="zh-CN",
+            google_translate_timeout_seconds=15,
+            google_translate_proxy_mode="off",
+        )
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=types.SimpleNamespace(),
+            parser=types.SimpleNamespace(),
+            dispatcher=types.SimpleNamespace(),
+            storage=types.SimpleNamespace(),
+            pipeline=pipeline,
+        )
+
+        result = await scheduler.test_translation(sample_text="sample")
+
+        self.assertEqual(pipeline.entry.get("summary"), "sample")
+        self.assertEqual(result.get("llm", {}).get("ok"), True)
+        self.assertEqual(result.get("github", {}).get("error"), "token_missing")
+        self.assertEqual(result.get("config", {}).get("github_models_model"), "openai/gpt-4o-mini")
+        self.assertEqual(result.get("google", {}).get("error"), "no_key")
+        self.assertEqual(result.get("config", {}).get("google_translate_proxy_mode"), "off")
+
+
+class SchedulerTargetScopedDedupTests(unittest.IsolatedAsyncioTestCase):
+    @staticmethod
+    def _target_seen_key(job_id: str, origin: str, item_key: str) -> str:
+        digest = hashlib.sha256(origin.encode("utf-8")).hexdigest()
+        return f"job:{job_id}:origin:{digest}:{item_key}"
+
+    def _build_config(self):
+        return RSSConfig.from_context(
+            {
+                "feeds": [{"id": "feed-1", "url": "https://example.com/rss", "enabled": True}],
+                "targets": [
+                    {
+                        "id": "target-friend",
+                        "platform": "qq",
+                        "unified_msg_origin": "default:FriendMessage:562506516",
+                        "enabled": True,
+                    },
+                    {
+                        "id": "target-group",
+                        "platform": "qq",
+                        "unified_msg_origin": "default:GroupMessage:764968756",
+                        "enabled": True,
+                    },
+                ],
+                "jobs": [
+                    {
+                        "id": "job-1",
+                        "feed_ids": ["feed-1"],
+                        "target_ids": ["target-friend", "target-group"],
+                        "interval_seconds": 300,
+                        "enabled": True,
+                    }
+                ],
+                "dedup_ttl_seconds": 123,
+            }
+        )
+
+    async def test_seen_target_is_not_sent_again_when_another_target_is_pending(self):
+        group_origin = "default:GroupMessage:764968756"
+        friend_origin = "default:FriendMessage:562506516"
+
+        class FakeStorage:
+            def __init__(self, seen_key):
+                self.seen = {seen_key}
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"]]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                return item_id in self.seen
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.seen.add(item_id)
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [{"feed_id": "feed-1", "guid": "item-1", "published_at": ""}]
+
+        class FakeDispatcher:
+            def __init__(self):
+                self.items = []
+
+            async def dispatch(self, item):
+                self.items.append(item)
+                return DispatchResult(success_count=1, success_origins=[friend_origin])
+
+        config = self._build_config()
+        dispatcher = FakeDispatcher()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=dispatcher,
+            storage=FakeStorage(self._target_seen_key("job-1", group_origin, "item-1")),
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(config.jobs[0])
+
+        self.assertEqual(dispatcher.items[0]["_target_origins"], [friend_origin])
+
+    async def test_partial_success_marks_only_successful_target_seen(self):
+        group_origin = "default:GroupMessage:764968756"
+        friend_origin = "default:FriendMessage:562506516"
+
+        class FakeStorage:
+            def __init__(self):
+                self.seen = set()
+                self.marked = []
+
+            def build_dedup_key(self, item):
+                return item["guid"]
+
+            def build_seen_keys(self, item):
+                return [item["guid"]]
+
+            async def has_seen(self, item_id, ttl_seconds=None):
+                return item_id in self.seen
+
+            async def mark_seen(self, item_id, ttl_seconds=0):
+                self.seen.add(item_id)
+                self.marked.append((item_id, ttl_seconds))
+
+            async def get_feed_state(self, feed_id):
+                return {"last_success_time": 0}
+
+            async def update_feed_state(self, *args, **kwargs):
+                return {}
+
+        class FakeFetcher:
+            async def fetch(self, job):
+                return [{"feed_id": "feed-1"}]
+
+        class FakeParser:
+            def parse(self, raw_items, job):
+                return [{"feed_id": "feed-1", "guid": "item-1", "published_at": ""}]
+
+        class FakeDispatcher:
+            async def dispatch(self, item):
+                return DispatchResult(
+                    success_count=1,
+                    transient_failure_count=1,
+                    success_origins=[group_origin],
+                )
+
+        config = self._build_config()
+        storage = FakeStorage()
+        scheduler = RSSScheduler(
+            config=config,
+            fetcher=FakeFetcher(),
+            parser=FakeParser(),
+            dispatcher=FakeDispatcher(),
+            storage=storage,
+            pipeline=None,
+        )
+
+        await scheduler._run_job_once_guarded(config.jobs[0])
+
+        self.assertEqual(
+            storage.marked,
+            [(self._target_seen_key("job-1", group_origin, "item-1"), 123)],
+        )
+        self.assertNotIn(
+            self._target_seen_key("job-1", friend_origin, "item-1"),
+            storage.seen,
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()

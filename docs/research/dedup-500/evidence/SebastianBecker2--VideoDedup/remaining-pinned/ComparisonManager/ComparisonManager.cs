@@ -1,0 +1,174 @@
+namespace ComparisonManager
+{
+    using Serilog;
+    using SmartTimer;
+    using VideoDedupGrpc;
+
+    public class ComparisonManager : IDisposable
+    {
+        private static readonly TimeSpan TimeoutTimerInterval =
+            TimeSpan.FromMinutes(1);
+        private static readonly TimeSpan TimeoutTime = TimeSpan.FromMinutes(5);
+
+        private bool disposedValue;
+
+        private ILogger? Logger { get; }
+
+        private Timer TimeoutTimer { get; }
+
+        private Dictionary<Guid, Comparison> Comparisons { get; } = [];
+        private Dictionary<Guid, DateTime> LastRequests { get; } = [];
+
+        private object ComparisonsLock { get; } = new();
+
+        public ComparisonManager() =>
+            TimeoutTimer = new Timer(
+                HandleTimeoutTimerTick,
+                null,
+                TimeoutTimerInterval);
+
+        public ComparisonManager(ILogger logger) : this()
+        {
+            Logger = logger;
+            Logger.Information("Started ComparisonManager");
+        }
+
+        public VideoComparisonStatus StartComparison(
+            VideoComparisonSettings settings,
+            string leftFilePath,
+            string rightFilePath,
+            bool forceLoadingAllFrames)
+        {
+            Logger?.Information($"Starting comparison '{leftFilePath}' - " +
+                $"'{rightFilePath}'");
+
+            try
+            {
+                var comparison = new Comparison(
+                    settings,
+                    leftFilePath,
+                    rightFilePath,
+                    forceLoadingAllFrames,
+                    Logger);
+
+                lock (ComparisonsLock)
+                {
+                    Comparisons.Add(
+                        comparison.Token,
+                        comparison);
+                    LastRequests[comparison.Token] = DateTime.Now;
+
+                    Logger?.Information($"Started comparison '{leftFilePath}' " +
+                        $"- '{rightFilePath}' as {comparison.Token}");
+                    return comparison.GetStatus();
+                }
+            }
+            catch (InvalidDataException ex)
+            {
+                Logger?.Error(ex, $"Failed to start comparison '{leftFilePath}' - " +
+                    $"'{rightFilePath}'");
+
+                return AbortedComparisonStatus(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Logger?.Error(ex, $"Failed to start comparison '{leftFilePath}' - " +
+                    $"'{rightFilePath}'");
+
+                return AbortedComparisonStatus(ex.Message);
+            }
+        }
+
+        private static VideoComparisonStatus AbortedComparisonStatus(string reason) =>
+            new()
+            {
+                VideoComparisonResult = new VideoComparisonResult
+                {
+                    ComparisonResult = ComparisonResult.Aborted,
+                    Reason = reason,
+                },
+            };
+
+        public VideoComparisonStatus? GetStatus(
+            Guid token,
+            int frameComparisonIndex = 0)
+        {
+            lock (ComparisonsLock)
+            {
+                if (!Comparisons.TryGetValue(token, out var comparison))
+                {
+                    return null;
+                }
+
+                LastRequests[token] = DateTime.Now;
+                return comparison.GetStatus(frameComparisonIndex);
+            }
+        }
+
+        public bool CancelComparison(Guid token)
+        {
+            Logger?.Information($"Cancelling comparison {token}");
+            lock (ComparisonsLock)
+            {
+                if (!Comparisons.TryGetValue(token, out var comparison))
+                {
+                    return false;
+                }
+
+                comparison.CancelComparison();
+                comparison.Dispose();
+
+                _ = LastRequests.Remove(token);
+                return Comparisons.Remove(token);
+            }
+        }
+
+        private void HandleTimeoutTimerTick(object? sender)
+        {
+            var now = DateTime.Now;
+            lock (ComparisonsLock)
+            {
+                foreach (var token in LastRequests
+                    .Where(kvp => (now - kvp.Value) > TimeoutTime)
+                    .Select(kvp => kvp.Key)
+                    .ToList())
+                {
+                    Logger?.Information($"Removing obsolete comparison {token}");
+                    _ = CancelComparison(token);
+                }
+            }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    Logger?.Information("Stopping ComparisonManager");
+                    TimeoutTimer.Dispose();
+                    lock (ComparisonsLock)
+                    {
+                        foreach (var comparison in Comparisons
+                            .Select(kvp => kvp.Value))
+                        {
+                            comparison.CancelComparison();
+                            comparison.Dispose();
+                        }
+                        Comparisons.Clear();
+                        LastRequests.Clear();
+                    }
+                    Logger?.Information("Stopped ComparisonManager");
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+    }
+}

@@ -1,0 +1,37 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.84s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-78bcd0e347a5a9c3)
+
+running 1 test
+test raw_reuse_qualification::cancelled_in_place_reuse_changes_the_retained_frame_metal ... ok
+
+successes:
+
+---- raw_reuse_qualification::cancelled_in_place_reuse_changes_the_retained_frame_metal stdout ----
+RAW_REUSE_ADAPTER AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+RAW_REUSE_NEGATIVE format=Rgba8UnormSrgb cancelled=true unchanged_uniforms=true unchanged_budget=true retained_pixels_changed=true
+RAW_REUSE_NEGATIVE format=Rgba16Float cancelled=true unchanged_uniforms=true unchanged_budget=true retained_pixels_changed=true
+RAW_REUSE_COMPLETE cases=2 final_credits=0 production_candidate_not_enabled=true
+
+
+successes:
+    raw_reuse_qualification::cancelled_in_place_reuse_changes_the_retained_frame_metal
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 82 filtered out; finished in 2.50s
+

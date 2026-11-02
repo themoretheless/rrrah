@@ -1,0 +1,10 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test local_final_callback",
+  "exit_code": 101,
+  "failed": 1,
+  "failure": "Existing automatic geometry path returned stale evidence after final user callback changed first source. Test also checks second source once first succeeds.",
+  "log": "docs/research/dedup-500/library-runtime-refresh-20261026-v1/rrrah-local-final-callback-before-20261026.log",
+  "log_sha256": "ef133d10116922f9d32523c7d80d554821381d92c252a62a865b8e37cf955ed0",
+  "repair": "Final passive source/dependency verification after last user callback; no further user callback on successful publication.",
+  "verification": "Post-fix regression and local_collection tests running."
+}

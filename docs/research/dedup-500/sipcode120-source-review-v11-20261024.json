@@ -1,0 +1,88 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v10-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/manifest/importGraph.ts",
+      "local": "graph-src_modules_manifest_importGraph.ts",
+      "git_blob": "531da3f07d1622ca046dcc8af347f3ab3fde6e74",
+      "sha256": "5d3cb5fcf186d6fb4ddcdceb3606079a54fca3ef19ca89dd9817f1fa2971650e",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/manifest/hotFiles.ts",
+      "local": "graph-src_modules_manifest_hotFiles.ts",
+      "git_blob": "a27cce098d07dfe8f37687a07eca5663894e0dce",
+      "sha256": "64b7fdb7a8b510b91b6663a62627b7c25b59fae450c96bbf347ea26e3635f1d3",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/git.ts",
+      "local": "graph-src_lib_git.ts",
+      "git_blob": "6e995882252ae45e82d8991851bfe1cc3b433691",
+      "sha256": "e3791d32d0d72625370369ad0f7334a7f5a7669feb6c31150e383f48bbca44a5",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/importGraph.test.ts",
+      "local": "graph-tests_modules_manifest_importGraph.test.ts",
+      "git_blob": "d7d7fb6dd901f67eb8e24a75c61204e79e706143",
+      "sha256": "5ecc6f53f8ae829a6b5db62e8259c3a727717744bb69c3bcd4aa09cc74036593",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/hotFiles.test.ts",
+      "local": "graph-tests_modules_manifest_hotFiles.test.ts",
+      "git_blob": "95143daf4c49b2f12b70e9bd9059c77e6d0062ce",
+      "sha256": "e63f5fb9d3cc8d8c58498a1173629c4d18c5392e10ec3c87a5c848115aa0b752",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 29,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest_results": {
+    "numTotalTests": 124,
+    "numPassedTests": 124,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 8,
+  "authored_upstream_controls_total_distinct": 25,
+  "new_authored_controls": 2,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-original-tests-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 2,
+    "listed": [
+      "padded.ts",
+      "\"emoji\\360\\237\\230\\200.ts\"",
+      "plain.ts",
+      "\"tab\\tname.ts\""
+    ],
+    "hot": {
+      "ok": true,
+      "value": [
+        {
+          "path": "plain.ts",
+          "changes": 1
+        }
+      ]
+    },
+    "findings": [
+      "RealGit ls-files line splitting/trimming loses literal spaced names and leavesGitCquoting on tab/unicode",
+      "Original hotfiles misses3committedspecialnames,keepsASCIIpositive"
+    ],
+    "scope": "OriginalGit andhotfiles/result/error modules;ownedtemporaryGit repo withlocalper-commandidentity andsigningdisabled;no userrepo commit orconfig changed",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/git-owned-QgFVma"
+  },
+  "findings": [
+    "Original RealGit newline split+trim cannot roundtrip whitespace orCquoted pathnames;actualownedgit fixture reproduced.",
+    "Actual original hotFiles drops3specialnames andretainsASCIIcontrol;filecontentduplicateclassification not exercised.",
+    "ImportGraph caps5 edges andsamepathmap lastwritewins;source-only,consistentwithsummarygraphscope."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

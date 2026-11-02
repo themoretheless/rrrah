@@ -1,0 +1,78 @@
+{
+  "method": "ffprobe count_frames reads actual pinned media; not upstream matcher test",
+  "files": [
+    {
+      "path": "asset/warnings_confirmation_example.avif",
+      "exit_code": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "av1",
+            "width": 486,
+            "height": 706,
+            "r_frame_rate": "1/1",
+            "nb_frames": "1",
+            "nb_read_frames": "1"
+          }
+        ]
+      },
+      "stderr": ""
+    },
+    {
+      "path": "tests/test_data/disk/folder1/dog2.mp4",
+      "exit_code": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 72,
+            "height": 128,
+            "r_frame_rate": "30/1",
+            "duration": "2.633333",
+            "nb_frames": "79",
+            "nb_read_frames": "79"
+          },
+          {
+            "codec_name": "aac",
+            "r_frame_rate": "0/0",
+            "duration": "2.647007",
+            "nb_frames": "115",
+            "nb_read_frames": "114"
+          }
+        ]
+      },
+      "stderr": ""
+    },
+    {
+      "path": "tests/test_data/disk/folder2/folder2.1/dog2.mp4",
+      "exit_code": 0,
+      "metadata": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "width": 144,
+            "height": 256,
+            "r_frame_rate": "30/1",
+            "duration": "2.633333",
+            "nb_frames": "79",
+            "nb_read_frames": "79"
+          },
+          {
+            "codec_name": "aac",
+            "r_frame_rate": "0/0",
+            "duration": "2.647007",
+            "nb_frames": "115",
+            "nb_read_frames": "114"
+          }
+        ]
+      },
+      "stderr": ""
+    }
+  ]
+}

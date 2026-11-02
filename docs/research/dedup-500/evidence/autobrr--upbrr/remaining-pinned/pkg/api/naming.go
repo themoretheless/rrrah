@@ -1,0 +1,208 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+import "strings"
+
+const (
+	// ReleaseNameElementPolicyVersionV1 identifies the first shared release-name element contract.
+	ReleaseNameElementPolicyVersionV1 = "release-name-elements/v1"
+	// ReleaseNamePresentationVersionV1 identifies the finalized release-name presentation contract.
+	ReleaseNamePresentationVersionV1 = "release-name-presentation/v1"
+)
+
+// ReleaseNamePresentation records finalized presentation choices for
+// tracker-specific automatic names without carrying raw workflow overrides.
+type ReleaseNamePresentation struct {
+	Version            string
+	OmitAlternateTitle bool
+	OmitYear           bool
+	OmitSeasonEpisode  bool
+	UseDailyDate       bool
+}
+
+// EpisodeTitleMode controls automatic episode-title rendering in generated release names.
+type EpisodeTitleMode string
+
+const (
+	// EpisodeTitleModeUnspecified inherits the shared include default.
+	EpisodeTitleModeUnspecified EpisodeTitleMode = ""
+	// EpisodeTitleModeInclude keeps an automatically generated single-episode title.
+	EpisodeTitleModeInclude EpisodeTitleMode = "include"
+	// EpisodeTitleModeOmit removes an automatically generated single-episode title.
+	EpisodeTitleModeOmit EpisodeTitleMode = "omit"
+)
+
+// NormalizeEpisodeTitleMode resolves the shared unspecified default while
+// preserving unsupported values for policy validation.
+func NormalizeEpisodeTitleMode(mode EpisodeTitleMode) EpisodeTitleMode {
+	normalized := EpisodeTitleMode(strings.ToLower(strings.TrimSpace(string(mode))))
+	if normalized == EpisodeTitleModeUnspecified {
+		return EpisodeTitleModeInclude
+	}
+	return normalized
+}
+
+// ReleaseNameElementPolicy is the versioned shared contract applied to
+// structurally generated names before tracker-specific formatting.
+type ReleaseNameElementPolicy struct {
+	// Version identifies the element-policy contract included in projection
+	// fingerprints.
+	Version string
+	// EpisodeTitleMode applies only to structurally generated names; exact
+	// source names and explicit release-name overrides remain authoritative.
+	EpisodeTitleMode EpisodeTitleMode
+}
+
+// Normalized resolves shared defaults without accepting unsupported values.
+func (p ReleaseNameElementPolicy) Normalized() ReleaseNameElementPolicy {
+	p.Version = strings.TrimSpace(p.Version)
+	p.EpisodeTitleMode = NormalizeEpisodeTitleMode(p.EpisodeTitleMode)
+	return p
+}
+
+type ReleaseNameRequest struct {
+	Category string
+	Type     string
+	// ManualType keeps an explicit type correction authoritative over inferred source signals.
+	ManualType   bool
+	Title        string
+	AltTitle     string
+	Year         int
+	ManualYear   int
+	Resolution   string
+	Audio        string
+	Service      string
+	Season       string
+	Episode      string
+	Part         string
+	Repack       string
+	ThreeD       string
+	Tag          string
+	Source       string
+	UHD          string
+	HDR          string
+	WebDV        bool
+	EpisodeTitle string
+	// ManualEpisodeTitle reports that EpisodeTitle came from an explicit
+	// override. Both blank and nonblank manual values remain authoritative.
+	ManualEpisodeTitle bool
+	VideoCodec         string
+	VideoEncode        string
+	DiscType           string
+	Region             string
+	DVDSize            string
+	EditionSet         string
+	Cut                string
+	Presentation       string
+	Edition            string
+	SearchYear         string
+	DailyDate          string
+	ManualDate         bool
+	TMDBDateMatch      bool
+	NoSeason           bool
+	NoYear             bool
+	NoAKA              bool
+}
+
+// ReleaseNameVariant contains one internally consistent generated name form.
+type ReleaseNameVariant struct {
+	// NameNoTag, Name, and CleanName are the same projections exposed by
+	// [ReleaseNameResult] for this structural alternative.
+	NameNoTag string
+	Name      string
+	CleanName string
+}
+
+// GeneratedReleaseNameVariants contains safe structural alternatives produced
+// by the canonical name builder. Empty variants mean the current name must not
+// be treated as automatically generated.
+type GeneratedReleaseNameVariants struct {
+	// IncludeEpisodeTitle retains the canonical single-episode title.
+	IncludeEpisodeTitle ReleaseNameVariant
+	// OmitEpisodeTitle removes only the automatically generated episode title.
+	OmitEpisodeTitle ReleaseNameVariant
+}
+
+type ReleaseNameResult struct {
+	NameNoTag string
+	Name      string
+	CleanName string
+	// GeneratedName preserves the semantic layout of this automatically generated name.
+	// Nil means the current result is not structurally generated.
+	GeneratedName     *ReleaseNameDocument
+	GeneratedVariants GeneratedReleaseNameVariants
+	MissingFields     []string
+}
+
+type ReleaseNameOverrides struct {
+	Category   *string
+	Type       *string
+	Source     *string
+	Resolution *string
+	Tag        *string
+	Service    *string
+	// Repack replaces the detected release version; empty clears it and nil keeps automatic detection.
+	Repack       *string
+	Edition      *string
+	Season       *string
+	Episode      *string
+	EpisodeTitle *string
+	// ManualYear replaces the derived year; zero explicitly clears it and nil restores automatic resolution.
+	ManualYear       *int
+	ManualDate       *string
+	UseSeasonEpisode *bool
+	NoSeason         *bool
+	NoYear           *bool
+	NoAKA            *bool
+	NoTag            *bool
+	NoEpisodeTitle   *bool
+	NoDistributor    *bool
+	NoEdition        *bool
+	NoDub            *bool
+	NoDual           *bool
+	DualAudio        *bool
+	Region           *string
+}
+
+// IsSupportedReleaseVersion reports whether value names a supported release version
+// or explicitly clears it. Matching ignores case and surrounding whitespace without changing value.
+func IsSupportedReleaseVersion(value string) bool {
+	switch strings.ToUpper(strings.TrimSpace(value)) {
+	case "", "REPACK", "REPACK2", "REPACK3", "PROPER", "PROPER2", "PROPER3", "RERIP":
+		return true
+	default:
+		return false
+	}
+}
+
+// EditionLabel returns the finalized edition wording used by tracker payloads
+// and duplicate comparison. EditionSet only controls rendered naming; this
+// label retains detailed categories for validation. Naming policies should use
+// their independent components in the generated document.
+func (s UploadSubject) EditionLabel() string {
+	return releaseEditionLabel(s.Cut, s.Edition, s.Presentation)
+}
+
+// EditionLabel returns the same finalized label used by upload payloads, so
+// preflight validation evaluates the exact cut, edition, and presentation facts.
+func (s TrackerValidationSubject) EditionLabel() string {
+	return releaseEditionLabel(s.Cut, s.Edition, s.Presentation)
+}
+
+// EditionLabel joins finalized release categories for duplicate subjects that
+// do not carry the upload projection. It never reads a rendered release name.
+func (r ReleaseInfo) EditionLabel() string {
+	return releaseEditionLabel(strings.Join(r.Cut, " "), strings.Join(r.Edition, " "), strings.Join(r.Presentation, " "))
+}
+
+func releaseEditionLabel(cut, edition, presentation string) string {
+	parts := make([]string, 0, 3)
+	for _, value := range []string{cut, edition, presentation} {
+		if value = strings.TrimSpace(value); value != "" {
+			parts = append(parts, value)
+		}
+	}
+	return strings.Join(parts, " ")
+}

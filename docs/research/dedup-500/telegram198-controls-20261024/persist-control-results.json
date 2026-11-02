@@ -1,0 +1,9 @@
+{
+  "cases": 2,
+  "scope": "Complete original _persistDetection function extracted unchanged;recording DB adapters only,no realDB/model/files.",
+  "findings": [
+    "Empty detection stamps row without deleting prior faces.",
+    "Nonempty detection deletes prior faces,inserts replacement,and stamps."
+  ],
+  "qualification": "Stale-face effect requires preexisting faces on unindexed row;schema/reset/invalidation flows not yet reviewed. Not proven ordinary scan defect."
+}

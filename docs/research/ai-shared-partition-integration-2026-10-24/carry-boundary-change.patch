@@ -1,0 +1,226 @@
+--- a/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
++++ b/vendor/hayro-interpret/src/encode/shared_fragment_store.rs
+@@ -120,7 +120,7 @@
+     segments: AdmittedVec<'a, Segment>,
+     len: usize,
+     maximum: usize,
+-    all_eligible: bool,
++    last_ineligible_end: usize,
+ }
+ fn allocate_chunk(input: &[Fragment], capacity: usize, admit: &Admitter<'_>) -> Result<Arc<Chunk>> {
+     if input.is_empty() || capacity < input.len() || capacity > CHUNK_RECORDS {
+@@ -152,7 +152,7 @@
+             segments: AdmittedVec::new(admit, maximum),
+             len: 0,
+             maximum,
+-            all_eligible: true,
++            last_ineligible_end: 0,
+         }
+     }
+     fn check_len(&self, extra: usize) -> Result<usize> {
+@@ -174,7 +174,7 @@
+             len: input.len(),
+             end,
+         })?;
+-        self.all_eligible &= eligible;
++        if !eligible { self.last_ineligible_end = end; }
+         self.len = end;
+         Ok(())
+     }
+@@ -224,7 +224,7 @@
+                         last.len += 1;
+                         last.end += 1;
+                         self.len += 1;
+-                        self.all_eligible &= item.has_area && item.no_merge_with_previous;
++                        if !chunk.summary.eligible { self.last_ineligible_end = self.len; }
+                         return Ok(());
+                     }
+                 }
+@@ -246,7 +246,7 @@
+                 last.len += 1;
+                 last.end += 1;
+                 self.len += 1;
+-                self.all_eligible &= item.has_area && item.no_merge_with_previous;
++                if !last.chunk.summary.eligible { self.last_ineligible_end = self.len; }
+                 return Ok(());
+             }
+         }
+@@ -271,9 +271,9 @@
+                 }
+             }
+         }
+-        // A false hint can stay conservative after removing a bad tail.
+-        // Empty storage starts a new eligible sequence without any allocation.
+-        if self.len == 0 { self.all_eligible = true; }
++        // Removing a bad tail can leave a conservative boundary at the new
++        // end. Appended eligible chunks can still form a fresh carry suffix.
++        self.last_ineligible_end = self.last_ineligible_end.min(self.len);
+     }
+     fn append_range(
+         &mut self,
+@@ -301,7 +301,7 @@
+                 len: count,
+                 end,
+             })?;
+-            self.all_eligible &= old.chunk.summary.eligible;
++            if !old.chunk.summary.eligible { self.last_ineligible_end = end; }
+             self.len = end;
+             cursor += count;
+             index += 1;
+@@ -514,7 +514,7 @@
+         // remainder and a proven nonmerging positive suffix, carry it at once.
+         // Require enough output room so a failed paint never pre-scans beyond
+         // the old single-segment overflow boundary.
+-        if empty && values.all_eligible && start < values.len && values.len - start <= room {
++        if empty && start >= values.last_ineligible_end && start < values.len && values.len - start <= room {
+             return Ok(Some((values.len, true)));
+         }
+         let index = values.segments.values.partition_point(|s| s.end <= start);
+@@ -964,14 +964,44 @@
+         assert_eq!(ledger.used(),baseline);
+         let RegionValues::Shared(payload)=&mut source.regions.values else {panic!()};
+         let view=payload.range(0..64,&mut 1000,&||false).unwrap();
+-        payload.truncate(63);payload.push_fragment(fragment(999)).unwrap();assert!(payload.all_eligible);
++        payload.truncate(63);payload.push_fragment(fragment(999)).unwrap();assert_eq!(payload.last_ineligible_end,0);
+         assert_eq!(view.get(63).unwrap().owner.patch_index,63);assert_eq!(payload.get(63).unwrap().owner.patch_index,999);
+-        let mut bad=fragment(1000);bad.no_merge_with_previous=false;payload.push_fragment(bad).unwrap();assert!(!payload.all_eligible);
+-        payload.truncate(64);assert!(!payload.all_eligible); // conservative after removing bad tail
+-        let recovered=payload.range(0..64,&mut 1000,&||false).unwrap();assert!(recovered.all_eligible);
+-        payload.truncate(0);assert!(payload.all_eligible);payload.push_fragment(fragment(7)).unwrap();assert!(payload.all_eligible);
++        let mut bad=fragment(1000);bad.no_merge_with_previous=false;payload.push_fragment(bad).unwrap();assert_ne!(payload.last_ineligible_end,0);
++        payload.truncate(64);assert_ne!(payload.last_ineligible_end,0); // conservative after removing bad tail
++        let recovered=payload.range(0..64,&mut 1000,&||false).unwrap();assert_eq!(recovered.last_ineligible_end,0);
++        payload.truncate(0);assert_eq!(payload.last_ineligible_end,0);payload.push_fragment(fragment(7)).unwrap();assert_eq!(payload.last_ineligible_end,0);
+         drop(view);drop(recovered);assert_summaries(&source);drop(source);assert_eq!(ledger.used(),0);
+         eprintln!("EMPTY_CARRY suffix125 chunks8 old_work={} new_work={cost}; admissions={allocations} cancellations={} quotas={cost}; exact fields/tags, room fallback, COW/truncate/retry; final=0",10000-slow_work,checks.get());
++    }
++    #[test]
++    fn carry_boundary_tracks_guarded_chunks_across_ranges_and_tail_growth() {
++        let ledger=Ledger::new();let admit=|n|ledger.reserve(n);
++        for bad in [0,20,63,127] {
++            let mut input=(0..128).map(fragment).collect::<Vec<_>>();input[bad].no_merge_with_previous=false;
++            let payload=SharedFragments::from_values(&input,&admit,256,&mut 1000,&||false).unwrap();
++            let boundary=(bad/16+1)*16;assert_eq!(payload.last_ineligible_end,boundary);
++            let mut pixel=mode_pixel(&admit,256,true);pixel.regions.values=RegionValues::Shared(payload);assert_summaries(&pixel);
++            for start in 0..128 {
++                let expected=if start>=boundary {(128,true)}else{((start/16+1)*16,start/16!=bad/16)};
++                assert_eq!(pixel.regions.carry_span(start,&super::super::Polygon::empty(),true,256,&mut 1000,&||false).unwrap(),Some(expected));
++            }
++            if boundary<128 {
++                assert_eq!(pixel.regions.carry_span(boundary,&super::super::Polygon::empty(),true,127-boundary,&mut 1000,&||false).unwrap(),Some((boundary+16,true)));
++            }
++            let RegionValues::Shared(values)=&pixel.regions.values else {panic!()};
++            let view=values.range(1..128,&mut 1000,&||false).unwrap();assert_eq!(view.last_ineligible_end,boundary-1);
++            let good=values.range(boundary..128,&mut 1000,&||false).unwrap();assert_eq!(good.last_ineligible_end,0);
++            drop(view);drop(good);drop(pixel);assert_eq!(ledger.used(),0);
++        }
++        let mut bad=fragment(0);bad.no_merge_with_previous=false;
++        let mut payload=SharedFragments::empty(&admit,256);payload.push_fragment(bad).unwrap();
++        for i in 1..17 {payload.push_fragment(fragment(i)).unwrap();assert_eq!(payload.last_ineligible_end,(i+1).min(16));}
++        let view=payload.range(0..17,&mut 1000,&||false).unwrap();payload.truncate(2);
++        payload.push_fragment(fragment(18)).unwrap();assert_eq!(payload.last_ineligible_end,3); // COW still includes guard
++        payload.truncate(0);payload.push_fragment(fragment(19)).unwrap();assert_eq!(payload.last_ineligible_end,0);
++        assert_eq!(view.get(0).unwrap().no_merge_with_previous,false);
++        drop(view);drop(payload);assert_eq!(ledger.used(),0);
++        eprintln!("CARRY_BOUNDARY guards at first/middle/last chunks;128positions each; room/range translation, mutable tail/COW/truncate; final=0");
+     }
+     #[test]
+     fn subranges_and_tail_share_unchanged_payload_and_release_last_owner() {
+@@ -2028,11 +2058,56 @@
+         }
+         println!("DENSE_FIXED occluded1024 elapsed_ns={elapsed_ns} repetitions={repetitions} total_work={total_work}");
+     }
++    fn guarded_suffix_seed<'a>(admit: &'a Admitter<'a>) -> OrderedPixel<'a> {
++        let mut pixel=occluded_suffix_seed(admit);let owner=pixel.regions.values[31].owner;
++        let mut rebuilt=pixel.regions.empty_like();
++        for (i,old) in pixel.regions.values.iter().enumerate() {
++            let mut item=*old;if i==32 {item.owner=owner;item.no_merge_with_previous=false;}
++            rebuilt.sink_push(item).unwrap();
++        }
++        pixel.regions=rebuilt;pixel
++    }
++    #[test]
++    #[ignore = "manual guarded-suffix CPU timing; seed construction excluded"]
++    fn guarded_suffix_fixed_work_cpu() {
++        use std::{hint::black_box,time::Instant};
++        let repetitions=std::env::var("RRRAH_CELL_CPU_REPETITIONS").ok().map(|s|s.parse::<usize>().unwrap()).unwrap_or(8);
++        assert!((1..=256).contains(&repetitions));let admit=|_:usize|Some(Box::new(()) as Credit);
++        let owner=super::super::PixelSourceOwner {patch_index:0,sample_index:0,component_count:1,
++            u:[0.;3],v:[0.;3],components:[[0.75,0.,0.],[0.;3],[0.;3],[0.;3]]};
++        let points=[kurbo::Point::new(1./4096.,0.25),kurbo::Point::new(2./4096.,0.25),kurbo::Point::new(1./4096.,0.75)];
++        let mut elapsed_ns=0;let mut total_work=0;
++        for _ in 0..repetitions {
++            let mut pixel=guarded_suffix_seed(&admit);let mut work=100_000_000;let start=Instant::now();
++            pixel.paint_triangle(black_box(points),black_box(owner),&mut work,&||false).unwrap();
++            elapsed_ns+=start.elapsed().as_nanos();total_work+=100_000_000-work;
++            assert_eq!(pixel.fragments(),1023);let mut area=0.;
++            pixel.visit(&mut 100_000_000,&||false,&mut |a,_,_,owner| {
++                assert!(owner.patch_index>0);assert_eq!(owner.components[0],[0.25,0.,0.]);area+=a;Ok(())
++            }).unwrap();assert_eq!(area,1.);black_box(pixel.fragments());
++        }
++        println!("DENSE_FIXED guarded1024 elapsed_ns={elapsed_ns} repetitions={repetitions} total_work={total_work}");
++    }
++    #[test]
++    fn native_guarded_suffix_preserves_a_required_merge_and_all_line_ids() {
++        let admit=|_:usize|Some(Box::new(()) as Credit);
++        let mut fast=guarded_suffix_seed(&admit);let mut reference=guarded_suffix_seed(&admit);
++        let RegionValues::Shared(values)=&fast.regions.values else {panic!()};assert_eq!(values.last_ineligible_end,48);
++        let owner=super::super::PixelSourceOwner {patch_index:0,sample_index:0,component_count:1,u:[0.;3],v:[0.;3],components:[[0.75,0.,0.],[0.;3],[0.;3],[0.;3]]};
++        let points=[kurbo::Point::new(1./4096.,0.25),kurbo::Point::new(2./4096.,0.25),kurbo::Point::new(1./4096.,0.75)];
++        let mut a=100_000_000;let mut b=a;
++        fast.paint_triangle_impl::<true>(points,owner,&mut a,&||false).unwrap();reference.paint_triangle_impl::<false>(points,owner,&mut b,&||false).unwrap();
++        assert_eq!(fast.fragments(),1023);assert_eq!(reference.fragments(),1023);
++        assert!(fast.lines.keys==reference.lines.keys && fast.lines.map==reference.lines.map);assert_eq!(fast.lines.next,reference.lines.next);
++        for (a,b) in fast.regions.values.iter().zip(reference.regions.values.iter()) {assert_fragment(a,b);}
++        assert_summaries(&fast);assert_summaries(&reference);
++        eprintln!("GUARDED_SUFFIX actual convex merge retained;1023regions exact fields/tags/full line context; batch_work={} unbatched_work={}",100_000_000-a,100_000_000-b);
++    }
+     #[test]
+     fn native_occluded_seed_has_a_complete_eligible_suffix() {
+         let admit=|_:usize|Some(Box::new(()) as Credit);let pixel=occluded_suffix_seed(&admit);
+         let RegionValues::Shared(values)=&pixel.regions.values else {panic!()};
+-        assert!(values.all_eligible);assert_summaries(&pixel);
++        assert_eq!(values.last_ineligible_end,0);assert_summaries(&pixel);
+         assert_eq!(pixel.regions.carry_span(1,&super::super::Polygon::empty(),true,2047,&mut 100,&||false).unwrap(),Some((1024,true)));
+     }
+     #[test]
+@@ -2085,10 +2160,9 @@
+     }
+     fn assert_summaries(pixel: &OrderedPixel<'_>) {
+         if let RegionValues::Shared(values) = &pixel.regions.values {
+-            if values.all_eligible {
+-                assert!(values.segments.values.iter().all(|s| s.chunk.summary.eligible));
+-            }
++            assert!(values.last_ineligible_end <= values.len);
+             for segment in &values.segments.values {
++                if segment.end > values.last_ineligible_end { assert!(segment.chunk.summary.eligible); }
+                 let expected = ChunkSummary::from_values(&segment.chunk.values);
+                 assert_eq!(
+                     expected.bounds.map(f64::to_bits),
+--- a/scripts/benchmark-ordered-cell-cpu.py
++++ b/scripts/benchmark-ordered-cell-cpu.py
+@@ -22,9 +22,11 @@
+     parser.add_argument("--report", required=True, type=Path)
+     parser.add_argument("--log", required=True, type=Path)
+     parser.add_argument("--repetitions", type=int, default=8)
+-    parser.add_argument("--workload", choices=["dense1236", "occluded1024"], default="dense1236")
++    parser.add_argument("--workload", choices=["dense1236", "occluded1024", "guarded1024"], default="dense1236")
+     args = parser.parse_args()
+-    test_name = TEST if args.workload == "dense1236" else "encode::ordered_pixel::shared_fragment_store::tests::occluded_suffix_fixed_work_cpu"
++    test_name = {"dense1236": TEST,
++                 "occluded1024": "encode::ordered_pixel::shared_fragment_store::tests::occluded_suffix_fixed_work_cpu",
++                 "guarded1024": "encode::ordered_pixel::shared_fragment_store::tests::guarded_suffix_fixed_work_cpu"}[args.workload]
+     if not 1 <= args.repetitions <= 256:
+         parser.error("repetitions must be between 1 and 256")
+     result = {
+--- a/scripts/analyze-split-cpu.py
++++ b/scripts/analyze-split-cpu.py
+@@ -26,7 +26,7 @@
+     result = {}
+     for label, prefix in [("triangles", "SPLIT_CPU"), ("pair", "DENSE_CPU pair"),
+                           ("dense50", "DENSE_CPU dense50"), ("dense75", "DENSE_CPU dense75"),
+-                          ("dense1236", "DENSE_CPU dense1236"), ("occluded1024", "DENSE_CPU occluded1024"),
++                          ("dense1236", "DENSE_CPU dense1236"), ("occluded1024", "DENSE_CPU occluded1024"), ("guarded1024", "DENSE_CPU guarded1024"),
+                           ("sparse64", "DENSE_CPU sparse64"), ("sparse256", "DENSE_CPU sparse256")]:
+         def pairs(kind, first, second):
+             return [tuple(map(int, row)) for row in re.findall(

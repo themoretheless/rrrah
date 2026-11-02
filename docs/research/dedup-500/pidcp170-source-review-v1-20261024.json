@@ -1,0 +1,42 @@
+{
+  "repository": "Davidcreador/pi-dcp",
+  "commit": "848689ad96a5f2d615aac4d9d28367a2307d1549",
+  "reviewed_whole_files": [
+    {
+      "path": "lib/strategies/deduplication.ts",
+      "sha256": "09ddb9fb0de3339177dfc7175fa8ba35ab2fb6b32662bd6d578de1a83059a76e",
+      "git_blob_sha1": "fe75b1ed9669643df5abd7dd7d2a97c5c6b6ffaa",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/strategies/overlap-dedup.ts",
+      "sha256": "e8963df703c46260645ac7f18a4b83257376939928a69f6118ec5384e211303b",
+      "git_blob_sha1": "6ca4af2f26aae7a4adf032aad73e344b521a10b1",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/overlap-dedup.test.ts",
+      "sha256": "f2058ccdff4d0baceb712de45a450b852892abde78f5f95a76ebdf71e89607ea",
+      "git_blob_sha1": "4ec6e55c6b4d5a4e10dfb4b9f80defb3db6dc652",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 3,
+  "tree_blob_count": 71,
+  "full_repository_read": false,
+  "authored_controls_run": 6,
+  "original_tests_run": 0,
+  "original_tests_read": 8,
+  "controls": "docs/research/dedup-500/pidcp170-controls-20261024/read-range-results.json",
+  "runtime_scope": "Original contiguous readRange helpers with native Node type stripping and node:path; no shell commands or message/strategy pipeline executed",
+  "findings": [
+    "Shell variable path remains literal; cat --help is treated as reading a file named --help.",
+    "Zero read limit creates reversed interval; NaN offsets survive. Host tool validation not qualified.",
+    "Ordinary bounded read and pipeline-command rejection positive controls pass.",
+    "Source: range containment does not compare content or file version; lossless historical-content claim requires host mutation/size semantics not established by these tests.",
+    "Source: exact-call dedup compares signature, not output; unlike overlap it does not skip isError results. No full-pipeline runtime reproduction."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "Only 3 tracked source/test files wholly read; rest of repository and eight original test cases not executed",
+  "deferred": "Native pHash.org/ASAN unchanged"
+}

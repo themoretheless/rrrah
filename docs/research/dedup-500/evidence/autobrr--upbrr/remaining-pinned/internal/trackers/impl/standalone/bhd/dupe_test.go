@@ -1,0 +1,400 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package bhd
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"slices"
+	"strings"
+	"testing"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/trackers/dupe"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func adapterEvidence(result dupe.AdapterResult) ([]api.DupeEntry, []string, error) {
+	return result.Entries(), result.Notes(), result.Cause()
+}
+
+type bhdRoundTripFunc func(*http.Request) (*http.Response, error)
+
+func (f bhdRoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) { return f(req) }
+
+type bhdDupeTraceLogger struct {
+	api.NopLogger
+	trace []string
+}
+
+func (l *bhdDupeTraceLogger) Tracef(format string, args ...any) {
+	l.trace = append(l.trace, fmt.Sprintf(format, args...))
+}
+
+func bhdStringFromAny(value any) string {
+	if value == nil {
+		return ""
+	}
+	if text, ok := value.(string); ok {
+		return strings.TrimSpace(text)
+	}
+	return strings.TrimSpace(fmt.Sprint(value))
+}
+
+func TestBHDSearchUsesExternalIDs(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name         string
+		meta         api.DuplicateSubject
+		wantTMDBID   string
+		wantIMDBID   string
+		wantCategory string
+	}{
+		{
+			name: "tv tmdb id",
+			meta: api.DuplicateSubject{
+				SourcePath:  "source",
+				ReleaseName: "Example.Series.S01E04.1080p.WEB-DL-GRP",
+				Identity:    api.ExternalIdentity{TMDBID: 123, Category: "TV"},
+				Release:     api.ReleaseInfo{Resolution: "1080p"},
+			},
+			wantTMDBID:   "tv/123",
+			wantCategory: "TV",
+		},
+		{
+			name: "tv imdb with season override",
+			meta: api.DuplicateSubject{
+				ReleaseNameOverrides: api.ReleaseNameOverrides{Season: new("02")},
+				SourcePath:           "source",
+				ReleaseName:          "Example.Series.S01E04.1080p.WEB-DL-GRP",
+				Identity:             api.ExternalIdentity{IMDBID: 1234567, Category: "TV"},
+			},
+			wantIMDBID:   "tt1234567",
+			wantCategory: "TV",
+		},
+		{
+			name: "movie tmdb id",
+			meta: api.DuplicateSubject{
+				SourcePath: "source",
+				Identity:   api.ExternalIdentity{TMDBID: 234, Category: "MOVIE"},
+				Release:    api.ReleaseInfo{Resolution: "1080p"},
+			},
+			wantTMDBID:   "movie/234",
+			wantCategory: "Movies",
+		},
+		{
+			name: "tmdb takes precedence over imdb",
+			meta: api.DuplicateSubject{
+				SourcePath: "source",
+				Identity: api.ExternalIdentity{
+					TMDBID:   123,
+					IMDBID:   7654321,
+					Category: "MOVIE",
+				},
+				Release: api.ReleaseInfo{Resolution: "2160p"},
+			},
+			wantTMDBID:   "movie/123",
+			wantCategory: "Movies",
+		},
+		{
+			name: "imdb id",
+			meta: api.DuplicateSubject{
+				SourcePath: "source",
+				Identity:   api.ExternalIdentity{IMDBID: 1234567, Category: "MOVIE"},
+				Release:    api.ReleaseInfo{Resolution: "1080p"},
+			},
+			wantIMDBID:   "tt1234567",
+			wantCategory: "Movies",
+		},
+		{
+			name: "sd keeps broad category and no type filter",
+			meta: api.DuplicateSubject{
+				SourcePath: "source",
+				Identity:   api.ExternalIdentity{TMDBID: 123, Category: "MOVIE"},
+				Release:    api.ReleaseInfo{Resolution: "576p"},
+			},
+			wantTMDBID:   "movie/123",
+			wantCategory: "Movies",
+		},
+		{
+			name: "dvd clears type filter",
+			meta: api.DuplicateSubject{
+				SourcePath: "source",
+				DiscType:   "DVD",
+				Identity:   api.ExternalIdentity{TMDBID: 123, Category: "MOVIE"},
+				Release:    api.ReleaseInfo{Size: "DVD9"},
+			},
+			wantTMDBID:   "movie/123",
+			wantCategory: "Movies",
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			var payload map[string]any
+			logger := &bhdDupeTraceLogger{}
+			client := &http.Client{Transport: bhdRoundTripFunc(func(req *http.Request) (*http.Response, error) {
+				if req.URL.Path != "/api/torrents/api-credential" {
+					t.Fatalf("logging changed the credential-bearing request path: %s", req.URL.Path)
+				}
+				body, err := io.ReadAll(req.Body)
+				if err != nil {
+					t.Fatalf("read request body: %v", err)
+				}
+				if err := json.Unmarshal(body, &payload); err != nil {
+					t.Fatalf("decode request body: %v", err)
+				}
+				if payload["rsskey"] != "rss-credential" {
+					t.Fatal("logging changed the request's RSS credential")
+				}
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Body: io.NopCloser(bytes.NewBufferString(
+						`{"status_code":1,"page":1,"total_pages":1,"total_results":1,"results":[{"name":"Example.Release.2026.1080p-GRP"}]}`,
+					)),
+					Header: make(http.Header),
+				}, nil
+			})}
+			cfg := config.Config{Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BHD": {APIKey: "api-credential", BhdRSSKey: "rss-credential"},
+			}}}
+			handler := dupe.NewAdapter(New(), "BHD", cfg, client, logger)
+
+			entries, notes, err := adapterEvidence(handler.Search(context.Background(), tc.meta))
+			if err != nil {
+				t.Fatalf("search failed: %v", err)
+			}
+			if len(notes) != 0 {
+				t.Fatalf("unexpected display notes: %v", notes)
+			}
+			if len(entries) != 1 {
+				t.Fatalf("expected one result, got %#v", entries)
+			}
+			if got := bhdStringFromAny(payload["tmdb_id"]); got != tc.wantTMDBID {
+				t.Fatalf("expected tmdb_id %q, got %q", tc.wantTMDBID, got)
+			}
+			if got := bhdStringFromAny(payload["imdb_id"]); got != tc.wantIMDBID {
+				t.Fatalf("expected imdb_id %q, got %q", tc.wantIMDBID, got)
+			}
+			if got := bhdStringFromAny(payload["categories"]); got != tc.wantCategory {
+				t.Fatalf("expected category %q, got %q", tc.wantCategory, got)
+			}
+			if value, ok := payload["types"]; ok {
+				t.Fatalf("expected no type filter, got %#v", value)
+			}
+			if value, ok := payload["search"]; ok {
+				t.Fatalf("expected no title or season filter, got %#v", value)
+			}
+			logs := strings.Join(logger.trace, "\n")
+			for _, want := range []string{
+				"dupechecking: request tracker=BHD method=POST endpoint=/api/torrents",
+				`"categories":"` + tc.wantCategory + `"`, `"page":1`,
+			} {
+				if !strings.Contains(logs, want) {
+					t.Fatalf("request TRACE missing %q", want)
+				}
+			}
+			if tc.wantTMDBID != "" && !strings.Contains(logs, `"tmdb_id":"`+tc.wantTMDBID+`"`) ||
+				tc.wantIMDBID != "" && !strings.Contains(logs, `"imdb_id":"`+tc.wantIMDBID+`"`) {
+				t.Fatal("request TRACE missing the selected work ID")
+			}
+			if strings.Contains(logs, "api-credential") || strings.Contains(logs, "rss-credential") || strings.Contains(logs, "rsskey") {
+				t.Fatal("request TRACE exposed credentials")
+			}
+		})
+	}
+}
+
+func TestBHDSearchFollowsPages(t *testing.T) {
+	t.Parallel()
+
+	for _, advertised := range []bool{false, true} {
+		t.Run(fmt.Sprintf("advertised=%t", advertised), func(t *testing.T) {
+			requestedPages := make([]int, 0, 2)
+			client := &http.Client{Transport: bhdRoundTripFunc(func(req *http.Request) (*http.Response, error) {
+				var request map[string]any
+				if err := json.NewDecoder(req.Body).Decode(&request); err != nil {
+					t.Fatalf("decode request: %v", err)
+				}
+				page := int(bhdInt(request["page"]))
+				requestedPages = append(requestedPages, page)
+				count := 100
+				if advertised {
+					count = 2
+				}
+				if page == 2 {
+					count = 1
+				}
+				results := make([]map[string]any, count)
+				for index := range count {
+					results[index] = map[string]any{
+						"name": fmt.Sprintf("Example.Release.2026.%03d.1080p-GRP", index+(page-1)*100),
+					}
+				}
+				response := map[string]any{
+					"status_code": 1,
+					"results":     results,
+				}
+				if advertised {
+					response["page"], response["total_pages"], response["total_results"] = page, 2, 3
+				}
+				body, err := json.Marshal(response)
+				if err != nil {
+					t.Fatalf("encode response: %v", err)
+				}
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       io.NopCloser(bytes.NewReader(body)),
+					Header:     make(http.Header),
+				}, nil
+			})}
+			searcher := &dupeSearcher{
+				cfg: config.Config{Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+					"BHD": {APIKey: "placeholder"},
+				}}},
+				http:     client,
+				baseURL:  "https://example.invalid/",
+				maxPages: 2,
+			}
+
+			result := searcher.Search(context.Background(), api.DuplicateSubject{
+				Identity: api.ExternalIdentity{TMDBID: 1234567, Category: api.CanonicalCategoryMovie},
+			})
+			search := result.SearchEvidence()
+			if err := result.Cause(); err != nil {
+				t.Fatalf("search: %v", err)
+			}
+			wantEntries := 101
+			if advertised {
+				wantEntries = 3
+			}
+			if !slices.Equal(requestedPages, []int{1, 2}) ||
+				!search.Complete ||
+				search.Pages != 2 ||
+				len(search.Warnings) != 0 ||
+				len(result.Entries()) != wantEntries {
+				t.Fatalf("requested pages=%v search=%#v entries=%d", requestedPages, search, len(result.Entries()))
+			}
+		})
+	}
+}
+
+func TestBHDSearchRejectsPaginationMetadataPresenceChange(t *testing.T) {
+	t.Parallel()
+
+	requestedPages := make([]int, 0, 2)
+	client := &http.Client{Transport: bhdRoundTripFunc(func(req *http.Request) (*http.Response, error) {
+		var request map[string]any
+		if err := json.NewDecoder(req.Body).Decode(&request); err != nil {
+			t.Fatalf("decode request: %v", err)
+		}
+		page := int(bhdInt(request["page"]))
+		requestedPages = append(requestedPages, page)
+		results := make([]map[string]any, 100)
+		for index := range results {
+			results[index] = map[string]any{
+				"name": fmt.Sprintf("Example.Release.2026.%03d.1080p-GRP", index+(page-1)*100),
+			}
+		}
+		body := map[string]any{"status_code": 1, "results": results}
+		if page == 2 {
+			body["page"], body["total_pages"], body["total_results"] = 2, 2, 200
+		}
+		encoded, err := json.Marshal(body)
+		if err != nil {
+			t.Fatalf("encode response: %v", err)
+		}
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(bytes.NewReader(encoded)),
+			Header:     make(http.Header),
+		}, nil
+	})}
+	searcher := &dupeSearcher{
+		cfg: config.Config{Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+			"BHD": {APIKey: "placeholder"},
+		}}},
+		http:     client,
+		baseURL:  "https://example.invalid/",
+		maxPages: 2,
+	}
+
+	result := searcher.Search(context.Background(), api.DuplicateSubject{
+		Identity: api.ExternalIdentity{TMDBID: 1234567, Category: api.CanonicalCategoryMovie},
+	})
+	search := result.SearchEvidence()
+	if err := result.Cause(); err != nil {
+		t.Fatalf("search: %v", err)
+	}
+	if !slices.Equal(requestedPages, []int{1, 2}) ||
+		search.Complete ||
+		search.Pages != 2 ||
+		len(search.Warnings) != 1 ||
+		len(result.Entries()) != 200 {
+		t.Fatalf("requested pages=%v search=%#v entries=%d", requestedPages, search, len(result.Entries()))
+	}
+}
+
+func TestBHDSearchCountMismatchFailsClosed(t *testing.T) {
+	t.Parallel()
+
+	client := &http.Client{Transport: bhdRoundTripFunc(func(*http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body: io.NopCloser(strings.NewReader(
+				`{"status_code":1,"page":1,"total_pages":1,"total_results":2,"results":[{"name":"Example.Release.2026.1080p-GRP"}]}`,
+			)),
+			Header: make(http.Header),
+		}, nil
+	})}
+	searcher := &dupeSearcher{
+		cfg: config.Config{Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+			"BHD": {APIKey: "placeholder"},
+		}}},
+		http:     client,
+		baseURL:  "https://example.invalid/",
+		maxPages: 1,
+	}
+	result := searcher.Search(context.Background(), api.DuplicateSubject{
+		Identity: api.ExternalIdentity{TMDBID: 1234567, Category: api.CanonicalCategoryMovie},
+	})
+	if search := result.SearchEvidence(); search.Complete || search.Pages != 1 || len(search.Warnings) != 1 || len(result.Entries()) != 1 {
+		t.Fatalf("count mismatch search=%#v entries=%d", search, len(result.Entries()))
+	}
+}
+
+func TestBHDSearchRejectsInvalidResults(t *testing.T) {
+	t.Parallel()
+	for _, body := range []string{
+		`{"status_code":1,"success":false,"results":[]}`,
+		`{"status_code":2,"results":[]}`,
+		`{"status_code":1}`,
+		`{"status_code":1,"results":null}`,
+		`{"status_code":1,"results":{}}`,
+		`{"status_code":1,"results":[null]}`,
+		`{"status_code":1,"results":[{"name":""}]}`,
+	} {
+		t.Run(body, func(t *testing.T) {
+			client := &http.Client{Transport: bhdRoundTripFunc(func(*http.Request) (*http.Response, error) {
+				return &http.Response{StatusCode: http.StatusOK, Body: io.NopCloser(strings.NewReader(body))}, nil
+			})}
+			cfg := config.Config{Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BHD": {APIKey: "placeholder"},
+			}}}
+			result := dupe.NewAdapter(New(), "BHD", cfg, client, api.NopLogger{}).Search(t.Context(), api.DuplicateSubject{
+				Identity: api.ExternalIdentity{TMDBID: 123, Category: api.CanonicalCategoryTV},
+			})
+			if result.SearchEvidence().Complete || result.Disposition() != dupe.DispositionFailed {
+				t.Fatalf("invalid response must fail: %#v", result)
+			}
+		})
+	}
+}

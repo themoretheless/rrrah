@@ -1,0 +1,9 @@
+{
+  "scope": "Original storage class with AstrBot import omitted; fake clock and synthetic temporary state only, no sending/network",
+  "result": {
+    "first_claim": true,
+    "new_claim_after_expiry": true,
+    "third_claim_after_old_owner_release": true
+  },
+  "interpretation": "Old owner release removes newer pending claim, allowing third claim while newer operation may still run."
+}

@@ -1,0 +1,88 @@
+{
+  "report": "docs/research/dedup-500/sony-display-matrix-20261026-v1/white-anchor-negative-holdout-20261026.json",
+  "report_sha256": "5978e0231c1e93608feff66fe334f15b73a31fa96601dfe3162e8260e846e24e",
+  "rows": [
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-cross-scene-0-1-20261026.csv",
+      "agreement": [
+        0.20170212765957446,
+        0.15625531914893617
+      ],
+      "gains": [
+        [
+          1.0317653095041275,
+          1.0304098404207134,
+          1.0298049695248805
+        ],
+        [
+          0.9384407311060969,
+          0.9404537970324258,
+          0.9360891462239627
+        ]
+      ],
+      "within_dense_gain_bounds": true
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-cross-scene-1-0-20261026.csv",
+      "agreement": [
+        0.1334468085106383,
+        0.1844255319148936
+      ],
+      "gains": [
+        [
+          0.9515976832254313,
+          0.9541911366537121,
+          0.9509888721349232
+        ],
+        [
+          1.0287858082205354,
+          1.0275366246652555,
+          1.0217095428930387
+        ]
+      ],
+      "within_dense_gain_bounds": true
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-shuffled-coordinates-0-20261026.csv",
+      "agreement": [
+        0.09736170212765957,
+        0.11063829787234042
+      ],
+      "gains": [
+        [
+          0.9877430702830128,
+          0.9876477917337185,
+          0.9784225034348175
+        ],
+        [
+          0.9789551469670864,
+          0.9784450108537391,
+          0.9686151114987613
+        ]
+      ],
+      "within_dense_gain_bounds": true
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-shuffled-coordinates-1-20261026.csv",
+      "agreement": [
+        0.15846808510638297,
+        0.22263829787234043
+      ],
+      "gains": [
+        [
+          0.9782253919003672,
+          0.9777945000020604,
+          0.9743647008289078
+        ],
+        [
+          0.9804287680127763,
+          0.9804975403693674,
+          0.9734966160018212
+        ]
+      ],
+      "within_dense_gain_bounds": true
+    }
+  ],
+  "finding": "All four sparse negative controls reject even without applying narrow dense diagnostic gain bounds.",
+  "limits": "Only two real scenes and shuffled correspondences; not burst/look-alike precision, full-image negatives or independent heldout camera qualification. Production remains unchanged."
+}

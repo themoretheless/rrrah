@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: three-turn floor and legacy restores prevent disclosure before inference
+ok 1 - three-turn floor and legacy restores prevent disclosure before inference
+  ---
+  duration_ms: 2.72275
+  type: 'test'
+  ...
+# Subtest: declared truncation is ineligible even when observed text happens to match the file
+ok 2 - declared truncation is ineligible even when observed text happens to match the file
+  ---
+  duration_ms: 0.896875
+  type: 'test'
+  ...
+# Subtest: shadow judgments retain results and failures never authorize another strategy
+ok 3 - shadow judgments retain results and failures never authorize another strategy
+  ---
+  duration_ms: 2.439625
+  type: 'test'
+  ...
+# Subtest: attempt budget survives task resets and does not automatically retry
+ok 4 - attempt budget survives task resets and does not automatically retry
+  ---
+  duration_ms: 3.336583
+  type: 'test'
+  ...
+# Subtest: invalid pins and upstream changes to protected originals retain the entire incoming view
+ok 5 - invalid pins and upstream changes to protected originals retain the entire incoming view
+  ---
+  duration_ms: 1.027792
+  type: 'test'
+  ...
+# Subtest: final guard returns the untouched incoming view if another strategy changes protected data
+ok 6 - final guard returns the untouched incoming view if another strategy changes protected data
+  ---
+  duration_ms: 1.217291
+  type: 'test'
+  ...
+# Subtest: resolved model changes cannot reuse an older model's omission decisions
+ok 7 - resolved model changes cannot reuse an older model's omission decisions
+  ---
+  duration_ms: 1.2925
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 122.831458

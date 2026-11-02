@@ -1,0 +1,70 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1168,6 +1168,12 @@
+         let a = self.bounds();
+         a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+     }
++    #[cfg(feature = "experimental-shared-partitions")]
++    fn bounds_contain(&self, other: &Self) -> bool {
++        let a = self.bounds();
++        let b = other.bounds();
++        a[0] <= b[0] && a[1] <= b[1] && a[2] >= b[2] && a[3] >= b[3]
++    }
+     fn edges(&self) -> impl Iterator<Item = [Point; 2]> + '_ {
+         (0..self.len).map(|i| [self.points[i], self.points[(i + 1) % self.len]])
+     }
+@@ -1810,7 +1816,16 @@
+             return Ok(());
+         }
+         if let Some(last) = self.regions.values.last() {
+-            if dominates(&last.owner, &owner, &triangle, work, cancelled)?
++            #[cfg(feature = "experimental-shared-partitions")]
++            let can_contain = !BATCH || (
++                (last.owner.patch_index > owner.patch_index
++                    || (last.owner.patch_index == owner.patch_index
++                        && (last.owner.v != owner.v || last.owner.u != owner.u)))
++                && last.polygon.bounds_contain(&triangle)
++            );
++            #[cfg(not(feature = "experimental-shared-partitions"))]
++            let can_contain = true;
++            if can_contain && dominates(&last.owner, &owner, &triangle, work, cancelled)?
+                 && last.polygon.contains(&triangle, work, cancelled)?
+             {
+                 return Ok(());
+@@ -1986,6 +2001,36 @@
+ #[cfg(test)]
+ mod exact_orientation_tests {
+     use super::*;
++    #[cfg(feature = "experimental-shared-partitions")]
++    #[test]
++    fn containment_bounds_only_reject_impossible_enclosures() {
++        let polygon = |points: &[[f64;2]]| {
++            let mut p=Polygon::empty();for &[x,y] in points {p.push(Point::new(x,y)).unwrap();}p
++        };
++        let square=polygon(&[[0.,0.],[1.,0.],[1.,1.],[0.,1.]]);
++        let inside=polygon(&[[0.,0.],[0.5,0.],[0.,0.5]]);
++        assert!(square.bounds_contain(&inside));
++        assert_eq!(square.contains(&inside,&mut 100,&||false),Ok(true));
++        let outside=polygon(&[[1.,0.],[1f64.next_up(),0.],[1.,0.5]]);
++        assert!(!square.bounds_contain(&outside));
++        assert_eq!(square.contains(&outside,&mut 100,&||false),Ok(false));
++        let diamond=polygon(&[[0.,0.5],[0.5,0.],[1.,0.5],[0.5,1.]]);
++        assert!(diamond.bounds_contain(&inside));
++        assert_eq!(diamond.contains(&inside,&mut 100,&||false),Ok(false));
++        let mut checked=0;
++        for x in -2..=6 { for y in -2..=6 { for side in [0.125,0.5,1.] {
++            let (x,y)=(f64::from(x)/4.,f64::from(y)/4.);
++            let other=polygon(&[[x,y],[x+side,y],[x,y+side]]);
++            for outer in [&square,&diamond] {
++                if !outer.bounds_contain(&other) {
++                    assert_eq!(outer.contains(&other,&mut 1000,&||false),Ok(false));
++                    checked+=1;
++                }
++            }
++        }}}
++        eprintln!("CONTAINMENT_GATE independent exact-half-plane rejections={checked}; touching retained; one-ulp outside rejected; bbox false-positive keeps exact test");
++    }
++
+     #[cfg(feature = "experimental-shared-partitions")]
+     #[test]
+     fn fragment_bounds_prune_diagonal_gaps_and_observe_every_query_failure() {

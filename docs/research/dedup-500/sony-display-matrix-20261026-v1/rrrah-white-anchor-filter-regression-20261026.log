@@ -1,0 +1,34 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.10s
+     Running tests/photometric.rs (target/debug/deps/photometric-02d0327dea3d6841)
+
+running 7 tests
+test explicit_display_projection_retains_hdr_disagreement_and_alpha_edits ... ok
+test incomplete_fits_have_specific_reasons_instead_of_invalid_pixel_errors ... ok
+test known_channel_gains_offsets_and_spatial_edit_are_separate_evidence ... ok
+test bounded_fit_excludes_saturation_from_model_but_never_from_residuals ... ok
+test flat_content_alpha_edits_limits_and_cancellation_do_not_disappear ... ok
+test reflected_gain_offset_preserves_strict_evidence_and_cancel_atomicity ... ok
+test reflected_range_and_display_keep_hdr_alpha_inverse_and_cancellation_evidence ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/white_anchored.rs (target/debug/deps/white_anchored-fd0541cfff31ecb2)
+
+running 5 tests
+test feasible_gain_boundary_is_explicit_and_retains_residual_failures ... ok
+test highlight_projection_keeps_strict_hdr_and_alpha_evidence ... ok
+test analytic_white_anchor_retains_strict_difference_and_visible_edits ... ok
+test flat_work_limits_and_infeasible_anchor_bounds_refuse ... ok
+test cancellation_at_every_checkpoint_discards_result_and_retry_is_stable ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/white_anchored_filter.rs (target/debug/deps/white_anchored_filter-39f1ec49493ef753)
+
+running 2 tests
+test analytic_window_fit_and_reflection_keep_all_interior_samples ... ok
+test exact_work_boundary_and_every_cancellation_checkpoint_are_explicit ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

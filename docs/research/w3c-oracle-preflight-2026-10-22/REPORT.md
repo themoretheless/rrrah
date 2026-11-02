@@ -1,0 +1,7 @@
+# W3C oracle helper: validate the complete source set before codec work
+
+During the coordinated no-heavy-work window a lightweight control found an integrity gap in scripts/fetch-w3c-hdr-png-conformance.py. With the first cached PNG valid and the second corrupt, the helper invoked FFmpeg for the first image before noticing the later bad source. That could replace one retained native oracle while leaving the previous complete-set manifest untouched.
+
+The helper now preflights every source's size and pinned SHA-256 before invoking any codec or replacing any prior native oracle. A deterministic control uses the retained original first PNG, a deliberately invalid second input, sentinel oracle/manifest contents, and mocked network/codec entry points. The original implementation fails because it attempts codec work first (red.log); the revised implementation reports the later hash mismatch while preserving oracle, manifest and corrupt source byte-for-byte (green.log). No network, FFmpeg, Rust compilation or GPU work ran in this control.
+
+Scope: input-validation failure now cannot partially regenerate an oracle set. A later FFmpeg/process/write failure is not claimed transactional across all outputs. This follow-up does not change production image decoding or prior HDR/GPU results. The fetcher source hash recorded with previous reports describes their earlier revision and is intentionally retained; the new revision hash is in source-hashes.json here.

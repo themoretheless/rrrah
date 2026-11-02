@@ -1,0 +1,32 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v7-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "src/pipeline.rs",
+      "local": "13-pipeline.rs",
+      "sha256": "4452f05215aef415e05f4d8afe9346faf6aa5dc8cc38243df2873bf737b50893",
+      "git_blob": "fe062eae45c3b2acf6ff51e04023daf5d22c6841",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 12,
+  "whole_repo_complete": false,
+  "runtime": {
+    "original_tests_passed": 26,
+    "authored_controls_passed": 2,
+    "harness_dir": "docs/research/dedup-500/orchestrator110-pipeline-controls-20261024",
+    "scope": "Unchangedoriginalpipelineprefix,realTokio/regex/thiserrorisolatedcrate;expectedpaniccontrolcountsreproduction,notcorrectnesssuccess."
+  },
+  "findings": [
+    "max_charsisbyteoffset:\u00e9xwith1panicscharboundary,with2returns\u00e9(onecharacter). Bothnativecontrolsconfirm.",
+    "26originaltestsASCIIfocusedtruncatecasespass,noUnicodeboundaryregression.",
+    "TrimStageusesUnicode trimdespiteASCIIdoc;languageheuristiccountscharactersdespitebytesdoc. Sourceonly.",
+    "pipeline.rscomposabletexttransformnotmainorchestrator;mainrequestdedupcallreachabilitystillrequireslib.rsstagesreview.",
+    "Regressionbelongsupstreamreview,nocodeadoptedintoourlibrary."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

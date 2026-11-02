@@ -1,0 +1,48 @@
+[
+  {
+    "name": "memory",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-memory",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "45",
+        "0",
+        "0"
+      ]
+    ]
+  },
+  {
+    "name": "cache",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--lib",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "157",
+        "0",
+        "5"
+      ]
+    ]
+  }
+]

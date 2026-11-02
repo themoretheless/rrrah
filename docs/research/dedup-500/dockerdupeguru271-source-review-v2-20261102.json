@@ -1,0 +1,111 @@
+{
+  "index": 271,
+  "repository": "jlesage/docker-dupeguru",
+  "commit": "702498cfa2108dfab8665be2204e791618d95f62",
+  "tracked_blob_count": 16,
+  "whole_file_reads": [
+    {
+      "path": "rootfs/etc/cont-init.d/55-dupeguru.sh",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/02-55-dupeguru.sh",
+      "sha256": "fba34b3f2dbbfd9c533fef537b0d89ef84a67166286d892704617c18c32c8d9f",
+      "git_blob_sha1": "2e2437c0d9db052ff9774b21057c47d4d584ea81"
+    },
+    {
+      "path": "rootfs/startapp.sh",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/03-startapp.sh",
+      "sha256": "8e7e4061f996b1a1904402eab99dc8b67300feb93464090693e79b8bea7efcc4",
+      "git_blob_sha1": "8ee0b67f5d2b7d0b5c6ffc93e4c4a147fae0a910"
+    },
+    {
+      "path": "rootfs/usr/share/dupeguru/send2trash/__init__.py",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/04-__init__.py",
+      "sha256": "51af469660dcc393bae7ef7f8a8fbdd94fbf7deb4c84504f3eb868eb517e9877",
+      "git_blob_sha1": "1d69e8f39fc16c12c36b3df2f8d0a1d1ea8b2b98"
+    },
+    {
+      "path": "rootfs/usr/share/dupeguru/send2trash/plat_docker.py",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/05-plat_docker.py",
+      "sha256": "afa0b59bf2164cf306b5758c48da9759fe998d9bc3ea458c802d0d61eaf230a4",
+      "git_blob_sha1": "8dd86be80860cf320be03fb44134e2a4935c8cd4"
+    },
+    {
+      "path": "Dockerfile",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/remaining-pinned/Dockerfile",
+      "sha256": "737d41ac3341f88105dd632f00971e497e4f517e9c816af51e5663bb6279e37f",
+      "git_blob_sha1": "89566f12de8d1789da0e8bfa49f9989b71367ec7"
+    },
+    {
+      "path": ".github/workflows/build-image.yml",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/remaining-pinned/.github/workflows/build-image.yml",
+      "sha256": "fc4bfcc331106aab3d7f828c2982caf527f3edb521b18ec8aa6ae67f29db0f4d",
+      "git_blob_sha1": "62bf3fdd6f5c824e56b7049fdd433c8dfdd93595"
+    },
+    {
+      "path": "rootfs/defaults/QtProject.conf",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/remaining-pinned/rootfs/defaults/QtProject.conf",
+      "sha256": "6fd4867a8c54c5a882fd28be972095d76b57b8f7fd2e170ff59c8a8a4fbccd41",
+      "git_blob_sha1": "6c9e14f720cc773738550e9c44a7c9222129707a"
+    },
+    {
+      "path": "rootfs/defaults/dupeGuru.conf",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/remaining-pinned/rootfs/defaults/dupeGuru.conf",
+      "sha256": "d54f1e66afed98385cdf0168814227dae804f29b09ba04439ad83876bc2716cd",
+      "git_blob_sha1": "0b43bdb2a21ad040d7d8f62ebf724215222dd6dc"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/jlesage--docker-dupeguru/remaining-pinned/LICENSE",
+      "sha256": "7b16b6a2ddca0dac1888db017a515467f316aa120adc49d6050d8ada2baf2bc1",
+      "git_blob_sha1": "dfc63080083660cdb2ec1e0e981d4bbfdeddbdef"
+    }
+  ],
+  "structured_assessments": [],
+  "remaining": [
+    {
+      "path": ".github/FUNDING.yml",
+      "bytes": 651
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug-report.yml",
+      "bytes": 3238
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "bytes": 327
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature-request.yml",
+      "bytes": 494
+    },
+    {
+      "path": "DOCKERHUB.md",
+      "bytes": 3506
+    },
+    {
+      "path": "README.md",
+      "bytes": 43234
+    },
+    {
+      "path": "appdefs.yml",
+      "bytes": 28190
+    }
+  ],
+  "upstream_tests_run": false,
+  "targeted_controls": {
+    "method": "Loaded pinned Python module without invoking send2trash or trash_move. Pure string/path helper calls only; no files moved or removed.",
+    "sibling_prefix_is_parent_actual": true,
+    "independent_commonpath_expected": false,
+    "info_contains_parent_traversal": true
+  },
+  "findings": [
+    "Container packaging delegates scanning to installed dupeGuru; these four files implement startup migration and trash behavior, not duplicate detection.",
+    "is_parent uses raw startswith of real paths: /synthetic/database/file is incorrectly considered within /synthetic/data. Pure helper control reproduces relative ../database/file metadata, contrary to the source comment.",
+    "trash_move chooses a name via exists checks, moves first then writes metadata without exclusive reservation, rollback or fsync. Concurrent calls, dangling symlink destinations and metadata-write failure are not qualified. Do not adopt this as a safe duplicate-removal transaction.",
+    "Root registry MIT metadata does not resolve the BSD notices in nested send2trash sources. No source copied into production and no upstream suite run.",
+    "Dockerfile builds dupeGuru 4.3.1 from a tag archive fetched via curl/tar without a recorded content digest, installs distribution dependencies and removes installed tests. GUI base image and icon URL are separate dependencies; this wrapper tree does not pin their complete source content. No container build performed.",
+    "CI declares five Linux architectures and build/push/manifest inspection but no scan accuracy or regression test invocation. Declared build platforms are not evidence of successful execution on each platform.",
+    "Default configuration enables IgnoreSmallFiles with threshold 10, retains hardlink matches and sets FilterHardness=95, MatchSimilar=false and MatchScaled=false. Their engine-specific semantics require underlying dupeGuru interpretation; these defaults cannot establish complete byte-exact scanning.",
+    "Root MIT license fully read; nested send2trash BSD notices remain separate licensing context. Default Qt state points file browser at /storage. No production adoption."
+  ],
+  "previous_audit": "docs/research/dedup-500/dockerdupeguru271-source-review-v1-20261102.json"
+}

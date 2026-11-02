@@ -1,0 +1,575 @@
+{
+  "policy": "Byte-identical JSON report copies replaced with relative symlinks. Historical paths and pinned SHA-256 remain valid. Distinct results, per-run logs, fixtures and external source evidence are preserved. Cumulative registry snapshot retention is documented separately in dedup-500/registry-snapshot-retention.json.",
+  "aliases": [
+    {
+      "path": "docs/research/xcf-half-opacity-negative-2026-10-06.json",
+      "retained": "docs/research/xcf-current-legacy-negative-2026-10-06.json",
+      "sha256": "b57469db043386cc8514ca74c8f27f451954b53879690256bae24ce737c319d9",
+      "bytes": 8169
+    },
+    {
+      "path": "docs/research/dedup-scale-wide-prefix-snapshot.json",
+      "retained": "docs/research/dedup-scale-wide-three-crops.json",
+      "sha256": "095a3402f6cfca36cd8828eaf015f3d865406793f7904be9da010f2d9d4d2cb1",
+      "bytes": 76640
+    },
+    {
+      "path": "docs/research/dedup-anchor-rank-driven-fallback-pixels-prefix-3.json",
+      "retained": "docs/research/dedup-anchor-rank-driven-fallback-real.json",
+      "sha256": "5ee61fd864a1277ad06f3ceebe44ba4b1cd4e982ca25d658b7eca80697a7f314",
+      "bytes": 220951
+    },
+    {
+      "path": "docs/research/dedup-anchor-rotation-reflected-pixels-prefix-8.json",
+      "retained": "docs/research/dedup-anchor-rotation-reflected.json",
+      "sha256": "d2be0c47009172c090967d9a70e87a50d7b2bef80eecd78104cb9f0067ebda4c",
+      "bytes": 1468907
+    },
+    {
+      "path": "docs/research/dedup-scale-wide-prefix-audit.json",
+      "retained": "docs/research/dedup-scale-wide-three-crops-audit.json",
+      "sha256": "48d593cad5209dffd9aa2df47996532777c995a954ccee16e48224a1c8de1c49",
+      "bytes": 1695
+    },
+    {
+      "path": "docs/research/dedup-atomic-pyramid-interim-integrity.json",
+      "retained": "docs/research/dedup-atomic-pyramid-terminal-integrity.json",
+      "sha256": "fff5e3a1ac8dc14630426c69e2c87f2c2f87b157e0493072155ab30c9953b83f",
+      "bytes": 448
+    },
+    {
+      "path": "docs/research/dedup-fallback-known-pairs-checkpoint-1-linux-started.json",
+      "retained": "docs/research/dedup-fallback-known-pairs.json",
+      "sha256": "c1fbfecf553d3eab246e7fa81e295d0b5a753cd04b82f198a614fa1c966ee115",
+      "bytes": 120674
+    },
+    {
+      "path": "docs/research/dedup-recursive-memory-qualification.json",
+      "retained": "docs/research/dedup-recursive-memory-current-state.json",
+      "sha256": "527647fd36ebcff5569eda7b82b577703eff4f9f5ff705a64b9b70d913951c93",
+      "bytes": 24023
+    },
+    {
+      "path": "docs/research/dedup-anchor-reflected-origin-controls-checkpoint-12.json",
+      "retained": "docs/research/dedup-anchor-reflected-origin-controls.json",
+      "sha256": "94744ccdd41b5302f43fc20645892d7b9ce3786c14935f6ce7a9499586d4d27c",
+      "bytes": 159501
+    },
+    {
+      "path": "docs/research/dedup-hpatches-sampled-complete-integrity.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-hpatches-spatial-integrity-complete.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-hpatches-anchored-complete-integrity.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-hpatches-spatial-integrity-strengthened.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-hpatches-baseline-integrity-strengthened.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-hpatches-portfolio-budget-full-integrity.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-hpatches-baseline-portfolio-verifier-compatibility.json",
+      "retained": "docs/research/dedup-hpatches-integrity-complete.json",
+      "sha256": "837396976c7f577fd1be542dd7e1330390359df9c04782eabb414f1eaa2be0b9",
+      "bytes": 295
+    },
+    {
+      "path": "docs/research/dedup-consensus-current-positive-prefix-0229-20261013.json",
+      "retained": "docs/research/dedup-consensus-current-positive-20261013.json",
+      "sha256": "65669e3a55bd6f54dc9a606cbb2fa1a48b7257dee9767df4bbf5f8e790d3f533",
+      "bytes": 122421
+    },
+    {
+      "path": "docs/research/dedup-anchor-fallback-recovered-pixels-prefix-1.json",
+      "retained": "docs/research/dedup-anchor-fallback-recovered-real-prefix-1.json",
+      "sha256": "4c617adf2319f8ce145f13e849c75e8583ad9dc7cba69b95a13d98c94f0e54e9",
+      "bytes": 16451
+    },
+    {
+      "path": "docs/research/dedup-folded-triangulation-hull-fix.json",
+      "retained": "docs/research/dedup-folded-triangulation.json",
+      "sha256": "7e9d62f08bef478ad3d03bdaadcc2c1c712c9340bc676397a54b7ecae892e29c",
+      "bytes": 4494
+    },
+    {
+      "path": "docs/research/dedup-anchor-automatic-full-checkpoint-3.json",
+      "retained": "docs/research/dedup-anchor-automatic-pixels-prefix-3.json",
+      "sha256": "105539c8c7818f4ff9b5f92cfbed95cba863b15462413b7be2334624ac7df58e",
+      "bytes": 215740
+    },
+    {
+      "path": "docs/research/dedup-copydays-nearest-wrong-native-prefix-0059-20261013.json",
+      "retained": "docs/research/dedup-copydays-nearest-wrong-native-20261013.json",
+      "sha256": "cdc2ff272fe6d5a42e5c24880cbe13d5ee0cabd91c49c67333506e5bddd796a6",
+      "bytes": 483303
+    },
+    {
+      "path": "docs/research/dedup-large-tiff-qualification.json",
+      "retained": "docs/research/dedup-large-tiff-current-state.json",
+      "sha256": "9535078fe1d5579f0928d5667b0f4ff1aa9fb54b238fd9b2ca913fa2c38f7d2f",
+      "bytes": 7899
+    },
+    {
+      "path": "docs/research/dedup-raster-png-qualification.json",
+      "retained": "docs/research/dedup-raster-png-current-state.json",
+      "sha256": "f1b67e2cc86a1165502eda9fd68510375e0152dc2c7841d1565ad0770309ddac",
+      "bytes": 4153
+    },
+    {
+      "path": "docs/research/dedup-anchor-geometry-origin-controls-checkpoint-8.json",
+      "retained": "docs/research/dedup-anchor-geometry-origin-pixels-prefix-1.json",
+      "sha256": "f71bb6980ae9090778460ad6b196914d6ded1a2942a55f278a57d68e22800925",
+      "bytes": 156129
+    },
+    {
+      "path": "docs/research/dedup-gradient-masked-lanes-managed-benchmark-v2-audit-20261014.json",
+      "retained": "docs/research/dedup-gradient-masked-lanes-managed-benchmark-audit-20261014.json",
+      "sha256": "5320e09d6c0e4f0757ceff758698fdc03c47df88445c6887acdb4d6c7b880162",
+      "bytes": 3236
+    },
+    {
+      "path": "docs/research/dedup-associated-alpha-qualification.json",
+      "retained": "docs/research/dedup-associated-alpha-current-state.json",
+      "sha256": "4108bcf77adce989a8141f632f64ad879290a61ff5662b811e8f775954df08e3",
+      "bytes": 36009
+    },
+    {
+      "path": "docs/research/dedup-gradient-interpolated-paired-checkpoint.json",
+      "retained": "docs/research/dedup-gradient-interpolated-full-paired-audit.json",
+      "sha256": "ae45afdb84fd9eabd4cb6c23d8dc0337760591f118515f9e06d3ce24f5c7823b",
+      "bytes": 1303
+    },
+    {
+      "path": "docs/research/dedup-anchor-rank-driven-fallback-real-checkpoint-2.json",
+      "retained": "docs/research/dedup-anchor-rank-driven-fallback-pixels-prefix-2.json",
+      "sha256": "58202836613f3ced433cffeba8d55512120677d1f588b80d78ceab6bbf00764a",
+      "bytes": 202382
+    },
+    {
+      "path": "docs/research/dedup-copydays-nearest-wrong-native-resume-prefix-0264-20261013.json",
+      "retained": "docs/research/dedup-copydays-nearest-wrong-native-resume-20261013.json",
+      "sha256": "6ceab3322c8471c37511b9333f5ca42205db2818062e927d6182cbf058b62cde",
+      "bytes": 538107
+    },
+    {
+      "path": "docs/research/dedup-anchor-fallback-recovered-real-prefix-3.json",
+      "retained": "docs/research/dedup-anchor-fallback-recovered-real.json",
+      "sha256": "095f9a5f610b357ff2c128b5542d1ad5b7b70f8d12f65f55bb8530fc7c0db515",
+      "bytes": 92852
+    },
+    {
+      "path": "docs/research/dedup-anchor-fallback-recovered-pixels-prefix-3.json",
+      "retained": "docs/research/dedup-anchor-fallback-recovered-real.json",
+      "sha256": "095f9a5f610b357ff2c128b5542d1ad5b7b70f8d12f65f55bb8530fc7c0db515",
+      "bytes": 92852
+    },
+    {
+      "path": "docs/research/dedup-asymmetric4-original-full-checkpoint-0-legacy-negative-finishing.json",
+      "retained": "docs/research/dedup-asymmetric4-original-full-checkpoint-0-initial.json",
+      "sha256": "1da038beb1c4f9ce94d5a0d0da983f34c483af4138be5bac762ade47220e4abe",
+      "bytes": 192783
+    },
+    {
+      "path": "docs/research/dedup-asymmetric4-original-full-checkpoint-0-reverse-running.json",
+      "retained": "docs/research/dedup-asymmetric4-original-full-checkpoint-0-initial.json",
+      "sha256": "1da038beb1c4f9ce94d5a0d0da983f34c483af4138be5bac762ade47220e4abe",
+      "bytes": 192783
+    },
+    {
+      "path": "docs/research/dedup-consensus-current-negative-prefix-0074-20261013.json",
+      "retained": "docs/research/dedup-consensus-current-negative-20261013.json",
+      "sha256": "66b7e357fb12056a8a1110ea0c9c16e91fb96b8be12f5e5209e252099d4963cc",
+      "bytes": 40833
+    },
+    {
+      "path": "docs/research/dedup-disposal-qualification.json",
+      "retained": "docs/research/dedup-disposal-current-state.json",
+      "sha256": "9fbdddedf3f70b84cd9bb1f48d591164fec92f15c00acaef62f7f94116bd5444",
+      "bytes": 1820
+    },
+    {
+      "path": "docs/research/dedup-raster-memory-qualification.json",
+      "retained": "docs/research/dedup-raster-memory-current-state.json",
+      "sha256": "3a149cd9e4e8357b451106a6a86b3e64a16d365f07a176d7ef7b262d5eacd350",
+      "bytes": 3793
+    },
+    {
+      "path": "docs/research/dedup-anchored-refresh-full-macos-start.json",
+      "retained": "docs/research/dedup-anchored-refresh-full-linux-start.json",
+      "sha256": "6c674ea4acb97a85e49eaa2e134f2631135e13852839d0fd41acc3c129b297d7",
+      "bytes": 28445
+    },
+    {
+      "path": "docs/research/dedup-anchor-rank-driven-fallback-real-checkpoint-1.json",
+      "retained": "docs/research/dedup-anchor-rank-driven-fallback-pixels-prefix-1.json",
+      "sha256": "4ee1e1eddaa4275cc01466a9da04f1e5e419bee9ae95cb0e4739f1634fd7b3cc",
+      "bytes": 30442
+    },
+    {
+      "path": "docs/research/dedup-disc21-bidirectional-noncopy-prefix-0003-audit-20261012-capture.json",
+      "retained": "docs/research/dedup-disc21-bidirectional-noncopy-20261012.json",
+      "sha256": "4508cbf3e9116b19c0d9074f29afd6e4855022e1fa12875d9ed59a3440436119",
+      "bytes": 1377645
+    },
+    {
+      "path": "docs/research/dedup-large-pixel-qualification.json",
+      "retained": "docs/research/dedup-large-pixel-current-state.json",
+      "sha256": "31941c4c61fa1dd24f03dc08e937ea8f1570dd864775eedf6b090b817829cc11",
+      "bytes": 4328
+    },
+    {
+      "path": "docs/research/dedup-alpha-scale-qualification.json",
+      "retained": "docs/research/dedup-alpha-scale-current-state.json",
+      "sha256": "deb485ca459e5bf78695397a23944a1bec6921505bf19161ee44096ae50d4dbc",
+      "bytes": 6346
+    },
+    {
+      "path": "docs/research/dedup-consensus-current-negative-resume-v2-prefix-0075-20261014.json",
+      "retained": "docs/research/dedup-consensus-current-negative-resume-v2-20261014.json",
+      "sha256": "99e4f27249d9a1933977ef0ddf52fd1ea35fda305d3556b35c3e9b40388e6620",
+      "bytes": 41755
+    },
+    {
+      "path": "docs/research/dedup-portfolio-refresh-full-macos-start.json",
+      "retained": "docs/research/dedup-portfolio-refresh-full-linux-start.json",
+      "sha256": "632b5846c9151842d4d972631b9fd93b5811e28e2fc311d50f271b790da1c904",
+      "bytes": 68302
+    },
+    {
+      "path": "docs/research/dedup-anchor-rank-driven-full-checkpoint-147.json",
+      "retained": "docs/research/dedup-anchor-rank-driven-full.json",
+      "sha256": "da2ffe0a614ad6bbda913149734d9b62258e06fbc22d3d317ff129e69a434d34",
+      "bytes": 35405569
+    },
+    {
+      "path": "docs/research/dedup-fingerprint-staging-six-file.json",
+      "retained": "docs/research/dedup-managed-index-six-file.json",
+      "sha256": "810dad8c59d2b59886ce32cdf5d9a4399db81f33d60e11ad76cecd296e97f86b",
+      "bytes": 905
+    },
+    {
+      "path": "docs/research/dedup-managed-pair-counts-six-file.json",
+      "retained": "docs/research/dedup-managed-index-six-file.json",
+      "sha256": "810dad8c59d2b59886ce32cdf5d9a4399db81f33d60e11ad76cecd296e97f86b",
+      "bytes": 905
+    },
+    {
+      "path": "docs/research/dedup-hpatches-baseline-dual-analysis-compatibility.json",
+      "retained": "docs/research/dedup-hpatches-baseline-model-quality.json",
+      "sha256": "07e0f944b8f40fa2e92df43d362d80b9c89ca4fa61d5684e46b39f1a6e007c74",
+      "bytes": 210187
+    },
+    {
+      "path": "docs/research/dedup-common-worker-fixed-candidate-gate-v4-20261015.json",
+      "retained": "docs/research/dedup-durable-pair-v5-20261015/original-v4-report.json",
+      "sha256": "c7793d1d99b9fad3ee8ac08fe2ee45ee30aa074bcf62edf041a364c49f09a2f6",
+      "bytes": 2086
+    },
+    {
+      "path": "docs/research/dedup-six-unique-current-229-terminal-audit.json",
+      "retained": "docs/research/dedup-six-unique-current-229-audit.json",
+      "sha256": "b5b91fe06a8420b8cb00e161414e08ee8123250444a30d673e4c29d91a7c83ad",
+      "bytes": 32051
+    },
+    {
+      "path": "docs/research/dedup-bidirectional-audit-adversaries-inverse-retry.json",
+      "retained": "docs/research/dedup-bidirectional-audit-adversaries.json",
+      "sha256": "c061a82c3d23e2a0ffe25faed933ed6490127ac39d0a1297bbfdabad2167a029",
+      "bytes": 909
+    },
+    {
+      "path": "docs/research/dedup-consensus-native-v2-execution-prefix-0005-20261013.json",
+      "retained": "docs/research/dedup-consensus-native-v2-20261013.json",
+      "sha256": "505efdb2f0fdf570b484568b69b3c17e43053c171be63812b853ab3c78a22d0a",
+      "bytes": 4066
+    },
+    {
+      "path": "docs/research/dedup-hpatches-analysis-partial.json",
+      "retained": "docs/research/dedup-hpatches-analysis-baseline.json",
+      "sha256": "21c19c2bdc8955e49996d3a41bf18bf0e2c163085c9e1fbf42820f6b4531479e",
+      "bytes": 183472
+    },
+    {
+      "path": "docs/research/dedup-common-worker-fixed-candidate-gate-v3-20261015.json",
+      "retained": "docs/research/dedup-common-candidate-v3-interruption-20261015/original-producer-report.json",
+      "sha256": "fc97f48897cb6f5eaddeb5a5018b34fc5dbc121d0b401b8ddb90fc905b8628b7",
+      "bytes": 1854
+    },
+    {
+      "path": "docs/research/dedup-fallback-original-negatives-201303-checkpoint-1-screen-retry.json",
+      "retained": "docs/research/dedup-fallback-original-negatives-201303.json",
+      "sha256": "b8cd19c61b707036bbf35c2f52ece4e590b24eba84dc6d7074279dca93df5ef4",
+      "bytes": 161368
+    },
+    {
+      "path": "docs/research/dedup-bidirectional-collection-229-terminal-recheck.json",
+      "retained": "docs/research/dedup-bidirectional-collection-229-audit.json",
+      "sha256": "70c95f12aa5ae28ef2bf9b9c1a8d8442c6a18c8ea1aaf989bb41d014d7d605d1",
+      "bytes": 26113
+    },
+    {
+      "path": "docs/research/dedup-atomic-interim-integrity.json",
+      "retained": "docs/research/dedup-atomic-terminal-integrity.json",
+      "sha256": "26771682b5b45324ced49b5b1ca8283489e25c9801cfb2d5a0b195786b5bbbea",
+      "bytes": 440
+    },
+    {
+      "path": "docs/research/native-textures-current-workspace-regression-2026-10-16/target-metadata.json",
+      "retained": "docs/research/eac-current-workspace-regression-2026-10-16/target-metadata.json",
+      "sha256": "25050ed64b85c8b94697d49bed4df5d814cf245acc17bf0fc9ee32c12bb71dbf",
+      "bytes": 144405
+    },
+    {
+      "path": "docs/research/jxl-header-admission-2026-10-19/legacy-rgb.json",
+      "retained": "docs/research/jxl-animation-foundation-2026-10-19/rgb-probe.json",
+      "sha256": "7a8aeada7118ba232bb496987594495df5b6bfc31d93617521221e053886ac8e",
+      "bytes": 698
+    },
+    {
+      "path": "docs/research/jxl-header-admission-2026-10-19/legacy-alpha.json",
+      "retained": "docs/research/jxl-animation-foundation-2026-10-19/alpha-probe.json",
+      "sha256": "0a1252a70858cf76cc283b4f386c6cdcb76cae6c3aa69fe9d01b9fa6d0a75ead",
+      "bytes": 698
+    },
+    {
+      "path": "docs/research/tensor-production-adaptive-candidate-2026-10-19/baseline-poppler.json",
+      "retained": "docs/research/ai-output-intent-boundary-2026-10-19/current-poppler.json",
+      "sha256": "185e049b47df7f48b7787836f89282c79577e6590a4a513c811d79e0e3f07863",
+      "bytes": 9758
+    },
+    {
+      "path": "docs/research/dedup-six-unique-current-gain-negatives/201301.jpg.terminal-audit.json",
+      "retained": "docs/research/dedup-six-unique-current-gain-negatives/201301.jpg.audit.json",
+      "sha256": "4a21a16935560bb4f5ea1267fd729a4f6053941c29407436b64f31089c4acfb3",
+      "bytes": 527
+    },
+    {
+      "path": "docs/research/dedup-six-unique-current-gain-negatives/204601.jpg.terminal-audit.json",
+      "retained": "docs/research/dedup-six-unique-current-gain-negatives/204601.jpg.audit.json",
+      "sha256": "a984ab43162fb50c0bb0688f5f4d25aa16b1b7b41f4d385e4b823d23812d4cb5",
+      "bytes": 527
+    },
+    {
+      "path": "docs/research/metal-no-large-cache-diagnostic-2026-10-21/sources.json",
+      "retained": "docs/research/metal-collection-600s-2026-10-21/sources.json",
+      "sha256": "f5b69d97b25a389e3f839537fbce2b608293d607a3e30cc08d1eaf115a1a8bbb",
+      "bytes": 3905
+    },
+    {
+      "path": "docs/research/dedup-bitwarden178-controls-20261014/cli-input_deduplicated.json",
+      "retained": "docs/research/dedup-bitwarden178-controls-20261014/inplace-input.json",
+      "sha256": "41a138b92ed9f9acf7f42c912ac746959cf147bfa7776777ae541d133ef0eb37",
+      "bytes": 306
+    },
+    {
+      "path": "docs/research/dedup-bitwarden178-controls-20261014/empty_folders_removed-output.json",
+      "retained": "docs/research/dedup-bitwarden178-controls-20261014/empty_export-output.json",
+      "sha256": "fbe27e8b6b3d13c14b68922bb21f68ac7845ad9139c07fff0501e3bcec95f8d3",
+      "bytes": 34
+    },
+    {
+      "path": "docs/research/dedup-500/lsh27-cache-recipe-run2-20261016.json",
+      "retained": "docs/research/dedup-500/lsh27-cache-recipe-run1-20261016.json",
+      "sha256": "eea88dea5ce9fcaba6f9b173a5c4c288a0a39031b3d42d59a900ce4b7514f13e",
+      "bytes": 1668
+    },
+    {
+      "path": "docs/research/dedup-500/swift40-native-controls-run2-20261015.json",
+      "retained": "docs/research/dedup-500/swift40-native-controls-run1-20261015.json",
+      "sha256": "d26c792661c08805a357758dabc42aa46bcef587d607d12d87eb56bc000b2655",
+      "bytes": 775
+    },
+    {
+      "path": "docs/research/dedup-500/x9133-shell-controls-run2-20261015.json",
+      "retained": "docs/research/dedup-500/x9133-shell-controls-run1-20261015.json",
+      "sha256": "d7cfdf462c7117f598baeca4fb36c2f9a60189e0e308fa3f1e0ba8924e25f1bd",
+      "bytes": 2341
+    },
+    {
+      "path": "docs/research/dedup-500/image37-metadata-native-run2-20261016.json",
+      "retained": "docs/research/dedup-500/image37-metadata-native-run1-20261016.json",
+      "sha256": "d55ef36ef6978b727e0487fc2f24daf8561df65ef43dfad3c95bbf4edd70982c",
+      "bytes": 1707
+    },
+    {
+      "path": "docs/research/dedup-500/sim18-cli-run2-20261016.json",
+      "retained": "docs/research/dedup-500/sim18-cli-run1-20261016.json",
+      "sha256": "dd2ef5051b027fe4e2098d9ef6aa25e18fda08d0fcf5c03b942320fa9247f714",
+      "bytes": 3663
+    },
+    {
+      "path": "docs/research/dedup-500/image37-selected-native-run2-20261016.json",
+      "retained": "docs/research/dedup-500/image37-selected-native-run1-20261016.json",
+      "sha256": "df5643631ad4ef8f4ccb95af4a85d293b2b4e9dcf30f3b841fd5ab49d054d91d",
+      "bytes": 6218
+    },
+    {
+      "path": "docs/research/dedup-500/video21-native-run2-20261016.json",
+      "retained": "docs/research/dedup-500/video21-native-run1-20261016.json",
+      "sha256": "6e0100741ad37d30cb7979930349859e0d64b6b830cb81ca47036d03995b895e",
+      "bytes": 7225
+    },
+    {
+      "path": "docs/research/dedup-500/lsh27-buffer-run2-20261016.json",
+      "retained": "docs/research/dedup-500/lsh27-buffer-run1-20261016.json",
+      "sha256": "7b46fc1d03a1656f1d3153b4d294c5bbed64494d2abfd9df3cc4aeb280ee8347",
+      "bytes": 2724
+    },
+    {
+      "path": "docs/research/dedup-500/plex24-selected-run2-20261016.json",
+      "retained": "docs/research/dedup-500/plex24-selected-run1-20261016.json",
+      "sha256": "e3c4de92694ebd8448d9e6839a4e30c53a2a4e7ba2619002f57cc7eb81812c76",
+      "bytes": 14562
+    },
+    {
+      "path": "docs/research/dedup-500/sim18-native-run2-20261016.json",
+      "retained": "docs/research/dedup-500/sim18-native-run1-20261016.json",
+      "sha256": "6a63c951f74eec1bb37bfcf9e7715e71c796b7a6b8942ba163fe04580a9b44f9",
+      "bytes": 5964
+    },
+    {
+      "path": "docs/research/dedup-500/dif14-native-run2-20261016.json",
+      "retained": "docs/research/dedup-500/dif14-native-run1-20261016.json",
+      "sha256": "48978547423a4cf841cdca5ac37e313f5347b87aa3323a0e3b95328a88719034",
+      "bytes": 2656
+    },
+    {
+      "path": "docs/research/dedup-500/lsh27-native-run2-20261016.json",
+      "retained": "docs/research/dedup-500/lsh27-native-run1-20261016.json",
+      "sha256": "934ba4b7867ddad7ae3ae4d9b14fd87863a8aa89379c28e049a0e6836b87bed1",
+      "bytes": 4971
+    },
+    {
+      "path": "docs/research/metal-exact-readback-capacity-2026-10-21/sources.json",
+      "retained": "docs/research/metal-exact-readback-600s-2026-10-21/sources.json",
+      "sha256": "4b05f5c122dd0faf3c327e8bbd78b8cbf0038d5ba6e5047b0840ac7247b42d62",
+      "bytes": 3905
+    },
+    {
+      "path": "docs/research/editor-009-011-2026-10-24/raw-warm-manifest.json",
+      "retained": "docs/research/editor-009-011-2026-10-24/raw-cold-manifest.json",
+      "sha256": "d570871a412889eebde8fee3ed7b85bfa8004c3ed41fc8a5a7650b39524aac4b",
+      "bytes": 1012
+    },
+    {
+      "path": "docs/research/editor-009-011-2026-10-24/recovery-v2-after-choice.json",
+      "retained": "docs/research/editor-009-011-2026-10-24/recovery-v2-before-kill.json",
+      "sha256": "169afd36697beaa4ef9f7f18d31d3d91bac6dd0eff0ec949ab6cddaf484d4d1e",
+      "bytes": 2398
+    },
+    {
+      "path": "docs/research/dedup-guard-latch-20261014/candidate-controls.json",
+      "retained": "docs/research/dedup-guard-latch-20261014/baseline-controls.json",
+      "sha256": "485c3f517227e436cbd7b3f912565b725575083b35e8cc2fab0bbe0ffacf62f4",
+      "bytes": 17
+    },
+    {
+      "path": "docs/research/viewer-prefetch-current-2026-10-15/source-execution-start.json",
+      "retained": "docs/research/viewer-prefetch-current-2026-10-15/source-during-build.json",
+      "sha256": "b152439cbd934851763f2843d60dae60117d6a2b2d249f499a9b3fb19958c250",
+      "bytes": 24801
+    },
+    {
+      "path": "docs/research/core-f64-boundary-2026-10-14/result.json",
+      "retained": "docs/research/core-f64-boundary-2026-10-14/plan.json",
+      "sha256": "81feee669d74fd9381925357ffd881d4f3af9e48aaba2723021716977fbc002c",
+      "bytes": 2753
+    },
+    {
+      "path": "docs/research/dual-green-snapshot-2026-10-14/result.json",
+      "retained": "docs/research/dual-green-snapshot-2026-10-14/plan.json",
+      "sha256": "b70e42f37b02e926d98f73a2a88f722bd88e0b5579e87f6531ba0445c807cd36",
+      "bytes": 1246
+    },
+    {
+      "path": "docs/research/main-pixel-budget-2026-10-21/restored-state.json",
+      "retained": "docs/research/sample-work-ledger-2026-10-21/metadata.json",
+      "sha256": "03a379b7d8c930a51e4f755a0f0edaea8c9365f1cec4aea4f3c6f9449c714f78",
+      "bytes": 373
+    },
+    {
+      "path": "docs/research/slow-io-hour-hdr-2026-10-14/smoke/sources.json",
+      "retained": "docs/research/slow-io-hour-hdr-2026-10-14/hour/sources.json",
+      "sha256": "ae77b5350dfa0b56dcbe51e3d9c0e34c36c4c8a812ac544f2d6afe3d5f86ac41",
+      "bytes": 5779
+    },
+    {
+      "path": "docs/research/metal-hour-full-hdr-2026-10-14/hour/sources.json",
+      "retained": "docs/research/metal-hour-full-hdr-2026-10-14/guard-probe/sources.json",
+      "sha256": "85f89d32d6adc772cca0ce6f0fa252c2bf32c13b49d1d0c8aea6f465bdb40e71",
+      "bytes": 5777
+    },
+    {
+      "path": "docs/research/metal-hour-full-hdr-2026-10-14/signal-probe/sources.json",
+      "retained": "docs/research/metal-hour-full-hdr-2026-10-14/guard-probe/sources.json",
+      "sha256": "85f89d32d6adc772cca0ce6f0fa252c2bf32c13b49d1d0c8aea6f465bdb40e71",
+      "bytes": 5777
+    },
+    {
+      "path": "docs/research/metal-hour-full-hdr-2026-10-14/smoke/sources.json",
+      "retained": "docs/research/metal-hour-full-hdr-2026-10-14/guard-probe/sources.json",
+      "sha256": "85f89d32d6adc772cca0ce6f0fa252c2bf32c13b49d1d0c8aea6f465bdb40e71",
+      "bytes": 5777
+    },
+    {
+      "path": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024/package-lock.json",
+      "retained": "docs/research/dedup-500/sipcode120-controls-20261024/package-lock.json",
+      "sha256": "881290f3e6915763a989e4127d6aaccf79a8077dc1a07ffe7ee21ad7684520f3",
+      "bytes": 49628
+    },
+    {
+      "path": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024/package.json",
+      "retained": "docs/research/dedup-500/sipcode120-controls-20261024/package.json",
+      "sha256": "c1e3072340df7d8f0e13471f27d21da08479d2d15f4fac7726bf5a04d495ea22",
+      "bytes": 218
+    },
+    {
+      "path": "docs/research/dedup-500/dupd50-embedded-docs-reproducer-20261019/license.exit.json",
+      "retained": "docs/research/dedup-500/dupd50-embedded-docs-reproducer-20261019/man.exit.json",
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+      "bytes": 17
+    },
+    {
+      "path": "docs/research/dedup-500/watson132-stream-controls-20261024/global.json",
+      "retained": "docs/research/dedup-500/watson132-controls-20261024/global.json",
+      "sha256": "d1bb820bf074027be921b263729d1fba343d34328f0c4b7484d10162287c059e",
+      "bytes": 55
+    },
+    {
+      "path": "docs/research/dedup-500/windirstat3-worker-lifecycle-reproducer-v3-20261019/initial-control-result.json",
+      "retained": "docs/research/dedup-500/windirstat3-worker-lifecycle-reproducer-v3-20261019/result.json",
+      "sha256": "4a39ad4f3c15097c883388e1590d421d9debd78ce04a58f9a9ffbebf9835d955",
+      "bytes": 1502
+    },
+    {
+      "path": "docs/research/dedup-500/sweep63-native-artifacts-20261015/original-demo/hashes-before.json",
+      "retained": "docs/research/dedup-500/sweep63-native-artifacts-20261015/original-demo/hashes-after.json",
+      "sha256": "84d6238ca28a0124c8732fba00e8688a980caf8a9c4147710e0ead9fdee34823",
+      "bytes": 1139
+    }
+  ]
+}

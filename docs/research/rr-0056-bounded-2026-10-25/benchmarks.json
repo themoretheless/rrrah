@@ -1,0 +1,80 @@
+[
+  {
+    "name": "pairs-1",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--lib",
+      "rr56_qualification::ttl_release_outside_lock_pairs",
+      "--",
+      "--ignored",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "binary_sha256": "6a48330f37c2123cc2581b88d0da9d0176a5ae6e2f01d75613700cde11bb4ae1"
+  },
+  {
+    "name": "pairs-2",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--lib",
+      "rr56_qualification::ttl_release_outside_lock_pairs",
+      "--",
+      "--ignored",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "binary_sha256": "a202e3e83d865beade1fef7b6aca16d8958382b9c6148a62381a2a8ca0b2a4b9"
+  },
+  {
+    "name": "scaling",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-cache",
+      "--lib",
+      "expiry_scaling_qualification::real_file_multi_batch_pairs",
+      "--",
+      "--ignored",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "1",
+        "0",
+        "0"
+      ]
+    ],
+    "binary_sha256": "a202e3e83d865beade1fef7b6aca16d8958382b9c6148a62381a2a8ca0b2a4b9"
+  }
+]

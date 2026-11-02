@@ -1,0 +1,23 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "container",
+    "indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges",
+    "--",
+    "--exact"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 425.0620666249888,
+  "test_source_sha256_before": "65c6581ba254a991aea09f3633a8b3036ceb4ca79113b7a01b636bb18176035f",
+  "test_source_sha256_after": "65c6581ba254a991aea09f3633a8b3036ceb4ca79113b7a01b636bb18176035f",
+  "stdout": "\nrunning 1 test\ntest indexed_recursive_memory_refusals_are_attributed_and_retry_recovers_all_edges ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.02s\n\n",
+  "stderr": "warning: hiding a lifetime that's elided elsewhere is confusing\n   --> vendor/jxl-color/src/icc/parse.rs:229:38\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {\n    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here\n    |                                      |\n    |                                      the lifetime is elided here\n    |\n    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing\n    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default\nhelp: use `'_` for type paths\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {\n    |                                                                 ++++\n\nwarning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)\n   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n    Finished `test` profile [optimized + debuginfo] target(s) in 6m 57s\n     Running tests/container.rs (target/debug/deps/container-e984367c8902a665)\n",
+  "scope": "Authored three-animation fixture: explicit and auto low-memory refusal, both retry APIs and memory release; not RSS or all-platform qualification"
+}

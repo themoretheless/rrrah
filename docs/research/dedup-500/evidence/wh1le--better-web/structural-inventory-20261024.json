@@ -1,0 +1,39 @@
+[
+  {
+    "path": "poetry.lock",
+    "method": "full TOML parse and package inventory; not manual lock read or install",
+    "packages": 172,
+    "package_files": 3194
+  },
+  {
+    "path": "tests/fixtures/search_batch_pages.json",
+    "method": "full JSON parse, entry and HTML inventory; embedded HTML not manually read or rendered",
+    "entries": 3,
+    "html_chars": 647167,
+    "unique_paths": 3
+  },
+  {
+    "path": "tests/cassettes/cli_search_batch.yaml",
+    "method": "byte integrity and record marker inventory only; no YAML parser or replay",
+    "interaction_markers": 26
+  },
+  {
+    "path": "assets/demo.gif",
+    "method": "all frames decoded and fingerprinted; six sample frames prepared; full visual review false",
+    "frames": 358,
+    "unique_rgb_frames": 358,
+    "duration_ms": 43000,
+    "dimensions": [
+      581,
+      720
+    ],
+    "sample_indices": [
+      0,
+      71,
+      142,
+      213,
+      284,
+      357
+    ]
+  }
+]

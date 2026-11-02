@@ -1,0 +1,46 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v5-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/lib/path-normalize.test.ts",
+      "local": "paths-tests_lib_path-normalize.test.ts",
+      "git_blob": "d71de820f54936d2416fd75e913e0026c06d42cb",
+      "sha256": "8b14ace4d4ccd3cda0c214aa421f96f87666d6dfbe09f9b880fe0509359765f4",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 12,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest_results": {
+    "numTotalTests": 80,
+    "numPassedTests": 80,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 10,
+  "authored_controls_total_distinct": 14,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-original-tests-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "findings": [
+      "Two distinct physical POSIX names normalize tosamekey;freshhash preventsfalsecontentmatch,but alternatingpaths overwriteeachother andmissunchangedreread",
+      "Two invalid session IDs map tosameunsafe-session cache;second session denied without itsown priorread",
+      "Valid distinct session IDs keep firstreads separate"
+    ],
+    "scope": "All original runtime modules,only import locations changed;real owned filesystem;invalid-session case is malformed-input boundary,not normal UUID session claim;no actual Claude tool execution",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/paths-owned-Gc6ElO"
+  },
+  "findings": [
+    "POSIX physical filenames a/backslashpayload vs a/payload normalize same;different content freshhash avoidsfalseequality but cachethrashes.",
+    "Invalid session IDs share unsafe-session cache;cross-session deny reproduced onlyonmalformed IDs;canonicalUUID sessions positive separation passes.",
+    "Upstream tests explicitly requirebackslashconversion andsharedunsafe-session fallback,so reproduced limitsarecrossplatform/malformed-inputcontract boundaries."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

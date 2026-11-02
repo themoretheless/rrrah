@@ -1,0 +1,64 @@
+{
+  "scope": "Original PromptStore/nudge/config/state modules, actual filesystem only under explicit owned promptsDir; no user prompts/config or live agent system-prompt modification",
+  "authored_controls_run": 4,
+  "observations": [
+    "enabled empty override returns empty string despite nonempty read() comment",
+    "disabled overrides use original built-in default",
+    "existing PromptStore keeps cached empty override after disk edit",
+    {
+      "case": "iteration scan cap freezes count at64 and no longer fires at72 or80 assistant-only messages",
+      "runs": [
+        {
+          "nonUserMessages": 8,
+          "fired": true,
+          "lastIterationNudgeAt": 8
+        },
+        {
+          "nonUserMessages": 16,
+          "fired": true,
+          "lastIterationNudgeAt": 16
+        },
+        {
+          "nonUserMessages": 24,
+          "fired": true,
+          "lastIterationNudgeAt": 24
+        },
+        {
+          "nonUserMessages": 32,
+          "fired": true,
+          "lastIterationNudgeAt": 32
+        },
+        {
+          "nonUserMessages": 40,
+          "fired": true,
+          "lastIterationNudgeAt": 40
+        },
+        {
+          "nonUserMessages": 48,
+          "fired": true,
+          "lastIterationNudgeAt": 48
+        },
+        {
+          "nonUserMessages": 56,
+          "fired": true,
+          "lastIterationNudgeAt": 56
+        },
+        {
+          "nonUserMessages": 64,
+          "fired": true,
+          "lastIterationNudgeAt": 64
+        },
+        {
+          "nonUserMessages": 72,
+          "fired": false,
+          "lastIterationNudgeAt": 64
+        },
+        {
+          "nonUserMessages": 80,
+          "fired": false,
+          "lastIterationNudgeAt": 64
+        }
+      ]
+    }
+  ]
+}

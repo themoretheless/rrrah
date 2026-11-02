@@ -1,0 +1,36 @@
+{
+  "scope": "Current source inspection only;not fresh test execution or universal coverage. No production changes.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "12cb18223d7acea350a0fb396da1a44c0e4840dea8d47a0bdf70b5c44695d9b6"
+  },
+  "findings": [
+    {
+      "external_case": "198 path-key aliases",
+      "local_evidence": "exact.rs Identity::Unix(dev,ino)/Windows(volume,fileindex),Report.aliases separate from Group",
+      "status": "Implementation contract differs appropriately;fresh runtime verification pending."
+    },
+    {
+      "external_case": "198 skips zero-sized stored rows",
+      "local_evidence": "exact_files.rs copies_empty_files_and_equal_size_negatives asserts separate zero-byte group",
+      "status": "Existing regression source inspected;not rerun."
+    },
+    {
+      "external_case": "198 cancelled scan reports done total",
+      "local_evidence": "Report.cancelled and complete false;exact_files.rs cancellation_during_full_hash_is_bounded asserts empty groups and bounded bytes",
+      "status": "Existing source/regression contract inspected;not rerun."
+    }
+  ],
+  "next": "Continue198 review;other platforms and whole-library requirements remain.",
+  "goal_complete": false,
+  "fresh_verification": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/local-exact198-target cargo +1.98.1 test -p rrrah-dedup --test exact_files --offline --jobs2",
+    "exit_code": 0,
+    "passed": 44,
+    "failed": 0,
+    "ignored": 0,
+    "log": "docs/research/dedup-500/telegram198-controls-20261024/local-exact-tests-log.txt",
+    "scope": "Current macOS exact_files integration suite only;no universal/platform/runtime/performance completion claim."
+  },
+  "source_unchanged_since_mapping": true
+}

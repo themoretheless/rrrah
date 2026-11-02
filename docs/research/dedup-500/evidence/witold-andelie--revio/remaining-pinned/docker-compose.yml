@@ -1,0 +1,94 @@
+# revio + Ollama — a self-contained review stack where no code leaves the box.
+#
+#   docker compose run --rm revio audit .               # full-repo audit
+#   docker compose run --rm revio review --commit HEAD  # review the last commit
+#   docker compose run --rm revio                       # interactive REPL
+#
+# The first invocation builds the image and pulls the model (a few GB, once).
+# Everything after that is offline.
+#
+# Tunables — put them in a .env file next to this one, Compose reads it:
+#   REVIO_MODEL=qwen2.5:7b     model Ollama serves (must support tool calls)
+#   REVIO_TARGET=.             host path to the repo under review
+#
+# To use a cloud provider instead of Ollama, skip Compose and see the
+# `docker run` example at the top of the Dockerfile.
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    environment:
+      # Ollama's default context is 4096 tokens — far too small once the
+      # system prompt, tool schemas and tool results are in the window, and
+      # it truncates silently rather than erroring. This cannot be set from
+      # the client side over the OpenAI-compatible API, only here.
+      OLLAMA_CONTEXT_LENGTH: "32768"
+    volumes:
+      - ollama-models:/root/.ollama
+    ports:
+      # Only so you can talk to the same model from the host. Drop this line
+      # if you don't need it — revio reaches Ollama over the compose network.
+      - "127.0.0.1:11434:11434"
+    healthcheck:
+      # `ollama list` needs the server up; using the bundled binary avoids
+      # assuming curl exists in the image.
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+      start_period: 10s
+    restart: unless-stopped
+
+  # One-shot: make sure the model is present before revio tries to use it.
+  # Idempotent — a no-op once the model is in the volume.
+  ollama-pull:
+    image: ollama/ollama:latest
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["ollama", "pull"]
+    command: ["${REVIO_MODEL:-qwen2.5:7b}"]
+    restart: "no"
+
+  revio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Keeps `docker compose up` to just the Ollama half. `docker compose run`
+    # enables a service's own profile automatically, so the commands at the
+    # top of this file work unchanged.
+    profiles: ["cli"]
+    depends_on:
+      ollama-pull:
+        condition: service_completed_successfully
+    environment:
+      # No config.toml in the image — this is the whole configuration.
+      # `revio config show` inside the container prints the merged result.
+      REVIO_LLM__PROVIDER: openai_compat
+      # The /v1 suffix is required: that is where Ollama serves the
+      # OpenAI-compatible API. A bare :11434 404s on every call.
+      REVIO_LLM__API_URL: http://ollama:11434/v1
+      REVIO_LLM__MODEL: ${REVIO_MODEL:-qwen2.5:7b}
+      # No API key on purpose — local servers don't check one.
+      REVIO_LLM__DISABLE_THINKING: "true"
+      # Local models are slower per call; a lower budget keeps a run bounded.
+      REVIO_AGENT__MAX_TOOL_CALLS: "12"
+    volumes:
+      # The repo under review. Read-write so `--fix` can apply patches.
+      - ${REVIO_TARGET:-.}:/work
+      # Fix-undo history and LangGraph checkpoints, so `revio fix undo` and
+      # resumable runs survive `--rm`.
+      - revio-cache:/home/revio/.cache/revio
+    working_dir: /work
+    # `--fix` and the REPL both prompt.
+    stdin_open: true
+    tty: true
+    # Uncomment so files written by --fix are owned by you rather than by the
+    # container's `revio` user. The named cache volume needs a chown to match.
+    # user: "${UID:-1000}:${GID:-1000}"
+
+volumes:
+  ollama-models:
+  revio-cache:

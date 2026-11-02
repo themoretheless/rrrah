@@ -1,0 +1,37 @@
+{
+  "repository": "nmante/image_deduplication",
+  "commit": "7e5d1c9687f33a7a5184fc205987024670309850",
+  "whole_files_read": [
+    {
+      "path": "dedup/exact_duplicate.py",
+      "local": "02-exact_duplicate.py",
+      "git_blob": "144b89b58343438f5f4a9a580ebe34269d8d3b72",
+      "sha256": "d658140f045ce19d28961428f95192ba97d880e89bac5f6f85b7b6e80b412374",
+      "whole_text_reviewed": true
+    },
+    {
+      "path": "dedup/near_duplicate.py",
+      "local": "03-near_duplicate.py",
+      "git_blob": "fc47bd6a7c9a8402ee2aba1e6b533ea9ff04de12",
+      "sha256": "6527dc3dc97989f9d20fdfd3d90048ba61ed62d6b22d3b86aa0b4303e7d81be4",
+      "whole_text_reviewed": true
+    }
+  ],
+  "whole_files_read_total": 2,
+  "tracked_blobs": 61,
+  "whole_repo_complete": false,
+  "original_upstream_tests_run": false,
+  "production_adoption": false,
+  "native_phash_asan": "deferred",
+  "review_scope_detail": "5 authored controls;original Python2/image pipeline unqualified",
+  "authored_controls_passed": 5,
+  "scope": "Original near-duplicate grouping methods AST unchanged with real Simhash2.1.2;features deliberately supplied as integer fingerprints;no Pillow feature extraction or actual image matching.Original exact module tested on Python3.14 compatibility only,not original Python2 runtime.",
+  "findings": [
+    "Chain fingerprints0,1,3 at k1 produce2 groups in A/B/C order but1 group in B/A/C order.",
+    "Equal fingerprint positive groups both records.",
+    "Merge assigns misspelled image_dicionary on smaller argument while image_dictionary remains stale.",
+    "Python3 text path raises TypeError hashing str.",
+    "Python3 PNGheader bytes fail UTF8 text decode."
+  ],
+  "controls": "image152-controls-20261024/results.json"
+}

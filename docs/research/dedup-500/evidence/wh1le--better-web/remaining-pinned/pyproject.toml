@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "better-web"
+version = "0.1.0"
+description = "Terminal-first web research: search, scrape, extract, digest for LLM"
+authors = ["wh1le"]
+license = "MIT"
+packages = [{include = "lib"}]
+include = ["data/**/*", "config.yaml"]
+
+[tool.poetry.scripts]
+bw = "lib.cli:app"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+crawl4ai = "*"
+playwright = "1.56.0"
+trafilatura = "*"
+click = "*"
+rich = "^14.3.3"
+textstat = "*"
+thinkst-zippy = "*"
+tranco = "^0.8.1"
+tldextract = "^5.3.1"
+datasketch = "^1.9.0"
+sentence-transformers = "^5.3.0"
+readability-lxml = "^0.8.4.1"
+markdownify = "^1.2.2"
+youtube-transcript-api = "*"
+yt-dlp = "*"
+faster-whisper = "*"
+dynaconf = "^3.2.13"
+pyyaml = "^6.0.3"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "*"
+mypy = "*"
+radon = "^6.0.1"
+pylint = "^4.0.5"
+bandit = "^1.9.4"
+pytest = "^9.0.3"
+pytest-mock = "^3.15.1"
+vcrpy = "^8.1.1"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "SIM", "TCH"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning:tranco",
+    "ignore::DeprecationWarning:tldextract",
+    "ignore:.*registered_domain.*:DeprecationWarning",
+    "ignore:.*multi-threaded.*:DeprecationWarning",
+    "ignore::ResourceWarning",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

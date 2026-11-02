@@ -1,0 +1,9 @@
+{
+  "controls_passed": 3,
+  "scope": "Original perceptualHash/gray/downsample/hamming/pixelKey function source unchanged;native Node crypto;owned RGBA buffers only;no PSD parser,PNG encoder,Cocos editor or asset writes",
+  "findings": [
+    "Black and white opaque flat tiles have equal aHash/dHash while decodedpixel hash differs;candidate fingerprints cannot establish equality.",
+    "Dimensions are included in decodedpixel key.",
+    "pixelKey accepts truncated1byte buffer for8x8 dimensions;invalid primitive boundary only,PNG caller data not qualified."
+  ]
+}

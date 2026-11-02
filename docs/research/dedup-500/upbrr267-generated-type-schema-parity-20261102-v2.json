@@ -1,0 +1,34 @@
+{
+  "pins": {
+    "internal/webserver/openapi/release-workflow-v1.json": {
+      "sha256": "3836bda3f0339e7646ce591e4da7e235bdf9705a1c17c01a4ff15adf7dc91c11",
+      "git_blob_sha1": "8a758bced57c4cbd9fb96e2c002dc02f2596f39f",
+      "bytes": 389251
+    },
+    "webui/src/api/generated/release-workflow.ts": {
+      "sha256": "a88c059fdb83a239bb2f0d66c0cd4a40b73bb312abf4a9c9ed135b505274948b",
+      "git_blob_sha1": "7d96e6911fa3ca6bb1befa2e6efc91c5b99e093c",
+      "bytes": 74707
+    }
+  },
+  "schema_count": 360,
+  "declaration_count": 360,
+  "missing_declarations": [],
+  "extra_declarations": [],
+  "method": "Independent recursive schema projection to TS readonly types; token comparison preserves quoted strings and ignores formatting. Every schema declaration compared, including property optionality, arrays, records, references, enums, nullable unions and unconstrained unknown. This is structural assessment, not full manual read, TypeScript compiler validation, runtime JSON validation or server execution.",
+  "mismatches": [
+    {
+      "name": "ContinueReleaseWorkflowRequest",
+      "expected": "Readonly<{answers?: readonly RequiredActionAnswer[];approval?: UploadApproval | null;authority?: WorkflowAuthority | null;goal: WorkflowGoal;idempotencyKey: string;intent: WorkflowIntent;trackerApproval?: TrackerApproval | null;}>",
+      "actual": "Readonly<{\n  answers?: readonly RequiredActionAnswer[];\n  /** @deprecated */\n  approval?: UploadApproval | null;\n  authority?: WorkflowAuthority | null;\n  goal: WorkflowGoal;\n  idempotencyKey: string;\n  intent: WorkflowIntent;\n  trackerApproval?: TrackerApproval | null;\n}>"
+    },
+    {
+      "name": "ReleaseWorkflowUploadFeedbackResponse",
+      "expected": "Readonly<{duplicateReview?: ReleaseWorkflowUploadDuplicateReview | null;kind: ReleaseWorkflowUploadFeedbackKind;metadataSelection?: ReleaseWorkflowUploadMetadataSelection | null;playlistSelection?: ReleaseWorkflowUploadPlaylistSelection | null;questionnaire?: ReleaseWorkflowUploadQuestionnaire | null;reconciliation?: ReleaseWorkflowUploadReconciliation | null;reprepare?: ReleaseWorkflowUploadReprepare | null;rescanConfirmation?: ReleaseWorkflowUploadConfirmation | null;ruleAuthorization?: ReleaseWorkflowUploadConfirmation | null;trackerApproval?: ReleaseWorkflowUploadTrackerApproval | null;trackerAuthentication?: ReleaseWorkflowUploadTrackerAuthentication | null;trackerInput?: ReleaseWorkflowUploadTrackerInput | null;trackerPreparation?: ReleaseWorkflowUploadConfirmation | null;twoFactor?: ReleaseWorkflowUploadTwoFactor | null;uploadApproval?: ReleaseWorkflowUploadApproval | null;}>",
+      "actual": "Readonly<{\n  duplicateReview?: ReleaseWorkflowUploadDuplicateReview | null;\n  kind: ReleaseWorkflowUploadFeedbackKind;\n  metadataSelection?: ReleaseWorkflowUploadMetadataSelection | null;\n  playlistSelection?: ReleaseWorkflowUploadPlaylistSelection | null;\n  questionnaire?: ReleaseWorkflowUploadQuestionnaire | null;\n  reconciliation?: ReleaseWorkflowUploadReconciliation | null;\n  reprepare?: ReleaseWorkflowUploadReprepare | null;\n  rescanConfirmation?: ReleaseWorkflowUploadConfirmation | null;\n  ruleAuthorization?: ReleaseWorkflowUploadConfirmation | null;\n  trackerApproval?: ReleaseWorkflowUploadTrackerApproval | null;\n  trackerAuthentication?: ReleaseWorkflowUploadTrackerAuthentication | null;\n  trackerInput?: ReleaseWorkflowUploadTrackerInput | null;\n  trackerPreparation?: ReleaseWorkflowUploadConfirmation | null;\n  twoFactor?: ReleaseWorkflowUploadTwoFactor | null;\n  /** @deprecated */\n  uploadApproval?: ReleaseWorkflowUploadApproval | null;\n}>"
+    }
+  ],
+  "declaration_parser": "Anchored exports through semicolon followed by blank line or EOF; complete object declarations retained, separate deprecation comments excluded.",
+  "supersedes_invalid_checker_output": "docs/research/dedup-500/upbrr267-generated-type-schema-parity-20261102-v1.json",
+  "checker_note": "Two remaining raw token differences are property deprecation comments, not type drift. v3 strips only exact generated deprecation annotations and records them."
+}

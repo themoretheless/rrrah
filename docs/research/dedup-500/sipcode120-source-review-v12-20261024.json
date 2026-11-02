@@ -1,0 +1,103 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v11-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/benchmark/types.ts",
+      "local": "bench-src_modules_benchmark_types.ts",
+      "git_blob": "216f72aa40a4ea230a6a4a2be1dd3bc4b9130747",
+      "sha256": "886b5f2279ab26db43d612929a08ca0c0b23d73088c81f85c74ea83338480fb7",
+      "whole_text_read": true
+    },
+    {
+      "path": "package.json",
+      "local": "bench-package.json",
+      "git_blob": "71e8be143714e02eae57b85743494779ac01168d",
+      "sha256": "7f6963843b53503f3427e467633587fa3dd0246f6c16adfa796b0854a32645ca",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/benchmark/render-format.test.ts",
+      "local": "bench-tests_modules_benchmark_render-format.test.ts",
+      "git_blob": "d1fa7a879e76f1f585584e640540d963ada0f159",
+      "sha256": "c40556aede0cfe064691d52cc2efd212175575ae07c1a69ad4ff83857bb3a457",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 32,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 124,
+  "new_original_tests_run": 0,
+  "authored_upstream_controls_total_distinct": 28,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "boundary": {
+      "schemaVersion": "sipcode-benchmark-compare/1",
+      "before": {
+        "label": "before",
+        "medianSavingsPct": 50
+      },
+      "after": {
+        "label": "after",
+        "medianSavingsPct": 48.04
+      },
+      "deltaPct": -2,
+      "regressed": true,
+      "perTask": [
+        {
+          "taskId": "same",
+          "beforePct": 50,
+          "afterPct": 48,
+          "deltaPct": -2
+        }
+      ]
+    },
+    "disjoint": {
+      "schemaVersion": "sipcode-benchmark-compare/1",
+      "before": {
+        "label": "before",
+        "medianSavingsPct": 50
+      },
+      "after": {
+        "label": "after",
+        "medianSavingsPct": 80
+      },
+      "deltaPct": 30,
+      "regressed": false,
+      "perTask": [
+        {
+          "taskId": "new",
+          "beforePct": 0,
+          "afterPct": 80,
+          "deltaPct": 80
+        },
+        {
+          "taskId": "old",
+          "beforePct": 50,
+          "afterPct": 0,
+          "deltaPct": -50
+        }
+      ]
+    },
+    "findings": [
+      "Raw1.96pp drop roundedto2pp then classifiedregression",
+      "Disjointtasksets accepted,missingtaskside replacedwith0;summarymedian30ppgain acceptedwithoutcorpusmatch",
+      "Same-task3ppdrop positive regression control"
+    ],
+    "scope": "Original unchanged compareRuns renamedmts;owned synthetic resultobjects,norealbenchmark/model/performanceclaim"
+  },
+  "findings": [
+    "Compare rounds rawdelta before2ppthreshold;1.96ppdrop yieldsregressed=true.",
+    "Compare acceptsdisjointtasksets withzero missing sidesandcompares suppliedsummaries withoutmatchedcorpusguard;not sufficientoptimizationevidence alone.",
+    "Original benchmarkrender-format suite buildsresultfrompre-capturedfixturetranscripts;file read,notexecuted.",
+    "Package1.6.20 declaresvitest^2.0.0,node>=20. Prior124originalcasesexecutedon isolatedVitest4.1.0/Node22.23.4,not declarednativeenvironment;validationboundary explicit."
+  ],
+  "upstream_runtime_qualification": "124pass onVitest4.1.0only;declaredVitest2 notyetqualified;fullpackage/build/nativeAST/browserunqualified",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

@@ -2,9 +2,9 @@
   "index": 165,
   "repository": "SloMR/jellyfin-plugin-dedupe-continue-watching",
   "commit": "373cab0f7602e2d24047bed641114835e140abc5",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All16 pinned tracked blobs inspected:15 text files wholly read,1 PNG visually viewed. Five prior authored native .NET10 middleware controls; no full Jellyfin/.NET8 server/client test. External links/releases/badges not inspected.",
   "decision": "reject-domain",
-  "finding": "Jellyfin continue-watching middleware groups series/episodes; no media content equality.",
+  "finding": "Original complete middleware: downstream handler writes owned bytes then throws; InvokeAsync swallows exception and returns zero bytes. DeduplicateMovies=true and MaxEpisodesPerSeries=2 retains two same-Id movies: common group cap applies to movie records too. Latest episode selection and surviving input ordering pass. Unrelated request path and malformed JSON preserve owned input bytes. Grouping by SeriesId or movie Id is metadata presentation policy, not media-content equality.",
   "available_source_evidence": [
     {
       "path": "Jellyfin.Plugin.ContinueWatchingDedup/Middleware/DedupMiddleware.cs",
@@ -45,6 +45,16 @@
       "lines": 40,
       "source": true,
       "test": false
+    },
+    {
+      "path": "Jellyfin.Plugin.ContinueWatchingDedup/Configuration/PluginConfiguration.cs",
+      "local": "06-PluginConfiguration.cs",
+      "url": "https://github.com/SloMR/jellyfin-plugin-dedupe-continue-watching/blob/373cab0f7602e2d24047bed641114835e140abc5/Jellyfin.Plugin.ContinueWatchingDedup/Configuration/PluginConfiguration.cs",
+      "sha256": "7c9bd2949571452d91f9cc0147403b97be197dca98b6c62acc727b6205908592",
+      "truncated": false,
+      "lines": 26,
+      "source": true,
+      "test": false
     }
   ],
   "license_metadata": "GPL-3.0",
@@ -74,5 +84,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/jellyfin165-source-review-v1-20261024.json",
+  "full_repository_read": true,
+  "authored_controls_run": 5,
+  "complete_source_review": "docs/research/dedup-500/jellyfin165-complete-source-review-20261024.json"
 }

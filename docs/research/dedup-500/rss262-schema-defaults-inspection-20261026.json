@@ -1,0 +1,127 @@
+{
+  "sha256": "451d8e1dceefc7d634c0fbc22f49b4271b4b1a1dbf9473a891b48d38cc9d1de4",
+  "git_blob_sha1": "c62353a7d7e8ec1077ca5d8c47575a8e32eff384",
+  "numeric_fields": [
+    {
+      "path": "feeds.templates.rss_feed.items.max_new_items",
+      "default": 0,
+      "constraint_keys": []
+    },
+    {
+      "path": "feeds.templates.rss_feed.items.timeout",
+      "default": 10,
+      "constraint_keys": []
+    },
+    {
+      "path": "feeds.templates.twitter_feed.items.max_new_items",
+      "default": 1,
+      "constraint_keys": []
+    },
+    {
+      "path": "feeds.templates.twitter_feed.items.timeout",
+      "default": 30,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.interval_seconds",
+      "default": 300,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.batch_size",
+      "default": 10,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.dedup_ttl_seconds",
+      "default": 0,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.semantic_dedup_ttl_seconds",
+      "default": 86400,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.semantic_dedup_max_candidates",
+      "default": 20,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.semantic_dedup_min_confidence",
+      "default": 0.82,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.aggregate_max_items",
+      "default": 12,
+      "constraint_keys": []
+    },
+    {
+      "path": "jobs.templates.job.items.aggregate_llm_timeout_seconds",
+      "default": 0,
+      "constraint_keys": []
+    },
+    {
+      "path": "daily_digests.templates.daily_digest.items.window_hours",
+      "default": 24,
+      "constraint_keys": []
+    },
+    {
+      "path": "daily_digests.templates.daily_digest.items.max_items",
+      "default": 20,
+      "constraint_keys": []
+    },
+    {
+      "path": "daily_digests.templates.daily_digest.items.llm_timeout_seconds",
+      "default": 0,
+      "constraint_keys": []
+    },
+    {
+      "path": "daily_digests.templates.daily_digest.items.semantic_merge_max_candidates",
+      "default": 20,
+      "constraint_keys": []
+    },
+    {
+      "path": "daily_digests.templates.daily_digest.items.semantic_merge_min_confidence",
+      "default": 0.82,
+      "constraint_keys": []
+    },
+    {
+      "path": "translation.items.llm_timeout_seconds",
+      "default": 15,
+      "constraint_keys": []
+    },
+    {
+      "path": "translation.items.max_input_chars",
+      "default": 2000,
+      "constraint_keys": []
+    },
+    {
+      "path": "translation.items.google_translate_timeout_seconds",
+      "default": 15,
+      "constraint_keys": []
+    },
+    {
+      "path": "translation.items.github_models_timeout_seconds",
+      "default": 15,
+      "constraint_keys": []
+    },
+    {
+      "path": "dedup_ttl_seconds",
+      "default": 604800,
+      "constraint_keys": []
+    },
+    {
+      "path": "startup_delay_seconds",
+      "default": 45,
+      "constraint_keys": []
+    },
+    {
+      "path": "summary_max_chars",
+      "default": 280,
+      "constraint_keys": []
+    }
+  ],
+  "scope": "Whole static schema read and parsed; no framework form behavior verified."
+}

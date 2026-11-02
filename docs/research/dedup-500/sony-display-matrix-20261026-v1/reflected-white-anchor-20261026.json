@@ -1,0 +1,25 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test white_anchored",
+  "passed": 6,
+  "failed": 0,
+  "scope": "Reflected white-anchored display primitive: analytic forward/reverse gains, full pixel agreement, strict difference, alpha edit visible in both directions, cancellation every callback and stable retry.",
+  "original_failure": "Authored test incorrectly used zero translation for horizontal reflection. Reflected coordinate is -x, so 5-column fixture needs translation x=4. First run correctly refused insufficient overlap; fixture corrected.",
+  "logs": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-reflected-white-anchor-original-fixture-failure-20261026.log",
+      "sha256": "1085d3df21d51536d381e53675e0fe5787fa2a840dfb3839a42c3919cec4d068"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-reflected-white-anchor-20261026.log",
+      "sha256": "d4ec6cdd0c817bfb5fe18577317031f165260a906dbad22e8bd7a7ffdb0f044c"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "3c559a9079bfb596eaf8947add76560ac283aad5dbee86accf1670e71f5cf9a6",
+    "crates/rrrah-dedup/tests/white_anchored.rs": "db2a2092aba3454dd34abb7b823f0c683373dba5516866c301e8859c9db983b3"
+  },
+  "limitations": [
+    "Primitive only: not yet connected to collection mode.",
+    "Finite analytic fixture is not broad precision qualification."
+  ]
+}

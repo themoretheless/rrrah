@@ -1,0 +1,45 @@
+{
+  "scope": "Original ten entity-bridges callbacks; original helpers without environment/client initialization; Node VM TypeScript transpilation and assert adapter; fake DB client. No Deno typechecking/full suite/network/DB.",
+  "outcomes": [
+    {
+      "name": "storeEntityBridges skips when thought has no entities",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges queries thought_entities then inserts bridges",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges includes brain_id in RPC calls",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges swallows errors (best-effort)",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges computes Newman-IDF similarity correctly",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges orders UUIDs lexicographically (source < target)",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges skips when entities exist but no overlaps",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges uses ignoreDuplicates to preserve existing edges",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges handles entity lookup RPC error gracefully",
+      "passed": true
+    },
+    {
+      "name": "storeEntityBridges handles overlap RPC error gracefully",
+      "passed": true
+    }
+  ]
+}

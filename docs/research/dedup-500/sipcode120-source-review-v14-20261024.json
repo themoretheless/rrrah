@@ -1,0 +1,74 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v13-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/manifest/render.ts",
+      "local": "render-src_modules_manifest_render.ts",
+      "git_blob": "a2aa1ed43afe69cf36977615b825646004b67158",
+      "sha256": "c82ca251e49790d2e4a50e628c96819ff16d81b4fb3fae13aadf62d69170a96f",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/manifest/budget.ts",
+      "local": "render-src_modules_manifest_budget.ts",
+      "git_blob": "e3c9dbdb411346198cc1516f9f2eb577d8464e99",
+      "sha256": "f04fb86bc54fc14359b730e01f964432f732829039db80b6436989a2813d4fe7",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/tokenizer.ts",
+      "local": "render-src_lib_tokenizer.ts",
+      "git_blob": "5a2a901730de0c313984b37cec6f201ee6c40135",
+      "sha256": "3051d874792b5b13aa76e5a453f66faf914ad40fe27126e9edcee300eecacda6",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/render.test.ts",
+      "local": "render-tests_modules_manifest_render.test.ts",
+      "git_blob": "66894138676b6b3c952fb4e2978cff712831d80b",
+      "sha256": "4393057542ea3b7bcce7bd3ec9afb5b01a13c922194068d51d05b950d56b0aac",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/budget.test.ts",
+      "local": "render-tests_modules_manifest_budget.test.ts",
+      "git_blob": "c98b1b268cae7e7cc7488d4b639795cde95feecf",
+      "sha256": "72d988de2a43064983db0f40bee77f9a9e9df416fccc5bb24ba00760673514e2",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 38,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 137,
+    "numPassedTests": 137,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 13,
+  "authored_upstream_controls_total_distinct": 31,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "findings": [
+      "Inputissues omitted fromrenderedmanifest",
+      "UnsupportedRustfile absent fromtree despitefiles-scanned1",
+      "Tightening warning returnedoutofband,renderedsummary omitsfiledetail butretainsSingle source of truthlabel"
+    ],
+    "scope": "Original renderer/budget/tokenizer/result/errors withruntimeimportlocationschanged;ownedsyntheticinputs;not fullcommand or exactduplicateAPI"
+  },
+  "findings": [
+    "Rendererdoesnotincludeinputissues;syntheticinputerror leavesidenticaloutput.",
+    "Other-language filtering deliberatelyomitsRustsourcewhilecountingitinscanned;notappropriatecompletefileinventory.",
+    "Budgettighten surfaceswarnings inreturnvalue,notinlineinrenderedcontent;runManifest previoussourcewriteswarningsstderr;do notclaimallwarningslost.",
+    "ApproxTokenCount isMath.ceilUTF16length/4 heuristic,not realtokenizer or memoryboundproof."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

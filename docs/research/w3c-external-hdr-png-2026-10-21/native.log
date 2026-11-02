@@ -1,0 +1,28 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.81s
+     Running tests/w3c_png_conformance.rs (target/debug/deps/w3c_png_conformance-853b933ca5b87d1a)
+
+running 1 test
+PNG-HLG-FancyColorBars-16bit-CICP-FR.png: all 2073600 RGB16 pixels exact against FFmpeg; CICP retained; explicit display policy accepted (not independent float oracle); final root=0
+PNG-HLG-FancyColorBars-16bit-CICP-NR.png: all 2073600 RGB16 pixels exact against FFmpeg; CICP retained; explicit display policy refused narrow HLG; final root=0
+PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png: all 2073600 RGB16 pixels exact against FFmpeg; CICP retained; explicit display policy accepted (not independent float oracle); final root=0
+test external_w3c_hdr_png_native_codes_and_explicit_policy ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+

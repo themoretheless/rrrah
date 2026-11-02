@@ -1,0 +1,974 @@
+{
+  "index": 238,
+  "repository": "kanhaoning/NeatMem",
+  "commit": "a8d173d41b7cbd04d69de937d675dfd0e2141664",
+  "tracked_blob_count": 217,
+  "whole_file_reads": [
+    {
+      "path": "neatmem/utils/text_parsing.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/utils/text_parsing.py",
+      "sha256": "aba678b443b962e1006b06aa83308174aa02d52b601b8668d0c29228d5a3f7ba",
+      "git_blob_sha1": "2507a965e03232f257720e1455700d9669c3771c"
+    },
+    {
+      "path": "neatmem/utils/think_tags.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/utils/think_tags.py",
+      "sha256": "c3d064b1a09a879fcda3b6a04fe87ad58db2a053cfa109972f69e90d000dee88",
+      "git_blob_sha1": "5d77f7dd41e88845f3881df3ba8f050c2d504fb3"
+    },
+    {
+      "path": "tests/test_dedup_parsers.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/tests/test_dedup_parsers.py",
+      "sha256": "5cd7e0d5191d1a39105cbe710e5b79b9fd737f1293866ea31011cce13bd92428",
+      "git_blob_sha1": "5047c0200783fb9e199c90f1e8d8085a3e487d53"
+    },
+    {
+      "path": "tests/test_think_tags.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/tests/test_think_tags.py",
+      "sha256": "2192548c874f0980f560ae66370db5517ebe4af8cb6ed7a163d9647fd0c75cbf",
+      "git_blob_sha1": "062ef276431814f2861b2f4632fc7a830e3e734d"
+    },
+    {
+      "path": "neatmem/prompts/examples/dedup_pointwise_en.txt",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/prompts/examples/dedup_pointwise_en.txt",
+      "sha256": "93f0c8fddbb4d4139ae600a248195181c2634457a677c1df3176ddfd469415dd",
+      "git_blob_sha1": "6351e12df51657905a158afa2348a55db5349eee"
+    },
+    {
+      "path": "neatmem/prompts/examples/dedup_listwise_en.txt",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/prompts/examples/dedup_listwise_en.txt",
+      "sha256": "9f9bc4fc9adc4017050ea9fdd3f23504cc3020544f1a205bd6ca011b74bc9d71",
+      "git_blob_sha1": "76d6e5445a7e2ad31edac45743a0ea0c388394a8"
+    },
+    {
+      "path": "neatmem/prompts/examples/dedup_listwise_multitarget_en.txt",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/prompts/examples/dedup_listwise_multitarget_en.txt",
+      "sha256": "1b7d45b2d824d10ca22bae0e8e1f0d8ffcc79e22dcfcb83cf8cf43907b51a481",
+      "git_blob_sha1": "dba4a3648cd0ab188035952bcc14233bfc9459c6"
+    },
+    {
+      "path": "neatmem/prompts/examples/dedup_listwise_strict_en.txt",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/prompts/examples/dedup_listwise_strict_en.txt",
+      "sha256": "3659c207995010b57e1fa0ef02590967971387f448d09cf655700d2ffc6f992e",
+      "git_blob_sha1": "23264ed4c4c768c589c1384576febd6c48b37d30"
+    },
+    {
+      "path": "neatmem/memory_add.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/memory_add.py",
+      "sha256": "6441c709b45e3f318a3e2269ce23b7475b7693b85d3f7f22921560db23a37fda",
+      "git_blob_sha1": "456cda2d54117142f0df5407bb0b5e62943d4251"
+    },
+    {
+      "path": "neatmem/memory_search.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/memory_search.py",
+      "sha256": "ea36049f8c9171415765ea8e609ab90f078b4e7be7433f6bda923e52c16721df",
+      "git_blob_sha1": "58d475ad0e4f7206334e9894f900329d6b2cb66a"
+    },
+    {
+      "path": "tests/test_memory_search.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/tests/test_memory_search.py",
+      "sha256": "e980f4cb3628d6dc9f80872146282dfb4efec8cbf50cd3a4c49de5f2fc9e766f",
+      "git_blob_sha1": "591b75516e141daa7db9f8d7f2094f88b8eee16a"
+    },
+    {
+      "path": "neatmem/signals/bm25/scoring.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/bm25/scoring.py",
+      "sha256": "76d53dabeaf815d5b8b8e60635836380e8cdbf0efd338225b286234ba4137baf",
+      "git_blob_sha1": "a30fb3d7fa783944abd99a0ec8a4a4118648bc76"
+    },
+    {
+      "path": "neatmem/signals/entity/boosting.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/entity/boosting.py",
+      "sha256": "6f16ba9b8c8d4a1e1b4ea533c0118677cd64b1535b5d9b2f67805f1e22881cd5",
+      "git_blob_sha1": "e214f623e6ed1925b7c0d3fe39356c4eed9d76f6"
+    },
+    {
+      "path": "neatmem/signals/entity/base.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/entity/base.py",
+      "sha256": "872ba78b120d04230ce4e30b9d7f299db8724b62336ac364d7fe7aeccacc20fc",
+      "git_blob_sha1": "779e3ff3989d1f7270173ac6e0cbf628cd60f8c1"
+    },
+    {
+      "path": "neatmem/storage/entity/base.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/storage/entity/base.py",
+      "sha256": "82ba8fae6971fd45f0640bb3bdd74af4587f6ace74876fb040739c6d4fa0d54a",
+      "git_blob_sha1": "d6323e14b5eb580f97727e315d3f6baf04e79523"
+    },
+    {
+      "path": "neatmem/storage/entity/qdrant.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/storage/entity/qdrant.py",
+      "sha256": "ee308fa0595630f5b21c24653692e8d9f739359b4553d3b594313030652f78ed",
+      "git_blob_sha1": "199f12496d69d1e087828cb53c1b8373afe6380f"
+    },
+    {
+      "path": "neatmem/storage/entity/factory.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/storage/entity/factory.py",
+      "sha256": "e2442630018769bb6422206502ef869bd56b537ad20466f3e6946eac2362d4c2",
+      "git_blob_sha1": "15826cc68b7448ba7a4da8b1a468cbe615b80513"
+    },
+    {
+      "path": "neatmem/signals/entity/factory.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/entity/factory.py",
+      "sha256": "f6576a3f9f57f0df230e938de3d2ea8a00dc116a6d165d633b50b5f8b7638107",
+      "git_blob_sha1": "5ba4d5164f88bed11844f849d9329bd2e2808407"
+    },
+    {
+      "path": "neatmem/signals/entity/extractor_llm.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/entity/extractor_llm.py",
+      "sha256": "e0d9cbc97db54f5d25976d23cd7145dcef77fd18d3fa33aad028147a8b065f68",
+      "git_blob_sha1": "0c12fceb3dc4083a9818676144c71c1506510e20"
+    },
+    {
+      "path": "neatmem/signals/entity/extractor_ner.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/entity/extractor_ner.py",
+      "sha256": "1e36dc93dfda90d6b6a73160e41918dea22156e227050a6fca01c12b1f0bd265",
+      "git_blob_sha1": "49b3507894a13e6f58a8627972822b6d6d096690"
+    },
+    {
+      "path": "neatmem/signals/bm25/base.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/bm25/base.py",
+      "sha256": "89b75907598c4029d215711b499f8e1d6e66c6b4e195a61f1d3e7683799ab762",
+      "git_blob_sha1": "32e40c7abd9aadeb901698f4e9896c224556327a"
+    },
+    {
+      "path": "neatmem/signals/bm25/factory.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/bm25/factory.py",
+      "sha256": "74618a69241aadbc7e4051cbbeca2fc523cf131e6d030e3a46ca15fe6dc6d1c5",
+      "git_blob_sha1": "55e1f1eb7c5f971258a93c39df34b7150ac5a829"
+    },
+    {
+      "path": "neatmem/signals/bm25/noop.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/bm25/noop.py",
+      "sha256": "d70a3616a33e5a6aca74bfce5eee518d97c55c0ac132b59c9b66aa032036cbc3",
+      "git_blob_sha1": "a107bcc5750c01881a48753c8460ea818fba7717"
+    },
+    {
+      "path": "neatmem/signals/bm25/qdrant_sparse.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/signals/bm25/qdrant_sparse.py",
+      "sha256": "3d8ee9e5562f2583c9eb259218d8814ff5c4c16ca2259a92a313ced67dbdf410",
+      "git_blob_sha1": "384cabed62d3e725017eef67e6c7ef711aaf7836"
+    },
+    {
+      "path": "neatmem/storage/vector/base.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/storage/vector/base.py",
+      "sha256": "bae589e3448a2cceccdea452a7b3c410abdc337a600306c2ec802964343d72bd",
+      "git_blob_sha1": "89628b6ae310c46a9837229aec376843d5dff404"
+    },
+    {
+      "path": "neatmem/storage/vector/factory.py",
+      "local": "docs/research/dedup-500/evidence/kanhaoning--NeatMem/remaining-pinned/neatmem/storage/vector/factory.py",
+      "sha256": "eb06d2d53972c49582f0efc43fa7f7c25b53bd99f50ee54ede7f9eee69ac6862",
+      "git_blob_sha1": "a3624802fb66f90eb7fbcf2c895336a781ea48e1"
+    }
+  ],
+  "whole_file_read_count": 26,
+  "partial_file_reads": [],
+  "remaining": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "bytes": 443
+    },
+    {
+      "path": ".env.example",
+      "bytes": 3188
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 1273
+    },
+    {
+      "path": ".readthedocs.yaml",
+      "bytes": 165
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 21308
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1077
+    },
+    {
+      "path": "README.md",
+      "bytes": 11998
+    },
+    {
+      "path": "THIRD_PARTY_LICENSES.md",
+      "bytes": 866
+    },
+    {
+      "path": "claude-code/.claude-plugin/plugin.json",
+      "bytes": 2099
+    },
+    {
+      "path": "claude-code/.mcp.json",
+      "bytes": 217
+    },
+    {
+      "path": "claude-code/NOTICE",
+      "bytes": 509
+    },
+    {
+      "path": "claude-code/README.md",
+      "bytes": 7045
+    },
+    {
+      "path": "claude-code/adapters/claude/hook.py",
+      "bytes": 926
+    },
+    {
+      "path": "claude-code/adapters/claude/transcript.py",
+      "bytes": 17267
+    },
+    {
+      "path": "claude-code/core/flush_worker.py",
+      "bytes": 2901
+    },
+    {
+      "path": "claude-code/core/hook_runner.py",
+      "bytes": 14218
+    },
+    {
+      "path": "claude-code/core/mcp_server.py",
+      "bytes": 7780
+    },
+    {
+      "path": "claude-code/core/memory_cli.py",
+      "bytes": 6611
+    },
+    {
+      "path": "claude-code/core/memory_core.py",
+      "bytes": 103551
+    },
+    {
+      "path": "claude-code/hooks/hooks.json",
+      "bytes": 2371
+    },
+    {
+      "path": "claude-code/skills/pause/SKILL.md",
+      "bytes": 691
+    },
+    {
+      "path": "claude-code/skills/recall/SKILL.md",
+      "bytes": 1678
+    },
+    {
+      "path": "claude-code/skills/resume/SKILL.md",
+      "bytes": 579
+    },
+    {
+      "path": "claude-code/skills/search/SKILL.md",
+      "bytes": 1118
+    },
+    {
+      "path": "claude-code/skills/status/SKILL.md",
+      "bytes": 1110
+    },
+    {
+      "path": "claude-code/skills/unpause/SKILL.md",
+      "bytes": 496
+    },
+    {
+      "path": "claude-code/tests/conftest.py",
+      "bytes": 267
+    },
+    {
+      "path": "claude-code/tests/test_memory_core.py",
+      "bytes": 186584
+    },
+    {
+      "path": "docs/api.md",
+      "bytes": 4743
+    },
+    {
+      "path": "docs/assets/banner.png",
+      "bytes": 17404
+    },
+    {
+      "path": "docs/assets/cover.png",
+      "bytes": 20255
+    },
+    {
+      "path": "docs/assets/logo.svg",
+      "bytes": 608
+    },
+    {
+      "path": "docs/client.md",
+      "bytes": 6670
+    },
+    {
+      "path": "docs/concepts.md",
+      "bytes": 1907
+    },
+    {
+      "path": "docs/configuration.md",
+      "bytes": 8118
+    },
+    {
+      "path": "docs/custom-prompts.md",
+      "bytes": 3541
+    },
+    {
+      "path": "docs/demo.md",
+      "bytes": 4377
+    },
+    {
+      "path": "docs/evaluation.md",
+      "bytes": 9385
+    },
+    {
+      "path": "docs/index.md",
+      "bytes": 4503
+    },
+    {
+      "path": "docs/integrations/claude-code.md",
+      "bytes": 1385
+    },
+    {
+      "path": "docs/integrations/dsh.md",
+      "bytes": 1237
+    },
+    {
+      "path": "docs/integrations/hermes.md",
+      "bytes": 864
+    },
+    {
+      "path": "docs/integrations/openclaw.md",
+      "bytes": 1126
+    },
+    {
+      "path": "docs/providers.md",
+      "bytes": 4271
+    },
+    {
+      "path": "docs/quickstart.md",
+      "bytes": 1695
+    },
+    {
+      "path": "docs/requirements.txt",
+      "bytes": 16
+    },
+    {
+      "path": "dsh/.gitignore",
+      "bytes": 26
+    },
+    {
+      "path": "dsh/README.md",
+      "bytes": 3678
+    },
+    {
+      "path": "dsh/cordis.patch.yml",
+      "bytes": 441
+    },
+    {
+      "path": "dsh/package.json",
+      "bytes": 1254
+    },
+    {
+      "path": "dsh/pnpm-lock.yaml",
+      "bytes": 17536
+    },
+    {
+      "path": "dsh/src/capture.ts",
+      "bytes": 7192
+    },
+    {
+      "path": "dsh/src/client.ts",
+      "bytes": 6281
+    },
+    {
+      "path": "dsh/src/deadline.ts",
+      "bytes": 1808
+    },
+    {
+      "path": "dsh/src/index.ts",
+      "bytes": 6134
+    },
+    {
+      "path": "dsh/src/recall.ts",
+      "bytes": 5728
+    },
+    {
+      "path": "dsh/src/tools.ts",
+      "bytes": 6346
+    },
+    {
+      "path": "dsh/tsconfig.json",
+      "bytes": 334
+    },
+    {
+      "path": "hermes/README.md",
+      "bytes": 4654
+    },
+    {
+      "path": "hermes/__init__.py",
+      "bytes": 29942
+    },
+    {
+      "path": "hermes/_backend.py",
+      "bytes": 5000
+    },
+    {
+      "path": "hermes/plugin.yaml",
+      "bytes": 263
+    },
+    {
+      "path": "mkdocs.yml",
+      "bytes": 1025
+    },
+    {
+      "path": "neatmem/__init__.py",
+      "bytes": 185
+    },
+    {
+      "path": "neatmem/batching.py",
+      "bytes": 8653
+    },
+    {
+      "path": "neatmem/cli.py",
+      "bytes": 12014
+    },
+    {
+      "path": "neatmem/client.py",
+      "bytes": 17978
+    },
+    {
+      "path": "neatmem/config.py",
+      "bytes": 17808
+    },
+    {
+      "path": "neatmem/demo/__init__.py",
+      "bytes": 78
+    },
+    {
+      "path": "neatmem/demo/output.py",
+      "bytes": 6358
+    },
+    {
+      "path": "neatmem/demo/runner.py",
+      "bytes": 10046
+    },
+    {
+      "path": "neatmem/demo/schema.py",
+      "bytes": 4410
+    },
+    {
+      "path": "neatmem/embeddings.py",
+      "bytes": 5627
+    },
+    {
+      "path": "neatmem/evaluation/README.md",
+      "bytes": 313
+    },
+    {
+      "path": "neatmem/evaluation/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/evaluation/dataset/locomo10.json",
+      "bytes": 2804908
+    },
+    {
+      "path": "neatmem/evaluation/locomo/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/evaluation/locomo/add.py",
+      "bytes": 5777
+    },
+    {
+      "path": "neatmem/evaluation/locomo/client.py",
+      "bytes": 2070
+    },
+    {
+      "path": "neatmem/evaluation/locomo/ingest_locomo.py",
+      "bytes": 7809
+    },
+    {
+      "path": "neatmem/evaluation/locomo/search.py",
+      "bytes": 10224
+    },
+    {
+      "path": "neatmem/evaluation/metrics/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/evaluation/metrics/llm_judge.py",
+      "bytes": 15526
+    },
+    {
+      "path": "neatmem/evaluation/metrics/utils.py",
+      "bytes": 7534
+    },
+    {
+      "path": "neatmem/evaluation/orchestrator.py",
+      "bytes": 39521
+    },
+    {
+      "path": "neatmem/evaluation/prompts.py",
+      "bytes": 11235
+    },
+    {
+      "path": "neatmem/evaluation/run_experiments.py",
+      "bytes": 1800
+    },
+    {
+      "path": "neatmem/exceptions.py",
+      "bytes": 335
+    },
+    {
+      "path": "neatmem/main.py",
+      "bytes": 49135
+    },
+    {
+      "path": "neatmem/memory_store.py",
+      "bytes": 32557
+    },
+    {
+      "path": "neatmem/message_store.py",
+      "bytes": 1054
+    },
+    {
+      "path": "neatmem/prompts/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/prompts/examples/edit_en.txt",
+      "bytes": 1527
+    },
+    {
+      "path": "neatmem/prompts/examples/editv3_en.txt",
+      "bytes": 2512
+    },
+    {
+      "path": "neatmem/prompts/examples/extraction_en.example.txt",
+      "bytes": 32188
+    },
+    {
+      "path": "neatmem/prompts/examples/query_rewrite_en.txt",
+      "bytes": 1249
+    },
+    {
+      "path": "neatmem/prompts/examples/rerank_en.example.txt",
+      "bytes": 910
+    },
+    {
+      "path": "neatmem/prompts/examples/rewrite_en.txt",
+      "bytes": 1748
+    },
+    {
+      "path": "neatmem/prompts/examples/rewrite_group_en.txt",
+      "bytes": 2011
+    },
+    {
+      "path": "neatmem/prompts/extraction.py",
+      "bytes": 38559
+    },
+    {
+      "path": "neatmem/prompts/loader.py",
+      "bytes": 8095
+    },
+    {
+      "path": "neatmem/query_rewrite.py",
+      "bytes": 9993
+    },
+    {
+      "path": "neatmem/rerank.py",
+      "bytes": 25567
+    },
+    {
+      "path": "neatmem/signals/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/signals/bm25/__init__.py",
+      "bytes": 662
+    },
+    {
+      "path": "neatmem/signals/entity/__init__.py",
+      "bytes": 547
+    },
+    {
+      "path": "neatmem/signals/graph/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/signals/graph/adapter.py",
+      "bytes": 5838
+    },
+    {
+      "path": "neatmem/signals/graph/factory.py",
+      "bytes": 2600
+    },
+    {
+      "path": "neatmem/signals/graph/prompts.py",
+      "bytes": 6516
+    },
+    {
+      "path": "neatmem/signals/graph/tools.py",
+      "bytes": 7759
+    },
+    {
+      "path": "neatmem/storage/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/storage/entity/__init__.py",
+      "bytes": 311
+    },
+    {
+      "path": "neatmem/storage/graph/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/storage/graph/kuzu_store.py",
+      "bytes": 30295
+    },
+    {
+      "path": "neatmem/storage/history.py",
+      "bytes": 13510
+    },
+    {
+      "path": "neatmem/storage/message/__init__.py",
+      "bytes": 411
+    },
+    {
+      "path": "neatmem/storage/message/base.py",
+      "bytes": 7391
+    },
+    {
+      "path": "neatmem/storage/message/factory.py",
+      "bytes": 1917
+    },
+    {
+      "path": "neatmem/storage/message/noop.py",
+      "bytes": 3701
+    },
+    {
+      "path": "neatmem/storage/message/sqlite.py",
+      "bytes": 26410
+    },
+    {
+      "path": "neatmem/storage/vector/__init__.py",
+      "bytes": 285
+    },
+    {
+      "path": "neatmem/storage/vector/qdrant.py",
+      "bytes": 19790
+    },
+    {
+      "path": "neatmem/utils/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "neatmem/utils/llm_client.py",
+      "bytes": 11507
+    },
+    {
+      "path": "neatmem/utils/spacy/__init__.py",
+      "bytes": 465
+    },
+    {
+      "path": "neatmem/utils/spacy/entity_extraction.py",
+      "bytes": 15160
+    },
+    {
+      "path": "neatmem/utils/spacy/lemmatization.py",
+      "bytes": 1854
+    },
+    {
+      "path": "neatmem/utils/spacy/spacy_models.py",
+      "bytes": 3153
+    },
+    {
+      "path": "openclaw/.gitignore",
+      "bytes": 43
+    },
+    {
+      "path": "openclaw/.npmrc",
+      "bytes": 60
+    },
+    {
+      "path": "openclaw/LICENSE",
+      "bytes": 11349
+    },
+    {
+      "path": "openclaw/Makefile",
+      "bytes": 7387
+    },
+    {
+      "path": "openclaw/README.md",
+      "bytes": 4553
+    },
+    {
+      "path": "openclaw/backend/base.ts",
+      "bytes": 3581
+    },
+    {
+      "path": "openclaw/backend/index.ts",
+      "bytes": 237
+    },
+    {
+      "path": "openclaw/backend/platform.ts",
+      "bytes": 13076
+    },
+    {
+      "path": "openclaw/cli/commands.ts",
+      "bytes": 29726
+    },
+    {
+      "path": "openclaw/cli/config-file.ts",
+      "bytes": 3655
+    },
+    {
+      "path": "openclaw/config.ts",
+      "bytes": 11288
+    },
+    {
+      "path": "openclaw/filtering.ts",
+      "bytes": 5435
+    },
+    {
+      "path": "openclaw/fs-safe.ts",
+      "bytes": 984
+    },
+    {
+      "path": "openclaw/index.test.ts",
+      "bytes": 18659
+    },
+    {
+      "path": "openclaw/index.ts",
+      "bytes": 30730
+    },
+    {
+      "path": "openclaw/isolation.ts",
+      "bytes": 3585
+    },
+    {
+      "path": "openclaw/openclaw-plugin-sdk.d.ts",
+      "bytes": 1569
+    },
+    {
+      "path": "openclaw/openclaw.plugin.json",
+      "bytes": 3795
+    },
+    {
+      "path": "openclaw/package.json",
+      "bytes": 1320
+    },
+    {
+      "path": "openclaw/pnpm-lock.yaml",
+      "bytes": 56137
+    },
+    {
+      "path": "openclaw/pnpm-workspace.yaml",
+      "bytes": 88
+    },
+    {
+      "path": "openclaw/providers.ts",
+      "bytes": 6378
+    },
+    {
+      "path": "openclaw/recall.ts",
+      "bytes": 678
+    },
+    {
+      "path": "openclaw/scripts/configure.py",
+      "bytes": 2191
+    },
+    {
+      "path": "openclaw/test-shims/plugin-entry.ts",
+      "bytes": 187
+    },
+    {
+      "path": "openclaw/test-shims/plugin-sdk.ts",
+      "bytes": 744
+    },
+    {
+      "path": "openclaw/tests/backend-platform.test.ts",
+      "bytes": 11912
+    },
+    {
+      "path": "openclaw/tests/cli-commands.test.ts",
+      "bytes": 37640
+    },
+    {
+      "path": "openclaw/tests/config-file.test.ts",
+      "bytes": 6520
+    },
+    {
+      "path": "openclaw/tests/config.test.ts",
+      "bytes": 12743
+    },
+    {
+      "path": "openclaw/tests/forward-mode.test.ts",
+      "bytes": 14306
+    },
+    {
+      "path": "openclaw/tests/tools.test.ts",
+      "bytes": 27944
+    },
+    {
+      "path": "openclaw/tools/index.ts",
+      "bytes": 1816
+    },
+    {
+      "path": "openclaw/tools/memory-add.ts",
+      "bytes": 3541
+    },
+    {
+      "path": "openclaw/tools/memory-delete.ts",
+      "bytes": 3749
+    },
+    {
+      "path": "openclaw/tools/memory-get.ts",
+      "bytes": 1018
+    },
+    {
+      "path": "openclaw/tools/memory-list.ts",
+      "bytes": 2675
+    },
+    {
+      "path": "openclaw/tools/memory-search.ts",
+      "bytes": 3727
+    },
+    {
+      "path": "openclaw/tools/memory-update.ts",
+      "bytes": 1413
+    },
+    {
+      "path": "openclaw/tsconfig.json",
+      "bytes": 804
+    },
+    {
+      "path": "openclaw/tsup.config.ts",
+      "bytes": 282
+    },
+    {
+      "path": "openclaw/types.ts",
+      "bytes": 2522
+    },
+    {
+      "path": "openclaw/version.ts",
+      "bytes": 179
+    },
+    {
+      "path": "openclaw/vitest.config.ts",
+      "bytes": 498
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 875
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 503
+    },
+    {
+      "path": "scripts/smoke_eval.sh",
+      "bytes": 4176
+    },
+    {
+      "path": "tests/mem0_messages_simulator.py",
+      "bytes": 4251
+    },
+    {
+      "path": "tests/test_config_client_policy.py",
+      "bytes": 2390
+    },
+    {
+      "path": "tests/test_embedder_config.py",
+      "bytes": 5300
+    },
+    {
+      "path": "tests/test_evaluate_orchestrator.py",
+      "bytes": 13830
+    },
+    {
+      "path": "tests/test_event_at.py",
+      "bytes": 7679
+    },
+    {
+      "path": "tests/test_group_resolution.py",
+      "bytes": 4795
+    },
+    {
+      "path": "tests/test_memory_store.py",
+      "bytes": 5858
+    },
+    {
+      "path": "tests/test_message_batch_cursor.py",
+      "bytes": 10682
+    },
+    {
+      "path": "tests/test_neatmem_dir.py",
+      "bytes": 2134
+    },
+    {
+      "path": "tests/test_poison_batch_guard.py",
+      "bytes": 7118
+    },
+    {
+      "path": "tests/test_prompt_examples.py",
+      "bytes": 3878
+    },
+    {
+      "path": "tests/test_provider_table.py",
+      "bytes": 5218
+    },
+    {
+      "path": "tests/test_query_rewrite.py",
+      "bytes": 9683
+    },
+    {
+      "path": "tests/test_rerank.py",
+      "bytes": 16066
+    },
+    {
+      "path": "tests/test_sqlite_message_store.py",
+      "bytes": 24741
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "isolated_controls": "neatmem238-parser-controls-20261024.json",
+  "findings": [
+    "Semantic agent-memory deduplication prompts distinguish add/none/update/keep, not byte-identical files. No production adoption.",
+    "24 original parser/think-tag test callbacks pass in isolated AST harness; 6 authored parser boundary controls pass. Full package and pytest not run.",
+    "Single-target parser ignores candidates_count, accepts out-of-range numeric index, defaults invalid target to first candidate, and raises AttributeError on valid non-object JSON. These are parser outputs only; downstream write behavior not yet reviewed.",
+    "Multi-target parser filters invalid actions and out-of-range targets; first valid entry per target wins.",
+    "text_parsing.py explicitly vendored from mem0 under Apache2; root MIT metadata cannot be assumed for every file. Prompts read as source data, not executed as instructions.",
+    "Original listwise action executor isolated with deterministic synthetic search/LLM and recording-only memory adapter: invalid target string and out-of-range target both update first candidate with new text under replace resolver. Two confirming controls passed.",
+    "Valid JSON array parser AttributeError is caught by action executor and falls back to add; third isolated control confirms no update and preserved new item. Do not characterize parser error as an uncaught application failure.",
+    "Group rewrite source updates primary then deletes secondary candidates sequentially, without rollback in this function. Per-target updates also sequential; persistent atomicity not established. No real writes or fault-injected transaction claim.",
+    "Single resolver compares parsed old timestamp with timezone-aware current UTC; naive ISO timestamp could raise TypeError outside parsing catch (source-only). Listwise caller uses merged-or-new fallback regardless resolver status; no inferred production default.",
+    "memory_add.py now read in full through final return (1749 lines). Pairwise mode uses semantic relation decisions; replace handles first hit, rewrite/edit may update multiple targets. No byte-equality claim or adoption.",
+    "Four original-function synthetic patch controls pass: exact replacement; later missing anchor returns original text (no partial string changes); unknown operation returns success unchanged; unequal 80-percent-similar quote is accepted. Fuzzy patch matching unsuitable for exact-file equality.",
+    "add_memories Step4b BM25 refresh resides inside if dedup_result.to_add: update-only batches skip refresh in this function. It indexes duplicate new_text rather than write_text, and processes duplicate records without checking whether relation means skip or deletion. Source-only; backend compensations not reviewed.",
+    "Context external-input truncation uses [-extract_last_k:], so explicit zero slices the full list rather than empty. Source-only, API validation not yet reviewed.",
+    "Writes and deletions occur before final cursor advance and no encompassing transaction/rollback appears in this function; do not claim actual retry duplication without storage review.",
+    "Three original add_memories orchestration controls with injected DedupResult confirm update-only skips BM25 indexing, mixed update indexes new_text rather than merged write_text, and mixed none_skip still indexes duplicate new_text. No persistent store or backend-compensation proof.",
+    "memory_search.py, its six test definitions, and BM25 scoring module read fully. Search merges dense candidates by string id and maximum score, then boosts and truncates before optional reranking. No vector/embedding/model runtime executed.",
+    "Search test claiming expansion results are a superset uses only five hits with top_k=10; this finite fixture does not prove preservation under top-k competition. Source algorithm can evict earlier hits when higher scoring expansion hits fill the fixed output limit.",
+    "Multi-query ThreadPoolExecutor max_workers equals query count with no local cap; expansion size validation elsewhere unreviewed. INTERNAL_LIMIT parsed directly as int. Source-only observations, no load test.",
+    "Six original search test callbacks pass with their own fake vector store and original boost/search functions, using AST import adapters. No full pytest/model/backend execution.",
+    "Authored top_k=1 control confirms expansion evicts the original top hit, unlike the test name suggesting a universal superset. Finite five-hit/top10 original fixture passes.",
+    "Authored boost control confirms unrelated/noncandidate BM25 hit changes has_bm25 normalization denominator: dense score .9 becomes .45 although candidate has no keyword score. Threshold still filters semantic score before fusion.",
+    "Entity boost deduplicates lowercase stripped text regardless entity type and caps eight. Search filters retain user_id/agent_id/run_id but omit app_id in compute_entity_boosts; no backend scoping claim without storage inspection.",
+    "Diagnostic entity logging recomputes embeddings/search rather than reusing matches, potentially doubling those calls when enabled; no timing measurement.",
+    "Five entity storage/factory/extractor files fully read. Four original-method controls with record-shaped model adapters confirm app-only filter is None, user filter retained but app omitted, scope parser retains app, and deletion ignores nonempty next-page token after a single 10000-limit scroll. No actual Qdrant access/deletion or cross-app outcome reproduced.",
+    "Entity linking performs read-modify-write on linked_memory_ids without local conditional update; concurrent lost-update risk source-only, not race reproduced. Vector entity merge accepts >=.95 without text/type equality, intentional semantic matching rather than exact deduplication.",
+    "Entity store factory accepts kwargs but does not forward host/path/port to QdrantEntityStore in reviewed function. LLM extractor is empty-list placeholder; factory only supports NER. No dependency/runtime qualification.",
+    "Six BM25/vector abstraction and factory files read in full. Sparse index returns raw backend scores despite abstract interface documentation saying normalized; reviewed scoring helper subsequently normalizes positive raw scores.",
+    "Two isolated original-class controls confirm temporary collection-info exception permanently caches slot=False on same object until explicit reset, and fresh lookup after manual reset sees valid slot. No native backend, encoder or network executed.",
+    "Encoder load failure similarly sticky via _encoder_load_failed (source-only). BM25 search catches query_points errors but _encode and filter construction happen before that try; exceptions there may propagate. No full-runtime outcome asserted.",
+    "Vector factory forwards host/port/path/url/API config in source, unlike reviewed entity factory. Dense backend implementation still pending. No production adoption or claimed throughput optimization."
+  ],
+  "previous_audit": "neatmem238-source-review-v6-20261025.json",
+  "action_controls": "neatmem238-action-controls-20261024.json",
+  "patch_controls": "neatmem238-patch-controls-20261024.json",
+  "index_controls": "neatmem238-index-controls-20261024.json",
+  "search_controls": "neatmem238-search-controls-20261024.json",
+  "entity_controls": "neatmem238-entity-controls-20261025.json",
+  "bm25_controls": "neatmem238-bm25-controls-20261025.json"
+}

@@ -1,0 +1,162 @@
+{
+  "repository": "maxkhim/laravel-storage-dedupler",
+  "commit": "7720046f9b1c9056a47de0d84a1384e667d3f367",
+  "previous_audit": "docs/research/dedup-500/laravel118-source-review-v3-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": ".gitignore",
+      "local": "remaining-.gitignore",
+      "git_blob": "d575197110e63c85a125ae1ba2e35b988a1673ea",
+      "sha256": "75042e25aa0ea8bf73c4abb1238c49ca2cd6c0bbcbd3026bb407c2bc8b5416b5",
+      "review": "whole text read"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "local": "remaining-CHANGELOG.md",
+      "git_blob": "0fbe656dd9d8e9f64fbe4913e1451cafa700fec1",
+      "sha256": "5cded3e5d0d71c1c8202e689a9e2ee69ea756e0020bd2b115a9df184df613ea0",
+      "review": "whole text read"
+    },
+    {
+      "path": "database/migrations/2025_10_24_144420_create_dedupler_legacy_file_migrations_table.php",
+      "local": "remaining-database_migrations_2025_10_24_144420_create_dedupler_legacy_file_migrations_table.php",
+      "git_blob": "9b53006be566c47793e054388a99f87a81af26c7",
+      "sha256": "de750f2b9e0864af6145ec4e14f6a8ad38e1c9f6f1eedf521a307ef40e8c6b53",
+      "review": "whole text read"
+    },
+    {
+      "path": "database/migrations/2025_10_24_144421_create_dedupler_deduplicatables_table.php",
+      "local": "remaining-database_migrations_2025_10_24_144421_create_dedupler_deduplicatables_table.php",
+      "git_blob": "b3b15d6c021f99247fd06a8939ca7fee93ca625c",
+      "sha256": "3919a5dbc4acc858288ce2daa1ff77c0364a4bc1ff5b5233b184a453c2b850b5",
+      "review": "whole text read"
+    },
+    {
+      "path": "dedupler-so-adapt.png",
+      "local": "remaining-dedupler-so-adapt.png",
+      "git_blob": "07a7c4c6cd7249e9c1672cc5824bc21c93fa1d14",
+      "sha256": "eaa6202bc48b35f049b1211feb8919b75c87a7d25f4bd26c5206e11e08e9d3dc",
+      "review": "visual asset inspected"
+    },
+    {
+      "path": "routes/api.php",
+      "local": "remaining-routes_api.php",
+      "git_blob": "75aa538154a8f905f140eb1b51419e8be42e47a3",
+      "sha256": "8919268368c268d4edad8f1b0272e0bc37cca0d51dadf4ff57839d296cef3ed5",
+      "review": "whole text read"
+    },
+    {
+      "path": "routes/web.php",
+      "local": "remaining-routes_web.php",
+      "git_blob": "6bfbd7fbb1e53c233aae2820f073fa66dbb5949f",
+      "sha256": "c5f0809acfca9f6e5ed2ed0ae261afe15ba99505fcc6f882a2eee5f15adc2174",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Commands/AnalyseLegacyFilesCommand.php",
+      "local": "remaining-src_Commands_AnalyseLegacyFilesCommand.php",
+      "git_blob": "132a4a183a44f4e7edeb67360839f7222ad04830",
+      "sha256": "3c5b37e64b2f33c18c42e3a9e8c2729178c3f87ef6ed12b05052dd0186e6ad9e",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Commands/FileStorageStatsCommand.php",
+      "local": "remaining-src_Commands_FileStorageStatsCommand.php",
+      "git_blob": "4caceab3f1ae7ca658aaa915dd63128f37cbddb1",
+      "sha256": "10a98e006474304ec31f2e73c269e62aa32a76319f30eadea62db2a50b6c4046",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Contracts/FileStorageInterface.php",
+      "local": "remaining-src_Contracts_FileStorageInterface.php",
+      "git_blob": "d394b97f397352c3a485dfde3950f677700e66b7",
+      "sha256": "7b83fe903f758ca0aadab0494d7701b2eb9ab8699de5f359cbd27ddefbae5680",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Factories/LegacyFileMigrationFactory.php",
+      "local": "remaining-src_Factories_LegacyFileMigrationFactory.php",
+      "git_blob": "a872841a42f5f41837988984247bb3d2ef36fb3e",
+      "sha256": "4f4f53ee5bfb0382aa1f598287cd3c5626db79b35f302bb8e7a3bd4825f7937a",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Helpers/FormatingHelper.php",
+      "local": "remaining-src_Helpers_FormatingHelper.php",
+      "git_blob": "3202fd268a43daee838068b050240d32d98cfd02",
+      "sha256": "9c83b8afdce523bbda20712f7f2a2f3c933b554f535221e5fe40bf799c0520c8",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Http/Controllers/DeduplerController.php",
+      "local": "remaining-src_Http_Controllers_DeduplerController.php",
+      "git_blob": "b1c631488ab8e1e64ec7873e25f9bc20920829ae",
+      "sha256": "cd6d99b5779f02fb880f06574510d8ef848d2c43bab0bf19d064d6fb50620870",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Models/Deduplicatable.php",
+      "local": "remaining-src_Models_Deduplicatable.php",
+      "git_blob": "3e62ad56a4d0cd4f4f0a4e16c3ba7bb7a85299c1",
+      "sha256": "7246932e24ef0e54455f1051aa5f7b71b5b0483f702e3f1f52b7140c49d4b6f7",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Providers/DeduplerServiceProvider.php",
+      "local": "remaining-src_Providers_DeduplerServiceProvider.php",
+      "git_blob": "1033a5edb30a2a5e49f3df77c7900b834aa9c823",
+      "sha256": "d719b4f9bd56e62d4cdd6058ff0e99702e32d963f7d6cf39488747d428dee378",
+      "review": "whole text read"
+    },
+    {
+      "path": "src/Traits/Deduplable.php",
+      "local": "remaining-src_Traits_Deduplable.php",
+      "git_blob": "6d0f8376d5e7e17f7eadcdeb1a9099224f38c5ff",
+      "sha256": "bc637f9117c3515ef577e57b70cf2f6c809483575fe46f2d260c0bf693b93b0a",
+      "review": "whole text read"
+    },
+    {
+      "path": "tests/Feature/Api/DeduplerApiReadTest.php",
+      "local": "remaining-tests_Feature_Api_DeduplerApiReadTest.php",
+      "git_blob": "e1c2de84e50d3b55b32dbfc9ac96216a81758581",
+      "sha256": "eb4fd11f36132389eefc84ccbac2a584b7e2bb8d91cdd1bed79c5d082eb46ac0",
+      "review": "whole text read"
+    }
+  ],
+  "whole_files_reviewed_total": 39,
+  "text_files_read_total": 38,
+  "visual_assets_reviewed_total": 1,
+  "tracked_blobs": 39,
+  "source_tree_review_complete": true,
+  "runtime_qualified": false,
+  "upstream_tests_run": false,
+  "authored_php_controls_run": 0,
+  "findings": [
+    {
+      "finding": "Potential savings calculated using average duplicate-file size times group count; groups10x2 and100x3 yield192 instead of210.",
+      "evidence": "docs/research/dedup-500/laravel118-savings-counterexample-20261024.json"
+    },
+    {
+      "finding": "Service returns UniqueFile but inactive upload controller uses fileRelation->file and formats it as UniqueFile; upload/download/stream routes commented out. Do not claim active upload failure.",
+      "evidence": "whole source cross-check"
+    },
+    {
+      "finding": "Provider loads routes/api.php unconditionally; api.enabled getter unused by configurePackage; route source itself has no enabled guard.",
+      "evidence": "source only, no live route resolution"
+    },
+    {
+      "finding": "Pivot schema has nonunique indices only; attachExistingFile uses check then create without transaction. Concurrent duplicate links remain unqualified.",
+      "evidence": "source only"
+    },
+    {
+      "finding": "Third upstream test source includes2 API test methods and references absent Models/Article.php; composer lacks dev test dependencies and test/bootstrap config not present in tree. Tests not executed.",
+      "evidence": "whole39-blob inventory and test source"
+    }
+  ],
+  "remaining": [
+    "PHP8.2+/Laravel integration and13 original test methods unexecuted",
+    "Nonseekable streams, partial failures, races and recovery need real runtime qualification"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

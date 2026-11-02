@@ -1,0 +1,65 @@
+{
+  "scope": "Original fifteen list-thoughts callbacks; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "returns thoughts as JSON",
+      "passed": true
+    },
+    {
+      "name": "empty result returns empty array",
+      "passed": true
+    },
+    {
+      "name": "db error returns isError",
+      "passed": true
+    },
+    {
+      "name": "respects limit parameter",
+      "passed": true
+    },
+    {
+      "name": "type filter applies correct JSONB filter",
+      "passed": true
+    },
+    {
+      "name": "fires increment_access_count RPC for returned thought IDs",
+      "passed": true
+    },
+    {
+      "name": "does not fire increment_access_count for empty results",
+      "passed": true
+    },
+    {
+      "name": "orders by salience DESC then created_at DESC",
+      "passed": true
+    },
+    {
+      "name": "min_quality default 0.4 applies quality filter",
+      "passed": true
+    },
+    {
+      "name": "min_quality=0 disables quality filter (passes everything)",
+      "passed": true
+    },
+    {
+      "name": "theme filter applies correct JSONB filter",
+      "passed": true
+    },
+    {
+      "name": "source filter applies correct equality filter",
+      "passed": true
+    },
+    {
+      "name": "since filter applies gte on created_at with ISO timestamp",
+      "passed": true
+    },
+    {
+      "name": "since takes precedence over days when both provided",
+      "passed": true
+    },
+    {
+      "name": "missing brain context returns error",
+      "passed": true
+    }
+  ]
+}

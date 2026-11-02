@@ -1,0 +1,10 @@
+{
+  "controls_passed": 4,
+  "scope": "Original NeighborMatcher class with explicit deterministic exact-distance fixture replacing Annoy backend;real NumPy2.5.4;legacy unique function original AST. No neural model,Annoy index,video decoding,DB or full pipeline execution.",
+  "findings": [
+    "Empty haystack constructor raises ValueError.",
+    "Zero-distance threshold excludes identical distinct vectors because comparison is strict.",
+    "Positive threshold returns one symmetric-deduplicated pair and skips self.",
+    "Legacy delimiter-free unique aliases pair(1,234) and(12,34);current local matcher uses tuple keys instead."
+  ]
+}

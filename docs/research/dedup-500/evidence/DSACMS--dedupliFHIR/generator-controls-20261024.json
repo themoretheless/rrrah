@@ -1,0 +1,19 @@
+{
+  "method": "Original AST functions unchanged; standard-library dependencies",
+  "passed": 2,
+  "cases": [
+    {
+      "function": "transposition_chars",
+      "input": "x",
+      "error": "ValueError",
+      "message": "empty range for randrange()"
+    },
+    {
+      "function": "mistype_chars",
+      "input": null,
+      "error": "TypeError",
+      "message": "object of type 'NoneType' has no len()"
+    }
+  ],
+  "original_tests_run": 0
+}

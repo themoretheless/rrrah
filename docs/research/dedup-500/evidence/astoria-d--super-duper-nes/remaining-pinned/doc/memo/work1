@@ -1,0 +1,114 @@
+
+
+using i2c2...
+
+list:
+i2cdetect -l
+
+check:
+i2cdetect -r 2
+
+read/write i2c dev.
+sudo i2cget -y 2 0x44
+sudo i2cset -y 2 0x44 0x45
+
+
+sudo bash -c 'echo duper_nes 0x44 > /sys/bus/i2c/devices/i2c-2/new_device'
+
+cat /proc/driver/bbb-tty-test
+
+---------------
+nes shell...
+
+sh < /dev/ttyNES0 >/dev/ttyNES0 2>&1
+bash < /dev/ttyNES0 >/dev/ttyNES0 2>&1
+
+sudo getty ttyNES0 115200
+
+sudo ./getty 115200 /dev/ttyNES0
+
+
+export PS1='# '
+
+--------------------------
+device overlay..
+
+sudo sh -c "echo bbb_tty > /sys/devices/platform/bone_capemgr/slots"
+
+remove device.
+sudo sh -c "echo '-4' > /sys/devices/platform/bone_capemgr/slots"
+
+
+
+
+------------------------
+device probe not using dts...
+sudo sh -c "echo duper-i2c > /sys/devices/platform/bone_capemgr/slots"
+sudo bash -c 'echo duper_nes 0x44 > /sys/bus/i2c/devices/i2c-1/new_device'
+
+sudo i2cget -y 1 0x44
+
+
+-----------------------------
+
+instal i2c dev.
+sudo sh -c "echo BB-I2C1 > /sys/devices/bone_capemgr.9/slots"
+
+check i2c dev.
+
+list:
+i2cdetect -l
+
+check:
+i2cdetect -r 2
+
+read/write i2c dev.
+sudo i2cget -y 2 0x44
+sudo i2cset -y 2 0x44 0x45
+
+
+for ch in $(hexout < /home/dmotooka/aaa) ; do sudo i2cset -y 2 0x44 $ch; done
+
+
+--------------------
+
+gpio setup.
+cd /sys/class/gpio
+sudo sh -c "echo 49 > export"
+sudo sh -c "echo 115 > export"
+sudo sh -c "echo in > gpio49/direction"
+sudo sh -c "echo in > gpio115/direction"
+
+read bbb_f_empty
+cat /sys/class/gpio/gpio115/value
+
+
+close.
+sudo sh -c "echo 49 > unexport"
+sudo sh -c "echo 115 > unexport"
+
+
+-----------------------
+
+case duper cassette is recognized as "eeprom"
+
+sudo sh -c "echo 24c256 0x44 > /sys/bus/i2c/devices/i2c-2/new_device"
+sudo sh -c "echo duper > /sys/bus/i2c/devices/2-0044/eeprom"
+sudo cat /sys/bus/i2c/devices/2-0044/eeprom | hexdump 
+sudo sh -c "echo 0x44 > /sys/bus/i2c/devices/i2c-2/delete_device"
+
+------------------------
+
+obsolete...
+
+sudo sh -c "echo 24c256 0x50 > /sys/bus/i2c/devices/i2c-2/new_device"
+sudo cat /sys/bus/i2c/devices/2-0050/eeprom | hexdump 
+
+---------------------------
+
+rebre-office menu issue..
+
+initctl stop unity-panel-service
+
+initctl start unity-panel-service
+

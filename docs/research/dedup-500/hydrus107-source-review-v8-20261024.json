@@ -1,0 +1,52 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v7-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "docs/faq.md",
+      "local": "25-faq.md",
+      "git_blob": "4027067423c75fb132688313748bda793eeec9df",
+      "sha256": "b5d275762e3add44e1f9d582979a671840fc3e1e80ababb7ffbaafa9f2336389",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/usage.md",
+      "local": "26-usage.md",
+      "git_blob": "13b14d08f501fb0465ac4abff1825809acd53c0d",
+      "sha256": "2596f7249550847ce9e19e492db9723030f63242fa612d666828e3b4281fea8e",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/credits.md",
+      "local": "27-credits.md",
+      "git_blob": "bdfc9168fca3407fd05d30faa58a22ac8f228767",
+      "sha256": "ac906955696ef77d6ff58abf6188d09fc9a61842402e0e9f83df1ed23cbd27cb",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/installation.md",
+      "local": "28-installation.md",
+      "git_blob": "77ede9cc652491841b8cba302874bca13d342adb",
+      "sha256": "4605aa9405a5cf86e3999bd6eff3f1c17ea258530861b251f613d3bebe8a4723",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 27,
+  "remaining_without_whole_review": 50,
+  "whole_repo_complete": false,
+  "new_authored_controls": 0,
+  "authored_controls_total": 17,
+  "findings": [
+    "FAQ says queries reduce files processed/search scope; source applies search_tags only when fetching videos to hash. Duplicate search iterates all eligible shape_search_cache rows without current-query filter. Existing DB may yield out-of-query candidates; live Hydrus not executed.",
+    "FAQ sample requests <50MB but command uses filesize>10MB; documentation example mismatch.",
+    "FAQ promises restart continuation; checkpoints exist but count cancellation defect and migration orphan issue remain; universal resume safety unproven.",
+    "Credits identifies bundled API as GNU AGPLv3 while root metadata MIT; actual nested license still requires full reading. No adoption.",
+    "Usage explicitly documents certificate verification default and cert-path option; this is stated upstream behavior, not an unsolicited new requirement.",
+    "FAQ broad media-support and low false-positive claims lack reproduced benchmark/codec matrix in this review.",
+    "Installation Linux venv activation line lacks shell source; docs only, installation not executed."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

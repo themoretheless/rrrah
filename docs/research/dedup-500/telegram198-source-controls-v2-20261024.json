@@ -1,0 +1,49 @@
+{
+  "repository": "botnick/telegram-media-downloader",
+  "commit": "5162cff1474ac2f3d0fb109bc1b6156d214cd33b",
+  "whole_file_reads": [
+    {
+      "path": "src/core/ai/dbscan.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/03-dbscan.js",
+      "sha256": "dcdfec7f6c995cdedae28c501cacb5a2884a93968f0b889af4ce833b739ff168"
+    },
+    {
+      "path": "src/core/gocore/hash.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/07-hash.js",
+      "sha256": "999ee048aab1e8a7515f50401aea6d45382f0495d698aaa541af6e9a42c7f2cf"
+    },
+    {
+      "path": "src/core/cluster/dedup.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/06-dedup.js",
+      "sha256": "987243b8c20a0495661816c8b0a9afbf0ef1f627dfff4cf8f821c9c9169954a9"
+    },
+    {
+      "path": "tests/contract/dedup.contract.test.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/08-dedup.contract.test.js",
+      "sha256": "62d640edf159823fd59a5196ced7055d4b82de27ced60009cd1ad2be03e0d125"
+    }
+  ],
+  "original_tests_run": 0,
+  "authored_controls": 6,
+  "control_source": "docs/research/dedup-500/telegram198-controls-20261024/dbscan-control.mjs",
+  "results": "docs/research/dedup-500/telegram198-controls-20261024/dbscan-control-results.json",
+  "scope": "Actual unchanged complete ESM module,Node numeric synthetic vectors only. No real faces,download,Telegram,DB/model.",
+  "findings": [
+    "Documented nonstandard noise-to-border behavior reproduces insertion-order membership difference.",
+    "Chain endpoints1.5 apart share cluster at eps0.8,minPts2;density connectivity is not pairwise duplicate equality.",
+    "Offline peer fixture passes lookup despite online-only docstring;actual peer-status domain/callers unqualified.",
+    "clusterRefPath coerces remoteId to Number;above2^53 rounds,actual id domain pending.",
+    "Hash wrapper streams whole file only for outside-core path error;unavailable core errors propagate. No actual core/hash runtime tested.",
+    "Complete contract test file read,9 it bodies identified;not executed and snapshot harness assertions not yet reviewed."
+  ],
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "remaining": "Other tracked source/tests/media and runtime qualification remain.",
+  "decision": "numeric-reference-only-no-adoption",
+  "previous_audit": "docs/research/dedup-500/telegram198-source-controls-v1-20261024.json",
+  "cluster_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/cluster-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/cluster-control-results.json",
+    "cases": 3
+  }
+}

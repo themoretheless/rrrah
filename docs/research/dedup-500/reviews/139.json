@@ -2,9 +2,9 @@
   "index": 139,
   "repository": "jianbingfang/vscode-dup-checker",
   "commit": "47aa6da54060a388a8e9ccc053df9e3d0d0859a8",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "5/23 whole pinned files;4 original full-module controls with real pinned production deps and explicit VSCode UI seams;no real editor execution",
   "decision": "reject-domain",
-  "finding": "VS Code duplicate text lines; editor-domain utility.",
+  "finding": "Within-document line dedup;real Cuckoo filter falsepositive reproduced by original command;not exact file duplicate detection.",
   "available_source_evidence": [
     {
       "path": "extension.js",
@@ -54,5 +54,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "vscode139-source-review-v1-20261024.json"
 }

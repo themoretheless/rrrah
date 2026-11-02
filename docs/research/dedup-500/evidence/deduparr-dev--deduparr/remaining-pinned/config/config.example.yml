@@ -1,0 +1,117 @@
+# Deduparr Configuration Example
+# This file is for reference only - actual configuration is done via the web UI
+# during the initial setup wizard
+
+# Plex Configuration
+# Note: Plex authentication is handled via OAuth through the setup wizard
+# You do not need to manually configure Plex tokens
+# The setup wizard will:
+#   1. Guide you through OAuth login via plex.tv
+#   2. Let you select which Plex server to use
+#   3. Store the authentication securely in the database
+
+# Other Service Configuration
+# These are also configured via the setup wizard, but examples are provided below:
+
+# Radarr Configuration
+radarr:
+  enabled: true
+  url: "http://localhost:7878"
+  api_key: "YOUR_RADARR_API_KEY"
+
+# Sonarr Configuration
+sonarr:
+  enabled: true
+  url: "http://localhost:8989"
+  api_key: "YOUR_SONARR_API_KEY"
+
+# qBittorrent Configuration
+qbittorrent:
+  enabled: true
+  url: "http://localhost:8080"
+  username: "admin"
+  password: "YOUR_QBITTORRENT_PASSWORD"
+
+# Scoring Configuration
+scoring:
+  # Video Resolution Scores
+  resolution:
+    4k: 20000
+    1080: 10000
+    720: 5000
+    480: 3000
+    sd: 1000
+    unknown: 0
+
+  # Video Codec Scores
+  video_codec:
+    h265: 10000
+    hevc: 10000
+    h264: 5000
+    vc1: 3000
+    vp9: 1000
+    mpeg4: 500
+    unknown: 0
+
+  # Audio Codec Scores
+  audio_codec:
+    truehd: 4500
+    dca-ma: 4000
+    flac: 2500
+    pcm: 2500
+    dca: 2000
+    eac3: 1250
+    ac3: 1000
+    aac: 1000
+    mp3: 1000
+    mp2: 500
+    wmapro: 200
+    unknown: 0
+
+  # Filename Pattern Scores (regex)
+  filename_patterns:
+    "*Remux*": 20000
+    "*1080p*BluRay*": 15000
+    "*720p*BluRay*": 10000
+    "*WEB*": 5000
+    "*PROPER*": 1500
+    "*REPACK*": 1500
+    "*HDTV*": -1000
+    "*.ts": -1000
+    "*.avi": -1000
+    "*.vob": -5000
+
+  # Consider file size in scoring
+  use_filesize: true
+
+# Deletion Settings
+deletion:
+  dry_run: true              # Set to false to actually delete files
+  remove_from_qbittorrent: true
+  remove_from_radarr: true
+  remove_from_sonarr: true
+  delete_from_disk: true
+  refresh_plex: true
+
+# Scheduling (optional)
+# Note: Scheduling is now configured via environment variables in Docker
+# Set ENABLE_SCHEDULED_SCANS=true and SCAN_INTERVAL_HOURS=24 in docker-compose.yml
+# This config file section is for reference only
+schedule:
+  enabled: false  # Use ENABLE_SCHEDULED_SCANS env var instead
+  interval_hours: 24  # Use SCAN_INTERVAL_HOURS env var instead
+  # Examples:
+  # - Every 6 hours: SCAN_INTERVAL_HOURS=6
+  # - Every 12 hours: SCAN_INTERVAL_HOURS=12
+  # - Daily: SCAN_INTERVAL_HOURS=24
+  # - Every 2 days: SCAN_INTERVAL_HOURS=48
+
+# Notifications (optional)
+notifications:
+  discord:
+    enabled: false
+    webhook_url: ""
+  
+  apprise:
+    enabled: false
+    urls: []

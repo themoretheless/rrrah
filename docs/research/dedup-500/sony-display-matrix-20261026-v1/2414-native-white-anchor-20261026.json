@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414-ahd.tiff",
+    "--verify-known-shift"
+  ],
+  "environment": {
+    "RRRAH_EXPECTED_SHIFT": "12,12",
+    "RRRAH_FIT_DISPLAY": "1",
+    "RRRAH_NATIVE_WHITE_ANCHOR": "1"
+  },
+  "binary_sha256": "023e4f53c754904bf8b7e0757bd9a36466938d56116a499301b0e03d8dc808e7",
+  "exit_code": 0,
+  "inputs_before": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414-ahd.tiff": "3776a3c34b89986246e9a4310053f51cf4254213c892810263622877d528516d"
+  },
+  "inputs_after": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414-ahd.tiff": "3776a3c34b89986246e9a4310053f51cf4254213c892810263622877d528516d"
+  },
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-native-white-anchor-20261026.log",
+  "log_sha256": "5397bc3d7edff14c731facde9b33c6db4244288bed9fee915038aea4c9d025fb",
+  "scope": "Public view API fits all opaque in-range samples and verifies all overlap. Geometry supplied; no production file/collection integration."
+}

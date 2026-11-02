@@ -1,0 +1,142 @@
+---
+title: Troubleshooting
+description: Diagnose startup, browse access, reverse proxy, FFmpeg, tracker auth, image, and unattended workflow failures.
+---
+
+# Troubleshooting
+
+Start with the shortest failing operation and the **Logging** page. Increase log level only long enough to reproduce the problem, then restore normal verbosity.
+
+## Web UI does not open
+
+1. Run `upbrr serve --help` and verify the intended host and port.
+2. Check startup output for `listen` errors.
+3. Open `http://localhost:7480` manually for the default configuration.
+4. If using Docker, confirm the container is healthy and port `7480` is published.
+5. If another process owns the port, select another with `--port`.
+
+The default host is `localhost`, so another machine cannot connect unless you deliberately bind a network address or use Docker's `0.0.0.0` default.
+
+## First-run setup is exposed
+
+Stop the instance or restrict its port to loopback until setup is complete. First-run account creation is reachable by anyone who can reach an unconfigured instance.
+
+## A release folder is missing from the browser
+
+- Confirm the path is inside a configured browse root.
+- Confirm the upbrr process can read the folder.
+- In Docker, mount the folder and select its container path, such as `/data/...`.
+- Remember that config import does not import browse roots.
+
+Do not enable unrestricted browsing solely to hide a mount or permission error.
+
+## A reverse-proxied page partly works
+
+If HTML loads but assets, login, API calls, or live progress fail under `/upbrr/`:
+
+1. set `--base-url /upbrr/` or `UPBRR_WEB_BASE_URL=/upbrr/`;
+2. keep `/upbrr/` on both sides of `proxy_pass`;
+3. inspect browser requests for `/upbrr/api/...` and `/upbrr/assets/...`;
+4. disable proxy buffering for live event streams;
+5. configure trusted proxies when HTTPS terminates upstream.
+
+See the [reverse proxy guide](../configuration/web-server.md#path-prefix-proxy).
+
+## An operation was interrupted by restart
+
+Startup retains completed operation checkpoints and marks unfinished operations interrupted. It can wait for prior-process input and work leases to expire before cleanup. It does not automatically repeat the interrupted command. Reopen the retained input from **History**, or explicitly continue a workflow that was waiting for feedback.
+
+For an interrupted upload or client injection, check the tracker and torrent client before retrying. Startup marks unresolved external attempts failed locally and clears their retry blocks after leases expire; a local failure is not proof that the remote action failed. Confirmed successful tracker submissions remain recorded and must not be submitted again.
+
+If **Legacy workflow recovery** still appears, inspect each listed remote outcome. Choose **Confirmed not completed; allow a fresh exact attempt** only after confirming it did not complete. Do not delete History simply to bypass an uncertain outcome: deletion also removes local repeat-submission protection.
+
+## FFmpeg is not found
+
+Run `ffmpeg -version` in the same environment that starts upbrr. On Windows, add FFmpeg's directory to `PATH` before starting upbrr or its service. Containers already include FFmpeg.
+
+The Web UI **Application Details** surface reports detected FFmpeg capability without exposing the local executable path.
+
+## Audio analysis fails or is incomplete
+
+Audio analysis depends on the exact audio streams found during release preparation. If no tracks are available, return to Input and verify the source and prepared technical data. If an explicit ordinal is rejected, remember that `--audio-tracks` uses one-based audio-only ordinals rather than container-wide stream indexes.
+
+For a failed track or image:
+
+1. verify that the same FFmpeg installation can inspect the source;
+2. check whether the source changed after preparation;
+3. review the bounded failure message shown for that track and variant;
+4. retry the analysis to regenerate only compatible missing or failed images;
+5. re-prepare Input when the source or stream mapping changed.
+
+Sources with more than eight channels per selected track are unsupported. Malformed or truncated decoded sample data is rejected rather than rendered. Cancellation can leave a partial result; successful PNGs remain visible while failed or missing variants can be retried.
+
+FFmpeg streams decoded float PCM directly to upbrr; no full decoded-audio file is saved. Selected tracks needing the same image types normally share one pass over the source at their native sample rate and channel layout, without normalization, resampling, or downmixing. Missing or inaccurate duration metadata can require another decode for exact spectrogram timing. If the audio changes between passes, upbrr rejects the result; re-prepare Input before trying again.
+
+## A multi-disc source is rejected
+
+Multi-disc support accepts extracted, homogeneous DVD or BDMV directory collections. Select the collection parent and use one marker type under every disc folder:
+
+- `Disc 1/VIDEO_TS` and `Disc 2/VIDEO_TS`; or
+- `Disc 1/BDMV` and `Disc 2/BDMV`.
+
+Mixed DVD/BDMV collections are rejected. Nested or multi-disc HD DVD collections are unsupported; only an existing single direct or immediate `HVDVD_TS` layout remains compatible. ISO images and optical drives are not discovered as multi-disc inputs, so extract or copy each disc into a directory layout first. Directory symlinks are also rejected.
+
+## Automatic DVD menu capture fails
+
+Automatic capture accepts an extracted DVD directory containing `VIDEO_TS`, `VIDEO_TS` itself, or a supported multi-disc DVD collection parent. Multi-disc results are grouped by disc; a partial-coverage warning means the collection-wide capture cap or available menus left at least one disc uncovered. Automatic capture does not accept ISO images, optical drives, or Blu-ray menus.
+
+The selected FFmpeg must expose the `dvdvideo` demuxer plus `menu`, `menu_lu`, `menu_vts`, `pgc`, and `pg`. Encrypted, protected, unreadable, region-restricted, or corrupt inputs can still fail. upbrr does not provide CSS decryption.
+
+Use manual disc-menu image import when automatic capture is not available.
+
+## A metadata provider fails or selects the wrong title
+
+Supply the correct provider ID, or clear the provider when you want to continue without it. For example, `--tmdb=` or `--tmdb=0` clears TMDB in the CLI. See [clearing a metadata provider](../cli/index.md#clear-a-metadata-provider) for all supported flags and examples.
+
+In the Web UI, use the [metadata ID controls on Input](../web-ui/index.md#clear-a-metadata-provider), then click **Refresh metadata**. If the first fetch fails before a preview appears, remove the provider and click **Retry metadata** instead.
+
+Clearing prevents that provider's ID and metadata from being rediscovered for this source. It persists across release reloads. Supply a positive ID to use the provider again.
+
+Check tracker eligibility after the change. A tracker that requires the missing provider can remain blocked, while other eligible trackers can continue.
+
+## Tracker authentication is blocked
+
+1. Open the tracker in **Settings**.
+2. confirm every required field is present;
+3. import a current cookie or use the supported login flow;
+4. complete 2FA when requested;
+5. run the tracker auth test;
+6. retry preparation.
+
+Upload preflight does not silently log in or mutate auth state. Fix auth on the dedicated Settings surface.
+
+## No screenshots or image links
+
+- Confirm FFmpeg access and screenshot count.
+- For imported screenshots, enable **Settings → Metadata → Keep images**, inspect **Tracker Data**, and use **Saved tracker images → Use saved images** on **Screenshots** when offered. Only usable validated images are eligible; an imported comparison block alone does not supply ordinary screenshots.
+- Confirm the chosen image host is configured and allowed by the tracker. Images tied to their source tracker may need downloading and rehosting, even when they display correctly in the original description.
+- Review host-specific failure messages without copying credentials or raw responses.
+- Check `min_successful_image_uploads`: zero requires the whole batch to succeed; a positive value permits a partially successful batch only after that many images publish.
+- Use `--skip-imagehost-upload` only when you will supply valid hosted images another way.
+
+## Config import reports warnings
+
+Warnings can identify unknown legacy keys, unsupported tracker fields, or unsupported image-host settings. Open Settings and correct each affected group. An import warning is not proof that the remaining configuration is ready for live upload.
+
+## Unattended mode stops
+
+`--unattended` never prompts. It stops when a workflow-global decision or unsafe ambiguity needs operator input. Use `--unattended_confirm` only when prompts are acceptable, or provide the missing input explicitly.
+
+A tracker-specific manual prerequisite can block that tracker while other viable tracker lanes continue.
+
+## Safe issue reports
+
+Include:
+
+- upbrr version and operating system;
+- binary or Docker installation;
+- the shortest reproduction using `Example.Release.2026.1080p-GRP`;
+- sanitized logs around the failure;
+- expected and actual stage outcome.
+
+Exclude config exports, API keys, passwords, cookies, passkeys, announce URLs, OTP data, private tracker pages, and raw request or response bodies.

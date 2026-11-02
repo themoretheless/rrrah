@@ -1,0 +1,36 @@
+{
+  "scope": "Original AST global semantic merge/none strategy; actual NumPy, synthetic inputs.\n\nNo embedding model, cosine-helper adapter, database or image decoding involved.\nLogger-only adapter; preformed clusters are explicit synthetic caller inputs.\n",
+  "authored_controls_passed": 3,
+  "observations": [
+    {
+      "case": "global_merge_of_preformed_clusters_loses_nested_membership",
+      "input_total_members": 5,
+      "observed_cluster_size": 4,
+      "observed_siblings": [
+        "a1",
+        "a2",
+        "b"
+      ],
+      "missing": "b1"
+    },
+    {
+      "case": "none_strategy_resets_count_but_preserves_previous_similar_list",
+      "cluster_size": 1,
+      "similar_photos": [
+        {
+          "filepath": "sibling"
+        }
+      ],
+      "input_dict_mutated": true
+    },
+    {
+      "case": "unnormalized_embedding_boundary",
+      "dot_product": 1.0,
+      "independent_cosine": 0.5000000000000001,
+      "retained": 1,
+      "qualification": "Production upstream may guarantee normalized embeddings;not a normal-input defect or model accuracy claim."
+    }
+  ],
+  "numpy": "2.5.4",
+  "limits": "No semantic_deduplicate end-to-end/original model helper,actual embeddings,realphotos/browser/performance. Preformed-cluster helper boundary qualified only."
+}

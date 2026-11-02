@@ -1,0 +1,234 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package bhd
+
+import (
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+
+	"github.com/autobrr/upbrr/internal/bbcode"
+	"github.com/autobrr/upbrr/internal/bbcode/comparison"
+	imagehost "github.com/autobrr/upbrr/internal/imagehosting/host"
+)
+
+// BBCodeOptions controls tracker-specific description cleanup and artifact
+// extraction. BaseDir and UUID are retained inputs but are not currently read.
+type BBCodeOptions struct {
+	// Framestor preserves the original description as a bhd.nfo artifact.
+	Framestor bool
+	// Flux wraps non-empty cleaned text in a code block.
+	Flux    bool
+	BaseDir string
+	UUID    string
+	// OnNFO receives the original description before cleanup when Framestor is set.
+	// Callback failures are recorded as report notes rather than returned.
+	OnNFO func(text string) error
+}
+
+var (
+	bhdSizePattern   = regexp.MustCompile(`(?i)\[size=.*?\]`)
+	bhdURLImgPattern = regexp.MustCompile(`(?is)\[url=(https?://[^\]]+)\]\s*\[img(?:=[^\]]*)?\](https?://[^\[]+?)\[/img\]\s*\[/url\]`)
+	bhdImgTagPattern = regexp.MustCompile(`(?is)\[img(?:=[^\]]*)?\](https?://[^\[]+?)\[/img\]`)
+	bhdLooseImg      = regexp.MustCompile(`(?i)(https?://[^\s\[\]]+\.(?:png|jpe?g|webp|gif)(?:\?[^\s\[\]]*)?)`)
+	bhdEmptyCenter   = regexp.MustCompile(`(?i)\[center\]\s*\[/center\]`)
+	bhdEmptyAlign    = regexp.MustCompile(`(?i)\[align=[^\]]+\]\s*\[/align\]`)
+	bhdTonemapNotice = regexp.MustCompile(
+		`(?is)\[(?:center|align=center)\]\s*\[code\]\s*Screenshots\s+have\s+been\s+tonemapped\s+for\s+reference\s*\[/code\]\s*\[/(?:center|align)\]`,
+	)
+	bhdBotSignature = regexp.MustCompile(
+		`(?is)(?:\[(?:center|right|align=right)\]\s*(?:\[img=\d+\]https://blutopia\.xyz/favicon\.ico\[/img\]\s*)?\[b\]?Uploaded\s+Using\s+\[url=https://github\.com/HDInnovations/UNIT3D\]UNIT3D\[/url\]\s+Auto\s+Uploader\[/b\]?(?:\s*\[img=\d+\]https://blutopia\.xyz/favicon\.ico\[/img\])?\s*\[/(?:center|right|align)\])|(?:\[center\]\s*\[url=https://github\.com/z-ink/uploadrr\]\[img=\d+\]https://i\.ibb\.co/2NVWb0c/uploadrr\.webp\[/img\]\[/url\]\s*\[/center\])|(?:\[center\]\s*\[url=https://github\.com/edge20200/Only-Uploader\]Powered\s+by\s+Only-Uploader\[/url\]\s*\[/center\])|(?:\[center\]\s*\[url=/torrents\?perPage=\d+&name=[^\]]*\]\s*\[/url\]\s*\[/center\])|(?:\[center\]\s*(?:\[b\]\s*(?:\[size=\d+\])?brush(?:\[/size\])?\s*\[/b\]\s*)?This is an internal release which was first released exclusively on Aither\.\s*Cheers to all the Aither(?:\s+users)?\s*\[/center\])|(?:\[(?:center|right|align=right)\]\s*(?:\[url=[^\]]+\]\s*)?(?:\[size=[^\]]+\]\s*)?Created by(?:\s+[^[]*?)?\s*Upload Assistant(?:\s*\[/size\])?(?:\s*\[/url\])?\s*\[/(?:center|right|align)\])`,
+	)
+)
+
+func maskBHDComparisonBlocks(value string) (string, []string) {
+	matches := comparison.BlockRanges(value)
+	if len(matches) == 0 {
+		return value, nil
+	}
+	blocks := make([]string, 0, len(matches))
+	var masked strings.Builder
+	last := 0
+	for index, match := range matches {
+		masked.WriteString(value[last:match[0]])
+		masked.WriteString("\x00upbrr-comparison-" + strconv.Itoa(index) + "\x00")
+		blocks = append(blocks, value[match[0]:match[1]])
+		last = match[1]
+	}
+	masked.WriteString(value[last:])
+	return masked.String(), blocks
+}
+
+func restoreBHDComparisonBlocks(value string, blocks []string) string {
+	for index, block := range blocks {
+		value = strings.ReplaceAll(value, "\x00upbrr-comparison-"+strconv.Itoa(index)+"\x00", block)
+	}
+	return value
+}
+
+// CleanDescription removes unsupported BHD formatting and uploader signatures,
+// extracts unique image URLs, and applies the requested Framestor and Flux
+// behavior. Image extraction preserves the first occurrence of each raw URL.
+func CleanDescription(description string, options BBCodeOptions) bbcode.Report {
+	masked, comparisonBlocks := maskBHDComparisonBlocks(description)
+	desc := bbcode.NormalizeNewlines(masked)
+	report := bbcode.Report{}
+	imagelist := make([]bbcode.Image, 0)
+	if len(comparisonBlocks) > 0 {
+		report.Notes = append(report.Notes, bbcode.Note{
+			Kind:    "images",
+			Message: fmt.Sprintf("comparison_blocks=%d preserved_in_description=true excluded_from_screenshot_import=true", len(comparisonBlocks)),
+		})
+	}
+
+	if options.Framestor {
+		if options.OnNFO != nil {
+			if err := options.OnNFO(bbcode.NormalizeNewlines(description)); err != nil {
+				report.Notes = append(report.Notes, bbcode.Note{Kind: "nfo", Message: err.Error()})
+			}
+		}
+		report.Artifacts = append(report.Artifacts, bbcode.Artifact{
+			Name:    "bhd.nfo",
+			Kind:    "nfo",
+			Content: bbcode.NormalizeNewlines(description),
+		})
+	}
+
+	desc = bhdSizePattern.ReplaceAllString(desc, "")
+	desc = strings.ReplaceAll(desc, "[/size]", "")
+	desc = bhdBotSignature.ReplaceAllString(desc, "")
+	desc = strings.ReplaceAll(desc, "<", "/")
+	desc = strings.ReplaceAll(desc, "<", "\\")
+
+	seen := make(map[string]struct{})
+	candidates := 0
+	duplicates := 0
+	appendImage := func(imgURL, webURL string) {
+		candidates++
+		imgURL = strings.TrimSpace(imgURL)
+		if imgURL == "" {
+			return
+		}
+		key := strings.ToLower(imgURL)
+		if _, ok := seen[key]; ok {
+			duplicates++
+			return
+		}
+		seen[key] = struct{}{}
+		host := imagehost.ExtractHost(imgURL)
+		web := strings.TrimSpace(webURL)
+		if web == "" {
+			web = imgURL
+		}
+		rawURL := bbcode.NormalizeImageRawURL(imgURL)
+		imagelist = append(imagelist, bbcode.Image{
+			ImgURL: imgURL,
+			RawURL: rawURL,
+			WebURL: web,
+			Host:   host,
+		})
+	}
+
+	urlImgMatches := bhdURLImgPattern.FindAllStringSubmatch(desc, -1)
+	for _, match := range urlImgMatches {
+		if len(match) < 3 {
+			continue
+		}
+		appendImage(match[2], match[1])
+	}
+	desc = bhdURLImgPattern.ReplaceAllString(desc, "")
+
+	imgTagMatches := bhdImgTagPattern.FindAllStringSubmatch(desc, -1)
+	for _, match := range imgTagMatches {
+		if len(match) < 2 {
+			continue
+		}
+		appendImage(match[1], "")
+	}
+	desc = bhdImgTagPattern.ReplaceAllString(desc, "")
+
+	looseImages := bhdLooseImg.FindAllString(desc, -1)
+	for _, imgURL := range looseImages {
+		appendImage(imgURL, "")
+		desc = strings.ReplaceAll(desc, imgURL, "")
+	}
+	report.Notes = append(report.Notes, bbcode.Note{
+		Kind:    "images",
+		Message: fmt.Sprintf("candidates=%d extracted=%d duplicates=%d", candidates, len(imagelist), duplicates),
+	})
+
+	for _, image := range imagelist {
+		imgURL := regexp.QuoteMeta(image.ImgURL)
+		urlTag := regexp.MustCompile(`(?i)\[URL=` + imgURL + `\]\[/URL\]`)
+		desc = urlTag.ReplaceAllString(desc, "")
+		urlImg := regexp.MustCompile(`(?i)\[URL=` + imgURL + `\]\[img[^\]]*\]` + imgURL + `\[/img\]\[/URL\]`)
+		desc = urlImg.ReplaceAllString(desc, "")
+	}
+
+	desc = regexp.MustCompile(`(?i)\[URL=[\s\S]*?\]\[/URL\]`).ReplaceAllString(desc, "")
+	desc = bhdTonemapNotice.ReplaceAllString(desc, "")
+	desc = bhdEmptyCenter.ReplaceAllString(desc, "")
+	desc = bhdEmptyAlign.ReplaceAllString(desc, "")
+	desc = bbcode.RemoveExtraLines(desc)
+	desc = strings.TrimSpace(desc)
+
+	if options.Flux {
+		desc = strings.TrimRight(desc, " \t\n")
+		desc = strings.Trim(desc, "\n")
+		desc = regexp.MustCompile(`\n\n+`).ReplaceAllString(desc, "\n\n")
+		for strings.HasPrefix(desc, "\n") {
+			desc = strings.TrimPrefix(desc, "\n")
+		}
+		desc = strings.Trim(desc, "\n")
+		if strings.TrimSpace(strings.ReplaceAll(desc, "\n", "")) == "" {
+			return bbcode.Report{Images: imagelist}
+		}
+		report.Description = wrapBHDFluxText(desc, comparisonBlocks)
+	} else {
+		report.Description = desc
+	}
+
+	report.Description = restoreBHDComparisonBlocks(report.Description, comparisonBlocks)
+	if report.Description == "" {
+		report.Description = ""
+	}
+	if len(comparisonBlocks) == 0 && bbcode.IsOnlyTags(report.Description) {
+		return bbcode.Report{
+			Images:    imagelist,
+			Notes:     report.Notes,
+			Artifacts: report.Artifacts,
+		}
+	}
+	return bbcode.Report{
+		Description: report.Description,
+		Images:      imagelist,
+		Notes:       report.Notes,
+		Artifacts:   report.Artifacts,
+	}
+}
+
+func wrapBHDFluxText(value string, comparisonBlocks []string) string {
+	if len(comparisonBlocks) == 0 {
+		return "[code]" + value + "[/code]"
+	}
+	parts := make([]string, 0, len(comparisonBlocks)*2+1)
+	remaining := value
+	for index := range comparisonBlocks {
+		marker := "\x00upbrr-comparison-" + strconv.Itoa(index) + "\x00"
+		before, after, found := strings.Cut(remaining, marker)
+		if !found {
+			continue
+		}
+		if text := strings.TrimSpace(before); text != "" {
+			parts = append(parts, "[code]"+text+"[/code]")
+		}
+		parts = append(parts, marker)
+		remaining = after
+	}
+	if text := strings.TrimSpace(remaining); text != "" {
+		parts = append(parts, "[code]"+text+"[/code]")
+	}
+	return strings.Join(parts, "\n\n")
+}

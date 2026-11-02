@@ -1,0 +1,15 @@
+{
+  "command": "cargo +1.98.1 test --offline -p rrrah-dedup --test exact_repeated_metadata",
+  "exit_code": 0,
+  "passed": 2,
+  "failed": 0,
+  "tests": [
+    "rescans_follow_renames_removal_and_recreated_paths",
+    "repeated_comparisons_reread_content_when_size_and_modified_time_are_restored"
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_repeated_metadata.rs": "c6d2e3662a6729114ca745869267c63aaf3f532a12364607014b6ac3ee8b9828"
+  },
+  "scope": "fresh test build; default features; tests exercise scan and scan_verified, same inode/size/restored mtime content mutation and rename/remove/recreate; not full suite or concurrent mutation proof"
+}

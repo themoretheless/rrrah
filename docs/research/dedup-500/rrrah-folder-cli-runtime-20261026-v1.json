@@ -1,0 +1,66 @@
+{
+  "build": "cargo +1.98.1 build --offline --release -p rrrah-dedup --example scan_folder",
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d"
+  },
+  "runs": [
+    {
+      "case": "multi_root",
+      "args": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Другие"
+      ],
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 1049089 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Другие/copy.bin\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами/original.bin\"\n",
+      "stderr": "Scan complete: 3 files observed, 1 duplicate groups, 15760911 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "single_root",
+      "args": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Scan complete: 2 files observed, 0 duplicate groups, 6310918 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "missing",
+      "args": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/absent"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/absent\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 0 files observed, 0 duplicate groups, 0 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "no_args",
+      "args": [],
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "case": "help",
+      "args": [
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "Usage: scan_folder [--] FOLDER [FOLDER ...]\nFind byte-confirmed duplicate files recursively; never delete files.\nSymlinks are skipped. Limits: 1,000,000 entries and depth 256.\nExit: 0 complete, 1 incomplete scan, 2 missing folder argument.\n",
+      "stderr": ""
+    }
+  ],
+  "fixture_hashes_before": {
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами/original.bin": "7816069ace23f918bfa241215ea733ba4cae2da1878882bf9dbcea8cfb4dbb4c",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Другие/copy.bin": "7816069ace23f918bfa241215ea733ba4cae2da1878882bf9dbcea8cfb4dbb4c",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами/вложенная/different.bin": "68358eb74fecef047781ad463560f7500105f178d34ef1e66040f09b50d576c4"
+  },
+  "fixture_hashes_after": {
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами/original.bin": "7816069ace23f918bfa241215ea733ba4cae2da1878882bf9dbcea8cfb4dbb4c",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Другие/copy.bin": "7816069ace23f918bfa241215ea733ba4cae2da1878882bf9dbcea8cfb4dbb4c",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-uof5gn6d/Папка с пробелами/вложенная/different.bin": "68358eb74fecef047781ad463560f7500105f178d34ef1e66040f09b50d576c4"
+  },
+  "temporary_fixture_cleaned_after_run": true,
+  "scope": "Real release CLI, recursive Unicode/spaced paths and multiple roots; >1MiB equal prefix tail-negative, missing root and usage codes. No visual decode or broad filesystem qualification."
+}

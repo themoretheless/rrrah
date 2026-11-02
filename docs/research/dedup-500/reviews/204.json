@@ -2,7 +2,7 @@
   "index": 204,
   "repository": "IlyaSemenov/bunlock-dedupe",
   "commit": "9e020bbbe6f2e6d282779fa2ed62446494e827e8",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All193 tracked artifacts assessed:192 whole reads+1 generated lockfile structural review;8 original progress callbacks+14 authored controls pass;full Bun runtime/external links unqualified.",
   "decision": "reject-domain",
   "finding": "Bun lockfile semver rewrite; no image comparison.",
   "available_source_evidence": [
@@ -74,5 +74,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/bunlock204-source-review-v49-20261024.json",
+  "authored_controls_run": 14,
+  "original_tests_run": 8
 }

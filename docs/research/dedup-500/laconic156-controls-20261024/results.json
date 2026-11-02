@@ -1,0 +1,28 @@
+{
+  "original_test_bodies_passed": 12,
+  "original_test_names": [
+    "test_context_dedup_first_send_is_untouched",
+    "test_context_dedup_replaces_repeat_for_same_recipient",
+    "test_context_dedup_does_not_leak_across_recipients",
+    "test_small_blocks_are_never_deduplicated",
+    "test_store_mode_rehydration_roundtrip",
+    "test_multi_block_payload_dedups_per_block",
+    "test_unknown_handle_raises",
+    "test_dedup_is_lossless_when_nothing_repeats",
+    "test_previous_calls_are_not_evidence_of_active_context",
+    "test_references_identify_actual_context_location",
+    "test_dedup_preserves_code_with_blank_lines",
+    "test_store_mode_uses_explicitly_supplied_empty_store"
+  ],
+  "authored_controls_passed": 2,
+  "collision": {
+    "first": "owned-block-555768",
+    "second": "owned-block-670429",
+    "digest40bit": "de2842ba71"
+  },
+  "scope": "Unchanged original session/store/segments/counter/exception modules;12 original test function bodies replayed with actual HeuristicCounter;namespaceinit bypass explicit,not fullpytest/CLI suite;owned synthetic strings only",
+  "findings": [
+    "Actual SHA256 prefix40bit collision overwrites original text under samehandle;rehydration returns other content.",
+    "Store accepts arbitrary handleprefix with same digest."
+  ]
+}

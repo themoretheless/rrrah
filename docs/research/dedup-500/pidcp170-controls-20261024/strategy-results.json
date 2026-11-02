@@ -1,0 +1,37 @@
+{
+  "scope": "Complete original strategy/messages/config/state/token modules and original test helper; real tokenizer0.0.4 dependency installed, though these paths use original character-based estimates. No config loading, host pipeline, real files, providers or shell actions.",
+  "authored_controls_run": 4,
+  "observations": [
+    {
+      "case": "identical arguments with differing outputs prunes historical output",
+      "observed": {
+        "prunedCount": 1,
+        "tokensSaved": 0
+      },
+      "oldAfter": "[pruned by pi-dcp: duplicate read call] (recall toolCallId=old restores it)"
+    },
+    {
+      "case": "latest errored call supersedes earlier successful exact-signature result",
+      "observed": {
+        "prunedCount": 1,
+        "tokensSaved": 0
+      }
+    },
+    {
+      "case": "requested range containment removes differing historical content",
+      "observed": {
+        "prunedCount": 1,
+        "tokensSaved": 0
+      }
+    },
+    {
+      "case": "short duplicate expands placeholder while savings floor hides growth",
+      "beforeChars": 2,
+      "afterChars": 73,
+      "observed": {
+        "prunedCount": 1,
+        "tokensSaved": 0
+      }
+    }
+  ]
+}

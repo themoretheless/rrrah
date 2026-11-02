@@ -1,0 +1,86 @@
+{
+  "repository": "ragibson/SMS-MMS-deduplication",
+  "commit": "7e33a7e1df7ae9f4fb04028f5c0cc7f90fa5ae07",
+  "whole_files_read": [
+    {
+      "path": "dedupe_texts.py",
+      "git_blob": "4fb65e056a45a886ac5e9a740d7456ad7b94473c",
+      "sha256": "8f2d2fccaad82f286c7bf456382d5f1355bb93a350bb106eb236e2a3b655804a",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/shared_testing_functions.py",
+      "git_blob": "1db35174dc7e2628c177b4cefe167b4cae3f74c3",
+      "sha256": "0161da9c76712b72286c4df62192b6eb0d02055ec96a003831556e6c1bbd4d07",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_country_codes.py",
+      "git_blob": "82ba81c0b8e48a616b1294530e3e241273124c23",
+      "sha256": "6a6702839dcd34c2cf09cadd77fea70a9fa84fc2207c67956c85465c1c6e060f",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_cross_message_protocol.py",
+      "git_blob": "85285c8f923236a2606812a199843c291bfba5bf",
+      "sha256": "20107c409c01cd196eb70d8db27080f60e49053c233fe9e44d258b805bb4ac32",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_different_smil_format.py",
+      "git_blob": "de37d6d0e18b6412823408d39827611f0b476b49",
+      "sha256": "0b40369f0a820538ae10e0d7da3e0b97eb6e96ff57117311261eb64a594991b3",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_multi_file.py",
+      "git_blob": "4b78aab0df33f7a00554ea74e4cfbd4f2b2ad23d",
+      "sha256": "72e35c1768de0ebde3e940ca04e540e78c042c1c3f7adc5202d60ce2a3c3d891",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_multiple_duplicates.py",
+      "git_blob": "9313b2180a74adee91b6e53788601879c397a385",
+      "sha256": "8b8b54acea26b880caf43b539b0fbedde830b0554a599cb41d88b77452079f0f",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_timestamps.py",
+      "git_blob": "b7d24630fe4598e631b682c13b1d0cfe07e84351",
+      "sha256": "a89de6c1733e8dbdbeb8c8219e0f0a6753ead1f82bccc405928cf16bb3d31df8",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_utf16_encoding.py",
+      "git_blob": "09577927e4a9cefe19fd656e753285bb86e56d7f",
+      "sha256": "06fa3544d32d737f32a3536cdfa7c0a7a25b59246512e5e7c5ffc55c9a10fb99",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_whitespace.py",
+      "git_blob": "f5a4dfcd657a03cc11f37c5feac8c7217920fc53",
+      "sha256": "2deb7cebfa68a08129feef981679c36bf455351e3b57260e033c3ed89d138e7e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 10,
+  "tracked_blobs": 29,
+  "whole_repo_complete": false,
+  "acquired_verified_blobs": 29,
+  "acquisition_is_not_review_credit": true,
+  "original_tests_passed": 14,
+  "original_test_scope": "Unchanged unittest suite and CLI children on owned pinned upstream XML fixtures;PATH selects isolated Python3.14/lxml6.0.2;not real backup restore",
+  "authored_controls_passed": 4,
+  "controls": "sms134-controls-20261024/results.json",
+  "original_harness": "sms134-original-tests-20261024",
+  "findings": [
+    "Independent equality assertions confirm7to2 messages for multiple_duplicates fixture.",
+    "Different service_center metadata intentionally ignored in domain key;not byte identity.",
+    "Different data payload strings kept separately.",
+    "Default mode keeps SMS/MMS separately but shared log representative map can report MMS as kept representative for removed SMS.",
+    "Original multiple_duplicates and UTF16 tests use assertTrue(integer,actualCount) instead of count equality;green does not establish intended count.Independent multiple_duplicates exact-count control7to2 passed."
+  ],
+  "decision": "reject-domain",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

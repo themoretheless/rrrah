@@ -1,0 +1,715 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { UploadFacet } from "../../releaseSession/types";
+import TrackerUploadPage from "./index";
+
+afterEach(cleanup);
+
+const uploadFacet = (
+  view: Partial<UploadFacet["view"]> = {},
+  methods: Partial<Omit<UploadFacet, "view">> = {},
+): UploadFacet => ({
+  view: {
+    revision: 1,
+    selectedTrackers: ["EXAMPLE"],
+    projections: null,
+    ignoredDupesFor: [],
+    questionnaireDirty: false,
+    workflowBusy: false,
+    options: { noSeed: false, runLogLevel: "info" },
+    liveTest: false,
+    mutationsAllowed: true,
+    dryRunStatus: "idle",
+    uploadStatus: "idle",
+    dryRunResult: null,
+    result: null,
+    trackerOutcomes: [],
+    submissionExclusions: [],
+    error: "",
+    ...view,
+  },
+  chooseTrackers: vi.fn(),
+  changeOptions: vi.fn(),
+  runDryRun: vi.fn(async () => true),
+  start: vi.fn(async () => true),
+  cancel: vi.fn(async () => true),
+  retry: vi.fn(async () => true),
+  retryClientInjection: vi.fn(async () => true),
+  ...methods,
+});
+
+const renderPage = (facet: UploadFacet) => render(<TrackerUploadPage facet={facet} />);
+
+describe("TrackerUploadPage", () => {
+  it("leaves tracker questions on Dupe Checking", () => {
+    renderPage(
+      uploadFacet({
+        projections: {
+          projections: [
+            {
+              trackerId: "EXAMPLE",
+              displayName: "Example Tracker",
+              questionnaire: [{ key: "edition", label: "Edition", required: true }],
+            },
+          ],
+        } as unknown as NonNullable<UploadFacet["view"]["projections"]>,
+      }),
+    );
+    expect(screen.queryByRole("heading", { name: "Tracker questions" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Apply tracker answers" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Edition *")).not.toBeInTheDocument();
+  });
+
+  it("locks client injection and mutations while retaining the live-test dry run", () => {
+    const facet = uploadFacet({
+      liveTest: true,
+      mutationsAllowed: false,
+      options: { noSeed: true, runLogLevel: "info" },
+      result: {
+        results: [
+          { trackerId: "EXAMPLE", submissionStatus: "failed" },
+          {
+            trackerId: "OTHER",
+            submissionStatus: "completed",
+            clientInjectionStatus: "failed",
+            clientFailureCode: "client_injection",
+          },
+        ],
+      } as unknown as NonNullable<UploadFacet["view"]["result"]>,
+    });
+    renderPage(facet);
+    expect(screen.getByRole("checkbox", { name: "Skip client injection" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Skip client injection" })).toBeDisabled();
+    for (const name of ["Start upload", "Retry failed uploads", "Retry client injection"]) {
+      const button = screen.getByRole("button", { name });
+      expect(button).toBeDisabled();
+      fireEvent.click(button);
+    }
+    expect(facet.start).not.toHaveBeenCalled();
+    expect(facet.retry).not.toHaveBeenCalled();
+    expect(facet.retryClientInjection).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Run dry run" }));
+    expect(facet.runDryRun).toHaveBeenCalledOnce();
+    expect(screen.getByLabelText("Log level")).toHaveValue("info");
+  });
+
+  it("offers workflow dry run and direct upload without a review step", () => {
+    const runDryRun = vi.fn(async () => true);
+    const start = vi.fn(async () => true);
+    renderPage(
+      uploadFacet(
+        {
+          trackerOutcomes: [
+            { trackerId: "EXAMPLE", uploadEligibility: "eligible" },
+          ] as unknown as UploadFacet["view"]["trackerOutcomes"],
+        },
+        { runDryRun, start },
+      ),
+    );
+
+    expect(screen.queryByRole("heading", { name: "Tracker intent" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Review upload" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Run dry run" }));
+    fireEvent.click(screen.getByRole("button", { name: "Start upload" }));
+    expect(runDryRun).toHaveBeenCalledOnce();
+    expect(start).toHaveBeenCalledOnce();
+  });
+
+  it("blocks initiating actions during workflow commands but keeps cancellation available", () => {
+    const facet = uploadFacet({
+      trackerOutcomes: [
+        { trackerId: "EXAMPLE", uploadEligibility: "eligible" },
+      ] as unknown as UploadFacet["view"]["trackerOutcomes"],
+      result: {
+        results: [
+          { trackerId: "EXAMPLE", submissionStatus: "failed" },
+          {
+            trackerId: "OTHER",
+            submissionStatus: "completed",
+            clientInjectionStatus: "failed",
+            clientFailureCode: "client_injection",
+          },
+        ],
+      } as unknown as NonNullable<UploadFacet["view"]["result"]>,
+    });
+    const { rerender } = renderPage(facet);
+    const actionNames = [
+      "Run dry run",
+      "Start upload",
+      "Retry failed uploads",
+      "Retry client injection",
+    ];
+    for (const name of actionNames) expect(screen.getByRole("button", { name })).toBeEnabled();
+    rerender(
+      <TrackerUploadPage facet={{ ...facet, view: { ...facet.view, workflowBusy: true } }} />,
+    );
+    for (const name of actionNames) {
+      const button = screen.getByRole("button", { name });
+      expect(button).toBeDisabled();
+      fireEvent.click(button);
+    }
+    for (const method of [facet.runDryRun, facet.start, facet.retry, facet.retryClientInjection])
+      expect(method).not.toHaveBeenCalled();
+    rerender(
+      <TrackerUploadPage
+        facet={{ ...facet, view: { ...facet.view, workflowBusy: true, uploadStatus: "running" } }}
+      />,
+    );
+    const cancel = screen.getByRole("button", { name: "Cancel upload" });
+    expect(cancel).toBeEnabled();
+    fireEvent.click(cancel);
+    expect(facet.cancel).toHaveBeenCalledOnce();
+  });
+
+  it("keeps a resumed backend dry run disabled without a local command owner", () => {
+    const facet = uploadFacet({ dryRunStatus: "running", workflowBusy: false });
+    renderPage(facet);
+    const dryRun = screen.getByRole("button", { name: "Running dry run..." });
+    expect(dryRun).toBeDisabled();
+    fireEvent.click(dryRun);
+    expect(facet.runDryRun).not.toHaveBeenCalled();
+  });
+
+  it("renders submission exclusions and suppresses actions when every tracker is excluded", () => {
+    const runDryRun = vi.fn(async () => true);
+    const start = vi.fn(async () => true);
+    renderPage(
+      uploadFacet(
+        {
+          selectedTrackers: ["AITHER", "BLU"],
+          uploadStatus: "ready",
+          submissionExclusions: [
+            {
+              trackerId: "AITHER",
+              reason: "already_uploaded",
+              confirmedAt: "2026-09-18T10:00:00Z",
+            },
+            {
+              trackerId: "BLU",
+              reason: "already_uploaded",
+              confirmedAt: "2026-09-18T11:00:00Z",
+            },
+          ],
+        },
+        { runDryRun, start },
+      ),
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "All selected trackers were already uploaded. No upload is needed.",
+    );
+    expect(screen.getByLabelText("Submission exclusions")).toHaveTextContent("AITHER");
+    expect(screen.getByLabelText("Submission exclusions")).toHaveTextContent("BLU");
+    for (const name of ["Run dry run", "Start upload"]) {
+      const button = screen.getByRole("button", { name });
+      expect(button).toBeDisabled();
+      fireEvent.click(button);
+    }
+    expect(runDryRun).not.toHaveBeenCalled();
+    expect(start).not.toHaveBeenCalled();
+  });
+
+  it("keeps upload actions for selected trackers without submission exclusions", () => {
+    renderPage(
+      uploadFacet({
+        selectedTrackers: ["AITHER", "BLU"],
+        trackerOutcomes: [
+          { trackerId: "AITHER", uploadEligibility: "skipped" },
+          { trackerId: "BLU", uploadEligibility: "eligible" },
+        ] as unknown as UploadFacet["view"]["trackerOutcomes"],
+        submissionExclusions: [
+          {
+            trackerId: "AITHER",
+            reason: "already_uploaded",
+            confirmedAt: "2026-09-18T10:00:00Z",
+          },
+        ],
+      }),
+    );
+
+    expect(screen.getByRole("button", { name: "Run dry run" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Start upload" })).toBeEnabled();
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("allows another dry run but blocks upload when every tracker lane failed preparation", () => {
+    const runDryRun = vi.fn(async () => true);
+    const start = vi.fn(async () => true);
+    renderPage(
+      uploadFacet(
+        {
+          selectedTrackers: ["AITHER", "BLU"],
+          trackerOutcomes: [
+            {
+              trackerId: "AITHER",
+              uploadEligibility: "skipped",
+              uploadSkipReason: "upload_preparation_failed",
+            },
+            {
+              trackerId: "BLU",
+              uploadEligibility: "skipped",
+              uploadSkipReason: "upload_preparation_failed",
+            },
+          ] as unknown as UploadFacet["view"]["trackerOutcomes"],
+        },
+        { runDryRun, start },
+      ),
+    );
+
+    const dryRunButton = screen.getByRole("button", { name: "Run dry run" });
+    const uploadButton = screen.getByRole("button", { name: "Start upload" });
+    expect(dryRunButton).toBeEnabled();
+    expect(uploadButton).toBeDisabled();
+    fireEvent.click(dryRunButton);
+    fireEvent.click(uploadButton);
+    expect(runDryRun).toHaveBeenCalledOnce();
+    expect(start).not.toHaveBeenCalled();
+  });
+
+  it("allows a fully skipped dry-run plan to complete as a no-op", () => {
+    const start = vi.fn(async () => true);
+    renderPage(
+      uploadFacet(
+        {
+          selectedTrackers: ["AITHER", "BLU"],
+          trackerOutcomes: [
+            {
+              trackerId: "AITHER",
+              uploadEligibility: "skipped",
+              uploadSkipReason: "upload_preparation_skipped",
+            },
+            {
+              trackerId: "BLU",
+              uploadEligibility: "skipped",
+              uploadSkipReason: "upload_preparation_skipped",
+            },
+          ] as unknown as UploadFacet["view"]["trackerOutcomes"],
+          dryRunResult: {
+            status: "skipped",
+            reports: [
+              { trackerId: "AITHER", status: "skipped" },
+              { trackerId: "BLU", status: "skipped" },
+            ],
+          } as unknown as NonNullable<UploadFacet["view"]["dryRunResult"]>,
+        },
+        { start },
+      ),
+    );
+
+    const uploadButton = screen.getByRole("button", { name: "Start upload" });
+    expect(uploadButton).toBeEnabled();
+    fireEvent.click(uploadButton);
+    expect(start).toHaveBeenCalledOnce();
+  });
+
+  it("allows a skipped dry-run plan after an earlier tracker exclusion", () => {
+    const start = vi.fn(async () => true);
+    renderPage(
+      uploadFacet(
+        {
+          selectedTrackers: ["AITHER", "BLU"],
+          trackerOutcomes: [
+            {
+              trackerId: "AITHER",
+              uploadEligibility: "skipped",
+              uploadSkipReason: "duplicate_found",
+            },
+            {
+              trackerId: "BLU",
+              uploadEligibility: "skipped",
+              uploadSkipReason: "upload_preparation_skipped",
+            },
+          ] as unknown as UploadFacet["view"]["trackerOutcomes"],
+          dryRunResult: {
+            status: "skipped",
+            reports: [{ trackerId: "BLU", status: "skipped" }],
+          } as unknown as NonNullable<UploadFacet["view"]["dryRunResult"]>,
+        },
+        { start },
+      ),
+    );
+
+    const uploadButton = screen.getByRole("button", { name: "Start upload" });
+    expect(uploadButton).toBeEnabled();
+    fireEvent.click(uploadButton);
+    expect(start).toHaveBeenCalledOnce();
+  });
+
+  it("blocks preview and upload while questionnaire drafts are unapplied", () => {
+    const facet = uploadFacet({ questionnaireDirty: true });
+    renderPage(facet);
+    expect(screen.getByRole("button", { name: "Run dry run" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Start upload" })).toBeDisabled();
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Apply your tracker answer changes on Dupe Checking",
+    );
+  });
+
+  it("shows projection-backed tracker upload names before any dry run", () => {
+    const projections = {
+      projections: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          canonicalReleaseName: "Example.Release.2026.1080p-GRP",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    renderPage(uploadFacet({ projections }));
+
+    expect(screen.getByText("Example.Release.2026.1080p-GRP")).toBeInTheDocument();
+    expect(screen.queryByText("Canonical:")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Expand Example Tracker" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows the canonical name as secondary context when it differs from the tracker name", () => {
+    const projections = {
+      projections: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          canonicalReleaseName: "Example Release 2026 1080p-GRP",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    renderPage(uploadFacet({ projections }));
+
+    expect(screen.getByText("Example.Release.2026.1080p-GRP")).toBeInTheDocument();
+    expect(screen.getByText("Example Release 2026 1080p-GRP")).toBeInTheDocument();
+  });
+
+  it.each(["release_name_override", "release_name_override_generated"])(
+    "renders %s from the current projection during dry-run review",
+    (code) => {
+      const projection = (policyDecisions: object[]) =>
+        ({
+          projections: [
+            {
+              trackerId: "EXAMPLE",
+              displayName: "Example Tracker",
+              canonicalReleaseName: "Example.Release.2026.1080p-GRP",
+              uploadReleaseName: "Example.Release.2026.1080p-GRP",
+              policyDecisions,
+            },
+          ],
+        }) as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+      const dryRunResult = {
+        status: "completed",
+        reports: [
+          {
+            trackerId: "EXAMPLE",
+            displayName: "Example Tracker",
+            uploadReleaseName: "Example.Release.2026.1080p-GRP",
+            status: "ready",
+          },
+        ],
+      } as unknown as NonNullable<UploadFacet["view"]["dryRunResult"]>;
+      const notice = {
+        code,
+        decision: "rebuilt",
+        blocking: false,
+        namingRuleId: "example/automatic-name/v1",
+        message: "Example requires automatic naming; the opaque name was replaced.",
+      };
+      const rendered = renderPage(
+        uploadFacet({ dryRunResult, dryRunStatus: "ready", projections: projection([notice]) }),
+      );
+
+      expect(screen.getByText("Example.Release.2026.1080p-GRP")).toBeInTheDocument();
+      expect(screen.getByLabelText("Tracker naming notices for EXAMPLE")).toHaveTextContent(
+        notice.message,
+      );
+
+      rendered.rerender(
+        <TrackerUploadPage
+          facet={uploadFacet({
+            dryRunResult,
+            dryRunStatus: "ready",
+            projections: projection([]),
+          })}
+        />,
+      );
+
+      expect(screen.queryByLabelText("Tracker naming notices for EXAMPLE")).not.toBeInTheDocument();
+    },
+  );
+
+  it("keeps tracker names visible for collapsed, partial, and failed dry-run results", () => {
+    const projections = {
+      projections: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          canonicalReleaseName: "Example.Release.2026.1080p-GRP",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+        },
+        {
+          trackerId: "OTHER",
+          displayName: "Other Tracker",
+          canonicalReleaseName: "Example.Release.2026.REPACK.1080p-GRP",
+          uploadReleaseName: "Example.Release.2026.REPACK.1080p-GRP",
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    const dryRunResult = {
+      status: "partial",
+      reports: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+          status: "failed",
+          failures: [{ failure: { Code: "upload_failed", Message: "Synthetic failure." } }],
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["dryRunResult"]>;
+    renderPage(
+      uploadFacet({
+        selectedTrackers: ["EXAMPLE", "OTHER"],
+        dryRunStatus: "ready",
+        projections,
+        dryRunResult,
+      }),
+    );
+
+    expect(screen.getByText("partial")).toBeInTheDocument();
+    expect(screen.getByText("failed")).toBeInTheDocument();
+    expect(screen.getByText("Example.Release.2026.1080p-GRP")).toBeInTheDocument();
+    expect(screen.getByText("Example.Release.2026.REPACK.1080p-GRP")).toBeInTheDocument();
+    expect(screen.queryByText("Synthetic failure.")).not.toBeInTheDocument();
+  });
+
+  it("merges dry-run report details by tracker without replacing unrelated projections", () => {
+    const projections = {
+      projections: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          canonicalReleaseName: "Example.Release.2026.1080p-GRP",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+        },
+        {
+          trackerId: "OTHER",
+          displayName: "Other Tracker",
+          canonicalReleaseName: "Example.Release.2026.REPACK.1080p-GRP",
+          uploadReleaseName: "Example.Release.2026.REPACK.1080p-GRP",
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    const dryRunResult = {
+      status: "completed",
+      reports: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          uploadReleaseName: "Example.Release.2026.PROPER.1080p-GRP",
+          status: "ready",
+          endpoint: "https://tracker.invalid/upload",
+          fields: [{ key: "category", value: "1" }],
+          files: [{ field: "torrent", present: true }],
+          clientInjection: { status: "completed", message: "Injected." },
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["dryRunResult"]>;
+    renderPage(
+      uploadFacet({
+        selectedTrackers: ["EXAMPLE", "OTHER"],
+        dryRunStatus: "ready",
+        projections,
+        dryRunResult,
+      }),
+    );
+
+    // The reviewed projection name stays authoritative; the report's differing
+    // name must not be rendered as the reviewed name.
+    expect(screen.getByText("Example.Release.2026.1080p-GRP")).toBeInTheDocument();
+    expect(screen.queryByText("Example.Release.2026.PROPER.1080p-GRP")).not.toBeInTheDocument();
+    expect(screen.getByText("Example.Release.2026.REPACK.1080p-GRP")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Expand Other Tracker" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Expand Example Tracker" }));
+    expect(screen.getByText("https://tracker.invalid/upload")).toBeInTheDocument();
+    expect(screen.getByText("category: 1")).toBeInTheDocument();
+  });
+
+  it("renders generated dry-run and upload outcomes", () => {
+    const retry = vi.fn(async () => true);
+    const dryRunResult = {
+      status: "completed",
+      reports: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+          status: "ready",
+          endpoint: "https://tracker.invalid/upload",
+          fields: [{ key: "category", value: "1" }],
+          files: [{ field: "torrent", present: true }],
+          clientInjection: { status: "completed", message: "Injected." },
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["dryRunResult"]>;
+    const result = {
+      status: "failed",
+      results: [
+        {
+          trackerId: "EXAMPLE",
+          status: "failed",
+          submissionStatus: "failed",
+          clientInjectionStatus: "pending",
+          failures: [
+            {
+              failure: {
+                Code: "internal",
+                Operation: "upload_execute",
+                Message: "Tracker rejected the synthetic payload.",
+                Recovery: "retry",
+              },
+            },
+          ],
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["result"]>;
+    renderPage(uploadFacet({ dryRunStatus: "ready", dryRunResult, result }, { retry }));
+
+    fireEvent.click(screen.getByRole("button", { name: "Expand Example Tracker" }));
+    expect(screen.getByText("Example.Release.2026.1080p-GRP")).toBeInTheDocument();
+    expect(screen.getByText("category: 1")).toBeInTheDocument();
+    expect(screen.getByText("Tracker rejected the synthetic payload.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Retry failed uploads" }));
+    expect(retry).toHaveBeenCalledOnce();
+  });
+
+  it("offers client-only retry for completed submissions", () => {
+    const retryClientInjection = vi.fn(async () => true);
+    const result = {
+      status: "partial",
+      results: [
+        {
+          trackerId: "EXAMPLE",
+          status: "partial",
+          submissionStatus: "completed",
+          clientInjectionStatus: "failed",
+          clientFailureCode: "client_injection",
+          clientInjectionMessage: "Exact-torrent client injection failed.",
+          failures: [
+            {
+              failure: {
+                Code: "client_injection_failed",
+                Operation: "client_injection",
+                Message: "Exact-torrent client injection failed.",
+                Recovery: "retry",
+              },
+            },
+          ],
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["result"]>;
+    const { container } = renderPage(uploadFacet({ result }, { retryClientInjection }));
+
+    expect(screen.queryByRole("button", { name: "Retry failed uploads" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Retry client injection" }));
+    expect(retryClientInjection).toHaveBeenCalledOnce();
+    expect(
+      screen.getByText(
+        "Submission: completed · Client injection: failed · Exact-torrent client injection failed.",
+      ),
+    ).toBeInTheDocument();
+    expect(container.textContent?.match(/Exact-torrent client injection failed\./g)).toHaveLength(
+      1,
+    );
+  });
+
+  it("marks each tracker with the backend upload decision before any dry run", () => {
+    const projections = {
+      projections: [
+        {
+          trackerId: "EXAMPLE",
+          displayName: "Example Tracker",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+        },
+        {
+          trackerId: "OTHER",
+          displayName: "Other Tracker",
+          uploadReleaseName: "Example.Release.2026.1080p-GRP",
+        },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    const trackerOutcomes = [
+      { trackerId: "EXAMPLE", uploadEligibility: "eligible" },
+      { trackerId: "OTHER", uploadEligibility: "skipped", uploadSkipReason: "duplicate_found" },
+    ] as unknown as UploadFacet["view"]["trackerOutcomes"];
+    renderPage(
+      uploadFacet({ selectedTrackers: ["EXAMPLE", "OTHER"], projections, trackerOutcomes }),
+    );
+
+    expect(screen.getByText("Will upload")).toBeInTheDocument();
+    expect(screen.getByText("Skipped: duplicate found")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Duplicates/ })).not.toBeInTheDocument();
+  });
+
+  it("stays silent while the decision is unknown and falls back when a reason has no label", () => {
+    const projections = {
+      projections: [
+        { trackerId: "EXAMPLE", displayName: "Example Tracker" },
+        { trackerId: "OTHER", displayName: "Other Tracker" },
+        { trackerId: "THIRD", displayName: "Third Tracker" },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    const trackerOutcomes = [
+      { trackerId: "EXAMPLE", uploadEligibility: "unknown" },
+      {
+        trackerId: "OTHER",
+        uploadEligibility: "skipped",
+        uploadSkipReason: "upload_preparation_skipped",
+      },
+      {
+        trackerId: "THIRD",
+        uploadEligibility: "skipped",
+        uploadSkipReason: "reason_from_a_newer_backend",
+      },
+    ] as unknown as UploadFacet["view"]["trackerOutcomes"];
+    renderPage(
+      uploadFacet({
+        selectedTrackers: ["EXAMPLE", "OTHER", "THIRD"],
+        projections,
+        trackerOutcomes,
+      }),
+    );
+
+    expect(screen.getByText("Skipped: skipped during upload preparation")).toBeInTheDocument();
+    expect(screen.getByText("Skipped")).toBeInTheDocument();
+    expect(screen.getByText("Example Tracker").parentElement?.textContent).toBe("Example Tracker");
+    expect(screen.queryByText("Will upload")).not.toBeInTheDocument();
+  });
+
+  it("shows the backend rule message instead of the generic not-ready label", () => {
+    const projections = {
+      projections: [
+        { trackerId: "EXAMPLE", displayName: "Example Tracker" },
+        { trackerId: "OTHER", displayName: "Other Tracker" },
+      ],
+    } as unknown as NonNullable<UploadFacet["view"]["projections"]>;
+    const trackerOutcomes = [
+      {
+        trackerId: "EXAMPLE",
+        uploadEligibility: "skipped",
+        uploadSkipReason: "not_ready",
+        uploadSkipDetail: "Tracker does not accept this genre.",
+      },
+      { trackerId: "OTHER", uploadEligibility: "skipped", uploadSkipReason: "not_ready" },
+    ] as unknown as UploadFacet["view"]["trackerOutcomes"];
+    renderPage(
+      uploadFacet({ selectedTrackers: ["EXAMPLE", "OTHER"], projections, trackerOutcomes }),
+    );
+
+    expect(screen.getByText("Skipped: Tracker does not accept this genre.")).toBeInTheDocument();
+    expect(screen.getByText("Skipped: tracker is not ready to upload")).toBeInTheDocument();
+  });
+});

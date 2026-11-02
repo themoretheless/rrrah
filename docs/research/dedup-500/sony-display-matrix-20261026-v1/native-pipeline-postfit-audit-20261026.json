@@ -1,0 +1,16 @@
+{
+  "source_sha256": {
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-develop/src/lib.rs": "f0ba669d3bd890ee258a1a77372a6d30e22f05f44e2e9f2e67a60af5b5e5e0d0",
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991"
+  },
+  "verified_native_pipeline": [
+    "Sensor equality path invokes DevelopOptions::default.",
+    "Default highlight recovery enabled; Auto demosaic; false-color/green-equilibration/impulse/fringe adjustments disabled.",
+    "Per-photosite white balance (including second green) precedes demosaic.",
+    "Camera XYZ-to-camera metadata feeds camera-to-linear-sRGB matrix; matrix applies after demosaic/highlight processing; output remains unclamped linear RGB."
+  ],
+  "comparison_model_limit": "Current photometric gain/offset fits each RGB channel independently. It cannot represent cross-channel color mixing caused by different 3x3 color transforms. This is a model limitation, not proof that the observed rejection is caused by a matrix mismatch.",
+  "next_discriminating_experiment": "Fit diagnostic full3x3-plus-offset mapping using only a fixed training subset of aligned in-range opaque pairs; measure both directions on disjoint spatially interleaved samples, retain highlight residuals and negative controls. Do not promote acceptance from in-sample fit or discard original failed references.",
+  "scope": "Current source audit plus experiment design; no production algorithm/threshold change, no new full-matrix measurements."
+}

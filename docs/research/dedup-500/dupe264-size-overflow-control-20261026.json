@@ -1,0 +1,25 @@
+{
+  "scope": "Original parse_size; scalar CLI narrowing/bounds expressions; no allocation/filesystem. Initial run4096 timed out10s, process terminal; independent repeat with30s recorded below.",
+  "source": "docs/research/dedup-500/evidence/markfasheh--duperemove/remaining-pinned/util.c",
+  "sha256": "2d06932414224a975dcb4f08c1819864ca599673836be1e3f125d14cb74707a9",
+  "harness": "#include <stdio.h>\n#include <stdlib.h>\n#include <stdint.h>\n#include <ctype.h>\n#include <inttypes.h>\n#define eprintf(...) fprintf(stderr,__VA_ARGS__)\nuint64_t parse_size(char *s)\n{\n\tint i;\n\tchar c;\n\tuint64_t mult = 1;\n\n\tfor (i = 0; s && s[i] && isdigit(s[i]); i++) ;\n\tif (!i) {\n\t\teprintf(\"ERROR: size value is empty\\n\");\n\t\texit(50);\n\t}\n\n\tif (s[i]) {\n\t\tc = tolower(s[i]);\n\t\tswitch (c) {\n\t\tcase 'e':\n\t\t\tmult *= 1024;\n\t\t\t/* fallthrough */\n\t\tcase 'p':\n\t\t\tmult *= 1024;\n\t\t\t/* fallthrough */\n\t\tcase 't':\n\t\t\tmult *= 1024;\n\t\t\t/* fallthrough */\n\t\tcase 'g':\n\t\tcase 'G':\n\t\t\tmult *= 1024;\n\t\t\t/* fallthrough */\n\t\tcase 'm':\n\t\tcase 'M':\n\t\t\tmult *= 1024;\n\t\t\t/* fallthrough */\n\t\tcase 'k':\n\t\tcase 'K':\n\t\t\tmult *= 1024;\n\t\t\t/* fallthrough */\n\t\tcase 'b':\n\t\t\tbreak;\n\t\tdefault:\n\t\t\teprintf(\"ERROR: Unknown size descriptor \"\n\t\t\t\t\"'%c'\\n\", c);\n\t\t\texit(1);\n\t\t}\n\t}\n\tif (s[i] && s[i+1]) {\n\t\teprintf(\"ERROR: Illegal suffix contains \"\n\t\t\t\"character '%c' in wrong position\\n\",\n\t\t\ts[i+1]);\n\t\texit(51);\n\t}\n\treturn strtoull(s, NULL, 10) * mult;\n}\nint main(int argc,char **argv){uint64_t v=parse_size(argv[1]);unsigned int n=v;printf(\"value=%\"PRIu64\" narrowed=%u bounds_accept=%d\\n\",v,n,n>=4096&&n<=1048576);return 0;}\n",
+  "build_returncode": 0,
+  "build_stderr": "",
+  "runs": [
+    {
+      "input": "4096",
+      "returncode": 0,
+      "stdout": "value=4096 narrowed=4096 bounds_accept=1\n"
+    },
+    {
+      "input": "4294971392",
+      "returncode": 0,
+      "stdout": "value=4294971392 narrowed=4096 bounds_accept=1\n"
+    },
+    {
+      "input": "18014398509481984k",
+      "returncode": 0,
+      "stdout": "value=0 narrowed=0 bounds_accept=0\n"
+    }
+  ]
+}

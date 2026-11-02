@@ -1,0 +1,1932 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo clippy --fix --lib -p jxl-color -- ` to apply 1 suggestion)
+warning: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-cache/src/disk.rs:223:5
+    |
+223 | /     pub fn with_max_entries(mut self, max_entries: Option<usize>) -> Self {
+224 | |         self.max_entries = max_entries;
+225 | |         self
+226 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+    = note: `-W clippy::return-self-not-must-use` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::return_self_not_must_use)]`
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-cache/src/disk.rs:229:5
+    |
+229 | /     pub fn with_ttl(mut self, ttl: Option<Duration>) -> Self {
+230 | |         self.ttl = ttl;
+231 | |         self
+232 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+warning: this function has too many lines (125/100)
+   --> crates/rrrah-cache/src/disk.rs:345:5
+    |
+345 | /     fn load_impl(
+346 | |         &self,
+347 | |         key: CacheKey,
+348 | |         budget: Option<&rrrah_memory::MemoryBudget>,
+349 | |         mut cancelled: impl FnMut() -> bool,
+350 | |     ) -> Result<Option<CacheLoad>, CacheError> {
+    | |______________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+    = note: `-W clippy::too-many-lines` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::too_many_lines)]`
+
+warning: using `chunks_exact` with a constant chunk size
+   --> crates/rrrah-cache/src/disk.rs:450:26
+    |
+450 |                         .chunks_exact(2)
+    |                          ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+    = note: `-W clippy::chunks-exact-to-as-chunks` implied by `-W clippy::all`
+    = help: to override `-W clippy::all` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+warning: this function has too many lines (114/100)
+   --> crates/rrrah-cache/src/disk.rs:631:5
+    |
+631 | /     fn plan_write_evictions(
+632 | |         &self,
+633 | |         destination: &Path,
+634 | |         incoming_bytes: u64,
+635 | |         protected: &[CacheKey],
+636 | |     ) -> Result<Vec<PathBuf>, CacheError> {
+    | |_________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this `if` statement can be collapsed
+   --> crates/rrrah-cache/src/disk.rs:725:9
+    |
+725 | /         if let Some(limit) = self.max_entries {
+726 | |             if protected_count >= limit {
+727 | |                 return Err(CacheError::DiskCountExceeded { limit });
+728 | |             }
+729 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-W clippy::collapsible-if` implied by `-W clippy::all`
+    = help: to override `-W clippy::all` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+725 ~         if let Some(limit) = self.max_entries
+726 ~             && protected_count >= limit {
+727 |                 return Err(CacheError::DiskCountExceeded { limit });
+728 ~             }
+    |
+
+warning: this `if` statement can be collapsed
+   --> crates/rrrah-cache/src/disk.rs:748:9
+    |
+748 | /         if let Some(limit) = self.max_entries {
+749 | |             if remaining_entries >= limit {
+750 | |                 return Err(CacheError::DiskCountExceeded { limit });
+751 | |             }
+752 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+748 ~         if let Some(limit) = self.max_entries
+749 ~             && remaining_entries >= limit {
+750 |                 return Err(CacheError::DiskCountExceeded { limit });
+751 ~             }
+    |
+
+warning: using `chunks_exact_mut` with a constant chunk size
+   --> crates/rrrah-cache/src/disk.rs:778:58
+    |
+778 |         for (sample, output) in samples.iter().zip(bytes.chunks_exact_mut(2)) {
+    |                                                          ^^^^^^^^^^^^^^^^^^^
+    |
+help: consider using `as_chunks_mut::<2>()` instead
+   --> crates/rrrah-cache/src/disk.rs:778:58
+    |
+778 |         for (sample, output) in samples.iter().zip(bytes.chunks_exact_mut(2)) {
+    |                                                          ^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+warning: using `chunks_exact_mut` with a constant chunk size
+   --> crates/rrrah-cache/src/disk.rs:790:58
+    |
+790 |         for (sample, output) in samples.iter().zip(bytes.chunks_exact_mut(2)) {
+    |                                                          ^^^^^^^^^^^^^^^^^^^
+    |
+help: consider using `as_chunks_mut::<2>()` instead
+   --> crates/rrrah-cache/src/disk.rs:790:58
+    |
+790 |         for (sample, output) in samples.iter().zip(bytes.chunks_exact_mut(2)) {
+    |                                                          ^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+warning: this `continue` expression is redundant
+   --> crates/rrrah-cache/src/disk.rs:822:78
+    |
+822 |             Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+    |                                                                              ^^^^^^^^
+    |
+    = help: consider dropping the `continue` expression
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_continue
+    = note: `-W clippy::needless-continue` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::needless_continue)]`
+
+warning: using `chunks_exact_mut` with a constant chunk size
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:657:55
+    |
+657 |         for (value, output) in chunk.iter().zip(bytes.chunks_exact_mut(size_of::<f32>())) {
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: consider using `as_chunks_mut::<size_of::<f32>()>()` instead
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:657:55
+    |
+657 |         for (value, output) in chunk.iter().zip(bytes.chunks_exact_mut(size_of::<f32>())) {
+    |                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+warning: using `chunks_exact` with a constant chunk size
+   --> crates/rrrah-cache/src/mosaic_payload_v1.rs:678:30
+    |
+678 |         for encoded in bytes.chunks_exact(size_of::<f32>()) {
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<size_of::<f32>()>().0`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#chunks_exact_to_as_chunks
+
+warning: this function has too many lines (175/100)
+   --> crates/rrrah-cache/src/raster_payload.rs:223:1
+    |
+223 | / fn read_raster_payload_impl(
+224 | |     reader: &mut impl Read,
+225 | |     budget: &MemoryBudget,
+226 | |     bytes: Option<u64>,
+227 | | ) -> Result<DecodedRaster, RasterPayloadError> {
+    | |______________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+   --> crates/rrrah-cache/src/raster_regions.rs:725:17
+    |
+725 |     cached_lod: std::sync::Arc<std::sync::Mutex<Option<([u32; 2], SegmentedSwapHandle)>>>,
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#type_complexity
+    = note: `-W clippy::type-complexity` implied by `-W clippy::all`
+    = help: to override `-W clippy::all` add `#[allow(clippy::type_complexity)]`
+
+warning: calling `Arc::default()` is more clear than this expression
+   --> crates/rrrah-cache/src/raster_regions.rs:758:25
+    |
+758 |             cached_lod: Default::default(),
+    |                         ^^^^^^^^^^^^^^^^^^ help: try: `Arc::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+    = note: `-W clippy::default-trait-access` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::default_trait_access)]`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-cache/src/raster_regions.rs:765:5
+    |
+765 |     pub fn pixel_aspect(&self) -> Option<f32> {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+note: first possible panic found here
+   --> crates/rrrah-cache/src/raster_regions.rs:766:40
+    |
+766 |         let value = f32::from_le_bytes(self.header[60..64].try_into().unwrap());
+    |                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+    = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_panics_doc)]`
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-cache/src/raster_regions.rs:779:5
+    |
+779 | /     pub fn downsample_linear(
+780 | |         &self,
+781 | |         target: [u32; 2],
+782 | |         budget: &MemoryBudget,
+783 | |         scratch: &MemoryBudget,
+784 | |         mut cancelled: impl FnMut() -> bool,
+785 | |     ) -> Result<DecodedRaster, RasterRegionError> {
+    | |_________________________________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-cache/src/raster_regions.rs:906:48
+    |
+906 | ...                   f32::from_le_bytes(row[begin + c * 4..begin + c * 4 + 4].try_into().unwrap())
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: this function has too many lines (220/100)
+   --> crates/rrrah-cache/src/raster_regions.rs:779:5
+    |
+779 | /     pub fn downsample_linear(
+780 | |         &self,
+781 | |         target: [u32; 2],
+782 | |         budget: &MemoryBudget,
+783 | |         scratch: &MemoryBudget,
+784 | |         mut cancelled: impl FnMut() -> bool,
+785 | |     ) -> Result<DecodedRaster, RasterRegionError> {
+    | |_________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: redundant closure
+   --> crates/rrrah-cache/src/raster_regions.rs:795:60
+    |
+795 |         let cached = self.cached_lod.lock().unwrap_or_else(|e| e.into_inner()).clone();
+    |                                                            ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+    = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: redundant closure
+   --> crates/rrrah-cache/src/raster_regions.rs:820:79
+    |
+820 |                         let mut cache = self.cached_lod.lock().unwrap_or_else(|e| e.into_inner());
+    |                                                                               ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+   --> crates/rrrah-cache/src/raster_regions.rs:842:75
+    |
+842 |                     let mut cache = self.cached_lod.lock().unwrap_or_else(|e| e.into_inner());
+    |                                                                           ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-cache/src/raster_regions.rs:887:22
+    |
+887 |             for y in y0.floor() as u32..(y1.ceil() as u32).min(self.size[1]) {
+    |                      ^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+    = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_sign_loss)]`
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-cache/src/raster_regions.rs:887:41
+    |
+887 |             for y in y0.floor() as u32..(y1.ceil() as u32).min(self.size[1]) {
+    |                                         ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-cache/src/raster_regions.rs:900:30
+    |
+900 |                     for x in x0.floor() as u32..(x1.ceil() as u32).min(self.size[0]) {
+    |                              ^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-cache/src/raster_regions.rs:900:49
+    |
+900 |                     for x in x0.floor() as u32..(x1.ceil() as u32).min(self.size[0]) {
+    |                                                 ^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: redundant closure
+   --> crates/rrrah-cache/src/raster_regions.rs:987:29
+    |
+987 |             .unwrap_or_else(|e| e.into_inner())
+    |                             ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+   --> crates/rrrah-cache/src/raster_regions.rs:991:52
+    |
+991 |             *self.cached_lod.lock().unwrap_or_else(|e| e.into_inner()) = None;
+    |                                                    ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: this `if` statement can be collapsed
+    --> crates/rrrah-cache/src/raster_regions.rs:992:13
+     |
+ 992 | /             if let Ok(bytes) = crate::raster_payload::raster_payload_len(&frame) {
+ 993 | |                 if let Ok(handle) = self.store.write_segmented_stream(
+ 994 | |                     bytes,
+ 995 | |                     &self.index_budget,
+...    |
+1006 | |             }
+     | |_____________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+     |
+ 992 ~             if let Ok(bytes) = crate::raster_payload::raster_payload_len(&frame)
+ 993 ~                 && let Ok(handle) = self.store.write_segmented_stream(
+ 994 |                     bytes,
+ ...
+1004 |                     }
+1005 ~                 }
+     |
+
+warning: this `if` statement can be collapsed
+    --> crates/rrrah-cache/src/raster_regions.rs:993:17
+     |
+ 993 | /                 if let Ok(handle) = self.store.write_segmented_stream(
+ 994 | |                     bytes,
+ 995 | |                     &self.index_budget,
+ 996 | |                     &mut cancelled,
+...    |
+1005 | |                 }
+     | |_________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+     |
+1001 ~                 )
+1002 ~                     && !cancelled() {
+1003 |                         *self.cached_lod.lock().unwrap_or_else(|e| e.into_inner()) = Some((target, handle));
+1004 ~                     }
+     |
+
+warning: redundant closure
+    --> crates/rrrah-cache/src/raster_regions.rs:1003:64
+     |
+1003 |                         *self.cached_lod.lock().unwrap_or_else(|e| e.into_inner()) = Some((target, handle));
+     |                                                                ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-cache/src/raster_regions.rs:1027:29
+     |
+1027 |             .unwrap_or_else(|e| e.into_inner())
+     |                             ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `std::sync::PoisonError::into_inner`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: docs for function which may panic missing `# Panics` section
+    --> crates/rrrah-cache/src/raster_regions.rs:1086:5
+     |
+1086 | /     pub fn restore_region(
+1087 | |         &self,
+1088 | |         rect: [u32; 4],
+1089 | |         budget: &MemoryBudget,
+1090 | |         scratch: &MemoryBudget,
+1091 | |         mut cancelled: impl FnMut() -> bool,
+1092 | |     ) -> Result<RasterRegion, RasterRegionError> {
+     | |________________________________________________^
+     |
+note: first possible panic found here
+    --> crates/rrrah-cache/src/raster_regions.rs:1121:41
+     |
+1121 |             let hx = u32::from_le_bytes(header[24..28].try_into().unwrap());
+     |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> crates/rrrah-cache/src/raster_ram.rs:164:35
+    |
+164 |     pub fn insert(&mut self, key: K, raster: DecodedRaster) -> bool {
+    |                                   ^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+    = note: `-W clippy::needless-pass-by-value` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::needless_pass_by_value)]`
+help: consider taking a reference instead
+    |
+164 |     pub fn insert(&mut self, key: &K, raster: DecodedRaster) -> bool {
+    |                                   +
+
+warning: this function has too many lines (163/100)
+   --> crates/rrrah-cache/src/swap.rs:240:5
+    |
+240 | /     pub fn new_with_budgets(
+241 | |         parent: &Path,
+242 | |         config: ImageSwapConfig,
+243 | |         queue_budget: MemoryBudget,
+244 | |         restore_budget: MemoryBudget,
+245 | |     ) -> std::io::Result<Self> {
+    | |______________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_lines
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> crates/rrrah-cache/src/swap.rs:243:23
+    |
+243 |         queue_budget: MemoryBudget,
+    |                       ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+243 |         queue_budget: &MemoryBudget,
+    |                       +
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> crates/rrrah-cache/src/swap.rs:244:25
+    |
+244 |         restore_budget: MemoryBudget,
+    |                         ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+244 |         restore_budget: &MemoryBudget,
+    |                         +
+
+warning: this `if` statement can be collapsed
+   --> crates/rrrah-cache/src/swap.rs:429:9
+    |
+429 | /         if let Ok(mut index) = self.index.try_lock() {
+430 | |             if index.get(&key).is_some() {
+431 | |                 return SpillAdmission::AlreadyPresent;
+432 | |             }
+433 | |         }
+    | |_________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+429 ~         if let Ok(mut index) = self.index.try_lock()
+430 ~             && index.get(&key).is_some() {
+431 |                 return SpillAdmission::AlreadyPresent;
+432 ~             }
+    |
+
+warning: this argument is passed by value, but not consumed in the function body
+   --> crates/rrrah-cache/src/swap.rs:491:50
+    |
+491 |     pub fn set_restore_budget(&mut self, budget: MemoryBudget) {
+    |                                                  ^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_pass_by_value
+help: consider taking a reference instead
+    |
+491 |     pub fn set_restore_budget(&mut self, budget: &MemoryBudget) {
+    |                                                  +
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-cache/src/swap.rs:510:5
+    |
+510 | /     pub fn try_get(
+511 | |         &self,
+512 | |         key: &K,
+513 | |         mut cancelled: impl FnMut() -> bool,
+514 | |     ) -> Result<Option<V>, rrrah_memory::BufferError> {
+    | |_____________________________________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-cache/src/swap.rs:591:56
+    |
+591 |             Err(_) if memory_pressure.is_some() => Err(memory_pressure.unwrap()),
+    |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: this `if` statement can be collapsed
+   --> crates/rrrah-cache/src/swap.rs:594:17
+    |
+594 | /                 if let Ok(mut index) = self.index.lock() {
+595 | |                     if index.get(key).is_some_and(|current| current.ptr_eq(&handle)) {
+596 | |                         index.remove(key);
+597 | |                     }
+598 | |                 }
+    | |_________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+help: collapse nested if block
+    |
+594 ~                 if let Ok(mut index) = self.index.lock()
+595 ~                     && index.get(key).is_some_and(|current| current.ptr_eq(&handle)) {
+596 |                         index.remove(key);
+597 ~                     }
+    |
+
+    Checking rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+warning: `rrrah-cache` (lib) generated 40 warnings (run `cargo clippy --fix --lib -p rrrah-cache -- ` to apply 15 suggestions)
+warning: calling `PipelineCompilationOptions::default()` is more clear than this expression
+  --> crates/rrrah-gpu/src/rgbe_compute.rs:32:34
+   |
+32 |             compilation_options: Default::default(),
+   |                                  ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+   = note: `-W clippy::default-trait-access` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::default_trait_access)]`
+
+warning: this function has too many arguments (8/7)
+  --> crates/rrrah-gpu/src/rgbe_compute.rs:64:5
+   |
+64 | /     pub fn execute_managed_with_cancel(
+65 | |         &self,
+66 | |         queue: &wgpu::Queue,
+67 | |         source_values: &[f32],
+...  |
+72 | |         mut cancelled: impl FnMut() -> bool,
+73 | |     ) -> Result<rrrah_core::PixelBuffer<[f32; 4]>, RgbeComputeError> {
+   | |____________________________________________________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+   = note: `-W clippy::too-many-arguments` implied by `-W clippy::all`
+   = help: to override `-W clippy::all` add `#[allow(clippy::too_many_arguments)]`
+
+warning: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/rgbe_compute.rs:115:63
+    |
+115 |         let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                               ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `ComputePassDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/rgbe_compute.rs:165:56
+    |
+165 |             let mut pass = encoder.begin_compute_pass(&Default::default());
+    |                                                        ^^^^^^^^^^^^^^^^^^ help: try: `ComputePassDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+  --> crates/rrrah-gpu/src/rgbe_plan.rs:67:9
+   |
+67 | /         fn gcd(mut a: u64, mut b: u64) -> u64 {
+68 | |             while b != 0 {
+69 | |                 let r = a % b;
+70 | |                 a = b;
+...  |
+73 | |             a
+74 | |         }
+   | |_________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+   = note: `-W clippy::items-after-statements` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::items_after_statements)]`
+
+warning: useless conversion to the same type: `u64`
+  --> crates/rrrah-gpu/src/rgbe_plan.rs:62:23
+   |
+62 |         let binding = u64::from(limits.max_storage_buffer_binding_size);
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+   = note: `-W clippy::useless-conversion` implied by `-W clippy::all`
+   = help: to override `-W clippy::all` add `#[allow(clippy::useless_conversion)]`
+
+warning: item in documentation is missing backticks
+ --> crates/rrrah-gpu/src/backend.rs:1:67
+  |
+1 | //! Explicit backend selection; device availability is checked by request_adapter.
+  |                                                                   ^^^^^^^^^^^^^^^
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+  = note: `-W clippy::doc-markdown` implied by `-W clippy::pedantic`
+  = help: to override `-W clippy::pedantic` add `#[allow(clippy::doc_markdown)]`
+help: try
+  |
+1 - //! Explicit backend selection; device availability is checked by request_adapter.
+1 + //! Explicit backend selection; device availability is checked by `request_adapter`.
+  |
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+  --> crates/rrrah-gpu/src/compute.rs:26:5
+   |
+26 | /     pub fn with_alpha_association(mut self, mode: rrrah_core::RasterAlphaAssociation) -> Self {
+27 | |         self.alpha_association = mode;
+28 | |         self
+29 | |     }
+   | |_____^
+   |
+   = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+   = note: `-W clippy::return-self-not-must-use` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::return_self_not_must_use)]`
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-gpu/src/compute.rs:34:30
+   |
+34 |     /// Retain this owner or resource_lease through completion of downstream work.
+   |                              ^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+34 -     /// Retain this owner or resource_lease through completion of downstream work.
+34 +     /// Retain this owner or `resource_lease` through completion of downstream work.
+   |
+
+warning: used underscore-prefixed binding
+  --> crates/rrrah-gpu/src/compute.rs:39:54
+   |
+39 |         crate::GpuResourceLease::new(std::iter::once(self._reservation.clone()))
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+note: binding is defined here
+  --> crates/rrrah-gpu/src/compute.rs:22:5
+   |
+22 |     _reservation: std::sync::Arc<rrrah_core::Reservation>,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+   = note: `-W clippy::used-underscore-binding` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::used_underscore_binding)]`
+
+warning: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/compute.rs:117:24
+    |
+117 |         let maximum = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/compute.rs:140:63
+    |
+140 |         let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                               ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: item in documentation is missing backticks
+   --> crates/rrrah-gpu/src/compute.rs:196:46
+    |
+196 |     /// Direct flat RGBA32F input/output for DecodedRaster storage. No temporary
+    |                                              ^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+    |
+196 -     /// Direct flat RGBA32F input/output for DecodedRaster storage. No temporary
+196 +     /// Direct flat RGBA32F input/output for `DecodedRaster` storage. No temporary
+    |
+
+warning: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/compute.rs:261:24
+    |
+261 |         let maximum = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/compute.rs:297:63
+    |
+297 |         let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                               ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/compute.rs:358:34
+    |
+358 |             compilation_options: Default::default(),
+    |                                  ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/compute.rs:392:27
+    |
+392 |         let max_pixels = (u64::from(limits.max_storage_buffer_binding_size) / 16)
+    |                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: item in documentation is missing backticks
+ --> crates/rrrah-gpu/src/demosaic_compute.rs:1:70
+  |
+1 | //! Managed GPU compute demosaicing for 2×2 Bayer sensors (Bilinear, SmoothHue, Malvar–He–Cutler 5×5,
+  |                                                                      ^^^^^^^^^
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+  |
+1 - //! Managed GPU compute demosaicing for 2×2 Bayer sensors (Bilinear, SmoothHue, Malvar–He–Cutler 5×5,
+1 + //! Managed GPU compute demosaicing for 2×2 Bayer sensors (Bilinear, `SmoothHue`, Malvar–He–Cutler 5×5,
+  |
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-gpu/src/demosaic_compute.rs:46:52
+   |
+46 |     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+   |                                                    ^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+46 -     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+46 +     /// Shader uniform code (`0` = Bilinear, `1` = `MalvarHeCutler`, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+   |
+
+warning: item in documentation is missing backticks
+  --> crates/rrrah-gpu/src/demosaic_compute.rs:46:93
+   |
+46 |     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+   |                                                                                             ^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+   |
+46 -     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = SmoothHue, `4` = Vng, `5` = Rcd).
+46 +     /// Shader uniform code (`0` = Bilinear, `1` = MalvarHeCutler, `2` = Directional, `3` = `SmoothHue`, `4` = Vng, `5` = Rcd).
+   |
+
+warning: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:104:54
+    |
+104 |         crate::GpuResourceLease::new(std::iter::once(self._reservation.clone()))
+    |                                                      ^^^^^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:88:5
+    |
+ 88 |     _reservation: std::sync::Arc<rrrah_core::Reservation>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: adding items after statements is confusing, since items exist from the start of the scope
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:140:9
+    |
+140 |         const MAX_REFLECTED_AXIS: u32 = (i32::MAX as u32) / 2 + 1;
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#items_after_statements
+
+warning: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:158:34
+    |
+158 |             compilation_options: Default::default(),
+    |                                  ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: this function has too many arguments (8/7)
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:180:5
+    |
+180 | /     pub fn execute_resident<F: FnMut() -> bool>(
+181 | |         &self,
+182 | |         queue: &wgpu::Queue,
+183 | |         source_values: &[f32],
+...   |
+188 | |         cancelled: F,
+189 | |     ) -> Result<ResidentBayerDemosaic, BayerDemosaicError> {
+    | |__________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+warning: this function has too many arguments (9/7)
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:239:5
+    |
+239 | /     fn execute_resident_with_color<F: FnMut() -> bool>(
+240 | |         &self,
+241 | |         queue: &wgpu::Queue,
+242 | |         source_values: &[f32],
+...   |
+248 | |         mut cancelled: F,
+249 | |     ) -> Result<ResidentBayerDemosaic, BayerDemosaicError> {
+    | |__________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+warning: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:282:29
+    |
+282 |         let binding_limit = u64::from(limits.max_storage_buffer_binding_size).min(limits.max_buffer_size);
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:402:67
+    |
+402 |             let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                                   ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `ComputePassDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:404:60
+    |
+404 |                 let mut pass = encoder.begin_compute_pass(&Default::default());
+    |                                                            ^^^^^^^^^^^^^^^^^^ help: try: `ComputePassDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: this function has too many arguments (8/7)
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:433:5
+    |
+433 | /     pub fn execute_managed(
+434 | |         &self,
+435 | |         queue: &wgpu::Queue,
+436 | |         source_values: &[f32],
+...   |
+441 | |         cpu_budget: &rrrah_core::MemoryBudget,
+442 | |     ) -> Result<rrrah_core::PixelBuffer<[f32; 4]>, BayerDemosaicError> {
+    | |______________________________________________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+warning: useless conversion to the same type: `u64`
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:486:29
+    |
+486 |         let binding_limit = u64::from(limits.max_storage_buffer_binding_size).min(limits.max_buffer_size);
+    |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `u64::from()`: `limits.max_storage_buffer_binding_size`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:595:67
+    |
+595 |             let mut encoder = self.device.create_command_encoder(&Default::default());
+    |                                                                   ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `ComputePassDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/demosaic_compute.rs:597:60
+    |
+597 |                 let mut pass = encoder.begin_compute_pass(&Default::default());
+    |                                                            ^^^^^^^^^^^^^^^^^^ help: try: `ComputePassDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: docs for function which may panic missing `# Panics` section
+  --> crates/rrrah-gpu/src/model.rs:87:5
+   |
+87 |     pub fn new(device: &wgpu::Device, target: wgpu::TextureFormat) -> Self {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+note: first possible panic found here
+  --> crates/rrrah-gpu/src/model.rs:88:9
+   |
+88 | /         assert!(
+89 | |             target.is_srgb() || target == wgpu::TextureFormat::Rgba16Float,
+90 | |             "model target must be sRGB or linear RGBA16Float"
+91 | |         );
+   | |_________^
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+   = note: `-W clippy::missing-panics-doc` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::missing_panics_doc)]`
+
+warning: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:129:38
+    |
+129 |                 compilation_options: Default::default(),
+    |                                      ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `StencilState::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:139:26
+    |
+139 |                 stencil: Default::default(),
+    |                          ^^^^^^^^^^^^^^^^^^ help: try: `StencilState::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `DepthBiasState::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:140:23
+    |
+140 |                 bias: Default::default(),
+    |                       ^^^^^^^^^^^^^^^^^^ help: try: `DepthBiasState::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `MultisampleState::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:142:26
+    |
+142 |             multisample: Default::default(),
+    |                          ^^^^^^^^^^^^^^^^^^ help: try: `MultisampleState::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: calling `PipelineCompilationOptions::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:151:38
+    |
+151 |                 compilation_options: Default::default(),
+    |                                      ^^^^^^^^^^^^^^^^^^ help: try: `PipelineCompilationOptions::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: item in documentation is missing backticks
+   --> crates/rrrah-gpu/src/model.rs:185:31
+    |
+185 |     /// Caps owned vertex and Depth32F attachment footprints, including replacement overlap.
+    |                               ^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+    |
+185 -     /// Caps owned vertex and Depth32F attachment footprints, including replacement overlap.
+185 +     /// Caps owned vertex and `Depth32F` attachment footprints, including replacement overlap.
+    |
+
+warning: useless conversion to the same type: `f64`
+   --> crates/rrrah-gpu/src/model.rs:258:59
+    |
+258 |                     bounds[0][axis] = bounds[0][axis].min(f64::from(vertex[axis]));
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `f64::from()`: `vertex[axis]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: useless conversion to the same type: `f64`
+   --> crates/rrrah-gpu/src/model.rs:259:59
+    |
+259 |                     bounds[1][axis] = bounds[1][axis].max(f64::from(vertex[axis]));
+    |                                                           ^^^^^^^^^^^^^^^^^^^^^^^ help: consider removing `f64::from()`: `vertex[axis]`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#useless_conversion
+
+warning: calling `TextureViewDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/model.rs:430:41
+    |
+430 |         let view = texture.create_view(&Default::default());
+    |                                         ^^^^^^^^^^^^^^^^^^ help: try: `TextureViewDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/filmstrip.rs:409:36
+    |
+409 |                 .filter_map(|slot| slot._reservation.clone()),
+    |                                    ^^^^^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/filmstrip.rs:126:5
+    |
+126 |     _reservation: Option<std::sync::Arc<rrrah_core::Reservation>>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/filmstrip.rs:417:35
+    |
+417 |             .map(|slot| u64::from(slot._texture.width()) * u64::from(slot._texture.height()) * 4)
+    |                                   ^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/filmstrip.rs:124:5
+    |
+124 |     _texture: wgpu::Texture,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: used underscore-prefixed binding
+   --> crates/rrrah-gpu/src/filmstrip.rs:417:70
+    |
+417 |             .map(|slot| u64::from(slot._texture.width()) * u64::from(slot._texture.height()) * 4)
+    |                                                                      ^^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-gpu/src/filmstrip.rs:124:5
+    |
+124 |     _texture: wgpu::Texture,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-gpu/src/filmstrip.rs:423:5
+    |
+423 | /     pub fn with_texture_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+424 | |         self.texture_budget = Some(budget);
+425 | |         self
+426 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-gpu/src/filmstrip.rs:429:5
+    |
+429 | /     pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+430 | |         self.upload_queue_budget = Some(budget);
+431 | |         self
+432 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+warning: docs for function which may panic missing `# Panics` section
+   --> crates/rrrah-gpu/src/filmstrip.rs:445:5
+    |
+445 | /     pub fn upload_tile(
+446 | |         &mut self,
+447 | |         device: &wgpu::Device,
+448 | |         queue: &wgpu::Queue,
+...   |
+451 | |         rgba8: &[u8],
+452 | |     ) -> FilmstripTileId {
+    | |________________________^
+    |
+note: first possible panic found here
+   --> crates/rrrah-gpu/src/filmstrip.rs:453:9
+    |
+453 | /         self.try_upload_tile(device, queue, width, height, rgba8)
+454 | |             .expect("thumbnail upload refused; use try_upload_tile for budgeted uploads")
+    | |_________________________________________________________________________________________^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+   --> crates/rrrah-gpu/src/raster.rs:114:5
+    |
+114 | /     pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+115 | |         self.upload_queue_budget = Some(budget);
+116 | |         self
+117 | |     }
+    | |_____^
+    |
+    = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-gpu/src/raster.rs:426:28
+    |
+426 |             origin[axis] = (low.floor() - halo).clamp(0.0, f64::from(dimensions[axis])) as u32;
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+    = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_sign_loss)]`
+
+warning: casting `f64` to `u32` may lose the sign of the value
+   --> crates/rrrah-gpu/src/raster.rs:427:23
+    |
+427 |             let end = (high.ceil() + halo).clamp(0.0, f64::from(dimensions[axis])) as u32;
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+
+warning: this function has too many arguments (10/7)
+   --> crates/rrrah-gpu/src/raster.rs:726:5
+    |
+726 | /     fn upload_resident_buffer<F: FnMut() -> bool>(
+727 | |         &mut self,
+728 | |         device: &wgpu::Device,
+729 | |         queue: &wgpu::Queue,
+...   |
+736 | |         mut cancelled: F,
+737 | |     ) -> Result<(), RasterUploadError> {
+    | |______________________________________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+warning: calling `CommandEncoderDescriptor::default()` is more clear than this expression
+   --> crates/rrrah-gpu/src/raster.rs:783:58
+    |
+783 |         let mut encoder = device.create_command_encoder(&Default::default());
+    |                                                          ^^^^^^^^^^^^^^^^^^ help: try: `CommandEncoderDescriptor::default()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+
+warning: strict comparison of `f32` or `f64` arrays
+   --> crates/rrrah-gpu/src/raster.rs:978:12
+    |
+978 |         if self.parameters.comparison != comparison {
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+    = note: `-W clippy::float-cmp` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::float_cmp)]`
+
+warning: item in documentation is missing backticks
+    --> crates/rrrah-gpu/src/raster.rs:1011:69
+     |
+1011 |     /// Optional render-pass GPU timestamps. The caller must enable TIMESTAMP_QUERY
+     |                                                                     ^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+     |
+1011 -     /// Optional render-pass GPU timestamps. The caller must enable TIMESTAMP_QUERY
+1011 +     /// Optional render-pass GPU timestamps. The caller must enable `TIMESTAMP_QUERY`
+     |
+
+warning: docs for function which may panic missing `# Panics` section
+    --> crates/rrrah-gpu/src/raster.rs:1013:5
+     |
+1013 | /     pub fn encode_with_timestamps(
+1014 | |         &self,
+1015 | |         encoder: &mut wgpu::CommandEncoder,
+1016 | |         target: &wgpu::TextureView,
+1017 | |         timestamps: Option<wgpu::RenderPassTimestampWrites<'_>>,
+1018 | |     ) {
+     | |_____^
+     |
+note: first possible panic found here
+    --> crates/rrrah-gpu/src/raster.rs:1055:33
+     |
+1055 |                   (true, true) => self
+     |  _________________________________^
+1056 | |                     .single_layer_region_pipeline
+1057 | |                     .as_ref()
+1058 | |                     .expect("region pipeline installed"),
+     | |________________________________________________________^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: this `if` statement can be collapsed
+   --> crates/rrrah-gpu/src/lib.rs:244:13
+    |
+244 | /             if let Ok(candidate) = plan_tiling(
+245 | |                 width,
+246 | |                 height,
+247 | |                 max_dimension,
+...   |
+260 | |             }
+    | |_____________^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#collapsible_if
+    = note: `-W clippy::collapsible-if` implied by `-W clippy::all`
+    = help: to override `-W clippy::all` add `#[allow(clippy::collapsible_if)]`
+help: collapse nested if block
+    |
+253 ~             )
+254 ~                 && best
+255 |                     .as_ref()
+...
+258 |                     best = Some(candidate);
+259 ~                 }
+    |
+
+warning: item in documentation is missing backticks
+    --> crates/rrrah-gpu/src/lib.rs:1474:22
+     |
+1474 |     /// Admits owned R16Uint atlas footprint, including halos and replacement overlap.
+     |                      ^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#doc_markdown
+help: try
+     |
+1474 -     /// Admits owned R16Uint atlas footprint, including halos and replacement overlap.
+1474 +     /// Admits owned `R16Uint` atlas footprint, including halos and replacement overlap.
+     |
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+    --> crates/rrrah-gpu/src/lib.rs:1487:5
+     |
+1487 | /     pub fn with_upload_memory_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+1488 | |         self.upload_memory_budget = Some(budget);
+1489 | |         self
+1490 | |     }
+     | |_____^
+     |
+     = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+warning: missing `#[must_use]` attribute on a method returning `Self`
+    --> crates/rrrah-gpu/src/lib.rs:1495:5
+     |
+1495 | /     pub fn with_upload_queue_budget(mut self, budget: rrrah_core::MemoryBudget) -> Self {
+1496 | |         self.upload_queue_budget = Some(budget);
+1497 | |         self
+1498 | |     }
+     | |_____^
+     |
+     = help: consider adding the `#[must_use]` attribute to the method or directly to the `Self` type
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#return_self_not_must_use
+
+warning: docs for function which may panic missing `# Panics` section
+    --> crates/rrrah-gpu/src/lib.rs:1550:5
+     |
+1550 | /     pub fn upload_mosaic_with_tiling_and_cancel(
+1551 | |         &mut self,
+1552 | |         device: &wgpu::Device,
+1553 | |         queue: &wgpu::Queue,
+...    |
+1556 | |         cancelled: impl Fn() -> bool,
+1557 | |     ) -> Result<GpuUploadTimings, GpuError> {
+     | |___________________________________________^
+     |
+note: first possible panic found here
+    --> crates/rrrah-gpu/src/lib.rs:1636:29
+     |
+1636 |                 let level = grid.at(row, column, 0).unwrap();
+     |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#missing_panics_doc
+
+warning: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1748:9
+     |
+1748 |         parameters._padding[0] = u32::from(rgbe.is_some());
+     |         ^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1256:5
+     |
+1256 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1749:9
+     |
+1749 |         parameters._padding[2] = if quad.is_none() { u32::from(grid.width) } else { 0 };
+     |         ^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1256:5
+     |
+1256 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1750:9
+     |
+1750 |         parameters._padding[3] = u32::from(grid.height);
+     |         ^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1256:5
+     |
+1256 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: used underscore-prefixed binding
+    --> crates/rrrah-gpu/src/lib.rs:1919:9
+     |
+1919 |         self.parameters._padding[1] = match mode {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+note: binding is defined here
+    --> crates/rrrah-gpu/src/lib.rs:1256:5
+     |
+1256 |     _padding: [u32; 4],
+     |     ^^^^^^^^^^^^^^^^^^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+
+warning: strict comparison of `f32` or `f64` arrays
+    --> crates/rrrah-gpu/src/lib.rs:1960:12
+     |
+1960 |         if self.parameters.comparison != comparison {
+     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#float_cmp
+
+warning: this function has too many arguments (9/7)
+    --> crates/rrrah-gpu/src/lib.rs:2069:1
+     |
+2069 | / fn tile_with_halo_into(
+2070 | |     output: &mut Vec<u16>,
+2071 | |     pixels: &[u16],
+2072 | |     width: u32,
+...    |
+2078 | |     cancelled: &dyn Fn() -> bool,
+2079 | | ) -> Result<(), GpuError> {
+     | |_________________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#too_many_arguments
+
+warning: `rrrah-gpu` (lib) generated 67 warnings (run `cargo clippy --fix --lib -p rrrah-gpu -- ` to apply 18 suggestions)
+    Checking rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+warning: this argument (528 byte) is passed by value, but might be more efficient if passed by reference (limit: 256 byte)
+   --> crates/rrrah-app/src/edit_store.rs:303:12
+    |
+303 |     state: EditState,
+    |            ^^^^^^^^^ help: consider passing by reference instead: `&EditState`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_types_passed_by_value
+    = note: `-W clippy::large-types-passed-by-value` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::large_types_passed_by_value)]`
+
+warning: this argument (528 byte) is passed by value, but might be more efficient if passed by reference (limit: 256 byte)
+   --> crates/rrrah-app/src/edit_store.rs:411:12
+    |
+411 |     state: EditState,
+    |            ^^^^^^^^^ help: consider passing by reference instead: `&EditState`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_types_passed_by_value
+
+warning: this argument (528 byte) is passed by value, but might be more efficient if passed by reference (limit: 256 byte)
+   --> crates/rrrah-app/src/edit_store.rs:512:77
+    |
+512 | pub fn retain_draft(path: &Path, source: SourceVersion, page: usize, state: EditState) -> Result<PathBuf> {
+    |                                                                             ^^^^^^^^^ help: consider passing by reference instead: `&EditState`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#large_types_passed_by_value
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+   --> crates/rrrah-app/src/gallery.rs:355:29
+    |
+355 | ...                   recipe_request.memory_budget = managed_budget.clone();
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `recipe_request.memory_budget.clone_from(&managed_budget)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+    = note: `-W clippy::assigning-clones` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::assigning_clones)]`
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+   --> crates/rrrah-app/src/gallery.rs:400:29
+    |
+400 | ...                   request.memory_budget = managed_budget.clone();
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `request.memory_budget.clone_from(&managed_budget)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: used underscore-prefixed binding
+   --> crates/rrrah-app/src/gallery.rs:874:14
+    |
+874 |         drop(_publication);
+    |              ^^^^^^^^^^^^
+    |
+note: binding is defined here
+   --> crates/rrrah-app/src/gallery.rs:866:13
+    |
+866 |         let _publication = self
+    |             ^^^^^^^^^^^^
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#used_underscore_binding
+    = note: `-W clippy::used-underscore-binding` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::used_underscore_binding)]`
+
+warning: this function's return value is unnecessarily wrapped by `Option`
+  --> crates/rrrah-app/src/model_swap.rs:15:5
+   |
+15 |     pub(crate) fn from_model(model: DecodedModel) -> Option<Self> {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unnecessary_wraps
+   = note: `-W clippy::unnecessary-wraps` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::unnecessary_wraps)]`
+help: remove `Option` from the return type...
+   |
+15 -     pub(crate) fn from_model(model: DecodedModel) -> Option<Self> {
+15 +     pub(crate) fn from_model(model: DecodedModel) -> model_swap::ModelPayload {
+   |
+help: ...and then remove the surrounding `Some()` from returning expressions
+   |
+16 -         Some(Self(model))
+16 +         Self(model)
+   |
+
+warning: redundant closure
+   --> crates/rrrah-app/src/raw_load_policy.rs:120:14
+    |
+120 |         .map(|swap| swap.restore_budget())
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_cache::ImageSwapCache::restore_budget`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+    = note: `-W clippy::redundant-closure-for-method-calls` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::redundant_closure_for_method_calls)]`
+
+warning: more than 3 bools in a struct
+   --> crates/rrrah-app/src/main.rs:348:1
+    |
+348 | / struct Cli {
+349 | |     /// Explicit alpha association for RLA files; omitted leaves ambiguous alpha refused.
+350 | |     #[arg(long, value_enum, conflicts_with = "inspect")]
+351 | |     rla_alpha: Option<RlaAlphaChoice>,
+...   |
+542 | |     path: Option<PathBuf>,
+543 | | }
+    | |_^
+    |
+    = help: consider using a state machine or refactoring bools into two-variant enums
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#struct_excessive_bools
+    = note: `-W clippy::struct-excessive-bools` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::struct_excessive_bools)]`
+
+warning: usage of wildcard import
+ --> crates/rrrah-app/src/gpu_recovery_probe.rs:3:5
+  |
+3 | use super::*;
+  |     ^^^^^^^^ help: try: `super::{Instant, PathBuf, Parser, AtomicU64, Ordering, ViewParameters, Result, Duration, App, ActiveEventLoop}`
+  |
+  = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#wildcard_imports
+  = note: `-W clippy::wildcard-imports` implied by `-W clippy::pedantic`
+  = help: to override `-W clippy::pedantic` add `#[allow(clippy::wildcard_imports)]`
+
+warning: more than 3 bools in a struct
+  --> crates/rrrah-app/src/gpu_recovery_probe.rs:6:1
+   |
+ 6 | / pub(super) struct Probe {
+ 7 | |     started: Instant,
+ 8 | |     phase: u8,
+ 9 | |     clock_started: bool,
+...  |
+32 | |     pub(super) failure: Option<String>,
+33 | | }
+   | |_^
+   |
+   = help: consider using a state machine or refactoring bools into two-variant enums
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#struct_excessive_bools
+
+warning: called `map(<f>).unwrap_or(<a>)` on a `Result` value
+  --> crates/rrrah-app/src/gpu_recovery_probe.rs:54:32
+   |
+54 |               required_prefetch: std::env::var("RRRAH_QUALIFY_PREFETCH_COUNT")
+   |  ________________________________^
+55 | |                 .map(|value| value.parse().expect("valid qualification prefetch count"))
+56 | |                 .unwrap_or(0),
+   | |_____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+   = note: `-W clippy::map-unwrap-or` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::map_unwrap_or)]`
+help: use `map_or(<a>, <f>)` instead
+   |
+55 -                 .map(|value| value.parse().expect("valid qualification prefetch count"))
+56 -                 .unwrap_or(0),
+55 +                 .map_or(0, |value| value.parse().expect("valid qualification prefetch count")),
+   |
+
+warning: called `map(<f>).unwrap_or(<a>)` on a `Result` value
+  --> crates/rrrah-app/src/gpu_recovery_probe.rs:57:41
+   |
+57 |               required_prefetch_attempts: std::env::var("RRRAH_QUALIFY_PREFETCH_ATTEMPTS")
+   |  _________________________________________^
+58 | |                 .map(|value| value.parse().expect("valid qualification attempt count"))
+59 | |                 .unwrap_or(0),
+   | |_____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: use `map_or(<a>, <f>)` instead
+   |
+58 -                 .map(|value| value.parse().expect("valid qualification attempt count"))
+59 -                 .unwrap_or(0),
+58 +                 .map_or(0, |value| value.parse().expect("valid qualification attempt count")),
+   |
+
+warning: called `map(<f>).unwrap_or(<a>)` on a `Result` value
+  --> crates/rrrah-app/src/gpu_recovery_probe.rs:63:21
+   |
+63 |               rounds: std::env::var("RRRAH_QUALIFY_NAV_ROUNDS")
+   |  _____________________^
+64 | |                 .map(|v| {
+65 | |                     v.parse::<usize>()
+66 | |                         .expect("valid qualification rounds")
+67 | |                         .clamp(1, 10000)
+68 | |                 })
+69 | |                 .unwrap_or(1),
+   | |_____________________________^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: use `map_or(<a>, <f>)` instead
+   |
+64 ~                 .map_or(1, |v| {
+65 |                     v.parse::<usize>()
+66 |                         .expect("valid qualification rounds")
+67 |                         .clamp(1, 10000)
+68 ~                 }),
+   |
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+   --> crates/rrrah-app/src/gpu_recovery_probe.rs:159:21
+    |
+159 |                     probe.path = self.path.clone();
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `probe.path.clone_from(&self.path)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: unnecessary `Debug` formatting in `format!` args
+   --> crates/rrrah-app/src/gpu_recovery_probe.rs:459:70
+    |
+459 |                 "navigation source absent from gallery: {} expected={expected:?} entries={entries:?}",
+    |                                                                      ^^^^^^^^
+    |
+    = help: use `Display` formatting and change this to `expected.display()`
+    = note: switching to `Display` formatting will change how the value is shown; escaped characters will no longer be escaped and surrounding quotes will be removed
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unnecessary_debug_formatting
+    = note: `-W clippy::unnecessary-debug-formatting` implied by `-W clippy::pedantic`
+    = help: to override `-W clippy::pedantic` add `#[allow(clippy::unnecessary_debug_formatting)]`
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+    --> crates/rrrah-app/src/main.rs:1510:37
+     |
+1510 | ...                   request.memory_budget = managed_budget.clone();
+     |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `request.memory_budget.clone_from(&managed_budget)`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+    --> crates/rrrah-app/src/main.rs:1810:13
+     |
+1810 |             identity.source = current.source.clone();
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `identity.source.clone_from(&current.source)`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: matching over `()` is more explicit
+    --> crates/rrrah-app/src/main.rs:1888:45
+     |
+1888 |         *flight = result.as_ref().ok().map(|_| (identity, generation));
+     |                                             ^ help: use `()` instead of `_`: `()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#ignored_unit_patterns
+     = note: `-W clippy::ignored-unit-patterns` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::ignored_unit_patterns)]`
+
+warning: manual implementation of `midpoint` which can overflow
+    --> crates/rrrah-app/src/main.rs:1971:18
+     |
+1971 |     let center = (minimum + maximum) * 0.5 + width * shift;
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `f64::midpoint` instead: `f64::midpoint(minimum, maximum)`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#manual_midpoint
+     = note: `-W clippy::manual-midpoint` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::manual_midpoint)]`
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2103:30
+     |
+2103 |                 .is_some_and(|token| token.is_cancelled())
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: this `continue` expression is redundant
+    --> crates/rrrah-app/src/main.rs:2212:25
+     |
+2212 |                         continue;
+     |                         ^^^^^^^^
+     |
+     = help: consider dropping the `continue` expression
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_continue
+     = note: `-W clippy::needless-continue` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::needless_continue)]`
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2335:34
+     |
+2335 |                     .is_some_and(|token| token.is_cancelled())
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2386:26
+     |
+2386 |             .is_some_and(|token| token.is_cancelled())
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2423:14
+     |
+2423 |         .map(|swap| swap.restore_budget())
+     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_cache::ImageSwapCache::restore_budget`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2533:34
+     |
+2533 |                     .is_some_and(|token| token.is_cancelled())
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: this `continue` expression is redundant
+    --> crates/rrrah-app/src/main.rs:2651:78
+     |
+2651 |             Err(error) if error.kind() == std::io::ErrorKind::Interrupted => continue,
+     |                                                                              ^^^^^^^^
+     |
+     = help: consider dropping the `continue` expression
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_continue
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2764:22
+     |
+2764 |         .is_some_and(|token| token.is_cancelled())
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2778:34
+     |
+2778 |                     .is_some_and(|token| token.is_cancelled())
+     |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: this `continue` expression is redundant
+    --> crates/rrrah-app/src/main.rs:2848:17
+     |
+2848 |                 continue;
+     |                 ^^^^^^^^
+     |
+     = help: consider dropping the `continue` expression
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#needless_continue
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2856:22
+     |
+2856 |         .is_some_and(|token| token.is_cancelled())
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:2945:30
+     |
+2945 |                 .is_some_and(|token| token.is_cancelled())
+     |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_decode::GenerationToken::is_cancelled`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: implicitly cloning a `String` by calling `to_string` on its dereferenced type
+    --> crates/rrrah-app/src/main.rs:3058:60
+     |
+3058 |             Err(error) => publish_load_failure(generation, error.to_string(), &token, sender, proxy),
+     |                                                            ^^^^^^^^^^^^^^^^^ help: consider using: `error.clone()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#implicit_clone
+     = note: `-W clippy::implicit-clone` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::implicit_clone)]`
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:3091:67
+     |
+3091 | ...                   region_store: raster_cache.swap().map(|swap| swap.region_store()),
+     |                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_cache::ImageSwapCache::region_store`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:3271:26
+     |
+3271 |                     .map(|swap| swap.restore_budget())
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_cache::ImageSwapCache::restore_budget`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: assigning the result of `Clone::clone()` may be inefficient
+    --> crates/rrrah-app/src/main.rs:3535:9
+     |
+3535 |         request.memory_budget = managed_budget.clone();
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: use `clone_from()`: `request.memory_budget.clone_from(&managed_budget)`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#assigning_clones
+
+warning: casting `f32` to `u8` may lose the sign of the value
+    --> crates/rrrah-app/src/main.rs:3592:41
+     |
+3592 | ...                   pixels.push((encoded * 255.0).round() as u8);
+     |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cast_sign_loss
+     = note: `-W clippy::cast-sign-loss` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::cast_sign_loss)]`
+
+warning: more than 3 bools in a struct
+    --> crates/rrrah-app/src/main.rs:3708:1
+     |
+3708 | / struct App {
+3709 | |     editor: editor::Editor,
+3710 | |     accesskit: Option<accesskit_winit::Adapter>,
+3711 | |     access_focus: accesskit::NodeId,
+...    |
+3776 | |     pending_first_present: Option<PendingFirstPresent>,
+3777 | | }
+     | |_^
+     |
+     = help: consider using a state machine or refactoring bools into two-variant enums
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#struct_excessive_bools
+
+warning: calling `Playback::default()` is more clear than this expression
+    --> crates/rrrah-app/src/main.rs:3889:23
+     |
+3889 |             playback: Default::default(),
+     |                       ^^^^^^^^^^^^^^^^^^ help: try: `Playback::default()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#default_trait_access
+     = note: `-W clippy::default-trait-access` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::default_trait_access)]`
+
+warning: returning the result of a `let` binding from a block
+    --> crates/rrrah-app/src/main.rs:4215:33
+     |
+4200 | / ...                   let upload = gpu
+4201 | | ...                       .prepare_raw_renderer(self.view)
+4202 | | ...                       .map_err(|e| e.to_string())
+4203 | | ...                       .and_then(|()| {
+...    |
+4213 | | ...                               .map_err(|e| e.to_string())
+4214 | | ...                       });
+     | |_____________________________- unnecessary `let` binding
+4215 |   ...                   upload
+     |                         ^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#let_and_return
+     = note: `-W clippy::let-and-return` implied by `-W clippy::all`
+     = help: to override `-W clippy::all` add `#[allow(clippy::let_and_return)]`
+help: return the expression directly
+     |
+4200 ~                                 
+4201 ~                                 gpu
+4202 +                                     .prepare_raw_renderer(self.view)
+4203 +                                     .map_err(|e| e.to_string())
+4204 +                                     .and_then(|()| {
+4205 +                                         gpu.renderer
+4206 +                                             .as_mut()
+4207 +                                             .expect("RAW renderer prepared")
+4208 +                                             .upload_mosaic_with_cancel(
+4209 +                                                 &gpu.device,
+4210 +                                                 &gpu.queue,
+4211 +                                                 &mosaic,
+4212 +                                                 || upload_token.is_cancelled(),
+4213 +                                             )
+4214 +                                             .map_err(|e| e.to_string())
+4215 +                                     })
+     |
+
+warning: implicitly cloning a `String` by calling `to_string` on its dereferenced type
+    --> crates/rrrah-app/src/main.rs:4247:56
+     |
+4247 | ...                   Err(error) => Some(Err(error.to_string())),
+     |                                              ^^^^^^^^^^^^^^^^^ help: consider using: `error.clone()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#implicit_clone
+
+warning: called `unwrap` on `self.accesskit` after checking its variant with `is_some`
+    --> crates/rrrah-app/src/main.rs:4575:13
+     |
+4573 |         if self.accesskit.is_some() {
+     |         --------------------------- help: try: `if let Some(<item>) = &mut self.accesskit`
+4574 |             let tree = self.accessibility_tree();
+4575 |             self.accesskit.as_mut().unwrap().update_if_active(|| tree);
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#unnecessary_unwrap
+     = note: `-W clippy::unnecessary-unwrap` implied by `-W clippy::all`
+     = help: to override `-W clippy::all` add `#[allow(clippy::unnecessary_unwrap)]`
+
+warning: called `map(<f>).unwrap_or_else(<g>)` on an `Option` value
+    --> crates/rrrah-app/src/main.rs:4713:24
+     |
+4713 |           let admitted = self
+     |  ________________________^
+4714 | |             .foreground_loader
+4715 | |             .edit_admission
+4716 | |             .lock()
+...    |
+4722 | |                 Err("source identity was not admitted for this frame; reload before editing".into())
+4723 | |             });
+     | |______________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#map_unwrap_or
+help: try
+     |
+4713 ~         let admitted = self
+4714 +             .foreground_loader
+4715 +             .edit_admission
+4716 +             .lock()
+4717 +             .unwrap_or_else(std::sync::PoisonError::into_inner)
+4718 +             .as_ref()
+4719 +             .filter(|source| source.generation == generation && source.path == self.path).map_or_else(|| {
+4720 +                 Err("source identity was not admitted for this frame; reload before editing".into())
+4721 ~             }, |source| source.version.clone());
+     |
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:5605:34
+     |
+5605 |                     .is_some_and(|h| h.is_pending())
+     |                                  ^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `rrrah_gpu::GpuHistogram::is_pending`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: consider adding a `;` to the last statement for consistent formatting
+    --> crates/rrrah-app/src/main.rs:6061:25
+     |
+6061 |                         self.access_command(self.access_focus)
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add a `;` here: `self.access_command(self.access_focus);`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+     = note: `-W clippy::semicolon-if-nothing-returned` implied by `-W clippy::pedantic`
+     = help: to override `-W clippy::pedantic` add `#[allow(clippy::semicolon_if_nothing_returned)]`
+
+warning: wildcard matches only a single variant and will also match any future added variants
+  --> crates/rrrah-app/src/raster_lod_worker.rs:49:13
+   |
+49 |             _ => Err(std::io::Error::other("expected raster worker output").into()),
+   |             ^ help: try: `Output::Swapped(_)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_wildcard_for_single_variants
+   = note: `-W clippy::match-wildcard-for-single-variants` implied by `-W clippy::pedantic`
+   = help: to override `-W clippy::pedantic` add `#[allow(clippy::match_wildcard_for_single_variants)]`
+
+warning: wildcard matches only a single variant and will also match any future added variants
+  --> crates/rrrah-app/src/raster_lod_worker.rs:55:13
+   |
+55 |             _ => Err(std::io::Error::other("expected swap worker output").into()),
+   |             ^ help: try: `Output::Frame(_)`
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#match_wildcard_for_single_variants
+
+warning: very complex type used. Consider factoring parts into `type` definitions
+  --> crates/rrrah-app/src/raster_viewport.rs:89:10
+   |
+89 |     ) -> Result<Option<(rrrah_cache::SwappedRaster, [u32; 4], MemoryBudget, MemoryBudget)>, RasterUploadError>
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#type_complexity
+   = note: `-W clippy::type-complexity` implied by `-W clippy::all`
+   = help: to override `-W clippy::all` add `#[allow(clippy::type_complexity)]`
+
+warning: returning the result of a `let` binding from a block
+   --> crates/rrrah-app/src/raster_viewport.rs:242:17
+    |
+226 | /                 let candidate = loop {
+227 | |                     size = size.map(|v| v.div_ceil(2));
+...   |
+241 | |                 };
+    | |__________________- unnecessary `let` binding
+242 |                   candidate
+    |                   ^^^^^^^^^
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#let_and_return
+help: return the expression directly
+    |
+226 ~                 
+227 ~                 loop {
+228 +                     size = size.map(|v| v.div_ceil(2));
+229 +                     // Keep an admissible cached level; only rebuild to improve it,
+230 +                     // or to replace a cached level that no longer fits on the GPU.
+231 +                     if current == Some(size) && renderer.can_admit_texture_extent(device, size[0], size[1]) {
+232 +                         break None;
+233 +                     }
+234 +                     if source.can_downsample_linear(size, &self.lod_budget, &scratch)
+235 +                         && renderer.can_admit_texture_extent(device, size[0], size[1])
+236 +                     {
+237 +                         break Some(ViewportWork::Fit(size));
+238 +                     }
+239 +                     if size == [1, 1] {
+240 +                         break None;
+241 +                     }
+242 +                 }
+    |
+
+warning: redundant closure
+    --> crates/rrrah-app/src/main.rs:6920:24
+     |
+6920 |             .map_or(0, |source| source.identity());
+     |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace the closure with the method itself: `raster_viewport::ResidentSource::identity`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#redundant_closure_for_method_calls
+
+warning: consider adding a `;` to the last statement for consistent formatting
+    --> crates/rrrah-app/src/main.rs:6983:33
+     |
+6983 | ...                   self.raster_region_error = Some(format!("Image region unavailable: {error}"))
+     |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: add a `;` here: `self.raster_region_error = Some(format!("Image region unavailable: {error}"));`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+
+warning: consider adding a `;` to the last statement for consistent formatting
+    --> crates/rrrah-app/src/main.rs:7039:45
+     |
+7039 | / ...                   self.raster_region_error =
+7040 | | ...                       Some(format!("Image region unavailable: {error}"))
+     | |____________________________________________________________________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+help: add a `;` here
+     |
+7039 |                                             self.raster_region_error =
+7040 ~                                                 Some(format!("Image region unavailable: {error}"));
+     |
+
+warning: consider adding a `;` to the last statement for consistent formatting
+    --> crates/rrrah-app/src/main.rs:7045:37
+     |
+7045 | / ...                   self.raster_region_error =
+7046 | | ...                       Some(format!("Image region unavailable: {error}"))
+     | |____________________________________________________________________________^
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#semicolon_if_nothing_returned
+help: add a `;` here
+     |
+7045 |                                     self.raster_region_error =
+7046 ~                                         Some(format!("Image region unavailable: {error}"));
+     |
+
+warning: `rrrah` (bin "rrrah") generated 53 warnings (run `cargo clippy --fix --bin "rrrah" -p rrrah -- ` to apply 29 suggestions)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1.98s

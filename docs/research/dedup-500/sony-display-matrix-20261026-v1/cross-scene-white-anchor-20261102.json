@@ -1,0 +1,212 @@
+{
+  "inputs": [
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-pair-samples-20261026.csv",
+      "sha256": "6aa1da1e96a9c1edd71c80de0320eb9316789a12e443d3705ec931d79d2f917d"
+    },
+    {
+      "path": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-pair-samples-20261026.csv",
+      "sha256": "a5b6906ec82b9a5aae8d01adcf23a020133bc9eda4793b134166ad6d04beae68"
+    }
+  ],
+  "results": [
+    {
+      "training_scene": "2414",
+      "evaluation_scene": "2414",
+      "direction": "forward",
+      "gains": [
+        1.0071690179535358,
+        1.0074298926738774,
+        1.008207850462989
+      ],
+      "training_points": 11567,
+      "result": {
+        "matched": 11477,
+        "compared": 11750,
+        "agreement": 0.9767659574468085
+      }
+    },
+    {
+      "training_scene": "2414",
+      "evaluation_scene": "2418",
+      "direction": "forward",
+      "gains": [
+        1.0071690179535358,
+        1.0074298926738774,
+        1.008207850462989
+      ],
+      "training_points": 11567,
+      "result": {
+        "matched": 11123,
+        "compared": 11750,
+        "agreement": 0.9466382978723404
+      }
+    },
+    {
+      "training_scene": "2414",
+      "evaluation_scene": "2414-raw-vs-2418-render",
+      "direction": "forward",
+      "gains": [
+        1.0071690179535358,
+        1.0074298926738774,
+        1.008207850462989
+      ],
+      "training_points": 11567,
+      "result": {
+        "matched": 2019,
+        "compared": 11750,
+        "agreement": 0.17182978723404255
+      }
+    },
+    {
+      "training_scene": "2414",
+      "evaluation_scene": "2414",
+      "direction": "reverse",
+      "gains": [
+        0.9928341750008175,
+        0.9925736406598108,
+        0.9917114455320656
+      ],
+      "training_points": 11567,
+      "result": {
+        "matched": 11478,
+        "compared": 11750,
+        "agreement": 0.9768510638297873
+      }
+    },
+    {
+      "training_scene": "2414",
+      "evaluation_scene": "2418",
+      "direction": "reverse",
+      "gains": [
+        0.9928341750008175,
+        0.9925736406598108,
+        0.9917114455320656
+      ],
+      "training_points": 11567,
+      "result": {
+        "matched": 11124,
+        "compared": 11750,
+        "agreement": 0.9467234042553192
+      }
+    },
+    {
+      "training_scene": "2414",
+      "evaluation_scene": "2414-raw-vs-2418-render",
+      "direction": "reverse",
+      "gains": [
+        0.9928341750008175,
+        0.9925736406598108,
+        0.9917114455320656
+      ],
+      "training_points": 11567,
+      "result": {
+        "matched": 2046,
+        "compared": 11750,
+        "agreement": 0.17412765957446807
+      }
+    },
+    {
+      "training_scene": "2418",
+      "evaluation_scene": "2414",
+      "direction": "forward",
+      "gains": [
+        1.0093242283270605,
+        1.0094443064849006,
+        1.0112024024886321
+      ],
+      "training_points": 10821,
+      "result": {
+        "matched": 11471,
+        "compared": 11750,
+        "agreement": 0.9762553191489362
+      }
+    },
+    {
+      "training_scene": "2418",
+      "evaluation_scene": "2418",
+      "direction": "forward",
+      "gains": [
+        1.0093242283270605,
+        1.0094443064849006,
+        1.0112024024886321
+      ],
+      "training_points": 10821,
+      "result": {
+        "matched": 11126,
+        "compared": 11750,
+        "agreement": 0.9468936170212766
+      }
+    },
+    {
+      "training_scene": "2418",
+      "evaluation_scene": "2414-raw-vs-2418-render",
+      "direction": "forward",
+      "gains": [
+        1.0093242283270605,
+        1.0094443064849006,
+        1.0112024024886321
+      ],
+      "training_points": 10821,
+      "result": {
+        "matched": 2078,
+        "compared": 11750,
+        "agreement": 0.17685106382978724
+      }
+    },
+    {
+      "training_scene": "2418",
+      "evaluation_scene": "2414",
+      "direction": "reverse",
+      "gains": [
+        0.9906657684577661,
+        0.9904200151505002,
+        0.988045852358381
+      ],
+      "training_points": 10821,
+      "result": {
+        "matched": 11472,
+        "compared": 11750,
+        "agreement": 0.9763404255319149
+      }
+    },
+    {
+      "training_scene": "2418",
+      "evaluation_scene": "2418",
+      "direction": "reverse",
+      "gains": [
+        0.9906657684577661,
+        0.9904200151505002,
+        0.988045852358381
+      ],
+      "training_points": 10821,
+      "result": {
+        "matched": 11131,
+        "compared": 11750,
+        "agreement": 0.9473191489361702
+      }
+    },
+    {
+      "training_scene": "2418",
+      "evaluation_scene": "2414-raw-vs-2418-render",
+      "direction": "reverse",
+      "gains": [
+        0.9906657684577661,
+        0.9904200151505002,
+        0.988045852358381
+      ],
+      "training_points": 10821,
+      "result": {
+        "matched": 2122,
+        "compared": 11750,
+        "agreement": 0.18059574468085107
+      }
+    }
+  ],
+  "tolerance": 0.03,
+  "gain_bounds": [
+    0.9,
+    1.1
+  ],
+  "scope": "Diagnostic on retained sparse aligned CSV samples. Fit even checkerboard in-range points; evaluate odd points including all range classes. Cross-scene negative is authored correspondence, not automatic geometry. No new decoding, native acceptance, threshold or recipe change; two scenes do not establish broad precision/recall."
+}

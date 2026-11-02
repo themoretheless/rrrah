@@ -1,0 +1,28 @@
+{
+  "repository": "maxkhim/laravel-storage-dedupler",
+  "commit": "7720046f9b1c9056a47de0d84a1384e667d3f367",
+  "whole_files_read": [
+    {
+      "path": "src/Commands/CheckDeduplerStorageCommand.php",
+      "git_blob": "f7e5351af5cfc170899cffeff7fcbec9af4b810e",
+      "sha256": "e31e3b4c8ee5ada9d23fe6571bd37f4a5ba2a98faec39b00850dd416eba952b8"
+    },
+    {
+      "path": "src/Facades/Dedupler.php",
+      "git_blob": "ec191eb398bd0ecb698cb805a794d994ff39e01b",
+      "sha256": "0c4dc86b1489af5f6ce3ecb0168671b04af4af07e622d24a211cd018f1d37c04"
+    }
+  ],
+  "whole_files_read_total": 2,
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "upstream_tests_run": false,
+  "findings": [
+    "Facade declares API only; does not establish dedup correctness.",
+    "Readiness command writes/deletes fixed /test.txt path and ignores returned booleans; source observation only, framework/storage semantics unqualified."
+  ],
+  "remaining": [
+    "Core DeduplerService and file adapters, DB uniqueness/concurrency, original tests and licenses"
+  ],
+  "production_changes": false
+}

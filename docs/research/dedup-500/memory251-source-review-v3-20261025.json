@@ -1,0 +1,85 @@
+{
+  "index": 251,
+  "repository": "reescalder/agent-memory-supabase",
+  "commit": "b711e6d76009d0713c5d5c211c2ab5c83d01ca53",
+  "tracked_blob_count": 9,
+  "whole_file_reads": [
+    {
+      "path": "src/client.js",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/02-client.js",
+      "sha256": "7d4fc585b22b4444a863d08eca97c471fd84ef227f0d90522983da94ef731992",
+      "git_blob_sha1": "0621da4e9d35853eda1b1fe2e02d5392bae81649"
+    },
+    {
+      "path": "sql/schema.sql",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/04-schema.sql",
+      "sha256": "3338997551df022d56460b0ce6931ff22917404b9d94576234dbe2f9100bd971",
+      "git_blob_sha1": "3ed0a185927ef64cbba00d4955f89e1fc1646ab6"
+    },
+    {
+      "path": "sql/rls.sql",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/03-rls.sql",
+      "sha256": "728db25b3b3bbd5bd226942f3a763376de0a7f7aad37dfcc6154b0d47e0e0dfb",
+      "git_blob_sha1": "5fac7dba62c8678c8a409c8af57136eda6d30db9"
+    },
+    {
+      "path": ".env.example",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/remaining-pinned/.env.example",
+      "sha256": "a330713c694db99f2fe0f79fc2b5a7209de7cc11c5efe692dbd56b9cad9365a0",
+      "git_blob_sha1": "7270b67a959a7e5ae70477e433ec2ff02ef10070"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/remaining-pinned/.gitignore",
+      "sha256": "d67403e4a7ea59cdaf8865ed95d734bca435a77c61fc138410ec2266e134a423",
+      "git_blob_sha1": "5d27f0018a450fd4508244afc224f9c020113986"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/01-LICENSE",
+      "sha256": "ec9906a3023215322a5c75d9b97e383115401a47dcb814bd7a10bf01e29ccc35",
+      "git_blob_sha1": "625bc5fe7a7d8c7424272b3dde8d78c610a60437"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/00-README.md",
+      "sha256": "ee508703eb4ec1b00f56b9b31552276241fdcba13b722055293889007e980ff3",
+      "git_blob_sha1": "980ae452607b90c36e775cc368e7d33aeecc2f80"
+    },
+    {
+      "path": "examples/quickstart.js",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/05-quickstart.js",
+      "sha256": "c5b0eb017332b5e3dc8ed6e17d0ae363767ccb8107e6017e663ae5b2ee6dafd0",
+      "git_blob_sha1": "4735d6f456da64f948df50e692177a87a3b906a4"
+    },
+    {
+      "path": "package.json",
+      "local": "docs/research/dedup-500/evidence/reescalder--agent-memory-supabase/remaining-pinned/package.json",
+      "sha256": "d8ea0040cefd3efee87b38b932c46d2ab67c29da843cd63d4ad383793c29291c",
+      "git_blob_sha1": "3f63e46d6d4ffd862d8cc797e6b8d106cfb2a2a1"
+    }
+  ],
+  "whole_file_read_count": 9,
+  "remaining": [],
+  "full_repository_read": true,
+  "original_tests_run": false,
+  "findings": [
+    {
+      "path": "src/client.js",
+      "confirmed": "Whole257lines read, no imports/client construction/credentials/model/DB calls. Semantic text memory dedup, not file identity. Duplicate update ignores returned error and falls back to old dupe while action updated; updates content/tags/metadata/importance without updating embedding/entities/source/expiry, potential stale representation. Check then insert separate RPC/mutations, concurrent semantic duplicates possible. Supersedes old memory deactivated before insert; insert failure leaves prior inactive, updates/link errors ignored, no transaction. Dedup fastpath ignores supersedes/expiry. Embedding no explicit deadline/retry/input budget/dimension/finite schema validation. Entity failure conflates empty extraction with error; only array shape validated. SQL project filtering semantics pending schema review; no adoption."
+    },
+    {
+      "paths": [
+        "sql/schema.sql",
+        "sql/rls.sql"
+      ],
+      "confirmed": "Whole551+36lines read, no SQL executed. Null project filter means all projects rather than only project NULL, including write-time dedup; unscoped store can overwrite scoped memory through client fastpath. find_similar_memory and snapshot duplicate omit expiry filters, so expired active records can absorb writes; client update does not renew expiry. Temporal valid_from/valid_until not enforced by ordinary recall. Entity injection omits min_similarity floor used in vector/text lanes. Candidate caps50/30/12 make recall bounded, no completeness metadata. content_tsv generated refreshes content automatically, but no embedding trigger, confirming stale vector after client update. Snapshot function not called by client. memory_history uses ILIKE substring, not recursive supersession traversal; percent/underscore treated as wildcard. RLS separate optional script enables server-only default, owner policies commented; service key bypass explicitly documented. SQL is data reviewed only; no account or policy changes. No exact-file algorithm adoption."
+    },
+    {
+      "confirmed": "Remaining6files fully read. MIT2026ReesCalder. README two write-time passes not wired: client only semantic RPC. Entity extraction awaited before insert despite async/non-blocking description. Package has no test script; pinned tree no test files/lockfile. Quickstart/env examples read only, never run. Original store with synthetic update error returns updated and old record, payload lacks embedding. No adoption.",
+      "controls": "docs/research/dedup-500/memory251-update-error-control-20261025.json"
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/memory251-source-review-v2-20261025.json",
+  "integrity_verified_blobs": 9
+}

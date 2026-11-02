@@ -1,0 +1,37 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 30.13s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 1 test
+
+thread 'raster::tga_alpha::tests::tga2_pixel_aspect_matches_independent_ratios_without_changing_samples' (50281643) panicked at crates/rrrah-decode/src/tga_alpha.rs:235:115:
+assertion `left == right` failed: tga2-aspect-2-1-origin0-raw.tga
+  left: None
+ right: Some(2.0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster::tga_alpha::tests::tga2_pixel_aspect_matches_independent_ratios_without_changing_samples ... FAILED
+
+failures:
+
+failures:
+    raster::tga_alpha::tests::tga2_pixel_aspect_matches_independent_ratios_without_changing_samples
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 265 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

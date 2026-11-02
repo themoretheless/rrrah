@@ -1,0 +1,8 @@
+import pathlib,tempfile,subprocess,os,json
+b=pathlib.Path.cwd()/'docs/research/dedup-500';script=b/'evidence/hydrusvideodeduplicator--hydrus-video-deduplicator/31-docker-entrypoint.sh';results=[]
+with tempfile.TemporaryDirectory(prefix='owned-hydrus-docker-') as td:
+ p=pathlib.Path(td);fake=p/'python';fake.write_text('#!/bin/sh\nprintf "%s\\n" "$@" > "$OWNED_ARGS"\n');fake.chmod(0o755)
+ env={'PATH':str(p)+':/usr/bin:/bin','OWNED_ARGS':str(p/'argv'),'HYDRUS_API_KEY':'owned-example','FAILED_PAGE_NAME':'failed videos','DEDUP_DATABASE_DIR':'/owned/db folder'}
+ r=subprocess.run(['/bin/bash',str(script)],env=env,text=True,capture_output=True,timeout=5,check=True);args=(p/'argv').read_text().splitlines();assert '--failed-page-name=failed' in args and 'videos' in args;assert '--dedup-database-dir=/owned/db' in args and 'folder' in args;results.append({'control':'spaces_split_page_and_database_arguments','argv':args,'pass':True})
+ env['FAILED_PAGE_NAME']='failed_videos';env['DEDUP_DATABASE_DIR']='/owned/db';subprocess.run(['/bin/bash',str(script)],env=env,text=True,capture_output=True,timeout=5,check=True);args=(p/'argv').read_text().splitlines();assert '--failed-page-name=failed_videos' in args and '--dedup-database-dir=/owned/db' in args;results.append({'control':'simple_values_retained','pass':True})
+report={'scope':'Original unchanged shell script with owned dummy environment and recording python replacement; no Docker/image/package/live API execution.','controls':results};(b/'hydrus107-docker-controls-20261024.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))

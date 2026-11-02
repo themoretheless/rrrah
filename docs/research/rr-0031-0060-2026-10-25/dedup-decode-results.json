@@ -1,0 +1,184 @@
+{
+  "command": [
+    "cargo",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "model_tiles",
+    "--test",
+    "model_projected_tiles",
+    "--test",
+    "model_compare",
+    "--test",
+    "bank_partition",
+    "--test",
+    "anchor_rank",
+    "--test",
+    "anchor_rank_file",
+    "--test",
+    "gradient",
+    "--test",
+    "gradient_distinct_locations",
+    "--test",
+    "gradient_collection",
+    "--test",
+    "local_collection",
+    "--test",
+    "opposite_native",
+    "--",
+    "--show-output",
+    "--test-threads=1"
+  ],
+  "exit_code": 0,
+  "timed_out": false,
+  "summaries": [
+    [
+      "ok",
+      "5",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "3",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "6",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "9",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "1",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "4",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "20",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "47",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "8",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "21",
+      "0",
+      "0"
+    ],
+    [
+      "ok",
+      "6",
+      "0",
+      "0"
+    ]
+  ],
+  "targets": [
+    {
+      "name": "anchor_rank",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "anchor_rank_file",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "bank_partition",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "gradient",
+      "status": "ok",
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "gradient_collection",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "gradient_distinct_locations",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "local_collection",
+      "status": "ok",
+      "passed": 20,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "model_compare",
+      "status": "ok",
+      "passed": 47,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "model_projected_tiles",
+      "status": "ok",
+      "passed": 8,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "model_tiles",
+      "status": "ok",
+      "passed": 21,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "name": "opposite_native",
+      "status": "ok",
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0
+    }
+  ]
+}

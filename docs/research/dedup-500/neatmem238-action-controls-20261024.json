@@ -1,0 +1,44 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original selected action/parser/adapter bodies with deterministic search/LLM and recording-only update adapters. No real model, network, vector database, persistent writes or full application.",
+  "authored_controls": [
+    {
+      "response": "{\"action\":\"update\",\"targetId\":\"oops\"}",
+      "passed": true,
+      "writes": [
+        {
+          "memory_id": "first",
+          "data": "new text",
+          "metadata": {
+            "attr_source": "user"
+          }
+        }
+      ],
+      "to_add": []
+    },
+    {
+      "response": "{\"action\":\"update\",\"targetId\":99}",
+      "passed": true,
+      "writes": [
+        {
+          "memory_id": "first",
+          "data": "new text",
+          "metadata": {
+            "attr_source": "user"
+          }
+        }
+      ],
+      "to_add": []
+    },
+    {
+      "response": "[]",
+      "passed": true,
+      "writes": [],
+      "to_add": [
+        {
+          "text": "new text"
+        }
+      ]
+    }
+  ]
+}

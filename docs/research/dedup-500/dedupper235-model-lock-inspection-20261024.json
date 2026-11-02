@@ -1,0 +1,83 @@
+{
+  "scope": "Complete JSON parse and structural manifest/lock walk; canonical pinned blob and SHA256 verification of all six binary shards. Binary contents not manually read; no tensor/model load or inference, no dependency installation.",
+  "model_manifest": [
+    {
+      "paths": [
+        "group1-shard1of6",
+        "group1-shard2of6",
+        "group1-shard3of6",
+        "group1-shard4of6",
+        "group1-shard5of6",
+        "group1-shard6of6"
+      ],
+      "tensor_count": 382,
+      "dtypes": {
+        "uint8": 382
+      },
+      "expected_bytes": 22360869,
+      "actual_bytes": 22360869,
+      "exact_size_match": true
+    }
+  ],
+  "model_topology_type": "dict",
+  "lockfile_version": 2,
+  "lock_dependency_nodes": 1733,
+  "files": [
+    {
+      "path": "package-lock.json",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/package-lock.json",
+      "sha256": "322b21be7d755466e0a9b7ddb470c431736c8546236635da940b86871d7c2b82",
+      "git_blob_sha1": "c4b067ca017e07c68f3587a770ad2eac7268d927",
+      "bytes": 1333498
+    },
+    {
+      "path": "resource/nsfwjs/group1-shard1of6",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/group1-shard1of6",
+      "sha256": "7a3a4c075cfcaa7f0b095f55b2ba54a288c2f770e504c8537394efda9545994b",
+      "git_blob_sha1": "b91a8fad3cf4ec6d5e402f51ddcd11afabea5222",
+      "bytes": 4194304
+    },
+    {
+      "path": "resource/nsfwjs/group1-shard2of6",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/group1-shard2of6",
+      "sha256": "8826da12bda0db9415aef0e6a8d1f178a0d950deab28c4e79b9da994748702a4",
+      "git_blob_sha1": "357cc216710042ecf5c7c152acc5e87b95337e4e",
+      "bytes": 4194304
+    },
+    {
+      "path": "resource/nsfwjs/group1-shard3of6",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/group1-shard3of6",
+      "sha256": "4557a96cf87ceb8df6c9647b647ac9843251a4455457cb40f35c02250a63e51c",
+      "git_blob_sha1": "27b144f069f8228ef51745b49086b3618460610e",
+      "bytes": 4194304
+    },
+    {
+      "path": "resource/nsfwjs/group1-shard4of6",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/group1-shard4of6",
+      "sha256": "399b99397ccd64351b59f04cdabe30000a15494c82f75c1e2ccb41c9b6338b7d",
+      "git_blob_sha1": "1a9846bf9960509813dd2e9a95db877feed5c2e3",
+      "bytes": 4194304
+    },
+    {
+      "path": "resource/nsfwjs/group1-shard5of6",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/group1-shard5of6",
+      "sha256": "994515b0f73407d71740301e9877511b086609dbdc7ead1b31bcb82b3397ae74",
+      "git_blob_sha1": "c8a9f74019493ed51785c887775b0bc232900780",
+      "bytes": 4194304
+    },
+    {
+      "path": "resource/nsfwjs/group1-shard6of6",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/group1-shard6of6",
+      "sha256": "cfb856c9d8fcefacca87b6063ed4949adf69f0372407d6edca8cec0c1694a28b",
+      "git_blob_sha1": "0d4556f109829c4fcf20c9b37b2db1c4b874de54",
+      "bytes": 1389349
+    },
+    {
+      "path": "resource/nsfwjs/model.json",
+      "local": "docs/research/dedup-500/evidence/wkdhkr--dedupper/remaining-pinned/resource/nsfwjs/model.json",
+      "sha256": "1220fc23413405858655f9c7342d5e201d9b8e0356904267d59659da71202cc3",
+      "git_blob_sha1": "8b24b119bc9a956a20eaf6c72018d3767d93253d",
+      "bytes": 215920
+    }
+  ]
+}

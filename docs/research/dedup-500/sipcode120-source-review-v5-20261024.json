@@ -1,0 +1,48 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v4-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/proxy/hookReadDedup.test.ts",
+      "local": "hook-tests_modules_proxy_hookReadDedup.test.ts",
+      "git_blob": "5d750712afaa2e67844ea6cf330fdfa71bf371d2",
+      "sha256": "86d7a92035e8f6fccfaaa1fff30e72f0960d414e1ffc829b3476565832e3f2b1",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 11,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest_results": {
+    "numTotalTests": 70,
+    "numPassedTests": 70,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 19,
+  "authored_controls_total_distinct": 11,
+  "new_authored_controls": 0,
+  "requalified_prior_controls": 2,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-original-tests-20261024",
+  "complete_result": {
+    "runtime": "v22.23.4",
+    "requalified_prior_controls": 2,
+    "new_distinct_controls": 0,
+    "findings": [
+      "Matching owned transcript warms persistent cache and denies on first hook",
+      "Changed owned source excluded from warmfill and live read passes"
+    ],
+    "scope": "All original runtime hook/decision/cache/path/warmfill modules,only runtime import locations changed;real owned source,transcript,marker,cache;not actual Claude transcript provenance or tool execution",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/complete-owned-wnqQ6X"
+  },
+  "findings": [
+    "All original runtime hook/cache/path/warmfill/decision modules compose on real owned filesystem;matched synthetic transcript warms anddenies,changed source passes.",
+    "Upstream recording tests explicitly assert cache append during PreToolUse,consistent with previously reproduced pre-completion record limitation.",
+    "Marker test checks marker existence andwrites>=prior,not exact absence of second scan.",
+    "No liveClaude session/read completion provenance,contextcompaction or actual host retry qualification."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "Selected dispatcher call sites only; whole dispatcher not yet read",
+  "path": "dispatcher.py",
+  "sha256": "1b852d48869424d194c931f9f0437359d571d66b244eec4978754b9866536756",
+  "git_blob_sha1": "9956112652c568ef80668490ed78970c40be225b",
+  "inspected_ranges": [
+    [
+      57,
+      72
+    ],
+    [
+      819,
+      835
+    ],
+    [
+      1263,
+      1274
+    ]
+  ],
+  "conclusion": "Default caller paths separate daily_digest_images from aggregate_images. Therefore cross-renderer cache trimming in a common directory is not established on this default path. Aggregate uses global AstrBot plugin_cache_dir when available, daily uses storage.plugin_cache_dir; exact resolved roots depend on framework runtime. Same-renderer filename collision and ownership-unfiltered cleanup remain source-level concerns."
+}

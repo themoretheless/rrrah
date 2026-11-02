@@ -1,0 +1,39 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v5-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/config.py",
+      "local": "17-config.py",
+      "git_blob": "b9d5c5b95caef027916e8cb2ea6e4f50cdb7fe0b",
+      "sha256": "529950f393939bcc5b1c9d5e0c8f61111f565d0d1215e108b3bd8eb728e56010",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/entrypoint.py",
+      "local": "18-entrypoint.py",
+      "git_blob": "f2c9b81bcd8ef4208e9806af7a7515637c88d5c9",
+      "sha256": "c999e7ad6315e2bdd100e2f86e40c4a77c561b191df0dbed3f84775c489481a5",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 17,
+  "remaining_without_whole_review": 60,
+  "whole_repo_complete": false,
+  "new_authored_controls": 4,
+  "authored_controls_total": 14,
+  "runtime_report": "docs/research/dedup-500/hydrus107-config-controls-20261024.json",
+  "findings": [
+    "Direct main function accepts NaN past threshold comparison to client creation, whereas negative threshold rejected; full Typer parser not tested.",
+    "Config loader retains numeric strings for threshold/jobs; downstream CLI coercion not qualified and this alone is not classified as failure.",
+    "Query array validation only checks list container, accepts numbers/null; later get_search_tags uses element.strip(), potential interoperability failure not end-to-end executed.",
+    "HVD_GUI=true string raises ValueError through bool(int(config.hvd_gui)); may be numeric-only convention, docs not yet checked.",
+    "main closes DB on normal completion only; exception resource handling not executed.",
+    "__main__ guard calls run_main(gui=False) without required is_executable; launcher paths not yet reviewed."
+  ],
+  "harness_setup_error": "Initial owned typer.Exit replacement lacked keyword code; corrected before successful controls. Not upstream failure.",
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

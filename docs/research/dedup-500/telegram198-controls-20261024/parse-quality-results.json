@@ -1,0 +1,8 @@
+{
+  "cases": 2,
+  "scope": "Original extracted complete _parseFacesList linked to actual original qualityFilter;valid synthetic JSON input,no real sidecar/model/network.",
+  "findings": [
+    "Nonfinite input score becomes0 and is rejected;previous direct NaN-score bypass is mitigated by parser.",
+    "Finite JSON1e300 embedding overflows Float32 toInfinity and passes parser+quality filter with finite score and equal huge dimensions. No actual sidecar output occurrence established."
+  ]
+}

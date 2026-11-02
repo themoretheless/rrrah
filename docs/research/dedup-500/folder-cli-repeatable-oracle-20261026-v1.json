@@ -1,0 +1,27 @@
+{
+  "seed": 267989,
+  "binary_sha256": "08965263ff191eec3199302820b0573e67ee6af60df0fcd0cba8a220ea0545b8",
+  "files": 80,
+  "expected_groups": 11,
+  "runs": [
+    {
+      "case": "single",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "overlap",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "reversed-overlap",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n"
+    }
+  ],
+  "scope": "Generated local byte oracle; not concurrent mutation, visual, or all-platform coverage"
+}

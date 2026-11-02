@@ -1,0 +1,68 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "tracked_blobs": 77,
+  "whole_repo_complete": false,
+  "new_whole_files_read": [
+    {
+      "path": "pyproject.toml",
+      "local": "07-pyproject.toml",
+      "git_blob": "2cb1724bdd0893c88c8e632c9dd26ab23cdfab5b",
+      "sha256": "c0cee028a18677d719f30824c50e09f841e6f5fd795d438a1472ccc180f22574",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/vpdqpy/vpdqpy.py",
+      "local": "08-vpdqpy.py",
+      "git_blob": "30b2f44fecc2ca98d82a97874e5970df2247ad0a",
+      "sha256": "a18cb928758c34744124146ae6b6d4a45353b31cbd415c736eae8f94646992c6",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/theory.md",
+      "local": "09-theory.md",
+      "git_blob": "1faba8cecf993ce836a62806b21b66b08ecbfd8b",
+      "sha256": "abce2c78c5547906615c9c778d50c0eb4fbebd547643498380dc200c833ae823",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "e85ddc7d4c55cf56baf8e9b2aeb7dfb43b9619bb",
+      "sha256": "47f3f9abc63461cdab5e590bb7e25815eb4e06df1941b56d44d0d6c190899e4d",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/dedup_util.py",
+      "local": "04-dedup_util.py",
+      "git_blob": "5ceadaa85a0e0e132a0103ba0c3e2a289de8e860",
+      "sha256": "f025ed74eebc6decfabe479ea92822b3162cf37c37fcb93d4ead6473e7119c18",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/hashing.py",
+      "local": "05-hashing.py",
+      "git_blob": "d42e5ce26a25f752c684bddcaa3d4443577468db",
+      "sha256": "208e0c0b956560a2f20bdea868ff8f836799cc1d6d74d3352a0f7def82f58d6a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 6,
+  "remaining_without_whole_review": 71,
+  "original_tests": {
+    "run": false
+  },
+  "source_only_findings": [
+    "Hash wrapper delegates VpdqHash/VideoHasher/matchHash to hvdaccelerators.vpdq; native backend not qualified or whole-reviewed in this increment.",
+    "Input file entirely read to bytes before av.open(BytesIO), so hash-frame queue backpressure does not imply bounded whole-video input memory. No measured peak memory.",
+    "frame_extract selects by frame_index modulo rounded average_rate, not timestamps; below1orNone uses every frame. VFR/time sampling accuracy unmeasured.",
+    "Selected frame forced512x512 RGB24 with POINT nearest-neighbor interpolation; no aspect ratio preservation in this call. Content loss/adversarial effects not yet measured.",
+    "InvalidDataError increments index and continues; generator behavior for bad input not native tested.",
+    "computeHash fixes VideoHasher averagefps1 and comments timestamps discarded. Temporal-order contract/backend behavior remains unqualified.",
+    "distance_tolerance float truncated to int before native match; outer hash similarity asserts0..100, asserts removable under optimized Python. No runtime error claim.",
+    "Root license MIT fully read; nested hydrus_api license separately tracked and not yet reviewed. No code adoption until license scope established."
+  ],
+  "production_changes": false,
+  "adopted_code": false,
+  "skipped": "native pHash.org/ASAN remains skipped; this source-only VPDQ review does not resume it"
+}

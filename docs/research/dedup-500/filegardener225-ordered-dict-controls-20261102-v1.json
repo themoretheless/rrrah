@@ -1,0 +1,32 @@
+{
+  "scope": "Authored isolated original class AST execution on current Python3; excludes legacy module imports, injects stdlib _thread.get_ident. Not upstream Python2 suite or actual package import.",
+  "source": {
+    "path": "test_data/1dup/seconddir/requests/packages/urllib3/packages/ordered_dict.py",
+    "local": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/urllib3/packages/ordered_dict.py",
+    "sha256": "55068f38d7e154cb1bf01eb75e0ed93b2749a8813f8f378c8553773de73aa20c",
+    "git_blob_sha1": "4479363cc45b5c7e0588072ccc19cab03fecce28",
+    "read_method": "Entire shared source displayed once for independently pinned byte-identical pair."
+  },
+  "observations": {
+    "overwrite_order": [
+      "a",
+      "b"
+    ],
+    "fifo": [
+      "a",
+      3
+    ],
+    "ordered_mapping_equality": false,
+    "plain_dict_equality": true,
+    "python3_clear_dict_length": 0,
+    "python3_clear_linked_iteration": [
+      "a",
+      "b"
+    ]
+  },
+  "limitations": [
+    "Python2 .itervalues path not executed.",
+    "Actual urllib3 may use stdlib OrderedDict instead of fallback.",
+    "No native code adopted."
+  ]
+}

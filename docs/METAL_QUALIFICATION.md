@@ -1084,3 +1084,133 @@ Extended manual timestamp reporting with nearest-rank p95, maximum, warmup count
 ## 2026-10-21 full-frame collection follow-up
 
 The current eight-frame4000x3000 collection passes3088cycles over600.121seconds with full SDR and HDR readback, managed pressure/cancellation/retry and finalzero credit. Exact HDR output reservation in the shared readback harness avoids geometric temporary vector growth; the original RSS-guard failure is preserved. This is headless scenario qualification, not calibrated display or general viewer memory proof. See [complete evidence](research/metal-exact-readback-600s-2026-10-21/REPORT.md).
+
+### External W3C PNG full-range PQ/HLG — confirmed 2026-10-22
+
+Required offscreen Apple M4 Max Metal run uses retained 1920x1080 external W3C conformance PNGs. Every linear pixel matches independent 70-digit Decimal references (PQ float32 exact; HLG max absolute 9.5367431640625e-7). Full source floats survive RAM pin/lease eviction, bounded swap, complete shared-root pressure, cancellation after restore admission and retry exactly. SDR/HDR readbacks at 256x144 are unchanged after swap; independent reference raster agrees within one SDR code / 0.2% binary16 HDR. Final root credit zero; focused gate 1 passed/0 ignored/0 failed. Physical HDR presentation, narrow HLG and NVIDIA are outside this result. [Report](research/w3c-external-png-linear-metal-2026-10-21/REPORT.md).
+
+### External narrow-HLG PNG — 2026-10-22
+
+The external W3C 1920x1080 RGB16 narrow-HLG source now reaches native scene-linear sRGB and actual M4 Max Metal. All 2,073,600 converted pixels match 70-digit Decimal references (max absolute 1.9073486328125e-6). Managed RAM lease/eviction, full-root refusal, cancellation after allocation and swap retry preserve every native float bit and complete SDR/HDR before/after readbacks; final root=0. Three-source external gate (full HLG, narrow HLG, PQ): 2 tests passed/0 ignored/0 failed. Independent raster reference frames use one-SDR-code/0.2%-binary16 tolerances at 256x144. No physical HDR, full-resolution output, NVIDIA or speed claim. [Report](research/png-narrow-hlg-2026-10-22/REPORT.md).
+
+### External HDR PNG Full-HD Metal attachments — 2026-10-24
+
+Required current-code Apple M4 Max gate: 2 passed/0 ignored/0 failed for W3C full/narrow HLG and full PQ. Three 1920×1080 sources and Full-HD SDR/float16 HDR outputs match independent input oracles within retained tolerances; outputs before/after swap are bit-exact. Managed lease/pressure/cancel/retry ends at zero credit. This extends earlier 256×144 attachment evidence; physical display, 1:1 sampling, NVIDIA and timing remain unqualified. [Current log, hashes and limits](research/w3c-external-png-linear-metal-2026-10-21/REPORT.md#full-hd-output-requalification--2026-10-24).
+
+### Direct 1:1 HDR source-pixel Metal oracle — 2026-10-24
+
+W3C full/narrow HLG and full PQ now pass direct all-channel Decimal-input versus float16 Metal output comparison at exact 1:1 scale, including borders, independently of a second GPU render. Required Apple M4 Max: 2 passed/0 failed/0 ignored. Existing swap/pressure/cancel/retry and exact before/after attachments pass, root=0. Physical HDR and NVIDIA remain open. [Current oracle and limits](research/w3c-external-png-linear-metal-2026-10-21/REPORT.md#direct-per-pixel-hdr-oracle-at-11--2026-10-24).
+
+### Independent direct SDR transfer oracle on Metal — 2026-10-24
+
+Three external W3C PQ/HLG sources pass all-channel 1:1 RGB8 readback versus independently encoded Decimal source pixels using W3C sRGB, ≤1 code, alongside direct float16 HDR and swap-pressure/cancel/retry controls. Required Apple M4 Max 2 passed/0 ignored/0 failed; root=0. Limited to these opaque sources and current render settings, not physical display/tone mapping/transparent composition/NVIDIA qualification. [Current evidence](research/w3c-external-png-linear-metal-2026-10-21/REPORT.md#direct-per-pixel-sdr-encoding-oracle--2026-10-24).
+
+### Current full-resolution Metal collection requalification — 2026-10-24
+
+Frozen current `ttl_swap_metal` binary: 555 cycles over 120.090 s, eight authored 4000×3000 float frames; all 555 full-resolution SDR and HDR readbacks exact, 555 pressure/cancel/retry paths, final managed root/queue=0. Terminal monitor passed (1 passed/0 ignored); sampled RSS peak 2178.1 MiB under 4 GiB guard. This shorter requalification does not replace prior 600s evidence and does not prove external codec collections, real slow disks, physical HDR, NVIDIA or performance. [Raw current evidence](research/metal-exact-readback-600s-2026-10-21/REPORT.md#current-build-two-minute-requalification--2026-10-24).
+
+### Palette TIFF native16 and Metal transport — 2026-10-24
+
+Unsigned8-bit palette indices now expand through original16-bit ColorMap without quantization; original Go Deflate matches independent Pillow, invalid Go palette fixture remains refused. Authored classic/BigTIFF LE/BE preserve exact16-bit colors,96-byte managed overlap/95-byte refusal and metadata/profile sharing. Decoder235/5ignored, develop102/2ignored, app328/84ignored pass; full actual M4 Max TIFF suite5/0ignored passes, exact SDR/HDR after RAM/swap pressure/cancel/retry, final0. Same1024 corpus preserves all929 accepted sources. Explicit sRGB still required for untagged sources; other index depths/alpha/Fax3/full format qualification remain open. [Evidence](research/tiff-palette-2026-10-24/REPORT.md).
+
+### Packed palette TIFF and low-bit gray — 2026-10-24
+
+1/2/4-bit palette indices now expand to native16 colors; Rust TIFF Gray2/Gray4 joins Gray1 with scanline padding ignored. Twelve classic/BigTIFF LE/BE mathematical controls and ordinary-gray checks pass; Pillow independently verifies nine, with three explicit BigTIFF BE oracle exclusions. Decoder236/5ignored, app328/84ignored, full required actual M4 Max TIFF suite5/0ignored pass; exact RAM/swap SDR/HDR and final0. Same mixed1024 selection preserves all929 accepted source/decoded hashes.16-bit indices, alpha, Fax3 and full-format/hardware qualification remain open. [Evidence](research/tiff-palette-2026-10-24/REPORT.md#packed-124-bit-indices-and-grayscale--2026-10-24).
+
+### Full16-bit TIFF palette indices, in-place mapping — 2026-10-24
+
+65,536-entry maps are validated and borrowed; RGBA16 indices map in place without another pixel buffer. Classic/BigTIFF LE/BE dense CPU controls check every index/channel; retained512KiB/peak640KiB, final0 (caller-owned source excluded). Independent test-only LibTIFF validates all20 authored fixtures' indices and full palettes, including earlier Pillow BigTIFF BE exclusions. Decoder238/5ignored, app328/84ignored and actual required M4 Max TIFF suite5/0ignored pass; four10-anchor wide-index sources preserve exact SDR/HDR through RAM/swap pressure/cancel/retry. External producers/compression/color cases, alpha/Fax3 and overall hardware/format qualification remain open. [Evidence](research/tiff-palette-2026-10-24/REPORT.md#full16-bit-index-range-without-copied-large-palette--2026-10-24).
+
+TIFF Fax3 1D/2D (2026-10-24): original Go/Pillow plus288 LibTIFF positive controls across all eight orientations and long runs; required offscreen M4 Max TIFF suite6/6, including35 Fax3 source/oracle/RAM/swap/pressure/cancel/retry checks. Physical HDR, NVIDIA and Fax3 uncompressed extension remain open. See [evidence](research/tiff-fax3-2026-10-24/REPORT.md).
+
+### Metal constrained-device upload rollback — 2026-10-24
+
+Actual M4 Max test negotiates texture64/layers2 and checks extent refusal, GPU-quota refusal and cancellation after one queued tile write. Old4×4 SDR/HDR attachments and uniforms remain byte-exact, retry changes the frame, no wgpu validation error and final GPU/upload quotas0. One required test passes in both formats; no production change, physical VRAM/HDR/NVIDIA claim. [Evidence](research/metal-12mp-upload-cancellation-current-2026-10-16/REPORT.md#constrained-device-limits--2026-10-24).
+
+### Native bounded TIFF Group4 — 2026-10-24
+
+Compression4 now uses application-owned T.6 rows with common TIFF quota/cancellation/color handling. Original Go/Pillow plus72 independently encoded LibTIFF sources pass; required M4 Max TIFF suite6/6 includes17 Group4 RAM/swap/pressure/cancel/retry lifecycles and exact SDR/HDR. Decoder246/6ignored, app329/84ignored pass after isolating an unrelated empty-folder test fixture; first timeout preserved. Wider producer/extension and physical HDR/NVIDIA qualification remain open. [Evidence](research/tiff-fax3-2026-10-24/REPORT.md#application-owned-group4-route--2026-10-24).
+
+### Dense TIFF2D cursor qualification — 2026-10-24
+
+The application-owned2D decoder now advances a monotonic reference cursor instead of repeating binary search per mode. LibTIFF/Pillow dense1025×129 input matches every old-control transition/consumed bit and independent RGBA byte, then passes actual M4 Max swap/pressure/cancel/retry with exact SDR/HDR. Decoder247/8ignored, app329/84ignored and required TIFF Metal6/0ignored pass. Eight paired full borrowed-source native-decode runs have median candidate/control0.399058; this excludes I/O/color/GPU and is not a viewer/release/FPS claim. [Evidence](research/tiff-fax3-2026-10-24/REPORT.md#monotonic-reference-cursor--2026-10-24).
+
+### Second original MEF sensor/Metal qualification — 2026-10-24
+
+Photographer-published MMFC0399.MEF has a distinct pinned source and independent LibRaw test-only sensor hash. All21,461,504 native sensor values match; exact quota/one-byte-short/cancellation and actual full-sensor M4 Max authored-channel compute pass, final0. Two-source metadata still gives zero camera-WB components; public viewing refuses before allocation. MEF remains Pending, with no preview/assumed-color substitution. [Evidence](research/mef-independent-wb-audit-2026-10-19/REPORT.md#second-independently-published-mef-original--2026-10-24).
+
+### Native CCITT RLE TIFF strips — 2026-10-24
+
+Valid Compression2 sources previously failed as unsupported Huffman. The application-owned byte-aligned1D engine now matches72 independent LibTIFF sources; padding, width, byte/count bounds, photometric inversion, exact quota and cancellation controls pass. Decoder249/8ignored, app329/84ignored and required M4 Max TIFF6/0ignored pass, including16 RLE RAM/swap/pressure/cancel/retry lifecycles, exact SDR/HDR and final0. Wider original-producer/tile/RLEW and physical HDR/NVIDIA qualification remain open. [Evidence](research/tiff-fax3-2026-10-24/REPORT.md#baseline-ccitt-modified-huffman-rle-compression2--2026-10-24).
+
+### Model prefetch transient restore refusal — 2026-10-24
+
+A reproduced STL swap-memory refusal previously fell through into native decode. Retained background lookup now refuses transient pressure without decoding, keeps the visible pin/swap object and restores exactly on retry; a permanently too-small configured restore cap retains native fallback. Four STL/OFF/OBJ/PLY payloads and actual M4 Max SDR/HDR frames are exact, managed final0. App330/85ignored, production check and required Metal1/0ignored pass. [Evidence](research/model-partial-swap-admission-2026-10-19/REPORT.md#transient-shared-root-restore-refusal--2026-10-24).
+
+### Raster prefetch transient restore admission — 2026-10-24
+
+A reproduced profiled-PNG restore-memory refusal previously fell through to native/color decode. A new typed background-cache API lets retained preload refuse transient pressure, preserve the visible owner and immutable disk entry, and retry exactly. Ready RAM hits and permanent-cap native fallback remain valid. PNG/EXR/PQ/HLG CPU+required M4 Max2/0ignored, cache154/3ignored, app331/86ignored and production check pass, exact payload/SDR/HDR and final0. [Evidence](research/prefetch-swap-admission-2026-10-19/REPORT.md#raster-transient-restore-refusal-without-native-fallback--2026-10-24).
+
+
+### RAW prefetch transient swap admission — 2026-10-24
+
+Reproduced CR3 prefetch previously waited for a busy foreground decode gate after swap-memory refusal. Typed background lookup now skips temporary pressure before the gate, restores on retry, preserves ready RAM and permanent-cap native fallback. All25,494,560 original sensor values and metadata agree; required Metal SDR/HDR attachments agree; final managed0. CPU+Metal2/0ignored, cache155/3ignored, app331/88ignored and production check pass. Physical HDR/NVIDIA and broader format qualification remain open. [Evidence](research/raw-prefetch-protected-bytes-2026-10-19/REPORT.md#transient-swap-restore-refusal-before-a-busy-decode-gate--2026-10-24).
+
+
+### Word-aligned TIFF CCITT RLEW — 2026-10-24
+
+Native32771 strips now match72 authored full-image controls built from independently roundtripped LibTIFF RLE rows. Exact word-padding/bounds/cancellation/quota controls pass; decoder250/8ignored and actual M4 Max TIFF6/0ignored pass, including16 RLEW RAM/swap/pressure/cancel/SDR/HDR endpoints, final0. System LibTIFF RLEW full-strip discrepancies are recorded, not counted as oracle success. External-producer/full-TIFF and physical HDR/NVIDIA qualification remain open. [Evidence](research/tiff-fax3-2026-10-24/REPORT.md#word-aligned-ccitt-rlew-strips-32771--2026-10-24).
+
+
+### RLEW full-image reference boundary — 2026-10-24
+
+Eight new one-row-strip TIFF/BigTIFF LE/BE FillOrder1/2 controls match complete LibTIFF and system ImageIO output; native Rust and actual M4 Max RAM/swap/SDR/HDR paths agree. Decoder250/8ignored; Metal TIFF6/0ignored. All72 multi-row files still disagree with system references and remain explicitly unqualified. ImageIO codec ancestry is unproven, not a proven third engine. [Evidence](research/tiff-fax3-2026-10-24/REPORT.md#full-image-rlew-oracle-boundary--2026-10-24).
+
+
+### RLEW native encoder equivalence — 2026-10-24
+
+An unmodified LibTIFF4.7.2 full-image RLEW encoder emits exactly the retained bytes for all80 controls/all272 strips, including all72 disputed multi-row images. This rules out row-assembly differences for these fixtures; the system decoder discrepancy is isolated to its word-boundary read-ahead logic: a test-only correction makes all80 full images exact. Modified-reference results remain diagnostic, not an unmodified oracle. No production or previously tested Rust decoder/Metal code changed. [Evidence](research/tiff-fax3-2026-10-24/REPORT.md#native-encoder-equivalence-for-every-rlew-strip--2026-10-24).
+
+
+### Legacy TGA interleaved row correctness — 2026-10-24
+
+A valid three-row source previously displayed shuffled rows because legacy two/four-way interleaving was ignored. The owned bounded in-place layout stage now matches144 full FFmpeg pixel controls (RGB/RGBA/gray, four origins, raw/RLE, short/nondivisible heights), with explicit reserved/TGA2 refusal and exact/short/cancelled scratch checks. Decoder254/8ignored, app331/88ignored, production check and required M4 Max1/0ignored pass. All144 native+prepared Metal/RAM/swap lifecycles preserve payloads and SDR/HDR through pressure/cancel/retry, final0; two storage modes mean288 lifecycles, not288 independent sources. Full TGA/100-format and NVIDIA qualification remain open. [Evidence](research/tga-interleave-2026-10-24/REPORT.md).
+
+
+### TGA2 alpha semantics and metadata boundary — 2026-10-24
+
+Owned footer handling now prevents unused alpha bytes from making mode0/1 sources transparent and unassociates mode4 RGB; mode2 undefined bytes are retained without intended-appearance qualification. Image decoding cannot borrow footer/extension bytes to complete a truncated payload. Forty new RGBA32 controls, independent OIIO samples/metadata and explicit unpremult checks pass; OIIO mode0/1 raw-output opacity differences stay explicit. Decoder257/8ignored, app331/88ignored, production check and required M4 Max1/0ignored pass (184 sources/368 native+prepared lifecycles, exact swap SDR/HDR, final0). Broader layouts and full-format qualification remain open. [Evidence](research/tga-interleave-2026-10-24/REPORT.md#tga2-attributes-type-and-bounded-payload--2026-10-24).
+
+
+### TGA2 physical pixel aspect — 2026-10-24
+
+Owned metadata now preserves explicit width/height pixel ratios through native/display/swap paths; undefined and invalid rational boundaries are distinct. Thirty-two OIIO-verified sources plus actual M4 Max references with independently sized square-pixel grids pass, including exact SDR/HDR geometry and final0. Decoder259/8ignored, app331/88ignored and production check pass. A separate app test's global-temp scan timeout is retained; its fixture was isolated without increasing its deadline. The shared Metal suite now covers216 sources/432 native+prepared lifecycles, with8 undefined-alpha sources still transport-only. Full-format and NVIDIA qualification remain open. [Evidence](research/tga-interleave-2026-10-24/REPORT.md#tga2-rational-pixel-aspect--2026-10-24).
+
+
+### Real foreground/cache/Metal before cover metadata — 2026-10-24
+
+A test-only headless wake drives the actual foreground worker without a window; production retains native event-loop notification. The reused16x16 PNG reaches prepared/cache-leased RasterReady and actual M4 Max SDR/HDR completion while cover work is held. Full1MiB logical quota reselects the same RAM allocation with exact repeated frames; foreground managed final0. Independent Pillow samples/f64 conversion bound the first frame. Full app337/89ignored, current focused CPU+Metal2/0ignored and production check pass. Prefetch counts are covered separately; no new swap I/O, OS first-present speedup, physical pressure/HDR calibration or NVIDIA claim. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#real-foreground-worker-and-metal-before-cover-completion--2026-10-24).
+
+### Real worker swap navigation — 2026-10-24
+
+Actual foreground A→B→A now verifies separate count/bytes/TTL evictions and indexed swap restore with B leased and only one frame of logical root quota free. Native decode demonstrably cannot fit that quota; restore preserves all float bits and metadata. Actual M4 Max Metal SDR/HDR before/after readbacks match exactly; final managed usage is zero. Focused worker4/0ignored; full app338/90ignored. This does not qualify physical memory pressure, slow disks, calibrated display or NVIDIA. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#real-foreground-swap-navigation-under-count-bytes-and-ttl--2026-10-24).
+
+### Repeated foreground navigation — 2026-10-24
+
+512 real-worker selections each on CPU and actual M4 Max Metal cover four PNG/BMP/WebP/TIFF file keys with RAM one4096-byte frame, root16384 and swap two objects/65536bytes. Pixel/reference and Metal SDR/HDR parity hold; settled per-step root4096 and final0. Focused6/0ignored, full app339/91ignored. This finite small-frame lifecycle does not replace duration-based large-collection, physical disk/memory or display qualification. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#repeated-real-worker-bounded-swap-navigation--2026-10-24).
+
+### Actual worker prefetch windows — 2026-10-24
+
+Five real-worker configurations verify exact completed-neighbour order for forward/backward, asymmetric, one-sided and disabled ahead/behind windows. Managed usage equals selected plus retained neighbours; planned neighbours remain selectable at full logical root quota with exact CPU samples and actual M4 Max SDR/HDR frames. Final0. Focused8/0ignored, full app340/92ignored, production check passes. Per-worker observation is cfg(test) only. Separate initial directions do not qualify a mid-decode reversal race; small repeated PNG keys do not qualify physical-memory or large-collection soak. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#real-worker-prefetch-windows-and-full-root-selection--2026-10-24).
+
+### Real-worker reversal during blocked prefetch admission — 2026-10-24
+
+A deterministic per-worker test barrier and real DecodeGate prove old forward neighbour4 cancels without pixel allocation while a permit is held. App backward navigation publishes a distinct BMP index2 before new backward neighbours[1,0,3]; all generations, retention and exact new-frame CPU/Metal SDR/HDR checks pass. Managed root stays4096 during cancellation, settles16384, final0. Focused10/0ignored; full app341/93ignored; production check passes. This is decode-admission cancellation, not an already-running entropy/source-read/swap-transfer boundary. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#real-worker-direction-reversal-while-prefetch-waits-for-decode-admission--2026-10-24).
+
+### Large-frame fixed-pressure minute soak — 2026-10-24
+
+Actual foreground worker + M4 Max Metal:64 authored1024x1024 PPM identities/16MiB prepared frames,1622 selections over60.019s, every full pixel digest and SDR/HDR readback exact against same-decoder baselines. Root128MiB with fixed64MiB pressure, RAM32MiB/two entries/250ms TTL, swap64MiB/three objects. Peak root121634816 including pressure; settled max100663296; final0. Required soak1/0ignored; existing focused worker10/0ignored after helper resource refactor. This finite minute run does not close heterogeneous multi-hour stress, physical disk/OS pressure, calibrated HDR or NVIDIA. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#60-second-large-frame-real-worker-pressure-soak--2026-10-24).
+
+### Large-frame prefetch under fixed pressure — 2026-10-24
+
+Actual M4 Max worker:64 authored16MiB-frame identities,270 selections/60.006s with behind1/ahead2 and direction changes.270 nearest neighbours retained,513 farther candidates refused at two-slot capacity, every completion's path/generation checked. All selected CPU digests and Metal SDR/HDR references match. Fixed64MiB pressure/root128MiB, peak128MiB, settled max96MiB, final0; swap<=3objects/64MiB. Aggregate restore pool32MiB supports the two retained restored frames; the preceding16MiB-pool refusal is preserved as negative evidence. Required1/0ignored; test-only extension, previous ordinary341/94 checkpoint remains. Physical/multi-hour/heterogeneous/display/NVIDIA scope stays open. [Evidence](research/folder-paths-before-covers-2026-10-24/REPORT.md#large-frame-pressure-with-bounded-real-prefetch--2026-10-24).

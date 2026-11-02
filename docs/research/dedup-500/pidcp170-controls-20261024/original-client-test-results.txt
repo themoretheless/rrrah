@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: payload contains complete text and explicit task only; bounded limits reject overflow
+ok 1 - payload contains complete text and explicit task only; bounded limits reject overflow
+  ---
+  duration_ms: 1.182875
+  type: 'test'
+  ...
+# Subtest: closed response schema rejects wrong IDs, extras, nonfinite and non-probability values
+ok 2 - closed response schema rejects wrong IDs, extras, nonfinite and non-probability values
+  ---
+  duration_ms: 0.255375
+  type: 'test'
+  ...
+# Subtest: transport uses fixed HTTPS, no redirects, bounded body and abortable requests
+ok 3 - transport uses fixed HTTPS, no redirects, bounded body and abortable requests
+  ---
+  duration_ms: 20.099667
+  type: 'test'
+  ...
+# Subtest: deadline covers hanging headers and streaming; rejected response bodies are cancelled
+ok 4 - deadline covers hanging headers and streaming; rejected response bodies are cancelled
+  ---
+  duration_ms: 24.493083
+  type: 'test'
+  ...
+# Subtest: credential fallback reads only a bounded literal assignment
+ok 5 - credential fallback reads only a bounded literal assignment
+  ---
+  duration_ms: 1.465166
+  type: 'test'
+  ...
+# Subtest: credentials are literal and never evaluated as shell or environment expressions
+ok 6 - credentials are literal and never evaluated as shell or environment expressions
+  ---
+  duration_ms: 0.098667
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 155.751792

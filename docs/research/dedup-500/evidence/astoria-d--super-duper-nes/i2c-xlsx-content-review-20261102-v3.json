@@ -1,0 +1,99 @@
+{
+  "path": "doc/i2c-test-doc.xlsx",
+  "sha256": "e801a7030893c6e5dfa5dc1888aca383d314bde765fae37805f1af4f9f2c89c5",
+  "extraction": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-xlsx-cells-20261102-v1/i2c-test-doc.json",
+  "extraction_sha256": "432d832fb4d6fdb074cfc614c69f6ef3c7c42c0a8c5738b3b8d9f086ad9ec0cc",
+  "populated_cells_read": 378,
+  "worksheet_count": 9,
+  "drawing_text_read": true,
+  "formulas_present": 0,
+  "embedded_images_pending": [
+    "xl/media/image22.png",
+    "xl/media/image23.png",
+    "xl/media/image18.png",
+    "xl/media/image19.png",
+    "xl/media/image16.png",
+    "xl/media/image1.png",
+    "xl/media/image2.png",
+    "xl/media/image3.png",
+    "xl/media/image4.png",
+    "xl/media/image5.png",
+    "xl/media/image6.png",
+    "xl/media/image7.png",
+    "xl/media/image12.png",
+    "xl/media/image17.png",
+    "xl/media/image11.png",
+    "xl/media/image14.png",
+    "xl/media/image10.png",
+    "xl/media/image15.png",
+    "xl/media/image13.png",
+    "xl/media/image9.png",
+    "xl/media/image8.png"
+  ],
+  "full_manual_review": false,
+  "findings": [
+    "Historical BeagleBone I2C bus inventory/overlay loading, EEPROM sysfs read/write logs, hexadecimal dumps,50MHz versus100kHz timing notes and pin assignments. All commands and text treated as source data, not executed.",
+    "Drawing annotations explicitly document incorrect0xff read, unprocessed repeated-start, incorrect address increment and pushing before signal stability. These are historical debug notes, not current simulator regression results or deduplication algorithm.",
+    "Sheet5 A61 creates a device on i2c-1 whereas final A88 deletion command names i2c-2. Recorded as source-text inconsistency only; no device changes performed.",
+    "29 embedded image assets and rendered layout still require individual visual review. Reading all populated cells/drawing strings does not complete this workbook."
+  ],
+  "previous_review": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-content-review-20261102-v2.json",
+  "embedded_images_viewed": [
+    {
+      "member": "xl/media/image25.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image25.png",
+      "sha256": "80ac7db091be9491677222b076dae23e608d0bab30ed317f7e852c69b7e0ef4f",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Cropped historical waveform screenshot with several red clock/data traces and decoded45h bus; signal names outside crop."
+    },
+    {
+      "member": "xl/media/image26.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image26.png",
+      "sha256": "84b4873f0efe1f16c4b96ee0531a24f86dcd2c9be861e76367eae072ad17bd1d",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Similar waveform screenshot with45h decoded value, changed horizontal framing and screenshot dimensions; visual similarity is not byte/pixel identity."
+    },
+    {
+      "member": "xl/media/image27.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image27.png",
+      "sha256": "0e2a08a61fad657cef28d978ad968fd25a781a3f1f9b3a372db9aedd7c2efc1e",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Historical SignalTap screenshot dated2017-12-23 with PRG address/data, I2C and FIFO/state traces;65h near FIFO write event, static capture only."
+    },
+    {
+      "member": "xl/media/image28.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image28.png",
+      "sha256": "72b4c3ecccff2bfd520b14e209673fd0d47ded4f8b4ce59fe22db2fb6942c972",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Different historical SignalTap capture with repeated PRG address sequence0031h/0032h/0033h, data4Ch/31h/80h and FIFO read transition; static screenshot only."
+    },
+    {
+      "member": "xl/media/image29.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image29.png",
+      "sha256": "a0cfe00432d960a2068d25186c45e46683c8e9573b305bef51de8121c614ff92",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Historical2017-12-23 SignalTap capture with PRG7FF9h/65h near FIFO write, empty-state and write-done transitions; static evidence only."
+    },
+    {
+      "member": "xl/media/image24.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image24.png",
+      "sha256": "acaa9db99004351c381c3912edfa24bf0a1db1f8e5f8f798c3cf57698f9435d6",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Firefox screenshot of Japanese ASCII code reference table0-127 with browser bookmarks/tabs. Links remain inert source-image data."
+    },
+    {
+      "member": "xl/media/image20.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image20.png",
+      "sha256": "bc44d9a21d2ff029520595065937570a2c4b81235d41d2377c48827a873a0391",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Cropped waveform region with d_ack/d7..d0 states and decoded44h/64h, lower counters0002h to0003h and0000h to0001h. Signal labels outside crop; no electrical qualification."
+    },
+    {
+      "member": "xl/media/image21.png",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/i2c-xlsx-images-20261102-v1/image21.png",
+      "sha256": "7b3e18437ce74bcd50b7650c0a546f6b5ec69ef64cc839c9f1e84cf0186bd76d",
+      "method": "complete individual embedded PNG visual inspection",
+      "finding": "Later cropped waveform region with d_ack/d7/d6 states,44h/04h values and counters0003h to0004h and0001h to0002h; distinct time region, not duplicate identity proof."
+    }
+  ]
+}

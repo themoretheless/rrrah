@@ -1,0 +1,37 @@
+{
+  "repository": "WSH032/image-deduplicate-cluster-webui",
+  "commit": "02963057d5ae9368f8f481f44e2d30b7c63ed946",
+  "source_sha256": "909a2d747512a4e37bcd73b2cfb6d55b193b5f86e27c2a46e5a1f09181b77e11",
+  "read_scope": {
+    "path": "img_dedup_clust/deduplicate_fn.py",
+    "lines_read": [
+      1,
+      739
+    ],
+    "total_lines": 739,
+    "whole_file_read": true
+  },
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "original_tests_run": 0,
+  "authored_control_scenarios": 4,
+  "authored_control_cases": 27,
+  "control_source": "docs/research/dedup-500/webui197-controls-20261024/cluster_control.py",
+  "control_results": "docs/research/dedup-500/webui197-controls-20261024/cluster-control-results.json",
+  "runtime_scope": "Unchanged AST-extracted complete cluster_duplicates function, MyHasher adapter supplies synthetic symmetric graph. No actual image hashing/model/Gradio runtime.",
+  "findings": [
+    "First-overlap-only set merging does not merge all previously accumulated intersecting sets. Symmetric A-B-C-D chain yields overlapping output clusters in4/24 key insertion orders, single connected component in20/24.",
+    "Connected components of approximate similarity are not pairwise equality; even corrected union-find cannot establish exact image duplicates.",
+    "Source delegates hashing/CNN to imagededup; equality semantics require downstream algorithm review.",
+    "Mutable module globals hold selection, clusters, confirmed directory and duplicate map; upstream TODO explicitly notes multi-user interference. Concurrency not runtime tested.",
+    "Original selection function accepts negative parent/child indexes; synthetic -1/-1 selects last image D. Repeated index0 plans same image A twice. Recording operation stub only, no real removals.",
+    "Select-all deliberately includes every member. confirm_cluster has no retained-member guard; this is explicit manual feature, not evidence auto_select deletes all.",
+    "Selection indexes are resolved against mutable current global cluster_list without scan generation identity. Multi-session/stale-selection consequences not runtime verified."
+  ],
+  "decision": "reject-cluster-merge-implementation; wrapper-reference-only",
+  "remaining": "deduplicate_fn.py fully read; other repository files/artifacts and delegated algorithms remain. Full application/original tests not run.",
+  "deferred": "Native pHash.org/ASAN remains skipped; Python wrapper inspection does not run that item.",
+  "previous_audit": "docs/research/dedup-500/webui197-source-controls-v1-20261024.json",
+  "selection_control_source": "docs/research/dedup-500/webui197-controls-20261024/selection_control.py",
+  "selection_control_results": "docs/research/dedup-500/webui197-controls-20261024/selection-control-results.json"
+}

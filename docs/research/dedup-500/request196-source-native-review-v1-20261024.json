@@ -1,0 +1,80 @@
+{
+  "repository": "garypen/deduplicate",
+  "commit": "8f191f2dcf5e083f5b76f5de90cc60e1253f85b0",
+  "tracked_blobs": 605,
+  "reviewed_whole_files": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/garypen--deduplicate/00-README.md",
+      "git_blob_sha1": "c732b28152e0ba6165b617cf95a6a25e6ce3d442",
+      "sha256": "3c6657794650f97f22ea931e34c967338fef98c9a51f9d18dada20a61b38d624",
+      "whole_file_read": true
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "docs/research/dedup-500/evidence/garypen--deduplicate/remaining-pinned/Cargo.toml",
+      "git_blob_sha1": "230500eddec090f6216e41aaa1ae5698900a06de",
+      "sha256": "314d9027b3a0ed14f0e40192e0b957351a3e803c0031a5bfc05670016c1f997f",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "docs/research/dedup-500/evidence/garypen--deduplicate/remaining-pinned/src/lib.rs",
+      "git_blob_sha1": "f0f21c7eaea40fe3640d5d8c6ce0b67c836b6697",
+      "sha256": "bb5db76eab6ed5448d3ee038e93edc448916dac21aa6080a42ae6248f53d523e",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/cache.rs",
+      "local": "docs/research/dedup-500/evidence/garypen--deduplicate/04-cache.rs",
+      "git_blob_sha1": "d3233ad5d599a3b759c25d6fc5b61ae8ccce15c8",
+      "sha256": "3b3bddf229275889100b9664776c1fa5e4bdc3cceb1d396be00b5db28ecef0d5",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/deduplicate.rs",
+      "local": "docs/research/dedup-500/evidence/garypen--deduplicate/02-deduplicate.rs",
+      "git_blob_sha1": "1c64f048217f67bb32f1d4b28dfb5bd8810b7f98",
+      "sha256": "dd1e2e3e0f1f39238b4d3a74d36ab333bff2f3cbe791abfdd6c89ad8d75d9dd5",
+      "whole_file_read": true
+    }
+  ],
+  "license_review": {
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "method": "Exact byteequality to fullyreviewed171Apache2LICENSE;no repeatedfreshlinebylinecredit"
+  },
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "library_source_complete": true,
+  "original_tests_run": 3,
+  "original_tests_passed": 3,
+  "original_test_log": "docs/research/dedup-500/request196-controls-20261024/original-tests-online-log.txt",
+  "authored_controls_run": 5,
+  "authored_control_log": "docs/research/dedup-500/request196-controls-20261024/controls-log.txt",
+  "authored_controls_source": "docs/research/dedup-500/request196-controls-20261024/review_controls.rs",
+  "native_scope": "Complete unchanged original threeRustsourcefiles andall3inlineoriginaltests,actualTokio/LRU/parkinglot. Isolatedcopy manifest onlyaddsworkspaceboundary;originalsource byteidentical. Ownedsynthetic keys/values andNotifygates,no algorithm adapters. Originalunit harnessusesrandomdelays/panicandtimingassertions;notabenchmark.",
+  "dependency_scope": {
+    "lockfile": ".dedup-work/request196-20261024/Cargo.lock",
+    "sha256": "1ae4315c88e540af70df6928569c3f105ccbe19b0496cd832fb358d9caa12558",
+    "versions": {
+      "futures": "0.3.34",
+      "lru": "0.18.5",
+      "parking_lot": "0.12.5",
+      "rand": "0.10.3",
+      "thiserror": "2.0.21",
+      "tokio": "1.54.1"
+    },
+    "qualification": "Originalunpinned semvermanifest resolvednow;firstofflineattempt failed missingtokio-test,secondnetworkenabled originaltest run succeeded;newcontrolrun offline succeeded. No claim historicaldeps or performance equivalence."
+  },
+  "findings": [
+    "16concurrent samekeycalls shareonedelegate and positivecachedentry undergatedcontrol. None results arenotcached,2sequentialrequests executedelegatetwice.",
+    "clear()resetscache/countersbutinflightresult canrepopulatecacheafterclear. APIdoesnotpromiseepochinvalidation;do not adoptasfilemutationinvalidator without generationguard.",
+    "Cancellingoriginrequestleavesdelegaterunning;follower canreceivevaluebutcache remains empty;next request failscleaningexpiredweakentry,followingrequest recomputes. Nativeownedcontrol reproduces this sequence.",
+    "Synchronousdelegatefactory panic unwindsinitialrequest;nextcall reportsFailedwhilecleaningweakentry,thirdcall recovers. No publicResult errorconversion forinitialfactorypanic established.",
+    "Requestcoalescing/keycacheonly;key equalitycallerprovided,not filebyte/pixelidentity. No directadoption orproductionchange."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "All605artifactreview incomplete:5wholetextreads+LICENSEexactcomparison;benchmarks,examples,fixturecorpus and592generatedcriterionreports notreviewed. Nativequalifieslibraryonly,not allrepos/platforms/corpusperformance.",
+  "deferred": "NativepHash.org/ASAN skipped."
+}

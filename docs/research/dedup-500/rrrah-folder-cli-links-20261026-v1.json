@@ -1,0 +1,35 @@
+{
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "platform": "current macOS filesystem",
+  "runs": [
+    {
+      "case": "hardlinks",
+      "args": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z"
+      ],
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 65536 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/copy\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/original\"]\n",
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 802816 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "overlap",
+      "args": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/original",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink"
+      ],
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 65536 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/copy\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/original\"]\n",
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 802816 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "symlink_skipped",
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 65536 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/copy\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink\"\nSame physical file (aliases, not separate copies): [\"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/hardlink\", \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/original\"]\n",
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-link-control-tcfkxd7z/symbolic\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 802816 bytes read, 1 diagnostics\n"
+    }
+  ],
+  "inputs_and_symlink_target_unchanged": true,
+  "initial_expectation_correction": "First harness incorrectly expected exit 1 for SymlinkSkipped; observed exit 0 Scan complete with diagnostic. Report::complete intentionally excludes policy-skipped symlinks from fatal omissions; rerun checks actual contract.",
+  "scope": "Release CLI hardlink alias separation, overlapping roots, intentional symlink skip diagnostic with complete status. Not following links, race or other-platform proof."
+}

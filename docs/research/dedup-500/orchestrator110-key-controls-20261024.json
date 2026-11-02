@@ -1,0 +1,16 @@
+{
+  "scope": "Independent byte-level reproduction of read hash_key concatenation recipe; not executing Rust module or cryptographic collision search.",
+  "distinct_pairs": [
+    [
+      "a\u0000b",
+      "c"
+    ],
+    [
+      "a",
+      "b\u0000c"
+    ]
+  ],
+  "identical_preimage_hex": "6100620063",
+  "identical_sha256": "8badde10c760e9b702defb4b5e225de79c515b1d2a5cfb000e140f3c6fbb5629",
+  "normal_pairs_distinct": true
+}

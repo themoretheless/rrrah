@@ -1,0 +1,51 @@
+{
+  "scope": "Original pinned POSIX launcher; owned filesystem and recording-only Java stub.\n\nNo JVM, indexing, archives, external network or user data touched.\n",
+  "authored_controls_passed": 3,
+  "results": [
+    {
+      "case": "plain",
+      "exit_code": 0,
+      "requested_args": [
+        "source",
+        "target"
+      ],
+      "received_tail": [
+        "source",
+        "target"
+      ],
+      "expected_directory_entered": true,
+      "stderr_present": false
+    },
+    {
+      "case": "argument_space",
+      "exit_code": 0,
+      "requested_args": [
+        "source with space",
+        "target"
+      ],
+      "received_tail": [
+        "source",
+        "with",
+        "space",
+        "target"
+      ],
+      "expected_directory_entered": true,
+      "stderr_present": false
+    },
+    {
+      "case": "home_space",
+      "exit_code": 0,
+      "requested_args": [
+        "source",
+        "target"
+      ],
+      "received_tail": [
+        "source",
+        "target"
+      ],
+      "expected_directory_entered": false,
+      "stderr_present": true
+    }
+  ],
+  "limits": "Real POSIX shell and original launcher only;Java recording stub does not qualify JVM/classpath loading/indexing/Maven."
+}

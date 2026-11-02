@@ -1,0 +1,19 @@
+{
+  "scope": "Run complete unchanged upstream analysis test module against original package.",
+  "test_source_sha256": "44504061dce9b39de0a35689144db4cdf5d7082060f5ff0baaafdfc4c0dc0458",
+  "original_tests_run": 13,
+  "passed": 13,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "compiled_numba_signatures": [
+    "(Array(uint64, 2, 'C', False, aligned=True), int64, int64, int64, int64, Array(int64, 1, 'C', False, aligned=True), Array(int64, 1, 'C', False, aligned=True))"
+  ],
+  "runtime_versions": {
+    "numba": "0.68.0",
+    "llvmlite": "0.50.0",
+    "numpy": "2.5.4",
+    "fsspec": "2026.9.0"
+  },
+  "qualification": "Actual original full package graph and original full unittest module; real Numba JIT, local signature files and memmaps; no method adapters,corpus-scale performance,S3 or scheduler"
+}

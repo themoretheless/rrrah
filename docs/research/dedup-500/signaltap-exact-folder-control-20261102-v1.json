@@ -1,0 +1,421 @@
+{
+  "build_command": [
+    "cargo",
+    "+1.98.1",
+    "build",
+    "-j",
+    "2",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--example",
+    "scan_folder"
+  ],
+  "build_exit_code": 0,
+  "elapsed_seconds": 9.611951112747192,
+  "source_pins": {
+    "Cargo.lock": "a020e36e00203badaca46653a7f4a9d1285f48800abdd730692a49fecc139b0f",
+    "crates/rrrah-dedup/Cargo.toml": "3973c2ad4c338a2c5f15a45eb3a19d27897142b23e46d97c5f38b06c3e88d5cb",
+    "crates/rrrah-dedup/src/exact.rs": "e18ba5bbd33a0d04d0b3f19adadf5980b23f53b5752708114dd66f49068673f5",
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0"
+  },
+  "sources_unchanged": true,
+  "input_pins": [
+    {
+      "path": "test/level_shift_test01/level_shift_test01.stp",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/level_shift_test01/level_shift_test01.stp",
+      "bytes": 27721,
+      "sha256": "cb9bd140628033f10ddf9c78a0bebe69ddbd196e4bd1415020d681ab5267bfbb",
+      "git_blob_sha1": "bf96f01af5be26c0a8773c2cc4cd276cbe0d53c2",
+      "root": "session",
+      "root_attributes": {
+        "jtag_chain": "USB-Blaster [USB-0]",
+        "jtag_device": "@1: EP2C(15|20) (0x020B30DD)",
+        "sof_file": ""
+      },
+      "element_count": 200,
+      "tags": {
+        "session": 1,
+        "display_tree": 1,
+        "display_branch": 1,
+        "global_info": 1,
+        "single": 13,
+        "multi": 2,
+        "instance": 1,
+        "node_ip_info": 1,
+        "position_info": 1,
+        "signal_set": 1,
+        "clock": 1,
+        "config": 1,
+        "top_entity": 1,
+        "signal_vec": 1,
+        "trigger_input_vec": 1,
+        "wire": 54,
+        "data_input_vec": 1,
+        "storage_qualifier_input_vec": 1,
+        "presentation": 1,
+        "unified_setup_data_view": 1,
+        "node": 29,
+        "data_view": 1,
+        "net": 52,
+        "bus": 6,
+        "setup_view": 1,
+        "trigger_in_editor": 1,
+        "trigger_out_editor": 1,
+        "trigger": 1,
+        "power_up_trigger": 1,
+        "events": 1,
+        "level": 1,
+        "power_up": 4,
+        "op_node": 4,
+        "storage_qualifier_events": 1,
+        "transitional": 1,
+        "pwr_up_transitional": 1,
+        "storage_qualifier_level": 3,
+        "log": 1,
+        "data": 1,
+        "extradata": 1,
+        "mnemonics": 1,
+        "static_plugin_mnemonics": 1
+      },
+      "selected_records": [
+        {
+          "tag": "instance",
+          "attributes": {
+            "entity_name": "sld_signaltap",
+            "is_auto_node": "yes",
+            "name": "auto_signaltap_0",
+            "source_file": "sld_signaltap.vhd"
+          },
+          "text": ""
+        },
+        {
+          "tag": "signal_set",
+          "attributes": {
+            "global_temp": "1",
+            "name": "signal_set: 2017/01/08 19:54:43  #0"
+          },
+          "text": ""
+        },
+        {
+          "tag": "clock",
+          "attributes": {
+            "name": "pi_base_clk",
+            "polarity": "posedge",
+            "tap_mode": "classic"
+          },
+          "text": ""
+        },
+        {
+          "tag": "signal_vec",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger_input_vec",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "data_input_vec",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "unified_setup_data_view",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "data_view",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger_in_editor",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger_out_editor",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger",
+          "attributes": {
+            "CRC": "3389DE44",
+            "attribute_mem_mode": "false",
+            "gap_record": "true",
+            "global_temp": "1",
+            "name": "trigger: 2017/01/08 20:00:02  #0",
+            "position": "pre",
+            "power_up_trigger_mode": "false",
+            "record_data_gap": "true",
+            "segment_size": "1",
+            "storage_mode": "off",
+            "storage_qualifier_disabled": "no",
+            "storage_qualifier_port_is_pin": "true",
+            "storage_qualifier_port_name": "auto_stp_external_storage_qualifier",
+            "storage_qualifier_port_tap_mode": "classic",
+            "trigger_type": "circular"
+          },
+          "text": ""
+        },
+        {
+          "tag": "power_up_trigger",
+          "attributes": {
+            "position": "pre",
+            "storage_qualifier_disabled": "no"
+          },
+          "text": ""
+        },
+        {
+          "tag": "data",
+          "attributes": {
+            "global_temp": "1",
+            "name": "log: 2017/01/08 20:00:02  #1",
+            "power_up_mode": "false",
+            "sample_depth": "128",
+            "trigger_position": "16"
+          },
+          "text": "110011000000110000001100001100110000001100000011000011001100000011000000110000110011000000110000001100001100110000001100"
+        },
+        {
+          "tag": "extradata",
+          "attributes": {},
+          "text": "1111111111111111T1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        }
+      ],
+      "data_attributes": {
+        "global_temp": "1",
+        "name": "log: 2017/01/08 20:00:02  #1",
+        "power_up_mode": "false",
+        "sample_depth": "128",
+        "trigger_position": "16"
+      },
+      "data_characters": 3328,
+      "data_alphabet": "01",
+      "extra_characters": 128,
+      "data_sha256": "0ea114365f7a96e851416be52935dfbc1f995fffdd80654096639ea66941d64e",
+      "characters_per_sample": 26
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01_auto_stripped.stp",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/level_shift_test01/level_shift_test01_auto_stripped.stp",
+      "bytes": 27778,
+      "sha256": "58302fab36bca7b813133062c547ec1ac2cf3d99cc279ba2d69a52fffb6737b4",
+      "git_blob_sha1": "7bad3a242e0a9e60e32d81ba7b53b3b9bb969e85",
+      "root": "session",
+      "root_attributes": {
+        "jtag_chain": "USB-Blaster [USB-0]",
+        "jtag_device": "@1: EP2C(15|20) (0x020B30DD)",
+        "sof_file": ""
+      },
+      "element_count": 200,
+      "tags": {
+        "session": 1,
+        "display_tree": 1,
+        "display_branch": 1,
+        "instance": 1,
+        "node_ip_info": 1,
+        "signal_set": 1,
+        "clock": 1,
+        "config": 1,
+        "top_entity": 1,
+        "signal_vec": 1,
+        "trigger_input_vec": 1,
+        "wire": 54,
+        "data_input_vec": 1,
+        "storage_qualifier_input_vec": 1,
+        "presentation": 1,
+        "unified_setup_data_view": 1,
+        "node": 29,
+        "data_view": 1,
+        "net": 52,
+        "bus": 6,
+        "setup_view": 1,
+        "trigger_in_editor": 1,
+        "trigger_out_editor": 1,
+        "trigger": 1,
+        "power_up_trigger": 1,
+        "events": 1,
+        "level": 1,
+        "power_up": 4,
+        "op_node": 4,
+        "storage_qualifier_events": 1,
+        "transitional": 1,
+        "pwr_up_transitional": 1,
+        "storage_qualifier_level": 3,
+        "log": 1,
+        "data": 1,
+        "extradata": 1,
+        "position_info": 1,
+        "single": 13,
+        "mnemonics": 1,
+        "static_plugin_mnemonics": 1,
+        "global_info": 1,
+        "multi": 2
+      },
+      "selected_records": [
+        {
+          "tag": "instance",
+          "attributes": {
+            "entity_name": "sld_signaltap",
+            "is_auto_node": "yes",
+            "is_expanded": "true",
+            "name": "auto_signaltap_0",
+            "source_file": "sld_signaltap.vhd"
+          },
+          "text": ""
+        },
+        {
+          "tag": "signal_set",
+          "attributes": {
+            "global_temp": "1",
+            "is_expanded": "true",
+            "name": "signal_set: 2017/01/08 19:54:43  #0"
+          },
+          "text": ""
+        },
+        {
+          "tag": "clock",
+          "attributes": {
+            "name": "pi_base_clk",
+            "polarity": "posedge",
+            "tap_mode": "classic"
+          },
+          "text": ""
+        },
+        {
+          "tag": "signal_vec",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger_input_vec",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "data_input_vec",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "unified_setup_data_view",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "data_view",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger_in_editor",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger_out_editor",
+          "attributes": {},
+          "text": ""
+        },
+        {
+          "tag": "trigger",
+          "attributes": {
+            "CRC": "3389DE44",
+            "attribute_mem_mode": "false",
+            "gap_record": "true",
+            "global_temp": "1",
+            "is_expanded": "true",
+            "name": "trigger: 2017/01/08 20:00:02  #0",
+            "position": "pre",
+            "power_up_trigger_mode": "false",
+            "record_data_gap": "true",
+            "segment_size": "1",
+            "storage_mode": "off",
+            "storage_qualifier_disabled": "no",
+            "storage_qualifier_port_is_pin": "true",
+            "storage_qualifier_port_name": "auto_stp_external_storage_qualifier",
+            "storage_qualifier_port_tap_mode": "classic",
+            "trigger_type": "circular"
+          },
+          "text": ""
+        },
+        {
+          "tag": "power_up_trigger",
+          "attributes": {
+            "position": "pre",
+            "storage_qualifier_disabled": "no"
+          },
+          "text": ""
+        },
+        {
+          "tag": "data",
+          "attributes": {
+            "global_temp": "1",
+            "name": "log: 2017/01/08 20:00:02  #1",
+            "power_up_mode": "false",
+            "sample_depth": "128",
+            "trigger_position": "16"
+          },
+          "text": "110011000000110000001100001100110000001100000011000011001100000011000000110000110011000000110000001100001100110000001100"
+        },
+        {
+          "tag": "extradata",
+          "attributes": {},
+          "text": "1111111111111111T1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
+        }
+      ],
+      "data_attributes": {
+        "global_temp": "1",
+        "name": "log: 2017/01/08 20:00:02  #1",
+        "power_up_mode": "false",
+        "sample_depth": "128",
+        "trigger_position": "16"
+      },
+      "data_characters": 3328,
+      "data_alphabet": "01",
+      "extra_characters": 128,
+      "data_sha256": "0ea114365f7a96e851416be52935dfbc1f995fffdd80654096639ea66941d64e",
+      "characters_per_sample": 26
+    }
+  ],
+  "runs": [
+    {
+      "roots": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-stp-exact-x8k37jz3"
+      ],
+      "exit_code": 0,
+      "exact_expected_group": true,
+      "payloads_unchanged": true,
+      "stderr": "Scan complete: 3 files observed, 1 duplicate groups, 360544 bytes read, 0 diagnostics"
+    },
+    {
+      "roots": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-stp-exact-x8k37jz3/a",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-stp-exact-x8k37jz3/b"
+      ],
+      "exit_code": 0,
+      "exact_expected_group": true,
+      "payloads_unchanged": true,
+      "stderr": "Scan complete: 3 files observed, 1 duplicate groups, 360544 bytes read, 0 diagnostics"
+    },
+    {
+      "roots": [
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-stp-exact-x8k37jz3/b",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-stp-exact-x8k37jz3/a",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-stp-exact-x8k37jz3"
+      ],
+      "exit_code": 0,
+      "exact_expected_group": true,
+      "payloads_unchanged": true,
+      "stderr": "Scan complete: 3 files observed, 1 duplicate groups, 360544 bytes read, 0 diagnostics"
+    }
+  ],
+  "log": "docs/research/dedup-500/signaltap-exact-folder-control-20261102-v1.log",
+  "log_sha256": "7b17158b51693aa33a660d8c09092482969d2d3e4116cb509a02f58f557a8754",
+  "scope": "Two real pinned SignalTap files with identical capture payload but different whole bytes, plus one authored exact copy; independent full-byte oracle in3rootorders, no source assets modified. Not visual/format/parser/general-corpus qualification."
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "Original AST normalizer and graph methods, constructor bypassed, fake embedding adapter and query recorder; no Kuzu import/database/query execution",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Normalizer mutates caller dictionaries in place",
+    "Required field presence does not validate field type: sourceNone raises AttributeError",
+    "Explicit search threshold0 replaced with configured0.7 by truthiness; two recorded directional queries omit app_id",
+    "Source node matching records agent/run filters but omits app_id"
+  ],
+  "backend_semantics_verified": false
+}

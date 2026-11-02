@@ -1,0 +1,25 @@
+{
+  "repository": "Zephyr3311/Tauri-Deduper",
+  "commit": "aac9b638e0846b9c61025fb99323d42b6b9e5ada",
+  "scope": "Actual pure TS functions after Node stripTypeScriptTypes and import-only alias redirection to unchanged consts/common modules; synthetic objects/strings, no React/Tauri/filesystem operation execution",
+  "results": {
+    "manual_comma_path": [
+      "/tmp/a",
+      "b"
+    ],
+    "manual_space_path": [
+      "/tmp/trailing"
+    ],
+    "empty_filter_same_array": true,
+    "original_after_derived_sort": [
+      "a",
+      "b"
+    ],
+    "reference_group_separator_count": 0,
+    "operation_paths_exclude_ref": [
+      "copy",
+      "other"
+    ]
+  },
+  "stderr": "(node:22448) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time\n(Use `node --trace-warnings ...` to show where the warning was created)\n"
+}

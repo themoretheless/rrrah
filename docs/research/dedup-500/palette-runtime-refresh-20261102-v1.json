@@ -1,0 +1,35 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "palette_transparency",
+    "--test",
+    "palette_mutation",
+    "--test",
+    "wal_dependency"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 304.3745039159985,
+  "source_sha256_before": {
+    "crates/rrrah-dedup/tests/palette_transparency.rs": "15a66bdfbfe879c3d8e3ad3f7f99e042efc9fc2cb53f6d8c7aa551dc02af9aae",
+    "crates/rrrah-dedup/tests/palette_mutation.rs": "3c0108bb8f42caebce89920a282fbad46aa8af6b391b756e7116cf7835b1f61e",
+    "crates/rrrah-dedup/tests/wal_dependency.rs": "c993747bda604a1f800a0ec70bf4edb497270004e1017ecdf76cfb1e9fd944ee",
+    "crates/rrrah-dedup/src/decode.rs": "4ee9af2e3768420aff054eed216131a7fd96e88c5b48f68052796a55ed20c6d5",
+    "crates/rrrah-dedup/src/decode_recipe.rs": "726432ee86503cb48cd1046d5d27ec065007ee0e24ed617fa50f4b2b65e2b120"
+  },
+  "source_sha256_after": {
+    "crates/rrrah-dedup/tests/palette_transparency.rs": "15a66bdfbfe879c3d8e3ad3f7f99e042efc9fc2cb53f6d8c7aa551dc02af9aae",
+    "crates/rrrah-dedup/tests/palette_mutation.rs": "3c0108bb8f42caebce89920a282fbad46aa8af6b391b756e7116cf7835b1f61e",
+    "crates/rrrah-dedup/tests/wal_dependency.rs": "c993747bda604a1f800a0ec70bf4edb497270004e1017ecdf76cfb1e9fd944ee",
+    "crates/rrrah-dedup/src/decode.rs": "4ee9af2e3768420aff054eed216131a7fd96e88c5b48f68052796a55ed20c6d5",
+    "crates/rrrah-dedup/src/decode_recipe.rs": "726432ee86503cb48cd1046d5d27ec065007ee0e24ed617fa50f4b2b65e2b120"
+  },
+  "stdout": "\nrunning 1 test\ntest same_length_png_alpha_table_rewrite_invalidates_cache_and_collection_edges ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s\n\n\nrunning 3 tests\ntest original_palette_alpha_tables_ignore_hidden_rgb_across_rgba_encoding ... ok\ntest original_uniform_png_hash_collision_does_not_prove_pixel_equality ... ok\ntest indexed_palette_collection_matches_exhaustive_without_uniform_false_edges ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s\n\n\nrunning 4 tests\ntest wal_external_palette_obeys_source_byte_limit_even_with_warm_cache ... ok\ntest selected_presentation_rejects_external_palette_mutation_and_recovers ... ok\ntest wal_fingerprint_one_shot_cancellation_never_admits_partial_cache_and_retries ... ok\ntest presentation_groups_remove_external_palette_stale_edges_and_retry ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.29s\n\n",
+  "stderr": "   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)\nwarning: hiding a lifetime that's elided elsewhere is confusing\n   --> vendor/jxl-color/src/icc/parse.rs:229:38\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {\n    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here\n    |                                      |\n    |                                      the lifetime is elided here\n    |\n    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing\n    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default\nhelp: use `'_` for type paths\n    |\n229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {\n    |                                                                 ++++\n\nwarning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)\n   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)\n   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)\n   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)\n   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)\n    Finished `test` profile [optimized + debuginfo] target(s) in 4m 47s\n     Running tests/palette_mutation.rs (target/debug/deps/palette_mutation-59776823c992ace5)\n     Running tests/palette_transparency.rs (target/debug/deps/palette_transparency-914b2aaf8529e3a7)\n     Running tests/wal_dependency.rs (target/debug/deps/wal_dependency-a1916aeb373b2d89)\n"
+}

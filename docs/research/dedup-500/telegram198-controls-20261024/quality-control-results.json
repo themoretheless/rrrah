@@ -1,0 +1,9 @@
+{
+  "cases": 3,
+  "scope": "Complete unchanged faces.js module body in VM with imports/exports adapted;only actual qualityFilter invoked. Synthetic detection objects,no actual faces/model/sidecar.",
+  "findings": [
+    "Default60x60 box accepted despite docstring80px.",
+    "59px box correctly rejected at current60px threshold.",
+    "Nonfinite dimensions Infinity/Infinity produce NaN ratio that passes comparisons;NaN score also bypasses finite-score guard. Actual sidecar output validation still unreviewed;malformed-boundary behavior only."
+  ]
+}

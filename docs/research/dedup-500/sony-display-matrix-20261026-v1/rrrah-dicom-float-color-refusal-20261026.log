@@ -1,0 +1,38 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 00s
+     Running tests/dicom_preamble.rs (target/debug/deps/dicom_preamble-060ba950e4a5808d)
+
+running 1 test
+test dicom_marker_wins_over_other_container_signatures_in_arbitrary_preamble ... FAILED
+
+failures:
+
+---- dicom_marker_wins_over_other_container_signatures_in_arbitrary_preamble stdout ----
+
+thread 'dicom_marker_wins_over_other_container_signatures_in_arbitrary_preamble' (74432908) panicked at crates/rrrah-dedup/tests/dicom_preamble.rs:21:84:
+called `Result::unwrap()` on an `Err` value: Decode(Color(Frame(ColorTransformRequired)))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    dicom_marker_wins_over_other_container_signatures_in_arbitrary_preamble
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test dicom_preamble`

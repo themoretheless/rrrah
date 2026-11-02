@@ -1,0 +1,41 @@
+{
+  "regression": "entry_limit_preserves_already_admitted_directory_children",
+  "before": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_files entry_limit_preserves_already_admitted_directory_children",
+    "exit_code": 101,
+    "failed": 1,
+    "observed_files": 0,
+    "expected_files": 2,
+    "diagnostic": "Limit",
+    "session": 7794
+  },
+  "change": "On directory child admission limit, break enumeration instead of returning before scheduling previously admitted children. No increase in admitted entry bound.",
+  "after": {
+    "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --lib --test exact_files",
+    "exit_code": 0,
+    "session": 38786,
+    "unit": {
+      "passed": 50,
+      "failed": 0,
+      "ignored": 2,
+      "seconds": 1.15
+    },
+    "integration": {
+      "passed": 50,
+      "failed": 0,
+      "ignored": 0,
+      "seconds": 1.15
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "8f171bfa62335cf24cc2d6c3c348e942ac344bf1ef98215f2da4b3ce55087e4f",
+    "crates/rrrah-dedup/tests/exact_files.rs": "a2b2f6bda1d65097b8ca47e79dc902078c6ce9f02507a3055158d631959d8952"
+  },
+  "coverage": "Owned3file directory, root plus2children entry budget3. Discovery retains2files; both scan APIs retain one byte-confirmed2membergroup, incomplete Limit diagnostic, no cancellation. Exact retained filename subset depends on OS read_dir order.",
+  "limitations": [
+    "macOS execution only.",
+    "No full decode-feature rerun following this production change.",
+    "No claim of deterministic selection when directory enumeration is truncated.",
+    "No directory read-error mid-enumeration injection."
+  ]
+}

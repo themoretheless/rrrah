@@ -1,0 +1,62 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package ptp
+
+import (
+	"fmt"
+	"os"
+	"strings"
+
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func readBDSummary(meta api.UploadSubject, dbPath string) (string, error) {
+	text, err := trackers.ReadBDInfo(dbPath, meta)
+	if err != nil {
+		return "", fmt.Errorf("trackers: PTP read BDInfo: %w", err)
+	}
+	return text, nil
+}
+
+func readTextFile(path string) (string, error) {
+	trimmed := strings.TrimSpace(path)
+	if trimmed == "" {
+		return "", nil
+	}
+	payload, err := os.ReadFile(trimmed)
+	if err != nil {
+		return "", fmt.Errorf("trackers: PTP read text file: %w", err)
+	}
+	return string(payload), nil
+}
+
+func buildMediaSection(meta api.UploadSubject, dbPath string) (string, error) {
+	discType := strings.ToUpper(strings.TrimSpace(meta.DiscType))
+	switch discType {
+	case "BDMV":
+		text, err := readBDSummary(meta, dbPath)
+		if err != nil {
+			return "", err
+		}
+		if strings.TrimSpace(text) == "" {
+			return "", nil
+		}
+		return "[mediainfo]" + strings.TrimSpace(text) + "[/mediainfo]", nil
+	default:
+		text, err := readTextFile(strings.TrimSpace(meta.MediaInfoTextPath))
+		if err != nil {
+			return "", err
+		}
+		text = strings.TrimSpace(text)
+		var sections []string
+		if text != "" {
+			sections = append(sections, "[mediainfo]"+text+"[/mediainfo]")
+		}
+		if vobText := trackers.ReadDVDVOBMediaInfo(meta); discType == "DVD" && strings.TrimSpace(vobText) != "" {
+			sections = append(sections, "[mediainfo]"+vobText+"[/mediainfo]")
+		}
+		return strings.Join(sections, "\n\n"), nil
+	}
+}

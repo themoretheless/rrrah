@@ -1,0 +1,8 @@
+[package]
+name="owned-yellowstone114-controls"
+version="0.0.0"
+edition="2021"
+[workspace]
+[dependencies]
+tokio={version="1.40",features=["rt-multi-thread","macros","sync"]}
+async-trait="0.1"

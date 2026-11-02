@@ -1,0 +1,76 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+   Compiling rrrah-scientific v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-scientific)
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+   Compiling rrrah-texture v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-texture)
+   Compiling rrrah-layered v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-layered)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 54.76s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 16 tests
+test mng::tests::authored_integer_frames_keep_selection_precision_and_managed_ownership ... ok
+test mng::tests::color_defaults_snapshot_nullification_precedence_and_local_override ... ok
+test mng::tests::common_mng_timing_matches_ticks_and_refuses_unimplemented_repetition ... ok
+test mng::tests::ffmpeg_qualified_alpha_sources_match_independent_linear_reference ... ok
+test mng::tests::frame_limit_preallocation_spends_heap_before_invalid_header_rejection ... ok
+test mng::tests::global_palette_requires_lc_profile_and_live_palette ... ok
+test mng::tests::inherited_icc_preserves_profile_and_last_owner_budget ... ok
+test mng::tests::intrapixel_filter_requires_simple_profile_and_releases_failed_admission ... ok
+test mng::tests::later_opaque_layer_cannot_repair_forbidden_initial_transparency ... ok
+test mng::tests::mixed_eight_and_sixteen_bit_layers_promote_without_quantization ... ok
+test mng::tests::mng_magic_wins_over_raw_suffix_and_frames_reach_common_router ... ok
+test mng::tests::palette_snapshots_and_transparency_nullification_do_not_recolor_earlier_layers ... ok
+test mng::tests::partial_composition_admits_canvas_first_and_rejects_missing_background ... ok
+test mng::tests::transparent_partial_layers_blend_in_linear_light_and_keep_last_owner_credit ... ok
+test mng::tests::truncated_crc_control_canvas_index_and_pressure_are_refused_without_retention ... ok
+test mng::tests::zero_tick_full_canvas_layers_form_one_final_still ... ok
+
+successes:
+
+---- mng::tests::common_mng_timing_matches_ticks_and_refuses_unimplemented_repetition stdout ----
+MNG_COMMON_TIMING cases=41 repetition_refusals=2 final=0
+
+---- mng::tests::frame_limit_preallocation_spends_heap_before_invalid_header_rejection stdout ----
+RR38_EARLY_INVALID candidate=false collection_allocations=0 capacity=0 requested_bytes=0 managed_peak=0 final=0
+RR38_EARLY_INVALID candidate=true collection_allocations=1 capacity=4096 requested_bytes=819200 managed_peak=0 final=0
+
+
+successes:
+    mng::tests::authored_integer_frames_keep_selection_precision_and_managed_ownership
+    mng::tests::color_defaults_snapshot_nullification_precedence_and_local_override
+    mng::tests::common_mng_timing_matches_ticks_and_refuses_unimplemented_repetition
+    mng::tests::ffmpeg_qualified_alpha_sources_match_independent_linear_reference
+    mng::tests::frame_limit_preallocation_spends_heap_before_invalid_header_rejection
+    mng::tests::global_palette_requires_lc_profile_and_live_palette
+    mng::tests::inherited_icc_preserves_profile_and_last_owner_budget
+    mng::tests::intrapixel_filter_requires_simple_profile_and_releases_failed_admission
+    mng::tests::later_opaque_layer_cannot_repair_forbidden_initial_transparency
+    mng::tests::mixed_eight_and_sixteen_bit_layers_promote_without_quantization
+    mng::tests::mng_magic_wins_over_raw_suffix_and_frames_reach_common_router
+    mng::tests::palette_snapshots_and_transparency_nullification_do_not_recolor_earlier_layers
+    mng::tests::partial_composition_admits_canvas_first_and_rejects_missing_background
+    mng::tests::transparent_partial_layers_blend_in_linear_light_and_keep_last_owner_credit
+    mng::tests::truncated_crc_control_canvas_index_and_pressure_are_refused_without_retention
+    mng::tests::zero_tick_full_canvas_layers_form_one_final_still
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 252 filtered out; finished in 0.01s
+

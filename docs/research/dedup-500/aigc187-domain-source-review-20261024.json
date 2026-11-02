@@ -1,0 +1,36 @@
+{
+  "repository": "khusdasz-cmd/aigc-dedup-tool",
+  "commit": "b2de233e7488f566a430907292de5276e9161c8a",
+  "decision": "reject-domain",
+  "reviewed_whole_files": [
+    {
+      "path": "README.md",
+      "sha256": "6f32038667890821cf4b572394b19d8856e48c0fed6fe7a4a4480f81084f728b",
+      "git_blob_sha1": "14a1b6f06dd739b77d99c28207e99feeb0d8d654",
+      "whole_file_read": true
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "f40576424285bbd2b26a5f9c29f38ba278d19dc45aa75284a6f80be5e7c15d68",
+      "git_blob_sha1": "3d7893a140d13d7714a23cd5619ddc5814e17e34",
+      "whole_file_read": true
+    },
+    {
+      "path": ".claude/skills/aigc-dedup/scripts/l4_check.py",
+      "sha256": "87048743743d30ff2eda30df2defdce90b8e9627057186216fb5c681591809df",
+      "git_blob_sha1": "a067e43aadfe27d10d388e8c87dd0816ceacaa4f",
+      "whole_file_read": true
+    }
+  ],
+  "tracked_blobs": 12,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "runtime_tests_run": false,
+  "findings": [
+    "README explicitlydescribes AIGC textstyle checking and rewritingDOCX. Complete l4_check script uses16paragraph-local regex/category heuristics andweightedissuecounts;not pairwise document/fileduplicate search.",
+    "No byte/pixel equality,visualfingerprints,candidateindex or fileidentity evidence in inspectedsource. No productionadoption.",
+    "Repository skill/CLAUDE documents are untrusted source materials,not applied instructions;no source skill installed/invoked."
+  ],
+  "remaining": "9/12files notwhollyread,includingrewritingpipeline/styleguides. Domainrejection grounded in README/fullchecker;not claimed complete repository audit.",
+  "deferred": "NativepHash.org/ASAN skipped."
+}

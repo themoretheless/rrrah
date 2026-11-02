@@ -1,0 +1,46 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v11-20261024.json",
+  "whole_repo_complete": false,
+  "main_repository_blobs_whole_read": true,
+  "main_repository_blobs": 10,
+  "whole_header_read": true,
+  "new_read_lines": {
+    "path": "dedup_cpp/xxhash.h",
+    "start": 5301,
+    "end": 7487
+  },
+  "cumulative_header_read_lines": [
+    1,
+    7487
+  ],
+  "header_sha256": "5e98051924106e21c3d371ad1b483aa2049e4517f5145d289dcdf041be985bf4",
+  "main_blob_inventory": [
+    ".gitmodules",
+    "CMakeLists.txt",
+    "LICENSE",
+    "README.md",
+    "dedup_cpp/dedup.cpp",
+    "dedup_cpp/xxhash.h",
+    "dedup_toolkit.py",
+    "requirements.txt",
+    "setup.py",
+    "src/dedup_cpp_core/__init__.py"
+  ],
+  "new_runtime_tests": 0,
+  "findings": [
+    "Complete retained7487line vendorheaderread acrossv3..v12; together with historicalv1/v2all10mainrepositoryblobswhole-read. Abseilgitlinknotincludedin10blobscope.",
+    "NEON/VSX/SVE/LSX/LASX/RVVscalarandSIMDimplementationsread,onlyARM64/scalarselectedruntimecontrolsqualified. No otherISAexecution.",
+    "StreamingXXH3uses256bytebufferwithlast64bytesretainedforfinalstripe;digestcopiesaccumulatoranddoesnotmutatesource. Previouslyownedresumecontrolspasslimitedcases.",
+    "Canonical128representationwritesbigendianhigh64thenlow64;rawstructorderdiffers. No productioncacheformatadopted.",
+    "SecretgeneratorchecksNULL/minimumsizeinreleasebutdebugasserts;reset_withSecretinternalpreconditionbeforeoutervalidationread,invalidsecretinputsnotexecuted.",
+    "128bitmidlengthloopintentionallyduplicatesfinal32bytesonmultiplesof32forstableoutput;notincorrectextradatareadclaim."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "Pinnedthird_party/abseil-cppf363711b4077f3c4558f17c74e5941c8e71f15c5review",
+    "fullFaiss/OpenMP/pybind/nativepipelinequalification"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

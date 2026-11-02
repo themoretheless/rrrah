@@ -1,0 +1,24 @@
+{
+  "command": "cargo +1.98.1 test --offline -p rrrah-dedup --test exact_files",
+  "exit_code": 0,
+  "passed": 44,
+  "failed": 0,
+  "ignored": 0,
+  "test_runtime_seconds": 1.14,
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "76910f82adb01575a079d28cce83bd05373f0a1f1a19b36848b0a89e7ff794dd"
+  },
+  "scope": "fresh current-source test build, default features, macOS environment; exact_files integration target only, not complete package suite, other platforms or universal correctness",
+  "observed_coverage": [
+    "byte copies/equal-size negatives",
+    "matching sampled edges changed interior/reordered blocks",
+    "hardlinks and symlink cycles",
+    "one-shot cancellation checkpoints",
+    "same-size/restored-mtime mutations and physical replacement",
+    "late source failures preserving healthy duplicates",
+    "path delimiters/whitespace/non-UTF8 diagnostics",
+    "FIFO replacement bounded behavior",
+    "root/depth/entry admission boundaries"
+  ]
+}

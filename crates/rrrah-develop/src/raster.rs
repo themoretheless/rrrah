@@ -174,7 +174,34 @@ impl DecodedRaster {
         budget: Option<&rrrah_memory::MemoryBudget>,
         cancel: impl Fn() -> bool,
     ) -> Result<Self, RasterError> {
-        self.hdr_to_linear_srgb(reference_white_nits, None, budget, cancel)
+        self.hdr_to_linear_srgb(reference_white_nits, None, false, budget, cancel)
+    }
+
+    /// PNG integer RGB codes with narrow-range PQ signaling. Expands RGB
+    /// 16..235 (scaled to storage depth), with sign-preserving PQ excursions.
+    /// Alpha remains full-range. Video decoder output must use the normalized API.
+    pub fn pq_narrow_rgb_to_linear_srgb_with_budget_and_cancel(
+        &self,
+        reference_white_nits: f32,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, RasterError> {
+        if cancel() {
+            return Err(RasterError::Cancelled);
+        }
+        if !matches!(
+            self.color_space.space,
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                matrix: 0,
+                full_range: false
+            }
+        ) || matches!(self.pixels, RasterPixels::Rgba32Float(_))
+        {
+            return Err(RasterError::ColorTransformRequired);
+        }
+        self.hdr_to_linear_srgb(reference_white_nits, None, true, budget, cancel)
     }
 
     /// HLG BT.2020 display conversion for a zero-black reference display.
@@ -190,6 +217,41 @@ impl DecodedRaster {
         self.hdr_to_linear_srgb(
             reference_white_nits,
             Some((peak_nits, system_gamma)),
+            false,
+            budget,
+            cancel,
+        )
+    }
+
+    /// Narrow-range integer HLG RGB, with full-range alpha and signed
+    /// below-black scene samples. The display remains zero-black and explicit.
+    pub fn hlg_narrow_rgb_to_linear_srgb_with_budget_and_cancel(
+        &self,
+        reference_white_nits: f32,
+        peak_nits: f32,
+        system_gamma: f32,
+        budget: Option<&rrrah_memory::MemoryBudget>,
+        cancel: impl Fn() -> bool,
+    ) -> Result<Self, RasterError> {
+        if cancel() {
+            return Err(RasterError::Cancelled);
+        }
+        if !matches!(
+            self.color_space.space,
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 18,
+                matrix: 0,
+                full_range: false
+            }
+        ) || matches!(self.pixels, RasterPixels::Rgba32Float(_))
+        {
+            return Err(RasterError::ColorTransformRequired);
+        }
+        self.hdr_to_linear_srgb(
+            reference_white_nits,
+            Some((peak_nits, system_gamma)),
+            true,
             budget,
             cancel,
         )
@@ -199,6 +261,7 @@ impl DecodedRaster {
         &self,
         reference_white_nits: f32,
         hlg: Option<(f32, f32)>,
+        narrow_rgb: bool,
         budget: Option<&rrrah_memory::MemoryBudget>,
         cancel: impl Fn() -> bool,
     ) -> Result<Self, RasterError> {
@@ -238,11 +301,25 @@ impl DecodedRaster {
             .map_err(|_| RasterError::Allocation)?;
         // Exact integer PQ results avoid millions of repeated powers. Scratch is
         // optional: constrained callers retain the scalar path and its output budget.
+        let expand_code = |value: f64| {
+            if narrow_rgb {
+                let (maximum, scale) = match &self.pixels {
+                    RasterPixels::Rgba8(_) => (255., 1.),
+                    RasterPixels::Rgba16(_) => (65535., 256.),
+                    RasterPixels::Rgba32Float(_) => unreachable!(),
+                };
+                ((value * maximum).round() - 16. * scale) / (219. * scale)
+            } else {
+                value
+            }
+        };
         let pq = |value: f64| {
-            let p = value.powf(32.0 / 2523.0);
+            let value = expand_code(value);
+            let sign = if narrow_rgb { value.signum() } else { 1. };
+            let p = value.abs().powf(32.0 / 2523.0);
             let linear =
                 ((p - 107.0 / 128.0).max(0.0) / (2413.0 / 128.0 - 2392.0 / 128.0 * p)).powf(8192.0 / 1305.0);
-            linear * 10000.0 / f64::from(reference_white_nits)
+            sign * linear * 10000.0 / f64::from(reference_white_nits)
         };
         let entries = if hlg.is_none() && count >= 4 * 65536 {
             match &self.pixels {
@@ -298,8 +375,10 @@ impl DecodedRaster {
             let rgb: [f64; 3] = if let Some((peak, gamma)) = hlg {
                 // BT.2100 HLG inverse OETF and luminance-dependent reference OOTF.
                 let scene: [f64; 3] = std::array::from_fn(|c| {
-                    let value = rgba[c];
-                    if value <= 0.5 {
+                    let value = expand_code(rgba[c]);
+                    if value < 0. {
+                        -value * value / 3.0
+                    } else if value <= 0.5 {
                         value * value / 3.0
                     } else {
                         (((value - 0.55991073) / 0.17883277).exp() + 0.28466892) / 12.0
@@ -307,9 +386,16 @@ impl DecodedRaster {
                 });
                 let luminance = 0.2627 * scene[0] + 0.6780 * scene[1] + 0.0593 * scene[2];
                 let gain = if luminance == 0.0 {
-                    0.0
+                    if gamma == 1.0 {
+                        f64::from(peak) / f64::from(reference_white_nits)
+                    } else if gamma > 1.0 || scene.iter().all(|v| *v == 0.) {
+                        0.0
+                    } else {
+                        return Err(RasterError::NonFiniteSample);
+                    }
                 } else {
-                    luminance.powf(f64::from(gamma) - 1.0) * f64::from(peak) / f64::from(reference_white_nits)
+                    luminance.abs().powf(f64::from(gamma) - 1.0) * f64::from(peak)
+                        / f64::from(reference_white_nits)
                 };
                 scene.map(|value| value * gain)
             } else {
@@ -448,6 +534,19 @@ impl DecodedRaster {
             animation_timing: None,
             alpha_association: RasterAlphaAssociation::Straight,
         })
+    }
+
+    /// Replace RGBA storage without cloning color profiles or changing metadata.
+    /// The caller supplies native samples in the raster's existing color space.
+    pub fn with_replaced_pixels(mut self, pixels: RasterPixels) -> Result<Self, RasterError> {
+        if pixels.len() != self.pixels.len() {
+            return Err(RasterError::SampleCount {
+                expected: self.pixels.len(),
+                actual: pixels.len(),
+            });
+        }
+        self.pixels = pixels;
+        Ok(self)
     }
 
     pub fn alpha_association(&self) -> RasterAlphaAssociation {
@@ -1370,6 +1469,235 @@ mod tests {
     }
 
     #[test]
+    fn narrow_hlg_integer_ramps_preserve_signed_light_and_alpha() {
+        use super::*;
+        let anchors = [
+            (8, 0, -5.01506512509462821e-03f64),
+            (8, 16, 0.00000000000000000e+00f64),
+            (8, 64, 7.00434595554784017e-02f64),
+            (8, 128, 5.35788856686342352e-01f64),
+            (8, 235, 1.00000002923993065e+01f64),
+            (8, 255, 1.82460478453336421e+01f64),
+            (16, 0, -5.01506512509462821e-03f64),
+            (16, 4096, 0.00000000000000000e+00f64),
+            (16, 16384, 7.00434595554784017e-02f64),
+            (16, 32768, 5.35788856686342352e-01f64),
+            (16, 60160, 1.00000002923993065e+01f64),
+            (16, 65535, 1.88033625799012292e+01f64),
+        ];
+        for bits in [8, 16] {
+            let count = 1u32 << bits;
+            let pixels = if bits == 8 {
+                RasterPixels::Rgba8(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|v| [v as u8, v as u8, v as u8, 128])
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
+            } else {
+                RasterPixels::Rgba16(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|v| [v as u16, v as u16, v as u16, 32768])
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
+            };
+            let source = DecodedRaster::new(
+                count,
+                1,
+                pixels,
+                RasterColorSpace::Cicp {
+                    primaries: 9,
+                    transfer: 18,
+                    matrix: 0,
+                    full_range: false,
+                },
+            )
+            .unwrap();
+            let bytes = u64::from(count) * 16;
+            let short = rrrah_memory::MemoryBudget::new(bytes - 1);
+            assert!(
+                source
+                    .hlg_narrow_rgb_to_linear_srgb_with_budget_and_cancel(
+                        100.,
+                        1000.,
+                        1.2,
+                        Some(&short),
+                        || false
+                    )
+                    .is_err()
+            );
+            assert_eq!(short.used(), 0);
+            let root = rrrah_memory::MemoryBudget::new(bytes);
+            assert!(
+                source
+                    .hlg_narrow_rgb_to_linear_srgb_with_budget_and_cancel(
+                        100.,
+                        1000.,
+                        1.2,
+                        Some(&root),
+                        || root.used() > 0
+                    )
+                    .is_err()
+            );
+            assert_eq!(root.used(), 0);
+            let linear = source
+                .hlg_narrow_rgb_to_linear_srgb_with_budget_and_cancel(100., 1000., 1.2, Some(&root), || false)
+                .unwrap();
+            let RasterPixels::Rgba32Float(values) = linear.pixels() else {
+                panic!()
+            };
+            for &(depth, code, expected) in &anchors {
+                if depth != bits {
+                    continue;
+                }
+                for actual in &values[code * 4..code * 4 + 3] {
+                    assert!(
+                        (f64::from(*actual) - expected).abs() <= expected.abs().max(1.) * 0.000002,
+                        "bits={bits} code={code}: {actual} != {expected}"
+                    );
+                }
+            }
+            let alpha = if bits == 8 { 128. / 255. } else { 32768. / 65535. };
+            assert!(
+                values
+                    .chunks_exact(4)
+                    .all(|p| p[3] == alpha && p.iter().all(|v| v.is_finite()))
+            );
+            assert!(
+                values
+                    .chunks_exact(4)
+                    .map(|p| p[0])
+                    .collect::<Vec<_>>()
+                    .windows(2)
+                    .all(|v| v[0] <= v[1])
+            );
+            let reflected = if bits == 8 { 32 } else { 8192 };
+            assert_eq!(values[0], -values[reflected * 4]);
+            assert!(values[0] < 0. && values[values.len() - 4] > 10.);
+            assert_eq!(root.used(), bytes);
+            drop(linear);
+            assert_eq!(root.used(), 0);
+        }
+    }
+
+    #[test]
+    fn narrow_pq_integer_ramps_preserve_excursions_alpha_and_admission() {
+        use super::*;
+        // 70-digit Decimal ST2084 anchors, independently generated from PNG3
+        // range scaling and its sign-preserving transfer extension.
+        let anchors = [
+            (8, 0, -1.46482927737597002e-03f64),
+            (8, 16, 0.00000000000000000e+00f64),
+            (8, 64, 3.28258412256088733e-02f64),
+            (8, 128, 1.03377076711917826e+00f64),
+            (8, 235, 1.00000000000000000e+02f64),
+            (8, 255, 2.43519492913206847e+02f64),
+            (16, 0, -1.46482927737597002e-03f64),
+            (16, 4096, 0.00000000000000000e+00f64),
+            (16, 16384, 3.28258412256088733e-02f64),
+            (16, 32768, 1.03377076711917826e+00f64),
+            (16, 60160, 1.00000000000000000e+02f64),
+            (16, 65535, 2.54824304232409020e+02f64),
+        ];
+        for bits in [8, 16] {
+            let count = 1u32 << bits;
+            let pixels = if bits == 8 {
+                RasterPixels::Rgba8(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|v| [v as u8, v as u8, v as u8, 128])
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
+            } else {
+                RasterPixels::Rgba16(
+                    Arc::new(
+                        (0..count)
+                            .flat_map(|v| [v as u16, v as u16, v as u16, 32768])
+                            .collect::<Vec<_>>(),
+                    )
+                    .into(),
+                )
+            };
+            let source = DecodedRaster::new(
+                count,
+                1,
+                pixels,
+                RasterColorSpace::Cicp {
+                    primaries: 9,
+                    transfer: 16,
+                    matrix: 0,
+                    full_range: false,
+                },
+            )
+            .unwrap();
+            let bytes = u64::from(count) * 16;
+            let short = rrrah_memory::MemoryBudget::new(bytes - 1);
+            assert!(
+                source
+                    .pq_narrow_rgb_to_linear_srgb_with_budget_and_cancel(100., Some(&short), || false)
+                    .is_err()
+            );
+            assert_eq!(short.used(), 0);
+            let root = rrrah_memory::MemoryBudget::new(bytes);
+            assert!(
+                source
+                    .pq_narrow_rgb_to_linear_srgb_with_budget_and_cancel(100., Some(&root), || root.used()
+                        > 0)
+                    .is_err()
+            );
+            assert_eq!(root.used(), 0);
+            let scalar = source
+                .pq_narrow_rgb_to_linear_srgb_with_budget_and_cancel(100., Some(&root), || false)
+                .unwrap();
+            let RasterPixels::Rgba32Float(values) = scalar.pixels() else {
+                panic!()
+            };
+            for &(depth, code, expected) in &anchors {
+                if depth != bits {
+                    continue;
+                }
+                for actual in &values[code * 4..code * 4 + 3] {
+                    assert!(
+                        (f64::from(*actual) - expected).abs() < 1e-5 * expected.abs().max(1.),
+                        "bits={bits}, code={code}, actual={actual}, expected={expected}"
+                    );
+                }
+            }
+            let alpha = if bits == 8 { 128. / 255. } else { 32768. / 65535. };
+            assert!(values.chunks_exact(4).all(|p| p[3] == alpha));
+            assert!(values[0] < 0. && values[values.len() - 4] > 100.);
+            assert!(
+                values
+                    .chunks_exact(4)
+                    .map(|p| p[0])
+                    .collect::<Vec<_>>()
+                    .windows(2)
+                    .all(|v| v[0] <= v[1])
+            );
+            let table_root = rrrah_memory::MemoryBudget::new(bytes + 65536 * 8);
+            let table = source
+                .pq_narrow_rgb_to_linear_srgb_with_budget_and_cancel(100., Some(&table_root), || false)
+                .unwrap();
+            let RasterPixels::Rgba32Float(table_values) = table.pixels() else {
+                panic!()
+            };
+            assert_eq!(&values[..], &table_values[..]);
+            assert_eq!(root.used(), bytes);
+            assert_eq!(table_root.used(), bytes);
+            drop(table);
+            drop(scalar);
+            assert_eq!((root.used(), table_root.used()), (0, 0));
+        }
+    }
+
+    #[test]
     fn narrow_bt709_integer_codes_match_signed_f64_reference_and_recover() {
         use super::*;
         for sixteen in [false, true] {
@@ -1856,5 +2184,43 @@ mod associated_linear_tests {
                 .with_alpha_association(RasterAlphaAssociation::Associated)
                 .is_err()
         );
+    }
+}
+
+#[cfg(test)]
+mod replaced_storage_tests {
+    use super::*;
+    #[test]
+    fn replacement_shares_profile_credit_and_preserves_metadata() {
+        let root = rrrah_memory::MemoryBudget::new(44);
+        let original = DecodedRaster::new(
+            1,
+            1,
+            RasterPixels::Rgba8(Arc::new(vec![0, 0, 0, 255]).into()),
+            RasterColorSpace::Icc(vec![7; 32]),
+        )
+        .unwrap()
+        .with_image_selection(1, 3)
+        .unwrap()
+        .with_pixel_aspect(Some(1.5))
+        .unwrap()
+        .with_sample_scale(2.)
+        .unwrap()
+        .try_manage_pixels(&root)
+        .unwrap();
+        let held = original.clone();
+        let output = root.try_buffer(4, 65535u16).unwrap().freeze();
+        let changed = original
+            .with_replaced_pixels(RasterPixels::Rgba16(output.into()))
+            .unwrap();
+        assert!(Arc::ptr_eq(&held.color_space, &changed.color_space));
+        assert_eq!((changed.image_index(), changed.image_count()), (1, 3));
+        assert_eq!(changed.pixel_aspect(), Some(1.5));
+        assert_eq!(changed.sample_scale(), 2.);
+        assert_eq!(root.used(), 44);
+        drop(held);
+        assert_eq!(root.used(), 40);
+        drop(changed);
+        assert_eq!(root.used(), 0);
     }
 }

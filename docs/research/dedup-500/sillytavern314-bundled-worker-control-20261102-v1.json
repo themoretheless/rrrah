@@ -1,0 +1,85 @@
+{
+  "source": "docs/research/dedup-500/evidence/SillyTavern--Extension-DupeFinder/remaining-pinned/dist/984.index.js",
+  "sha256": "965166c2b7593148f513ea10f2c59b188dd174dea4935154027865074d7451fa",
+  "method": "Pinned complete worker bundle executed in isolated Node vm with captured postMessage; no UI, network or file mutations",
+  "exit_code": 0,
+  "messages": [
+    {
+      "type": "progress",
+      "data": {
+        "percent": 17,
+        "run": 2,
+        "totalRuns": 6
+      }
+    },
+    {
+      "type": "progress",
+      "data": {
+        "percent": 33,
+        "run": 3,
+        "totalRuns": 6
+      }
+    },
+    {
+      "type": "progress",
+      "data": {
+        "percent": 50,
+        "run": 4,
+        "totalRuns": 6
+      }
+    },
+    {
+      "type": "progress",
+      "data": {
+        "percent": 67,
+        "run": 5,
+        "totalRuns": 6
+      }
+    },
+    {
+      "type": "progress",
+      "data": {
+        "percent": 83,
+        "run": 6,
+        "totalRuns": 6
+      }
+    },
+    {
+      "type": "result",
+      "data": [
+        [
+          {
+            "id": "C",
+            "data": {
+              "name": "C",
+              "description": "b.c"
+            },
+            "date_added": 1
+          },
+          {
+            "id": "B",
+            "data": {
+              "name": "B",
+              "description": "a.b.c"
+            },
+            "date_added": 1
+          },
+          {
+            "id": "A",
+            "data": {
+              "name": "A",
+              "description": "a.b"
+            },
+            "date_added": 1
+          }
+        ]
+      ]
+    }
+  ],
+  "oracle": {
+    "A_B": 0.6666666666666666,
+    "B_C": 0.6666666666666666,
+    "A_C": 0.3333333333333333,
+    "threshold": 0.6
+  }
+}

@@ -2,9 +2,9 @@
   "index": 130,
   "repository": "benetech/VideoDeduplication",
   "commit": "59222c64250886aefdc70e0541d830ca9200b5d7",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "6/859 whole pinned files;4 fixture and5 native Annoy controls with overlaps;no model/video/DB pipeline qualification",
   "decision": "reference",
-  "finding": "Video match-generation entrypoints with frame sampling; inspect matching backend before applying animation policies.",
+  "finding": "Vector candidate pipeline;direct native Annoy1.17.3 output truncates at2 on this macOS host in Python3.9 and3.14,including distinct vectors. Root cause unresolved;no universal or original-upstream runtime claim.",
   "available_source_evidence": [
     {
       "path": "generate_matches.py",
@@ -74,5 +74,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "video130-source-review-v2-20261024.json"
 }

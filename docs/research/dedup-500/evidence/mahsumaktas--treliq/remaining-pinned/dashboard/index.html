@@ -1,0 +1,2159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treliq v0.5.1 Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%232da44e'/><path d='M30 52l15 15 25-30' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ═══════ Tokyo Night Color System ═══════ */
+:root{
+  --bg:#0a0a0f;
+  --surface:#12131a;
+  --surface2:#1a1b26;
+  --surface3:#1e1f2b;
+  --border:#2a2b36;
+  --border-subtle:#1e1f2b;
+  --border-hover:#3a3b46;
+  --text:#c9d1d9;
+  --text-secondary:#8b949e;
+  --muted:#565f69;
+  --accent:#58a6ff;
+  --green:#2da44e;
+  --green-bg:rgba(45,164,78,.1);
+  --red:#f85149;
+  --red-bg:rgba(248,81,73,.1);
+  --yellow:#d29922;
+  --yellow-bg:rgba(210,153,34,.1);
+  --orange:#db6d28;
+  --orange-bg:rgba(219,109,40,.1);
+  --blue:#58a6ff;
+  --blue-bg:rgba(88,166,255,.06);
+  --purple:#a371f7;
+  --purple-bg:rgba(163,113,247,.1);
+  --shadow:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+  --shadow-lg:0 4px 12px rgba(0,0,0,.15);
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+
+[data-theme="light"]{
+  --bg:#fafbfc;
+  --surface:#ffffff;
+  --surface2:#f4f5f7;
+  --surface3:#ebedf0;
+  --border:#dfe1e6;
+  --border-subtle:#ebedf0;
+  --border-hover:#c1c7d0;
+  --text:#1a1a2e;
+  --text-secondary:#44546f;
+  --muted:#8993a4;
+}
+
+/* ═══════ Base ═══════ */
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  position:relative;
+}
+
+/* Noise texture overlay */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  opacity:0.02;
+  pointer-events:none;
+  z-index:9998;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* Subtle radial gradient */
+[data-theme="dark"] body{
+  background:radial-gradient(ellipse 80% 50% at 50% -20%,rgba(88,166,255,.03),transparent),var(--bg);
+}
+
+/* ═══════ Mobile Top Bar ═══════ */
+.mobile-bar{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:56px;
+  background:var(--surface);
+  border-bottom:1px solid var(--border-subtle);
+  align-items:center;
+  padding:0 16px;
+  z-index:199;
+  gap:12px;
+}
+
+.sidebar-toggle{
+  background:transparent;
+  border:none;
+  color:var(--text);
+  width:40px;
+  height:40px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:6px;
+  transition:background 150ms cubic-bezier(0.4,0,0.2,1);
+}
+.sidebar-toggle:hover{background:var(--surface2)}
+.sidebar-toggle svg{width:20px;height:20px;stroke-width:2;stroke:currentColor;fill:none}
+
+.mobile-title{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:-.3px;
+}
+
+/* ═══════ Sidebar Overlay (mobile) ═══════ */
+.sidebar-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.5);
+  z-index:199;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 200ms;
+}
+
+/* ═══════ Sidebar ═══════ */
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  width:220px;
+  height:100vh;
+  background:var(--surface);
+  border-right:1px solid var(--border-subtle);
+  display:flex;
+  flex-direction:column;
+  z-index:200;
+  transition:transform 200ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.sidebar-header{
+  padding:20px 16px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border-bottom:1px solid var(--border-subtle);
+}
+
+.sidebar-header img{
+  height:24px;
+  border-radius:4px;
+}
+
+[data-theme="dark"] .sidebar-header img{
+  background:#fff;
+  padding:3px 6px;
+  border-radius:4px;
+}
+
+.sidebar-brand{
+  font-size:15px;
+  font-weight:700;
+  letter-spacing:-.3px;
+}
+
+.sidebar-nav{
+  flex:1;
+  padding:12px 8px;
+  overflow-y:auto;
+}
+
+.sidebar-nav .tab-btn{
+  width:100%;
+  background:transparent;
+  border:none;
+  color:var(--text-secondary);
+  padding:8px 12px;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  white-space:nowrap;
+  border-radius:6px;
+  border-left:3px solid transparent;
+  margin-bottom:4px;
+  font-family:var(--font);
+  text-align:left;
+  position:relative;
+}
+
+.sidebar-nav .tab-btn svg{
+  width:16px;
+  height:16px;
+  flex-shrink:0;
+  stroke-width:2;
+  stroke:currentColor;
+  fill:none;
+}
+
+.sidebar-nav .tab-btn:hover{
+  background:var(--surface2);
+  color:var(--text);
+}
+
+.sidebar-nav .tab-btn.active{
+  color:var(--accent);
+  background:var(--blue-bg);
+  border-left-color:var(--accent);
+}
+
+.sidebar-nav .tab-badge{
+  background:var(--surface3);
+  color:var(--muted);
+  padding:1px 7px;
+  border-radius:10px;
+  font-size:10px;
+  font-weight:700;
+  min-width:20px;
+  text-align:center;
+  margin-left:auto;
+}
+
+.sidebar-nav .tab-btn.active .tab-badge{
+  background:var(--accent);
+  color:var(--bg);
+}
+
+.sidebar-footer{
+  padding:12px 12px 16px;
+  border-top:1px solid var(--border-subtle);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.conn-status{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:11px;
+  padding:4px 8px;
+  border-radius:6px;
+  font-weight:600;
+  color:var(--muted);
+  background:var(--surface2);
+  border:1px solid var(--border-subtle);
+  letter-spacing:.2px;
+}
+
+.conn-status.connected{
+  color:var(--green);
+  border-color:rgba(45,164,78,.3);
+  background:var(--green-bg);
+}
+
+.conn-status.disconnected{
+  color:var(--muted);
+  border-color:var(--border-subtle);
+}
+
+.theme-toggle{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--muted);
+  width:32px;
+  height:32px;
+  border-radius:6px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.theme-toggle:hover{
+  border-color:var(--border-hover);
+  color:var(--text);
+}
+
+/* ═══════ Main Content ═══════ */
+.main-content{
+  margin-left:220px;
+  min-height:100vh;
+  padding:24px 32px;
+  position:relative;
+  z-index:1;
+}
+
+/* ═══════ Toast ═══════ */
+.toast-container{
+  position:fixed;
+  top:16px;
+  right:16px;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.toast{
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:10px 16px;
+  border-radius:8px;
+  box-shadow:var(--shadow-lg);
+  font-size:12px;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  animation:toastIn 150ms ease;
+  max-width:340px;
+  border-left:3px solid var(--green);
+}
+
+.toast.error{border-left-color:var(--red)}
+
+@keyframes toastIn{
+  from{transform:translateX(100%);opacity:0}
+  to{transform:translateX(0);opacity:1}
+}
+
+@keyframes toastOut{
+  from{transform:translateX(0);opacity:1}
+  to{transform:translateX(100%);opacity:0}
+}
+
+/* ═══════ Input Area ═══════ */
+.input-area{
+  background:var(--surface);
+  border:1px solid var(--border-subtle);
+  border-radius:10px;
+  margin-bottom:24px;
+  overflow:hidden;
+}
+
+.input-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 16px;
+  cursor:pointer;
+  user-select:none;
+  transition:background 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.input-header:hover{background:var(--surface2)}
+
+.input-header h3{
+  font-size:11px;
+  color:var(--muted);
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+
+.input-header h3 svg{
+  width:14px;
+  height:14px;
+}
+
+.input-header .chevron{
+  transition:transform 150ms cubic-bezier(0.4,0,0.2,1);
+  font-size:10px;
+  color:var(--muted);
+}
+
+.input-header .chevron.open{transform:rotate(180deg)}
+
+.input-body{
+  padding:0 16px 16px;
+  display:none;
+}
+
+.input-body.open{display:block}
+
+.input-area label{
+  display:block;
+  color:var(--muted);
+  margin-bottom:6px;
+  font-size:12px;
+  font-weight:500;
+}
+
+.input-area textarea{
+  width:100%;
+  height:100px;
+  background:var(--bg);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 12px;
+  font-family:var(--font-mono);
+  font-size:12px;
+  resize:vertical;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.input-area textarea:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--blue-bg);
+}
+
+.input-area .actions{
+  display:flex;
+  gap:8px;
+  margin-top:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+/* ═══════ Buttons ═══════ */
+.btn{
+  background:var(--green);
+  color:#fff;
+  border:none;
+  padding:7px 14px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-family:var(--font);
+}
+
+.btn:hover{opacity:.9;transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+
+.btn.secondary{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.btn.secondary:hover{
+  border-color:var(--border-hover);
+  background:var(--surface3);
+}
+
+.btn.blue{background:var(--accent)}
+
+.btn:disabled{
+  opacity:.4;
+  cursor:not-allowed;
+  transform:none;
+}
+
+input[type=text],select{
+  background:var(--bg);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:7px 12px;
+  font-size:12px;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  font-family:var(--font);
+}
+
+input[type=text]{flex:1;min-width:180px}
+
+input[type=text]:focus,select:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--blue-bg);
+}
+
+select{min-width:140px;cursor:pointer}
+
+.divider{width:1px;height:24px;background:var(--border);margin:0 4px}
+
+/* ═══════ Mode Tabs (input area) ═══════ */
+.mode-tabs{
+  display:flex;
+  gap:0;
+  margin-bottom:10px;
+  border-bottom:1px solid var(--border-subtle);
+  padding-bottom:0;
+}
+
+.mode-tab{
+  padding:6px 14px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.mode-tab:hover{color:var(--text)}
+
+.mode-tab.active{
+  color:var(--text);
+  border-bottom-color:var(--accent);
+}
+
+.mode-content{display:none}
+.mode-content.active{display:block}
+
+/* ═══════ Stats Cards ═══════ */
+#sections{display:none}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:var(--surface);
+  border:1px solid var(--border-subtle);
+  border-radius:10px;
+  padding:18px 20px;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  position:relative;
+}
+
+.stat:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow);
+  transform:translateY(-1px);
+}
+
+.stat .label{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.6px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+
+.stat .value{
+  font-size:32px;
+  font-weight:700;
+  font-family:var(--font-mono);
+  letter-spacing:-.5px;
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+
+.stat .value.green{color:var(--green)}
+.stat .value.red{color:var(--red)}
+.stat .value.yellow{color:var(--yellow)}
+.stat .value.blue{color:var(--accent)}
+.stat .value.purple{color:var(--purple)}
+
+.stat .subtitle{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:6px;
+  font-weight:500;
+  letter-spacing:.2px;
+}
+
+/* ═══════ Tab Content ═══════ */
+.tab-content{
+  display:none;
+  padding-top:24px;
+  animation:fadeIn 150ms ease;
+}
+
+.tab-content.active{display:block}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(4px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ═══════ Overview Widgets ═══════ */
+.overview-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:16px;
+}
+
+.widget{
+  background:var(--surface);
+  border:1px solid var(--border-subtle);
+  border-radius:10px;
+  padding:18px 20px;
+}
+
+.widget h3{
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:14px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.widget h3 .count{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:0;
+  text-transform:none;
+}
+
+/* Mini PR cards (Overview top 5) */
+.mini-pr{
+  padding:9px 12px;
+  border-radius:8px;
+  background:var(--surface2);
+  margin-bottom:6px;
+  cursor:pointer;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  border:1px solid transparent;
+}
+
+.mini-pr:hover{
+  background:var(--surface3);
+  border-color:var(--border-subtle);
+}
+
+.mini-pr:last-child{margin-bottom:0}
+
+.mini-pr-header{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.mini-pr-title{
+  font-size:12px;
+  color:var(--text-secondary);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  flex:1;
+}
+
+.mini-pr-author{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:2px;
+  letter-spacing:.2px;
+}
+
+.mini-score{
+  display:inline-flex;
+  align-items:center;
+  font-weight:700;
+  font-size:11px;
+  padding:2px 7px;
+  border-radius:4px;
+  flex-shrink:0;
+  font-family:var(--font-mono);
+}
+
+/* Cluster Summary Widget */
+.cluster-summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.cluster-summary-item{
+  background:var(--surface2);
+  padding:14px;
+  border-radius:8px;
+  text-align:center;
+  border:1px solid var(--border-subtle);
+}
+
+.cluster-summary-item .num{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:-1px;
+  font-family:var(--font-mono);
+}
+
+.cluster-summary-item .num.red{color:var(--red)}
+.cluster-summary-item .num.orange{color:var(--orange)}
+
+.cluster-summary-item .label{
+  font-size:10px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  margin-top:3px;
+  font-weight:600;
+}
+
+.cluster-summary-sim{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:10px;
+  text-align:center;
+}
+
+.cluster-summary-link{
+  display:inline-block;
+  color:var(--accent);
+  text-decoration:none;
+  font-size:12px;
+  font-weight:600;
+  transition:opacity 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.cluster-summary-link:hover{opacity:.8}
+
+/* Score Distribution */
+.score-bar-item{margin-bottom:10px}
+.score-bar-item:last-child{margin-bottom:0}
+
+.score-bar-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:5px;
+  font-size:12px;
+}
+
+.score-bar-label{font-weight:600}
+.score-bar-label.high{color:var(--green)}
+.score-bar-label.medium{color:var(--yellow)}
+.score-bar-label.low{color:var(--red)}
+
+.score-bar-count{
+  color:var(--muted);
+  font-size:11px;
+  font-family:var(--font-mono);
+}
+
+.score-bar-track{
+  height:6px;
+  background:var(--surface3);
+  border-radius:3px;
+  overflow:hidden;
+}
+
+.score-bar-fill{
+  height:100%;
+  border-radius:3px;
+  transition:width 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.score-bar-fill.high{background:var(--green)}
+.score-bar-fill.medium{background:var(--yellow)}
+.score-bar-fill.low{background:var(--red)}
+
+/* ═══════ PR Toolbar ═══════ */
+.pr-toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.search-bar{
+  flex:1;
+  min-width:260px;
+  background:var(--surface);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px 8px 34px;
+  font-size:12px;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  font-family:var(--font);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b949e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:12px center;
+}
+
+.search-bar:focus{
+  outline:none;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--blue-bg);
+}
+
+.search-bar::placeholder{color:var(--muted)}
+
+/* ═══════ Table (GitHub Issues Style) ═══════ */
+.table-wrap{
+  border-radius:10px;
+  border:1px solid var(--border-subtle);
+  overflow:auto;
+  margin-bottom:12px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--surface);
+}
+
+th,td{
+  padding:8px 12px;
+  text-align:left;
+  font-size:12px;
+  white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+
+th{
+  background:var(--surface);
+  color:var(--muted);
+  font-weight:600;
+  cursor:pointer;
+  user-select:none;
+  position:sticky;
+  top:0;
+  z-index:2;
+  text-transform:uppercase;
+  font-size:10px;
+  letter-spacing:.5px;
+  border-bottom:1px solid var(--border-subtle);
+}
+
+th:hover{color:var(--text-secondary)}
+
+th.sorted{color:var(--accent)}
+
+th .arrow{
+  margin-left:3px;
+  font-size:9px;
+  opacity:.4;
+}
+
+th.sorted .arrow{
+  opacity:1;
+  color:var(--accent);
+}
+
+td{border-bottom:1px solid var(--border-subtle)}
+
+tbody tr{
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  border-left:3px solid transparent;
+}
+
+tbody tr:hover{
+  background:var(--blue-bg);
+  border-left-color:var(--accent);
+}
+
+tbody tr:last-child td{border-bottom:none}
+
+/* Score pill - circle dot + number */
+.score-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:700;
+  font-size:12px;
+  font-family:var(--font-mono);
+}
+
+.score-pill .bar{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.score-pill .num{min-width:20px}
+
+/* Risk pill */
+.risk-pill{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:4px;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.3px;
+}
+
+.risk-low{background:var(--green-bg);color:var(--green)}
+.risk-medium{background:var(--yellow-bg);color:var(--yellow)}
+.risk-high{background:var(--red-bg);color:var(--red)}
+
+/* Badges */
+.badge-pill{
+  display:inline-block;
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.badge-draft{background:var(--yellow-bg);color:var(--yellow)}
+.badge-open{background:var(--green-bg);color:var(--green)}
+
+/* Group badge (cluster indicator in PR table) */
+.group-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:2px 7px;
+  border-radius:4px;
+  font-size:10px;
+  font-weight:700;
+  cursor:pointer;
+  transition:opacity 150ms cubic-bezier(0.4,0,0.2,1);
+  letter-spacing:.2px;
+}
+
+.group-badge.dup{background:var(--red-bg);color:var(--red)}
+.group-badge.rel{background:var(--orange-bg);color:var(--orange)}
+.group-badge:hover{opacity:.8}
+
+/* Spam / No-spam */
+.spam{color:var(--red);font-weight:600;font-size:11px}
+.no-spam{color:var(--green);font-weight:500;font-size:11px}
+
+/* PR link */
+.pr-link{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:600;
+  font-size:12px;
+  transition:opacity 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.pr-link:hover{
+  opacity:.8;
+  text-decoration:underline;
+}
+
+/* ═══════ Pagination ═══════ */
+.pagination{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:12px;
+}
+
+.page-btn{
+  background:var(--surface);
+  border:1px solid var(--border);
+  color:var(--text-secondary);
+  padding:5px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:600;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+  font-family:var(--font);
+}
+
+.page-btn:hover:not(:disabled){
+  border-color:var(--border-hover);
+  background:var(--surface2);
+}
+
+.page-btn:disabled{
+  opacity:.3;
+  cursor:not-allowed;
+}
+
+.page-info{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:500;
+  font-family:var(--font-mono);
+}
+
+/* ═══════ Cluster Toolbar ═══════ */
+.cluster-toolbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:16px;
+  flex-wrap:wrap;
+}
+
+/* Cluster Section Headers */
+.cluster-section-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+  margin-top:28px;
+}
+
+.cluster-section-header:first-child{margin-top:0}
+
+.cluster-section-header h3{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:-.2px;
+}
+
+.cluster-section-header .badge{
+  background:var(--surface2);
+  border:1px solid var(--border-subtle);
+  padding:2px 10px;
+  border-radius:10px;
+  font-size:11px;
+  color:var(--muted);
+  font-weight:600;
+  font-family:var(--font-mono);
+}
+
+/* ═══════ Cluster Cards ═══════ */
+.cluster{
+  background:var(--surface);
+  border:1px solid var(--border-subtle);
+  border-top:3px solid var(--border);
+  border-radius:10px;
+  padding:16px 18px;
+  margin-bottom:10px;
+  transition:all 150ms cubic-bezier(0.4,0,0.2,1);
+}
+
+.cluster:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow);
+}
+
+.cluster.dup{border-top-color:var(--red)}
+.cluster.rel{border-top-color:var(--orange)}
+
+.cluster.highlighted{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--blue-bg);
+}
+
+.cluster-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+
+.cluster-head h3{
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:-.2px;
+}
+
+.cluster-type-badge{
+  display:inline-block;
+  padding:2px 8px;
+  border-radius:4px;
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.cluster-type-badge.dup{background:var(--red-bg);color:var(--red)}
+.cluster-type-badge.rel{background:var(--orange-bg);color:var(--orange)}
+
+.cluster .sim{
+  background:var(--surface3);
+  color:var(--muted);
+  padding:2px 8px;
+  border-radius:4px;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.2px;
+  font-family:var(--font-mono);
+}
+
+.cluster ul{list-style:none;padding:0}
+
+.cluster li{
+  padding:7px 10px;
+  font-size:12px;
+  border-radius:6px;
+  transition:background 150ms cubic-bezier(0.4,0,0.2,1);
+  display:flex;
+  align-items:center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.cluster li:hover{background:var(--surface2)}
+
+.cluster li .best{color:var(--green);font-size:14px}
+
+.cluster li .pr-num{
+  color:var(--accent);
+  font-weight:700;
+  min-width:36px;
+  font-size:12px;
+  font-family:var(--font-mono);
+}
+
+.cluster li .pr-score{
+  font-size:10px;
+  padding:1px 6px;
+  border-radius:4px;
+  font-weight:700;
+  font-family:var(--font-mono);
+}
+
+.cluster li .connector{
+  width:16px;
+  height:1px;
+  background:var(--border);
+  flex-shrink:0;
+}
+
+.cluster li .pr-repo{
+  font-size:10px;
+  color:var(--muted);
+  background:var(--surface3);
+  padding:1px 5px;
+  border-radius:3px;
+  font-weight:600;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:40px;
+  font-size:13px;
+}
+
+/* Spinner */
+.spinner{
+  display:inline-block;
+  width:14px;
+  height:14px;
+  border:2px solid var(--border);
+  border-top-color:var(--accent);
+  border-radius:50%;
+  animation:spin .6s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+/* ═══════ Responsive ═══════ */
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .overview-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:768px){
+  .mobile-bar{display:flex}
+
+  .sidebar{
+    transform:translateX(-100%);
+    box-shadow:var(--shadow-lg);
+  }
+
+  .sidebar-open .sidebar{transform:translateX(0)}
+
+  .sidebar-open .sidebar-overlay{
+    display:block;
+    opacity:1;
+    pointer-events:all;
+  }
+
+  .main-content{
+    margin-left:0;
+    padding:72px 16px 16px;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .stat{padding:12px 14px}
+  .stat .value{font-size:24px}
+
+  .overview-grid{grid-template-columns:1fr}
+
+  .table-wrap{font-size:11px}
+  th,td{padding:6px 8px}
+
+  .input-area .actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  input[type=text]{
+    min-width:unset;
+    width:100%;
+  }
+
+  .search-bar{
+    min-width:unset;
+    width:100%;
+  }
+
+  .pr-toolbar{flex-direction:column}
+
+  .pagination{
+    flex-wrap:wrap;
+    gap:6px;
+  }
+}
+
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr}
+  .stat .value{font-size:28px}
+}
+</style>
+</head>
+<body>
+  <!-- Mobile top bar (hidden on desktop) -->
+  <div class="mobile-bar">
+    <button class="sidebar-toggle" onclick="document.body.classList.toggle('sidebar-open')">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <span class="mobile-title">Treliq</span>
+  </div>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" onclick="document.body.classList.remove('sidebar-open')"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="logo.png" alt="Treliq" onerror="this.style.display='none'">
+      <span class="sidebar-brand">Treliq</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="tab-btn active" onclick="switchTab('overview')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Overview
+      </button>
+      <button class="tab-btn" onclick="switchTab('prs')">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Pull Requests
+        <span class="tab-badge" id="prTabBadge">0</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('clusters')">
+        <svg viewBox="0 0 24 24"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg>
+        Clusters
+        <span class="tab-badge" id="clusterTabBadge">0</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="conn-status disconnected" id="connStatus">Offline</span>
+      <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Input Area (collapsible) -->
+    <div class="input-area">
+      <div class="input-header" onclick="toggleInput()">
+        <h3>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Load Scan Results
+          <span class="chevron" id="inputChevron">&#9660;</span>
+        </h3>
+      </div>
+      <div class="input-body" id="inputBody">
+        <div class="mode-tabs">
+          <div class="mode-tab active" onclick="switchMode('json')" data-mode="json">JSON / URL</div>
+          <div class="mode-tab" onclick="switchMode('api')" data-mode="api">Server API</div>
+        </div>
+
+        <div class="mode-content active" id="mode-json">
+          <div class="actions" style="margin-top:10px;margin-bottom:10px">
+            <input type="text" id="urlInput" placeholder="URL to JSON (e.g. demo.json)">
+            <button class="btn" onclick="loadFromUrl()">Load URL</button>
+            <button class="btn secondary" onclick="loadDemo()">Demo</button>
+          </div>
+          <textarea id="jsonInput" placeholder='Paste treliq scan JSON here...'></textarea>
+          <div class="actions"><button class="btn" onclick="loadFromText()">Parse JSON</button></div>
+        </div>
+
+        <div class="mode-content" id="mode-api">
+          <div class="actions" style="margin-top:10px;margin-bottom:10px">
+            <input type="text" id="serverUrl" placeholder="Server URL (e.g. http://localhost:3000)" value="">
+            <button class="btn blue" onclick="connectToServer()" id="connectBtn">Connect</button>
+          </div>
+          <div id="apiControls" style="display:none">
+            <div class="actions" style="margin-top:0">
+              <select id="repoSelect" onchange="loadRepoPRs()">
+                <option value="">Select repository...</option>
+              </select>
+              <button class="btn" onclick="triggerScan()" id="scanBtn">Scan Now</button>
+              <span style="font-size:11px;color:var(--muted)" id="lastScanTime"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="sections">
+      <!-- Stats Cards -->
+      <div class="stats">
+        <div class="stat">
+          <div class="label">Total PRs</div>
+          <div class="value blue" id="totalPRs">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Spam</div>
+          <div class="value red" id="spamCount">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Clusters</div>
+          <div class="value yellow" id="clusterCount">0</div>
+          <div class="subtitle" id="clusterSubtitle">0 Dup &middot; 0 Rel</div>
+        </div>
+        <div class="stat">
+          <div class="label">Avg Score</div>
+          <div class="value green" id="avgScore">0</div>
+        </div>
+        <div class="stat">
+          <div class="label">Drafts</div>
+          <div class="value purple" id="draftCount">0</div>
+        </div>
+      </div>
+
+      <!-- OVERVIEW TAB -->
+      <div class="tab-content active" id="tab-overview">
+        <div class="overview-grid">
+          <div class="widget">
+            <h3>Top PRs <span class="count">(by score)</span></h3>
+            <div id="topPRs"></div>
+          </div>
+          <div class="widget">
+            <h3>Cluster Summary</h3>
+            <div id="clusterSummary"></div>
+          </div>
+        </div>
+        <div class="widget">
+          <h3>Score Distribution</h3>
+          <div id="scoreDist"></div>
+        </div>
+      </div>
+
+      <!-- PRs TAB -->
+      <div class="tab-content" id="tab-prs">
+        <div class="pr-toolbar">
+          <input type="text" class="search-bar" id="prSearch" placeholder="Search by title, author, #number..." oninput="onSearchChange()">
+          <select id="prRepoFilter" onchange="onSearchChange()">
+            <option value="">All Repos</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table id="prTable">
+            <thead><tr>
+              <th data-col="repo">Repo <span class="arrow"></span></th>
+              <th data-col="number"># <span class="arrow"></span></th>
+              <th data-col="totalScore">Score <span class="arrow"></span></th>
+              <th data-col="title">Title <span class="arrow"></span></th>
+              <th data-col="author">Author <span class="arrow"></span></th>
+              <th data-col="isDraft">Draft <span class="arrow"></span></th>
+              <th data-col="filesChanged">Files <span class="arrow"></span></th>
+              <th data-col="isSpam">Spam <span class="arrow"></span></th>
+              <th data-col="ageInDays">Age <span class="arrow"></span></th>
+              <th data-col="mergeable">Conflict <span class="arrow"></span></th>
+              <th data-col="milestone">Milestone <span class="arrow"></span></th>
+              <th data-col="requestedReviewers">Reviewers <span class="arrow"></span></th>
+              <th data-col="llmRisk">LLM Risk <span class="arrow"></span></th>
+              <th data-col="visionScore">Vision <span class="arrow"></span></th>
+              <th data-col="group">Group <span class="arrow"></span></th>
+            </tr></thead>
+            <tbody id="prBody"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+
+      <!-- CLUSTERS TAB -->
+      <div class="tab-content" id="tab-clusters">
+        <div class="cluster-toolbar">
+          <select id="clusterTypeFilter" onchange="renderClusters()">
+            <option value="">All Types</option>
+            <option value="duplicate">Duplicates Only</option>
+            <option value="related">Related Only</option>
+          </select>
+          <select id="clusterRepoFilter" onchange="renderClusters()">
+            <option value="">All Repos</option>
+          </select>
+        </div>
+        <div id="clustersContent"></div>
+      </div>
+    </div>
+  </main>
+
+<script>
+// ========== HTML Escaping Utility ==========
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+// ========== Global State ==========
+let data=null;
+let sortCol='totalScore',sortAsc=false;
+let inputOpen=true;
+let activeTab='overview';
+let currentPage=1;
+const PAGE_SIZE=25;
+let searchQuery='';
+let prRepoFilter='';
+let apiBaseUrl=null,eventSource=null,currentRepo=null;
+let allPRs=[];
+let clusterMap=new Map(); // Map<prNumber, {clusterId, type}>
+
+// ========== Theme ==========
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.dataset.theme==='dark'?'light':'dark';
+  html.dataset.theme=next;
+  const btn=document.querySelector('.theme-toggle');
+  btn.innerHTML=next==='dark'
+    ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+    :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  localStorage.setItem('treliq-theme',next);
+}
+(function(){
+  const saved=localStorage.getItem('treliq-theme');
+  if(saved){
+    document.documentElement.dataset.theme=saved;
+    const btn=document.querySelector('.theme-toggle');
+    btn.innerHTML=saved==='dark'
+      ?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>'
+      :'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+  }
+})();
+
+// ========== Toast Notifications ==========
+function showToast(msg, type='success'){
+  const container=document.getElementById('toastContainer');
+  const el=document.createElement('div');
+  el.className='toast'+(type==='error'?' error':'');
+  el.textContent=msg;
+  container.appendChild(el);
+  setTimeout(()=>{el.style.animation='toastOut .25s ease forwards';setTimeout(()=>el.remove(),250);},4000);
+}
+
+// ========== Input Toggle ==========
+function toggleInput(){
+  inputOpen=!inputOpen;
+  document.getElementById('inputBody').classList.toggle('open',inputOpen);
+  document.getElementById('inputChevron').classList.toggle('open',inputOpen);
+}
+document.getElementById('inputBody').classList.add('open');
+document.getElementById('inputChevron').classList.add('open');
+
+function collapseInput(){
+  inputOpen=false;
+  document.getElementById('inputBody').classList.remove('open');
+  document.getElementById('inputChevron').classList.remove('open');
+}
+
+// ========== Mode Tabs ==========
+function switchMode(mode){
+  document.querySelectorAll('.mode-tab').forEach(t=>t.classList.toggle('active',t.dataset.mode===mode));
+  document.querySelectorAll('.mode-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('mode-'+mode).classList.add('active');
+}
+
+// ========== Main Tab Navigation ==========
+function switchTab(tab){
+  activeTab=tab;
+  // Update tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.onclick.toString().includes(`'${tab}'`));
+  });
+  // Update tab content
+  document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+
+  // Render content for active tab
+  if(tab==='overview')renderOverview();
+  else if(tab==='prs')renderPRTable();
+  else if(tab==='clusters')renderClusters();
+
+  // Scroll to top
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ========== Cluster Classification ==========
+function classifyCluster(cluster){
+  return cluster.similarity>=0.90?'duplicate':'related';
+}
+
+// ========== Build Cluster Map ==========
+function buildClusterMap(){
+  clusterMap.clear();
+  if(!data||!data.duplicateClusters)return;
+  data.duplicateClusters.forEach(cluster=>{
+    const type=classifyCluster(cluster);
+    cluster.prs.forEach(pr=>{
+      clusterMap.set(pr.number,{clusterId:cluster.id,type:type});
+    });
+  });
+}
+
+// ========== Filter PRs (search + repo) ==========
+function filterPRs(prs){
+  let filtered=[...prs];
+  // Repo filter
+  if(prRepoFilter){
+    filtered=filtered.filter(p=>(p._repo||data.repo||'')===prRepoFilter);
+  }
+  // Search filter
+  if(searchQuery){
+    const q=searchQuery.toLowerCase();
+    filtered=filtered.filter(p=>{
+      const title=(p.title||'').toLowerCase();
+      const author=(p.author||'').toLowerCase();
+      const num=String(p.number||'');
+      return title.includes(q)||author.includes(q)||num.includes(q);
+    });
+  }
+  return filtered;
+}
+
+function onSearchChange(){
+  searchQuery=document.getElementById('prSearch').value.trim();
+  prRepoFilter=document.getElementById('prRepoFilter').value;
+  currentPage=1;
+  renderPRTable();
+}
+
+// ========== Pagination ==========
+function goToPage(page){
+  currentPage=page;
+  renderPRTable();
+}
+
+function renderPagination(total){
+  const totalPages=Math.ceil(total/PAGE_SIZE);
+  const pag=document.getElementById('pagination');
+  if(totalPages<=1){pag.style.display='none';return;}
+  pag.style.display='flex';
+
+  const prevDisabled=currentPage<=1;
+  const nextDisabled=currentPage>=totalPages;
+
+  pag.innerHTML=`
+    <button class="page-btn" onclick="goToPage(${currentPage-1})" ${prevDisabled?'disabled':''}>Prev</button>
+    <span class="page-info">${currentPage} / ${totalPages}</span>
+    <button class="page-btn" onclick="goToPage(${currentPage+1})" ${nextDisabled?'disabled':''}>Next</button>
+  `;
+}
+
+// ========== Helpers ==========
+function getLLMRisk(score){
+  if(score==null) return {level:'N/A',cls:''};
+  if(score>=70) return {level:'Low',cls:'risk-low'};
+  if(score>=40) return {level:'Med',cls:'risk-medium'};
+  return {level:'High',cls:'risk-high'};
+}
+
+// ========== OVERVIEW TAB RENDERING ==========
+function renderOverview(){
+  if(!data)return;
+  const prs=allPRs;
+
+  // Top 5 PRs
+  const top5=prs.slice(0,5);
+  const topPRsEl=document.getElementById('topPRs');
+  if(top5.length===0){
+    topPRsEl.innerHTML='<div class="empty" style="padding:24px">No PRs yet</div>';
+  }else{
+    topPRsEl.innerHTML=top5.map(pr=>{
+      const c=pr.totalScore>=70?'var(--green)':pr.totalScore>=40?'var(--yellow)':'var(--red)';
+      const bg=pr.totalScore>=70?'var(--green-bg)':pr.totalScore>=40?'var(--yellow-bg)':'var(--red-bg)';
+      return `<div class="mini-pr" onclick="goToPR(${pr.number})">
+        <div class="mini-pr-header">
+          <span class="mini-score" style="background:${bg};color:${c}">${pr.totalScore}</span>
+          <span class="mini-pr-title">${escapeHtml((pr.title||'').slice(0,50))}</span>
+        </div>
+        <div class="mini-pr-author">@${escapeHtml(pr.author||'')} &middot; #${pr.number}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Cluster Summary
+  const clusters=data.duplicateClusters||[];
+  const dupClusters=clusters.filter(c=>classifyCluster(c)==='duplicate');
+  const relClusters=clusters.filter(c=>classifyCluster(c)==='related');
+  const maxSim=clusters.length>0?Math.max(...clusters.map(c=>c.similarity)):0;
+
+  const clusterSummaryEl=document.getElementById('clusterSummary');
+  if(clusters.length===0){
+    clusterSummaryEl.innerHTML='<div class="empty" style="padding:24px;font-size:12px">No clusters found.<br><span style="font-size:11px;color:var(--muted)">Requires LLM API key for embeddings</span></div>';
+  }else{
+    clusterSummaryEl.innerHTML=`
+      <div class="cluster-summary-grid">
+        <div class="cluster-summary-item">
+          <div class="num red">${dupClusters.length}</div>
+          <div class="label">Duplicates</div>
+        </div>
+        <div class="cluster-summary-item">
+          <div class="num orange">${relClusters.length}</div>
+          <div class="label">Related</div>
+        </div>
+      </div>
+      <div class="cluster-summary-sim">Highest similarity: <strong>${(maxSim*100).toFixed(1)}%</strong></div>
+      <div style="text-align:center">
+        <a href="javascript:void(0)" class="cluster-summary-link" onclick="switchTab('clusters')">View All &rarr;</a>
+      </div>
+    `;
+  }
+
+  // Score Distribution
+  const high=prs.filter(p=>p.totalScore>=70).length;
+  const medium=prs.filter(p=>p.totalScore>=40&&p.totalScore<70).length;
+  const low=prs.filter(p=>p.totalScore<40).length;
+  const total=prs.length||1;
+
+  const scoreDistEl=document.getElementById('scoreDist');
+  scoreDistEl.innerHTML=`
+    <div class="score-bar-item">
+      <div class="score-bar-header">
+        <span class="score-bar-label high">High (70+)</span>
+        <span class="score-bar-count">${high} PRs</span>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill high" style="width:${(high/total*100)}%"></div>
+      </div>
+    </div>
+    <div class="score-bar-item">
+      <div class="score-bar-header">
+        <span class="score-bar-label medium">Medium (40-69)</span>
+        <span class="score-bar-count">${medium} PRs</span>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill medium" style="width:${(medium/total*100)}%"></div>
+      </div>
+    </div>
+    <div class="score-bar-item">
+      <div class="score-bar-header">
+        <span class="score-bar-label low">Low (&lt;40)</span>
+        <span class="score-bar-count">${low} PRs</span>
+      </div>
+      <div class="score-bar-track">
+        <div class="score-bar-fill low" style="width:${(low/total*100)}%"></div>
+      </div>
+    </div>
+  `;
+}
+
+function goToPR(prNumber){
+  switchTab('prs');
+  // Optionally scroll to PR row
+  setTimeout(()=>{
+    const rows=document.querySelectorAll('#prBody tr');
+    rows.forEach(row=>{
+      if(row.innerHTML.includes(`#${prNumber}`)){
+        row.scrollIntoView({behavior:'smooth',block:'center'});
+        row.style.background='var(--blue-bg)';
+        setTimeout(()=>row.style.background='',2000);
+      }
+    });
+  },100);
+}
+
+// ========== PR TABLE RENDERING ==========
+function renderPRTable(){
+  if(!data)return;
+  const prs=allPRs;
+  const filtered=filterPRs(prs);
+
+  // Update repo filter dropdown
+  const repos=[...new Set(prs.map(p=>p._repo||data.repo||''))].filter(Boolean);
+  const repoSelect=document.getElementById('prRepoFilter');
+  if(repos.length>1){
+    repoSelect.style.display='';
+    const current=repoSelect.value;
+    repoSelect.innerHTML='<option value="">All Repos ('+prs.length+')</option>';
+    repos.forEach(r=>{
+      const count=prs.filter(p=>(p._repo||data.repo||'')===r).length;
+      const opt=document.createElement('option');
+      opt.value=r;opt.textContent=escapeHtml(r)+' ('+count+')';
+      repoSelect.appendChild(opt);
+    });
+    repoSelect.value=current;
+  }else{
+    repoSelect.style.display='none';
+  }
+
+  // Sort
+  const sorted=[...filtered].sort((a,b)=>{
+    let va=a[sortCol],vb=b[sortCol];
+    if(typeof va==='string')va=va.toLowerCase();
+    if(typeof vb==='string')vb=vb.toLowerCase();
+    if(va==null)va=sortAsc?Infinity:-Infinity;
+    if(vb==null)vb=sortAsc?Infinity:-Infinity;
+    return sortAsc?(va>vb?1:-1):(va<vb?1:-1);
+  });
+
+  // Paginate
+  const start=(currentPage-1)*PAGE_SIZE;
+  const paginated=sorted.slice(start,start+PAGE_SIZE);
+
+  // Update sort indicators
+  document.querySelectorAll('#prTable th').forEach(th=>{
+    const col=th.dataset.col;
+    th.classList.toggle('sorted',col===sortCol);
+    th.querySelector('.arrow').textContent=col===sortCol?(sortAsc?'\u25B2':'\u25BC'):'';
+  });
+
+  // Render rows
+  const fallbackRepo=data.repo||(data.repos&&data.repos[0])||'';
+  const tbody=document.getElementById('prBody');
+  tbody.innerHTML=paginated.map(pr=>{
+    const repo=pr._repo||fallbackRepo;
+    const repoShort=repo.split('/').pop()||repo;
+    const c=pr.totalScore>=70?'var(--green)':pr.totalScore>=40?'var(--yellow)':'var(--red)';
+    const risk=getLLMRisk(pr.llmScore);
+    const reviewerCount=typeof pr.requestedReviewers==='number'?pr.requestedReviewers:(Array.isArray(pr.requestedReviewers)?pr.requestedReviewers.length:0);
+
+    // Group column (cluster badge)
+    let groupHtml='\u2014';
+    if(clusterMap.has(pr.number)){
+      const g=clusterMap.get(pr.number);
+      const label=g.type==='duplicate'?'D#'+g.clusterId:'R#'+g.clusterId;
+      const cls=g.type==='duplicate'?'dup':'rel';
+      groupHtml=`<span class="group-badge ${cls}" onclick="goToCluster(${g.clusterId})" title="Click to view cluster">${label}</span>`;
+    }
+
+    return `<tr>
+      <td style="color:var(--muted);font-size:10px" title="${escapeHtml(repo)}">${escapeHtml(repoShort)}</td>
+      <td><a class="pr-link" href="https://github.com/${escapeHtml(repo)}/pull/${pr.number}" target="_blank">#${pr.number}</a></td>
+      <td><span class="score-pill"><span class="bar" style="background:${c};width:${Math.max(pr.totalScore*.4,3)}px"></span><span class="num">${pr.totalScore}</span></span></td>
+      <td title="${escapeHtml(pr.title||'')}" style="max-width:300px;overflow:hidden;text-overflow:ellipsis">${escapeHtml((pr.title||'').slice(0,60))}</td>
+      <td style="color:var(--muted);font-size:11px">@${escapeHtml(pr.author||'')}</td>
+      <td>${pr.isDraft?'<span class="badge-pill badge-draft">Draft</span>':''}</td>
+      <td>${pr.filesChanged||0}</td>
+      <td>${pr.isSpam?'<span class="spam">Spam</span>':'<span class="no-spam">\u2713</span>'}</td>
+      <td>${pr.ageInDays!=null?pr.ageInDays+'d':'\u2014'}</td>
+      <td>${pr.mergeable==='conflicting'?'<span class="spam">Conflict</span>':(pr.mergeable==='mergeable'?'<span class="no-spam">\u2713</span>':'<span style="color:var(--muted);font-size:10px" title="GitHub pending">\u23F3</span>')}</td>
+      <td style="color:var(--muted);font-size:11px">${escapeHtml(pr.milestone||'\u2014')}</td>
+      <td>${reviewerCount>0?'<span style="color:var(--blue);font-weight:600">'+reviewerCount+'</span>':'\u2014'}</td>
+      <td>${risk.cls?`<span class="risk-pill ${risk.cls}">${risk.level}</span>`:risk.level}</td>
+      <td>${pr.visionAlignment==='unchecked'?'N/A':(pr.visionScore!=null?pr.visionScore:'\u2014')}</td>
+      <td>${groupHtml}</td>
+    </tr>`;
+  }).join('');
+
+  renderPagination(filtered.length);
+}
+
+function goToCluster(clusterId){
+  switchTab('clusters');
+  setTimeout(()=>{
+    const clusterEls=document.querySelectorAll('.cluster');
+    clusterEls.forEach(el=>{
+      if(el.dataset.clusterId==clusterId){
+        el.scrollIntoView({behavior:'smooth',block:'center'});
+        el.classList.add('highlighted');
+        setTimeout(()=>el.classList.remove('highlighted'),3000);
+      }
+    });
+  },100);
+}
+
+// ========== CLUSTERS TAB RENDERING ==========
+function renderClusters(){
+  if(!data)return;
+  const clusters=data.duplicateClusters||[];
+  if(clusters.length===0){
+    document.getElementById('clustersContent').innerHTML='<div class="empty">No duplicate clusters found.<br><span style="font-size:11px;color:var(--muted)">Dedup requires embeddings. If using Anthropic/OpenRouter, set GEMINI_API_KEY or OPENAI_API_KEY for auto-fallback.<br>Example: <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:11px">--provider openrouter --model anthropic/claude-sonnet-4.5</code></span></div>';
+    return;
+  }
+
+  // Update repo filter
+  const allRepos=[...new Set(allPRs.map(p=>p._repo||data.repo||''))].filter(Boolean);
+  const repoSelect=document.getElementById('clusterRepoFilter');
+  if(allRepos.length>1){
+    repoSelect.style.display='';
+    const current=repoSelect.value;
+    repoSelect.innerHTML='<option value="">All Repos</option>';
+    allRepos.forEach(r=>{
+      const opt=document.createElement('option');
+      opt.value=r;opt.textContent=escapeHtml(r);
+      repoSelect.appendChild(opt);
+    });
+    repoSelect.value=current;
+  }else{
+    repoSelect.style.display='none';
+  }
+
+  // Filter by type and repo
+  const typeFilter=document.getElementById('clusterTypeFilter').value;
+  const repoFilter=document.getElementById('clusterRepoFilter').value;
+
+  let filtered=[...clusters];
+  if(typeFilter){
+    filtered=filtered.filter(c=>classifyCluster(c)===typeFilter);
+  }
+  if(repoFilter){
+    filtered=filtered.filter(c=>{
+      return c.prs.some(pr=>(pr._repo||data.repo||'')===repoFilter);
+    });
+  }
+
+  // Separate by type
+  const dupClusters=filtered.filter(c=>classifyCluster(c)==='duplicate');
+  const relClusters=filtered.filter(c=>classifyCluster(c)==='related');
+
+  const fallbackRepo=data.repo||(data.repos&&data.repos[0])||'';
+
+  function renderClusterCards(clusterList,type){
+    return clusterList.map(c=>`<div class="cluster ${type}" data-cluster-id="${c.id}">
+      <div class="cluster-head">
+        <h3>Cluster ${c.id}</h3>
+        <span class="cluster-type-badge ${type}">${type==='dup'?'Duplicate':'Related'}</span>
+        <span class="sim">${(c.similarity*100).toFixed(1)}%</span>
+      </div>
+      <ul>${c.prs.map(p=>{
+        const sc=p.totalScore>=70?'var(--green)':p.totalScore>=40?'var(--yellow)':'var(--red)';
+        const repo=p._repo||fallbackRepo;
+        return `<li>
+          ${p.number===c.bestPR?'<span class="best">\u2605</span>':'<span style="width:14px;display:inline-block"></span>'}
+          <span class="connector"></span>
+          <span class="pr-num">#${p.number}</span>
+          <span class="pr-score" style="background:${p.totalScore>=70?'var(--green-bg)':p.totalScore>=40?'var(--yellow-bg)':'var(--red-bg)'};color:${sc}">${p.totalScore}</span>
+          ${allRepos.length>1?`<span class="pr-repo">${escapeHtml(repo)}</span>`:''}
+          <span style="color:var(--text-secondary);font-size:12px">${escapeHtml((p.title||'').slice(0,55))}</span>
+        </li>`;
+      }).join('')}</ul>
+    </div>`).join('');
+  }
+
+  let html='';
+  if(dupClusters.length>0){
+    html+=`<div class="cluster-section-header">
+      <h3>Duplicates</h3>
+      <span class="badge">${dupClusters.length}</span>
+    </div>
+    ${renderClusterCards(dupClusters,'dup')}`;
+  }
+  if(relClusters.length>0){
+    html+=`<div class="cluster-section-header">
+      <h3>Related</h3>
+      <span class="badge">${relClusters.length}</span>
+    </div>
+    ${renderClusterCards(relClusters,'rel')}`;
+  }
+  if(filtered.length===0){
+    html='<div class="empty">No clusters match the selected filters</div>';
+  }
+
+  document.getElementById('clustersContent').innerHTML=html;
+}
+
+// ========== MAIN RENDER ==========
+function render(){
+  if(!data)return;
+  document.getElementById('sections').style.display='block';
+
+  // Ensure _repo field
+  const rawPRs=data.rankedPRs||[];
+  const defaultRepo=data.repo||(data.repos&&data.repos[0])||'';
+  rawPRs.forEach(p=>{if(!p._repo) p._repo=defaultRepo;});
+  allPRs=rawPRs;
+
+  // Build cluster map
+  buildClusterMap();
+
+  // Update stats
+  const prs=allPRs;
+  document.getElementById('totalPRs').textContent=prs.length;
+  document.getElementById('spamCount').textContent=prs.filter(p=>p.isSpam).length;
+
+  const clusters=data.duplicateClusters||[];
+  const dupCount=clusters.filter(c=>classifyCluster(c)==='duplicate').length;
+  const relCount=clusters.filter(c=>classifyCluster(c)==='related').length;
+  document.getElementById('clusterCount').textContent=clusters.length;
+  document.getElementById('clusterSubtitle').textContent=`${dupCount} Dup \u00B7 ${relCount} Rel`;
+
+  const avg=prs.length?Math.round(prs.reduce((s,p)=>s+p.totalScore,0)/prs.length):0;
+  document.getElementById('avgScore').textContent=avg;
+  const draftCount=prs.filter(p=>p.isDraft).length;
+  document.getElementById('draftCount').textContent=draftCount;
+
+  // Update tab badges
+  document.getElementById('prTabBadge').textContent=prs.length;
+  document.getElementById('clusterTabBadge').textContent=clusters.length;
+
+  // Render active tab only
+  if(activeTab==='overview')renderOverview();
+  else if(activeTab==='prs')renderPRTable();
+  else if(activeTab==='clusters')renderClusters();
+}
+
+// ========== Table Sort ==========
+document.querySelectorAll('#prTable th').forEach(th=>{
+  th.addEventListener('click',()=>{
+    const col=th.dataset.col;
+    if(!col)return;
+    if(sortCol===col)sortAsc=!sortAsc;else{sortCol=col;sortAsc=false;}
+    renderPRTable();
+  });
+});
+
+// ========== JSON/URL Load ==========
+function loadFromText(){
+  try{data=JSON.parse(document.getElementById('jsonInput').value);render();collapseInput();}
+  catch(e){alert('Invalid JSON: '+e.message);}
+}
+
+async function loadFromUrl(){
+  const url=document.getElementById('urlInput').value.trim();
+  if(!url)return;
+  try{const r=await fetch(url);data=await r.json();render();collapseInput();}
+  catch(e){alert('Failed to load: '+e.message);}
+}
+
+function loadDemo(){
+  document.getElementById('urlInput').value='demo.json';
+  loadFromUrl();
+}
+
+// ========== Server API Mode ==========
+async function connectToServer(){
+  let url=document.getElementById('serverUrl').value.trim();
+  if(!url) url=window.location.origin;
+  url=url.replace(/\/$/,'');
+
+  const btn=document.getElementById('connectBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Connecting...';
+
+  try{
+    const r=await fetch(url+'/health');
+    if(!r.ok) throw new Error('Server not reachable');
+    const h=await r.json();
+    apiBaseUrl=url;
+    updateConnStatus(true);
+    showToast('Connected to server');
+
+    // Load repos
+    const reposR=await fetch(url+'/api/repos');
+    const reposData=await reposR.json();
+    const select=document.getElementById('repoSelect');
+    select.innerHTML='<option value="">Select repository...</option>';
+    (reposData.repos||[]).forEach(repo=>{
+      const opt=document.createElement('option');
+      const repoFullName=`${repo.owner}/${repo.name}`;
+      opt.value=repoFullName;
+      opt.textContent=escapeHtml(repoFullName);
+      select.appendChild(opt);
+    });
+
+    document.getElementById('apiControls').style.display='block';
+
+    // Connect SSE
+    connectSSE(url);
+  }catch(e){
+    showToast('Connection failed: '+e.message,'error');
+    updateConnStatus(false);
+  }finally{
+    btn.disabled=false;btn.textContent='Connect';
+  }
+}
+
+function updateConnStatus(connected){
+  const el=document.getElementById('connStatus');
+  if(connected){
+    el.className='conn-status connected';
+    el.innerHTML='&#9679; Live';
+  }else{
+    el.className='conn-status disconnected';
+    el.textContent='Offline';
+  }
+}
+
+async function loadRepoPRs(){
+  const repoFull=document.getElementById('repoSelect').value;
+  if(!repoFull||!apiBaseUrl) return;
+  currentRepo=repoFull;
+  const [owner,repo]=repoFull.split('/');
+
+  try{
+    const r=await fetch(`${apiBaseUrl}/api/repos/${owner}/${repo}/prs?limit=500&sortBy=total_score DESC`);
+    const result=await r.json();
+
+    // Map API response to dashboard format
+    data={
+      repo:repoFull,
+      totalPRs:result.total||result.prs?.length||0,
+      spamCount:(result.prs||[]).filter(p=>p.is_spam).length,
+      duplicateClusters:[],
+      rankedPRs:(result.prs||[]).map(p=>mapAPIPR(p,repoFull)),
+    };
+    render();
+    collapseInput();
+    updateLastScan();
+  }catch(e){
+    showToast('Failed to load PRs: '+e.message,'error');
+  }
+}
+
+function mapAPIPR(p,repoName){
+  return{
+    _repo:repoName||'',
+    number:p.pr_number||p.number,
+    title:p.title||'',
+    author:p.author||'',
+    totalScore:p.total_score||p.totalScore||0,
+    isSpam:p.is_spam||p.isSpam||false,
+    isDraft:p.is_draft||p.isDraft||false,
+    filesChanged:p.files_changed||p.filesChanged||0,
+    ageInDays:p.age_days||p.ageInDays,
+    mergeable:p.mergeable||'',
+    milestone:p.milestone||'',
+    requestedReviewers:p.requested_reviewers||p.requestedReviewers||0,
+    llmScore:p.llm_score||p.llmScore,
+    visionScore:p.vision_score||p.visionScore,
+    visionAlignment:p.vision_alignment||p.visionAlignment||'unchecked',
+    changedFiles:p.changed_files||p.changedFiles||[],
+    body:p.body||'',
+  };
+}
+
+async function triggerScan(){
+  if(!apiBaseUrl||!currentRepo) return;
+  const [owner,repo]=currentRepo.split('/');
+  const btn=document.getElementById('scanBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Scanning...';
+
+  try{
+    const r=await fetch(`${apiBaseUrl}/api/repos/${owner}/${repo}/scan`,{method:'POST'});
+    if(!r.ok) throw new Error('Scan failed');
+    const result=await r.json();
+    data=result;
+    // Re-map if needed (scan returns native format)
+    if(data.rankedPRs){
+      render();
+    }else{
+      await loadRepoPRs();
+    }
+    showToast(`Scan complete: ${result.totalPRs||0} PRs scored`);
+    updateLastScan();
+  }catch(e){
+    showToast('Scan failed: '+e.message,'error');
+  }finally{
+    btn.disabled=false;btn.textContent='Scan Now';
+  }
+}
+
+function updateLastScan(){
+  const ts=new Date().toLocaleTimeString();
+  document.getElementById('lastScanTime').textContent='Last: '+ts;
+}
+
+// ========== SSE (Server-Sent Events) ==========
+function connectSSE(url){
+  if(eventSource){eventSource.close();}
+  eventSource=new EventSource(url+'/api/events');
+
+  eventSource.addEventListener('connected',()=>{
+    console.log('SSE connected');
+  });
+
+  eventSource.addEventListener('scan_complete',(e)=>{
+    const d=JSON.parse(e.data);
+    showToast(`Scan complete for ${escapeHtml(d.repo)}: ${d.totalPRs} PRs`);
+    // Auto-refresh if we're viewing this repo
+    if(currentRepo===d.repo){
+      loadRepoPRs();
+    }
+    updateLastScan();
+  });
+
+  eventSource.addEventListener('scan_start',(e)=>{
+    const d=JSON.parse(e.data);
+    showToast(`Scan started for ${escapeHtml(d.repo)}...`);
+  });
+
+  eventSource.addEventListener('pr_scored',(e)=>{
+    const d=JSON.parse(e.data);
+    showToast(`PR #${d.prNumber} scored: ${d.totalScore}/100${d.isSpam?' (Spam)':''}`);
+    // Auto-refresh if we're viewing this repo
+    if(currentRepo===d.repo){
+      loadRepoPRs();
+    }
+  });
+
+  eventSource.addEventListener('pr_closed',(e)=>{
+    const d=JSON.parse(e.data);
+    showToast(`PR #${d.prNumber} ${escapeHtml(d.state)}`);
+    if(currentRepo===d.repo){
+      loadRepoPRs();
+    }
+  });
+
+  eventSource.onerror=()=>{
+    updateConnStatus(false);
+    // Auto-reconnect after 5s
+    setTimeout(()=>{
+      if(apiBaseUrl) connectSSE(apiBaseUrl);
+    },5000);
+  };
+
+  eventSource.onopen=()=>{
+    updateConnStatus(true);
+  };
+}
+
+// ========== Auto-connect ==========
+(function(){
+  // If served from Treliq server, auto-connect
+  if(window.location.pathname==='/'||window.location.pathname==='/index.html'){
+    fetch(window.location.origin+'/health')
+      .then(r=>r.ok?r.json():null)
+      .then(d=>{
+        if(d&&d.status==='ok'){
+          document.getElementById('serverUrl').value=window.location.origin;
+          switchMode('api');
+          connectToServer();
+        }
+      })
+      .catch(()=>{});
+  }
+  // Fallback: try loading demo.json
+  fetch('demo.json').then(r=>r.ok?r.json():null).then(d=>{if(d&&!data){data=d;render();collapseInput();}}).catch(()=>{});
+})();
+</script>
+</body>
+</html>

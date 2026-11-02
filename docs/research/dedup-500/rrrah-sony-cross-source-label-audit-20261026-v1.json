@@ -1,0 +1,9 @@
+{
+  "visually_reviewed_previews": {
+    "crates/rrrah-dedup/tests/fixtures/photos-heldout/2414-base.png": "2c7d263d3cb93496085db6d743d0eb53586585a6568d5dbce5736f51e33303c4",
+    "crates/rrrah-dedup/tests/fixtures/photos-heldout/2418-base.png": "0fcc61edab868ebaef60c2187cfe1e53f3704a2ec7e365e74ef5d89e49380d97"
+  },
+  "observation": "Both previews depict overlapping outdoor trees/yard scene with shifted framing; different source IDs are not semantic negative labels.",
+  "implication": "Cross-source candidate acceptance would require interpreting geometric/pixel overlap, not counting as false positive solely from ID mismatch. Preview inspection does not establish full-resolution pixel equality or exact raw provenance by itself.",
+  "scope": "Manual visual label audit only; independent RAW/TIFF comparisons remain pending."
+}

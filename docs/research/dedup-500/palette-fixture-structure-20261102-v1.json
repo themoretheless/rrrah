@@ -1,0 +1,65 @@
+{
+  "fixtures": [
+    {
+      "name": "hidden-black.png",
+      "bytes": 1117,
+      "sha256": "e1116635bab047aa8e7a4f40af455a2711be8ba898752a56843d85c61466cb7b",
+      "ihdr_hex": "00000009000000090803000000",
+      "chunks_sha256": {
+        "PLTE": "72432263dbfe17abc40ed269f24c7a344e077e3671007dfc8a2f3851f8193dc2",
+        "tRNS": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "IDAT": "1522656013ff8bbe3b58ecabd07d01b07b6b2d3eb98dc320015075acbe7cdf6e"
+      }
+    },
+    {
+      "name": "hidden-gradient.png",
+      "bytes": 1126,
+      "sha256": "7222b84f1ca088567cbccdbc29482741d87d7dae2e819f58564fe127bcd77ab3",
+      "ihdr_hex": "00000009000000090803000000",
+      "chunks_sha256": {
+        "PLTE": "72432263dbfe17abc40ed269f24c7a344e077e3671007dfc8a2f3851f8193dc2",
+        "tRNS": "5341e6b2646979a70e57653007a1f310169421ec9bdd9f1a5648f75ade005af1",
+        "IDAT": "518ab095787204a4e0a6b6fb15717bc8daed701c4dee13705a4756c561f3712b"
+      }
+    },
+    {
+      "name": "hidden-rgba.png",
+      "bytes": 79,
+      "sha256": "c9bbdc5980b9c6855bd61d490f949d7c2247e0f4a1f4ae2a335571ba30baf931",
+      "ihdr_hex": "00000009000000090806000000",
+      "chunks_sha256": {
+        "IDAT": "2e476e568b468c0c664cb74c715578e0302ca8f5c8135852b4d1d8538cd6ff3c"
+      }
+    },
+    {
+      "name": "visible-center.png",
+      "bytes": 1131,
+      "sha256": "f4b4c50b5d87f58bbb10776f19f57c09f2b0ead1f783b3f1452fc59e0e5b7ac0",
+      "ihdr_hex": "00000009000000090803000000",
+      "chunks_sha256": {
+        "PLTE": "72432263dbfe17abc40ed269f24c7a344e077e3671007dfc8a2f3851f8193dc2",
+        "tRNS": "dcc2abbf5dda5b634e188e619ab83c4b97635d61b94a28980a04d8cdf370e509",
+        "IDAT": "72f0f0fe123afcecee8642ce692e66644e78c2123cbfb3ffab6269b2f80b8cd0"
+      }
+    },
+    {
+      "name": "black.png",
+      "bytes": 69,
+      "sha256": "8ae0ca1bb471e7492accce7787f7125692c79a9ddedfe0a414aff5053597b040",
+      "ihdr_hex": "00000009000000090802000000",
+      "chunks_sha256": {
+        "IDAT": "1b900da1454bf405c95a9ac9a3a51927162958d16d06401f175f5c289f64f6c1"
+      }
+    },
+    {
+      "name": "white.png",
+      "bytes": 78,
+      "sha256": "4d640f059c782a7657000a3575eb017ac3b26dfd6b8981956eb1b96a1ca2f16d",
+      "ihdr_hex": "00000009000000090802000000",
+      "chunks_sha256": {
+        "IDAT": "33d4208bea6d4dbb8898585978d1e1435a6de0b14641ad80e7112a08a5afb20c"
+      }
+    }
+  ],
+  "scope": "Read-only PNG chunk identity; decoded/equality outcomes require native test receipt."
+}

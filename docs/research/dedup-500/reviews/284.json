@@ -2,7 +2,7 @@
   "index": 284,
   "repository": "byteskeptical/sftpretty",
   "commit": "2b8afc70a1de6a953d21f7086f12d4b8b34ba92d",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 67 pinned blobs covered: 64 whole-file reads, three key structural assessments; all cached hashes reverified. Isolated hash and aggregation controls executed; upstream SFTP suite not run.",
   "decision": "reference",
   "finding": "SFTP transfer hashing helpers/test corpus; file-transfer validation, not duplicate discovery or image hashing.",
   "available_source_evidence": [
@@ -74,5 +74,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/sftpretty284-source-review-v14-20261102.json"
 }

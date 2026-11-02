@@ -1,0 +1,30 @@
+{
+  "cases": 2,
+  "scope": "Unchanged original _replacePeople function extracted,actual Node SQLite in-memory minimal schema and real BEGIN/COMMIT/ROLLBACK;transaction3 injected failure,chunk reduced1,insertPerson/blob/yield adapters. No actual production DB/app/recovery.",
+  "results": [
+    {
+      "failAt": 3,
+      "people": [
+        1,
+        2
+      ],
+      "assignments": [
+        2,
+        1
+      ],
+      "error": "injected transaction failure"
+    },
+    {
+      "failAt": 0,
+      "people": [
+        2
+      ],
+      "assignments": [
+        2,
+        2
+      ],
+      "error": null
+    }
+  ],
+  "finding": "Failure after first face-update commit leaves old/new people and mixed assignments;healthy control finishes generation. Subsequent repair/retry behavior unqualified."
+}

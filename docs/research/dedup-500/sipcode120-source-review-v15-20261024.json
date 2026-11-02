@@ -1,0 +1,46 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v14-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/manifest/framework.ts",
+      "local": "command-src_modules_manifest_framework.ts",
+      "git_blob": "49fa3210ee078ba8949b038c335f441a500d64f6",
+      "sha256": "e8df7b11eaed51a0e9fcc51460a1fd62a084f42794fd5da806bae63c377ecda6",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/manifest/patterns.ts",
+      "local": "command-src_modules_manifest_patterns.ts",
+      "git_blob": "6987ad83c46e3848ba481d13aecaee4bf6b5a845",
+      "sha256": "9452e5e1a69551695d7c21fce0152c63c21d24b811255f8fee56a956b8a737ed",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 40,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 137,
+  "new_original_tests_run": 0,
+  "authored_upstream_controls_total_distinct": 34,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "command_results": {
+    "numTotalTests": 3,
+    "numPassedTests": 3,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "runtime_graph_inventory": "docs/research/dedup-500/sipcode120-manifest-runtime-inventory-20261024.json",
+  "runtime_scope": "Original19module manifest graph onVitest2.1.9;owned realFs withrootreadDir orsingleFile readFile injectederrors;FakeGit disablesgit andfixedclock;writesrealownedmanifest. NotinstalledCLI/hostintegration.",
+  "findings": [
+    "Rootenumerationthrows:runManifest returns0andwrites files-scanned0;noerror diagnosticforenumeration.",
+    "Singlefile readthrows:runManifest returns0andwrites scannedcount2butno failedfilepurpose orreaderror diagnostic.",
+    "Healthypositive rendersbothsources.",
+    "19 acquiredruntime modules executed;only2newwholefilescredited;unreadsupportbytesnotcounted."
+  ],
+  "harness_startup_notes": "Firstconfigpath wasresolvedtwiceunderroot,startupfailedwith0tests;correctedrootrelativeconfigbeforepassing3cases;nocasecreditforstartupfailure",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

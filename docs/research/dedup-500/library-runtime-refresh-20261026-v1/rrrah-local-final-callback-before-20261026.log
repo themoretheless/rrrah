@@ -1,0 +1,38 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 48.22s
+     Running tests/local_final_callback.rs (target/debug/deps/local_final_callback-fc8c945556bf27cb)
+
+running 1 test
+test automatic_geometry_final_callback_cannot_publish_changed_source ... FAILED
+
+failures:
+
+---- automatic_geometry_final_callback_cannot_publish_changed_source stdout ----
+
+thread 'automatic_geometry_final_callback_cannot_publish_changed_source' (73427714) panicked at crates/rrrah-dedup/tests/local_final_callback.rs:25:9:
+published geometry result after last callback changed "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpLGYQzQ/a.png"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    automatic_geometry_final_callback_cannot_publish_changed_source
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test local_final_callback`

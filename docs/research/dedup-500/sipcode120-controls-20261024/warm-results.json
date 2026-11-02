@@ -1,0 +1,12 @@
+{
+  "runtime": "v22.23.4",
+  "controls_passed": 3,
+  "transcript_bytes": 897,
+  "transcript_utf16_units": 497,
+  "findings": [
+    "maxTranscriptBytes compares UTF16 stringlength, admits largerUTF8 payload",
+    "Different content rejected by warmfill",
+    "CRLF vsLF canonical match accepted and retainsrawdiskhash;intentional text semantics,not byte identity"
+  ],
+  "scope": "Original whole warmfill with only path import location changed;owned synthetic transcript/diskIO;not actual tool transcript/server"
+}

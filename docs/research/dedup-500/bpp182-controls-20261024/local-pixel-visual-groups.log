@@ -1,0 +1,50 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 8.35s
+     Running tests/groups.rs (.dedup-work/bpp182-rust-target/debug/deps/groups-f0f222c24dd6f139)
+
+running 6 tests
+test invalid_input_budget_and_cancellation_are_explicit ... ok
+test nontransitive_chain_preserves_edge_without_inventing_pair ... ok
+test sixty_member_evidence_is_not_truncated_and_one_missing_edge_is_not_invented ... ok
+test every_emitted_group_has_all_pairs_for_all_small_graphs ... ok
+test isolated_and_sparse_entries_avoid_unrelated_group_checks ... ok
+test sparse_selection_matches_independent_exhaustive_reference_for_all_six_node_graphs ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+
+     Running tests/pixels.rs (.dedup-work/bpp182-rust-target/debug/deps/pixels-dd7227e74ee02ce5)
+
+running 13 tests
+test gradient_has_independently_known_difference_bits ... ok
+test opaque_solid_colours_and_crossed_dimensions_keep_exact_identity_separate ... ok
+test validates_layout_budget_and_cancellation ... ok
+test identical_pixels_honor_each_block_and_final_cancellation_checkpoint ... ok
+test identical_and_transparent_pixel_equality_observe_late_cancellation ... ok
+test invisible_rgb_is_canonical_but_visible_pixels_are_exact ... ok
+test uniform_hash_collision_is_not_informative ... ok
+test informative_zero_distance_is_a_candidate_not_pixel_identity ... ok
+test transparent_texture_is_canonical_and_alpha_gradient_survives_white_projection ... ok
+test uniform_tiny_and_thin_images_have_no_empty_resample_cells ... ok
+test fractional_single_pixel_footprints_match_integer_overlap_oracle ... ok
+test all_opaque_gray_levels_collide_only_as_uninformative_candidates ... ok
+test area_fingerprint_preserves_last_row_and_column_contributions ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/visual.rs (.dedup-work/bpp182-rust-target/debug/deps/visual-60ad3c84d4afbf00)
+
+running 11 tests
+test cancellation_inside_large_collision_bucket_is_observed ... ok
+test fallible_search_result_caps_are_inconclusive_and_leave_index_unchanged ... ok
+test cancelled_insertions_preserve_collision_buckets_and_deep_trees ... ok
+test fallible_insert_enforces_total_ids_without_partial_mutation ... ok
+test duplicate_ids_budgets_and_cancel_do_not_return_partial_indexes ... ok
+test full_radius_direct_search_cancellation_never_returns_partial_matches ... ok
+test nonfinite_fingerprint_statistics_never_claim_informative_evidence ... ok
+test dense_zero_fingerprints_are_not_silently_discarded ... ok
+test sixty_tied_candidates_survive_with_inclusive_distance_boundaries ... ok
+test dense_adaptive_search_keeps_oracle_and_cancellation ... ok
+test complete_recipe_index_matches_exhaustive_oracle ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

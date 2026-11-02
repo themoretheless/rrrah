@@ -1,0 +1,19 @@
+{
+  "scope": "Original deep-search handler, mocked RPC and model functions; no network, DB, model, schema validation or full Deno suite",
+  "controls": [
+    {
+      "case": "first content exceeds 32000 budget",
+      "returned_chars": 40000,
+      "truncated": false,
+      "confirmed": true
+    },
+    {
+      "case": "source rss and quality .4 retain graph neighbor telegram quality0",
+      "returned_ids": [
+        "a",
+        "b"
+      ],
+      "confirmed": true
+    }
+  ]
+}

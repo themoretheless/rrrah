@@ -1,0 +1,32 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original is_complete property body and stage orchestration body; all stages and DB commit replaced by in-memory recorders. No filesystem, SQL or external-service execution.",
+  "authored_controls": [
+    {
+      "name": "critical stage missing",
+      "passed": true,
+      "observed": false
+    },
+    {
+      "name": "optional services absent",
+      "passed": true,
+      "observed": true
+    },
+    {
+      "name": "separate failure recorded",
+      "passed": true,
+      "observed": false
+    },
+    {
+      "name": "same error segment mixes optional and critical failure",
+      "passed": true,
+      "observed": true
+    },
+    {
+      "name": "dry-run orchestrator commits shared session four times",
+      "passed": true,
+      "observed": 4
+    }
+  ]
+}

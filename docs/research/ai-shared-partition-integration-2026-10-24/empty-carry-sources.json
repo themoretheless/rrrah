@@ -1,0 +1,30 @@
+{
+  "after_test_sha256": "44725cf487e9f3bef27f752ee21f78bb47444ca866ba4061b2f07d91ad114384",
+  "decoder_sha256": "08565474955c15ced6cc38a51277edaba3148a863e37876bd623ab1b390d7e70",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "f545da5a20fc67247d307f3e6808ce37af56d6e269b080544bf121221f9f2800",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "f5d417a3a1dd755a65259ae6ba058f29e01a5b34124f49b9a16b31f9a7bf3954",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "scripts/benchmark-ordered-cell-cpu.py": "035bafdd38ebaf866a9aae75b9310e0efc758a97a99cc88baa2c02ac09b78f88",
+    "scripts/analyze-split-cpu.py": "b4e359fdc437a11d1b9522edc547fceb5c4798e35375266fbf9604fd79cbbac6",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "before_test_sha256": "1e930df18b6f64ac86ee63c01db3c122500ccf7a0ce021c10bb9c5890ecfbd4e",
+  "cpu_body_sha256": "bd049583cb2ea054746273c56c11a148c93b744dbac149885b33d04b9b43b5c0",
+  "cpu_before_only_test_injected": true,
+  "artifacts": {
+    "empty-carry-kernel.log": "26f15228fb5c5708dd6a7f12819b02663429acaf97ece173b5e71ebe12342985",
+    "empty-carry-full-encode.log": "5fab753425e91a568725d5cff621ae9186ab286fa3ab8981a7fdec59d983cb94",
+    "empty-carry-feature-vector.log": "3d079c8d1e265f51fabbd34b188809e6d5a2a785a65a855dd0cbcdf84adbbbd4",
+    "empty-carry-default-check.log": "f7e977257a0351ecdb3e7d8b6252b5ba071118cdc6f282f312aada492daff30c",
+    "empty-carry-feature-build.log": "cd2d2e8787451fea8965100ba07d22f086b10df47da4f70dc5cc73e940873f06",
+    "empty-carry-poppler.json": "2e7586333b88445045b09e7f5090728d7f70b21d7dc0fc52ef3758e7ee455b95",
+    "empty-carry-cpu.json": "979c95ae609bf2df49a8b6b1501b82330e12411b66e261a557101836a8b165ac",
+    "empty-carry-cpu.log": "70e8de80525d8a31199ac938ccf2b3639641a747fa33b507d495f1ec62303c54",
+    "empty-carry-change.patch": "dedd4ce9fc886aa9394053496466a577a87f8447890318d7d2f0fa2b7049e228"
+  },
+  "patch_reproduces_current_core_sources": true,
+  "cpu_scope": "Only the losing-triangle paint update of a native1024-strip pixel is timed; fresh seed construction and final area/color assertions are outside each Instant interval.128updates/call,6AAcontrols,16alternatingABpairs; all build/correctness jobs completed before timing. Zero-size admission credits omit actual MemoryBudget bookkeeping.",
+  "direct_kernel_scope": "Selected55checks predate only the new native-seed and ignored timing test additions; full109encode run includes all current tests. Production core unchanged between these runs."
+}

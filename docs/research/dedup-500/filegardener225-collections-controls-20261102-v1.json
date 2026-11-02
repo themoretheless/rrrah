@@ -1,0 +1,38 @@
+{
+  "source": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/urllib3/_collections.py",
+  "sha256": "44ff9c1f24f1e00818c2fa044caf2ad485516d61499c4d1557af7664749b53af",
+  "method": "Original two class AST nodes executed with explicit stdlib collections.abc/OrderedDict/RLock and six-compatible iterator shims; no package import or socket/network.",
+  "controls": {
+    "overwrite_then_new_insert": {
+      "retained_keys": [
+        "b",
+        "c"
+      ],
+      "disposed_values": [
+        "old-a",
+        "new-a"
+      ]
+    },
+    "clear_callback_failure": {
+      "mapping_length": 0,
+      "attempted_disposals": [
+        "a"
+      ],
+      "unattempted_disposals": [
+        "b",
+        "c"
+      ]
+    },
+    "merged_header_equality": {
+      "equal": true,
+      "multi_getlist": [
+        "a",
+        "b"
+      ],
+      "single_getlist": [
+        "a, b"
+      ]
+    }
+  },
+  "scope": "Authored isolated controls of pinned class bodies, not original upstream suite, concurrent stress, HTTP validity or rrrah runtime qualification."
+}

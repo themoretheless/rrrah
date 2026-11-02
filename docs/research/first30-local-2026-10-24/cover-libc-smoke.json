@@ -1,0 +1,14 @@
+[
+  {
+    "mode": "baseline",
+    "code": 0,
+    "stdout": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=382834 explicit_metadata_calls=100 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.00s\n\n",
+    "stderr": "COVER_LIBC lstat=100 stat=0 fstatat=0\n"
+  },
+  {
+    "mode": "candidate",
+    "code": 0,
+    "stdout": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=152917 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.00s\n\n",
+    "stderr": "COVER_LIBC lstat=0 stat=0 fstatat=0\n"
+  }
+]

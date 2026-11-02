@@ -1,0 +1,37 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v2-20261021.json",
+  "whole_repo_complete": false,
+  "source": {
+    "path": "dedup_cpp/xxhash.h",
+    "local": "docs/research/dedup-500/evidence/conanhujinming--text_dedup/05-xxhash-full.h",
+    "bytes": 279425,
+    "lines": 7487,
+    "git_blob": "3dddd4430ef862490cddbf37deacc5064436b85d",
+    "sha256": "5e98051924106e21c3d371ad1b483aa2049e4517f5145d289dcdf041be985bf4",
+    "read_lines": [
+      1,
+      280
+    ],
+    "whole_text_read": false
+  },
+  "findings": [
+    "Full pinned header279425bytes7487lines now retained; previous selected evidence truncated. No whole-header claim.",
+    "Entire BSD2-Clause notice read in first280lines. Source describes noncryptographic hash, readable byte range precondition and NULL only for length0, canonical big-endian storage representation.",
+    "11 owned lengths0,1,3,16,17,128,129,240,241,1024,4097 tested against original full header compiled clang-O2 natively. One-shot equals7byte-chunk streaming; canonical64 roundtrip matches. Not hash collision resistance or document dedup correctness proof."
+  ],
+  "runtime": {
+    "architecture": "arm64",
+    "passed_cases": 11,
+    "harness": "docs/research/dedup-500/text108-xxhash-controls-20261024.c",
+    "full_pipeline_run": false
+  },
+  "production_changes": false,
+  "remaining": [
+    "xxhash.h lines281..7487",
+    "pinned Abseil submodule qualification",
+    "full Faiss/native pipeline"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

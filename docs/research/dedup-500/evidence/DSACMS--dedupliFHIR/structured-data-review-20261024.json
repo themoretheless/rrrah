@@ -1,0 +1,64 @@
+[
+  {
+    "path": "frontend/package-lock.json",
+    "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/remaining-pinned/frontend/package-lock.json",
+    "sha256": "df8bc4e0083487f16a5d7b93b88b32caec8cda92b609a655908f4b6e5a0ff131",
+    "git_blob_sha1": "eeb46828f4b3d86c242bd402f9b00f55c14c3329",
+    "scope": "complete parse and structural aggregate; not manual whole-text read",
+    "analysis": {
+      "lockfileVersion": 2,
+      "package_records": 451,
+      "records_with_install_script": 2,
+      "integrity_records": 450
+    }
+  },
+  {
+    "path": "poetry.lock",
+    "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/remaining-pinned/poetry.lock",
+    "sha256": "7e4ed58b29f627c91b40fb4ea2c93307dd674abba2c6e65fe199f06998180d6f",
+    "git_blob_sha1": "59b33a8cf85c0fe4e8866684ae509b0221e42e09",
+    "scope": "complete parse and structural aggregate; not manual whole-text read",
+    "analysis": {
+      "package_records": 48,
+      "metadata": {
+        "lock-version": "2.0",
+        "python-versions": "^3.10",
+        "content-hash": "a939ea64ceceacd409565a3a6c967d05905691994f94ae6d649f7c93cb177ea8"
+      },
+      "packages_with_file_hashes": 48
+    }
+  },
+  {
+    "path": "cli/deduplifhirLib/tests/test_data.csv",
+    "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/remaining-pinned/cli/deduplifhirLib/tests/test_data.csv",
+    "sha256": "3ea423bb1f56c96a3909e5cba99691cf0dbee3d72c8a3a0c6b929a611e3463bf",
+    "git_blob_sha1": "f544a48ab4e9419c9e7e617a1d2e467b3a7c00bb",
+    "scope": "complete parse and structural aggregate; not manual whole-text read",
+    "analysis": {
+      "rows": 500,
+      "columns": [
+        "id",
+        "truth_value",
+        "family_name",
+        "given_name",
+        "gender",
+        "birth_date",
+        "phone",
+        "street_address0",
+        "city0",
+        "state0",
+        "postal_code0",
+        "street_address1",
+        "city1",
+        "state1",
+        "postal_code1",
+        "SSN"
+      ],
+      "truth_groups": 350,
+      "multi_record_truth_groups": 123,
+      "missing_cells": 311,
+      "malformed_rows": 0,
+      "unique_birth_dates": 347
+    }
+  }
+]

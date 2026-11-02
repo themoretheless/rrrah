@@ -1,0 +1,45 @@
+{
+  "repository": "ayushgupta4897/fast-dedupe",
+  "commit": "779ab732c045e6dd93b67647e6b609846afa3e20",
+  "reviewed_whole_files": [
+    {
+      "path": "fastdedupe/similarity.py",
+      "sha256": "9b0f564dd0340dd0f95a0c33c296f3d16f34a9f6e5ea92b85f145ae847f5318f",
+      "git_blob_sha1": "7d635c2d26f290afe77b6b87cdccec9a657cb549",
+      "whole_file_read": true
+    },
+    {
+      "path": "fastdedupe/__init__.py",
+      "sha256": "1b3f33fda4796aee20ca0caafe567508ab64ae19476acccbd9653bd53c051828",
+      "git_blob_sha1": "a825b11b685ddd0b73cad565874e55cedf0e204e",
+      "whole_file_read": true
+    },
+    {
+      "path": "fastdedupe/__main__.py",
+      "sha256": "8cc54432e6e6139cfde63617bcbc7a9fe6d3bc9cbc3193dd3e34155033a7569d",
+      "git_blob_sha1": "47f850e45c2c31389c6a7b72484b254988b4bae5",
+      "whole_file_read": true
+    },
+    {
+      "path": "fastdedupe/tests/test_similarity.py",
+      "sha256": "6f4b598ddbb07001508c9464cac2a0b275ed9fe24b016a5540d60780fb661858",
+      "git_blob_sha1": "d67ceaed6b967cf38593ddf50ad2df9d8b77a0f2",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 4,
+  "tree_blob_count": 36,
+  "tree_truncated": false,
+  "full_repository_read": false,
+  "findings": [
+    "Executed original Jaccard: differing token order and multiplicity score 100; intentional text similarity, not file identity.",
+    "Executed original Jaro-Winkler with prefix_weight=1.0: abcdx vs abcdy scores 140, beyond documented 0..100.",
+    "Executed default cosine: Document vs document scores 100."
+  ],
+  "original_test_bodies_run": 2,
+  "authored_controls_run": 3,
+  "runtime_scope": "AST-selected unchanged original pure functions and two unchanged original unittest method bodies; no full package/dependency/CLI/pipeline execution",
+  "decision": "reject-domain",
+  "deferred": "Native pHash.org/ASAN remains deferred; this audit does not advance it",
+  "controls": "docs/research/dedup-500/fast163-controls-20261024/results.json"
+}

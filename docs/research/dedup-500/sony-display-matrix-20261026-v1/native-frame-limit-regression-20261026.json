@@ -1,0 +1,37 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test ico_dib --test decode --test pages --test raw_selected --test cache_interpretation",
+  "passed": 36,
+  "failed": 0,
+  "logs": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-ico-dib-initial-compile-20261026.log",
+      "sha256": "59bb40f124eb8f67a9dd71f3d76b239ca5876c97baaa0a0c913d33caef733792"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-ico-dib-frame-limit-before-20261026.log",
+      "sha256": "65e96e346afd96809aff057f0fbbce5e36a77e07a2814e944d48e1241800ea7d"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-native-frame-limit-regression-20261026.log",
+      "sha256": "9ae69e38c8dbeb97cc9e43f6248f4932ecf2c8b25ed1e5b3f41d8fc3adb3bf52"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/ico_dib.rs": "2ea86687ad4544259e3cac25a796d32a99e544fecd182ab3d0ea54a8e7318f2e",
+    "crates/rrrah-dedup/src/decode.rs": "c1b57653e8e220da6534f3d7419b8190843e03c152710c4ab5e6337924d50014"
+  },
+  "scope": "Authored 24/32-bit DIB-backed two-entry ICO: independent primary RGB, partial alpha, bottom-up AND mask, quality rank and metadata, pixel/memory/frame count/out-of-range refusals, managed memory release. Native selected-frame path now checks reported image_count against max_frames; fingerprint domain v7 prevents reuse of prior admission semantics.",
+  "original_failures": [
+    "Initial test used private pixel accessor; corrected to public rgba API before execution.",
+    "DIB pixel test passed but frame-count cap test exposed native ICO count not constrained by the prior TIFF-specific bound. New general post-decode reported-count guard added."
+  ],
+  "limitations": [
+    "Native count guard is after native decoding and relies on reported metadata; does not bound all directory/parser work before decode.",
+    "Finite 24/32-bit DIB fixture, not full ICO/CUR or palette/mask grammar qualification."
+  ],
+  "all_decode_test_targets_compile": {
+    "status": "passed",
+    "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-native-frame-limit-check-20261026.log",
+    "sha256": "8e6ff7793cc8fc5cef485a651eb87a8fd78b2144499bfc3a28ad439788f09480"
+  }
+}

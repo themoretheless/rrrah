@@ -1,0 +1,31 @@
+{
+  "binary_sha256": "08965263ff191eec3199302820b0573e67ee6af60df0fcd0cba8a220ea0545b8",
+  "cases": [
+    {
+      "name": "multiple-unicode-roots",
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 0 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/вторая/empty-b\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/папка с пробелами/empty-a\"\nGroup 2: 3 files, 26 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/вторая/three\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/папка с пробелами/nested/two\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/папка с пробелами/one\"\n",
+      "stderr": "Scan complete: 6 files observed, 2 duplicate groups, 665 bytes read, 0 diagnostics\n"
+    },
+    {
+      "name": "missing-root",
+      "exit_code": 1,
+      "stdout": "Group 1: 2 files, 26 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/папка с пробелами/nested/two\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/папка с пробелами/one\"\n",
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-cli-kadeh_ao/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 3 files observed, 1 duplicate groups, 416 bytes read, 1 diagnostics\n"
+    },
+    {
+      "name": "missing-arguments",
+      "exit_code": 2,
+      "stdout": "",
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "name": "help",
+      "exit_code": 0,
+      "stdout": "Usage: scan_folder [--] FOLDER [FOLDER ...]\nFind byte-confirmed duplicate files recursively; never delete files.\nSymlinks are skipped. Limits: 1,000,000 entries and depth 256.\nExit: 0 complete, 1 incomplete scan, 2 missing folder argument.\n",
+      "stderr": ""
+    }
+  ],
+  "source_contents_unchanged": true,
+  "scope": "Fresh debug example; exact recursive folder CLI smoke, not full scanner qualification"
+}

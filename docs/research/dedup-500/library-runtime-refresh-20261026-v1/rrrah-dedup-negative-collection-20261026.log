@@ -1,0 +1,70 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 06s
+     Running tests/gradient_collection.rs (target/debug/deps/gradient_collection-788149ed31f45b61)
+
+running 1 test
+test gradient_collection_matches_direct_pairs_and_atomic_admission ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.81s
+
+     Running tests/information.rs (target/debug/deps/information-26dcdc81d867b64a)
+
+running 5 tests
+test informative_hash_collision_remains_candidate_and_fails_full_resolution_confirmation ... ok
+test uniform_candidates_and_invisible_rgb_never_invent_visible_pixel_equality ... ok
+test standalone_pixel_search_recovers_equal_transparent_files_without_visual_candidates ... ok
+test indexed_candidates_match_exhaustive_pixel_equality_and_avoid_unrelated_pairs ... ok
+test uniform_local_search_cannot_invent_geometry_or_color_fit ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/local_collection.rs (target/debug/deps/local_collection-7d1f07d14286f152)
+
+running 20 tests
+test recursive_collection_preserves_aliases_errors_and_request_settings ... ok
+test reflected_ranged_modes_validate_before_consuming_sources ... ok
+test indexed_collection_changed_before_decode_is_invalidated_without_losing_healthy_pair ... ok
+test reflected_collection_discards_changed_sources_batch_wide ... ok
+test recursive_spatial_collection_preserves_requests_and_rejects_substitution ... ok
+test indexed_collection_reports_bad_and_insufficient_sources_and_admission_errors ... ok
+test reflected_file_pair_confirms_pixels_and_releases_managed_features ... ok
+test ranged_fit_collection_matches_pair_results_and_exposes_selected_domain ... ok
+test display_projection_collection_matches_pairs_and_preserves_strict_evidence ... ok
+test spatial_collection_matches_exhaustive_spatial_pair_acceptance ... ok
+test reflected_spatial_collection_matches_spatial_file_oracle ... ok
+test indexed_collection_retains_every_exhaustively_verified_crop_scale_rotation_pair ... ok
+test final_callback_mutation_cannot_publish_incident_local_pairs ... ok
+test final_directory_callback_mutation_cannot_publish_incident_local_pairs ... ok
+test indexed_watermark_and_large_edit_preserve_pixel_policy ... ok
+test reflected_recursive_collection_keeps_aliases_paths_and_request_policy ... ok
+test indexed_arbitrary_angles_and_intermediate_scales_keep_labelled_pairs ... ok
+test early_bad_source_is_isolated_but_late_healthy_mutation_refuses_publication ... ok
+test indexed_collection_final_generation_and_one_shot_cancel_discard_report ... ok
+test reflected_collection_retrieves_labelled_pairs_and_cancels_without_report ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.61s
+
+     Running tests/visual_publication.rs (target/debug/deps/visual_publication-2502ef6f84e743c7)
+
+running 2 tests
+test final_visual_callback_mutation_refuses_cold_and_warm_reports ... ok
+test flat_hash_collisions_remain_candidates_and_exact_pixel_groups_stay_separate ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

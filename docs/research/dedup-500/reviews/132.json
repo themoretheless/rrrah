@@ -2,9 +2,9 @@
   "index": 132,
   "repository": "jchristn/WatsonDedupe",
   "commit": "80274df8bc9cbd69c0851c8933f2d9a96dd5bee5",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "6/69 whole pinned files;9 authored native .NET helper/stream controls;stream database/DTO seams explicit;full store unqualified",
   "decision": "reference",
-  "finding": "SQLite chunk-dedup models and SHA256 helpers; useful persistence concepts, no visual normalization.",
+  "finding": "Chunk storage helper reference;native short-read overwrite,EOF nonprogress,and zero-byte boundary defects reproduced;no adoption.",
   "available_source_evidence": [
     {
       "path": "src/DedupeLibrary/DedupeCallbacks.cs",
@@ -84,5 +84,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "watson132-source-review-v2-20261024.json"
 }

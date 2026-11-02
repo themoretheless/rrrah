@@ -1,0 +1,103 @@
+{
+  "repository": "Davidcreador/pi-dcp",
+  "commit": "848689ad96a5f2d615aac4d9d28367a2307d1549",
+  "reviewed_whole_files": [
+    {
+      "path": "lib/strategies/deduplication.ts",
+      "sha256": "09ddb9fb0de3339177dfc7175fa8ba35ab2fb6b32662bd6d578de1a83059a76e",
+      "git_blob_sha1": "fe75b1ed9669643df5abd7dd7d2a97c5c6b6ffaa",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/strategies/overlap-dedup.ts",
+      "sha256": "e8963df703c46260645ac7f18a4b83257376939928a69f6118ec5384e211303b",
+      "git_blob_sha1": "6ca4af2f26aae7a4adf032aad73e344b521a10b1",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/overlap-dedup.test.ts",
+      "sha256": "f2058ccdff4d0baceb712de45a450b852892abde78f5f95a76ebdf71e89607ea",
+      "git_blob_sha1": "4ec6e55c6b4d5a4e10dfb4b9f80defb3db6dc652",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/messages.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/messages.ts",
+      "sha256": "5abfe43d74f24b29cd35e242fa609f83377016c847618ef1347cd09c0029e610",
+      "git_blob_sha1": "ca7c35407fddae1d52f6173ba33f4c10dbef00cf",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/state.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/state.ts",
+      "sha256": "f028b2e18a521f9963747091810920208b6fb9dc09f64c766c545bece16ccdf9",
+      "git_blob_sha1": "de9933b67b1e0b2be9408c2a0ac4e048f85fd5ee",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/config.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/config.ts",
+      "sha256": "a619b8c65af8acb5fd24601da4869a44a8a9e8a9a0be49af63aeaa6d261812d6",
+      "git_blob_sha1": "79ffc3e8565ffec8453366119771da5c42f37922",
+      "whole_file_read": true
+    },
+    {
+      "path": "lib/tokens.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/lib/tokens.ts",
+      "sha256": "30edbb643dfe00505ee167e80af094108b32cb6e3222c7aae5803d30dbd46293",
+      "git_blob_sha1": "90453c4b47dca4099dd4b0859fc43bc150e5cdb9",
+      "whole_file_read": true
+    },
+    {
+      "path": "test/_helpers.ts",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/test/_helpers.ts",
+      "sha256": "d8e30aca30303b9a63b9df21b9cf72c61caaa34c44e942d5c27121a2b60a1884",
+      "git_blob_sha1": "4008c3767930bbe5fe66dfcf85642d773cb730ab",
+      "whole_file_read": true
+    },
+    {
+      "path": "package.json",
+      "local": "docs/research/dedup-500/evidence/Davidcreador--pi-dcp/remaining-pinned/package.json",
+      "sha256": "f84f132c61bb37fd0424dd8aa667a456b1d9786f68ce5615dc6f8c28f1fd487a",
+      "git_blob_sha1": "2ba59d14cfff31215b2bcec8604ffe84da177381",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 9,
+  "tree_blob_count": 71,
+  "full_repository_read": false,
+  "authored_controls_run": 10,
+  "original_tests_run": 8,
+  "original_tests_read": 8,
+  "controls": [
+    "docs/research/dedup-500/pidcp170-controls-20261024/read-range-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/strategy-results.json",
+    "docs/research/dedup-500/pidcp170-controls-20261024/original-test-results.txt"
+  ],
+  "runtime_scope": "Complete original strategy/messages/config/state/token modules and original test helper; real tokenizer0.0.4 dependency installed, though these paths use original character-based estimates. No config loading, host pipeline, real files, providers or shell actions.",
+  "findings": [
+    "Shell variable path remains literal; cat --help is treated as reading a file named --help.",
+    "Zero read limit creates reversed interval; NaN offsets survive. Host tool validation not qualified.",
+    "Ordinary bounded read and pipeline-command rejection positive controls pass.",
+    "Source: range containment does not compare content or file version; lossless historical-content claim requires host mutation/size semantics not established by these tests.",
+    "Source: exact-call dedup compares signature, not output; unlike overlap it does not skip isError results. No full-pipeline runtime reproduction.",
+    "Executed exact-call strategy: different outputs with same args prune earlier output; latest errored result prunes earlier successful result.",
+    "Executed overlap strategy: range containment prunes differing historical output; file/content version not checked.",
+    "Executed short repeat: OK length2 replaced by length73 placeholder; tokensSaved=0 floors negative character savings. No actual token-savings measurement."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "9/71 tracked files wholly read; index/pipeline, other tests and host lifecycle unqualified",
+  "deferred": "Native pHash.org/ASAN unchanged",
+  "original_test_scope": "Unchanged original overlap test file; native Node22.23.4, original runtime modules, real tokenizer0.0.4; full suite and Pi host not executed",
+  "runtime_verified_original_files": [
+    "lib/messages.ts",
+    "lib/state.ts",
+    "lib/config.ts",
+    "lib/tokens.ts",
+    "test/_helpers.ts",
+    "lib/strategies/deduplication.ts",
+    "lib/strategies/overlap-dedup.ts",
+    "test/overlap-dedup.test.ts"
+  ],
+  "previous_audit": "docs/research/dedup-500/pidcp170-source-review-v1-20261024.json"
+}

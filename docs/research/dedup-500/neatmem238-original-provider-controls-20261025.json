@@ -1,0 +1,24 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original stdlib-only LLM utility module and selected original test callbacks via AST with minimal raises adapter; explicit five parametrized rows. No SDK/server/provider calls; historical request-shape expectations do not prove current API support.",
+  "original_callbacks": [
+    "test_legacy_minimax_dual_field_unchanged",
+    "test_legacy_qwen_deepseek_unknown_unchanged",
+    "test_legacy_constraints_noop_without_provider",
+    "test_thinking_type_shape[deepseek]",
+    "test_thinking_type_shape[zhipu]",
+    "test_thinking_type_shape[moonshot]",
+    "test_thinking_type_shape[volcengine]",
+    "test_thinking_type_shape[siliconflow]",
+    "test_dashscope_ctk_shape",
+    "test_minimax_explicit_provider_matches_legacy",
+    "test_passthrough_and_openai_send_no_extra_body",
+    "test_aliases_resolve_to_canonical",
+    "test_unknown_provider_fails_loudly",
+    "test_every_provider_has_base_url",
+    "test_moonshot_drops_temperature",
+    "test_openai_reasoning_filter_matches_mem0_heuristic",
+    "test_gemini_reasoning_effort_toggle"
+  ],
+  "passed": 17
+}

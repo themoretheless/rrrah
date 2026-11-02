@@ -1,0 +1,12 @@
+{
+  "scope": "Original transpiled deduplicator/comparatorUtils; synthetic hash buffers and fake DB/comparator/result helpers; no media files, native binary, WASM, transfer or real DB",
+  "authored_controls_passed": 5,
+  "observations": [
+    "Zero-length hash compared with nonempty is similarity1 in one direction and0 in reverse",
+    "Zero suffix length difference has Hamming distance0",
+    "Overlap merge creates a-b-c transitive cluster from a-b and b-c only",
+    "Same first-frame pHash clusters distinct synthetic filenames without content read or comparator equality call",
+    "Candidate DB lookup failure yields success with candidate marked unique"
+  ],
+  "full_upstream_suite_run": false
+}

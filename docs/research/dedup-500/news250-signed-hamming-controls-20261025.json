@@ -1,0 +1,40 @@
+{
+  "scope": "Original2function AST nodes unchanged; simhash dependency/compute_simhash not imported, no network/config/model/DB access",
+  "results": [
+    {
+      "a": -1,
+      "b": 0,
+      "actual": 1,
+      "expected_unsigned64": 64,
+      "similar_threshold3": false
+    },
+    {
+      "a": -1,
+      "b": 1,
+      "actual": 1,
+      "expected_unsigned64": 63,
+      "similar_threshold3": true
+    },
+    {
+      "a": -9223372036854775808,
+      "b": 9223372036854775807,
+      "actual": 1,
+      "expected_unsigned64": 64,
+      "similar_threshold3": true
+    },
+    {
+      "a": -1,
+      "b": -2,
+      "actual": 1,
+      "expected_unsigned64": 1,
+      "similar_threshold3": true
+    },
+    {
+      "a": 1,
+      "b": 2,
+      "actual": 2,
+      "expected_unsigned64": 2,
+      "similar_threshold3": true
+    }
+  ]
+}

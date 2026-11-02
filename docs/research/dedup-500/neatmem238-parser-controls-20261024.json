@@ -1,0 +1,57 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original three parser functions extracted by AST, original think helper and 24 original test callbacks; no LLM, memory store, HTTP, package imports or pytest execution. Parser findings alone do not prove downstream storage writes.",
+  "original_callbacks": [
+    "tests/test_dedup_parsers.py::test_single_normal_object",
+    "tests/test_dedup_parsers.py::test_single_concatenated_objects_first_wins",
+    "tests/test_dedup_parsers.py::test_single_garbage_is_parse_error_add",
+    "tests/test_dedup_parsers.py::test_single_unknown_action_becomes_add",
+    "tests/test_dedup_parsers.py::test_mt_judgments_array",
+    "tests/test_dedup_parsers.py::test_mt_bare_single_object_compat",
+    "tests/test_dedup_parsers.py::test_mt_concatenated_objects",
+    "tests/test_dedup_parsers.py::test_mt_invalid_entries_dropped",
+    "tests/test_dedup_parsers.py::test_mt_duplicate_target_first_wins",
+    "tests/test_dedup_parsers.py::test_mt_empty_means_add",
+    "tests/test_think_tags.py::test_plain_text_unchanged",
+    "tests/test_think_tags.py::test_empty_and_none",
+    "tests/test_think_tags.py::test_closed_pair",
+    "tests/test_think_tags.py::test_closed_pair_with_attributes",
+    "tests/test_think_tags.py::test_closed_pair_thinking_variant",
+    "tests/test_think_tags.py::test_multiple_closed_pairs",
+    "tests/test_think_tags.py::test_multiline_think_block",
+    "tests/test_think_tags.py::test_unclosed_stripped_to_end",
+    "tests/test_think_tags.py::test_unclosed_whole_message",
+    "tests/test_think_tags.py::test_orphan_close_keeps_tail",
+    "tests/test_think_tags.py::test_orphan_close_thinking_variant",
+    "tests/test_think_tags.py::test_closed_then_unclosed",
+    "tests/test_think_tags.py::test_all_think_message_yields_empty",
+    "tests/test_think_tags.py::test_user_style_literal_discussion_untouched_when_no_tags"
+  ],
+  "original_passed": 24,
+  "authored_controls": [
+    {
+      "name": "invalid single target defaults to candidate zero",
+      "passed": true
+    },
+    {
+      "name": "single target beyond candidate count retained",
+      "passed": true
+    },
+    {
+      "name": "single parser valid non-object JSON raises AttributeError: []",
+      "passed": true
+    },
+    {
+      "name": "single parser valid non-object JSON raises AttributeError: null",
+      "passed": true
+    },
+    {
+      "name": "single parser valid non-object JSON raises AttributeError: 1",
+      "passed": true
+    },
+    {
+      "name": "multi-target parser rejects beyond-range target",
+      "passed": true
+    }
+  ]
+}

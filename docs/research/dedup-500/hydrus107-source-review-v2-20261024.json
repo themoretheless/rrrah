@@ -1,0 +1,39 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v1-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/dedup.py",
+      "local": "03-dedup.py",
+      "git_blob": "f013c5dfbd0fd30eb83f08f35a924456b8bd71f4",
+      "sha256": "a3c708a92f84f7d334a90a45818b09798eda5827e6665a42d901cd18b59a0416",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/acceptance_tests/test_dedupe.py",
+      "local": "06-test_dedupe.py",
+      "git_blob": "ed7b06fe0b754606806d7639c63b62c41907022b",
+      "sha256": "6cee6a895427b80ab7da43d3f2f034c9ea9f71e26cb0ea71662827038e9a6813",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "remaining_without_whole_review": 69,
+  "whole_repo_complete": false,
+  "original_tests_run": false,
+  "authored_controls": {
+    "passed": 3,
+    "report": "docs/research/dedup-500/hydrus107-native-controls-20261024.json",
+    "scope": "AST-extracted unchanged methods with recording replacements; no live backend"
+  },
+  "findings": [
+    "Cancelled search after first matching file makes one relationship call but returns zero due unconditional integer division by two. Full symmetric two-file control reports one after two calls. Actual tree symmetry not yet qualified.",
+    "Zero-byte native hash accepted by wrapper by design; downstream empty-hash semantics remain unqualified.",
+    "Maintenance returns immediately before tree maintenance code.",
+    "Acceptance class has unconditional unittest.skip, placeholder assertTrue(True), and setup constructor call supplies one argument while implementation requires db and client. Not executed."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

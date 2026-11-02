@@ -1,0 +1,647 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package db
+
+import (
+	"context"
+	"database/sql"
+	"slices"
+	"testing"
+
+	_ "modernc.org/sqlite"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+const expectedSchemaVersion = 8
+
+func TestMigrateAddTrackerImagePreviewsPreservesExistingRows(t *testing.T) {
+	t.Parallel()
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = rawDB.Close() })
+	ctx := t.Context()
+	if _, err := rawDB.ExecContext(ctx, `CREATE TABLE tracker_metadata (source_path TEXT, image_urls TEXT NOT NULL)`); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := rawDB.ExecContext(ctx, `INSERT INTO tracker_metadata (source_path, image_urls) VALUES (?, ?)`, "synthetic", `["https://images.example.invalid/full.png"]`); err != nil {
+		t.Fatal(err)
+	}
+	for range 2 {
+		if err := migrateAddTrackerImagePreviews(ctx, rawDB); err != nil {
+			t.Fatal(err)
+		}
+	}
+	var urls, previews string
+	if err := rawDB.QueryRowContext(ctx, `SELECT image_urls, image_previews FROM tracker_metadata WHERE source_path = ?`, "synthetic").Scan(&urls, &previews); err != nil {
+		t.Fatal(err)
+	}
+	if urls != `["https://images.example.invalid/full.png"]` || previews != "{}" {
+		t.Fatalf("migrated image URLs = %q, previews = %q", urls, previews)
+	}
+}
+
+func TestBaselineSchemaIncludesCurrentMigrationColumns(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = rawDB.Close()
+	})
+
+	ctx := context.Background()
+	if err := createBaselineSchema(ctx, rawDB); err != nil {
+		t.Fatalf("create baseline schema: %v", err)
+	}
+	for _, table := range []struct {
+		name    string
+		columns []string
+	}{
+		{
+			name: "external_ids",
+			columns: []string{
+				"generation",
+				"category_provenance",
+				"override_json",
+				"conflict_status",
+				"source_fingerprint",
+				"intent_fingerprint",
+				"contract_version",
+				"resolved_at",
+				"dependency_json",
+			},
+		},
+		{name: "external_metadata", columns: []string{"generation"}},
+		{name: "release_overrides", columns: []string{"use_season_episode", "no_episode_title", "no_distributor"}},
+		{name: "description_overrides", columns: []string{"group_key"}},
+	} {
+		for _, column := range table.columns {
+			exists, err := tableColumnExists(ctx, rawDB, table.name, column)
+			if err != nil {
+				t.Fatalf("inspect %s.%s: %v", table.name, column, err)
+			}
+			if !exists {
+				t.Fatalf("baseline missing current column %s.%s", table.name, column)
+			}
+		}
+	}
+}
+
+func TestMigrateAddExternalIdentityDependenciesPreservesExistingIdentity(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() { _ = rawDB.Close() })
+
+	ctx := context.Background()
+	if _, err := rawDB.ExecContext(ctx, `CREATE TABLE external_ids (
+		source_path TEXT PRIMARY KEY, tmdb_id INTEGER NOT NULL, updated_at TEXT NOT NULL
+	)`); err != nil {
+		t.Fatalf("create legacy external ids: %v", err)
+	}
+	if _, err := rawDB.ExecContext(ctx, `INSERT INTO external_ids (source_path, tmdb_id, updated_at) VALUES (?, ?, ?)`, "/media/Example.Release.2026.1080p-GRP.mkv", 123456, "2026-09-10T00:00:00Z"); err != nil {
+		t.Fatalf("seed legacy identity: %v", err)
+	}
+	for range 2 {
+		if err := migrateAddExternalIdentityDependencies(ctx, rawDB); err != nil {
+			t.Fatalf("migrate identity dependencies: %v", err)
+		}
+	}
+
+	var tmdbID int
+	var dependencyJSON string
+	if err := rawDB.QueryRowContext(ctx, `SELECT tmdb_id, dependency_json FROM external_ids WHERE source_path = ?`, "/media/Example.Release.2026.1080p-GRP.mkv").Scan(&tmdbID, &dependencyJSON); err != nil {
+		t.Fatalf("read migrated identity: %v", err)
+	}
+	if tmdbID != 123456 || dependencyJSON != "{}" {
+		t.Fatalf("migrated identity = tmdb=%d dependencies=%q", tmdbID, dependencyJSON)
+	}
+}
+
+func TestMigrateAddReleaseOmissionControlsIsIdempotent(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() { _ = rawDB.Close() })
+
+	ctx := context.Background()
+	if _, err := rawDB.ExecContext(ctx, `CREATE TABLE release_overrides (source_path TEXT PRIMARY KEY)`); err != nil {
+		t.Fatalf("create legacy release overrides: %v", err)
+	}
+	for range 2 {
+		if err := migrateAddReleaseOmissionControls(ctx, rawDB); err != nil {
+			t.Fatalf("migrate release omission controls: %v", err)
+		}
+	}
+	for _, column := range []string{"no_episode_title", "no_distributor"} {
+		exists, err := tableColumnExists(ctx, rawDB, "release_overrides", column)
+		if err != nil || !exists {
+			t.Fatalf("release_overrides.%s exists=%t err=%v", column, exists, err)
+		}
+	}
+}
+
+func TestMigrateAddReusableMediaTombstoneSourcesPreservesLegacyRows(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() { _ = rawDB.Close() })
+
+	ctx := t.Context()
+	if _, err := rawDB.ExecContext(ctx, `
+		CREATE TABLE media_reusable_tombstones (
+			compatibility_key TEXT NOT NULL,
+			capture_fingerprint TEXT NOT NULL,
+			content_sha256 TEXT NOT NULL,
+			deleted_at TEXT NOT NULL,
+			PRIMARY KEY (compatibility_key, capture_fingerprint, content_sha256)
+		)
+	`); err != nil {
+		t.Fatalf("create legacy tombstones: %v", err)
+	}
+	if _, err := rawDB.ExecContext(ctx, `
+		INSERT INTO media_reusable_tombstones (compatibility_key, capture_fingerprint, content_sha256, deleted_at)
+		VALUES (?, ?, ?, ?)
+	`, "compatibility", "capture", "content", "2026-09-19T00:00:00Z"); err != nil {
+		t.Fatalf("insert legacy tombstone: %v", err)
+	}
+	for range 2 {
+		if err := Migrate(rawDB); err != nil {
+			t.Fatalf("migrate legacy tombstones: %v", err)
+		}
+	}
+
+	if exists, err := tableColumnExists(ctx, rawDB, "media_reusable_tombstones", "source_path"); err != nil || !exists {
+		t.Fatalf("tombstone source_path exists=%t err=%v", exists, err)
+	}
+	var sourcePath, deletedAt string
+	if err := rawDB.QueryRowContext(ctx, `
+		SELECT source_path, deleted_at
+		FROM media_reusable_tombstones
+		WHERE compatibility_key = ? AND capture_fingerprint = ? AND content_sha256 = ?
+	`, "compatibility", "capture", "content").Scan(&sourcePath, &deletedAt); err != nil {
+		t.Fatalf("read migrated tombstone: %v", err)
+	}
+	if sourcePath != "" || deletedAt != "2026-09-19T00:00:00Z" {
+		t.Fatalf("migrated tombstone source=%q deleted_at=%q", sourcePath, deletedAt)
+	}
+}
+
+func TestMigrateNormalizeDescriptionOverridesKeepsCurrentRows(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = rawDB.Close()
+	})
+
+	ctx := context.Background()
+	if err := createBaselineSchema(ctx, rawDB); err != nil {
+		t.Fatalf("create baseline schema: %v", err)
+	}
+	for _, group := range []string{"GROUP-A", "GROUP-B"} {
+		if _, err := rawDB.ExecContext(
+			ctx,
+			`INSERT INTO description_overrides (source_path, group_key, description, updated_at) VALUES (?, ?, ?, ?)`,
+			"Example.Release.2026",
+			group,
+			"description",
+			"2026-07-31T00:00:00Z",
+		); err != nil {
+			t.Fatalf("seed current override %s: %v", group, err)
+		}
+	}
+
+	if err := migrateNormalizeDescriptionOverrides(ctx, rawDB); err != nil {
+		t.Fatalf("rerun description override migration: %v", err)
+	}
+
+	var count int
+	if err := rawDB.QueryRowContext(
+		ctx,
+		`SELECT COUNT(*) FROM description_overrides WHERE source_path = ?`,
+		"Example.Release.2026",
+	).Scan(&count); err != nil {
+		t.Fatalf("count current overrides: %v", err)
+	}
+	if count != 2 {
+		t.Fatalf("current overrides after migration = %d, want 2", count)
+	}
+}
+
+func TestMigrateAddTrackerRuleFailureSeverityHandlesAbsentAndLegacyTables(t *testing.T) {
+	t.Parallel()
+	for _, tc := range []struct {
+		name string
+		seed string
+	}{
+		{name: "absent"},
+		{name: "legacy", seed: `CREATE TABLE tracker_rule_failures (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			source_path TEXT NOT NULL,
+			tracker TEXT NOT NULL,
+			rule TEXT NOT NULL,
+			reason TEXT NOT NULL DEFAULT "",
+			created_at TEXT NOT NULL
+		)`},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+			db, err := sql.Open("sqlite", ":memory:")
+			if err != nil {
+				t.Fatalf("open: %v", err)
+			}
+			t.Cleanup(func() { _ = db.Close() })
+			if tc.seed != "" {
+				if _, err := db.ExecContext(context.Background(), tc.seed); err != nil {
+					t.Fatalf("seed: %v", err)
+				}
+				if _, err := db.ExecContext(context.Background(), `INSERT INTO tracker_rule_failures (source_path, tracker, rule, created_at) VALUES ("source", "PTP", "legacy", "now")`); err != nil {
+					t.Fatalf("seed legacy row: %v", err)
+				}
+			}
+			if err := migrateAddTrackerRuleFailureSeverity(context.Background(), db); err != nil {
+				t.Fatalf("migrate: %v", err)
+			}
+			if err := migrateAddTrackerRuleFailureSeverity(context.Background(), db); err != nil {
+				t.Fatalf("idempotent migrate: %v", err)
+			}
+			exists, err := tableColumnExists(context.Background(), db, "tracker_rule_failures", "severity")
+			if err != nil || !exists {
+				t.Fatalf("severity column exists=%t err=%v", exists, err)
+			}
+			if tc.seed != "" {
+				var severity string
+				if err := db.QueryRowContext(context.Background(), `SELECT severity FROM tracker_rule_failures WHERE rule = "legacy"`).Scan(&severity); err != nil {
+					t.Fatalf("read legacy severity: %v", err)
+				}
+				if severity != "blocking" {
+					t.Fatalf("legacy severity=%q", severity)
+				}
+			}
+		})
+	}
+}
+
+func TestMigrateAddTrackerRuleDispositionNormalizesLegacyRows(t *testing.T) {
+	t.Parallel()
+	db, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open: %v", err)
+	}
+	t.Cleanup(func() { _ = db.Close() })
+	if err := migrateAddTrackerRuleFailureSeverity(context.Background(), db); err != nil {
+		t.Fatalf("create legacy rule table: %v", err)
+	}
+	for _, row := range []struct{ rule, severity string }{{"legacy", "blocking"}, {"advice", "warning"}, {"unknown", "other"}} {
+		if _, err := db.ExecContext(context.Background(), `INSERT INTO tracker_rule_failures (source_path, tracker, rule, severity, created_at) VALUES ("source", "PTP", ?, ?, "now")`, row.rule, row.severity); err != nil {
+			t.Fatalf("seed %s: %v", row.rule, err)
+		}
+	}
+	if err := migrateAddTrackerRuleDisposition(context.Background(), db); err != nil {
+		t.Fatalf("migrate disposition: %v", err)
+	}
+	rows, err := db.QueryContext(context.Background(), `SELECT rule, disposition, authorized FROM tracker_rule_failures ORDER BY id`)
+	if err != nil {
+		t.Fatalf("query: %v", err)
+	}
+	defer rows.Close()
+	want := []api.RuleDisposition{api.RuleDispositionWaivable, api.RuleDispositionAdvisory, api.RuleDispositionStrict}
+	for idx := 0; rows.Next(); idx++ {
+		var rule, disposition string
+		var authorized int
+		if err := rows.Scan(&rule, &disposition, &authorized); err != nil {
+			t.Fatalf("scan: %v", err)
+		}
+		if idx >= len(want) || disposition != string(want[idx]) || authorized != 0 {
+			t.Fatalf("row %s disposition=%q authorized=%d", rule, disposition, authorized)
+		}
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatalf("iterate rows: %v", err)
+	}
+}
+
+func TestMigrateCreatesTrackerCookiesSchema(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = rawDB.Close()
+	})
+
+	if err := Migrate(rawDB); err != nil {
+		t.Fatalf("Migrate: %v", err)
+	}
+
+	var userVersion int
+	if err := rawDB.QueryRowContext(context.Background(), `PRAGMA user_version`).Scan(&userVersion); err != nil {
+		t.Fatalf("query user_version: %v", err)
+	}
+	if userVersion != expectedSchemaVersion {
+		t.Fatalf("expected schema version %d, got %d", expectedSchemaVersion, userVersion)
+	}
+
+	rows, err := rawDB.QueryContext(context.Background(), `SELECT id FROM schema_migrations ORDER BY id`)
+	if err != nil {
+		t.Fatalf("query schema_migrations: %v", err)
+	}
+	defer rows.Close()
+
+	var ids []string
+	for rows.Next() {
+		var id string
+		if err := rows.Scan(&id); err != nil {
+			t.Fatalf("scan schema_migrations: %v", err)
+		}
+		ids = append(ids, id)
+	}
+	if err := rows.Err(); err != nil {
+		t.Fatalf("iterate schema_migrations: %v", err)
+	}
+	if !slices.Contains(ids, "2026_04_add_tracker_cookies") {
+		t.Fatalf("expected tracker cookies migration id to be recorded, got %v", ids)
+	}
+	if !slices.Contains(ids, "2026_06_add_tracker_auth_state") {
+		t.Fatalf("expected tracker auth state migration id to be recorded, got %v", ids)
+	}
+
+	objects := []struct {
+		typ  string
+		name string
+	}{
+		{typ: "table", name: "tracker_cookies"},
+		{typ: "index", name: "idx_tracker_cookies_tracker_id"},
+		{typ: "index", name: "idx_tracker_cookies_created_at"},
+		{typ: "table", name: "tracker_auth_state"},
+		{typ: "index", name: "idx_tracker_auth_state_tracker_id"},
+		{typ: "index", name: "idx_tracker_auth_state_updated_at"},
+	}
+
+	for _, item := range objects {
+		assertSQLiteObjectExists(t, rawDB, item.typ, item.name)
+	}
+}
+
+func TestMigrateBridgesLegacyV8TrackerCookiesSchema(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = rawDB.Close()
+	})
+
+	ctx := context.Background()
+	if err := createBaselineSchema(ctx, rawDB); err != nil {
+		t.Fatalf("create baseline schema: %v", err)
+	}
+	if err := migrateAddDVDMediaInfo(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v2: %v", err)
+	}
+	if err := migrateAddReleaseOverrideUseSeasonEpisode(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v3: %v", err)
+	}
+	if err := migrateAddHistoryIndexes(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v4: %v", err)
+	}
+	if err := migrateBackfillUploadedImageUsageScope(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v5: %v", err)
+	}
+	if err := migrateAddScreenshotSlotTables(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v6: %v", err)
+	}
+	if err := migrateNormalizeDescriptionOverrides(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v7: %v", err)
+	}
+	if err := migrateAddTrackerCookies(ctx, rawDB); err != nil {
+		t.Fatalf("apply legacy v8: %v", err)
+	}
+	if _, err := rawDB.ExecContext(context.Background(), `PRAGMA user_version = 8`); err != nil {
+		t.Fatalf("set legacy user_version: %v", err)
+	}
+
+	if _, err := rawDB.ExecContext(ctx, `INSERT INTO config_settings (section,data,updated_at) VALUES ('Trackers','{"DefaultTrackers":["THR","AITHER"],"PreferredTracker":"THR","Trackers":{"THR":{"Password":"upbrr-enc:v1:unreadable"},"RETIRED":{"keep_me":"retained"}}}','2026-01-01')`); err != nil {
+		t.Fatal(err)
+	}
+	if err := Migrate(rawDB); err != nil {
+		t.Fatalf("bridge legacy v8 db: %v", err)
+	}
+
+	var userVersion int
+	if err := rawDB.QueryRowContext(context.Background(), `PRAGMA user_version`).Scan(&userVersion); err != nil {
+		t.Fatalf("query user_version after bridge: %v", err)
+	}
+	if userVersion != expectedSchemaVersion {
+		t.Fatalf("expected schema version %d after bridge, got %d", expectedSchemaVersion, userVersion)
+	}
+
+	assertSQLiteObjectExists(t, rawDB, "table", "tracker_cookies")
+	assertSQLiteObjectExists(t, rawDB, "table", "schema_migrations")
+	assertSQLiteObjectExists(t, rawDB, "index", "idx_tracker_cookies_tracker_id")
+	assertSQLiteObjectExists(t, rawDB, "index", "idx_tracker_cookies_created_at")
+	repo := &SQLiteRepository{db: rawDB, logger: nopLogger{}}
+	for range 2 {
+		if err := Migrate(rawDB); err != nil {
+			t.Fatal(err)
+		}
+		cfg, report, err := config.LoadFromDatabaseWithRepairReport(ctx, repo)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if _, ok := cfg.Trackers.Trackers["THR"]; ok {
+			t.Fatal("removed tracker retained after legacy schema upgrade")
+		}
+		if cfg.Trackers.Trackers["RETIRED"].Unknown["keep_me"] != "retained" {
+			t.Fatal("unrelated legacy extension lost")
+		}
+		if err := config.SaveSectionsToDatabase(ctx, cfg, report.ChangedSections, repo); err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+func TestMigrateAddExternalIDsMALBackfillsFromTMDBMetadata(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = rawDB.Close()
+	})
+
+	ctx := context.Background()
+	statements := []string{
+		`
+		CREATE TABLE external_ids (
+			source_path TEXT PRIMARY KEY,
+			tmdb_id INTEGER NOT NULL DEFAULT 0,
+			imdb_id INTEGER NOT NULL DEFAULT 0,
+			tvdb_id INTEGER NOT NULL DEFAULT 0,
+			tvmaze_id INTEGER NOT NULL DEFAULT 0,
+			category TEXT NOT NULL DEFAULT "",
+			source_tmdb TEXT NOT NULL DEFAULT "",
+			source_imdb TEXT NOT NULL DEFAULT "",
+			source_tvdb TEXT NOT NULL DEFAULT "",
+			source_tvmaze TEXT NOT NULL DEFAULT "",
+			updated_at TEXT NOT NULL
+		)
+		`,
+		`
+		CREATE TABLE external_metadata (
+			source_path TEXT PRIMARY KEY,
+			tmdb_json TEXT NOT NULL DEFAULT "",
+			imdb_json TEXT NOT NULL DEFAULT "",
+			tvdb_json TEXT NOT NULL DEFAULT "",
+			tvmaze_json TEXT NOT NULL DEFAULT "",
+			bluray_json TEXT NOT NULL DEFAULT "",
+			updated_at TEXT NOT NULL
+		)
+		`,
+		`INSERT INTO external_ids (source_path, tmdb_id, updated_at) VALUES ('/media/Example.Release.2026.1080p-GRP.mkv', 123, '2026-01-01T00:00:00Z')`,
+		`INSERT INTO external_ids (source_path, tmdb_id, updated_at) VALUES ('/media/Example.Release.2026.2160p-GRP.mkv', 456, '2026-01-01T00:00:00Z')`,
+		`INSERT INTO external_metadata (source_path, tmdb_json, updated_at) VALUES ('/media/Example.Release.2026.1080p-GRP.mkv', '{"MALID":5114}', '2026-01-01T00:00:00Z')`,
+	}
+	for _, statement := range statements {
+		if _, err := rawDB.ExecContext(ctx, statement); err != nil {
+			t.Fatalf("seed schema: %v", err)
+		}
+	}
+
+	if err := migrateAddExternalIDsMAL(ctx, rawDB); err != nil {
+		t.Fatalf("migrate external ids mal: %v", err)
+	}
+
+	var malID int
+	var sourceMAL string
+	if err := rawDB.QueryRowContext(ctx, `
+		SELECT mal_id, source_mal
+		FROM external_ids
+		WHERE source_path = ?
+	`, "/media/Example.Release.2026.1080p-GRP.mkv").Scan(&malID, &sourceMAL); err != nil {
+		t.Fatalf("read backfilled mal: %v", err)
+	}
+	if malID != 5114 || sourceMAL != "tmdb" {
+		t.Fatalf("expected tmdb mal backfill, got id=%d source=%q", malID, sourceMAL)
+	}
+
+	if err := rawDB.QueryRowContext(ctx, `
+		SELECT mal_id, source_mal
+		FROM external_ids
+		WHERE source_path = ?
+	`, "/media/Example.Release.2026.2160p-GRP.mkv").Scan(&malID, &sourceMAL); err != nil {
+		t.Fatalf("read empty mal row: %v", err)
+	}
+	if malID != 0 || sourceMAL != "" {
+		t.Fatalf("expected missing metadata to stay empty, got id=%d source=%q", malID, sourceMAL)
+	}
+}
+
+func TestMigrateAddAniListExternalMetadataCreatesMissingTable(t *testing.T) {
+	t.Parallel()
+
+	rawDB, err := sql.Open("sqlite", ":memory:")
+	if err != nil {
+		t.Fatalf("open raw db: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = rawDB.Close()
+	})
+
+	ctx := context.Background()
+	if err := migrateAddAniListExternalMetadata(ctx, rawDB); err != nil {
+		t.Fatalf("migrate anilist external metadata: %v", err)
+	}
+	if err := migrateAddAniListExternalMetadata(ctx, rawDB); err != nil {
+		t.Fatalf("migrate anilist external metadata idempotent: %v", err)
+	}
+
+	assertSQLiteObjectExists(t, rawDB, "table", "external_metadata")
+	assertSQLiteObjectExists(t, rawDB, "index", "idx_external_metadata_source_path")
+
+	for _, column := range []string{
+		"source_path",
+		"tmdb_json",
+		"imdb_json",
+		"tvdb_json",
+		"tvmaze_json",
+		"anilist_json",
+		"bluray_json",
+		"updated_at",
+	} {
+		exists, err := tableColumnExists(ctx, rawDB, "external_metadata", column)
+		if err != nil {
+			t.Fatalf("inspect external_metadata.%s: %v", column, err)
+		}
+		if !exists {
+			t.Fatalf("expected external_metadata.%s to exist", column)
+		}
+	}
+}
+
+func TestCanonicalReleaseGenerationMigrationIsOnlyBranchMigration(t *testing.T) {
+	const (
+		publicBoundary = "2026_07_add_tracker_rule_failure_severity"
+		finalID        = "2026_07_add_canonical_release_generations"
+		removedID      = "2026_07_add_prepared_release_generations"
+	)
+
+	var final *migrationStep
+	for i := range migrationRegistry {
+		step := &migrationRegistry[i]
+		if step.id == removedID {
+			t.Fatalf("removed branch-only migration %q remains registered", removedID)
+		}
+		if step.id == finalID {
+			final = step
+		}
+	}
+	if final == nil {
+		t.Fatalf("final migration %q is not registered", finalID)
+	}
+	if !slices.Equal(final.dependsOn, []string{publicBoundary}) {
+		t.Fatalf("final migration dependencies = %v, want [%s]", final.dependsOn, publicBoundary)
+	}
+}
+
+func assertSQLiteObjectExists(t *testing.T, db *sql.DB, objectType, name string) {
+	t.Helper()
+
+	var count int
+	if err := db.QueryRowContext(context.Background(),
+		`SELECT COUNT(1) FROM sqlite_master WHERE type = ? AND name = ?`,
+		objectType,
+		name,
+	).Scan(&count); err != nil {
+		t.Fatalf("query sqlite_master for %s %s: %v", objectType, name, err)
+	}
+	if count != 1 {
+		t.Fatalf("expected %s %s to exist", objectType, name)
+	}
+}

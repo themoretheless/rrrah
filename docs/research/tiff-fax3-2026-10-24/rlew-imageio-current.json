@@ -1,0 +1,90 @@
+{
+  "scope": "System ImageIO via sips; independent application invocation, underlying codec ancestry unproven. One-row strips required exact; multi-row results diagnostic, not oracle success. No rrrah output used to derive expected pixels.",
+  "macos": "26.7.2",
+  "sips": "sips-316",
+  "results": [
+    {
+      "manifest": "fax2w-single-libtiff-reference.json",
+      "manifest_sha256": "5e2f7c498b4ad75dba2f21280d0711ec1d611e5b90433d4be6c67660f290cfc7",
+      "sources": 8,
+      "exact": 8,
+      "different": 0,
+      "refused": 0,
+      "examples": []
+    },
+    {
+      "manifest": "fax2w-libtiff-reference.json",
+      "manifest_sha256": "851d776b7fd38d443408b4d8083b537e762ab64286e1798bf9fede12aa679a7e",
+      "sources": 64,
+      "exact": 0,
+      "different": 64,
+      "refused": 0,
+      "examples": [
+        {
+          "source": "fax2w-wl-fill1-opt0-ori1.tiff",
+          "status": "different",
+          "actual_size": [
+            13,
+            7
+          ],
+          "differing_bytes": 15
+        },
+        {
+          "source": "fax2w-wl-fill1-opt0-ori2.tiff",
+          "status": "different",
+          "actual_size": [
+            13,
+            7
+          ],
+          "differing_bytes": 18
+        },
+        {
+          "source": "fax2w-wl-fill1-opt0-ori3.tiff",
+          "status": "different",
+          "actual_size": [
+            13,
+            7
+          ],
+          "differing_bytes": 18
+        }
+      ]
+    },
+    {
+      "manifest": "fax2w-long-libtiff-reference.json",
+      "manifest_sha256": "de36731dfc1780ea2ff0f97cbb9e9ed26826e0dcd581637341b67a1a08b16c19",
+      "sources": 8,
+      "exact": 0,
+      "different": 8,
+      "refused": 0,
+      "examples": [
+        {
+          "source": "fax2w-long-wl-fill1-opt0-ori1.tiff",
+          "status": "different",
+          "actual_size": [
+            2049,
+            11
+          ],
+          "differing_bytes": 6186
+        },
+        {
+          "source": "fax2w-long-wl-fill2-opt0-ori1.tiff",
+          "status": "different",
+          "actual_size": [
+            2049,
+            11
+          ],
+          "differing_bytes": 6186
+        },
+        {
+          "source": "fax2w-long-wb-fill1-opt0-ori1.tiff",
+          "status": "different",
+          "actual_size": [
+            2049,
+            11
+          ],
+          "differing_bytes": 6186
+        }
+      ]
+    }
+  ]
+}

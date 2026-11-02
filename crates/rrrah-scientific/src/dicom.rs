@@ -4,7 +4,57 @@
 //! No guessed color, VOI LUT, presentation-state or compression fallback.
 use crate::{DecodeRequest, RasterDecodeError, ScalarWindow};
 use rrrah_core::{DecodedRaster, RasterColorSpace, RasterPixels};
-use std::{collections::BTreeSet, sync::Arc};
+use std::sync::Arc;
+#[cfg(test)]
+thread_local! { static LEGACY_TAGS: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
+#[derive(Default)]
+struct TagOrder {
+    previous: Option<u32>,
+    required_meta: u8,
+    #[cfg(test)]
+    legacy: Option<std::collections::BTreeSet<u32>>,
+}
+impl TagOrder {
+    fn new() -> Self {
+        Self {
+            previous: None,
+            required_meta: 0,
+            #[cfg(test)]
+            legacy: LEGACY_TAGS.with(|value| value.get().then(Default::default)),
+        }
+    }
+    fn insert(&mut self, tag: u32) -> bool {
+        #[cfg(test)]
+        if let Some(seen) = &mut self.legacy {
+            if self.previous.is_some_and(|previous| tag < previous) || !seen.insert(tag) {
+                return false;
+            }
+            self.previous = Some(tag);
+            return true;
+        }
+        if self.previous.is_some_and(|previous| tag <= previous) {
+            return false;
+        }
+        self.previous = Some(tag);
+        self.required_meta |= match tag {
+            0x00020001 => 1,
+            0x00020002 => 2,
+            0x00020003 => 4,
+            0x00020012 => 8,
+            _ => 0,
+        };
+        true
+    }
+    fn complete_meta(&self) -> bool {
+        #[cfg(test)]
+        if let Some(seen) = &self.legacy {
+            return [0x00020001, 0x00020002, 0x00020003, 0x00020012]
+                .iter()
+                .all(|tag| seen.contains(tag));
+        }
+        self.required_meta == 15
+    }
+}
 #[path = "dicom_encapsulation.rs"]
 mod encapsulation;
 #[path = "dicom_geometry.rs"]
@@ -96,8 +146,7 @@ pub fn decode(
     }
     request.check_cancelled()?;
     let (mut at, mut count) = (132usize, 0usize);
-    let mut seen = BTreeSet::new();
-    let mut previous = 0u32;
+    let mut seen = TagOrder::new();
     let mut meta_end = None;
     let mut dataset_started = false;
     let (mut rows, mut columns, mut samples, mut bits, mut stored, mut high, mut signed) =
@@ -125,16 +174,11 @@ pub fn decode(
         let little = syntax != Some("1.2.840.10008.1.2.2") || meta_end.is_none_or(|end| element_start < end);
         let group = word(h[..2].try_into().unwrap(), little);
         let tag = (u32::from(group) << 16) | u32::from(word(h[2..4].try_into().unwrap(), little));
-        if tag < previous || !seen.insert(tag) {
+        if !seen.insert(tag) {
             return Err(bad("unordered or duplicate tag"));
         }
-        previous = tag;
         if group != 2 && !dataset_started {
-            if meta_end != Some(element_start)
-                || ![0x00020001, 0x00020002, 0x00020003, 0x00020012]
-                    .iter()
-                    .all(|tag| seen.contains(tag))
-            {
+            if meta_end != Some(element_start) || !seen.complete_meta() {
                 return Err(bad("incomplete/inconsistent Part 10 file meta information"));
             }
             dataset_started = true;
@@ -1304,6 +1348,144 @@ mod tests {
         assert_eq!(budget.peak(), input + output + scratch);
         request.memory_budget = Some(rrrah_core::MemoryBudget::new(input + output + scratch - 1));
         assert!(decode_file(&request).is_err());
+        assert_eq!(request.memory_budget.unwrap().used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod rr36_qualification {
+    use super::*;
+    #[test]
+    fn tag_order_matches_legacy_for_zero_duplicates_missing_meta_and_unsorted_streams() {
+        let tags = [
+            0,
+            1,
+            0x00020001,
+            0x00020002,
+            0x00020003,
+            0x00020012,
+            0x00280010,
+            u32::MAX,
+        ];
+        for a in tags {
+            for b in tags {
+                for c in tags {
+                    let mut order = TagOrder::new();
+                    let mut legacy = std::collections::BTreeSet::new();
+                    let mut previous = 0;
+                    for tag in [a, b, c] {
+                        let expected = tag >= previous && legacy.insert(tag);
+                        assert_eq!(order.insert(tag), expected);
+                        if !expected {
+                            break;
+                        }
+                        previous = tag;
+                        assert_eq!(
+                            order.complete_meta(),
+                            [0x00020001, 0x00020002, 0x00020003, 0x00020012]
+                                .iter()
+                                .all(|t| legacy.contains(t))
+                        );
+                    }
+                }
+            }
+        }
+        for missing in 0..5 {
+            let mut order = TagOrder::new();
+            for (i, tag) in [0x00020001, 0x00020002, 0x00020003, 0x00020012]
+                .into_iter()
+                .enumerate()
+            {
+                if i != missing {
+                    assert!(order.insert(tag));
+                }
+            }
+            assert_eq!(order.complete_meta(), missing == 4);
+        }
+    }
+    fn inputs() -> Vec<Vec<u8>> {
+        let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+        let original = std::fs::read(root.join("dicom-explicit-float32.dcm")).unwrap();
+        let pixel = original.windows(4).position(|v| v == [0xe0, 0x7f, 8, 0]).unwrap();
+        [0, 64, 4096]
+            .into_iter()
+            .map(|count| {
+                let mut bytes = original[..pixel].to_vec();
+                for tag in 0..count {
+                    bytes.extend_from_slice(&0x0029u16.to_le_bytes());
+                    bytes.extend_from_slice(&(0x1000u16 + tag).to_le_bytes());
+                    bytes.extend_from_slice(b"OB\0\0\0\0\0\0");
+                }
+                bytes.extend_from_slice(&original[pixel..]);
+                bytes
+            })
+            .collect()
+    }
+    #[test]
+    #[ignore = "actual DICOM decode tag-allocation A/A A/B, alternating small/large, budget and bytes"]
+    fn full_decode_tag_set_pairs() {
+        let inputs = inputs();
+        let budget = rrrah_core::MemoryBudget::new(4096);
+        let mut request = DecodeRequest::new("synthetic.dcm");
+        request.memory_budget = Some(budget.clone());
+        if let Ok(variant) = std::env::var("RRRAH_DICOM_TAG_VARIANT") {
+            LEGACY_TAGS.with(|v| v.set(variant == "legacy"));
+            for i in 0..300 {
+                let frame = decode(&inputs[[0, 2, 0, 1][i % 4]], &request, None).unwrap();
+                std::hint::black_box(frame);
+                assert_eq!(budget.used(), 0);
+            }
+            eprintln!(
+                "DICOM_ALLOCATION_PROBE variant={variant} decodes=300 managed_peak={} final=0",
+                budget.peak()
+            );
+            return;
+        }
+        let mut reference = Vec::new();
+        for legacy in [true, false] {
+            LEGACY_TAGS.with(|v| v.set(legacy));
+            for bytes in &inputs {
+                let raster = decode(bytes, &request, None).unwrap();
+                let signature = format!("{:?}", raster.pixels());
+                if legacy {
+                    reference.push(signature);
+                } else {
+                    assert_eq!(signature, reference.remove(0));
+                }
+                drop(raster);
+                assert_eq!(budget.used(), 0);
+            }
+        }
+        for control in [true, false] {
+            for pair in 0..13 {
+                for mode in [pair % 2, 1 - pair % 2] {
+                    LEGACY_TAGS.with(|v| v.set(!control && mode == 0));
+                    let start = std::time::Instant::now();
+                    let mut samples = Vec::new();
+                    for i in 0..120 {
+                        let t = std::time::Instant::now();
+                        let frame = decode(&inputs[[0, 2, 0, 1][i % 4]], &request, None).unwrap();
+                        std::hint::black_box(frame);
+                        samples.push(t.elapsed().as_nanos());
+                        assert_eq!(budget.used(), 0);
+                    }
+                    let total = start.elapsed().as_nanos();
+                    samples.sort_unstable();
+                    if pair >= 3 {
+                        eprintln!(
+                            "DICOM_PAIR control={control} pair={} mode={mode} total_ns={total} p50_ns={} p95_ns={} managed_peak={} final=0",
+                            pair - 3,
+                            samples[59],
+                            samples[113],
+                            budget.peak()
+                        );
+                    }
+                }
+            }
+        }
+        LEGACY_TAGS.with(|v| v.set(false));
+        request.memory_budget = Some(rrrah_core::MemoryBudget::new(1));
+        assert!(decode(&inputs[0], &request, None).is_err());
         assert_eq!(request.memory_budget.unwrap().used(), 0);
     }
 }

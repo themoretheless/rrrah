@@ -1,0 +1,131 @@
+{
+  "name": "@sylphx/media-curator",
+  "version": "1.3.0",
+  "description": "MediaCurator: An intelligent CLI tool to curate, organize, and deduplicate your digital photo and video collection.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "bin": {
+    "media-curator": "./dist/index.js"
+  },
+  "scripts": {
+    "start": "bun run index.ts",
+    "build": "bun run stage:rust && bun build index.ts --outdir dist --target node --external lmdb --external sharp --external exiftool-vendored --external fluent-ffmpeg --minify && bun run asbuild:release && cp build/index.wasm dist/index.wasm",
+    "start:node": "node dist/index.js",
+    "test": "vitest run && bun run test:bun",
+    "test:bun": "bun test .bun.test.ts",
+    "test:watch": "vitest watch",
+    "test:cov": "vitest run --coverage",
+    "prepare": "husky",
+    "format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --fix --cache",
+    "validate": "bun run check-format && bun run lint && bun run typecheck && bun run test && bun run check:native-packaging",
+    "typecheck": "tsc --noEmit",
+    "asbuild": "asc assembly/index.ts --target debug --outFile build/index.wasm",
+    "asbuild:release": "asc assembly/index.ts --target release --outFile build/index.wasm",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "bun run build && changeset publish",
+    "stage:rust": "bun scripts/stage-rust-cli.ts",
+    "build:rust": "cargo build --release -p media-curator-cli && bun run stage:rust",
+    "check:native-packaging": "bash scripts/check-native-packaging.sh",
+    "prepublishOnly": "bun run build:rust && bun run build && bun run check:native-packaging"
+  },
+  "author": "Sylphx <hi@sylphx.com> (https://sylphx.com)",
+  "license": "MIT",
+  "dependencies": {
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "@types/fluent-ffmpeg": "^2.1.25",
+    "@types/node": "^22.14.0",
+    "deep-eql": "^5.0.2",
+    "exiftool-vendored": "35.21.0",
+    "fast-equals": "^5.2.2",
+    "fluent-ffmpeg": "^2.1.3",
+    "lmdb": "^3.0.13",
+    "neverthrow": "^8.2.0",
+    "sharp": "0.35.4",
+    "workerpool": "^9.1.3",
+    "commander": "^9.5.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@changesets/cli": "^2.29.7",
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@datastructures-js/heap": "^4.3.3",
+    "@eslint/js": "^9.9.0",
+    "@topcli/spinner": "^2.1.2",
+    "@types/bun": "^1.2.8",
+    "@types/cli-progress": "^3.11.6",
+    "@types/deep-eql": "^4.0.2",
+    "@vitest/coverage-v8": "3.2.7",
+    "assemblyscript": "^0.27.29",
+    "async-mutex": "^0.5.0",
+    "chalk": "^5.3.0",
+    "cli-progress": "^3.12.0",
+    "eslint": "^9.9.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^15.9.0",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.9",
+    "node-addon-api": "^8.1.0",
+    "node-gyp": "^10.2.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.1.0",
+    "vitest": "^3.1.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "bun": ">=1.4.0"
+  },
+  "homepage": "https://github.com/SylphxAI/media-curator#readme",
+  "bugs": {
+    "url": "https://github.com/SylphxAI/media-curator/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SylphxAI/media-curator.git"
+  },
+  "keywords": [
+    "media-curator",
+    "typescript",
+    "nodejs",
+    "bun",
+    "cli",
+    "media-organizer",
+    "deduplication",
+    "perceptual-hashing",
+    "image-processing",
+    "video-processing",
+    "sqlite",
+    "lmdb",
+    "ffmpeg",
+    "sharp",
+    "exiftool",
+    "functional-programming"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "packageManager": "bun@1.4.2",
+  "files": [
+    "bin/",
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "scope": "Original get_extent with synthetic single extent4096..8192 and requested hole0; minimal C structs, no actual FIEMAP/filesystem/kernel ioctl.",
+  "source": "docs/research/dedup-500/evidence/markfasheh--duperemove/remaining-pinned/fiemap.c",
+  "sha256": "1cc17a8ae60d1e30a4751a5999c8b4034962a66498d651f9b6c133503355df30",
+  "harness": "#include <stdio.h>\n#include <stdint.h>\n#include <stddef.h>\nstruct fiemap_extent {uint64_t fe_logical,fe_length;};\nstruct fiemap {unsigned int fm_mapped_extents;struct fiemap_extent fm_extents[1];};\nstruct fiemap_extent *get_extent(struct fiemap *fiemap, size_t loff,\n\t\t\t\t unsigned int *index)\n{\n\tstruct fiemap_extent *extent;\n\tsize_t ext_end_off;\n\n\tfor (unsigned int i = 0; i < fiemap->fm_mapped_extents; i++) {\n\t\textent = &fiemap->fm_extents[i];\n\t\text_end_off = extent->fe_logical + extent->fe_length - 1;\n\t\tif (ext_end_off < loff)\n\t\t\tcontinue;\n\n\t\tif (index)\n\t\t\t*index = i;\n\n\t\treturn extent;\n\t}\n\treturn NULL;\n}\nint main(void){struct fiemap f={1,{{4096,4096}}};unsigned int idx=99;struct fiemap_extent *p=get_extent(&f,0,&idx);printf(\"hole_offset=0 returned_extent_start=%llu index=%u covers_requested_offset=%d\\n\",p?(unsigned long long)p->fe_logical:0,idx,p&&p->fe_logical<=0);return 0;}\n",
+  "build_returncode": 0,
+  "build_stderr": "",
+  "run_returncode": 0,
+  "stdout": "hole_offset=0 returned_extent_start=4096 index=0 covers_requested_offset=0\n"
+}

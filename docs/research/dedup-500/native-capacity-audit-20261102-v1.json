@@ -1,0 +1,28 @@
+{
+  "source_sha256": {
+    "crates/rrrah-dedup/src/managed_pair_counts.rs": "06f937219bb3421347eb51dbffdb0add475612ad655c82faaf859d0573085a62",
+    "crates/rrrah-dedup/src/local.rs": "c89c2b0841078177077704e4ab89123215f815dc2bfe8d1e435999ed1ea4ad3c",
+    "crates/rrrah-dedup/src/geometry.rs": "ccbbeb779159d340cc56e6d5d967a03ac0e848c81935300662b614a693a97d94",
+    "crates/rrrah-memory/src/lib.rs": "b70514da81fdf38f869411dddc26b68c07c5a1ac72aa56f8d06a31cf84d796c5"
+  },
+  "scope": "Focused inspected arithmetic sites, not complete library panic/allocation audit.",
+  "findings": [
+    "ManagedPairCounts find_slot only receives initially length2 or checked doubled buffer, nonempty power-of-two invariant precedes len-1. Empty/zero-limit table refuses before allocation; repeated existing keys use checked count increment.",
+    "reserve_slot refuses len>=limit; only reserves at len==capacity and target doubles saturating, clamps to limit, both exceed len for feasible growth, so next-len nonnegative.",
+    "Projective sampler rejects points.len<4 before i0..3 subtraction; enumerated remaining point bound and inlier count bound keep subtraction and sum within slice length.",
+    "MemoryBudget buffer byte multiplication is checked, credit reserved before Vec allocation and actual capacity reconciled before initialization."
+  ],
+  "runtime_command": "cargo +1.98.1 test -p rrrah-dedup --features decode --lib managed_pair_counts::tests::",
+  "runtime_status": "completed",
+  "runtime_session_id": 68506,
+  "runtime_results": {
+    "exit_code": 0,
+    "passed": 3,
+    "failed": 0,
+    "ignored": 0,
+    "filtered_out": 132,
+    "compile_seconds": 413,
+    "test_seconds": 0.0,
+    "scope": "Only managed_pair_counts tests; no full decode suite or global RSS claim."
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "reference": "byteskeptical/sftpretty",
+  "reference_audit": "docs/research/dedup-500/sftpretty284-source-review-v5-20261102.json",
+  "native_sources": {
+    "crates/rrrah-dedup/src/exact.rs": "e18ba5bbd33a0d04d0b3f19adadf5980b23f53b5752708114dd66f49068673f5",
+    "crates/rrrah-dedup/tests/exact_files.rs": "d196fd060f16b98e8c9bd78130c44759656649b58b8da9750a0b39488b66d9c1"
+  },
+  "method": "Current source and regression-body inspection only; no new native test execution while full decode run is active.",
+  "checks": [
+    {
+      "reference_failure": "Missing or unreadable path hashed as text",
+      "native_evidence": "exact::hash returns Result and propagates open/read failures; Report::complete is false for Io/Changed/Limit or cancellation. missing_input_and_overlap_do_not_lose_valid_results checks both public scan APIs and root orderings."
+    },
+    {
+      "reference_failure": "First successful result hides later errors",
+      "native_evidence": "Report accumulates explicit issues; directory_iteration_error_preserves_admitted_children and missing-input tests preserve healthy groups while incomplete. This mapping does not independently prove every parallel stage."
+    },
+    {
+      "reference_failure": "Partial read failure silently accepted",
+      "native_evidence": "every_partial_read_failure_preserves_typed_error_and_unread_tail injects 64 offsets times three error kinds into read_exact_cancelled and asserts exact typed failure plus untouched tail."
+    },
+    {
+      "reference_failure": "Permission denial indistinguishable from absence",
+      "native_evidence": "unreadable_file_is_explicit_and_does_not_hide_healthy_copies checks actual read denial prerequisite and Io issue. Privileged runners return early and cannot qualify this case; body exercises scan rather than scan_verified."
+    }
+  ],
+  "production_changes": false,
+  "limitations": [
+    "Source inspection is not a fresh execution receipt.",
+    "No inference of total platform/format/race coverage.",
+    "Full decode test session 77723 remains active."
+  ]
+}

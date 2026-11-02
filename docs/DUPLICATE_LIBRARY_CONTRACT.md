@@ -10136,3 +10136,243 @@ Original310SandDupe sixblobs and322AutoJukeBox fiveblobs fullyread/Gitmatched. I
 The original Root selecteddecode run completed214passed0failed5ignored across5targets, with complete executed/listed inventories and cloned binaries/log retained by `docs/research/dedup-root-decode-drift-preserved-20261015.json`. Nine sourcefiles changed, so the strict currentRoot auditor correctly refused unchanged-source qualification. The frozenV4queue failed before dispatch when the Cargo child exited while its owning producer still validated sources; original terminal reports preserved, no frozen run had started. A distinct V4 diagnostic test-profile run now uses lto=off with all5targets retained and raw childCPU/time accounting. Not default/release-profile, latest mutableRoot, fullworkspace/native/corpus or measuredspeedup qualification. Cargo documents that false allows localThinLTO while off disablesLTO: [Cargo profiles](https://doc.rust-lang.org/cargo/reference/profiles.html#lto).
 
 Normal application/library cargo check passed, and a fresh check after manifest changes also passed. These unblock an authorized preservation/push checkpoint, not overall goal completion; scope recorded in `docs/research/dedup-push-checkpoint-validation-20261015.json`.
+
+### Real RAW development differences refreshed (2026-10-26)
+
+The four known DNG/NEF/ORF/CR2 originals and independent LibRaw TIFF references
+were restored with their recorded SHA-256 hashes. On the current pinned probe
+binary, the explicit display-projection recipe accepts all four same-source
+pairs and rejects all twelve cross-scene RAW/TIFF pairs. This is the known
+development corpus, not held-out precision or exact pixel equality. Strict CR2
+still rejects its same-source TIFF. Inputs and results are retained under
+`docs/research/dedup-500/rrrah-restored-real-camera-inputs-20261026-v1.json` and
+`docs/research/dedup-500/real-camera-display-matrix-20261026-v1/report.json`.
+
+Two additional Sony ILCE-7M3 RAW sources both fail same-source comparison against
+independently rendered linear-demosaic TIFFs, even with display projection. Their
+cross-source views overlap and must not be labelled semantic negatives solely
+because their source IDs differ. For source 2414, exact crop-shift and existing
+radius-one filtering controls still reject; changing only the independent
+renderer to AHD yields approximately 98% matched pixels and acceptance. The same AHD control on source 2418 still rejects: display matching is
+93.14% forward and 88.72% reverse, below the required 90% in both directions.
+Acceptance on 2414 therefore does not replicate across these two Sony sources.
+Log, TIFF and probe binary hashes were verified in
+`docs/research/dedup-500/sony-display-matrix-20261026-v1/ahd-replication-verification.json`.
+A fixed 12x12 shift on 2418/AHD yields 89.47% strict matching in both
+directions; this diagnostic does not evaluate display projection and cannot
+by itself isolate its rejection. Evidence: `2418-ahd-known-shift.json` in the
+same control directory. Native Bayer Auto development selects AHD. These controls establish sensitivity to
+development differences, not a general fix. The original linear-reference
+failures remain required evidence; replacing them with AHD references would not
+close cross-development coverage. Logs, source-policy audit and control reports:
+`docs/research/dedup-500/sony-display-matrix-20261026-v1/`.
+
+No production thresholds or decoding defaults were changed in this refresh.
+Broad camera/development support, burst/look-alike precision and the full
+500-repository review remain incomplete.
+
+The explicit fixed-shift display control subsequently completed successfully
+with the diagnostic-only `RRRAH_FIT_DISPLAY=1` mode: 2418/AHD matches
+93.19% forward and 88.74% reverse at exactly (12,12). Reverse agreement remains
+below 90%, so estimated transform error alone does not explain rejection.
+This leaves the development/residual-fit cause open. Full evidence and binary
+hash: `docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-known-display.json`.
+
+The matched-binary highlight control retains the default: disabling native
+highlight reconstruction reduces 2418/AHD display agreement from 93.19% to
+88.00% forward; reverse agreement remains below threshold at 88.82%. The
+baseline reproduces the prior log hash exactly and both runs release managed
+memory. Disabling recovery is not a sufficient remedy for this source. Evidence:
+`docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-highlight-control.json`.
+
+
+## Verified exact-scan observation reuse (2026-11-02)
+
+`scan_verified` reuses its initial full-content observations to bucket
+same-size candidates. It no longer samples and hashes those candidates again.
+Full byte confirmation, representative recovery, the caller-visible final
+validation and the final publication validation remain in place. Candidate
+bucketing checks cancellation per entry. This still does not create an atomic
+filesystem snapshot.
+
+The current no-default-feature library and `exact_files` gate passed 94 tests;
+two manual timing controls remained ignored. Forced digest collisions cover
+both scan modes. The regression for verified observations requires the initial
+read and both final reads of each same-size negative. Existing mutation,
+restored-mtime, physical replacement, healthy-member recovery and cancellation
+checks passed. Evidence:
+`docs/research/dedup-500/exact-observation-reuse-tests-20261102-v1.json`.
+
+Fresh release binaries before and after the change passed the same 16-case
+independent CLI oracle. For three authored sparse files of 64 MiB each (two
+copies and one equal-size/equal-edge file with a middle edit), the read counter
+fell from 1,073,766,400 to 872,415,232 bytes: 201,351,168 fewer bytes, or 18.75%.
+The expected partition and checked fixture state were preserved. This measures
+bytes read in this finite case, not elapsed speed, RSS, dense-file storage
+performance, native Windows behavior or complete library coverage. Evidence:
+`docs/research/dedup-500/exact-observation-reuse-comparison-20261102-v1.json`.
+Repeat the oracle after building the example with:
+`python3 scripts/check-dedup-folder-cli-oracle.py target/release/examples/scan_folder --large-mib 64`.
+
+The verified path also borrows the baseline observation map during group
+confirmation instead of duplicating its per-file hashes. The follow-up passed
+94 tests (two manual timing controls ignored), and a fresh release passed all
+16 CLI cases with dense 64 MiB files, retaining the 872,415,232-byte read count.
+This removes a redundant map by construction; no RSS reduction was measured.
+Evidence: `docs/research/dedup-500/exact-observation-borrow-tests-20261102-v1.json`
+and `docs/research/dedup-500/exact-observation-borrow-release-20261102-v1.json`.
+
+
+## Exact zero-extension versus written-zero fixture (2026-11-02)
+
+`length_extension_zeroes_match_written_zeroes_but_not_a_middle_byte_change`
+compares a 4 MiB + 17 byte file created with `set_len` and endpoint writes
+against independently written zero-filled bytes. A same-length negative differs
+at the middle byte, beyond the edge samples. Both ordinary and verified exact
+scans must return exactly the authored pair under both explicit root orders and
+recursive directory traversal, with no aliases/issues and all three files
+observed. Final byte reads also check that the authored payloads are unchanged.
+
+The allocation probe in
+`docs/research/dedup-500/exact-sparse-dense-allocation-20261102-v1.json`
+reported 4,198,400 allocated bytes for each file on this host. This fixture
+therefore proves logical zero-extension equivalence, not actual sparse-hole or
+cross-filesystem allocation qualification. The current test receipt is
+`docs/research/dedup-500/exact-zero-extension-tests-20261102-v2.json`;
+its terminal result must be inspected before treating the run as passed.
+
+
+## Exact Unix socket admission fixture (2026-11-02)
+
+`unix_socket_roots_and_entries_do_not_hide_regular_copies` owns a temporary
+Unix-domain listener and two separately written equal regular files. Both exact
+APIs must diagnose precisely the socket as `NotRegular`, preserve the authored
+copy pair under directory traversal and two explicit root orders, and observe
+only the two regular files. A socket-only root must read zero payload bytes,
+observe zero regular files and return no duplicate group. Nonregular admission
+is an explicit skip under the current `Report::complete` contract. The listener
+has no accepted connections and is dropped before temporary cleanup; both file
+payloads are rechecked. This is a Unix fixture, not Windows named-pipe coverage
+or a concurrent socket replacement proof. Receipt:
+`docs/research/dedup-500/exact-unix-socket-tests-20261102-v1.json`.
+
+
+## Palette and external-dependency runtime refresh (2026-11-02)
+
+The current `palette_transparency`, `palette_mutation`, and `wal_dependency`
+integration targets passed: 8 tests, no failures or ignored tests, using
+`cargo +1.98.1 test -p rrrah-dedup --features decode --test palette_transparency --test palette_mutation --test wal_dependency`.
+Receipt: `docs/research/dedup-500/palette-runtime-refresh-20261102-v1.json`.
+Recorded test/decode source hashes were unchanged before/after the run and
+rechecked against the current files.
+
+The authored cases include transparent hidden-RGB equivalence, visible-pixel
+negative controls, uniform black/white separation, indexed-vs-exhaustive pair
+agreement, same-length alpha-table rewrite invalidating cached results,
+external WAL palette mutation/removal/replacement withdrawing stale edges while
+retaining healthy members, cold/warm one-shot cancellation with retry, and the
+external palette byte limit even with a warm cache. Managed memory credit is
+checked after these operations. These are focused PNG/WAL fixtures on this
+host; they do not qualify all palettes, animated timelines, ICC/HDR conversions,
+RSS bounds, or native Windows behavior.
+
+
+## RAW evidence scope and cross-scene white-anchor transfer (2026-11-02)
+
+The retained 2418/AHD reverse agreement88.74% is the older unconstrained
+per-channel fit, not the later white-anchored result. Retained white-anchor
+fixed-geometry measurements were22,807,242/24,000,000 forward and
+22,811,260/24,000,000 reverse; automatic-geometry candidate was true with
+22,803,225/24,000,000 and22,794,712/23,991,656. Their original log hashes were
+rechecked; these remain historical runtime evidence, not a current binary run.
+The separate NativeDefault vs q0 linear-TIFF failure remains open; explicit
+Bilinear matching is a different request recipe and does not close it.
+
+`cross-scene-white-anchor-20261102.py` reproduces an additional diagnostic from
+retained aligned CSVs whose hashes match the prior sample audit. Even spatial
+checkerboard in-range pairs train white-anchored gains bounded0.9..1.1; odd
+points, including all range classes, evaluate with tolerance0.03. Parameters
+trained on2414 and transferred to2418 yield94.66/94.67% forward/reverse; the
+opposite transfer yields97.63/97.63%. Authored cross-scene negative2414RAW vs
+2418render yields17.18..18.06%, depending on training source/direction. Receipt:
+`docs/research/dedup-500/sony-display-matrix-20261026-v1/cross-scene-white-anchor-20261102.json`.
+
+This is sparse retained-sample analysis with fixed correspondences and two
+scenes. It is neither a new decode nor production candidate acceptance,
+independent-camera recall/precision qualification, or permission to change the
+threshold. All original failures and negative controls remain retained.
+
+## Exact dangling and self-referential symlink fixture (2026-11-02)
+
+Authored Unix fixtures now exercise a dangling relative symlink and a self-referential symlink beside two independent regular copies. Both scan APIs retain the single byte-equal pair for directory roots and both explicit root orders. With follow_symlinks=false both links produce SymlinkSkipped and the report is complete under that policy; with follow_symlinks=true both produce Io diagnostics and the report is incomplete without losing healthy copies. Payloads and link targets remain unchanged. The full exact_files integration suite passed 47 tests, zero failures/ignored; final source hashes and full output are retained in `docs/research/dedup-500/exact-broken-symlink-tests-20261102-v1.json`. This does not qualify Windows reparse points, concurrent link replacement or an atomic filesystem snapshot.
+
+## Overlapping roots with a depth limit (2026-11-02)
+
+An explicit nested root retains its own depth budget even if the parent traversal encountered that physical directory first. Directory visitation records the smallest depth seen, allowing shallower revisits while suppressing equal/deeper revisits and cycles. The regression failed before the fix with zero observed files instead of two; both APIs and root orders now retain the duplicate pair. Earlier depth-limit diagnostics remain visible. Validation: 50 library tests and 48 exact-file integration tests passed, with two manual timing tests ignored. Receipt: `docs/research/dedup-500/exact-overlapping-depth-tests-20261102-v1.json`. This is not full decoder or cross-platform qualification.
+
+
+## Explicit directory-symlink root depth (2026-11-02)
+
+Unix regression `explicit_symlink_root_restores_depth_without_reentering_a_cycle` combines two aliases of one physical directory, an explicit shallower alias root, depth1 and a directory self-cycle. Both exact scan APIs and both root orders recover the two independent byte-equal copies while preserving Limit diagnostics; cycle link remains unchanged. Full current `exact_files` integration target passed49tests, zero failures/ignored. Receipt: `docs/research/dedup-500/exact-symlink-depth-tests-20261102-v1.json`. This is macOS fixture evidence, not Windows reparse-point or concurrent snapshot qualification.
+
+
+## Preserve admitted children on traversal limit (2026-11-02)
+
+An authored3file fixture with max_entries3 (directory plus2children) first reproduced discovery returning0files despite admitting2children. collect now stops enumerating excess children and schedules the already admitted subset instead of discarding it. Discovery retains2files and both exact scan APIs retain their byte-confirmed pair with an incomplete Limit report. Bounded subset selection follows OS directory enumeration order. Postfix minimal-feature library and exact_files gates passed50+50tests, zero failures,2manual unit timings ignored. Receipt: `docs/research/dedup-500/exact-entry-limit-preservation-20261102-v1.json`. Decode-feature/full-platform qualification and injected mid-directory read errors remain open.
+
+
+## Decode-feature verification after traversal admission repair (2026-11-02)
+
+Current `cargo +1.98.1 test -p rrrah-dedup --features decode --lib --test exact_files` completed with130unit tests passed,5manual timing tests ignored, and50exact_files integration tests passed; zero failures/filters. All185listed test names are distinct and match the two result totals. Dedup source and exact_files hashes captured before/after match and were rechecked against current files. Full command log and pins: `docs/research/dedup-500/decode-after-entry-limit-20261102-v1.json`. This verifies the current directory-entry limit repair in the decode-feature library build; it does not execute all integration targets, native Windows, whole corpus or whole-process memory qualification.
+
+
+## Preserve admitted children on directory iteration error (2026-11-02)
+
+A deterministic internal directory-reader fixture yields two real temporary file names, then an I/O error. Before the repair the collector discarded both admitted children (0 instead of 2). It now schedules the admitted names, records one Io diagnostic, stops that failed listing and returns an incomplete, non-canceled report. The regression verifies sorted retained paths, fresh byte comparison and unchanged fixture contents. The internal generic reader preserves the public scanner API and uses the real streaming read_dir iterator in production.
+
+Validation after the repair: 51 minimal-feature library tests passed, two manual timing tests ignored, and all 50 exact_files integration tests passed. Receipt: `docs/research/dedup-500/directory-iteration-preservation-20261102-v1.json`. One whitespace-only match-arm formatting edit occurred during that compilation; a separate final-source CLI rebuild completed afterward. Its independent generated-byte oracle passed all16cases, including the80file/11group partition in three root orders and three densely written22MiB files with a middle edit. Full receipt: `docs/research/dedup-500/folder-cli-after-directory-error-20261102-v1.json`.
+
+The preceding decode-after-entry-limit receipt is historical evidence for its captured source hashes; it predates this directory-error repair. Decode-feature verification of the new repair is running separately and is not yet credited here. The injected iterator error closes the deterministic partial-list preservation regression, not real filesystem fault injection, concurrent snapshot, every integration target, Windows runtime, full corpus or total-memory coverage.
+
+
+## Decode verification after directory iteration error repair (2026-11-02)
+
+The existing decode-feature library and exact_files command completed with exit0 after568.38seconds. Full log and source pins were rechecked: 131unit tests passed, 5manual timing tests ignored, and 50integration tests passed, zero failures/filters. All186listed test names are distinct and match the summaries. This supersedes the preceding pending status for this repair. Receipt: `docs/research/dedup-500/decode-after-directory-error-20261102-v1.json`. Other integration targets, whole-corpus precision/recall, native Windows and total resource bounds remain open.
+
+
+## PNG and PGM precision corpus refresh (2026-11-02)
+
+Five tests passed across png_primary_policy, pnm_precision and explicitly enabled png_pinned_corpus, zero failures/ignored. Rechecked175pinned fixture hashes before/after:161valid PNG files decoded with finite RGBA, dimensions, alpha and digest checks;15Adam7/plain pairs agreed exactly. Explicit caller-supplied RGB primary/white coordinates are part of this request. Additional authored tests verify gamma/alpha, APNG selected frames,16bit PNG low bits and PGM16 byte order/BT.709 normalization against independent arithmetic. Fourteen expected-invalid PNGs were hashed but not decoded in this run. Source pins across dedup/decode/develop/color/core and fixtures remained unchanged. Receipt: `docs/research/dedup-500/png-pnm-corpus-refresh-20261102-v1.json`. This is neither arbitrary ICC/HDR/PNG policy coverage nor whole-corpus duplicate precision/recall or whole-process memory proof.
+
+
+## Invalid PNG corpus refusal and complete pinned replay (2026-11-02)
+
+New ignored external-corpus regression checks all14expected-invalid PNGs with explicit primary coordinates and asserts managed budget returns0 after each rejection. Independent Python diagnostics confirm invalid signatures, invalid header color/depth/length, CRC failures or truncated zlib data. The focused regression passed, then both valid/invalid tests replayed together on the final test source:161valid decodes,15exact Adam7/plain pairs,14invalid refusals, zero failures/ignored. All175fixture hashes rechecked. Receipts: `docs/research/dedup-500/png-invalid-structure-20261102-v1.json`, `docs/research/dedup-500/png-invalid-corpus-run-20261102-v1.json`, `docs/research/dedup-500/png-complete-pinned-corpus-20261102-v1.json`. These finite malformed inputs do not establish arbitrary parser robustness, every color interpretation, duplicate precision/recall or total RSS bounds.
+
+
+## Mirrored directory layout is not content identity (2026-11-02)
+
+New exact_files regression authors9files in3identically shaped collections. Corresponding basenames, lengths and modified times match; content families differ internally and only2cross-collection groups are real byte copies. Both exact APIs in3root orders (including overlap) must equal the independently authored full-byte partition and preserve all fixture contents. Focused test and full51test exact_files target passed, zero failures/ignored. Production exact source unchanged. Receipt: `docs/research/dedup-500/exact-mirrored-layout-controls-20261102-v1.json`. Path/count/common-prefix metadata matching from external client provenance code is not adopted as an equality oracle. This finite test does not establish atomic concurrent snapshots or all-platform qualification.
+
+
+## Complete minimal-feature library and integration run (2026-11-02)
+
+The final-source command `cargo +1.98.1 test -p rrrah-dedup --no-default-features --lib --tests` completed with exit0 in761.48seconds:333tests passed, zero failures/filters,2manual timing tests ignored. All per-target listed tests reconcile with result summaries. Cargo ran the library and168integration targets:48targets contained tests and121were empty under feature/cfg gates. The additional opposite_native integration target requires decode and was excluded. Captured dedup source/test, package manifest and Cargo.lock hashes were unchanged before/after and rechecked against current files. Full log, pins and per-target results: `docs/research/dedup-500/native-minimal-all-targets-20261102-v1.json`. This broadens exact-file-only verification to cache persistence/concurrent writers, geometry/pixel kernels and worker cancellation/process-group targets in this configuration. Empty targets do not qualify decoder behavior; full decode integration, ignored/manual tests, external corpus precision/recall, Windows and whole-process resource bounds remain separate requirements.
+
+
+## Complete decode run and explicit ignored-test follow-up (2026-11-02)
+
+The command `cargo +1.98.1 test -j 2 -p rrrah-dedup --features decode --lib --tests --no-fail-fast` completed with exit 0: 170 target summaries, 1113 passed, zero failed/filtered and eight ignored. All 323 recorded source/manifest/lock hashes still match the current checkout; the full log hash matches its terminal receipt. Evidence: `docs/research/dedup-500/native-decode-all-targets-20261102-v1.json` and `native-decode-all-targets-qualification-20261102-v1.json` in that directory.
+
+All eight omitted tests have separate successful explicit executions: two pinned PNG tests, two synthetic matcher controls, two real-photo matcher controls, one index-construction probe and one exhaustive exact-collection scaling probe. Receipt/log crosswalk: `docs/research/dedup-500/native-decode-eight-ignored-followup-20261102-v1.json`. These separate runs are not represented as a new combined all-target run. PNG corpus integrity and the final test source were rechecked separately.
+
+The production batched matcher preserved exact correspondence parity across six controls from three pinned photographs; observed test-profile median speedups were 2.07–2.25x. The bounded-distance candidate remains test-only and previously rejected. Index construction produced 160 measurements with observed median reference/current ratios 1.08–1.20. Concurrent host load and the test profile limit these timing conclusions; no isolated release-throughput claim is made.
+
+The exhaustive pair API returned all 28/496/2016 exact pairs for 8/32/64 identical 1 MiB files, without inference, and released managed credit after each report. Median times were 0.093/1.303/5.059 seconds. Its per-pair source checks still imply quadratic analytical source reads; this is not measured device IO, scalable group-only scanning or total RSS qualification. Evidence: `docs/research/dedup-500/exact-collection-scaling-analysis-20261102-v1.json`.
+
+This supersedes the pending decode/manual-run portions of the preceding minimal-feature entry only. Full corpus recall, held-out difficult negatives, broader RAW development behavior, all-format/platform execution, hard process resource bounds and complete review of all 500 repositories remain open. The objective is incomplete.
+
+
+## Real SignalTap payload equality is not file equality (2026-11-02)
+
+Two pinned upstream SignalTap files contain identical128sample capture-data text but differ as complete files. The current no-default-feature scan_folder example, built with Rust1.98.1, scanned owned temporary copies plus one independently authored exact copy in three root orders including overlap. Each run retained exactly the full-byte oracle group of original+copy, excluded the different container, observed3files, returned exit0/zero diagnostics and preserved payload bytes. Source pins were unchanged. Receipt: `docs/research/dedup-500/signaltap-exact-folder-control-20261102-v1.json`. This finite real-format exact-identity control does not qualify waveform similarity, parser interpretation, all-source review or broad corpus quality.

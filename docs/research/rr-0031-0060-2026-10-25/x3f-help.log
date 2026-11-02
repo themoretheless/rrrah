@@ -1,0 +1,34 @@
+usage: qualify-x3f-sd10.py [-h] --libraw-root LIBRAW_ROOT
+                           [--library-dir LIBRARY_DIR] --target-dir TARGET_DIR
+                           --report REPORT [--dcraw-source DCRAW_SOURCE]
+                           [--sd14-source SD14_SOURCE]
+                           [--artifacts-dir ARTIFACTS_DIR] [--metal-readback]
+                           [--timeout TIMEOUT]
+                           source
+
+Pinned SD10 arithmetic qualification. External LibRaw is a test oracle only.
+
+positional arguments:
+  source
+
+options:
+  -h, --help            show this help message and exit
+  --libraw-root LIBRAW_ROOT
+                        Isolated 0.22.2 source build with USE_X3FTOOLS and
+                        static libraw.a
+  --library-dir LIBRARY_DIR
+  --target-dir TARGET_DIR
+  --report REPORT
+  --dcraw-source DCRAW_SOURCE
+                        Pinned independent standalone dcraw.c; enables full
+                        output and rotation checks
+  --sd14-source SD14_SOURCE
+                        Also qualify pinned CC0 SD14 sensor, eight WB neutrals
+                        and complete Sunlight/Auto output
+  --artifacts-dir ARTIFACTS_DIR
+                        Preserve generated oracle files in a new directory;
+                        refuses an existing directory
+  --metal-readback      Require actual Metal full-frame readback against
+                        generated linear PPMs
+  --timeout TIMEOUT     Deadline in seconds for each complete command tree
+                        (default: 1800)

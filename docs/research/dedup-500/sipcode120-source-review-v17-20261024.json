@@ -1,0 +1,42 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v16-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/lib/fs.test.ts",
+      "local": "seams-tests_lib_fs.test.ts",
+      "git_blob": "689e0f4400edf0cc6abfc98ed573d09ec7b2b6ba",
+      "sha256": "b35b9bebc63ebba2c748ee5c57ab92af7e529159e18ac0f97cd826b677afd862",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/lib/git.test.ts",
+      "local": "seams-tests_lib_git.test.ts",
+      "git_blob": "fc843461bb341ee8178b6c8f671d874da42b3ca8",
+      "sha256": "0e8ed41f9eda7a18c750720fec1f044ab7ac765ba915f4cf9b09a7dd435f5077",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 48,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 174,
+    "numPassedTests": 174,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 19,
+  "authored_upstream_controls_total_distinct": 36,
+  "new_authored_controls": 0,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "git_test_scope": "Original unchanged RealGit tests run against owned nestedGitfixture with1ASCIItrackedTSfile/recentcommit;not upstreamrepositoryhistory. ParentrrrahGit unaffected. Setupscript retained;no.git copied.",
+  "findings": [
+    "Originalfs tests onlyInMemoryFs andASCIIstatbytes3,not realFsUnicode/symlink coverage.",
+    "OriginalGit tests verify normalpath/log andoutside-repoemptyfallback;noquotedname roundtrip test.",
+    "Tests pass whilepreviousspecialpathnamecounterexamples remainvalid."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

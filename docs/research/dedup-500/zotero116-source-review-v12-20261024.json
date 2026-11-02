@@ -1,0 +1,58 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v11-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/trackingStore.test.mjs",
+      "local": "22-trackingStore.test.mjs",
+      "sha256": "a407f448d9bc5d620eb6d9b238efda7ef8cb9c07da4441708830bb9b53761c5f",
+      "git_blob": "d5640ad93ccfdabd1d9cb7eced22e828c2633633",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 20,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 85,
+    "original_tests_total_distinct": 144,
+    "original_test_counts": {
+      "duplicateDetector.test.mjs": 42,
+      "hashCache.test.mjs": 17,
+      "trackingStore.test.mjs": 85
+    },
+    "new_authored_controls_passed": 0,
+    "total_authored_controls_distinct": 37,
+    "retained_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "result_file": "docs/research/dedup-500/zotero116-original-tests-20261024/tracking-results.json",
+    "scope": "Original complete trackingStore test/source bytes unchanged; original upstream config and Gecko mock setup; isolated npm resolution retained in prior harness lock. No full upstream suite or actual Gecko I/O."
+  },
+  "findings": [
+    {
+      "finding": "All85 original store cases pass incl CRUD, hash state filtering, canonical/shadow lookup, tombstone buckets, load, debounce, mid-write mutation re-save and write rejection. No failed or skipped cases in this run.",
+      "evidence": "native original Vitest report"
+    },
+    {
+      "finding": "Atomic-write tests verify tmpPath argument and mocked IOUtils.move invocation. Mock writeJSON does not serialize bytes to a temporary file; passing tests do not qualify actual Gecko rename/fsync, crash durability or concurrent writers.",
+      "evidence": "whole tests/setup inspection"
+    },
+    {
+      "finding": "Original load tests restore small default-capacity fixtures; prior native3records/maxFiles1 capacity result not contradicted. Original store tests cannot validate attachment content mapping because fake records use supplied hash strings.",
+      "evidence": "scope of original tests"
+    },
+    {
+      "finding": "Original re-save race test uses timed80ms barriers and snapshots localPath lists before its first write gate. It validates that supplied add lands in second write, not arbitrary all mutation/crash interleavings.",
+      "evidence": "whole test source inspection"
+    }
+  ],
+  "remaining": [
+    "80blobs not whole-read",
+    "Remaining original suites/full plugin/Gecko runtime unqualified",
+    "Root/dependency license coverage and release incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

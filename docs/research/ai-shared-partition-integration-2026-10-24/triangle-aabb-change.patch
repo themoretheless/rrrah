@@ -1,0 +1,42 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1162,8 +1162,10 @@
+         bounds
+     }
+     fn bounds_overlap(&self, other: &Self) -> bool {
++        self.bounds_overlap_rect(other.bounds())
++    }
++    fn bounds_overlap_rect(&self, b: [f64; 4]) -> bool {
+         let a = self.bounds();
+-        let b = other.bounds();
+         a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3]
+     }
+     fn edges(&self) -> impl Iterator<Item = [Point; 2]> + '_ {
+@@ -1831,6 +1833,9 @@
+             return Ok(());
+         }
+         let triangle = tagged;
++        // The incoming triangle is immutable throughout this transaction.
++        // Reuse its exact bounds for both the carry scan and individual tests.
++        let triangle_bounds = triangle.bounds();
+         let mut next = fresh_regions(&self.regions);
+         let mut incoming = AdmittedVec::new(admit, maximum);
+         incoming.push(Fragment::new(triangle, owner, true, true))?;
+@@ -1854,7 +1859,7 @@
+                 while old_index < scan_end && old_index - start < room {
+                     let old = &self.regions.values[old_index];
+                     if !old.has_area || !old.no_merge_with_previous
+-                        || (!incoming.values.is_empty() && old.polygon.bounds_overlap(&triangle)) {
++                        || (!incoming.values.is_empty() && old.polygon.bounds_overlap_rect(triangle_bounds)) {
+                         break;
+                     }
+                     tick(work, cancelled)?;
+@@ -1876,7 +1881,7 @@
+             // Every remainder is contained in the clipped incoming triangle.
+             // Disjoint bounds therefore preserve this old region without
+             // rebuilding the incoming list or comparing source priorities.
+-            let disjoint = !old.polygon.bounds_overlap(&triangle);
++            let disjoint = !old.polygon.bounds_overlap_rect(triangle_bounds);
+             #[cfg(feature = "experimental-shared-partitions")]
+             let disjoint = disjoint || (BATCH && old.bounds.disjoint(&triangle, work, cancelled)?);
+             if disjoint {

@@ -1,0 +1,129 @@
+{
+  "seed": 2671102,
+  "binary_sha256": "bb0b0a5c8e2dc2f5f1aa59b2ed72963f2ad0d6965e82cac0db6eba7cd031ac4f",
+  "files": 80,
+  "expected_groups": 11,
+  "runs": [
+    {
+      "case": "single",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 18084436 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "overlap",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 18084436 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "reversed-overlap",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 18084436 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "literal-option-folder:--help",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 280 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "literal-option-folder:-h",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 240 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "literal-option-folder:--",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 240 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "empty-folder",
+      "exit_code": 0,
+      "groups": 0,
+      "stderr": "Scan complete: 0 files observed, 0 duplicate groups, 0 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "missing-folder",
+      "exit_code": 1,
+      "groups": 0,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 0 files observed, 0 duplicate groups, 0 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "no-arguments",
+      "exit_code": 2,
+      "groups": 0,
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "case": "separator-without-folder",
+      "exit_code": 2,
+      "groups": 0,
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "case": "missing-first",
+      "exit_code": 1,
+      "groups": 5,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 19 files observed, 5 duplicate groups, 7119739 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "missing-last",
+      "exit_code": 1,
+      "groups": 5,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 19 files observed, 5 duplicate groups, 7119739 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "large-middle-edit",
+      "bytes_per_file": 23068672,
+      "storage_fixture": "dense-written",
+      "files": 3,
+      "groups": 1,
+      "exit_code": 0,
+      "stderr": "Scan complete: 3 files observed, 1 duplicate groups, 299892736 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "physical-aliases-and-symlink-cycle",
+      "exit_code": 0,
+      "groups": 1,
+      "alias_groups": 1,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/physical-aliases/cycle\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/physical-aliases/symbolic.bin\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 450 bytes read, 2 diagnostics\n"
+    },
+    {
+      "case": "fifo-with-healthy-files",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/special-files/unconnected.fifo\": NotRegular\nScan complete: 2 files observed, 1 duplicate groups, 370 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "fifo-as-root",
+      "exit_code": 0,
+      "groups": 0,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-if2wfjm6/special-files/unconnected.fifo\": NotRegular\nScan complete: 0 files observed, 0 duplicate groups, 0 bytes read, 1 diagnostics\n"
+    }
+  ],
+  "literal_option_folder_files": 6,
+  "base_fixture_preserved_fields": [
+    "sha256",
+    "device",
+    "inode",
+    "size",
+    "mtime_ns",
+    "mode",
+    "links"
+  ],
+  "scope": "Generated local byte oracle; not concurrent mutation, visual, or all-platform coverage",
+  "source_pins_after_build_before_oracle_and_rechecked_after": {
+    "crates/rrrah-dedup/src/exact.rs": "8f171bfa62335cf24cc2d6c3c348e942ac344bf1ef98215f2da4b3ce55087e4f",
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0",
+    "scripts/check-dedup-folder-cli-oracle.py": "4595e17fafdbed82f3771abf50ea70014f6e7fae103f7300550d496f5cbadd38"
+  },
+  "build_command": "cargo +1.98.1 build -p rrrah-dedup --no-default-features --example scan_folder",
+  "build_exit_code": 0,
+  "oracle_command": "python3 scripts/check-dedup-folder-cli-oracle.py target/debug/examples/scan_folder --seed 2671102 --large-mib 22 --dense-large --report docs/research/dedup-500/folder-cli-after-entry-limit-20261102-v1.json",
+  "oracle_exit_code": 0,
+  "verification_scope": "16 CLI cases; base80file11group full partition in three root orders; literal option names, missing/empty roots, healthy groups retained beside missing roots, 3dense22MiBfiles with middle edit independently byte-compared, physical aliases/symlink cycle and FIFO. All owned temporary fixtures removed by TemporaryDirectory. No user folders, concurrent mutation, visual matching, all-platform or total resource qualification."
+}

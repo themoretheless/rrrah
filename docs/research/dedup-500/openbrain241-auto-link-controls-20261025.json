@@ -1,0 +1,95 @@
+{
+  "scope": "Original auto-link exports transpiled in VM with fake DB and model imports; no network or database writes",
+  "failedSearch": {
+    "merged": false
+  },
+  "failedMerge": {
+    "merged": true,
+    "originalId": "existing",
+    "originalContentPreview": "fixture",
+    "similarity": 0.99
+  },
+  "related": [
+    {
+      "thought_id": "existing",
+      "content_preview": "fixture",
+      "similarity": 0.75
+    }
+  ],
+  "confirmed": "Search error treated as no duplicate, resolved merge error reports merged, graph error still returns related list and accepts duplicate sentinel",
+  "calls": [
+    {
+      "name": "match_thoughts",
+      "args": {
+        "p_brain_id": "brain",
+        "query_embedding": [
+          1
+        ],
+        "match_threshold": 0.85,
+        "match_count": 5
+      }
+    },
+    {
+      "name": "match_thoughts",
+      "args": {
+        "p_brain_id": "brain",
+        "query_embedding": [
+          1
+        ],
+        "match_threshold": 0.85,
+        "match_count": 5
+      }
+    },
+    {
+      "name": "perform_merge",
+      "args": {
+        "p_brain_id": "brain",
+        "p_id": "existing",
+        "p_merge_entry": {
+          "source": "fixture",
+          "source_event_id": "event",
+          "similarity": 0.99,
+          "content": "fixture",
+          "timestamp": "2026-10-25T10:39:35.427Z"
+        }
+      }
+    },
+    {
+      "name": "log_merge",
+      "args": {
+        "p_brain_id": "brain",
+        "p_survivor_id": "existing",
+        "p_loser_id": null,
+        "p_similarity": 0.99,
+        "p_merge_type": "ingest_dedup",
+        "p_loser_content": "fixture",
+        "p_loser_source": "fixture",
+        "p_loser_source_event_id": "event"
+      }
+    },
+    {
+      "name": "match_thoughts",
+      "args": {
+        "p_brain_id": "brain",
+        "query_embedding": [
+          1
+        ],
+        "match_threshold": 0.7,
+        "match_count": 4
+      }
+    },
+    {
+      "name": "insert",
+      "rows": [
+        {
+          "brain_id": "brain",
+          "source_thought_id": "duplicate",
+          "target_thought_id": "existing",
+          "similarity": 0.75,
+          "link_type": "related",
+          "metadata": {}
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v6-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/client.py",
+      "local": "19-client.py",
+      "git_blob": "40104cc298cc0891198700b0ef986c6d0bba3252",
+      "sha256": "1cee1209cbaffbd776ea8e3daee9500747515a1a1318345f79ee210fcf1fd91c",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/page_logger.py",
+      "local": "20-page_logger.py",
+      "git_blob": "db6de3623d85d0328f51b93229043f8012932db5",
+      "sha256": "2976dfc96a5b396df2243cc9791c80d2ffb992d5dcced0c49259ab40cc984fdb",
+      "whole_text_read": true
+    },
+    {
+      "path": ".env.example",
+      "local": "21-env.example",
+      "git_blob": "99c78f43303e650463060d73fd626878e71801b8",
+      "sha256": "b74dc61838ce77623c4774339008129438728c841980dd028cd3cd7a92b9ebd1",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/__main__.py",
+      "local": "22-main.py",
+      "git_blob": "1ba5a836cb57bdb520653578f7f61c433cfbcda9",
+      "sha256": "32cdd98140f666b7b4309a80b73f1c53315105b16b360528002f850644edf9dc",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/cli_exe_entrypoint.py",
+      "local": "23-cli_exe_entrypoint.py",
+      "git_blob": "49bcd545a91f8d2cc88c4a8a4930f34fb41c7ea6",
+      "sha256": "e11c6669c974e6f42091fc0dea210206a470e71059d14e79e432ae763de920a6",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/hydrusvideodeduplicator/gui_exe_entrypoint.py",
+      "local": "24-gui_exe_entrypoint.py",
+      "git_blob": "90bc3126bec3f058c1a0ced62a94f39300794161",
+      "sha256": "698eb66154c390e1b2a48db811e1d6142f3576c746dc5993e093c53d84c9035a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 23,
+  "remaining_without_whole_review": 54,
+  "whole_repo_complete": false,
+  "new_authored_controls": 3,
+  "authored_controls_total": 17,
+  "runtime_report": "docs/research/dedup-500/hydrus107-page-controls-20261024.json",
+  "findings": [
+    "Normal module/CLI-exe/GUI-exe launchers correctly pass both run_main arguments. Earlier missing argument observation limited to direct entrypoint.py guard.",
+    "Failure-page selection case-insensitive depth-first first match, not random as docstring states; reproduced.",
+    "Missing failure page logs and returns without raising; existing page receives owned hash; recording API only.",
+    "Environment example uses quoted numeric threshold/jobs, consistent with retaining strings before downstream parsing. HVD_GUI not documented here; true-string convention remains unestablished.",
+    "Client search returns full hash list and requests ascending file size. No pagination/memory runtime measurement.",
+    "Client service key filtering drops whitespace-only entries after checking original sequence truthiness; downstream empty list semantics not qualified."
+  ],
+  "harness_setup_error": "Owned page harness initially omitted TYPE_CHECKING replacement; fixed before passing controls, not upstream failure.",
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

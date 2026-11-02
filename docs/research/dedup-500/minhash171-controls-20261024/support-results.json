@@ -1,0 +1,12 @@
+{
+  "scope": "Original support-compression/dominance helpers, finite exhaustive owned graphs.\n\nNo MinHash extraction, threshold matching, representative run(), corpus or IO.\n",
+  "source_sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+  "authored_controls_run": 2,
+  "finite_graphs_checked": 128,
+  "observations": [
+    "all128 hypergraphs on3 keys: original equal-support compression matches independent support-set reference; alias counts/weights correct; dominance leaves a surviving subset-support witness for each suppressed representative",
+    "chain support A:{0},B:{0,1},C:{1} is unchanged by dominance helper; it does not eliminate every support-dominated key and is not final run() clustering"
+  ],
+  "original_tests_run": 0,
+  "rejected_control_assumption": "Initial assertion every bucket must remain nonempty was invalid: [[0],[0,1]] legitimately reduces to [None,[1]]. Raw failure retained in support-initial-failure.txt; not an upstream bug."
+}

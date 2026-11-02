@@ -1,0 +1,178 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original test function bodies and original matching/helper/service bodies. Fresh AsyncMock client fixtures and minimal base constructor adapter; pytest/database fixtures omitted. Three helper tests create and move their own temporary files only. No remote services or HTTP requests.",
+  "callbacks": 28,
+  "passed": 28,
+  "failed": 0,
+  "results": [
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_by_exact_path_match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_returns_correct_movie_for_exact_path",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_different_filenames_same_folder",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_no_match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_case_sensitive_path",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_without_movie_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_deletion_bug_regression",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_radarr_filename_matching.py",
+      "name": "test_find_movie_with_special_characters",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_by_exact_path_match",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_no_match_for_different_path",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_multiple_versions_same_filename",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_without_episode_ids",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_empty_episode_ids",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_case_sensitive_path",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_deletion_bug_regression_sonarr",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_multi_episode_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_special_characters",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_sonarr_filename_matching.py",
+      "name": "test_find_episode_no_files_in_sonarr",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_rescan_media_item_movie_with_kept_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_rescan_media_item_series_with_kept_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_rescan_media_item_without_kept_file",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_rescan_media_item_path_mismatch",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_rescan_media_item_media_not_found",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_trigger_full_library_scan_movie",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_trigger_full_library_scan_series",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_create_media_subfolder_success",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_create_media_subfolder_special_characters",
+      "passed": true,
+      "error": null
+    },
+    {
+      "path": "backend/tests/test_arr_helpers.py",
+      "name": "test_create_media_subfolder_no_year",
+      "passed": true,
+      "error": null
+    }
+  ]
+}

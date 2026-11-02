@@ -1,0 +1,119 @@
+{
+  "index": 344,
+  "repository": "matthayes/anki_flex_dupes",
+  "commit": "5e750b2ce2faf96eef03b516356c6108deeec934",
+  "tracked_blob_count": 15,
+  "whole_file_reads": [
+    {
+      "path": "flex_dupe_checking/__init__.py",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/02-__init__.py",
+      "sha256": "cb86c8af4d6571e35646154bb5549ace6c641dce56ddb4dc97e52b2a16109191",
+      "git_blob_sha1": "2b4d860987881d362217f729f278094b07b7947c"
+    },
+    {
+      "path": "__init__.py",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/03-__init__.py",
+      "sha256": "631e67e808406f05df859a2634c0006e5316cf5631f0f063e504cf58a2fc33d9",
+      "git_blob_sha1": "30d0e4c5185ccda1f951142e4a4443fa7163e101"
+    },
+    {
+      "path": "release.sh",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/04-release.sh",
+      "sha256": "dd59397e813ef88a6dc68fd4a3f5dc16ffab542c227526c98b4a5e45b9105afc",
+      "git_blob_sha1": "039843c5b09784b486716b8ce183f253bb9f3548"
+    },
+    {
+      "path": ".flake8",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/.flake8",
+      "sha256": "362756a08c38ae6af2bd8bb663bd2cb71f2af0744fe4d6917bbee7fdbcc50ad6",
+      "git_blob_sha1": "6862c3773f5a34361054037673155bd696a9f4be"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/.gitignore",
+      "sha256": "65a8b634f2477a17330ad0d3269791af226e7c3405043d3b66bef496a24dd5fb",
+      "git_blob_sha1": "cf0553efa6eb26cb2e6178381adf6324274a5e1c"
+    },
+    {
+      "path": ".travis.yml",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/.travis.yml",
+      "sha256": "a9d329d452d6497a2ab3f99207fab46ee6a32121725c9ddd9947fa5fc299dd88",
+      "git_blob_sha1": "2763092721fdb4b4ce5db90f5ee884a98ad8ec20"
+    },
+    {
+      "path": "Makefile",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/Makefile",
+      "sha256": "da17be298fc128604fbca4210f843ed0c8f4d57f1855dddf1e28d5ae4db011d8",
+      "git_blob_sha1": "48c146774c1f74cad345407d23224f94cbba3d91"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/README.md",
+      "sha256": "45e6b6b59f710f988f5f8ae9ebc70c2ffde1bbec40f8a15e5d1e416909aa4619",
+      "git_blob_sha1": "a215dcb82d363c5dd920c1fe8aa30df2f36dae84"
+    },
+    {
+      "path": "manifest.json",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/manifest.json",
+      "sha256": "a2363b6ce8a508a18338511f3550946ab31485a3cb712838e335a880a006a41b",
+      "git_blob_sha1": "cf651441f07cb837908f1a5b98736c088f683026"
+    },
+    {
+      "path": "project_description.html",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/project_description.html",
+      "sha256": "86dec32f892306490fc61602a2f2bfeb3f2af278e5eb41117c381cf37a01da0e",
+      "git_blob_sha1": "453b3181d5da3c36931e5db08a5fc13fec28dbd5"
+    },
+    {
+      "path": "requirements.txt",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/requirements.txt",
+      "sha256": "1fea028a5e486d55b38378253f53d1e5b001a3796b601ad623f808be58f3969a",
+      "git_blob_sha1": "51991d8b287982d343ba83772edc2680ee943a0f"
+    }
+  ],
+  "remaining": [],
+  "full_manual_review": false,
+  "upstream_tests_run": false,
+  "controls": "docs/research/dedup-500/ankiflex344-function-control-20261102-v1.json",
+  "findings": [
+    "Three implementation/entry/release files fully read. Domain Anki notes; SQL checksum prefilter scoped to model excluding current ID, followed by normalized equality on first field plus _pk suffixed fields. Nonkey fields intentionally ignored. Useful principle: hash candidates require explicit equality verification; no file/image engine here.",
+    "Four original-function AST controls passed with synthetic host adapters: colliding checksum different first field rejected, different _pk rejected, nonkey difference accepted, whitespace first field empty. These are not upstream Anki integration tests; actual checksum/HTML-media normalization replaced by identity stubs.",
+    "Browser search drops extra key constraint if term contains both quote types, so results can be broader than equality checker; first-field search contents and field names lack explicit escaping here. Patch-version logic only parses final dotted component. Release script deletes target relative to current working directory and lacks set-e/quoted paths; read only, not executed. No code adopted.",
+    "All remaining documentation/configuration read. CI only runs flake8 on Python3.6; pytest is declared but no tests or pytest command in tracked inventory. README explicitly limits behavior to desktop editor, excluding import/mobile and deck-scoped identity. No all-format/file semantics claimed.",
+    "All three original PNGs visually inspected: standard first-field-only warning conflates Spanish/Italian la mano; _pk language distinguishes them; matching Spanish key highlights both Expression and Lang_pk. These are authored documentation screenshots, not a current Anki run.",
+    "All15tracked blobs assessed:11whole text/source,3visual PNG,1license header/tail assessment. License remains partial manual reading; full_manual_review remains false."
+  ],
+  "structured_assessments": [
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/LICENSE",
+      "sha256": "9855ac003bebea9fbe4e325098d99cd7803fbe36dd1a9b29559fc5c235798195",
+      "git_blob_sha1": "7bd4ddb1b275e0b0e35a3475b688725e4031ce1c",
+      "method": "Header17lines and final12lines inspected, full blob verified; body not manually read."
+    }
+  ],
+  "visual_assessments": [
+    {
+      "path": "images/la_mano.png",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/images/la_mano.png",
+      "sha256": "7fa6978cbc687ccc80e1e45601df7db0411d0e20f33afce047be726202b39309",
+      "git_blob_sha1": "2641c796224ee15d551916843f82e4abd6a11050",
+      "method": "Original full PNG visually inspected with view_image."
+    },
+    {
+      "path": "images/la_mano2.png",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/images/la_mano2.png",
+      "sha256": "bf03b387829dbfb34fe1bda01baa82ed31de1d6c99e766189181469051b01b6e",
+      "git_blob_sha1": "876ef1a9b8cc7e7ffc60506d73cd3a07ab3c4d27",
+      "method": "Original full PNG visually inspected with view_image."
+    },
+    {
+      "path": "images/la_mano_es_dup.png",
+      "local": "docs/research/dedup-500/evidence/matthayes--anki_flex_dupes/remaining-pinned/images/la_mano_es_dup.png",
+      "sha256": "d9aa4c77ae4b7b2544c192792b1545a8bb067b15b2e37cc4f8a40b71fdafc9a3",
+      "git_blob_sha1": "d5b840b14bd8ae4aa3230df70142fa009dff222a",
+      "method": "Original full PNG visually inspected with view_image."
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/ankiflex344-source-review-v1-20261102.json"
+}

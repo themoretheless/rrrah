@@ -1,0 +1,13 @@
+{
+  "cases": 4,
+  "passed": 4,
+  "source": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/bunlock/resolve.ts",
+  "sha256": "1c6e845998845b537a7d6b5fa6721d1da6491327c00613ba0081df5052c3d6ec",
+  "scope": "Original whole TS module, Node built-in type stripping; no Bun or registry execution.",
+  "checks": [
+    "scoped root vs nested",
+    "nearest exact nested",
+    "closest ancestor nested",
+    "ambiguous root fallback refuses; unique fallback accepted"
+  ]
+}

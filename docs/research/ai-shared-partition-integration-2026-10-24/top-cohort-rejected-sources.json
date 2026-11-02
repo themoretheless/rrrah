@@ -1,0 +1,66 @@
+{
+  "decoder_sha256": "3cf89f2e6383029f83c9dc1a93dff91f163cc21e7b32804ff2230ea6e7525e49",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "ab5e7b932b88b17e6be28264776a8119d244f22e4f990dd9610ff7dbaaaf7a9f",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "b01848c01f9649b507ccd235671c29d8cd7cbf1a4d873bc9965f9597e307159f",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "861830897f83b50e38e64e687313792c00ae86f12a69795be99705e596f781ac",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "334e157b26c664f66f71a825815715e8418d0539de55396b2681b73fdf96ca68",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "note": "Only tests changed after decoder build.",
+  "scope": "Rejected highest-patch complete-cohort coverage pilot. Full coverage safely culls lower layers, but these actual workloads do not benefit.",
+  "artifacts": {
+    "top-cohort-rejected-poppler.json": "4166dbb648c94baf3dedb717683a8512d909829d6476e199575222e057660480",
+    "top-cohort-rejected-sampled.log": "3d269cd87947d35515e1e40b49fc6a1ec9ab37d596929c42e4d8ce0cb6bb082b",
+    "top-cohort-rejected.patch": "a1dfac5a88ef02e5d8e9b4d132f16458de4de58a490e9271273d95f8642c31ab"
+  },
+  "full_encode": {
+    "terminal_result": "test result: ok. 105 passed; 0 failed; 6 ignored; 0 measured; 96 filtered out; finished in 94.32s",
+    "log_sha256": "2ba2560a3997f831c2c41b40c2ae6a7363e9247875a4cdc7eb55917132dc447d",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-top-cohort-full-encode-20261102.log"
+  },
+  "public_feature": {
+    "terminal_result": "test result: ok. 256 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 44.71s",
+    "log_sha256": "ffb2f6b56c753743556db612f725f2dc215e6f2dbbca322e0a5a15010ef0de2a",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-top-cohort-feature-vector-20261102.log"
+  },
+  "stage_deltas": [
+    {
+      "scans": -7109,
+      "initial_paint": -164855,
+      "initial_visit": -101,
+      "dense": 172065,
+      "total": 0,
+      "patches": 1455
+    },
+    {
+      "scans": -1385,
+      "initial_paint": -53835,
+      "initial_visit": -303,
+      "dense": 55523,
+      "total": 0,
+      "patches": 323
+    },
+    {
+      "scans": 0,
+      "initial_paint": 0,
+      "initial_visit": 0,
+      "dense": 0,
+      "total": 0,
+      "patches": 245
+    },
+    {
+      "scans": 0,
+      "initial_paint": 0,
+      "initial_visit": 0,
+      "dense": 0,
+      "total": 0,
+      "patches": 788
+    }
+  ],
+  "restored_sources_match_qualified_checkpoint": true,
+  "rejected_patch_reproduces_trial_sources": true,
+  "restored_decoder_sha256": "a92a4a456273f17f4ef28d1991367c1d07a47d3daf7c3a40da21c776f5e89840",
+  "restored_decoder_identical_to_qualified_initial_profile": true,
+  "restored_build_succeeded": true
+}

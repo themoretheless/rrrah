@@ -2,9 +2,9 @@
   "index": 244,
   "repository": "lolrenceH/TrieDedup",
   "commit": "9375feb15fdb4c266417a69bbf8493f79850d3fe",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All43 pinned blobs assessed:36 text files whole-read,4binary and3dataset artifacts structurally checked; isolated original Python/C++ controls only, Java runtime unavailable, no upstream suite",
   "decision": "reject-domain",
-  "finding": "Trie sequence deduper tests for DNA alphabet; biological input.",
+  "finding": "Biological wildcard sequence matching, not exact byte/image duplicate engine; Python/C++/Java behavior diverges and benchmark is stale against returned index API. No implementation adopted.",
   "available_source_evidence": [
     {
       "path": "TrieDedupWrapper.py",
@@ -58,10 +58,10 @@
     }
   ],
   "license_metadata": "Apache-2.0",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root Apache-2.0 text fully read; nested pRESTO-derived code and bundled JAR provenance still unqualified; no implementation adopted",
   "tests_detected": 0,
   "upstream_tests_run": false,
-  "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
+  "tests_inventory_scope": "Whole-read TestHash/TestHash2 are benchmark main programs without assertions; no formal regression suite demonstrated",
   "tree_truncated": false,
   "available_readme_license_evidence": [
     {
@@ -84,5 +84,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/triededup244-source-review-v9-20261025.json",
+  "full_repository_read": false,
+  "all_repository_files_assessed": true,
+  "whole_runtime_qualified": false
 }

@@ -1,0 +1,29 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v11-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/hydrus_api/utils.py",
+      "local": "56-api-utils.py",
+      "git_blob": "78133a8322621a75a8f4e99d4eaf5c68b0e959c6",
+      "sha256": "7796da38383061dcc3c3505255f93eb65ad135ddad3d45fb3a2d8ce0d22e6424",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 55,
+  "remaining_without_whole_review": 22,
+  "whole_repo_complete": false,
+  "new_authored_controls": 3,
+  "authored_controls_total": 22,
+  "runtime_report": "docs/research/dedup-500/hydrus107-api-utils-controls-20261024.json",
+  "findings": [
+    "yield_chunks lacks positive-size validation; size0 repeats empty slices without offset progress, negative size moves offset backwards. Bounded three-yield controls confirm progression behavior without hanging. Production caller relevance not yet checked.",
+    "Positive size2 on five elements returns all elements in expected three chunks.",
+    "get_service_mapping assumes each top-level services response value is iterable of service dicts; newer response compatibility requires full API response inspection. Source only.",
+    "API utils header confirms AGPLv3-or-later source notice; no code copied into production."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

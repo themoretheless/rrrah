@@ -1,0 +1,16 @@
+{
+  "command": "CARGO_TARGET_DIR=.dedup-work/exact117-target-20261024 cargo test -p rrrah-dedup --locked --offline --test exact_files",
+  "exit_code": 0,
+  "observed_tests": {
+    "passed": 44,
+    "failed": 0,
+    "ignored": 0
+  },
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "12cb18223d7acea350a0fb396da1a44c0e4840dea8d47a0bdf70b5c44695d9b6",
+    "Cargo.lock": "43dfb866b1bd53a87c1585f108121272b461c831515219a38984107a5c74484f"
+  },
+  "scope": "Current worktree default-feature exact_files integration suite. Empty files, changed-middle negatives, real path replacement, cancellation and healthy-group preservation; not all formats/perceptual matching or destructive storage integration.",
+  "production_changes": false
+}

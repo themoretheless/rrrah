@@ -1,0 +1,36 @@
+[package]
+name = "dupey-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+description = "Office document family detection: extract, exact hash, MinHash near-dup, explainable latest ranking"
+readme = "../../README.md"
+keywords = ["dedup", "minhash", "documents", "near-duplicate"]
+categories = ["text-processing"]
+
+[dependencies]
+cfb = "0.14.0"
+flate2 = "1.1.9"
+gaoya.workspace = true
+hex.workspace = true
+jiff = { version = "0.2.35", features = ["serde"] }
+pdf_oxide = { version = "0.3.77", default-features = false, features = ["legacy-crypto"] }
+quick-xml = "0.41.0"
+rayon.workspace = true
+serde.workspace = true
+sha2.workspace = true
+thiserror.workspace = true
+walkdir.workspace = true
+zip = { version = "8.6.0", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+criterion = { version = "0.8.2", features = ["html_reports"] }
+zip = { version = "8", default-features = false, features = ["deflate"] }
+
+[[bench]]
+name = "core"
+harness = false

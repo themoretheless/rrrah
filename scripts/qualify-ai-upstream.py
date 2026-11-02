@@ -36,10 +36,35 @@ def attach_renderer_diagnostics(row, detail):
         return
     row["renderer_stderr_tail"] = detail[-16384:]
     outcomes = []
+    stage_costs = []
+    initial_costs = []
+    stages_truncated = False
+    stage_pattern = (r"ORDERED_STAGE_COST patches=([0-9]{1,20}) scans=([0-9]{1,20}) "
+                     r"initial_paint=([0-9]{1,20}) initial_visit=([0-9]{1,20}) "
+                     r"dense=([0-9]{1,20}) total=([0-9]{1,20}) left=([0-9]{1,20})")
     truncated = False
     pattern = (r"ORDERED_SAMPLE_OUTCOME patches=([0-9]{1,20}) complete=(true|false) "
                r"work_spent=([0-9]{1,20}) work_left=([0-9]{1,20})")
+    initial_pattern = (r"ORDERED_INITIAL_COST patches=([0-9]{1,20}) abandoned=([0-9]{1,20}) "
+                       r"visited=([0-9]{1,20}) pending=([0-9]{1,20}) total=([0-9]{1,20}) "
+                       r"abandoned_pixels=([0-9]{1,20}) visited_pixels=([0-9]{1,20})")
     for line in detail.splitlines():
+        initial = re.fullmatch(initial_pattern, line)
+        if initial:
+            if len(initial_costs) < 64:
+                values = dict(zip(["patches", "abandoned", "visited", "pending", "total", "abandoned_pixels", "visited_pixels"], map(int, initial.groups())))
+                values["accounting_consistent"] = sum(values[k] for k in ["abandoned", "visited", "pending"]) == values["total"]
+                initial_costs.append(values)
+            else:
+                row["renderer_initial_costs_truncated"] = True
+        stage = re.fullmatch(stage_pattern, line)
+        if stage:
+            if len(stage_costs) < 64:
+                values = dict(zip(["patches", "scans", "initial_paint", "initial_visit", "dense", "total", "left"], map(int, stage.groups())))
+                values["accounting_consistent"] = sum(values[k] for k in ["scans", "initial_paint", "initial_visit", "dense"]) == values["total"]
+                stage_costs.append(values)
+            else:
+                stages_truncated = True
         match = re.fullmatch(pattern, line)
         if match:
             if len(outcomes) == 64:
@@ -47,6 +72,16 @@ def attach_renderer_diagnostics(row, detail):
                 continue
             outcomes.append({"patches": int(match[1]), "complete": match[2] == "true",
                              "work_spent": int(match[3]), "work_left": int(match[4])})
+    if initial_costs:
+        for initial in initial_costs:
+            matching = [stage for stage in stage_costs if stage["patches"] == initial["patches"]]
+            if len(matching) == 1:
+                initial["stage_total_matches"] = matching[0]["initial_paint"] == initial["total"]
+        row["renderer_initial_costs"] = initial_costs
+    if stage_costs:
+        row["renderer_stage_costs"] = stage_costs
+    if stages_truncated:
+        row["renderer_stage_costs_truncated"] = True
     if outcomes:
         row["renderer_outcomes"] = outcomes
     if truncated:

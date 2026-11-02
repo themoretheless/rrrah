@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFile,writeFile,utimes,stat,mkdir} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('./files/',import.meta.url));await mkdir(root,{recursive:true});const path=root+'owned.txt';
+globalThis.IOUtils={stat:async p=>{const s=await stat(p);return {size:s.size,lastModified:s.mtimeMs};}};
+globalThis.ownedHashCalls=0;
+const digest=x=>createHash('sha256').update(x).digest('hex');const results=[];
+const cache=await import('./hashCache.mjs?first');
+await writeFile(path,'AAA');await utimes(path,2,2);const initial=await IOUtils.stat(path);assert.equal(await cache.hashFile(path),digest('AAA'));
+await writeFile(path,'BBB');await utimes(path,2,2);assert.deepEqual(await IOUtils.stat(path),initial);assert.equal(await cache.hashFile(path),digest('AAA'));assert.equal(digest(await readFile(path)),digest('BBB'));assert.equal(ownedHashCalls,1);results.push({name:'same size and restored mtime returns stale digest',passed:true,real_file_bytes_changed:true});
+await utimes(path,3,3);assert.equal(await cache.hashFile(path),digest('BBB'));assert.equal(ownedHashCalls,2);results.push({name:'changed mtime recomputes correct digest',passed:true});
+const parallel=await import('./hashCache.mjs?parallel');ownedHashCalls=0;await Promise.all([parallel.hashFile(path,initial),parallel.hashFile(path,initial)]);assert.equal(ownedHashCalls,2);results.push({name:'two simultaneous misses read/hash twice',passed:true,scope:'owned Node hash adapter, not Gecko runtime'});
+cache.clear();cache.__test_setCapacity(2);cache.set('/a',1,1,'A');cache.set('/b',1,1,'B');assert.equal(cache.get('/a',1,1),'A');cache.set('/c',1,1,'C');assert.equal(cache.get('/b',1,1),null);assert.equal(cache.get('/a',1,1),'A');assert.equal(cache.stats().size,2);results.push({name:'LRU hit promotion preserves recent entry',passed:true});
+console.log(JSON.stringify({runtime:process.version,original_upstream_tests_run:0,authored_controls:results},null,2));

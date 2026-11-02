@@ -1,0 +1,53 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v4-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "tests/unit_tests/test_vpdqpy.py",
+      "local": "13-test_vpdqpy.py",
+      "git_blob": "fd6b16f62bd6be7416605ec233f5e7bcf9ea36de",
+      "sha256": "460105021de3e684ae47a48bbd53c5268e335036d87a1ee1428ebb7e4b143510",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/test.yml",
+      "local": "14-test.yml",
+      "git_blob": "57f2a074ebcdc4ce54a5e1bc12a1524598ece256",
+      "sha256": "88e680f85a9970f7daa69e8d686bf52e23aa803f92e71055b50a7e7fe8ab1256",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/acceptance_tests/test_main_vcr.py",
+      "local": "15-test_main_vcr.py",
+      "git_blob": "e8ac7a9bccd64b254e81011a90f7c88510e13a92",
+      "sha256": "93fac38c4ae2ad27478768eab67cb90536643b059a89bc3b7ec6f850a4962df1",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/tests.md",
+      "local": "16-tests.md",
+      "git_blob": "3484d8c84abd9aac2b04fc998d065df6045323f6",
+      "sha256": "3b7eb70d5308ecdbee81112c17e8003e954ed1e8fadad3688ab22289dce5466d",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 15,
+  "remaining_without_whole_review": 62,
+  "whole_repo_complete": false,
+  "new_authored_controls": 2,
+  "authored_controls_total": 10,
+  "runtime_report": "docs/research/dedup-500/hydrus107-test-oracle-controls-20261024.json",
+  "original_native_tests_run": false,
+  "findings": [
+    "Confirmed with extracted unchanged test class and replaced hash backend: missing baseline generated from current algorithm then accepted in test_hashing_identical. Not independent regression oracle when baseline missing.",
+    "Confirmed all three test methods pass empty similarity/strange inventories after owned setup; source setup checks directories but no video counts.",
+    "Hash identical test permits nonidentical bytes when similarity exceeds99 despite comment requiring byte equality.",
+    "VCR acceptance compares total num_similar_pairs to cassette final potential_duplicates_count, not pair identity; not executed.",
+    "Test workflow declares Python3.10..3.14/3.x and Linux/Windows/macOS; declaration is not observed pass evidence.",
+    "Media fixture repository is external submodule; 77-blob count is main repository only and excludes submodule contents."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

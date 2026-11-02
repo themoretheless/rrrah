@@ -1,0 +1,31 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v12-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/gui/gui.py",
+      "local": "57-gui.py",
+      "git_blob": "556de80ba656ffa4af40575d1d742c24988abdcc",
+      "sha256": "598b437fe5bc5e089a103d25556cc80897bbad59cca8b30902e5a118d0daa2d6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 56,
+  "remaining_without_whole_review": 21,
+  "whole_repo_complete": false,
+  "new_authored_controls": 3,
+  "authored_controls_total": 25,
+  "runtime_report": "docs/research/dedup-500/hydrus107-gui-controls-20261024.json",
+  "findings": [
+    "Confirmed GUI query string JSON passed unparsed to deduper, which extends tags with individual characters. Real API rejection/result not executed.",
+    "Confirmed NaN threshold accepted by GUI method; valid numeric/empty-query positive control passed.",
+    "Query textbox instantiated but not added to main layout; configuration hydrus_query and failed_page_name not populated into their textboxes. Source only; no window inspected.",
+    "Close handler requests cooperative skip then force-terminates worker after10s; SQLite transaction and thread cleanup safety unqualified.",
+    "Progress callback releases skip semaphore on next progress when skip button disabled; cancellation sequencing requires real Qt thread/event evidence.",
+    "Similarity tooltip says thresholds of previous runs not saved, while DB stores searched_distance; source/documentation inconsistency."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

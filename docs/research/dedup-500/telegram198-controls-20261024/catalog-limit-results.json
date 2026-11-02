@@ -1,0 +1,14 @@
+{
+  "cases": 1,
+  "scope": "Exact pinned SQL template extracted from original findClusterByHash,where substituted per original nonnull-size branch;actual in-memory SQLite,synthetic six-row catalog. Peer status filter behavior established separately by original-module control. No real DB/network.",
+  "query": "SELECT peer_id, remote_id, file_path, file_size, file_hash FROM peer_downloads WHERE file_hash = ? AND file_size = ? LIMIT 5",
+  "returned_peer_ids": [
+    "revoked0",
+    "revoked1",
+    "revoked2",
+    "revoked3",
+    "revoked4"
+  ],
+  "eligible_online_row_exists": true,
+  "finding": "Five earlier revoked-peer rows consume LIMIT5 before peer filtering,online sixth row absent. Query lacks ORDER BY;this is one actual SQLite fixture execution,not guaranteed row ordering for every database."
+}

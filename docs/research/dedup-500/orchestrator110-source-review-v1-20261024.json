@@ -1,0 +1,35 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "src/request_dedup.rs",
+      "local": "02-request_dedup.rs",
+      "git_blob": "1acba4ed569af2af84c9af63da4a57cd178e2056",
+      "sha256": "72c2ea5bc6aca457f998cfe9b574de106bba6b8bbf694eea9f4490bc380f3744",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/retrieval.rs",
+      "local": "03-retrieval.rs",
+      "git_blob": "f8566601169d2fcaa0a0c25039fd38a9fccfa882",
+      "sha256": "56da482d9bfb7f94ab23d11b786ec85675d1e0af0e9becc0f8534c931b96421f",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 2,
+  "whole_repo_complete": false,
+  "original_tests_run": false,
+  "authored_byte_recipe_report": "docs/research/dedup-500/orchestrator110-key-controls-20261024.json",
+  "findings": [
+    "Hash key modelbytes+NUL+promptbytes ambiguously encodes tuples if bothfieldsallowNUL. Byte-recipe reproduction confirms differentpairs identicalpreimage/hash; notRustmoduleexecutionorcryptographiccollision. Call-siteinputrestrictionsunreviewed.",
+    "Completion removes by contentkey only,notRequestId/generation. Staleoriginalcompletion may remove laterreplacementafterTTL;sourceonly, noTTLruntimecontrol.",
+    "TTLpruningruns onsubmit/manualcall, nottimer;oldwaitersdropwhenentrypruned. Activecount/stats do notprune. Sourceonly.",
+    "complete returnsnumberregisteredwaiters evenifreceiverdropped;docs fanoutcountnotdeliverycount.",
+    "Requestkeyincludesmodelandpromptonly;othergenerationparametersnotpartofthisAPI. Callersemanticidentityunqualified.",
+    "Retrievalformatfunctionnumberspassagesandtrimstext;containsnoactualduplicatealgorithm. NoexternalretrievalorLLMcall executed."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

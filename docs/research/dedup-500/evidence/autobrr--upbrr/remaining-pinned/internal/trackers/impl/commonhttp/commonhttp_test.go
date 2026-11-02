@@ -1,0 +1,582 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package commonhttp
+
+import (
+	"context"
+	"errors"
+	"html"
+	"io"
+	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+type stubCookieStore struct {
+	cookies map[string]string
+	err     error
+}
+
+func (s stubCookieStore) GetAllTrackerCookies(context.Context, string, []byte) (map[string]string, error) {
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.cookies, nil
+}
+
+func TestReadUploadResponseBodyUsesFullSuccessAndExtractedFailurePreview(t *testing.T) {
+	t.Parallel()
+
+	large := strings.Repeat("a", int(DefaultResponsePreviewBytes)+32)
+	successResp := &http.Response{Body: ioNopCloser(large)}
+	body, preview, err := ReadUploadResponseBody(successResp, true, DefaultResponsePreviewBytes)
+	if err != nil {
+		t.Fatalf("ReadUploadResponseBody success: %v", err)
+	}
+	if len(body) != len(large) {
+		t.Fatalf("expected full success body length %d, got %d", len(large), len(body))
+	}
+	if int64(len(preview)) != DefaultResponsePreviewBytes {
+		t.Fatalf("expected bounded preview length %d, got %d", DefaultResponsePreviewBytes, len(preview))
+	}
+
+	failureResp := &http.Response{Body: ioNopCloser(large)}
+	body, preview, err = ReadUploadResponseBody(failureResp, false, DefaultResponsePreviewBytes)
+	if err != nil {
+		t.Fatalf("ReadUploadResponseBody failure: %v", err)
+	}
+	if len(body) != len(large) {
+		t.Fatalf("expected failure scan body length %d, got %d", len(large), len(body))
+	}
+	if string(preview) != "[REDACTED]" {
+		t.Fatalf("expected compact redacted failure preview, got %q", preview)
+	}
+}
+
+func ioNopCloser(value string) io.ReadCloser {
+	return io.NopCloser(strings.NewReader(value))
+}
+
+func TestLoadCookiesForTrackerUsesCookieStoreWhenNoStartupCookieExists(t *testing.T) {
+	t.Parallel()
+
+	got, err := LoadCookiesForTracker(
+		context.Background(),
+		filepath.Join(t.TempDir(), "upbrr.db"),
+		"blu",
+		stubCookieStore{cookies: map[string]string{"session": "from-db"}},
+		[]byte("01234567890123456789012345678901"),
+	)
+	if err != nil {
+		t.Fatalf("LoadCookiesForTracker: %v", err)
+	}
+	if got["session"] != "from-db" {
+		t.Fatalf("expected cookie from store, got %#v", got)
+	}
+}
+
+func TestWriteFailureArtifactRedactsSensitiveBody(t *testing.T) {
+	t.Parallel()
+
+	root := t.TempDir()
+	dbPath := filepath.Join(root, "state", "upbrr.db")
+	meta := api.UploadSubject{SourcePath: filepath.Join(root, "source.mkv")}
+	body := []byte(`{"message":"failed","api_key":"secret-key","detail":"token=plain-secret"}`)
+
+	path, err := WriteFailureArtifact(meta, dbPath, "GPW", "upload_failure", body, ".json")
+	if err != nil {
+		t.Fatalf("WriteFailureArtifact: %v", err)
+	}
+	payload, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read artifact: %v", err)
+	}
+	text := string(payload)
+	if strings.Contains(text, "secret-key") || strings.Contains(text, "plain-secret") {
+		t.Fatal("artifact leaked secret body")
+	}
+	if !strings.Contains(text, "[REDACTED]") {
+		t.Fatal("expected redaction marker in artifact")
+	}
+}
+
+func TestLoadCookiesForTrackerCookieStoreOverridesStartupCookie(t *testing.T) {
+	t.Parallel()
+
+	dbPath := filepath.Join(t.TempDir(), "state", "upbrr.db")
+	candidates := CookiePathCandidates(dbPath, "blu", ".txt", ".json")
+
+	jsonPath := ""
+	for _, candidate := range candidates {
+		if strings.HasSuffix(candidate, ".json") {
+			jsonPath = candidate
+			break
+		}
+	}
+	if jsonPath == "" {
+		t.Fatalf("expected json cookie candidate, got %#v", candidates)
+	}
+	if err := os.MkdirAll(filepath.Dir(jsonPath), 0o755); err != nil {
+		t.Fatalf("MkdirAll: %v", err)
+	}
+	if err := os.WriteFile(jsonPath, []byte(`{"session":"from-startup","extra":"from-file"}`), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	got, err := LoadCookiesForTracker(
+		context.Background(),
+		dbPath,
+		"blu",
+		stubCookieStore{cookies: map[string]string{"session": "from-db", "persisted": "keep-me"}},
+		[]byte("01234567890123456789012345678901"),
+	)
+	if err != nil {
+		t.Fatalf("LoadCookiesForTracker: %v", err)
+	}
+	if got["session"] != "from-db" {
+		t.Fatalf("expected store cookie to override startup value, got %#v", got)
+	}
+	if got["persisted"] != "keep-me" {
+		t.Fatalf("expected db-only cookie to be preserved, got %#v", got)
+	}
+	if got["extra"] != "from-file" {
+		t.Fatalf("expected startup-only cookie to be returned, got %#v", got)
+	}
+}
+
+func TestLoadCookiesForTrackerFallsBackToJSONFileWhenStoreHasNoCookies(t *testing.T) {
+	t.Parallel()
+
+	dbPath := filepath.Join(t.TempDir(), "state", "upbrr.db")
+	candidates := CookiePathCandidates(dbPath, "blu", ".txt", ".json")
+	if len(candidates) != 2 {
+		t.Fatalf("expected txt and json cookie candidates, got %#v", candidates)
+	}
+
+	jsonPath := ""
+	for _, candidate := range candidates {
+		if strings.HasSuffix(candidate, ".json") {
+			jsonPath = candidate
+			break
+		}
+	}
+	if jsonPath == "" {
+		t.Fatalf("expected json cookie candidate, got %#v", candidates)
+	}
+	if err := os.MkdirAll(filepath.Dir(jsonPath), 0o755); err != nil {
+		t.Fatalf("MkdirAll: %v", err)
+	}
+	if err := os.WriteFile(jsonPath, []byte(`{"session":"from-json"}`), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	got, err := LoadCookiesForTracker(
+		context.Background(),
+		dbPath,
+		"blu",
+		stubCookieStore{cookies: map[string]string{}},
+		[]byte("01234567890123456789012345678901"),
+	)
+	if err != nil {
+		t.Fatalf("LoadCookiesForTracker: %v", err)
+	}
+	if got["session"] != "from-json" {
+		t.Fatalf("expected JSON fallback cookie, got %#v", got)
+	}
+}
+
+func TestLoadCookiesForTrackerFallsBackToNetscapeFileWithoutDomainFilter(t *testing.T) {
+	t.Parallel()
+
+	dbPath := filepath.Join(t.TempDir(), "state", "upbrr.db")
+	candidates := CookiePathCandidates(dbPath, "blu", ".txt", ".json")
+	if len(candidates) != 2 {
+		t.Fatalf("expected txt and json cookie candidates, got %#v", candidates)
+	}
+
+	txtPath := ""
+	for _, candidate := range candidates {
+		if strings.HasSuffix(candidate, ".txt") {
+			txtPath = candidate
+			break
+		}
+	}
+	if txtPath == "" {
+		t.Fatalf("expected txt cookie candidate, got %#v", candidates)
+	}
+	if err := os.MkdirAll(filepath.Dir(txtPath), 0o755); err != nil {
+		t.Fatalf("MkdirAll: %v", err)
+	}
+
+	netscape := ".example.org\tTRUE\t/\tFALSE\t0\tsession\t from-txt \n"
+	if err := os.WriteFile(txtPath, []byte(netscape), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	got, err := LoadCookiesForTracker(
+		context.Background(),
+		dbPath,
+		"blu",
+		stubCookieStore{cookies: map[string]string{}},
+		[]byte("01234567890123456789012345678901"),
+	)
+	if err != nil {
+		t.Fatalf("LoadCookiesForTracker: %v", err)
+	}
+	if got["session"] != " from-txt " {
+		t.Fatalf("expected Netscape fallback cookie, got %#v", got)
+	}
+}
+
+func TestLoadNetscapeCookiesPreservesValueWhitespaceAndSkipsEmptyNameOrValue(t *testing.T) {
+	t.Parallel()
+
+	path := filepath.Join(t.TempDir(), "cookies.txt")
+	content := strings.Join([]string{
+		".example.org\tTRUE\t/\tFALSE\t0\t\tmissing-name",
+		".example.org\tTRUE\t/\tFALSE\t0\tempty\t",
+		".example.org\tTRUE\t/\tFALSE\t0\tsession\t padded ",
+		"#HttpOnly_.example.org\tTRUE\t/\tFALSE\t0\thttp_only\t padded http ",
+		"",
+	}, "\n")
+	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+
+	got, err := LoadNetscapeCookies(path, "example.org")
+	if err != nil {
+		t.Fatalf("LoadNetscapeCookies: %v", err)
+	}
+	if len(got) != 2 {
+		t.Fatalf("expected one valid cookie, got %#v", got)
+	}
+	if got[0].Name != "session" || got[0].Value != " padded " {
+		t.Fatalf("expected padded Netscape value to be preserved, got %#v", got[0])
+	}
+	if got[1].Name != "http_only" || got[1].Value != " padded http " {
+		t.Fatalf("expected padded HttpOnly Netscape value to be preserved, got %#v", got[1])
+	}
+}
+
+func TestLoadCookiesForTrackerReturnsStoreError(t *testing.T) {
+	t.Parallel()
+
+	_, err := LoadCookiesForTracker(
+		context.Background(),
+		filepath.Join(t.TempDir(), "state", "upbrr.db"),
+		"blu",
+		stubCookieStore{err: errors.New("database unavailable")},
+		[]byte("01234567890123456789012345678901"),
+	)
+	if err == nil {
+		t.Fatal("expected cookie store error to be returned")
+	}
+	if !strings.Contains(err.Error(), "database unavailable") {
+		t.Fatalf("expected wrapped cookie store error, got %v", err)
+	}
+}
+
+func TestLoadCookiesForTrackerReturnsErrorWhenNoSourcesExist(t *testing.T) {
+	t.Parallel()
+
+	_, err := LoadCookiesForTracker(context.Background(), filepath.Join(t.TempDir(), "upbrr.db"), "blu", nil, nil)
+	if err == nil {
+		t.Fatal("expected missing cookie sources to fail")
+	}
+}
+
+func TestExtractHTTPErrorDetailPrefersErrorsMap(t *testing.T) {
+	t.Parallel()
+
+	body := []byte(`{"message":"Validation failed","errors":{"name":["The name has already been taken."],"tmdb":["The tmdb field is required."]},"api_token":"secret"}`)
+	got := ExtractHTTPErrorDetail(body)
+
+	if !strings.Contains(got, "name: The name has already been taken.") {
+		t.Fatalf("expected name error, got %q", got)
+	}
+	if !strings.Contains(got, "tmdb: The tmdb field is required.") {
+		t.Fatalf("expected tmdb error, got %q", got)
+	}
+	if strings.Contains(got, "secret") {
+		t.Fatalf("expected sensitive value redacted, got %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailSkipsBooleanStatusKeys(t *testing.T) {
+	t.Parallel()
+
+	body := []byte(`{"success":false,"error":true,"message":"Invalid category selected."}`)
+	got := ExtractHTTPErrorDetail(body)
+
+	if got != "Invalid category selected." {
+		t.Fatalf("unexpected detail: %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailRedactsMessageSecrets(t *testing.T) {
+	t.Parallel()
+
+	body := []byte(`{"message":"Upload rejected at https://tracker.example/api?api_token=secret-token"}`)
+	got := ExtractHTTPErrorDetail(body)
+
+	if strings.Contains(got, "secret-token") {
+		t.Fatalf("expected secret to be redacted, got %q", got)
+	}
+	if !strings.Contains(got, "api_token=[REDACTED]") {
+		t.Fatalf("expected redacted token marker, got %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailFallsBackToCompactBody(t *testing.T) {
+	t.Parallel()
+
+	body := []byte("<html><body><h1>Forbidden</h1><p>Upload permission denied.</p></body></html>")
+	got := ExtractHTTPErrorDetail(body)
+
+	if got != "Forbidden Upload permission denied." {
+		t.Fatalf("unexpected compact body: %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailUsesVisibleHTML(t *testing.T) {
+	t.Parallel()
+
+	body := []byte(`<html><head><title>Upload</title></head><body><nav>Browse</nav><p>Upload form</p>` +
+		`<script>{"message":"private-script"}</script><div role="alert">Invalid passkey&#61;synthetic-secret` +
+		`<input value="private-input"><textarea>private-textarea</textarea><select><option>private-select</option></select>` +
+		`<button>private-button</button><style>private-style</style><span hidden>private-hidden</span>` +
+		`<span aria-hidden="true">private-aria</span></div></body></html>`)
+	got := ExtractHTTPErrorDetail(body)
+
+	if got != "Invalid passkey=[REDACTED]" {
+		t.Fatalf("unexpected visible HTML detail: %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailHandlesMalformedAndEmbeddedJSON(t *testing.T) {
+	t.Parallel()
+
+	if got := ExtractHTTPErrorDetail([]byte(`<div class=error>Invalid <b>category`)); got != "Invalid category" {
+		t.Fatalf("malformed HTML detail = %q", got)
+	}
+	if got := ExtractHTTPErrorDetail([]byte(`prefix {"message":"Invalid category selected."} suffix`)); got != "Invalid category selected." {
+		t.Fatalf("embedded JSON detail = %q", got)
+	}
+	if got := ExtractHTTPErrorDetail(nil); got != "" {
+		t.Fatalf("empty detail = %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailSkipsInlineHiddenStyles(t *testing.T) {
+	t.Parallel()
+
+	for _, style := range []string{
+		"display:none", "visibility:hidden", "color:red; DISPLAY : none !important", " VISIBILITY: hidden; color:red",
+		"display: none /* hidden */", "visibility: hidden /* hidden */", "display /* hidden */: none !important",
+		"display: /* comment ; */ none", `content:"/*"; display:none`, `content:'/*'; visibility:hidden`,
+		"display:none !/*x*/important", "visibility:hidden ! important", "--x:fn(a;b);display:none",
+		`--x:\(;display:none`,
+		"display:block;display:none", "display:none!important;display:block", "visibility:visible;visibility:hidden",
+		"visibility:hidden!important;visibility:visible", "display:none;display:block!invalid",
+	} {
+		t.Run(style, func(t *testing.T) {
+			body := []byte(`<div class="error">Invalid category<span style="` + html.EscapeString(style) + `"><b>private-hidden-text</b></span>` +
+				`<span style="display:block;visibility:visible">remains visible</span></div>`)
+			if got := ExtractHTTPErrorDetail(body); got != "Invalid category remains visible" {
+				t.Fatalf("inline hidden text entered diagnostics: %q", got)
+			}
+		})
+	}
+}
+
+func TestExtractHTTPErrorDetailPreservesVisibleInlineStyles(t *testing.T) {
+	t.Parallel()
+
+	for _, style := range []string{
+		`content:"x;display:none;y"`, `content:'x;visibility:hidden;y'`, `content:"x\";display:none;y"`,
+		"--x:fn(a;display:none;b)", "--x:[a;visibility:hidden;b]", "--x:{a;display:none;b}",
+		`content:"x;display:none`, `--x:foo\;display:none;`, "--x:fn(a];display:none;b)",
+		"display:none;display:block", "display:none;display:block!important", "display:block!important;display:none",
+		"visibility:hidden;visibility:visible", "visibility:visible!important;visibility:hidden",
+	} {
+		t.Run(style, func(t *testing.T) {
+			body := []byte(`<div class="error" style="` + html.EscapeString(style) + `">Invalid category</div>`)
+			if got := ExtractHTTPErrorDetail(body); got != "Invalid category" {
+				t.Fatalf("inline style hid visible diagnostic: %q", got)
+			}
+		})
+	}
+}
+
+func TestExtractHTMLFormErrorDetailOmitsUnrelatedPageText(t *testing.T) {
+	t.Parallel()
+
+	form := []byte(`<p>Unrelated upload rules</p><div class="error"></div><input name="artist" value="Autofill Fail">`)
+	if got := ExtractHTMLFormErrorDetail(form); got != "" {
+		t.Fatalf("empty form error included page text: %q", got)
+	}
+	form = append(form, []byte(`<div role="alert">Series lookup unavailable</div>`)...)
+	if got := ExtractHTMLFormErrorDetail(form); got != "Series lookup unavailable" {
+		t.Fatalf("form lost visible error detail: %q", got)
+	}
+	oversized := []byte(strings.Repeat(" ", int(maxHTTPErrorResponseBytes)) + `<div class="error">Beyond scan limit</div>`)
+	if got := ExtractHTMLFormErrorDetail(oversized); got != "" {
+		t.Fatalf("form error scanned beyond limit: %q", got)
+	}
+}
+
+func TestExtractHTTPErrorDetailSkipsNavigationContainers(t *testing.T) {
+	t.Parallel()
+
+	for _, attr := range []string{`id="header"`, `id="footer"`, `role="banner"`, `role="navigation"`, `role="contentinfo"`} {
+		t.Run(attr, func(t *testing.T) {
+			body := []byte(`<div ` + attr + `>` + strings.Repeat("Upload Bonus Torrents Forums Rules ", 100) +
+				`<span class="error">private-navigation-error</span></div><div id="content">Autofill could not find the series.</div>`)
+			if got := ExtractHTTPErrorDetail(body); got != "Autofill could not find the series." {
+				t.Fatalf("navigation obscured response detail: %q", got)
+			}
+		})
+	}
+}
+
+func TestExtractHTTPErrorDetailBoundsOversizedInput(t *testing.T) {
+	t.Parallel()
+
+	body := []byte(`<div class="error">Invalid category</div>` + strings.Repeat("x", int(maxHTTPErrorResponseBytes)))
+	got := ExtractHTTPErrorDetail(body)
+	if got != "response exceeded 1 MiB; Invalid category" {
+		t.Fatalf("oversized detail = %q", got)
+	}
+	if got := ExtractHTTPErrorDetail([]byte(strings.Repeat(" ", int(maxHTTPErrorResponseBytes)+1))); got != "response exceeded 1 MiB" {
+		t.Fatalf("oversized blank detail = %q", got)
+	}
+}
+
+func TestReadUploadResponseBodyFindsLateHTMLFailure(t *testing.T) {
+	t.Parallel()
+
+	for _, tt := range []struct {
+		name string
+		html string
+		want string
+	}{
+		{
+			name: "marked",
+			html: `<div class="errors">Invalid category selected.</div>`,
+			want: "Invalid category selected.",
+		},
+		{
+			name: "unmarked",
+			html: `<h1>Upload failed!</h1><p>A matching torrent already exists.</p>`,
+			want: "Upload failed! A matching torrent already exists.",
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			bodyText := `<html><head>` + strings.Repeat(`<link href="/favicon">`, 4000) + `</head><body>` + tt.html + `</body></html>`
+			resp := &http.Response{Body: ioNopCloser(bodyText)}
+			body, preview, err := ReadUploadResponseBody(resp, false, DefaultResponsePreviewBytes)
+			if err != nil {
+				t.Fatalf("ReadUploadResponseBody: %v", err)
+			}
+			if len(body) <= int(DefaultResponsePreviewBytes) {
+				t.Fatalf("expected scan beyond old preview limit, got %d bytes", len(body))
+			}
+			if string(preview) != tt.want {
+				t.Fatalf("late error preview = %q, want %q", preview, tt.want)
+			}
+		})
+	}
+}
+
+func TestReadUploadResponseBodyReportsOversizeAndPartialRead(t *testing.T) {
+	t.Parallel()
+
+	oversized := `<div class="error">Invalid category</div>` + strings.Repeat("x", int(maxHTTPErrorResponseBytes))
+	body, preview, err := ReadUploadResponseBody(&http.Response{Body: ioNopCloser(oversized)}, false, DefaultResponsePreviewBytes)
+	if err != nil {
+		t.Fatalf("oversized response: %v", err)
+	}
+	if int64(len(body)) != maxHTTPErrorResponseBytes {
+		t.Fatalf("oversized body length = %d", len(body))
+	}
+	if string(preview) != "response exceeded 1 MiB; Invalid category" {
+		t.Fatalf("oversized preview = %q", preview)
+	}
+
+	sentinel := errors.New("synthetic read failure")
+	resp := &http.Response{Body: &partialErrorReadCloser{payload: []byte(`<div class="error">Invalid source</div>`), err: sentinel}}
+	body, preview, err = ReadUploadResponseBody(resp, false, DefaultResponsePreviewBytes)
+	if !errors.Is(err, sentinel) {
+		t.Fatalf("expected read error identity, got %v", err)
+	}
+	if string(body) != `<div class="error">Invalid source</div>` {
+		t.Fatalf("partial body = %q", body)
+	}
+	if string(preview) != "response body read failed; Invalid source" {
+		t.Fatalf("partial read preview = %q", preview)
+	}
+}
+
+type partialErrorReadCloser struct {
+	payload []byte
+	err     error
+}
+
+func (r *partialErrorReadCloser) Read(p []byte) (int, error) {
+	if len(r.payload) == 0 {
+		return 0, r.err
+	}
+	n := copy(p, r.payload)
+	r.payload = r.payload[n:]
+	if len(r.payload) == 0 {
+		return n, r.err
+	}
+	return n, nil
+}
+
+func (*partialErrorReadCloser) Close() error { return nil }
+
+func TestFormatErrorValueStopsAtMaxDepth(t *testing.T) {
+	t.Parallel()
+
+	if got := formatErrorValue(nestedMessageValue(maxHTTPErrorDetailDepth-1, "within depth"), "", 0); got != "within depth" {
+		t.Fatalf("expected nested value within depth, got %q", got)
+	}
+	if got := formatErrorValue(nestedMessageValue(maxHTTPErrorDetailDepth, "too deep"), "", 0); got != "" {
+		t.Fatalf("expected nested value beyond depth to be skipped, got %q", got)
+	}
+}
+
+func nestedMessageValue(depth int, message string) any {
+	var value any = message
+	for range depth {
+		value = map[string]any{"message": value}
+	}
+	return value
+}
+
+func TestUploadHTTPErrorWithURLRedactsURLSecrets(t *testing.T) {
+	t.Parallel()
+
+	var err error = UploadHTTPErrorWithURL("AITHER", 403, "https://tracker.example/api?api_key=secret-key", nil)
+	if strings.Contains(err.Error(), "secret-key") {
+		t.Fatalf("expected URL secret to be redacted, got %v", err)
+	}
+	if !strings.Contains(err.Error(), "api_key=[REDACTED]") {
+		t.Fatalf("expected redacted key marker, got %v", err)
+	}
+}
+
+func TestUploadHTTPErrorIncludesExtractedDetail(t *testing.T) {
+	t.Parallel()
+
+	var err error = UploadHTTPError("AITHER", 422, []byte(`{"errors":{"name":["Already exists"]}}`))
+	if !strings.Contains(err.Error(), "AITHER upload failed status=422: name: Already exists") {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}

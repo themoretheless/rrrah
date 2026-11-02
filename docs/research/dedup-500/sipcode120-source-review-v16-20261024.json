@@ -1,0 +1,73 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v15-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/lib/clock.ts",
+      "local": "command-src_lib_clock.ts",
+      "git_blob": "568079fc2b4312722e1ae5679c79f57777b323c1",
+      "sha256": "112b55c7fc806fa6d407c8f9a2ce231afeb902eac5aece6062e38a185400741a",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/process.ts",
+      "local": "command-src_lib_process.ts",
+      "git_blob": "aa95098db88bfdc92cce4e342d4a04ad4c8863f7",
+      "sha256": "f6919d426fdd25216741fc49884c3189cfea15626033c90870538c7edd48b4ab",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/privacy.ts",
+      "local": "command-src_lib_privacy.ts",
+      "git_blob": "5550e73afcc1a1553d35fa664a366ac4e3a2e053",
+      "sha256": "146a8e52fe787d8869a5f5b62b34bd33ccbff3fd0b11556479855cbc3a019bcb",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/messages.ts",
+      "local": "command-src_lib_messages.ts",
+      "git_blob": "eadf398aed4897dec9db2590ab2fff822ece0452",
+      "sha256": "efd10e52738b969f1a8330f0563de11ba9b52af4fd93f201c932e8e770456e87",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/framework.test.ts",
+      "local": "detect-tests_modules_manifest_framework.test.ts",
+      "git_blob": "842bd1995adf0fbeeb5159c863781199addc667e",
+      "sha256": "c45dbcf7494d8123cb5e929972d0f0e92f00b1485ab18fd99aa6656405784872",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/manifest/patterns.test.ts",
+      "local": "detect-tests_modules_manifest_patterns.test.ts",
+      "git_blob": "847eaea39c168eaa97499245b7a6c1bcdd5cd89d",
+      "sha256": "3fd72b0cd70c8b8ce6be2a7d97105f2afd1df6caecdac1c8050cd9d2c551c452",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 46,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 155,
+    "numPassedTests": 155,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 18,
+  "authored_upstream_controls_total_distinct": 36,
+  "new_authored_controls": 2,
+  "owned_command_cases_passed": 5,
+  "repeated_prior_owned_cases": 3,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "findings": [
+    "LargeexistingJSONlockfileexcludedbyscanner means runManifest package-managerunknown;smalllockpositive identifiesnpm. Tests passed via original19modulechain/ownedfiles/FakeGit.",
+    "Originalpatterns packageManager test useshasFile true withoutscanner limit,doesnot exerciseintegration.",
+    "OriginalmessagesunsupportedLanguage promiseslistedothertypes butrendererallowlist omitsRust aspreviouslyconfirmed.",
+    "PrivacyASSERT constant isdocumentationmarker without runtimeeffect;nogeneralnetworkguaranteeclaimfromthisreview.",
+    "All19acquiredmanifest runtime modules nowwhole-read acrossaudits;full788blobsourceandappremainincomplete."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

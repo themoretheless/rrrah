@@ -569,3 +569,6 @@ pub mod worker;
 
 #[cfg(feature = "decode")]
 pub mod model_worker;
+
+#[cfg(feature = "decode")]
+pub mod white_anchored_file;

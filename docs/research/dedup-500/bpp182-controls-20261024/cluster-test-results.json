@@ -1,0 +1,25 @@
+{
+  "scope": "Six unchanged original test bodies with original AST hash/global-cluster functions.\n\nNo cv2/imported application graph; module namespace shim and logger adapter only.\n",
+  "original_test_bodies_passed": 6,
+  "executed_names": [
+    "test_hamming_distance_symmetric",
+    "test_hamming_distance_known",
+    "test_month_rep_survives_global_dedup",
+    "test_no_date_month_still_works",
+    "test_same_month_duplicates_still_deduped",
+    "test_three_months_all_similar"
+  ],
+  "authored_controls_passed": 1,
+  "counterexample": {
+    "input_hashes": [
+      -1,
+      0
+    ],
+    "fixed_width_distance": 64,
+    "threshold": 8,
+    "kept": [
+      "high.jpg"
+    ]
+  },
+  "limits": "Three cv2-dependent original tests not executed; no full module/application/CLI runtime."
+}

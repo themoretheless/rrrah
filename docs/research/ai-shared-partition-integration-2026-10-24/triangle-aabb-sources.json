@@ -1,0 +1,35 @@
+{
+  "after_test_sha256": "a73eaaa867b4ae85adebf6b17b147111df659642117991464c12107cca8fba86",
+  "before_test_sha256": "73236ee9e5434a46daabb2b22b90a5a5a4dcdfd0161c2723eb3997770d9d3ac8",
+  "source_sha256": "be9b33f1c7d141cfcc24eb1d375d099d5a00c4c5159cb0da3bf818711552105a",
+  "before_source_sha256": "2da329af117ed3c0b8c3167534b2fdd6bcdc5a071ba36e5cda4595ec0e9e5a26",
+  "decoder_sha256": "85ea77ab6bb5cfd56afa4710ec90d999335889ea31a14b1df13c8a303d74d5cc",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "be9b33f1c7d141cfcc24eb1d375d099d5a00c4c5159cb0da3bf818711552105a",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "9eac5628f7ca2523d665482b1a53bf27f1a150752fb12be3630b758681e893ce",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "artifacts": {
+    "triangle-aabb-feature-encode.log": "3bf895f566b1a19435a71b19305e502ae8b8ce884b3a62119a8290a48fbee975",
+    "triangle-aabb-feature-vector.log": "e74186571ce8779cbd963703c82e073c5829aa57679c3e98158314cd8bfcdcd4",
+    "triangle-aabb-default-vector.log": "2a031624f4b940c77184c2531284719a0d79a09a3aa7f50240b7dc3139646598",
+    "triangle-aabb-feature-build.log": "2908ee28f978415d2463bdb5858489965741e39c1983bb5368354c8ca9ba4554",
+    "triangle-aabb-real-equivalence.json": "9fca4e9d9d3d3f743338e9da6814c2dc06c1acc9657b0bdc664bab53e05c6d41",
+    "triangle-aabb-change.patch": "d574a577e2273097babde2b0430ef6cdab8088f2f0073434083a3640b454ccc1",
+    "triangle-aabb-cpu.json": "18aec213b5c9e02531c16a42d1964e4c3cc0b1c42239ed0794173baeb67a6298",
+    "triangle-aabb-cpu.log": "fa699b4c23482173b4c589d1534de1f024a2e96b41c0017004399a61a071dfde"
+  },
+  "patch_reproduces_current_source": true,
+  "cpu_result": "Inconclusive. AA interval -17.85..1.02%, candidate -89.10..5.73%; no elapsed-speed claim. Separate process snapshot showed load20.77 with unrelated active applications/compilers. None were stopped.",
+  "static_codegen": {
+    "scope": "Supporting static evidence only, not elapsed time or executed instruction counts",
+    "before_overlap_helper_instruction_lines": 307,
+    "after_overlap_helper_instruction_lines": 168,
+    "before_paint_instruction_lines": 1713,
+    "after_paint_instruction_lines": 1716,
+    "before_overlap_assembly_sha256": "e5871f8920c436cb563908139a1d11f1edf2feb3c4d472dffeb24d00c330829d",
+    "after_overlap_assembly_sha256": "645077cae509f373b7c6e6931bddfdd46f68e71858e99c619e2068dabdb837f5"
+  }
+}

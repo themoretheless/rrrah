@@ -1,0 +1,43 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v4-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/trackingStore.mjs",
+      "local": "15-trackingStore.mjs",
+      "git_blob": "afe6fdee696f77645d725a35a2bc7b5f84c579b4",
+      "sha256": "4a358cc31d4289ffde3505110fbd5a2f039891a4be9e0d9f3ace12321a0ab4b8",
+      "whole_text_read": true,
+      "scope": "Previous v4 read ranges plus336-349,411-474,566-749,951-end now cover full1001lines."
+    }
+  ],
+  "whole_files_read_total": 11,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 2,
+    "total_authored_controls_distinct": 17,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-store-capacity-controls-20261024",
+    "scope": "Original TrackingStore and createFileRecord, owned JSON/IOUtils/Zotero adapters, initialization fields explicitly set; no real plugin."
+  },
+  "findings": [
+    "Loading3 valid file records into TrackingStore(maxFiles=1) keepsall3 and hash index includes all; capacity not applied by load. Native control.",
+    "Subsequent add evicts down to1 and removes old hash mappings; native positive control. No unbounded production memory claim from3record fixture.",
+    "Getter methods expose mutable record references and update() accepts partial key fields; caller mutation discipline requires further review, no new failure claim."
+  ],
+  "local_library_comparison": {
+    "scope": "Source inspection only; no new native rrrah tests or production changes this step",
+    "cache": "rrrah-dedup CacheKey uses content digest, recipe digest and frame_index; module contract requires fresh full-file content digest. Timestamp-only reuse is not its API.",
+    "exact": "exact scan requires full hash plus equal() byte confirmation; inspected implementation verifies candidates before grouping. This source observation is not a proof every caller supplies fresh digest or all races are covered."
+  },
+  "remaining": [
+    "89blobs not whole-read including remainder of watchFolder",
+    "Original suite/full Zotero/plugin release and licenses incomplete",
+    "500 repository review and all-case objective remain incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

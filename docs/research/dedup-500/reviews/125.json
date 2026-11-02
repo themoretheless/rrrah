@@ -2,9 +2,9 @@
   "index": 125,
   "repository": "rafcopy/auto-cut-agent",
   "commit": "528503b9dbd9c06045096498c4201182a498ad41",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "6/14 whole pinned blobs;59 unchanged original Node tests and7 authored controls;Premiere/CEP/FFmpeg unqualified",
   "decision": "reject-domain",
-  "finding": "Premiere editing/silence ranges and LLM repeated-take decision; no deterministic image duplicate verification.",
+  "finding": "Audio-level silence cut planning;not file/image duplicate verification. Prior LLM repeated-take claim corrected from pinned source.",
   "available_source_evidence": [
     {
       "path": "install.sh",
@@ -94,5 +94,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "autocut125-source-review-v1-20261024.json"
 }

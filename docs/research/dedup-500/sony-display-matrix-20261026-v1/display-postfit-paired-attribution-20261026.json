@@ -1,0 +1,55 @@
+{
+  "results": [
+    {
+      "pair": "2414",
+      "counts": [
+        23641348,
+        357695,
+        957
+      ],
+      "forward_rejected": [
+        242696,
+        217429,
+        775
+      ],
+      "reverse_rejected": [
+        236512,
+        259420,
+        768
+      ],
+      "forward_agreement": 0.9807958333333333,
+      "reverse_agreement": 0.9793041666666666,
+      "in_range_forward_failure_fraction": 0.010265742884035207,
+      "in_range_reverse_failure_fraction": 0.010004167275064011,
+      "binary_sha256": "e5d512f1b3422c9298a1e48471bdcdf9965a89aa1f02d741068cff4cdeaf8686",
+      "log_sha256": "496ee87187b99e23fa89a31034082beadd1f6706af640ac9b2d2b05dff42fc75"
+    },
+    {
+      "pair": "2418",
+      "counts": [
+        22108891,
+        1887673,
+        3436
+      ],
+      "forward_rejected": [
+        1066992,
+        564112,
+        2964
+      ],
+      "reverse_rejected": [
+        874565,
+        1825030,
+        2917
+      ],
+      "forward_agreement": 0.9319138333333333,
+      "reverse_agreement": 0.8873953333333333,
+      "in_range_forward_failure_fraction": 0.048260765318350884,
+      "in_range_reverse_failure_fraction": 0.0395571627722078,
+      "binary_sha256": "e5d512f1b3422c9298a1e48471bdcdf9965a89aa1f02d741068cff4cdeaf8686",
+      "log_sha256": "808274f4ae4d6f4146e299ea6c709f6db90256a5bc93ed0ed0b08bc0d66a2285"
+    }
+  ],
+  "finding": "2414 control passes 90% both directions; 2418 fails reverse. 2418 has higher in-range post-fit residual rate and many more out-of-range pixels. Attribution does not identify decoder-stage cause or justify ignoring either class.",
+  "next": "Separate demosaic/color-matrix/highlight residual causes with fixed inputs and independent references; retain false-positive controls before any policy change.",
+  "scope": "Two fixed-shift same-binary comparisons; no geometry discovery, heldout precision or general RAW completion."
+}

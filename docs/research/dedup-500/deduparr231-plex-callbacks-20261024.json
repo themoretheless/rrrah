@@ -1,0 +1,40 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Six original duplicate-detection test bodies, original sample/PlexService class, original Mock fixture bodies. Removed patch decorators replaced by explicit module-global factory injection. No pytest package fixture, actual Plex account/server/auth/network connection.",
+  "callbacks": 6,
+  "passed": 6,
+  "failed": 0,
+  "results": [
+    {
+      "name": "test_find_duplicate_movies_with_multiple_versions",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_find_duplicate_movies_no_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_find_duplicate_movies_wrong_library_type",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_find_duplicate_episodes_with_multiple_versions",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_find_duplicate_episodes_no_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_find_duplicate_episodes_wrong_library_type",
+      "passed": true,
+      "error": null
+    }
+  ]
+}

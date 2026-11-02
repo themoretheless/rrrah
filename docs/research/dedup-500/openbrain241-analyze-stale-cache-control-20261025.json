@@ -1,0 +1,65 @@
+{
+  "scope": "Original fourteen analyze callbacks plus authored stale-cache control; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "hubs: reads hub data from cache",
+      "passed": true
+    },
+    {
+      "name": "hubs: returns hub thoughts as JSON",
+      "passed": true
+    },
+    {
+      "name": "hubs: filters by min_connections when > 5",
+      "passed": true
+    },
+    {
+      "name": "hubs: cache error returns isError",
+      "passed": true
+    },
+    {
+      "name": "density: reads density data from cache",
+      "passed": true
+    },
+    {
+      "name": "density: returns density data as JSON",
+      "passed": true
+    },
+    {
+      "name": "density: cache error returns isError",
+      "passed": true
+    },
+    {
+      "name": "sources: calls both analysis RPCs",
+      "passed": true
+    },
+    {
+      "name": "sources: returns combined sources and cross_source",
+      "passed": true
+    },
+    {
+      "name": "sources: RPC error returns isError",
+      "passed": true
+    },
+    {
+      "name": "missing brain context returns error",
+      "passed": true
+    },
+    {
+      "name": "themes: returns all themes summary via get_theme_stats",
+      "passed": true
+    },
+    {
+      "name": "themes: returns timeline for specific theme",
+      "passed": true
+    },
+    {
+      "name": "themes: RPC error returns isError",
+      "passed": true
+    },
+    {
+      "name": "control: analyze accepts cache dated 2000 without freshness check",
+      "passed": true
+    }
+  ]
+}

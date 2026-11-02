@@ -1,0 +1,57 @@
+{
+  "receipt": "docs/research/dedup-500/exact-collection-scaling-current-20261102-v1.json",
+  "passed": 1,
+  "rows": [
+    {
+      "files": 8,
+      "families": 1,
+      "pairs": 28,
+      "exact_pairs": 28,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 209715200,
+      "elapsed_ns": [
+        90641917,
+        92747125,
+        100344792
+      ],
+      "managed_peak": 13696,
+      "median_seconds": 0.092747125
+    },
+    {
+      "files": 32,
+      "families": 1,
+      "pairs": 496,
+      "exact_pairs": 496,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 3254779904,
+      "elapsed_ns": [
+        1284393917,
+        1403806041,
+        1303387625
+      ],
+      "managed_peak": 189952,
+      "median_seconds": 1.303387625
+    },
+    {
+      "files": 64,
+      "families": 1,
+      "pairs": 2016,
+      "exact_pairs": 2016,
+      "file_bytes": 1048576,
+      "analytical_source_bytes": 12952010752,
+      "elapsed_ns": [
+        5080351709,
+        5059314750,
+        4999981833
+      ],
+      "managed_peak": 740352,
+      "median_seconds": 5.05931475
+    }
+  ],
+  "findings": [
+    "All expected exact pairs returned, inference closure never called, managed budget zero after every dropped report (test assertions).",
+    "This pair-report API performs per-pair source confirmation: analytical source traffic grows quadratically with pair count.64identical1MiB files imply12.06GiB source reads by code model, not measured device IO.",
+    "Potential optimization must retain mutation/stability guarantees and distinguish pair-output requirements from group-only folder scanning; no source policy weakened here."
+  ],
+  "scope": "Three small all-copy collections on current host, optimized test profile. Managed peak is not total RSS and elapsed timing is not physical disk throughput."
+}

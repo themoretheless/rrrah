@@ -139,42 +139,63 @@ impl MosaicRamCache {
     ) -> Option<DecodedMosaic> {
         self.get_mode(key, false, cancelled)
     }
+    /// Background lookup preserving allocation-admission failure separately from a miss.
+    pub fn try_get_background_with_cancel(
+        &mut self,
+        key: &CacheKey,
+        cancelled: impl FnMut() -> bool,
+    ) -> Result<Option<DecodedMosaic>, rrrah_memory::BufferError> {
+        self.try_get_mode(key, false, cancelled)
+    }
     fn get_mode(
         &mut self,
         key: &CacheKey,
         visible: bool,
-        mut cancelled: impl FnMut() -> bool,
+        cancelled: impl FnMut() -> bool,
     ) -> Option<DecodedMosaic> {
+        self.try_get_mode(key, visible, cancelled).ok().flatten()
+    }
+    fn try_get_mode(
+        &mut self,
+        key: &CacheKey,
+        visible: bool,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<Option<DecodedMosaic>, rrrah_memory::BufferError> {
         if cancelled() {
-            return None;
+            return Ok(None);
         }
         self.spill_expired();
         if let Some(mosaic) = self.inner.get_cloned(key) {
-            return (!cancelled()).then_some(mosaic);
+            return Ok((!cancelled()).then_some(mosaic));
         }
         loop {
-            match self.swap.as_ref()?.try_get(key, &mut cancelled) {
+            let Some(swap) = self.swap.as_ref() else {
+                return Ok(None);
+            };
+            match swap.try_get(key, &mut cancelled) {
                 Ok(Some(mosaic)) => {
-                    // Do not publish a restore or transfer the visible pin
-                    // after its request generation has been cancelled.
                     if cancelled() {
-                        return None;
+                        return Ok(None);
                     }
                     if visible {
                         self.insert_visible(*key, mosaic.clone());
                     } else {
                         self.insert(*key, mosaic.clone());
                     }
-                    return Some(mosaic);
+                    return Ok(Some(mosaic));
                 }
-                Err(rrrah_memory::BufferError::Capacity { requested, limit, .. })
+                Err(error @ rrrah_memory::BufferError::Capacity { requested, limit, .. })
                     if visible && requested <= limit =>
                 {
-                    if cancelled() || !self.release_lru_unpinned() {
-                        return None;
+                    if cancelled() {
+                        return Ok(None);
+                    }
+                    if !self.release_lru_unpinned() {
+                        return Err(error);
                     }
                 }
-                _ => return None,
+                Err(error) => return if cancelled() { Ok(None) } else { Err(error) },
+                Ok(None) => return Ok(None),
             }
         }
     }
@@ -722,6 +743,52 @@ mod tests {
         assert!(cache.get(&key(2)).is_some());
         cache.swap().unwrap().wait_idle().unwrap();
         assert_eq!(cache.swap().unwrap().stats().errors, 0);
+    }
+    #[test]
+    fn typed_raw_background_lookup_keeps_pressure_distinct_from_miss_and_ready_ram() {
+        let (_parent, mut cache) = swap_cache(64, 2);
+        let budget = rrrah_memory::MemoryBudget::new(4);
+        cache.swap.as_mut().unwrap().set_restore_budget(budget.clone());
+        cache.swap().unwrap().enqueue(key(1), mosaic(2));
+        cache.swap().unwrap().wait_idle().unwrap();
+        assert!(
+            cache
+                .try_get_background_with_cancel(&key(2), || false)
+                .unwrap()
+                .is_none()
+        );
+        let pressure = budget.try_reserve(4).unwrap();
+        assert!(matches!(
+            cache.try_get_background_with_cancel(&key(1), || false),
+            Err(rrrah_memory::BufferError::Capacity { .. })
+        ));
+        assert!(cache.get_background_with_cancel(&key(1), || false).is_none());
+        drop(pressure);
+        assert!(
+            cache
+                .try_get_background_with_cancel(&key(1), || budget.used() > 0)
+                .unwrap()
+                .is_none()
+        );
+        assert_eq!(budget.used(), 0);
+        let frame = cache
+            .try_get_background_with_cancel(&key(1), || false)
+            .unwrap()
+            .unwrap();
+        assert_eq!(&*frame.pixels, &[42u16, 42]);
+        assert_eq!(budget.used(), 4);
+        let reads = cache.swap().unwrap().stats().reads;
+        let ready = cache
+            .try_get_background_with_cancel(&key(1), || false)
+            .unwrap()
+            .unwrap();
+        assert!(ready.pixels.ptr_eq(&frame.pixels));
+        assert_eq!(cache.swap().unwrap().stats().reads, reads);
+        assert_eq!(cache.swap().unwrap().stats().errors, 0);
+        drop(ready);
+        drop(frame);
+        drop(cache);
+        assert_eq!(budget.used(), 0);
     }
     #[test]
     fn restored_external_owner_holds_budget_and_pressure_preserves_swap_for_retry() {

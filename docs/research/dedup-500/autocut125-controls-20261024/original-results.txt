@@ -1,0 +1,92 @@
+
+parseSilenceDetect
+  [32m✓[0m reads paired start/end lines
+  [32m✓[0m a silence running to EOF has a null end
+  [32m✓[0m two starts without an end do not swallow the first silence
+  [32m✓[0m ignores unrelated ffmpeg chatter
+
+parseVolumeDetect
+  [32m✓[0m extracts mean and peak
+  [32m✓[0m missing levels come back null, not NaN
+
+suggestNoiseFloor
+  [32m✓[0m sits below the mean level
+  [32m✓[0m never lands within 12 dB of the peak (would cut everything)
+  [32m✓[0m clamps pathologically quiet measurements to the floor
+  [32m✓[0m returns null when there is nothing to measure
+
+cutsForClip
+  [32m✓[0m maps source silence onto sequence time
+  [32m✓[0m padding shrinks the cut at both ends
+  [32m✓[0m a silence to EOF is clamped to the clip out point
+  [32m✓[0m silence outside the used source window is ignored
+  [32m✓[0m ranges shorter than minCut are dropped
+
+mergeRanges
+  [32m✓[0m unions overlapping ranges
+  [32m✓[0m sorts before merging
+  [32m✓[0m mergeWithin joins cuts separated by a short gap
+  [32m✓[0m mergeWithin leaves genuinely separate cuts alone
+
+absorbShortKeeps
+  [32m✓[0m swallows a sliver of footage between two cuts
+  [32m✓[0m keeps fragments that are long enough
+  [32m✓[0m is a no-op below two ranges
+
+snapToFrame / snapRange
+  [32m✓[0m rounds to the nearest frame
+  [32m✓[0m floor and ceil pick their side
+  [32m✓[0m snapRange rounds inward so a cut can never eat a frame of speech
+  [32m✓[0m an unknown frame rate leaves times untouched
+
+planCuts
+  [32m✓[0m returns ranges sorted descending for right-to-left application
+  [32m✓[0m counts the clips it actually analyzed
+  [32m✓[0m skips speed-ramped clips with a warning instead of mis-timing them
+  [32m✓[0m warns when a clip has no analysis rather than silently keeping it
+  [32m✓[0m never plans a cut past the end of the sequence
+  [32m✓[0m drops ranges that frame snapping shrank below minCut
+  [32m✓[0m frame-snapped ranges land exactly on the grid
+
+selectAnalysisClips
+  [32m✓[0m defaults to the first video and audio track
+  [32m✓[0m honours an explicit track choice
+  [32m✓[0m null excludes a media type entirely
+
+summarizePlan
+  [32m✓[0m totals cuts, seconds and percentage
+  [32m✓[0m an empty plan removes nothing
+
+formatDuration
+  [32m✓[0m formats minutes and seconds
+  [32m✓[0m formats past an hour
+
+normalizeParams
+  [32m✓[0m clamps values ffmpeg would reject
+  [32m✓[0m non-numeric input falls back to defaults
+  [32m✓[0m every preset survives normalization unchanged
+
+host.jsx _toTimecode
+  [32m✓[0m non-drop rates use colons and exact frames
+  [32m✓[0m rounds to the nearest frame at the half-frame boundary
+  [32m✓[0m drop-frame rates use a semicolon
+  [32m✓[0m drop-frame renumbers, so an hour of real time reads as one hour
+  [32m✓[0m drop-frame is exact at every 10-minute resync point
+  [32m✓[0m drop-frame drift never exceeds two frames
+  [32m✓[0m timecode is monotonic frame by frame
+  [32m✓[0m identifies exactly the NTSC drop-frame rates
+
+host.jsx _eps
+  [32m✓[0m is at least half a frame at every normal rate
+  [32m✓[0m never grows past a whole frame, which would eat kept footage
+  [32m✓[0m falls back to the fixed epsilon when fps is unknown
+
+host.jsx _desyncedTracks
+  [32m✓[0m a clean ripple reports nothing
+  [32m✓[0m names the track that kept its content while the others moved
+  [32m✓[0m ignores tracks with nothing past the cut
+  [32m✓[0m ignores locked tracks, which the panel warns about separately
+  [32m✓[0m a sub-frame rounding difference is not a desync
+
+[32m59 passed[0m
+

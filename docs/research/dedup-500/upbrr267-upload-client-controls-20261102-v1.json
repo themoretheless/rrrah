@@ -1,0 +1,20 @@
+{
+  "source": "docs/research/dedup-500/evidence/autobrr--upbrr/remaining-pinned/scripts/examples/upload_release_api.py",
+  "sha256": "de14ce62f8a7e1ea6bcaccbe5d5570541ac89dc264fa805e8492ab8f0e53de59",
+  "method": "AST-extracted three pure functions only; no module imports, main, environment token read, network, uploads or server execution. Synthetic local values.",
+  "observations": {
+    "boolean_revision_accepted": {
+      "id": "owned-action",
+      "workflowRevision": true
+    },
+    "failed_workflow_with_empty_result_returned": {
+      "workflowId": "owned-workflow",
+      "dryRun": {}
+    },
+    "nonfinite_cli_comparison": {
+      "nan_passes_positive_comparison": true,
+      "infinity_passes_positive_comparison": true
+    }
+  },
+  "scope": "Client validation behavior only; server rejection, transport bounds and actual workflow effects not tested."
+}

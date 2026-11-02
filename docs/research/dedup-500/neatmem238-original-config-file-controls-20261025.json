@@ -1,0 +1,53 @@
+{
+  "scope": "Original config-file.test.ts callbacks transpiled unmodified; minimal Vitest adapter; toEqual normalizes undefined object keys for these JSON-shaped assertions; completely fake fs and synthetic homedir",
+  "original_callbacks_passed": 11,
+  "results": [
+    {
+      "name": "returns empty object when config file does not exist",
+      "passed": true
+    },
+    {
+      "name": "returns empty object when config has no plugins section",
+      "passed": true
+    },
+    {
+      "name": "reads all fields correctly from nested config",
+      "passed": true
+    },
+    {
+      "name": "handles snake_case aliases (api_key, base_url, user_id)",
+      "passed": true
+    },
+    {
+      "name": "returns empty object when JSON is invalid",
+      "passed": true
+    },
+    {
+      "name": "creates nested structure from scratch when no config exists",
+      "passed": true
+    },
+    {
+      "name": "merges into existing config preserving other data",
+      "passed": true
+    },
+    {
+      "name": "creates directory if missing",
+      "passed": true
+    },
+    {
+      "name": "skips undefined values",
+      "passed": true
+    },
+    {
+      "name": "returns configured URL when baseUrl is set",
+      "passed": true
+    },
+    {
+      "name": "returns default URL when baseUrl is not configured",
+      "passed": true
+    }
+  ],
+  "authored_controls_passed": 1,
+  "observation": "Malformed prior JSON followed by write replaces full config with plugin-only object in fake filesystem",
+  "full_vitest_suite_run": false
+}

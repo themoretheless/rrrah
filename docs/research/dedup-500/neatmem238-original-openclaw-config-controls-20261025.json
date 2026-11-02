@@ -1,0 +1,187 @@
+{
+  "scope": "Original config.test.ts callbacks transpiled unmodified, minimal describe/it/expect adapter and synthetic node:os; no Vitest runner/gateway/config access",
+  "passed": 45,
+  "results": [
+    {
+      "name": "is a non-empty string",
+      "passed": true
+    },
+    {
+      "name": "is a non-empty object with string values",
+      "passed": true
+    },
+    {
+      "name": "baseUrl defaults to local NeatMem server",
+      "passed": true
+    },
+    {
+      "name": "userId falls back to a non-empty string when not provided",
+      "passed": true
+    },
+    {
+      "name": "autoCapture defaults to true",
+      "passed": true
+    },
+    {
+      "name": "autoRecall defaults to true",
+      "passed": true
+    },
+    {
+      "name": "topK defaults to 5",
+      "passed": true
+    },
+    {
+      "name": "searchThreshold defaults to 0.1",
+      "passed": true
+    },
+    {
+      "name": "customInstructions defaults to DEFAULT_CUSTOM_INSTRUCTIONS",
+      "passed": true
+    },
+    {
+      "name": "customCategories defaults to DEFAULT_CUSTOM_CATEGORIES",
+      "passed": true
+    },
+    {
+      "name": "userId from config takes precedence over os.userInfo() fallback",
+      "passed": true
+    },
+    {
+      "name": "empty string userId falls back to os.userInfo()",
+      "passed": true
+    },
+    {
+      "name": "non-string userId falls back to os.userInfo()",
+      "passed": true
+    },
+    {
+      "name": "needsSetup is consistent with empty config",
+      "passed": true
+    },
+    {
+      "name": "is false when apiKey is explicitly provided",
+      "passed": true
+    },
+    {
+      "name": "needsSetup is always false when apiKey is a valid string",
+      "passed": true
+    },
+    {
+      "name": "throws on unknown keys",
+      "passed": true
+    },
+    {
+      "name": "throws when multiple unknown keys are present",
+      "passed": true
+    },
+    {
+      "name": "throws on null input",
+      "passed": true
+    },
+    {
+      "name": "throws on undefined input",
+      "passed": true
+    },
+    {
+      "name": "throws on string input",
+      "passed": true
+    },
+    {
+      "name": "throws on number input",
+      "passed": true
+    },
+    {
+      "name": "throws on array input",
+      "passed": true
+    },
+    {
+      "name": "throws on boolean input",
+      "passed": true
+    },
+    {
+      "name": "throws on the removed 'mode' key (hard-deleted with OSS mode)",
+      "passed": true
+    },
+    {
+      "name": "throws on the removed 'oss' key (hard-deleted with OSS mode)",
+      "passed": true
+    },
+    {
+      "name": "throws on the removed 'customPrompt' key (hard-deleted with OSS mode)",
+      "passed": true
+    },
+    {
+      "name": "autoCapture can be set to false",
+      "passed": true
+    },
+    {
+      "name": "autoRecall can be set to false",
+      "passed": true
+    },
+    {
+      "name": "custom topK is used when provided",
+      "passed": true
+    },
+    {
+      "name": "custom searchThreshold is used when provided",
+      "passed": true
+    },
+    {
+      "name": "custom customInstructions override defaults",
+      "passed": true
+    },
+    {
+      "name": "custom customCategories override defaults",
+      "passed": true
+    },
+    {
+      "name": "baseUrl is passed through when provided",
+      "passed": true
+    },
+    {
+      "name": "throws on the removed 'skills' key",
+      "passed": true
+    },
+    {
+      "name": "recall defaults to undefined",
+      "passed": true
+    },
+    {
+      "name": "parses top-level recall knobs",
+      "passed": true
+    },
+    {
+      "name": "drops unknown recall knobs",
+      "passed": true
+    },
+    {
+      "name": "non-object recall is ignored",
+      "passed": true
+    },
+    {
+      "name": "non-object customCategories falls back to defaults",
+      "passed": true
+    },
+    {
+      "name": "array customCategories falls back to defaults",
+      "passed": true
+    },
+    {
+      "name": "null customCategories falls back to defaults",
+      "passed": true
+    },
+    {
+      "name": "non-string apiKey is not used directly from config",
+      "passed": true
+    },
+    {
+      "name": "boolean apiKey is not used directly from config",
+      "passed": true
+    },
+    {
+      "name": "string apiKey takes precedence over any fallback",
+      "passed": true
+    }
+  ],
+  "full_upstream_suite_run": false
+}

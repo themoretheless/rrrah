@@ -1,0 +1,50 @@
+{
+  "binary_sha256": "c0e6218e9a11f5743ed7e1e3750b62e550f46e3ba3e01b8c6fc6a79a6671583f",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f"
+  },
+  "rows": [
+    {
+      "budget_mib": 1000,
+      "exit_code": 0,
+      "seconds": 25.353219166980125,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-budget-exit-1000-20261026.log",
+      "log_sha256": "c66cfb2637643d82683dd95a1916654d9763f08ead165405f033b32f42d0101a",
+      "candidates": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "managed_peak_bytes": 1017069952,
+      "managed_released": true,
+      "issues_empty": true
+    },
+    {
+      "budget_mib": 900,
+      "exit_code": 1,
+      "seconds": 5.053236500010826,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-budget-exit-900-20261026.log",
+      "log_sha256": "cd7d4e4c0133ad5f2a860cce5f9e14dd21b3237ccafb8154ad7a6df62cb4ff94",
+      "candidates": [],
+      "managed_peak_bytes": 632917952,
+      "managed_released": true,
+      "issues_empty": false
+    }
+  ],
+  "scope": "Collection example exit status: complete four-file Sony collection at 1000 MiB exits 0 with two expected candidates; explicit RAW capacity failures at 900 MiB retain diagnostics and exit 1. Managed allocations released and inputs/binary stable in both.",
+  "limitations": [
+    "Two scenes and explicit test budgets only.",
+    "A zero exit code reports execution completeness, not universal recall or equality."
+  ],
+  "probe_source_sha256": "ab2627e938354bf383d26d2f68b5e29f7f90d6601a3d5c988aa641a11c5fe882"
+}

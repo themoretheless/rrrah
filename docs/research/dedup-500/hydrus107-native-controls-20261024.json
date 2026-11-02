@@ -1,0 +1,24 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "source_sha256": "a3c708a92f84f7d334a90a45818b09798eda5827e6665a42d901cd18b59a0416",
+  "scope": "Unchanged methods AST-extracted; recording DB/tree/progress/native hash replacements. No real Hydrus/PyAV/VPDQ or upstream test execution.",
+  "controls": [
+    {
+      "control": "symmetric_full_search",
+      "reported_pairs": 1,
+      "relationship_calls": 2,
+      "pass": true
+    },
+    {
+      "control": "cancel_after_first_file",
+      "reported_pairs": 0,
+      "relationship_calls": 1,
+      "pass": true
+    },
+    {
+      "control": "zero_byte_native_hash_accepted",
+      "pass": true
+    }
+  ]
+}

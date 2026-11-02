@@ -2,9 +2,9 @@
   "index": 118,
   "repository": "maxkhim/laravel-storage-dedupler",
   "commit": "7720046f9b1c9056a47de0d84a1384e667d3f367",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "39/39 pinned blobs reviewed:38 whole text files and1 visual asset;PHP/Laravel runtime unqualified",
   "decision": "wrapper",
-  "finding": "Laravel storage dedup command/facade and legacy migration tests; storage integration rather than native visual algorithm.",
+  "finding": "Full source review:SHA1-only DB reuse, unchecked I/O, unsafe migration/backup cleanup ordering;arithmetic savings counterexample. No production adoption.",
   "available_source_evidence": [
     {
       "path": "src/Commands/CheckDeduplerStorageCommand.php",
@@ -74,5 +74,26 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/laravel118-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/laravel118-source-review-v2-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/laravel118-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/laravel118-source-review-v4-20261024.json",
+      "whole_repo_complete": true,
+      "scope": "source tree only;runtime not qualified"
+    }
+  ],
+  "full_repository_read": true,
+  "runtime_qualified": false
 }

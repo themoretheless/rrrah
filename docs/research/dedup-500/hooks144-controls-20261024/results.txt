@@ -1,0 +1,14 @@
+test_case_is_preserved (original_content_hash_tests.TestContentHash.test_case_is_preserved) ... ok
+test_empty_string_hashes_to_empty (original_content_hash_tests.TestContentHash.test_empty_string_hashes_to_empty) ... ok
+test_known_value (original_content_hash_tests.TestContentHash.test_known_value) ... ok
+test_leading_and_trailing_whitespace_stripped (original_content_hash_tests.TestContentHash.test_leading_and_trailing_whitespace_stripped) ... ok
+test_punctuation_is_preserved (original_content_hash_tests.TestContentHash.test_punctuation_is_preserved) ... ok
+test_returns_32_byte_sha256 (original_content_hash_tests.TestContentHash.test_returns_32_byte_sha256) ... ok
+test_unicode_is_preserved (original_content_hash_tests.TestContentHash.test_unicode_is_preserved) ... ok
+test_whitespace_runs_collapse (original_content_hash_tests.TestContentHash.test_whitespace_runs_collapse) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.002s
+
+OK
+{"original_selected_tests_passed": 8, "original_alias_test_not_run": "Requires original pgvector provider graph;not substituted", "authored_controls_passed": 4, "scope": "Original content_hash module and8 unchanged selected original tests;namespace package initialization bypass explicit.Original dedup functions AST;synthetic provider;no hooks installed,no realmemory/stores accessed.", "findings": ["Same first500 characters suppress different tails.", "Precomputed full-content vector still uses500char final comparison.", "Provider error returnsTrue failopen.", "Whitespace-only content rejected."]}

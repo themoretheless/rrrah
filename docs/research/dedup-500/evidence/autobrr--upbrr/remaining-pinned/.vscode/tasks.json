@@ -1,0 +1,355 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-cli",
+      "type": "shell",
+      "command": "go",
+      "args": ["build", "-o", "dist/upbrr", "./cmd/upbrr"],
+      "windows": {
+        "args": ["build", "-o", "dist/upbrr.exe", "./cmd/upbrr"]
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "problemMatcher": ["$go"]
+    },
+    {
+      "label": "frontend-install",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["install", "--frozen-lockfile"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "frontend-build",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "build"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "dependsOn": ["frontend-install"],
+      "problemMatcher": []
+    },
+    {
+      "label": "frontend-dev",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "dev"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "format-go",
+      "type": "shell",
+      "command": "make",
+      "args": ["fmt-go"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "lint-go",
+      "type": "shell",
+      "command": "golangci-lint",
+      "args": ["run", "--timeout=5m"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": ["$go"]
+    },
+    {
+      "label": "lint-fix-go",
+      "type": "shell",
+      "command": "golangci-lint",
+      "args": ["run", "--fix", "--timeout=5m"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$go"]
+    },
+    {
+      "label": "logpolicy",
+      "type": "shell",
+      "command": "go",
+      "args": ["run", "./cmd/logpolicy"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": {
+        "owner": "go",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      }
+    },
+    {
+      "label": "pathpolicy",
+      "type": "shell",
+      "command": "go",
+      "args": ["run", "./cmd/pathpolicy"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": {
+        "owner": "go",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      }
+    },
+    {
+      "label": "literalpolicy",
+      "type": "shell",
+      "command": "go",
+      "args": ["run", "./cmd/literalpolicy"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": {
+        "owner": "go",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      }
+    },
+    {
+      "label": "format-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "format"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "format-check-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "format:check"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "lint"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "group": "test",
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "lint-fix-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "lint:fix"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "typecheck-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "typecheck"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "group": "test",
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "lint-dead-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "lint:dead"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint-style-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "lint:style"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint-style-fix-frontend",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "lint:style:fix"],
+      "options": {
+        "cwd": "${workspaceFolder}/webui"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "test-go",
+      "type": "shell",
+      "command": "go",
+      "args": ["test", "-v", "-timeout", "20m", "./..."],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": {
+        "owner": "go-test",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^([\\w./\\-]+\\.go):(\\d+)(?::(\\d+))?:\\s+(?!(?:permission bits are ACL-backed on Windows|permission bits are not enforced consistently on Windows|parent-directory permissions behave differently on Windows|symlink privilege on Windows requires elevation|Unix permission model)$)(.+)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4
+        }
+      }
+    },
+    {
+      "label": "serve-backend",
+      "type": "shell",
+      "command": "go",
+      "args": ["run", "./cmd/upbrr", "serve"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "go",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "listening on"
+        },
+        "pattern": {
+          "regexp": "^$"
+        }
+      }
+    },
+    {
+      "label": "dev",
+      "dependsOn": ["serve-backend", "frontend-dev"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
+      "label": "build-all",
+      "group": "build",
+      "problemMatcher": [],
+      "type": "shell",
+      "command": "make",
+      "args": ["build"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+    {
+      "label": "lint-all",
+      "dependsOn": [
+        "lint-go",
+        "lint-frontend",
+        "lint-dead-frontend",
+        "lint-style-frontend",
+        "typecheck-frontend",
+        "format-check-frontend",
+        "logpolicy",
+        "pathpolicy",
+        "literalpolicy"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "fix-all",
+      "dependsOn": [
+        "format-go",
+        "lint-fix-go",
+        "format-frontend",
+        "lint-fix-frontend",
+        "lint-style-fix-frontend"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    },
+    {
+      "label": "all",
+      "dependsOn": ["fix-all", "lint-all", "test-go"],
+      "dependsOrder": "sequence",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "all+build",
+      "dependsOn": ["all", "build-all"],
+      "dependsOrder": "sequence",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "setup-hooks",
+      "type": "shell",
+      "command": "lefthook",
+      "args": ["install"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "run-pre-commit",
+      "type": "shell",
+      "command": "lefthook",
+      "args": ["run", "pre-commit", "--all-files"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "repository": "GoogleCloudPlatform/dataflow-pubsub-dedup",
+  "commit": "8dfab8db47a0160051e5edbe93a981982bf32ac9",
+  "whole_files_read": [
+    {
+      "path": "beam_df_dedup/src/main/java/com/google/examples/dfdedup/common/StateBasedDistinct.java",
+      "local": "deep-StateBasedDistinct.java",
+      "git_blob": "53a395fcc0d728c2f19fa152f0d1b3bbbd7051bc",
+      "sha256": "8e71d584522f72cec1d03d06a7a51d357b4ffede6dd683f02a5fb77f9435b153",
+      "whole_text_read": true
+    },
+    {
+      "path": "beam_df_dedup/src/main/java/com/google/examples/dfdedup/common/StateBasedDistinctWithTimer.java",
+      "local": "deep-StateBasedDistinctWithTimer.java",
+      "git_blob": "71d9790586037d7df6ce0354449292ab32ccd796",
+      "sha256": "3eaac6459d309b2049d75efbed29888a0c69f4efca72fb8e8fa948a54a167280",
+      "whole_text_read": true
+    },
+    {
+      "path": "beam_df_dedup/src/main/java/com/google/examples/dfdedup/DedupWithDistinct.java",
+      "local": "deep-DedupWithDistinct.java",
+      "git_blob": "a4d72cdc14f2b3e26aebc16a1b22e30b0c324acf",
+      "sha256": "cc928e051090feef9c9ea886d8a2e5a515a3ccbaeb58de7af2642ed4632063c6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "tracked_blobs": 42,
+  "whole_repo_complete": false,
+  "original_tests_run": false,
+  "authored_runtime_controls": 0,
+  "findings": [
+    "Allthree reviewed implementations deduplicate logical event IDs,not message bytes or file content.",
+    "StateBasedDistinct retains seenboolean perkey without localGC.",
+    "Timer variant uses processing-time idle gap,resets timer on each event,and clearsseenstate when timerfires.",
+    "Distinct entrypoint chooses fixed10second windows,zeroallowedlateness;globalwindow alternative presentbutnotcalledbymain.",
+    "No basis to transfer these event equivalence semantics to exact file/image equality."
+  ],
+  "execution": "Static-only;no Java/Beam runner,PubSub,BigQuery or GoogleCloud job execution.",
+  "decision": "reject-domain",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

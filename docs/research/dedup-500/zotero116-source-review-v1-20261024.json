@@ -1,0 +1,89 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "1d4aafff0237214a295e339f8ee4ec846e1d8e57",
+      "sha256": "1f4be92e754b091466ffb359e22b46856b8a7ef8412e158aba26d30e63ff8230",
+      "whole_text_read": true
+    },
+    {
+      "path": "bootstrap.js",
+      "local": "02-bootstrap.js",
+      "git_blob": "29794dd359fb1a9660033420406b8a58ed79a3ae",
+      "sha256": "c766b9a76211c4ef694feffb6d2bd0db8db137bbaba49db7ccfb92aa1cfb0498",
+      "whole_text_read": true
+    },
+    {
+      "path": "prefs.js",
+      "local": "03-prefs.js",
+      "git_blob": "a54578623d67c3c9c880892fb620bad626ade0d2",
+      "sha256": "80b01a18d96c59e6c5ee0a53981b007c32088772d38b87b4321cef280735a3ca",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/_hashCache.mjs",
+      "local": "07-hashCache.mjs",
+      "git_blob": "f45acfe65c38ed0e940809b8db6c60a8e4b7bbd4",
+      "sha256": "a2366307e752598ddd7cdf6ec42945bc490a9f62bc336b9c4feb8db7fb51f5a4",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/hashCache.test.mjs",
+      "local": "08-hashCache.test.mjs",
+      "git_blob": "9b0719994a0dbb581e2d1ee05ef78ef0cf601c36",
+      "sha256": "f9023891717b8f3bdb5e92d795c12022881b1f7ed73aa48ef0d92c2a914ef758",
+      "whole_text_read": true
+    },
+    {
+      "path": "package.json",
+      "local": "09-package.json",
+      "git_blob": "f67cd3f9b81912a261a71ad40c27a971225fe6bf",
+      "sha256": "b4bc974d492a308d0c09b615c8863a7ab56113c993b24c508fdb6b3658fd3d06",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 6,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "original_tests_run": 0,
+    "authored_controls_passed": 4,
+    "retained_harness": "docs/research/dedup-500/zotero116-cache-controls-20261024",
+    "scope": "Original hashCache module unchanged; owned Node filesystem SHA256 getFileHash adapter and IOUtils.stat adapter; files only inside owned controls folder; no Zotero installation, library, network or actual Gecko runtime."
+  },
+  "findings": [
+    {
+      "finding": "Real same-sized file replaced AAA->BBB and exact mtime restored with utimes: original cache returns old SHA256 digest, while fresh hash of current bytes differs. Acknowledged upstream cache header risk, reproduced rather than newly discovered. No final duplicate-detector false-match claim before caller review.",
+      "evidence": "authored native Node control"
+    },
+    {
+      "finding": "Changing mtime recomputes correct digest; LRU promotion/eviction positive control passes.",
+      "evidence": "two authored controls"
+    },
+    {
+      "finding": "Two simultaneous cold hashFile calls each execute hash adapter; no shared in-flight result in cache. Not measured throughput regression and not proposal to remove full hashing.",
+      "evidence": "authored control"
+    },
+    {
+      "finding": "Bootstrap migrates configured older installs to collection scope before loading bundle; errors attempt same fallback. If underlying pref writes also fail, safe choice not guaranteed by catch alone; not fault-injected.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Package specifies GPL-3.0-only and17 hashCache unit cases read; no original Vitest run. Root license and actual hashing utils/duplicate-detector callers not reviewed.",
+      "evidence": "source-only"
+    }
+  ],
+  "decision": "reference",
+  "remaining": [
+    "94 blobs not whole-read",
+    "Read actual utils hashing and duplicate-detector caller to distinguish candidate cache risk from final identity verification",
+    "Root license/dependency licenses incomplete",
+    "Original tests/Zotero runtime/release unqualified"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

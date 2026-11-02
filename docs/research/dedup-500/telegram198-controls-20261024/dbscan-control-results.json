@@ -1,0 +1,25 @@
+{
+  "source_sha256": "dcdfec7f6c995cdedae28c501cacb5a2884a93968f0b889af4ce833b739ff168",
+  "scope": "Complete unchanged original ESM module via data URL, actual Node Float32 arrays;synthetic numeric vectors only,no faces/model/Telegram/DB.",
+  "cases": 3,
+  "results": {
+    "early_border": [
+      -1,
+      0,
+      0,
+      0
+    ],
+    "natural_order": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "chain_endpoints_distance": 1.5,
+    "chain_eps": 0.8
+  },
+  "findings": [
+    "Documented original noise-border quirk reproduced: previously visited noise only reclaimed from seed neighborhood,not later core expansion. Order changes membership.",
+    "Density connectivity groups endpoints farther apart than eps;no pairwise identity guarantee."
+  ]
+}

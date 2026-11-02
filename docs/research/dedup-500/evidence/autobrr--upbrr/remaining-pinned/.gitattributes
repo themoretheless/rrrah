@@ -1,0 +1,29 @@
+# Normalize text files to LF in the repository and working tree
+* text=auto eol=lf
+
+# Keep Windows command scripts with CRLF for compatibility
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Do not modify line endings for binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.7z binary
+*.tar binary
+*.mp4 binary
+*.mkv binary
+*.mov binary
+*.mp3 binary
+*.wav binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary

@@ -2,7 +2,7 @@
   "index": 196,
   "repository": "garypen/deduplicate",
   "commit": "8f191f2dcf5e083f5b76f5de90cc60e1253f85b0",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All13 nongenerated artifacts assessed;592 reports structurally checked;all303 SVG plots visually viewed.31 HTML pages not live-rendered;4 original native tests pass/2 ignore +5 authored controls. No fresh performance claim.",
   "decision": "reference",
   "finding": "Rust async deduplicator with bounded LRU cache; could avoid repeated fingerprint work, not define image equality.",
   "available_source_evidence": [
@@ -40,7 +40,7 @@
   "license_metadata": "Apache-2.0",
   "license_scope": "screening metadata; nested licenses require checking before copying",
   "tests_detected": 0,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -64,5 +64,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/request196-source-native-review-v15-20261024.json",
+  "original_tests_run": 4,
+  "authored_controls_run": 5,
+  "original_tests_ignored": 2
 }

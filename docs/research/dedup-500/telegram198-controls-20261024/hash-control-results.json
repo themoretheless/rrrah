@@ -1,0 +1,10 @@
+{
+  "cases": 4,
+  "scope": "Complete original hash.js body in VM,imports/exports adapted;real Node crypto/fs streams on owned files. GoCore client raises synthetic outside/unavailable;actual service not run.",
+  "findings": [
+    "Outside-path fallback matches reference SHA256 for empty and1048577-byte binary file.",
+    "Missing fallback path propagates ENOENT.",
+    "Unavailable-core error propagates instead of silently falling back."
+  ],
+  "client_calls": 4
+}

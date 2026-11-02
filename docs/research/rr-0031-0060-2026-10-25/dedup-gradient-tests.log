@@ -1,0 +1,31 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.20s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_dedup-f567719b8cde26bc)
+
+running 11 tests
+test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar ... ok
+test gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length ... ok
+test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control
+test gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties ... ok
+test gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive ... ok
+test gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains ... ok
+test gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint ... ok
+test gradient::matching_tests::sixteen_descriptor_lanes_preserve_scalar_bits_and_every_tail ... ok
+test gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes ... ok
+
+successes:
+
+successes:
+    gradient::batch_tests::every_cancellation_checkpoint_and_work_refusal_matches_scalar
+    gradient::batch_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains
+    gradient::batch_tests::four_lane_distances_are_bitwise_scalar_for_every_tail_length
+    gradient::matching_tests::bounded_distance_preserves_order_and_strict_ties
+    gradient::matching_tests::every_cancellation_checkpoint_and_work_refusal_matches_exhaustive
+    gradient::matching_tests::exact_matching_agrees_with_exhaustive_positive_negative_ties_and_spatial_chains
+    gradient::matching_tests::production_mutual_competitors_match_exhaustive_at_every_checkpoint
+    gradient::matching_tests::sixteen_descriptor_lanes_preserve_scalar_bits_and_every_tail
+    gradient::matching_tests::unrolled_distance_blocks_preserve_scalar_bits_and_partial_lanes
+
+test result: ok. 9 passed; 0 failed; 2 ignored; 0 measured; 40 filtered out; finished in 0.99s
+

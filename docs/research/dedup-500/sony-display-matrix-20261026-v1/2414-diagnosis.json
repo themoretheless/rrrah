@@ -1,0 +1,21 @@
+{
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-2414.log",
+  "sha256": "ffc95a597685179fca002e7f73b79445524077e41816e82533b048475266eefb",
+  "geometry": {
+    "a": 0.9999993198484856,
+    "b": 1.3965112680128246e-05,
+    "translation_x": 12.016412707154782,
+    "translation_y": 11.92708775253459
+  },
+  "strict_matched_fractions": [
+    0.8098868333333333,
+    0.8130265165021684
+  ],
+  "display_matched_fractions": [
+    0.819461625,
+    0.8280073535462202
+  ],
+  "candidate": false,
+  "diagnosis": "Geometry exists near integer crop shift12,12. This alone does not prove whether subpixel alignment or development/color differences dominate residuals. Existing --verify-known-shift can isolate exact integer shift without changing production threshold.",
+  "next_control": "RRRAH_EXPECTED_SHIFT=12,12 with --verify-known-shift and residual bins after live matrix finishes."
+}

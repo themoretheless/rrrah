@@ -19,10 +19,18 @@ mod ico_pages;
 mod png_profile;
 #[path = "png_source.rs"]
 mod png_source;
+#[path = "tga_alpha.rs"]
+mod tga_alpha;
+#[path = "tga_layout.rs"]
+mod tga_layout;
 #[path = "tiff_alpha.rs"]
 mod tiff_alpha;
+#[path = "tiff_fax.rs"]
+mod tiff_fax;
 #[path = "tiff_pages.rs"]
 mod tiff_pages;
+#[path = "tiff_palette.rs"]
+mod tiff_palette;
 #[path = "tiff_profile.rs"]
 mod tiff_profile;
 
@@ -30,6 +38,10 @@ pub(crate) const MAX_RASTER_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Debug, Error)]
 pub enum RasterDecodeError {
+    #[error("invalid or unsupported TGA extension metadata: {0}")]
+    InvalidTgaAlpha(&'static str),
+    #[error("invalid or unsupported TGA layout: {0}")]
+    InvalidTgaLayout(&'static str),
     #[error("invalid QOI: {0}")]
     InvalidQoi(&'static str),
     #[error(transparent)]
@@ -495,38 +507,53 @@ pub(crate) fn decode_raster_bytes(
         bytes[at..at + size].copy_from_slice(&selected[..size]);
         let mut page_request = request.clone();
         page_request.image_index = 0;
-        let result = decode_raster_bytes_inner(&mut *bytes, &page_request);
+        let result = tiff_fax::decode(&*bytes, &page_request).and_then(|frame| match frame {
+            Some(frame) => Ok(frame),
+            None => tiff_palette::decode(&mut *bytes, &page_request),
+        });
         bytes[at..at + size].copy_from_slice(&original[..size]);
         result?.with_image_selection(request.image_index, count)?
     } else {
         decode_raster_bytes_inner(bytes, request)?
     };
-    // PNG carries the original narrow-range RGB codes. Unlike video codecs
-    // that already expand YUV into normalized RGB, it needs an additional
-    // range expansion before the existing normalized HDR policy conversion.
+    // PNG retains original integer RGB codes; video codecs already normalize RGB.
     if is_png
-        && ((request.pq_reference_white_nits.is_some()
-            && matches!(
-                raster.color_space(),
-                RasterColorSpace::Cicp {
-                    primaries: 9,
-                    transfer: 16,
-                    full_range: false,
-                    ..
-                }
-            ))
-            || (request.hlg_display.is_some()
-                && matches!(
-                    raster.color_space(),
-                    RasterColorSpace::Cicp {
-                        primaries: 9,
-                        transfer: 18,
-                        full_range: false,
-                        ..
-                    }
-                )))
+        && let Some((white, peak, gamma)) = request.hlg_display
+        && matches!(
+            raster.color_space(),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 18,
+                matrix: 0,
+                full_range: false
+            }
+        )
     {
-        return Err(rrrah_core::RasterError::ColorTransformRequired.into());
+        raster = raster.hlg_narrow_rgb_to_linear_srgb_with_budget_and_cancel(
+            white,
+            peak,
+            gamma,
+            request.memory_budget.as_ref(),
+            || request.check_cancelled().is_err(),
+        )?;
+    }
+    if is_png
+        && let Some(white) = request.pq_reference_white_nits
+        && matches!(
+            raster.color_space(),
+            RasterColorSpace::Cicp {
+                primaries: 9,
+                transfer: 16,
+                matrix: 0,
+                full_range: false
+            }
+        )
+    {
+        raster = raster.pq_narrow_rgb_to_linear_srgb_with_budget_and_cancel(
+            white,
+            request.memory_budget.as_ref(),
+            || request.check_cancelled().is_err(),
+        )?;
     }
     if let Some(white) = request.pq_reference_white_nits
         && matches!(
@@ -849,6 +876,12 @@ fn decode_raster_bytes_inner(
         reader.set_format(ImageFormat::Tga);
     }
     let format = reader.format().ok_or(RasterDecodeError::UnsupportedFormat)?;
+    let tga_layout = (format == ImageFormat::Tga)
+        .then(|| tga_layout::Layout::parse(bytes, request))
+        .transpose()?;
+    let tga_alpha = (format == ImageFormat::Tga)
+        .then(|| tga_alpha::Metadata::parse(bytes, request))
+        .transpose()?;
     let mut limits = Limits::default();
     limits.max_alloc = Some(MAX_RASTER_BYTES);
     limits.max_image_width = Some(65536);
@@ -907,6 +940,11 @@ fn decode_raster_bytes_inner(
         let mut decoder =
             image::codecs::avif::AvifDecoder::new_with_pixel_limit(reader.into_inner(), maximum_pixels)?;
         decoder.set_limits(limits)?;
+        (Box::new(decoder), None)
+    } else if let Some(metadata) = tga_alpha {
+        let mut decoder = image::codecs::tga::TgaDecoder::new(Cursor::new(&bytes[..metadata.pixel_end]))?;
+        decoder.set_limits(limits)?;
+        metadata.validate_color(decoder.color_type())?;
         (Box::new(decoder), None)
     } else {
         (Box::new(reader.into_decoder()?), None)
@@ -1008,6 +1046,7 @@ fn decode_raster_bytes_inner(
     let pixel_aspect = png_color
         .pixel_aspect
         .or(exr_metadata.pixel_aspect)
+        .or(tga_alpha.and_then(|metadata| metadata.pixel_aspect))
         .map(|aspect| {
             if orientation.to_exif() >= 5 {
                 1.0 / aspect
@@ -1148,6 +1187,12 @@ fn decode_raster_bytes_inner(
         }
         _ => {
             let mut pixels = image.into_rgba8().into_raw();
+            if let Some(layout) = tga_layout {
+                layout.apply(&mut pixels, width, height, request)?;
+            }
+            if let Some(metadata) = tga_alpha {
+                metadata.apply(&mut pixels, request)?;
+            }
             if format == ImageFormat::Avif && avif_properties.premultiplied_alpha {
                 crate::avif_color::unassociate_u8(&mut pixels, request)?;
             }
@@ -2467,7 +2512,9 @@ mod tests {
                     }
                     let result = decode_raster(&request);
                     std::fs::remove_file(&path).unwrap();
-                    assert!(result.is_err());
+                    let decoded = result.unwrap();
+                    assert_eq!(decoded.color_space(), &RasterColorSpace::LinearSrgb);
+                    drop(decoded);
                     assert_eq!(root.used(), 0);
                 }
                 continue;

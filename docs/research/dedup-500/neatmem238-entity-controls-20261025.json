@@ -1,0 +1,26 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original entity-store class with object base and record-shaped Qdrant model adapters; constructor bypassed; recording-only scroll client. No Qdrant/server/network/persistent deletion or cross-app disclosure execution.",
+  "authored_controls": [
+    {
+      "name": "app-only filter omitted",
+      "passed": true
+    },
+    {
+      "name": "user filter preserved while app filter omitted",
+      "passed": true
+    },
+    {
+      "name": "scope parser preserves app unlike query filter",
+      "passed": true
+    },
+    {
+      "name": "nonempty pagination token ignored after first scroll",
+      "passed": true,
+      "observed": {
+        "scroll_calls": 1,
+        "limit": 10000
+      }
+    }
+  ]
+}

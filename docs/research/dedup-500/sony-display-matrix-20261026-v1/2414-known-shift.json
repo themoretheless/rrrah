@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+    "--verify-known-shift"
+  ],
+  "environment": {
+    "RRRAH_EXPECTED_SHIFT": "12,12",
+    "RRRAH_RESIDUAL_BINS": "1",
+    "RRRAH_FIT_RANGE": "1"
+  },
+  "exit_code": 0,
+  "binary_sha256": "724c414d11fa1433809a4652eb359090c87f07178ce59bdf9ecb7e326e74260a",
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-known-shift.log",
+  "sha256": "836641986496cbf2afbcdee3dd1b861e665cb4bc8689df7cdcdc81e9098131f4",
+  "scope": "Diagnostic exact12,12 crop shift only, not production acceptance or changed thresholds."
+}

@@ -1,0 +1,27 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --lib --test exact_files",
+  "exit_code": 0,
+  "unit": {
+    "passed": 50,
+    "failed": 0,
+    "ignored": 2
+  },
+  "integration": {
+    "passed": 48,
+    "failed": 0,
+    "ignored": 0
+  },
+  "regression": "explicit_nested_root_restores_its_own_depth_budget",
+  "before_fix": {
+    "exit_code": 101,
+    "observed_files": 0,
+    "expected_files": 2,
+    "groups": 0
+  },
+  "after_fix": "Both APIs and both root orders retain two observed files and one byte-confirmed group at max_depth=1. Directory identity stores least visited depth; equal/deeper revisits are suppressed. Limit diagnostics from prior deeper traversal remain visible. Existing symlink-cycle and bounded traversal tests pass.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "6aa6ca528c0a255b37ae2dc0729a22e9597c85ba26371e8e27641c52ba3236ca",
+    "crates/rrrah-dedup/tests/exact_files.rs": "60d3ab253632641f4b188391600552cb08e2e465864efc8910351854e2b80b36"
+  },
+  "scope": "macOS no-default-features lib and exact_files; not Windows, decoder qualification, all repositories or atomic filesystem snapshot"
+}

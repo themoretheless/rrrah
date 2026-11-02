@@ -1,0 +1,30 @@
+{
+  "after_test_sha256": "e32b83fd1ed463743eeaa1a4d2e0d452487a56f838716aeb6fe19d0905c9df5e",
+  "decoder_sha256": "92d9b2fa7d9d103fed5ece6f08720442f375ba055f3cbd757ab84fc88d2d76b2",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "f545da5a20fc67247d307f3e6808ce37af56d6e269b080544bf121221f9f2800",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "4929b81356021a0ba75f0481efa2c69d8c147c05de7ef40540ce32a8773b3560",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "scripts/benchmark-ordered-cell-cpu.py": "dd1740dd01ee1065d85de40728d8336420aa7860fe7cf49f959836679fe1266c",
+    "scripts/analyze-split-cpu.py": "ebd5f6fccdc5f98925d2dd5b1b15dd64156e644097a016f2751569daa8ac79e0",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "before_test_sha256": "fcba4eb45fac2f643626481601eaaa445b48e71505748e6850b7393924e30e68",
+  "before_only_identical_benchmark_injected": true,
+  "cpu_body_sha256": "be457d8669fed285b3fc7de54be4c8fe9a7d4c7bf37fa7bc06bb3fc42a353b95",
+  "artifacts": {
+    "carry-boundary-kernel.log": "d5916a4bd7e6352f7caeecfc6ae9ab38528a5e2d9777ac23bb4773895e402b27",
+    "carry-boundary-full-encode.log": "2896a42417f566499feec7d27ac6dc4e36023b48c9dc88cc4b990afa9dcbe26c",
+    "carry-boundary-feature-vector.log": "b927145517f47474969874952a5c0ea46a59c88d61b14cbec532120779af2d67",
+    "carry-boundary-feature-build.log": "cb100fc3dda75410b557817ba3680cf143f7461e9eb9527d32f60662f00beebd",
+    "carry-boundary-poppler.json": "a8319220c2b9f8e4e2a43fc22803058b264f385551986d6b1841619d1f89a4a6",
+    "carry-boundary-cpu.json": "a5d89fa53b59c9a6c6148fbf07822615c62fbad68294405e5547524d08764258",
+    "carry-boundary-cpu.log": "421c8ca2fdba33138647954b92fb1042236078e30151544af152a2d4913cfa85",
+    "carry-boundary-change.patch": "be37ba31d519ac809ea9656284f71ed67d6245ed0151b7b70df030e0720406f5"
+  },
+  "before_core_sha256": "f5d417a3a1dd755a65259ae6ba058f29e01a5b34124f49b9a16b31f9a7bf3954",
+  "patch_reproduces_all_changed_sources": true,
+  "cpu_scope": "Native1024-strip geometry; record32is given record31owner and a conservative no-merge guard, requiring a real convex merge during paint. Construction/rebuild and final1023region/color/area assertions excluded from native timers.128fresh updates/call,6AAcontrols,16alternatingABpairs; builds/correctness finished before timing; zero-size admission credits.",
+  "selected_kernel_scope": "58direct checks predate only addition of the ignored guarded CPU test; full111encode aggregate is current."
+}

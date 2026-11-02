@@ -1,0 +1,36 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 23.47s
+     Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
+
+running 1 test
+test model_upload_worker::tests::latest_model_upload_wins_and_cancel_releases_worker_credit ... model first open cancellation: SDR/HDR generation/cancel/shutdown; six completed pipelines discarded; final CPU/GPU zero
+model first open: worker-built SDR/HDR pipelines; owner-bound install; final CPU/GPU zero
+model first open frames: 63x65 SDR/HDR; every sample equals synchronous path; exact geometry/depth budget
+model upload bounded queue: first active job blocked; 1000 replacements; one latest pending; obsolete active discarded
+model upload source ownership: managed-source exact; lease prevents eviction; cancellation/shutdown releases source CPU credit
+model stale submission: no thread/revision for obsolete initial job; current prepared geometry/revision/credit retained; final CPU/GPU zero
+model upload completed races: generation-change and explicit-cancel release queued GPU credit
+model upload worker: 1000 replacements; latest only; generation cancellation; final credit zero
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 436 filtered out; finished in 2.03s
+

@@ -1,0 +1,16 @@
+✔ newer read containing the older range placeholders the older result (0.744208ms)
+✔ a smaller newer read keeps both (containment requires newer superset) (0.100375ms)
+✔ an unbounded newer read contains any older bounded range (0.096667ms)
+✔ bash cat counts as a full-file read in both directions (0.178125ms)
+✔ compound bash commands are never treated as reads (0.071667ms)
+✔ protectedByTurn ids and errored results are untouched (0.069583ms)
+✔ idempotent: a second run adds nothing to counts or stats (0.072083ms)
+✔ sed -n '5,20p' contained by a newer full-range read is pruned (0.147708ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.4565

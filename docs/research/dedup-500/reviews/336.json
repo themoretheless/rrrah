@@ -3,8 +3,8 @@
   "repository": "TitansTech/TitanDupeFinder",
   "commit": "a494d5dec01f160e7564daa99b6812a4ef046971",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "needs-deeper-source",
-  "finding": "Selected ItemNewPath/game-resource source does not establish file/image detector despite repository name.",
+  "decision": "reject-domain",
+  "finding": "Full Data.cpp establishes game-item serial/type duplicate detection across SQL inventories/warehouses; not original-file/image equality. Remaining repository review incomplete.",
   "available_source_evidence": [
     {
       "path": "SCFDS/Resource.h",
@@ -84,5 +84,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/titan336-source-review-v8-20261102.json"
 }

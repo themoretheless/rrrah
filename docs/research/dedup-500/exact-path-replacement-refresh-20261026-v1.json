@@ -1,0 +1,52 @@
+{
+  "runs": [
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--test",
+        "exact_files",
+        "non_utf8"
+      ],
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest unavailable_non_utf8_path_preserves_diagnostic_bytes ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 43 filtered out; finished in 0.00s\n\n",
+      "stderr": "   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n    Finished `test` profile [optimized + debuginfo] target(s) in 19.86s\n     Running tests/exact_files.rs (target/debug/deps/exact_files-f8ac1290d9e1b399)\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--test",
+        "exact_files",
+        "same_bytes_and_modified_time_do_not_hide_physical_file_replacement"
+      ],
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest same_bytes_and_modified_time_do_not_hide_physical_file_replacement ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 43 filtered out; finished in 0.00s\n\n",
+      "stderr": "    Finished `test` profile [optimized + debuginfo] target(s) in 0.09s\n     Running tests/exact_files.rs (target/debug/deps/exact_files-f8ac1290d9e1b399)\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--test",
+        "exact_files",
+        "restored_modified_time"
+      ],
+      "exit_code": 0,
+      "stdout": "\nrunning 2 tests\ntest restored_modified_time_does_not_hide_same_length_snapshot_edit ... ok\ntest restored_modified_time_does_not_hide_same_inode_edit_during_scan ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 42 filtered out; finished in 1.11s\n\n",
+      "stderr": "    Finished `test` profile [optimized + debuginfo] target(s) in 0.08s\n     Running tests/exact_files.rs (target/debug/deps/exact_files-f8ac1290d9e1b399)\n"
+    }
+  ],
+  "source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+  "tests_sha256": "76910f82adb01575a079d28cce83bd05373f0a1f1a19b36848b0a89e7ff794dd",
+  "scope": "Current local macOS regression fixtures; not native Windows or all filesystem coverage"
+}

@@ -1,0 +1,155 @@
+Release History - DeDuplicator for Heritrix 1
+~~~~~~~~~~~~~~~
+
+  The following is a list of releases of the DeDuplicator for Heritrix 1. For Heritrix 3 see 
+  {{{./release3.html}here}}.   
+  
+  Stable releases are clearly labeled as such and can be downloaded via our 
+  {{{https://sourceforge.net/project/showfiles.php?group_id=181565}SourceForge download page}}. 
+  Any other release may contain unstable/untested elements. They are 
+  provided since a continous build process is not currently available.
+  
+  Most recent stable release is {{{0.4.0}0.4.0}}
+
+* {1.0.0-RC1} (Release candidate for 1.0.0)
+~~~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+
+ Incorporates a few minor bugfixes from version 0.4.0. Namely, it fixes a bug when doing matches by digest and a bug
+ in how it hooked into Heritrix 1.12 (and up) way of marking content as duplicate. 
+ 
+ 
+* {0.4.0} (Stable)
+~~~~~~~~~~~~~~~~~~
+
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.4.0-bin.tar.gz?download}deduplicator-0.4.0-bin.tar.gz}}
+  
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.4.0-bin.zip?download}deduplicator-0.4.0-bin.zip}}
+  
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.4.0-src.tar.gz?download}deduplicator-0.4.0-src.tar.gz}}
+  
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.4.0-src.zip?download}deduplicator-0.4.0-src.zip}}
+
+ Incorporates the numerous tweaks and patches introduced since 0.2.0 (see comments for interim builds below for details).
+ Tested in production crawls. No known issues.
+ This is the last version to be built against Heritrix 1.10.0 (fully compatible with any Heritrix version from 1.6-1.14, but not 2.x).
+ Unlike 0.2.0 it is built with Java 1.5, not 1.4.2. 
+ 
+ 
+* 0.3.0-20080527
+~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+ 
+ Applied patches from Kaare Fiedler Christiansen. It includes a new 'SpareRangeFilter' that now optionally replaces Lucene's RangeFilter when 
+ making queries. This reduces the memory usage at a cost to performance. Also a minor NPE bugfix patch was included. 
+ Module is now compiled against Java 1.5. Some 1.5 specific changes have been made, mostly using generics. Some clean up of warnings.  
+ This version is largely untested!
+ 
+		
+* 0.3.0-20080129
+~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+ 
+ Applied patch from Lars Clausen. Issue as explained by Lars: "We've run across a scaling issue in the use of TermQuery for Lucene indexes of 400+ million entries.  TermQuery uses norms, which spends one byte of memory per entry in the index.  Even turning off norms on the index doesn't help, since TermQuery in the most friendly way creates a fake array of norms.  This patch changes the deduplicator to use a ConstantScoreQuery with a RangeFilter, which avoids most of the memory usage and doesn't seem to affect the speed."
+ Patch is untested at this time. 
+ 
+		
+* 0.3.0-20070601
+~~~~~~~~~~~~~~~~
+
+ * BUILD UNAVAILABE
+
+ While still compiled against version 1.10.0 of Heritrix, this release now handles the changed crawl.log format of Heritrix 1.12.0 which prefixes the content digest with the name of the scheme.
+
+		
+* 0.3.0-20061218
+~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+
+ Added (patch by Maximilian Schoefmann) the ability to exclude URLs marked as duplicates in crawl.log from the index.
+
+		
+* 0.3.0-20061031
+~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+
+ Fixed a bug (reported by Lars Clausen) in CrawlLogIterator where malformed lines in the crawl.log would cause an exception. Is now handled gracefully. Also added unit tests for CrawlLogIterator.parseLine(). To facilitate that parseLine() is now a static method.
+		
+		
+* {0.2.0} (Stable)
+~~~~~~~~~~~~~~~~~~
+
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.2.0-bin.tar.gz?download}deduplicator-0.2.0-bin.tar.gz}}
+  
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.2.0-bin.zip?download}deduplicator-0.2.0-bin.zip}}
+  
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.2.0-src.tar.gz?download}deduplicator-0.2.0-src.tar.gz}}
+  
+  * {{{http://prdownloads.sourceforge.net/deduplicator/deduplicator-0.2.0-src.zip?download}deduplicator-0.2.0-src.zip}}
+
+ First official release. September 13, 2006.
+ 
+ 
+* PreRelease20060808
+~~~~~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+
+ Fixed a bug (reported by Lars Clausen) in CrawlLogIterator where entries of files exceeding 10GB would not be parsed correctly since the crawl.log format assumes that the byte size string can never be longer then 10 characters, 10 GB requires 11 characters causing the URL to be shifted down the line.
+
+
+* PreRelease20060717
+~~~~~~~~~~~~~~~~~~~~
+
+  * BUILD UNAVAILABE
+
+ CrawlLogIterator refactored some more. Project now built with Maven 2.0. First seperate source release.
+
+
+* Older
+~~~~~~~
+
+ The following releases were made prior to the implementation of the Maven automatic build/release process. Consequently only .tar.gz of the binaries are available. Note that the jar files also contain source files.
+ 
+ * BUILD UNAVAILABE
+ 
+  * CrawlLogIterator refactored to make subclassing easier - patch from Lars Clausen. Added setters to CrawlDataItem. Improved Javadoc.
+
+
+ * BUILD UNAVAILABE
+
+  * DigestIndexer can now be used by other classes. Moved to Lucene 2.0. Improved bash script.
+
+
+ * BUILD UNAVAILABE
+ 
+  * Adds 'origin' and makes overriding of content size configurable
+
+
+ * BUILD UNAVAILABE
+ 
+  * Adds DeDupFetchHTTP
+
+
+ * BUILD UNAVAILABE
+  
+  * Initial preview release
+
+
+
+
+
+
+
+
+
+
+
+
+
+

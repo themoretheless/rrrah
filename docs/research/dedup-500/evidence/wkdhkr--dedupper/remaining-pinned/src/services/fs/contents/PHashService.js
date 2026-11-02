@@ -1,0 +1,89 @@
+// @flow
+import typeof { Logger } from "log4js";
+import { promisify } from "util";
+import { imageHash, hammingDistance } from "phash";
+
+import JimpService from "./JimpService";
+import FileSystemHelper from "../../../helpers/FileSystemHelper";
+import type { Config } from "../../../types";
+
+const imageHashAsync = promisify(imageHash);
+
+export default class PHashService {
+  log: Logger;
+
+  config: Config;
+
+  js: JimpService;
+
+  constructor(config: Config) {
+    this.log = config.getLogger(this);
+    this.config = config;
+    this.js = new JimpService(config);
+  }
+
+  static expandOneBitRange: (pHash: string) => Array<number> = (
+    pHash: string
+  ) => {
+    const d = parseInt(pHash, 10)
+      .toString(2)
+      .padStart(64, "0");
+    const chars = d.split("");
+
+    return chars
+      .map((c, i) => {
+        const newChars = chars.slice();
+        if (parseInt(c, 10) > 0) {
+          newChars[i] = "0";
+        } else {
+          newChars[i] = "1";
+        }
+        return newChars;
+      })
+      .map(a => parseInt(a.join(""), 2));
+  };
+
+  /**
+   * XXX: pHash library cannot process multibyte file path.
+   */
+  prepareEscapePath: (targetPath: string) => Promise<string> = async (
+    targetPath: string
+  ): Promise<string> => {
+    return FileSystemHelper.prepareEscapePath(targetPath);
+  };
+
+  clearEscapePath: (escapePath: string) => Promise<void> = (
+    escapePath: string
+  ): Promise<void> => FileSystemHelper.clearEscapePath(escapePath);
+
+  calculate: (targetPath: string) => Promise<null | string> = async (
+    targetPath: string
+  ): Promise<null | string> => {
+    let escapePath = null;
+    try {
+      escapePath = await this.prepareEscapePath(targetPath);
+      const targetPathFixed = await this.js.fixTargetPath(escapePath);
+      const hash = await imageHashAsync(targetPathFixed);
+      this.log.debug(`calculate pHash: path = ${targetPath} hash = ${hash}`);
+      await this.clearEscapePath(escapePath);
+      await this.js.clearFixedPath(targetPathFixed, targetPath);
+      return hash;
+    } catch (e) {
+      this.log.warn(e, `path = ${targetPath}`);
+      if (escapePath) {
+        await this.clearEscapePath(escapePath);
+      }
+    }
+    return null;
+  };
+
+  static compare: (a: ?string, b: ?string) => false | number = (
+    a: ?string,
+    b: ?string
+  ): number | false => {
+    if (!a || !b) {
+      return false;
+    }
+    return hammingDistance(a, b);
+  };
+}

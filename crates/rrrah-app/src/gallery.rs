@@ -187,6 +187,10 @@ impl GalleryModel {
     }
 }
 
+#[cfg(test)]
+thread_local! {
+    static PREFETCH_CAPACITY_PROBE: std::cell::RefCell<Option<(bool, Sender<(usize, usize, usize)>)>> = const { std::cell::RefCell::new(None) };
+}
 #[derive(Debug)]
 struct RawPrefetchCommand {
     generation: u64,
@@ -201,6 +205,7 @@ struct RawPrefetchCommand {
 /// read. A new selection replaces pending work and invalidates the in-flight
 /// result before it can be persisted.
 pub struct RawPrefetcher {
+    worker: Option<thread::JoinHandle<()>>,
     lifetime: Arc<AtomicU64>,
     tx: Sender<RawPrefetchCommand>,
     pending: Receiver<RawPrefetchCommand>,
@@ -244,6 +249,11 @@ impl Drop for RawPrefetcher {
         self.state.fetch_or(RAW_PREFETCH_FOREGROUND, Ordering::AcqRel);
         self.lifetime.fetch_add(1, Ordering::AcqRel);
         while self.pending.try_recv().is_ok() {}
+        let (disconnected, _) = bounded(1);
+        drop(std::mem::replace(&mut self.tx, disconnected));
+        if let Some(worker) = self.worker.take() {
+            let _ = worker.join();
+        }
     }
 }
 
@@ -285,6 +295,8 @@ impl RawPrefetcher {
         limits: rrrah_cache::CacheLimits,
         managed_budget: Option<rrrah_cache::MemoryBudget>,
     ) -> Self {
+        #[cfg(test)]
+        let capacity_probe = PREFETCH_CAPACITY_PROBE.with(|probe| probe.borrow().clone());
         let (tx, commands) = bounded::<RawPrefetchCommand>(1);
         let pending = commands.clone();
         let lifetime = Arc::new(AtomicU64::new(0));
@@ -292,6 +304,7 @@ impl RawPrefetcher {
         let generation = decode_gate.speculative_generation();
         let state = Arc::new(AtomicU8::new(0));
         let mut enabled = cache_root.is_some() && !no_cache;
+        let mut worker = None;
 
         if let Some(cache_root) = cache_root.filter(|_| !no_cache) {
             let worker_generation = Arc::clone(&generation);
@@ -308,6 +321,19 @@ impl RawPrefetcher {
                         let token = GenerationToken::new(Arc::clone(&worker_generation), command.generation)
                             .combine(&worker_lifetime);
                         let mut protected = Vec::new();
+                        #[cfg(test)]
+                        if let Some((eager, observer)) = &capacity_probe {
+                            if *eager {
+                                protected.try_reserve_exact(command.paths.len()).unwrap();
+                            }
+                            observer
+                                .send((
+                                    command.paths.len(),
+                                    protected.capacity(),
+                                    std::mem::size_of::<CacheKey>(),
+                                ))
+                                .unwrap();
+                        }
                         let mut protected_keys = std::collections::HashSet::new();
                         let mut checked_paths = std::collections::HashSet::new();
                         // Do not let the lower-priority tail of this plan evict
@@ -335,7 +361,12 @@ impl RawPrefetcher {
                                 worker_telemetry.record_prefetch_skipped(command.generation);
                                 continue;
                             }
-                            let Ok(fingerprint) = SourceFingerprint::from_path(&path) else {
+                            let Ok(fingerprint) =
+                                SourceFingerprint::from_path_with_cancel(&path, || token.is_cancelled())
+                            else {
+                                if token.is_cancelled() {
+                                    break;
+                                }
                                 worker_telemetry.record_prefetch_failure(command.generation);
                                 continue;
                             };
@@ -449,14 +480,18 @@ impl RawPrefetcher {
                         }
                     }
                 });
-            if let Err(error) = spawn {
-                enabled = false;
-                telemetry.disable_prefetch();
-                log::warn!("failed to start RAW prefetch worker: {error}");
+            match spawn {
+                Ok(handle) => worker = Some(handle),
+                Err(error) => {
+                    enabled = false;
+                    telemetry.disable_prefetch();
+                    log::warn!("failed to start RAW prefetch worker: {error}");
+                }
             }
         }
 
         Self {
+            worker,
             lifetime,
             tx,
             pending,
@@ -497,6 +532,11 @@ impl RawPrefetcher {
             return;
         }
         if selected >= gallery.len() {
+            // An empty plan supersedes old work just like a valid selection.
+            // Cancel a command already taken by the worker and discard queued work.
+            let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
+            while self.pending.try_recv().is_ok() {}
+            self.telemetry().begin_prefetch(generation, 0);
             self.telemetry().idle_prefetch();
             self.state.fetch_and(!RAW_PREFETCH_FOREGROUND, Ordering::Release);
             return;
@@ -597,22 +637,50 @@ pub fn container_prefetch_plan(
     automatic_wrap: Option<bool>,
     window: PrefetchWindow,
 ) -> ContainerPrefetchPlan {
+    let (direction, cyclic, indices) =
+        container_prefetch_plan_lazy(count, selected, previous, source_looping, automatic_wrap, window);
+    ContainerPrefetchPlan {
+        direction,
+        cyclic,
+        indices: indices.collect(),
+    }
+}
+
+/// Bounded-state production plan: do not allocate one job per selected frame.
+pub fn container_prefetch_plan_lazy(
+    count: usize,
+    selected: usize,
+    previous: Option<usize>,
+    source_looping: bool,
+    automatic_wrap: Option<bool>,
+    window: PrefetchWindow,
+) -> (NavDirection, bool, impl Iterator<Item = usize> + Send) {
     let cyclic = source_looping && automatic_wrap.unwrap_or(true);
     let direction = if automatic_wrap.is_some() {
         NavDirection::Forward
     } else {
         container_prefetch_direction(count, selected, previous, cyclic)
     };
-    let indices = if cyclic {
-        cyclic_neighbour_prefetch_indices(count, selected, direction, window)
+    let wrapped = cyclic_neighbour_prefetch_iterator(count, selected, direction, window).take(if cyclic {
+        usize::MAX
     } else {
-        neighbour_prefetch_indices(count, selected, direction, window)
-    };
-    ContainerPrefetchPlan {
-        direction,
-        cyclic,
-        indices,
-    }
+        0
+    });
+    let linear = neighbour_prefetch_iterator(count, selected, direction, window).take(if cyclic {
+        0
+    } else {
+        usize::MAX
+    });
+    (direction, cyclic, wrapped.chain(linear))
+}
+
+/// Stop the remaining same-container work once every count slot is protected.
+/// A fresh navigation owns a fresh flag; failures of individual files do not set it.
+pub fn container_prefetch_until_capacity(
+    indices: impl Iterator<Item = usize>,
+    exhausted: Arc<std::sync::atomic::AtomicBool>,
+) -> impl Iterator<Item = usize> {
+    indices.take_while(move |_| !exhausted.load(Ordering::Acquire))
 }
 
 pub fn cyclic_neighbour_prefetch_indices(
@@ -733,11 +801,26 @@ impl SourceStamp {
     /// Required source admission: rejects non-files before opening them and
     /// preserves the I/O diagnostic for the foreground failure event.
     pub fn try_read(path: &Path) -> Result<Self, rrrah_cache::CacheError> {
-        Ok(Self {
-            image: Some(rrrah_cache::SourceFingerprint::from_path(path)?),
-            palette: rrrah_decode::wal_palette_path(path)
-                .and_then(|p| rrrah_cache::SourceFingerprint::from_path(p).ok()),
-        })
+        Self::try_read_with_cancel(path, || false)
+    }
+    pub fn try_read_with_cancel(
+        path: &Path,
+        mut cancelled: impl FnMut() -> bool,
+    ) -> Result<Self, rrrah_cache::CacheError> {
+        let image = Some(SourceFingerprint::from_path_with_cancel(path, &mut cancelled)?);
+        let palette = if let Some(path) = rrrah_decode::wal_palette_path(path) {
+            match SourceFingerprint::from_path_with_cancel(path, &mut cancelled) {
+                Ok(stamp) => Some(stamp),
+                Err(rrrah_cache::CacheError::Cancelled) => return Err(rrrah_cache::CacheError::Cancelled),
+                Err(_) => None,
+            }
+        } else {
+            None
+        };
+        if cancelled() {
+            return Err(rrrah_cache::CacheError::Cancelled);
+        }
+        Ok(Self { image, palette })
     }
     pub fn is_readable(&self) -> bool {
         self.image.is_some()
@@ -939,7 +1022,15 @@ fn smallest_paths(paths: impl Iterator<Item = PathBuf>, limit: usize) -> Vec<Pat
     kept.into_sorted_vec().into_iter().map(|(_, path)| path).collect()
 }
 
+pub struct FolderPathsReady {
+    pub generation: u64,
+    pub folder: PathBuf,
+    pub paths: Vec<PathBuf>,
+}
+
 pub struct FolderScanReady {
+    /// Paths were already taken through the early publication API.
+    pub paths_already_taken: bool,
     pub generation: u64,
     pub folder: PathBuf,
     pub paths: Vec<PathBuf>,
@@ -953,17 +1044,42 @@ pub struct FolderScanner {
     tx: Sender<FolderScanJob>,
     pending: Receiver<FolderScanJob>,
     rx: Receiver<FolderScanReady>,
+    paths_rx: Receiver<FolderPathsReady>,
     generation: Arc<AtomicU64>,
     publication: Arc<Mutex<()>>,
 }
 impl FolderScanner {
     pub fn new() -> Self {
-        Self::with_source_reader(SourceStamp::read)
+        Self::with_cancellable_source_reader(|path, cancelled| {
+            SourceStamp::try_read_with_cancel(path, cancelled)
+        })
     }
+    #[cfg(test)]
     fn with_source_reader(reader: impl Fn(&Path) -> SourceStamp + Send + 'static) -> Self {
+        Self::with_cancellable_source_reader(move |path, _| Ok(reader(path)))
+    }
+    fn with_cancellable_source_reader(
+        reader: impl Fn(&Path, &dyn Fn() -> bool) -> Result<SourceStamp, rrrah_cache::CacheError> + Send + 'static,
+    ) -> Self {
+        Self::with_readers(reader, sibling_folder_tiles_with_cancel)
+    }
+    #[cfg(test)]
+    pub(super) fn with_tile_reader(
+        reader: impl Fn(&Path, &dyn Fn() -> bool) -> Vec<FolderTile> + Send + 'static,
+    ) -> Self {
+        Self::with_readers(
+            |path, cancelled| SourceStamp::try_read_with_cancel(path, cancelled),
+            reader,
+        )
+    }
+    fn with_readers(
+        reader: impl Fn(&Path, &dyn Fn() -> bool) -> Result<SourceStamp, rrrah_cache::CacheError> + Send + 'static,
+        tile_reader: impl Fn(&Path, &dyn Fn() -> bool) -> Vec<FolderTile> + Send + 'static,
+    ) -> Self {
         let (tx, jobs) = bounded::<FolderScanJob>(1);
         let pending = jobs.clone();
         let (ready, rx) = bounded(1);
+        let (paths_ready, paths_rx) = bounded(1);
         let generation = Arc::new(AtomicU64::new(0));
         let current = generation.clone();
         let publication = Arc::new(Mutex::new(()));
@@ -979,7 +1095,28 @@ impl FolderScanner {
                     if cancelled() {
                         continue;
                     }
-                    let tiles = sibling_folder_tiles_with_cancel(&folder, &cancelled);
+                    {
+                        let _guard = worker_publication
+                            .lock()
+                            .unwrap_or_else(std::sync::PoisonError::into_inner);
+                        if cancelled() {
+                            continue;
+                        }
+                        if paths_ready
+                            .try_send(FolderPathsReady {
+                                generation,
+                                folder: folder.clone(),
+                                paths,
+                            })
+                            .is_err()
+                        {
+                            continue;
+                        }
+                    }
+                    if cancelled() {
+                        continue;
+                    }
+                    let tiles = tile_reader(&folder, &cancelled);
                     let mut stale_thumbnails = Vec::new();
                     for snapshot in cached {
                         if cancelled() {
@@ -988,7 +1125,16 @@ impl FolderScanner {
                         let cover_changed = tiles
                             .iter()
                             .any(|tile| tile.folder == snapshot.folder && tile.cover != snapshot.source);
-                        if cover_changed || reader(&snapshot.source) != snapshot.stamp {
+                        let changed = if cover_changed {
+                            true
+                        } else {
+                            match reader(&snapshot.source, &cancelled) {
+                                Ok(stamp) => stamp != snapshot.stamp,
+                                Err(rrrah_cache::CacheError::Cancelled) => break,
+                                Err(_) => true,
+                            }
+                        };
+                        if changed {
                             stale_thumbnails.push(snapshot);
                         }
                     }
@@ -999,7 +1145,8 @@ impl FolderScanner {
                         let _ = ready.try_send(FolderScanReady {
                             generation,
                             folder,
-                            paths,
+                            paths: Vec::new(),
+                            paths_already_taken: true,
                             tiles,
                             stale_thumbnails,
                         });
@@ -1013,6 +1160,7 @@ impl FolderScanner {
             tx,
             pending,
             rx,
+            paths_rx,
             generation,
             publication,
         }
@@ -1033,6 +1181,7 @@ impl FolderScanner {
         let generation = self.generation.fetch_add(1, Ordering::AcqRel).wrapping_add(1);
         while self.pending.try_recv().is_ok() {}
         while self.rx.try_recv().is_ok() {}
+        while self.paths_rx.try_recv().is_ok() {}
         let _ = self.tx.try_send((generation, folder, cached));
         generation
     }
@@ -1042,6 +1191,27 @@ impl FolderScanner {
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         match self.rx.try_recv() {
+            Ok(mut ready) => {
+                if ready.generation == self.generation.load(Ordering::Acquire) {
+                    if let Ok(paths) = self.paths_rx.try_recv() {
+                        if paths.generation == ready.generation {
+                            ready.paths = paths.paths;
+                            ready.paths_already_taken = false;
+                        }
+                    }
+                }
+                Ok(Some(ready))
+            }
+            Err(crossbeam_channel::TryRecvError::Empty) => Ok(None),
+            Err(error) => Err(error),
+        }
+    }
+    pub fn try_recv_paths(&self) -> Result<Option<FolderPathsReady>, crossbeam_channel::TryRecvError> {
+        let _guard = self
+            .publication
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        match self.paths_rx.try_recv() {
             Ok(ready) => Ok(Some(ready)),
             Err(crossbeam_channel::TryRecvError::Empty) => Ok(None),
             Err(error) => Err(error),
@@ -1061,6 +1231,7 @@ impl Drop for FolderScanner {
         self.generation.fetch_add(1, Ordering::AcqRel);
         while self.pending.try_recv().is_ok() {}
         while self.rx.try_recv().is_ok() {}
+        while self.paths_rx.try_recv().is_ok() {}
     }
 }
 
@@ -1130,8 +1301,184 @@ fn first_supported_image_with_cancel(folder: &Path, cancelled: &dyn Fn() -> bool
 mod tests {
     use super::*;
 
+    #[test]
+    fn eager_protected_plan_capacity_allocates_even_when_cache_count_is_zero() {
+        let root = tempfile::tempdir().unwrap();
+        for eager in [false, true] {
+            let (observer, receive) = bounded(1);
+            PREFETCH_CAPACITY_PROBE.with(|probe| *probe.borrow_mut() = Some((eager, observer)));
+            let mut limits = rrrah_cache::CacheLimits::bytes(4096);
+            limits.max_entries = Some(0);
+            let budget = rrrah_cache::MemoryBudget::new(64);
+            let worker = RawPrefetcher::with_budget(
+                Some(root.path().join(if eager { "eager" } else { "current" })),
+                false,
+                Arc::new(DecodeGate::new()),
+                Arc::new(CacheTelemetry::new(true, 4096)),
+                PrefetchWindow { behind: 0, ahead: 1 },
+                limits,
+                Some(budget.clone()),
+            );
+            PREFETCH_CAPACITY_PROBE.with(|probe| *probe.borrow_mut() = None);
+            worker
+                .tx
+                .send(RawPrefetchCommand {
+                    generation: worker.generation.load(Ordering::Acquire),
+                    paths: (0..4096)
+                        .map(|i| PathBuf::from(format!("unused-{i}.dng")))
+                        .collect(),
+                })
+                .unwrap();
+            let (plan, capacity, stride) = receive.recv_timeout(Duration::from_secs(5)).unwrap();
+            assert_eq!(plan, 4096);
+            assert_eq!(capacity, if eager { 4096 } else { 0 });
+            drop(worker);
+            assert_eq!(budget.used(), 0);
+            eprintln!(
+                "PREFETCH_EAGER_NEGATIVE eager={eager} cache_count_limit=0 plan={plan} capacity={capacity} requested_bytes={} final_managed=0",
+                capacity * stride
+            );
+        }
+    }
+    #[test]
+    #[ignore = "manual isolated APFS directory latency; explicit root/mode required"]
+    fn cover_directory_probe() {
+        let root = std::path::PathBuf::from(
+            std::env::var_os("RRRAH_COVER_PROBE_ROOT").expect("explicit disposable fixture root"),
+        );
+        let baseline = std::env::var("RRRAH_COVER_PROBE_MODE").unwrap() == "baseline";
+        let mut metadata_calls = 0;
+        let start = std::time::Instant::now();
+        let path = if baseline {
+            smallest_paths(
+                std::fs::read_dir(&root)
+                    .unwrap()
+                    .filter_map(Result::ok)
+                    .filter_map(|entry| {
+                        let path = entry.path();
+                        metadata_calls += 1;
+                        let metadata = std::fs::symlink_metadata(&path).ok()?;
+                        (metadata.file_type().is_file() && is_supported(&path)).then_some(path)
+                    }),
+                1,
+            )
+            .pop()
+        } else {
+            first_supported_image_with_cancel(&root, &|| false)
+        };
+        let elapsed = start.elapsed().as_nanos();
+        assert_eq!(path.unwrap().file_name().unwrap(), "00000.png");
+        eprintln!(
+            "COVER_PROBE baseline={baseline} elapsed_ns={elapsed} explicit_metadata_calls={metadata_calls} selected_exact=true"
+        );
+    }
+
+    #[test]
+    #[cfg(unix)]
+    fn cover_rescan_never_reuses_changed_missing_symlink_or_denied_source() {
+        use std::os::unix::fs::{PermissionsExt, symlink};
+        let dir = tempfile::tempdir().unwrap();
+        let folder = dir.path().join("folder");
+        std::fs::create_dir(&folder).unwrap();
+        let a = folder.join("a.png");
+        let b = folder.join("b.png");
+        std::fs::write(&a, [1u8; 32]).unwrap();
+        std::fs::write(&b, [2u8; 32]).unwrap();
+        let scan = || first_supported_image_with_cancel(&folder, &|| false);
+        assert_eq!(scan(), Some(a.clone()));
+        let original = SourceStamp::try_read(&a).unwrap();
+        // Same length replacement must invalidate the fingerprint, not just size.
+        let replacement = folder.join("replacement");
+        std::fs::write(&replacement, [3u8; 32]).unwrap();
+        std::fs::rename(&replacement, &a).unwrap();
+        assert_ne!(SourceStamp::try_read(&a).unwrap(), original);
+        std::fs::remove_file(&a).unwrap();
+        assert_eq!(scan(), Some(b.clone()));
+        assert!(SourceStamp::try_read(&a).is_err());
+        symlink(&b, &a).unwrap();
+        assert_eq!(scan(), Some(b.clone()));
+        std::fs::remove_file(&a).unwrap();
+        symlink(folder.join("missing.png"), &a).unwrap();
+        assert_eq!(scan(), Some(b.clone()));
+        assert!(first_supported_image_with_cancel(&folder, &|| true).is_none());
+        struct Restore(std::path::PathBuf, u32);
+        impl Drop for Restore {
+            fn drop(&mut self) {
+                std::fs::set_permissions(&self.0, std::fs::Permissions::from_mode(self.1)).unwrap();
+            }
+        }
+        let _restore_file = Restore(b.clone(), 0o600);
+        std::fs::set_permissions(&b, std::fs::Permissions::from_mode(0)).unwrap();
+        assert!(
+            matches!(std::fs::File::open(&b),Err(e) if e.kind()==std::io::ErrorKind::PermissionDenied),
+            "test must really run without access; root bypass is not a pass"
+        );
+        assert!(SourceStamp::try_read(&b).is_err());
+        let _restore_folder = Restore(folder.clone(), 0o700);
+        std::fs::set_permissions(&folder, std::fs::Permissions::from_mode(0)).unwrap();
+        assert!(
+            matches!(std::fs::read_dir(&folder),Err(e) if e.kind()==std::io::ErrorKind::PermissionDenied)
+        );
+        assert!(scan().is_none());
+    }
+
     fn write_file(path: &std::path::Path) {
         std::fs::write(path, b"synthetic").expect("write test file");
+    }
+
+    #[test]
+    fn huge_container_tail_stops_on_capacity_and_fresh_plan_resumes() {
+        let full = Arc::new(std::sync::atomic::AtomicBool::new(false));
+        let window = PrefetchWindow {
+            behind: 0,
+            ahead: usize::MAX,
+        };
+        let (_, _, indices) = container_prefetch_plan_lazy(usize::MAX, 0, None, true, Some(true), window);
+        let mut work = container_prefetch_until_capacity(indices, full.clone());
+        assert_eq!(work.next(), Some(1));
+        // A failed nearest decode leaves capacity available for the next neighbour.
+        assert_eq!(work.next(), Some(2));
+        full.store(true, Ordering::Release);
+        assert_eq!(work.next(), None);
+        assert_eq!(work.next(), None);
+        let fresh = Arc::new(std::sync::atomic::AtomicBool::new(false));
+        let (_, _, indices) = container_prefetch_plan_lazy(usize::MAX, 4, None, true, Some(true), window);
+        let mut work = container_prefetch_until_capacity(indices, fresh);
+        assert_eq!(work.next(), Some(5));
+    }
+
+    #[test]
+    fn huge_container_prefetch_plan_is_lazy_and_preserves_order() {
+        let window = PrefetchWindow {
+            behind: usize::MAX,
+            ahead: usize::MAX,
+        };
+        let (_, cyclic, indices) =
+            container_prefetch_plan_lazy(usize::MAX, 0, None, true, Some(true), window);
+        assert!(cyclic);
+        assert_eq!(indices.take(4).collect::<Vec<_>>(), vec![1, 2, 3, 4]);
+        let (_, cyclic, indices) =
+            container_prefetch_plan_lazy(usize::MAX, usize::MAX - 1, None, false, None, window);
+        assert!(!cyclic);
+        assert_eq!(
+            indices.take(3).collect::<Vec<_>>(),
+            vec![usize::MAX - 2, usize::MAX - 3, usize::MAX - 4]
+        );
+        for count in 0..12 {
+            for selected in 0..=count {
+                for looping in [false, true] {
+                    for automatic in [None, Some(false), Some(true)] {
+                        let eager =
+                            container_prefetch_plan(count, selected, None, looping, automatic, window);
+                        let (direction, cyclic, lazy) =
+                            container_prefetch_plan_lazy(count, selected, None, looping, automatic, window);
+                        assert_eq!(direction, eager.direction);
+                        assert_eq!(cyclic, eager.cyclic);
+                        assert_eq!(lazy.collect::<Vec<_>>(), eager.indices);
+                    }
+                }
+            }
+        }
     }
 
     #[test]
@@ -1263,6 +1610,7 @@ mod tests {
         let decode_gate = Arc::new(DecodeGate::new());
         let telemetry = Arc::new(CacheTelemetry::new(true, 1024));
         RawPrefetcher {
+            worker: None,
             lifetime: Arc::new(AtomicU64::new(0)),
             tx,
             pending,
@@ -1274,6 +1622,48 @@ mod tests {
             window: PrefetchWindow::default(),
         }
     }
+    #[test]
+    fn raw_prefetch_shutdown_joins_and_releases_worker_memory() {
+        let mut prefetcher = raw_prefetcher_without_worker();
+        let root = rrrah_cache::MemoryBudget::new(4096);
+        let token = GenerationToken::new(Arc::clone(&prefetcher.lifetime), 0);
+        let worker_root = root.clone();
+        let (ready_tx, ready_rx) = bounded(1);
+        let (done_tx, done_rx) = bounded(1);
+        prefetcher.worker = Some(thread::spawn(move || {
+            let credit = worker_root.try_reserve(4096).unwrap();
+            ready_tx.send(()).unwrap();
+            let deadline = std::time::Instant::now() + Duration::from_secs(3);
+            while !token.is_cancelled() {
+                assert!(std::time::Instant::now() < deadline);
+                thread::yield_now();
+            }
+            // Model the codec's finite unwind after observing cancellation.
+            thread::sleep(Duration::from_millis(20));
+            drop(credit);
+            done_tx.send(()).unwrap();
+        }));
+        ready_rx.recv_timeout(Duration::from_secs(3)).unwrap();
+        assert_eq!(root.used(), 4096);
+        drop(prefetcher);
+        assert_eq!(done_rx.try_recv(), Ok(()));
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn raw_prefetch_shutdown_joins_real_idle_worker() {
+        let root = tempfile::tempdir().unwrap();
+        let prefetcher = RawPrefetcher::new(
+            Some(root.path().to_owned()),
+            false,
+            Arc::new(DecodeGate::new()),
+            Arc::new(CacheTelemetry::new(true, 1024)),
+            PrefetchWindow::default(),
+        );
+        assert!(prefetcher.worker.is_some());
+        drop(prefetcher);
+    }
+
     #[test]
     fn raw_prefetch_shutdown_cancels_only_its_own_lifetime() {
         let worker = raw_prefetcher_without_worker();
@@ -1298,6 +1688,51 @@ mod tests {
             Err(crossbeam_channel::TryRecvError::Disconnected)
         ));
         assert!(RawStoreAdmission::try_acquire(&state).is_none());
+    }
+
+    #[test]
+    fn source_stamp_cancel_never_publishes_partial_palette_identity() {
+        let root = tempfile::tempdir().unwrap();
+        std::fs::create_dir(root.path().join("textures")).unwrap();
+        std::fs::create_dir(root.path().join("pics")).unwrap();
+        let source = root.path().join("textures/grid.wal");
+        let palette = root.path().join("pics/colormap.pcx");
+        std::fs::write(&source, b"source bytes").unwrap();
+        std::fs::write(&palette, vec![23; 65537]).unwrap();
+        for present in [true, false] {
+            if !present {
+                std::fs::remove_file(&palette).unwrap();
+            }
+            let expected = SourceStamp::read(&source);
+            let mut checkpoints = 0;
+            assert_eq!(
+                SourceStamp::try_read_with_cancel(&source, || {
+                    checkpoints += 1;
+                    false
+                })
+                .unwrap(),
+                expected
+            );
+            for stop in 1..=checkpoints {
+                let mut calls = 0;
+                assert!(
+                    matches!(
+                        SourceStamp::try_read_with_cancel(&source, || {
+                            calls += 1;
+                            calls == stop
+                        }),
+                        Err(rrrah_cache::CacheError::Cancelled)
+                    ),
+                    "present={present} stop={stop}"
+                );
+                assert_eq!(calls, stop);
+            }
+            assert_eq!(SourceStamp::try_read(&source).unwrap(), expected);
+        }
+        assert!(matches!(
+            SourceStamp::try_read_with_cancel(&root.path().join("missing"), || true),
+            Err(rrrah_cache::CacheError::Cancelled)
+        ));
     }
 
     #[test]
@@ -1348,14 +1783,104 @@ mod tests {
     }
 
     #[test]
+    fn early_paths_keep_thumbnail_validation_background_and_do_not_duplicate_the_path_vector() {
+        let workspace = tempfile::tempdir().unwrap();
+        let folder = workspace.path().join("images");
+        std::fs::create_dir(&folder).unwrap();
+        let source = folder.join("cover.png");
+        write_file(&source);
+        let stamp = SourceStamp::read(&source);
+        let (started, observed) = bounded(1);
+        let (release, gate) = bounded(1);
+        let scanner = FolderScanner::with_source_reader(move |path| {
+            started.send(()).unwrap();
+            gate.recv_timeout(Duration::from_secs(5)).unwrap();
+            SourceStamp::read(path)
+        });
+        let generation = scanner.submit_with_sources(
+            folder.clone(),
+            vec![crate::filmstrip_ui::CachedThumbSource {
+                folder: folder.clone(),
+                source: source.clone(),
+                stamp,
+                id: rrrah_gpu::FilmstripTileId::from_raw_for_test(1),
+            }],
+        );
+        observed.recv_timeout(Duration::from_secs(5)).unwrap();
+        let early = scanner.try_recv_paths().unwrap();
+        std::fs::write(&source, b"replacement source").unwrap();
+        release.send(()).unwrap();
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        let ready = loop {
+            if let Some(ready) = scanner.try_recv().unwrap() {
+                break ready;
+            }
+            assert!(std::time::Instant::now() < deadline);
+            thread::yield_now();
+        };
+        let early = early.expect("paths waited for thumbnail source validation");
+        assert_eq!(early.generation, generation);
+        assert_eq!(early.paths, [source.clone()]);
+        assert!(ready.paths_already_taken);
+        assert!(ready.paths.is_empty());
+        assert_eq!(ready.stale_thumbnails.len(), 1);
+        assert_eq!(ready.stale_thumbnails[0].source, source);
+        assert!(scanner.try_recv_paths().unwrap().is_none());
+    }
+    #[test]
+    fn superseding_scan_discards_both_early_and_complete_old_generations() {
+        let workspace = tempfile::tempdir().unwrap();
+        let old = workspace.path().join("old");
+        let latest = workspace.path().join("latest");
+        std::fs::create_dir(&old).unwrap();
+        std::fs::create_dir(&latest).unwrap();
+        write_file(&old.join("old.png"));
+        write_file(&latest.join("new.png"));
+        let (started, observed) = bounded(1);
+        let first = std::sync::atomic::AtomicBool::new(true);
+        let scanner = FolderScanner::with_tile_reader(move |folder, cancelled| {
+            if first.swap(false, Ordering::AcqRel) {
+                started.send(()).unwrap();
+                let deadline = std::time::Instant::now() + Duration::from_secs(5);
+                while !cancelled() {
+                    assert!(std::time::Instant::now() < deadline);
+                    thread::yield_now();
+                }
+                return Vec::new();
+            }
+            sibling_folder_tiles(folder)
+        });
+        scanner.submit(old);
+        observed.recv_timeout(Duration::from_secs(5)).unwrap();
+        assert!(!scanner.paths_rx.is_empty());
+        let generation = scanner.submit(latest.clone());
+        let deadline = std::time::Instant::now() + Duration::from_secs(5);
+        let ready = loop {
+            if let Some(ready) = scanner.try_recv().unwrap() {
+                break ready;
+            }
+            assert!(std::time::Instant::now() < deadline);
+            thread::yield_now();
+        };
+        assert_eq!(ready.generation, generation);
+        assert_eq!(ready.paths, [latest.join("new.png")]);
+        assert!(!ready.paths_already_taken);
+        assert!(scanner.try_recv_paths().unwrap().is_none());
+        assert!(scanner.try_recv().unwrap().is_none());
+    }
+
+    #[test]
     fn folder_scanner_reports_worker_disconnect_instead_of_waiting_forever() {
         let (tx, pending) = bounded(1);
         let (ready, rx) = bounded::<FolderScanReady>(1);
         drop(ready);
+        let (paths_ready, paths_rx) = bounded(1);
+        drop(paths_ready);
         let scanner = FolderScanner {
             tx,
             pending,
             rx,
+            paths_rx,
             generation: Arc::new(AtomicU64::new(0)),
             publication: Arc::new(Mutex::new(())),
         };
@@ -1364,6 +1889,45 @@ mod tests {
             scanner.try_recv(),
             Err(crossbeam_channel::TryRecvError::Disconnected)
         ));
+    }
+
+    #[test]
+    fn folder_source_read_observes_superseding_generation_and_publishes_only_latest() {
+        let root = tempfile::tempdir().unwrap();
+        let folder = root.path().join("images");
+        std::fs::create_dir(&folder).unwrap();
+        let source = folder.join("cover.png");
+        write_file(&source);
+        let cached = vec![crate::filmstrip_ui::CachedThumbSource {
+            folder: folder.clone(),
+            source: source.clone(),
+            stamp: SourceStamp::read(&source),
+            id: rrrah_gpu::FilmstripTileId::from_raw_for_test(1),
+        }];
+        let (started, start_rx) = bounded(1);
+        let (cancelled_tx, cancelled_rx) = bounded(1);
+        let first = std::sync::atomic::AtomicBool::new(true);
+        let scanner = FolderScanner::with_cancellable_source_reader(move |path, cancelled| {
+            if first.swap(false, Ordering::AcqRel) {
+                started.send(()).unwrap();
+                let deadline = std::time::Instant::now() + Duration::from_secs(5);
+                while !cancelled() {
+                    assert!(std::time::Instant::now() < deadline);
+                    thread::yield_now();
+                }
+                cancelled_tx.send(()).unwrap();
+                return Err(rrrah_cache::CacheError::Cancelled);
+            }
+            SourceStamp::try_read_with_cancel(path, cancelled)
+        });
+        scanner.submit_with_sources(folder.clone(), cached.clone());
+        start_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+        let generation = scanner.submit_with_sources(folder, cached);
+        cancelled_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+        let ready = scanner.rx.recv_timeout(Duration::from_secs(5)).unwrap();
+        assert_eq!(ready.generation, generation);
+        assert!(ready.stale_thumbnails.is_empty());
+        assert!(scanner.try_recv().unwrap().is_none());
     }
 
     #[test]
@@ -1435,11 +1999,16 @@ mod tests {
         let scanner = FolderScanner::new();
         let generation = scanner.generation.clone();
         let ready = scanner.rx.clone();
+        let paths = scanner.paths_rx.clone();
         let before = generation.load(Ordering::Acquire);
         drop(scanner);
         assert_eq!(generation.load(Ordering::Acquire), before + 1);
         assert!(matches!(
             ready.recv_timeout(Duration::from_secs(5)),
+            Err(crossbeam_channel::RecvTimeoutError::Disconnected)
+        ));
+        assert!(matches!(
+            paths.recv_timeout(Duration::from_secs(5)),
             Err(crossbeam_channel::RecvTimeoutError::Disconnected)
         ));
     }
@@ -3259,6 +3828,58 @@ mod tests {
     }
 
     #[test]
+    fn empty_thumbnail_window_releases_ready_and_inflight_managed_pixels() {
+        const BYTES: usize = 4096;
+        for _ in 0..32 {
+            let budget = rrrah_core::MemoryBudget::new((BYTES * 2) as u64);
+            let worker_budget = budget.clone();
+            let (started_tx, started_rx) = bounded(4);
+            let (release_tx, release_rx) = bounded(1);
+            let prefetcher = Prefetcher::new_with_cancel(3, move |job, token| {
+                let pixels = worker_budget.try_buffer(BYTES, job.index as u8).unwrap().freeze();
+                started_tx.send((job.index, token.clone())).unwrap();
+                if job.index == 1 {
+                    release_rx.recv_timeout(Duration::from_secs(5)).unwrap();
+                    assert!(token.is_cancelled());
+                } else {
+                    assert!(!token.is_cancelled());
+                }
+                Some(ThumbnailReady {
+                    source_stamp: SourceStamp::default(),
+                    index: job.index,
+                    width: 32,
+                    height: 32,
+                    pixels: pixels.into(),
+                })
+            });
+            prefetcher.submit([thumbnail_job(0), thumbnail_job(1), thumbnail_job(2)]);
+            assert_eq!(recv_test(&started_rx).0, 0);
+            let (active, token) = recv_test(&started_rx);
+            assert_eq!(active, 1);
+            // Starting 1 proves 0 was published; 2 is still queued.
+            assert_eq!(budget.used(), (BYTES * 2) as u64);
+            prefetcher.submit(std::iter::empty());
+            assert!(token.is_cancelled());
+            assert!(prefetcher.pending.is_empty());
+            assert!(prefetcher.try_recv().is_none());
+            assert_eq!(budget.used(), BYTES as u64);
+            prefetcher.submit([thumbnail_job(3)]);
+            release_tx.send(()).unwrap();
+            assert_eq!(recv_test(&started_rx).0, 3);
+            let ready = recv_test(&prefetcher.rx);
+            assert_eq!(ready.index, 3);
+            assert!(ready.pixels.iter().all(|&byte| byte == 3));
+            assert_eq!(budget.used(), BYTES as u64);
+            assert!(prefetcher.try_recv().is_none());
+            assert!(started_rx.try_recv().is_err());
+            drop(ready);
+            drop(prefetcher);
+            assert_eq!(budget.used(), 0);
+            assert_eq!(budget.peak(), (BYTES * 2) as u64);
+        }
+    }
+
+    #[test]
     fn thumbnail_submit_discards_already_ready_stale_generation() {
         let (started_tx, started_rx) = bounded(4);
         let (release_tx, release_rx) = bounded(0);
@@ -3282,6 +3903,42 @@ mod tests {
         assert_eq!(recv_test(&started_rx), 2);
         assert_eq!(recv_test(&prefetcher.rx).index, 2);
         assert!(prefetcher.try_recv().is_none());
+    }
+
+    #[test]
+    fn raw_invalid_selection_cancels_previous_plan_and_allows_fresh_resume() {
+        let paths = vec![PathBuf::from("selected.dng"), PathBuf::from("next.dng")];
+        for empty in [false, true] {
+            let prefetcher = raw_prefetcher_without_worker();
+            prefetcher.finish_foreground_and_submit(&paths, 0, NavDirection::Forward);
+            let generation = prefetcher.generation.load(Ordering::Acquire);
+            let old = GenerationToken::new(Arc::clone(&prefetcher.generation), generation);
+            assert_eq!(prefetcher.pending.len(), 1);
+            if empty {
+                prefetcher.finish_foreground_and_submit(&[], 0, NavDirection::Forward);
+            } else {
+                prefetcher.finish_foreground_and_submit(&paths, paths.len(), NavDirection::Backward);
+            }
+            assert!(old.is_cancelled(), "empty={empty}");
+            assert!(prefetcher.pending.is_empty(), "empty={empty}");
+            // A delayed status report from the old worker cannot revive this plan.
+            prefetcher
+                .telemetry
+                .set_prefetch_phase(generation, PrefetchPhase::Writing);
+            prefetcher.telemetry.record_prefetch_stored(generation, 4096);
+            let snapshot = prefetcher.telemetry.snapshot();
+            assert_eq!(snapshot.prefetch_phase, PrefetchPhase::Idle);
+            assert_eq!((snapshot.prefetch_planned, snapshot.prefetch_stored), (0, 0));
+            assert_eq!(
+                prefetcher.state.load(Ordering::Acquire) & RAW_PREFETCH_FOREGROUND,
+                0
+            );
+            prefetcher.finish_foreground_and_submit(&paths, 1, NavDirection::Backward);
+            let resumed = prefetcher.pending.try_recv().unwrap();
+            assert_ne!(resumed.generation, generation);
+            assert_eq!(resumed.generation, prefetcher.generation.load(Ordering::Acquire));
+            assert_eq!(resumed.paths, vec![paths[0].clone()]);
+        }
     }
 
     #[test]

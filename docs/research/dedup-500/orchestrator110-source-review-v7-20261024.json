@@ -1,0 +1,50 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v6-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "tests/semantic_dedup_tests.rs",
+      "local": "10-semantic_dedup_tests.rs",
+      "sha256": "31b540359555d100e9d763bf42052a721ba91ebdb801bdbbc50ecc04b69ff9b6",
+      "git_blob": "e6e6a3c6deb7405492279a9eba589920f2141a34",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/intelligence/semantic_dedup.rs",
+      "local": "11-intelligence_semantic.rs",
+      "sha256": "4750bf9384fe8df8a59cd1b32bb815a1018c7818280b0eb19092bcff9a25036f",
+      "git_blob": "c74b3d943163dd397811cdbac76fe83171779602",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/enhanced/semantic_dedup.rs",
+      "local": "12-semantic_dedup.rs",
+      "sha256": "8323a455d7f93ea21566f48af9f175058fad4c0e48dc5ecd617c06a862d71855",
+      "git_blob": "0d99cf3fe60c1450afd58a67f51c0c80d43a26b5",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 11,
+  "whole_repo_complete": false,
+  "runtime": {
+    "original_simhash_tests_passed": 9,
+    "authored_controls_passed": 3,
+    "harness_dir": "docs/research/dedup-500/orchestrator110-simhash-controls-20261024",
+    "scope": "Unchangedoriginalmoduleprefix,realDashMap5.5.3/Tokio/tracing;isolatedcrate;noLLM/model/API"
+  },
+  "findings": [
+    "Threshold0compares64bitSimHashoffilteredlowercasewordunigramsandweightedbigrams,notbyteexactcontent. ConfirmedHello world!vshello worldsuppressed.",
+    "Signed10andunsigned10fingerprintsidentical;emptyandpunctuationonlyfingerprintsidentical. Nativecontrols.",
+    "Headerclaims3gramwindowsbutimplementation1gramweight1/2gramweight2.",
+    "check_and_registerfind_matchtheninsertseparateoperationsdespiteatomicdoc;racepossiblebutnotexecuted.",
+    "StoreTTLnotcapacitybound;numberentrieswithinwindowdependsarrivalrate.",
+    "Real-modelintegrationtwoignoredfastembedtestsrequiremodeldownload;notrun. Negativepairsasserted,positivepairreusecountprintedwithoutminimumassertioninfirsttest.",
+    "intelligence semantic module is compatibilityreexportoflexicaldedup,noseparateembeddingimplementation.",
+    "Mainpipelinecall-site/sessionreachabilitystillunreviewed."
+  ],
+  "harness_correction": "InitialrunusedDashMap6.2.1byownsetupmistake;correctedtooriginalcompatible5.5range,resolved5.5.3,all12passedagain. Counts12distincttestsnot24.",
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

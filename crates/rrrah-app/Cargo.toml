@@ -7,6 +7,7 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+thiserror.workspace = true
 serde.workspace = true
 serde_json = { workspace = true, features = ["float_roundtrip"] }
 blake3.workspace = true
@@ -43,3 +44,6 @@ harness = false
 [[bench]]
 name = "folder_scan"
 harness = false
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2-metal = { version = "=0.3.2", default-features = false, features = ["std", "MTLDevice"] }

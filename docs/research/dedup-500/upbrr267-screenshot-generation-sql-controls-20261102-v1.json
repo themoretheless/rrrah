@@ -1,0 +1,14 @@
+{
+  "source": "docs/research/dedup-500/evidence/autobrr--upbrr/remaining-pinned/internal/services/db/sqlite.go",
+  "source_sha256": "0be405a4500bbe3ef039fcf0b463d1c2228a32488ca10b953ff27fca7aea9bd7",
+  "sqlite_version": "3.54.1",
+  "method": "Executed exact SaveScreenshot SQL literal on authored in-memory minimal schema. Not Go repository execution, file content verification or full database qualification.",
+  "checks": {
+    "stale_conflicting_path_rejected": true,
+    "same_generation_different_fingerprint_conflict_rejected": true,
+    "current_generation_rebind_accepted": true,
+    "stale_binding_at_new_image_path_inserted": true
+  },
+  "interpretation": "ON CONFLICT guard fences replacement of an existing path; a new path does not invoke that guard. Higher-level admission must validate current binding before new inserts.",
+  "sql_sha256": "195ae719b739928358e383b02fb1c512e043445113c3d3fe0abaf467e559fc15"
+}

@@ -1,0 +1,52 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 31.12s
+     Running unittests src/main.rs (target/debug/deps/rrrah-7624cd91891a6f1f)
+
+running 1 test
+test folder_worker_qualification::real_worker_large_collection_pressure_soak ... large soak adapter: Metal Apple M4 Max
+large soak selections=64 seconds=2.2 settled=100663296 root_peak=121634816
+large soak selections=128 seconds=4.4 settled=100663296 root_peak=121634816
+large soak selections=192 seconds=6.6 settled=100663296 root_peak=121634816
+large soak selections=256 seconds=9.1 settled=100663296 root_peak=121634816
+large soak selections=320 seconds=14.0 settled=100663296 root_peak=121634816
+large soak selections=384 seconds=16.3 settled=100663296 root_peak=121634816
+large soak selections=448 seconds=18.6 settled=100663296 root_peak=121634816
+large soak selections=512 seconds=20.9 settled=100663296 root_peak=121634816
+large soak selections=576 seconds=23.1 settled=100663296 root_peak=121634816
+large soak selections=640 seconds=25.4 settled=100663296 root_peak=121634816
+large soak selections=704 seconds=27.6 settled=100663296 root_peak=121634816
+large soak selections=768 seconds=30.0 settled=100663296 root_peak=121634816
+large soak selections=832 seconds=32.3 settled=100663296 root_peak=121634816
+large soak selections=896 seconds=34.7 settled=100663296 root_peak=121634816
+large soak selections=960 seconds=37.0 settled=100663296 root_peak=121634816
+large soak selections=1024 seconds=39.5 settled=100663296 root_peak=121634816
+large soak selections=1088 seconds=41.8 settled=100663296 root_peak=121634816
+large soak selections=1152 seconds=44.0 settled=100663296 root_peak=121634816
+large soak selections=1216 seconds=46.1 settled=100663296 root_peak=121634816
+large soak selections=1280 seconds=48.3 settled=100663296 root_peak=121634816
+large soak selections=1344 seconds=50.5 settled=100663296 root_peak=121634816
+large soak selections=1408 seconds=52.7 settled=100663296 root_peak=121634816
+large soak selections=1472 seconds=54.9 settled=100663296 root_peak=121634816
+large soak selections=1536 seconds=57.1 settled=100663296 root_peak=121634816
+large soak selections=1600 seconds=59.3 settled=100663296 root_peak=121634816
+large real worker soak PASS: sources=64 dimensions=1024x1024 frame_bytes=16777216 selections=1622 seconds=60.019 fixed_pressure=67108864 root_limit=134217728 root_peak=121634816 largest_settled=100663296 swap_objects<=3 swap_bytes<=67108864 exact Metal SDR/HDR every selection final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 434 filtered out; finished in 65.91s
+

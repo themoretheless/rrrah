@@ -1,0 +1,26 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 53s
+     Running unittests src/main.rs (target/debug/deps/rrrah-84a53910c160fc61)
+
+running 1 test
+test edit_qualification::tests::native_counter_tracks_selected_wgpu_allocations_metal ... NATIVE_METAL_COUNTER registry=4294968439 before=999424 during=17776640 after=999424
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 402 filtered out; finished in 10.48s
+

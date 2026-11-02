@@ -1,0 +1,41 @@
+{
+  "scope": "Original slugify method and geocode handler, with real Flask3.1.2.\n\nOnly missing/empty address branches run; no SQL, dedupe, network or model reads.\nThis does not qualify the upstream pinned Flask0.10.1/Python3.4 runtime.\n",
+  "runtime_flask": "3.1.2",
+  "source_sha256": {
+    "geocoder/data_loader.py": "8771b15a91ad367fd146eb08ac3dcd2f15e00e9e3580a74502c1768cfc84e974",
+    "geocoder/api.py": "018280973f52d4981aca586cbc5901cd3ae2da145704af4d5db7673bb0c860ca"
+  },
+  "authored_controls_run": 4,
+  "slug_controls": [
+    {
+      "inputs": [
+        "House-No",
+        "House No"
+      ],
+      "output": "house_no"
+    },
+    {
+      "input": "house newline number",
+      "newline_preserved": true
+    }
+  ],
+  "http_controls": [
+    {
+      "request": "/geocode/",
+      "actual_status": 200,
+      "body": {
+        "status": "error",
+        "message": "address is required"
+      }
+    },
+    {
+      "request": "/geocode/?address=",
+      "actual_status": 200,
+      "body": {
+        "status": "error",
+        "message": "address is required"
+      }
+    }
+  ],
+  "original_tests_run": 0
+}

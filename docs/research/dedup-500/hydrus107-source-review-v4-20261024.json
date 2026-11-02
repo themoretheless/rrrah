@@ -1,0 +1,30 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v3-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/db/vptree.py",
+      "local": "12-vptree.py",
+      "git_blob": "1c5319d87137d60614514898b421788b9aa2f3f8",
+      "sha256": "6514cbf37ecea88630985ea94b6c776e313b4bb5f9c1dccb4a4da2090c13c70e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 11,
+  "remaining_without_whole_review": 66,
+  "whole_repo_complete": false,
+  "new_authored_controls": 3,
+  "authored_controls_total": 8,
+  "runtime_report": "docs/research/dedup-500/hydrus107-tree-controls-20261024.json",
+  "findings": [
+    "Empty regenerate_tree calls pop_best_root_node([]), raising IndexError; reproduced with real SQLite. CLI reachability not checked.",
+    "Shared hash association correctly returns both files in exact mode in owned fixture.",
+    "20 queries across four files and five radii matched exhaustive oracle with substituted Hamming-derived similarity. Native VPDQ not qualified.",
+    "Tree uses triangle-inequality pruning on converted native video similarity; native distance metric axioms and recall remain unproven, not established as a defect by substituted metric controls.",
+    "regenerate_tree purges map rows for missing file ids, not missing phash ids; previous orphan migration finding remains relevant."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

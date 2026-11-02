@@ -1,0 +1,90 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <!-- Add WPF reference for Taskbar handling in StatusInfoCtl. -->
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x86;x64</Platforms>
+    <!-- Disable auto generating Assembly Info so we can use
+         our own project wide versioning schema.-->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
+    <ApplicationVisualStyles>true</ApplicationVisualStyles>
+    <ApplicationUseCompatibleTextRendering>false</ApplicationUseCompatibleTextRendering>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <ApplicationIcon>Images\film.ico</ApplicationIcon>
+    <PublishDir>bin\publish\</PublishDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Versioning\Versioning.cs" Link="Versioning.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\film.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CircularBuffer" Version="1.4.0" />
+    <PackageReference Include="CustomSelectFileDlg" Version="1.0.1-beta" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
+    <PackageReference Include="OxyPlot.WindowsForms" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartTimer\SmartTimer.csproj" />
+    <ProjectReference Include="..\Versioning\Versioning.csproj">
+      <TreatAsUsed>true</TreatAsUsed>
+    </ProjectReference>
+    <ProjectReference Include="..\VideoDedupSharedLib\VideoDedupSharedLib.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Controls\DnsTextBox\DnsTextBoxCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Controls\FilePreview\FilePreviewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\FrameComparisonResultView\FrameComparisonResultViewCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Controls\StatusInfo\StatusInfoCtl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Dialogs\ClientConfigDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\CustomVideoComparisonDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\ServerConfigDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\ResolveDuplicateDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Dialogs\VideoDedupDlg.cs" />
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+</Project>

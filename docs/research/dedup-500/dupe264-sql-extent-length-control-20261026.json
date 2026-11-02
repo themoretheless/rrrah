@@ -1,0 +1,14 @@
+{
+  "scope": "Original SQL table/query macros extracted verbatim; Python SQLite in-memory only, fabricated identical digest for different-length extents. Not a demonstrated XXH collision or upstream C/SQLite runtime qualification.",
+  "source": "docs/research/dedup-500/evidence/markfasheh--duperemove/remaining-pinned/dbfile.c",
+  "sha256": "e3adb5125e4c6002cb88554c9ba74880c9972ef2b565e6e3f250a4d9dbe3c1d4",
+  "schemas": {
+    "CREATE_TABLE_CONFIG": "CREATE TABLE IF NOT EXISTS config(keyname TEXT PRIMARY KEY NOT NULL, keyval BLOB, UNIQUE(keyname));",
+    "CREATE_TABLE_FILES": "CREATE TABLE IF NOT EXISTS files(id INTEGER PRIMARY KEY NOT NULL, filename TEXT NOT NULL, ino INTEGER, subvol INTEGER, size INTEGER, mtime INTEGER, dedupe_seq INTEGER, digest BLOB, flags INTEGER, UNIQUE(ino, subvol), UNIQUE(filename));",
+    "CREATE_TABLE_EXTENTS": "CREATE TABLE IF NOT EXISTS extents(digest BLOB KEY NOT NULL, fileid INTEGER, loff INTEGER, poff INTEGER, len INTEGER, UNIQUE(fileid, loff, len) FOREIGN KEY(fileid) REFERENCES files(id) ON DELETE CASCADE);",
+    "CREATE_TABLE_BLOCKS": "CREATE TABLE IF NOT EXISTS blocks(digest BLOB KEY NOT NULL, fileid INTEGER, loff INTEGER, UNIQUE(fileid, loff) FOREIGN KEY(fileid) REFERENCES files(id) ON DELETE CASCADE);"
+  },
+  "query": "select extents.loff, len, poff FROM extents join files on files.id = extents.fileid where files.id = ?1 and (1 = (SELECT COUNT(*) FROM extents as e where e.digest = extents.digest));",
+  "rows_for_unique_digest_length_pair": [],
+  "sqlite_version": "3.54.1"
+}

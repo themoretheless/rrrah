@@ -1,0 +1,50 @@
+{
+  "scope": "Real scan_folder CLI execution on authored temporary fixtures; recursive two-root byte equality and incomplete missing-root exit. Not format decoding or universal coverage.",
+  "source_sha256": {
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0",
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d"
+  },
+  "controls": [
+    {
+      "case": "two_roots",
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "run",
+        "--offline",
+        "--release",
+        "-p",
+        "rrrah-dedup",
+        "--example",
+        "scan_folder",
+        "--",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/one",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/two"
+      ],
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 2300 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/one/nested/original.bin\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/two/renamed.jpg\"\n",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.16s\n     Running `target/release/examples/scan_folder /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/one /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/two`\nScan complete: 3 files observed, 1 duplicate groups, 48300 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "missing_root",
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "run",
+        "--offline",
+        "--release",
+        "-p",
+        "rrrah-dedup",
+        "--example",
+        "scan_folder",
+        "--",
+        "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/missing"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "    Finished `release` profile [optimized] target(s) in 0.08s\n     Running `target/release/examples/scan_folder /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/missing`\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-control-dvggadb_/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 0 files observed, 0 duplicate groups, 0 bytes read, 1 diagnostics\n"
+    }
+  ],
+  "all_controls_passed": true,
+  "fixture_cleanup": "TemporaryDirectory removed authored fixtures after execution"
+}

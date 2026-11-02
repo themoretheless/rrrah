@@ -1,0 +1,288 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+import (
+	"encoding/json"
+	"strings"
+	"testing"
+)
+
+func TestWorkflowRequestFingerprintsAreDeterministic(t *testing.T) {
+	t.Parallel()
+
+	first := ProjectReleaseWorkflowTrackersRequest{
+		ReleaseWorkflowCommandContext: testWorkflowCommandContext(),
+		TrackerIDs:                    []TrackerID{"ALPHA", "BETA"},
+		Instructions: map[TrackerID]TrackerProjectionInstructions{
+			"ALPHA": {},
+			"BETA":  {},
+		},
+	}
+	second := ProjectReleaseWorkflowTrackersRequest{
+		ReleaseWorkflowCommandContext: testWorkflowCommandContext(),
+		TrackerIDs:                    []TrackerID{"ALPHA", "BETA"},
+		Instructions: map[TrackerID]TrackerProjectionInstructions{
+			"BETA":  {},
+			"ALPHA": {},
+		},
+	}
+	firstFingerprint, err := CanonicalWorkflowFingerprint(first)
+	if err != nil {
+		t.Fatalf("fingerprint first request: %v", err)
+	}
+	secondFingerprint, err := CanonicalWorkflowFingerprint(second)
+	if err != nil {
+		t.Fatalf("fingerprint second request: %v", err)
+	}
+	if firstFingerprint != secondFingerprint {
+		t.Fatalf("map insertion order changed request fingerprint: %s != %s", firstFingerprint, secondFingerprint)
+	}
+}
+
+func TestProjectReleaseWorkflowTrackersRequestRejectsNegativeScreenshotCount(t *testing.T) {
+	t.Parallel()
+
+	negative := -1
+	request := ProjectReleaseWorkflowTrackersRequest{
+		ReleaseWorkflowCommandContext: testWorkflowCommandContext(),
+		Instructions: map[TrackerID]TrackerProjectionInstructions{
+			"EXAMPLE": {ScreenshotCount: &negative},
+		},
+	}
+	if err := request.Validate(); err == nil || !strings.Contains(err.Error(), "screenshot count must not be negative") {
+		t.Fatalf("negative screenshot count error = %v", err)
+	}
+
+	zero := 0
+	request.Instructions["EXAMPLE"] = TrackerProjectionInstructions{ScreenshotCount: &zero}
+	if err := request.Validate(); err != nil {
+		t.Fatalf("zero screenshot count validation: %v", err)
+	}
+}
+
+func TestContinueReleaseWorkflowRequestRejectsNegativeScreenshotCount(t *testing.T) {
+	t.Parallel()
+
+	negative := -1
+	request := ContinueReleaseWorkflowRequest{
+		Authority:      &WorkflowAuthority{WorkflowID: "workflow-1", ExpectedRevision: 1},
+		IdempotencyKey: "continue-1",
+		Goal:           WorkflowGoalTrackersAssessed,
+		Intent: WorkflowIntent{ProjectionInstructions: map[TrackerID]TrackerProjectionInstructions{
+			"EXAMPLE": {ScreenshotCount: &negative},
+		}},
+	}
+	if err := request.Validate(); err == nil || !strings.Contains(err.Error(), "screenshot count must not be negative") {
+		t.Fatalf("negative screenshot count error = %v", err)
+	}
+
+	zero := 0
+	request.Intent.ProjectionInstructions["EXAMPLE"] = TrackerProjectionInstructions{ScreenshotCount: &zero}
+	if err := request.Validate(); err != nil {
+		t.Fatalf("zero screenshot count validation: %v", err)
+	}
+}
+
+func TestContinueRejectsMixedCorrectionAndTrackerAnswerOwners(t *testing.T) {
+	for _, intent := range []WorkflowIntent{
+		{CorrectionPatch: &ReleaseCorrectionPatch{ExpectedRevision: new(uint64)}},
+		{FactInstructions: &ReleaseFactInstructions{}},
+		{Preparation: &PrepareInput{Instructions: ReleaseFactInstructions{Metadata: MetadataOverrides{Title: new("Manual title")}}}},
+	} {
+		intent.TrackerInputAnswers = map[TrackerID]map[string]*string{"PTP": {"no_english_subtitles": new("yes")}}
+		request := ContinueReleaseWorkflowRequest{
+			IdempotencyKey: "mixed",
+			Goal:           WorkflowGoalInputReady,
+			Intent:         intent,
+		}
+		if err := request.Validate(); err == nil || !strings.Contains(err.Error(), "cannot be combined") {
+			t.Fatalf("mixed mutation was not rejected: %v", err)
+		}
+	}
+}
+
+func TestContinueWorkflowRequestRequiresTypedGoalAndAuthority(t *testing.T) {
+	t.Parallel()
+
+	begin := ContinueReleaseWorkflowRequest{
+		IdempotencyKey: "continue-1",
+		Goal:           WorkflowGoalPrepared,
+		Intent: WorkflowIntent{
+			Preparation: &PrepareInput{SourcePath: "C:\\releases\\Example.Release.2026.1080p-GRP"},
+		},
+	}
+	if err := begin.Validate(); err != nil {
+		t.Fatalf("validate begin continuation: %v", err)
+	}
+	begin.Authority = &WorkflowAuthority{WorkflowID: "workflow-1"}
+	if err := begin.Validate(); err == nil || !strings.Contains(err.Error(), "authority") {
+		t.Fatalf("missing continuation revision error = %v", err)
+	}
+	begin.Authority.ExpectedRevision = 2
+	begin.Intent.MediaSelection = &WorkflowMediaSelection{}
+	if err := begin.Validate(); err == nil || !strings.Contains(err.Error(), "explicit media selection") {
+		t.Fatalf("explicit empty media selection error = %v", err)
+	}
+	begin.Intent.MediaSelection = nil
+	begin.Goal = WorkflowGoalPrepared
+	begin.Intent.Interaction = "prompt_when_convenient"
+	if err := begin.Validate(); err == nil || !strings.Contains(err.Error(), "interaction mode") {
+		t.Fatalf("unknown continuation interaction error = %v", err)
+	}
+	begin.Intent.Interaction = InteractionModeUnattended
+	begin.Intent.UploadTrackerIDs = []TrackerID{"alpha", "ALPHA"}
+	if err := begin.Validate(); err == nil || !strings.Contains(err.Error(), "more than once") {
+		t.Fatalf("duplicate upload tracker error = %v", err)
+	}
+	begin.Intent.UploadTrackerIDs = nil
+	begin.Goal = "adapter_owned_stage"
+	if err := begin.Validate(); err == nil || !strings.Contains(err.Error(), "unsupported workflow goal") {
+		t.Fatalf("unknown continuation goal error = %v", err)
+	}
+}
+
+func TestWorkflowRequestValidationRejectsMissingAndStaleAuthority(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		request interface{ Validate() error }
+		want    string
+	}{
+		{
+			name:    "missing workflow",
+			request: CancelReleaseWorkflowRequest{},
+			want:    "workflow ID",
+		},
+		{
+			name: "missing revision",
+			request: CancelReleaseWorkflowRequest{ReleaseWorkflowCommandContext: ReleaseWorkflowCommandContext{
+				WorkflowID:     "workflow-1",
+				IdempotencyKey: "intent-1",
+			}},
+			want: "revision",
+		},
+		{
+			name: "stale action revision",
+			request: ResolveReleaseWorkflowActionRequest{
+				ReleaseWorkflowCommandContext: testWorkflowCommandContext(),
+				Answer:                        RequiredActionAnswer{ActionID: "action-1", WorkflowRevision: 6},
+			},
+			want: "does not match",
+		},
+		{
+			name: "pathless attachment",
+			request: AttachReleaseWorkflowMediaRequest{
+				ReleaseWorkflowCommandContext: testWorkflowCommandContext(),
+				Attachments:                   []MediaAttachment{{}},
+			},
+			want: "resource ID",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			err := test.request.Validate()
+			if err == nil || !strings.Contains(err.Error(), test.want) {
+				t.Fatalf("Validate() error = %v, want substring %q", err, test.want)
+			}
+		})
+	}
+}
+
+func TestWorkflowRequestJSONRoundTripClonesSlices(t *testing.T) {
+	t.Parallel()
+
+	original := UploadReleaseWorkflowImagesRequest{
+		ReleaseWorkflowCommandContext: testWorkflowCommandContext(),
+		Media:                         MediaArtifactSetRef{ID: "media-1", Revision: 4},
+		ArtifactIDs:                   []PublicResourceID{"artifact-1", "artifact-2"},
+		Host:                          "example-host",
+	}
+	payload, err := json.Marshal(original)
+	if err != nil {
+		t.Fatalf("marshal workflow request: %v", err)
+	}
+	var cloned UploadReleaseWorkflowImagesRequest
+	if err := json.Unmarshal(payload, &cloned); err != nil {
+		t.Fatalf("unmarshal workflow request: %v", err)
+	}
+	cloned.ArtifactIDs[0] = "changed"
+	if original.ArtifactIDs[0] != "artifact-1" {
+		t.Fatalf("round-trip clone aliased original slice: %#v", original.ArtifactIDs)
+	}
+}
+
+func TestNewWorkflowContractsDoNotSerializePrivatePathsOrTokens(t *testing.T) {
+	t.Parallel()
+
+	value := struct {
+		Resource WorkflowResourceRef `json:"resource"`
+		Plan     MediaPlan           `json:"plan"`
+		DryRun   UploadDryRunResult  `json:"dryRun"`
+	}{
+		Resource: WorkflowResourceRef{
+			ID:          "resource-1",
+			ContentType: "image/png",
+			SizeBytes:   42,
+		},
+		Plan: MediaPlan{
+			ID:         "plan-1",
+			WorkflowID: "workflow-1",
+			Revision:   3,
+		},
+		DryRun: UploadDryRunResult{
+			ID:         "dry-run-1",
+			WorkflowID: "workflow-1",
+			Revision:   4,
+		},
+	}
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal safe workflow contracts: %v", err)
+	}
+	lower := strings.ToLower(string(payload))
+	for _, forbidden := range []string{"sourcepath", "localpath", "token", "credential", "cookie"} {
+		if strings.Contains(lower, forbidden) {
+			t.Fatalf("safe workflow contracts serialized forbidden authority %q: %s", forbidden, payload)
+		}
+	}
+}
+
+func testWorkflowCommandContext() ReleaseWorkflowCommandContext {
+	return ReleaseWorkflowCommandContext{
+		WorkflowID:       "workflow-1",
+		ExpectedRevision: 7,
+		IdempotencyKey:   "intent-1",
+	}
+}
+
+func TestProjectionOnlyContinuationRejectsUnrelatedMutations(t *testing.T) {
+	for _, scenario := range []string{"valid", "no authority", "facts", "tracker input", "action", "approval"} {
+		t.Run(scenario, func(t *testing.T) {
+			request := ContinueReleaseWorkflowRequest{
+Authority: &WorkflowAuthority{WorkflowID: "projection", ExpectedRevision: 1},
+ IdempotencyKey: "project",
+ Goal: WorkflowGoalTrackersProjected,
+ Intent: WorkflowIntent{TrackerIDs: []TrackerID{"PTP"}},
+}
+			switch scenario {
+			case "no authority":
+				request.Authority = nil
+			case "facts":
+				request.Intent.FactInstructions = &ReleaseFactInstructions{}
+			case "tracker input":
+				request.Intent.TrackerInputAnswers = map[TrackerID]map[string]*string{"PTP": {"trumpable_review": new("yes")}}
+			case "action":
+				request.Answers = []RequiredActionAnswer{{ActionID: "answer"}}
+			case "approval":
+				request.TrackerApproval = &TrackerApproval{}
+			}
+			err := request.Validate()
+			if (err == nil) != (scenario == "valid") {
+				t.Fatalf("validation=%v", err)
+			}
+		})
+	}
+}

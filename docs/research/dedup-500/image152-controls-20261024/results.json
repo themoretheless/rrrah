@@ -1,0 +1,11 @@
+{
+  "controls_passed": 5,
+  "scope": "Original near-duplicate grouping methods AST unchanged with real Simhash2.1.2;features deliberately supplied as integer fingerprints;no Pillow feature extraction or actual image matching.Original exact module tested on Python3.14 compatibility only,not original Python2 runtime.",
+  "findings": [
+    "Chain fingerprints0,1,3 at k1 produce2 groups in A/B/C order but1 group in B/A/C order.",
+    "Equal fingerprint positive groups both records.",
+    "Merge assigns misspelled image_dicionary on smaller argument while image_dictionary remains stale.",
+    "Python3 text path raises TypeError hashing str.",
+    "Python3 PNGheader bytes fail UTF8 text decode."
+  ]
+}

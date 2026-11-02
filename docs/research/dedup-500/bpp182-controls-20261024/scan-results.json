@@ -1,0 +1,39 @@
+{
+  "scope": "Original complete scan_images function; real owned files, logger-only adapter.",
+  "controls_passed": 5,
+  "observations": [
+    {
+      "case": "skip_directory_does_not_prune_descendants",
+      "observed": [
+        "data/nested/escaped.jpg",
+        "top.JPG"
+      ]
+    },
+    {
+      "case": "flat_scan_skips_symlink",
+      "observed": [
+        "top.JPG"
+      ]
+    },
+    {
+      "case": "flat_scan_explicitly_includes_symlink",
+      "observed": [
+        "linked.jpg",
+        "top.JPG"
+      ]
+    },
+    {
+      "case": "max_images_limits_result_not_traversal",
+      "returned": 1,
+      "final_progress": [
+        3,
+        2
+      ]
+    },
+    {
+      "case": "progress_callback_exception_contained",
+      "passed": true
+    }
+  ],
+  "limits": "No real user paths, permission-denied IO, cyclic followed symlinks or performance qualification."
+}

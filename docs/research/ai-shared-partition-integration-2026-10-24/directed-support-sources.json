@@ -1,0 +1,51 @@
+{
+  "diagnostic_capture": {
+    "decoder_sha256": "4bba7cab11c5be3a4b16cdb7f3c0792ddcee3d944da9ed415b8393a81f90516a",
+    "diagnostic_working_limit": 128,
+    "source_sha256": "d294ba512d3d8ea6fefbdf060da0462464bf43bc756c607db51da8939b4ec66e",
+    "returncode": 1,
+    "elapsed_seconds": 79.85062579200167
+  },
+  "original_capture_log_sha256": "80fbdc4b51f39f52392647b5d472a1bcffacaa5d6492bdc60341f6cba9479ad1",
+  "selected_capture_index": 5,
+  "selected_frame_bits": [
+    4635470653959438336,
+    4639085848191565824,
+    4598175219545276416
+  ],
+  "selected_rows": 116,
+  "first_overlap_paint_zero_based": 97,
+  "first_total_coverage_excess_paint_zero_based": 112,
+  "pre_fix_core_sha256": "402ecf467bd419570fab68af0ef955c246a9ce998309dcc77481bc59902d97ec",
+  "validation": "internal encode88passed; independent public gate255passed/1failed/11ignored; directed support candidate NOT qualified",
+  "feature_decoder_sha256": "bace53327c0c6a9eec6bfd079854e200c0921ba159d51929b0b2aa223ba70782",
+  "restored_default_decoder_sha256": "c6dddf03a507ec0993a1cf7dd8c9e07343ae7704d7387625c154a85173a8991d",
+  "real_AI": "negative:1455/323/245/788each exhaust100M;one.ai2522different/max58 and page1exact",
+  "default_build": "succeeded without experimental feature",
+  "coverage_regression_final_area": 0.9999999999999993,
+  "rollback_checks": {
+    "admission": 7,
+    "cancel": 113,
+    "short_quota": 113,
+    "final_used": 0,
+    "forced_line_growth": {
+      "admission": 8,
+      "cancel": 561,
+      "short_quota": 561,
+      "final_used": 0
+    }
+  },
+  "candidate_sources_before_public_gate": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "28cb0a9e73a741db7d7ac54791776886c80bb05e45d378b741c0bb5e374a3efa",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "f53e0ed053121c1edee3756ef0fa625978c3e8affe33ed4559a431d696e9e884",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "5edc5a62c7beca4972f03f7e72616f03c2ff580fe0ac97b5c03d10c5f85b859d",
+    "tests/fixtures/geometry/coverage-cell-82.rs": "9026480d5e3a66a431d5041bc80d4f3d7819a7ee91dfa32ad63abbf6ffbc3811",
+    "scripts/verify-ordered-region-overlap.py": "f579a32b808e34cb89c693f507c81a40cea9be9e6d30fa1c2fe4ca40a61ae13f",
+    "scripts/extract-ordered-cell.py": "f802e508f1505c1da79e255f02acd6f1d2e94bf6bc2b1e9b4d7b31eaaceea49d"
+  },
+  "public_failure": {
+    "test": "captured_dense_lineage_partition_stays_within_original_fragment_bound",
+    "actual_area": 0.1621849392406709,
+    "rational_union_area": 0.8462670619378092
+  }
+}

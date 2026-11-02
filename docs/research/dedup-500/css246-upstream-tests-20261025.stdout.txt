@@ -1,0 +1,2441 @@
+
+> css-dedup@1.13.3 test
+> npm run test:types && node --test "test/**/*.test.js"
+
+
+> css-dedup@1.13.3 test:types
+> tsc
+
+TAP version 13
+# Subtest: Selectors
+    # Subtest: Splits top-level commas, ignoring ones nested in `:is()`/`[]`
+    ok 1 - Splits top-level commas, ignoring ones nested in `:is()`/`[]`
+      ---
+      duration_ms: 0.972541
+      type: 'test'
+      ...
+    # Subtest: Does not let an unmatched closing bracket misclassify a later top-level comma as nested
+    ok 2 - Does not let an unmatched closing bracket misclassify a later top-level comma as nested
+      ---
+      duration_ms: 0.067792
+      type: 'test'
+      ...
+    # Subtest: Treats a backslash-escaped character as content, not syntax
+    ok 3 - Treats a backslash-escaped character as content, not syntax
+      ---
+      duration_ms: 0.048542
+      type: 'test'
+      ...
+    # Subtest: Treats a comma inside a `/* … */` comment as text, not a selector separator
+    ok 4 - Treats a comma inside a `/* … */` comment as text, not a selector separator
+      ---
+      duration_ms: 0.069333
+      type: 'test'
+      ...
+    1..4
+ok 1 - Selectors
+  ---
+  duration_ms: 1.6785
+  type: 'suite'
+  ...
+# Subtest: Selectors—mutually exclusive
+    # Subtest: Recognizes an exact-match attribute value difference as mutually exclusive
+    ok 1 - Recognizes an exact-match attribute value difference as mutually exclusive
+      ---
+      duration_ms: 0.5335
+      type: 'test'
+      ...
+    # Subtest: Works with unquoted attribute values
+    ok 2 - Works with unquoted attribute values
+      ---
+      duration_ms: 0.046417
+      type: 'test'
+      ...
+    # Subtest: Recognizes exclusivity from any one of several differing attributes
+    ok 3 - Recognizes exclusivity from any one of several differing attributes
+      ---
+      duration_ms: 0.1915
+      type: 'test'
+      ...
+    # Subtest: Ignores an identical presence-only attribute alongside a differing one
+    ok 4 - Ignores an identical presence-only attribute alongside a differing one
+      ---
+      duration_ms: 0.174125
+      type: 'test'
+      ...
+    # Subtest: Does not assume exclusivity for a different attribute name
+    ok 5 - Does not assume exclusivity for a different attribute name
+      ---
+      duration_ms: 0.126625
+      type: 'test'
+      ...
+    # Subtest: Does not treat identical selectors as mutually exclusive
+    ok 6 - Does not treat identical selectors as mutually exclusive
+      ---
+      duration_ms: 0.14125
+      type: 'test'
+      ...
+    # Subtest: Does not assume exclusivity for `~=` (multi-value) attribute selectors
+    ok 7 - Does not assume exclusivity for `~=` (multi-value) attribute selectors
+      ---
+      duration_ms: 0.03575
+      type: 'test'
+      ...
+    # Subtest: Does not assume exclusivity for `^=`/`$=`/`*=`/`|=` attribute selectors
+    ok 8 - Does not assume exclusivity for `^=`/`$=`/`*=`/`|=` attribute selectors
+      ---
+      duration_ms: 0.034208
+      type: 'test'
+      ...
+    # Subtest: Does not assume exclusivity for values differing only in case
+    ok 9 - Does not assume exclusivity for values differing only in case
+      ---
+      duration_ms: 0.024666
+      type: 'test'
+      ...
+    # Subtest: Does not assume exclusivity when anything else about the selectors differs
+    ok 10 - Does not assume exclusivity when anything else about the selectors differs
+      ---
+      duration_ms: 0.025125
+      type: 'test'
+      ...
+    # Subtest: Does not assume exclusivity across a descendant or `~` combinator (the compounds can bind to different elements)
+    ok 11 - Does not assume exclusivity across a descendant or `~` combinator (the compounds can bind to different elements)
+      ---
+      duration_ms: 0.046375
+      type: 'test'
+      ...
+    # Subtest: Recognizes exclusivity across `>`/`+` combinators (one parent, one preceding sibling)
+    ok 12 - Recognizes exclusivity across `>`/`+` combinators (one parent, one preceding sibling)
+      ---
+      duration_ms: 0.060209
+      type: 'test'
+      ...
+    # Subtest: Recognizes exclusivity on the subject compound, past any combinator
+    ok 13 - Recognizes exclusivity on the subject compound, past any combinator
+      ---
+      duration_ms: 0.025042
+      type: 'test'
+      ...
+    # Subtest: Recognizes exclusivity past a descendant combinator when the compound is `html`/`:root` (unique per document)
+    ok 14 - Recognizes exclusivity past a descendant combinator when the compound is `html`/`:root` (unique per document)
+      ---
+      duration_ms: 0.034042
+      type: 'test'
+      ...
+    # Subtest: Does not let an `html`-prefixed class name pass as the unique `html` element
+    ok 15 - Does not let an `html`-prefixed class name pass as the unique `html` element
+      ---
+      duration_ms: 0.025584
+      type: 'test'
+      ...
+    # Subtest: Does not fold attribute-name case (attribute names are case-sensitive in XML/SVG)
+    ok 16 - Does not fold attribute-name case (attribute names are case-sensitive in XML/SVG)
+      ---
+      duration_ms: 0.022042
+      type: 'test'
+      ...
+    # Subtest: Resolves CSS character escapes in attribute values before comparing
+    ok 17 - Resolves CSS character escapes in attribute values before comparing
+      ---
+      duration_ms: 0.03975
+      type: 'test'
+      ...
+    1..17
+ok 2 - Selectors—mutually exclusive
+  ---
+  duration_ms: 1.828708
+  type: 'suite'
+  ...
+# Subtest: Selector—likely disjoint
+    # Subtest: Assumes disjointness for subject compounds with no class in common
+    ok 1 - Assumes disjointness for subject compounds with no class in common
+      ---
+      duration_ms: 0.174
+      type: 'test'
+      ...
+    # Subtest: Does not assume disjointness when the subject compounds share a class
+    ok 2 - Does not assume disjointness when the subject compounds share a class
+      ---
+      duration_ms: 0.042084
+      type: 'test'
+      ...
+    # Subtest: Recognizes different type selectors as disjoint
+    ok 3 - Recognizes different type selectors as disjoint
+      ---
+      duration_ms: 0.028459
+      type: 'test'
+      ...
+    # Subtest: Recognizes different IDs as disjoint
+    ok 4 - Recognizes different IDs as disjoint
+      ---
+      duration_ms: 0.02975
+      type: 'test'
+      ...
+    # Subtest: Does not compare across identity categories (a class tells nothing about a type)
+    ok 5 - Does not compare across identity categories (a class tells nothing about a type)
+      ---
+      duration_ms: 0.020167
+      type: 'test'
+      ...
+    # Subtest: Only the subject compound counts, not ancestor compounds
+    ok 6 - Only the subject compound counts, not ancestor compounds
+      ---
+      duration_ms: 0.029334
+      type: 'test'
+      ...
+    # Subtest: Bails out on selector-taking pseudo-classes in the subject compound
+    ok 7 - Bails out on selector-taking pseudo-classes in the subject compound
+      ---
+      duration_ms: 0.022667
+      type: 'test'
+      ...
+    # Subtest: Bails out on escapes in the subject compound
+    ok 8 - Bails out on escapes in the subject compound
+      ---
+      duration_ms: 0.022708
+      type: 'test'
+      ...
+    # Subtest: Does not misread `.`/`\#` inside attribute values as classes/IDs
+    ok 9 - Does not misread `.`/`\#` inside attribute values as classes/IDs
+      ---
+      duration_ms: 0.026041
+      type: 'test'
+      ...
+    1..9
+ok 3 - Selector—likely disjoint
+  ---
+  duration_ms: 0.467208
+  type: 'suite'
+  ...
+# Subtest: Analysis
+    # Subtest: Flags declarations that are duplicated across rules in the same scope
+    ok 1 - Flags declarations that are duplicated across rules in the same scope
+      ---
+      duration_ms: 4.439958
+      type: 'test'
+      ...
+    # Subtest: Normalizes case for duplicate detection
+    ok 2 - Normalizes case for duplicate detection
+      ---
+      duration_ms: 0.28025
+      type: 'test'
+      ...
+    # Subtest: Normalizes zero-value units for duplicate detection
+    ok 3 - Normalizes zero-value units for duplicate detection
+      ---
+      duration_ms: 0.240542
+      type: 'test'
+      ...
+    # Subtest: Normalizes modern viewport/container zero-value units
+    ok 4 - Normalizes modern viewport/container zero-value units
+      ---
+      duration_ms: 0.295292
+      type: 'test'
+      ...
+    # Subtest: Does not collapse unitless and unit-bearing zero for angle/time units
+    ok 5 - Does not collapse unitless and unit-bearing zero for angle/time units
+      ---
+      duration_ms: 0.16975
+      type: 'test'
+      ...
+    # Subtest: Treats equivalent `s`/`ms` time values as duplicates, unconditionally
+    ok 6 - Treats equivalent `s`/`ms` time values as duplicates, unconditionally
+      ---
+      duration_ms: 0.407167
+      type: 'test'
+      ...
+    # Subtest: Normalizes time units inside the `animation`/`transition` shorthand without touching the case-sensitive animation name
+    ok 7 - Normalizes time units inside the `animation`/`transition` shorthand without touching the case-sensitive animation name
+      ---
+      duration_ms: 0.126792
+      type: 'test'
+      ...
+    # Subtest: Does not mistake digits inside a case-sensitive custom ident for a time or angle value
+    ok 8 - Does not mistake digits inside a case-sensitive custom ident for a time or angle value
+      ---
+      duration_ms: 1.410792
+      type: 'test'
+      ...
+    # Subtest: Sorts `min()`/`max()` arguments, since mathematical min/max is commutative
+    ok 9 - Sorts `min()`/`max()` arguments, since mathematical min/max is commutative
+      ---
+      duration_ms: 0.155708
+      type: 'test'
+      ...
+    # Subtest: Does not reorder `clamp()` arguments (positional: minimum, preferred, maximum)
+    ok 10 - Does not reorder `clamp()` arguments (positional: minimum, preferred, maximum)
+      ---
+      duration_ms: 0.049167
+      type: 'test'
+      ...
+    # Subtest: Does not reorder `minmax()` arguments (positional grid track sizing, not the `min()` function)
+    ok 11 - Does not reorder `minmax()` arguments (positional grid track sizing, not the `min()` function)
+      ---
+      duration_ms: 0.052083
+      type: 'test'
+      ...
+    # Subtest: Sorts arguments of a `min()`/`max()` call nested inside another
+    ok 12 - Sorts arguments of a `min()`/`max()` call nested inside another
+      ---
+      duration_ms: 0.065458
+      type: 'test'
+      ...
+    # Subtest: Does not treat angle units as equivalent by default (aggressive-only)
+    ok 13 - Does not treat angle units as equivalent by default (aggressive-only)
+      ---
+      duration_ms: 0.044625
+      type: 'test'
+      ...
+    # Subtest: Treats equivalent angle units as duplicates in aggressive mode
+    ok 14 - Treats equivalent angle units as duplicates in aggressive mode
+      ---
+      duration_ms: 0.234292
+      type: 'test'
+      ...
+    # Subtest: Does not collapse `0%` and unitless `0` for `flex-basis`
+    ok 15 - Does not collapse `0%` and unitless `0` for `flex-basis`
+      ---
+      duration_ms: 0.0575
+      type: 'test'
+      ...
+    # Subtest: Does not collapse `0%` and unitless `0` for `height`
+    ok 16 - Does not collapse `0%` and unitless `0` for `height`
+      ---
+      duration_ms: 0.040916
+      type: 'test'
+      ...
+    # Subtest: Still collapses `0%` and unitless `0` for properties not in the percentage-sensitive set
+    ok 17 - Still collapses `0%` and unitless `0` for properties not in the percentage-sensitive set
+      ---
+      duration_ms: 0.061209
+      type: 'test'
+      ...
+    # Subtest: Treats equivalent color spellings as duplicates (hex, named, `rgb()`)
+    ok 18 - Treats equivalent color spellings as duplicates (hex, named, `rgb()`)
+      ---
+      duration_ms: 0.265
+      type: 'test'
+      ...
+    # Subtest: Treats `transparent` and `rgba(0, 0, 0, 0)` as equivalent
+    ok 19 - Treats `transparent` and `rgba(0, 0, 0, 0)` as equivalent
+      ---
+      duration_ms: 0.050625
+      type: 'test'
+      ...
+    # Subtest: Leaves `hsl()` and percentage `rgb()` channels alone (rounding is the browser’s business)
+    ok 20 - Leaves `hsl()` and percentage `rgb()` channels alone (rounding is the browser’s business)
+      ---
+      duration_ms: 0.0765
+      type: 'test'
+      ...
+    # Subtest: Treats `font-weight: bold`/`700` and `normal`/`400` as equivalent
+    ok 21 - Treats `font-weight: bold`/`700` and `normal`/`400` as equivalent
+      ---
+      duration_ms: 0.080875
+      type: 'test'
+      ...
+    # Subtest: Ignores a redundant leading `+` sign
+    ok 22 - Ignores a redundant leading `+` sign
+      ---
+      duration_ms: 0.044583
+      type: 'test'
+      ...
+    # Subtest: Ignores whitespace around `/` separators
+    ok 23 - Ignores whitespace around `/` separators
+      ---
+      duration_ms: 0.048291
+      type: 'test'
+      ...
+    # Subtest: Collapses repeated shorthand values (`margin: 0 0` ≡ `margin: 0`)
+    ok 24 - Collapses repeated shorthand values (`margin: 0 0` ≡ `margin: 0`)
+      ---
+      duration_ms: 0.146208
+      type: 'test'
+      ...
+    # Subtest: Does not collapse shorthand values that aren’t repetitions
+    ok 25 - Does not collapse shorthand values that aren’t repetitions
+      ---
+      duration_ms: 0.067208
+      type: 'test'
+      ...
+    # Subtest: Treats `border: none` and `border: 0` as equivalent
+    ok 26 - Treats `border: none` and `border: 0` as equivalent
+      ---
+      duration_ms: 0.041291
+      type: 'test'
+      ...
+    # Subtest: Normalizes leading zero in decimals (`0.5` and `.5`)
+    ok 27 - Normalizes leading zero in decimals (`0.5` and `.5`)
+      ---
+      duration_ms: 0.042208
+      type: 'test'
+      ...
+    # Subtest: Normalizes trailing zero in decimals (`1.0` and `1`)
+    ok 28 - Normalizes trailing zero in decimals (`1.0` and `1`)
+      ---
+      duration_ms: 0.042
+      type: 'test'
+      ...
+    # Subtest: Normalizes redundant trailing zeros (`1.50` and `1.5`)
+    ok 29 - Normalizes redundant trailing zeros (`1.50` and `1.5`)
+      ---
+      duration_ms: 0.045791
+      type: 'test'
+      ...
+    # Subtest: Does not touch decimal-looking substrings inside `url()`
+    ok 30 - Does not touch decimal-looking substrings inside `url()`
+      ---
+      duration_ms: 0.64175
+      type: 'test'
+      ...
+    # Subtest: Masks a quoted `url()` containing a closing parenthesis as one segment
+    ok 31 - Masks a quoted `url()` containing a closing parenthesis as one segment
+      ---
+      duration_ms: 0.07725
+      type: 'test'
+      ...
+    # Subtest: Does not fold case for `page` (a named page is a case-sensitive custom ident)
+    ok 32 - Does not fold case for `page` (a named page is a case-sensitive custom ident)
+      ---
+      duration_ms: 0.042625
+      type: 'test'
+      ...
+    # Subtest: Does not collapse repeated `place-content` values
+    ok 33 - Does not collapse repeated `place-content` values
+      ---
+      duration_ms: 0.044417
+      type: 'test'
+      ...
+    # Subtest: Distinguishes selectors whose quoted attribute values differ only in inner whitespace
+    ok 34 - Distinguishes selectors whose quoted attribute values differ only in inner whitespace
+      ---
+      duration_ms: 0.080416
+      type: 'test'
+      ...
+    # Subtest: Does not treat different-case `var()` references as duplicates
+    ok 35 - Does not treat different-case `var()` references as duplicates
+      ---
+      duration_ms: 0.072
+      type: 'test'
+      ...
+    # Subtest: Does not treat different-case custom property names as duplicates
+    ok 36 - Does not treat different-case custom property names as duplicates
+      ---
+      duration_ms: 0.05175
+      type: 'test'
+      ...
+    # Subtest: Treats same-case `var()` references as duplicates
+    ok 37 - Treats same-case `var()` references as duplicates
+      ---
+      duration_ms: 0.096791
+      type: 'test'
+      ...
+    # Subtest: Normalizes whitespace and function-name case around a `var()` reference
+    ok 38 - Normalizes whitespace and function-name case around a `var()` reference
+      ---
+      duration_ms: 0.097125
+      type: 'test'
+      ...
+    # Subtest: Normalizes spacing around a `var()` fallback
+    ok 39 - Normalizes spacing around a `var()` fallback
+      ---
+      duration_ms: 0.063916
+      type: 'test'
+      ...
+    # Subtest: Still normalizes the value parts outside a `var()` reference
+    ok 40 - Still normalizes the value parts outside a `var()` reference
+      ---
+      duration_ms: 0.057041
+      type: 'test'
+      ...
+    # Subtest: Ignores whitespace just inside parentheses and around commas
+    ok 41 - Ignores whitespace just inside parentheses and around commas
+      ---
+      duration_ms: 0.062667
+      type: 'test'
+      ...
+    # Subtest: Preserves whitespace inside quoted strings
+    ok 42 - Preserves whitespace inside quoted strings
+      ---
+      duration_ms: 0.046125
+      type: 'test'
+      ...
+    # Subtest: Treats identical custom property declarations as duplicates
+    ok 43 - Treats identical custom property declarations as duplicates
+      ---
+      duration_ms: 0.0395
+      type: 'test'
+      ...
+    # Subtest: Compares custom property values verbatim (no case folding, no zero collapsing)
+    ok 44 - Compares custom property values verbatim (no case folding, no zero collapsing)
+      ---
+      duration_ms: 0.058083
+      type: 'test'
+      ...
+    # Subtest: Does not fold case for `content` (a `counter()` argument names a case-sensitive counter)
+    ok 45 - Does not fold case for `content` (a `counter()` argument names a case-sensitive counter)
+      ---
+      duration_ms: 0.047417
+      type: 'test'
+      ...
+    # Subtest: Does not fold case for grid line names (custom idents)
+    ok 46 - Does not fold case for grid line names (custom idents)
+      ---
+      duration_ms: 0.048583
+      type: 'test'
+      ...
+    # Subtest: Does not treat different-case `animation-name` as duplicates (custom ident, case-sensitive)
+    ok 47 - Does not treat different-case `animation-name` as duplicates (custom ident, case-sensitive)
+      ---
+      duration_ms: 0.045417
+      type: 'test'
+      ...
+    # Subtest: Still treats same-case `animation-name` as duplicates
+    ok 48 - Still treats same-case `animation-name` as duplicates
+      ---
+      duration_ms: 0.041666
+      type: 'test'
+      ...
+    # Subtest: Does not treat different-case `counter-reset` as duplicates (custom ident, case-sensitive)
+    ok 49 - Does not treat different-case `counter-reset` as duplicates (custom ident, case-sensitive)
+      ---
+      duration_ms: 0.04125
+      type: 'test'
+      ...
+    # Subtest: Still normalizes case for ordinary keyword values
+    ok 50 - Still normalizes case for ordinary keyword values
+      ---
+      duration_ms: 0.045042
+      type: 'test'
+      ...
+    # Subtest: Does not flag a declaration that only occurs once
+    ok 51 - Does not flag a declaration that only occurs once
+      ---
+      duration_ms: 0.043083
+      type: 'test'
+      ...
+    # Subtest: Does not flag duplicates across different `@media` scopes
+    ok 52 - Does not flag duplicates across different `@media` scopes
+      ---
+      duration_ms: 0.227958
+      type: 'test'
+      ...
+    # Subtest: Flags duplicates within the same `@media` scope
+    ok 53 - Flags duplicates within the same `@media` scope
+      ---
+      duration_ms: 0.112958
+      type: 'test'
+      ...
+    # Subtest: Flags duplicates split across two separately-written blocks with the same condition
+    ok 54 - Flags duplicates split across two separately-written blocks with the same condition
+      ---
+      duration_ms: 0.09575
+      type: 'test'
+      ...
+    # Subtest: Matches scopes regardless of whitespace formatting in the condition
+    ok 55 - Matches scopes regardless of whitespace formatting in the condition
+      ---
+      duration_ms: 0.061416
+      type: 'test'
+      ...
+    # Subtest: Flags a redundant declaration repeated within one rule
+    ok 56 - Flags a redundant declaration repeated within one rule
+      ---
+      duration_ms: 0.05425
+      type: 'test'
+      ...
+    # Subtest: Ignores selector hack rules by default
+    ok 57 - Ignores selector hack rules by default
+      ---
+      duration_ms: 0.122708
+      type: 'test'
+      ...
+    # Subtest: Honors custom `ignoreSelectors` patterns
+    ok 58 - Honors custom `ignoreSelectors` patterns
+      ---
+      duration_ms: 0.146792
+      type: 'test'
+      ...
+    # Subtest: `ignoreSelectorsDefaults: false` disables the built-in hack list
+    ok 59 - `ignoreSelectorsDefaults: false` disables the built-in hack list
+      ---
+      duration_ms: 0.077834
+      type: 'test'
+      ...
+    # Subtest: Ignores a rule with a mixed hack/normal selector list
+    ok 60 - Ignores a rule with a mixed hack/normal selector list
+      ---
+      duration_ms: 0.411541
+      type: 'test'
+      ...
+    # Subtest: Does not treat differing values for the same property as duplicates
+    ok 61 - Does not treat differing values for the same property as duplicates
+      ---
+      duration_ms: 0.154208
+      type: 'test'
+      ...
+    # Subtest: Flags duplicates between nested rules, as their own scope
+    ok 62 - Flags duplicates between nested rules, as their own scope
+      ---
+      duration_ms: 0.078084
+      type: 'test'
+      ...
+    # Subtest: Does not compare a rule’s own declarations against its nested rules’
+    ok 63 - Does not compare a rule’s own declarations against its nested rules’
+      ---
+      duration_ms: 0.047208
+      type: 'test'
+      ...
+    # Subtest: Does not flag duplicates across different `@layer` blocks
+    ok 64 - Does not flag duplicates across different `@layer` blocks
+      ---
+      duration_ms: 0.066709
+      type: 'test'
+      ...
+    # Subtest: Flags duplicates within the same `@layer` block
+    ok 65 - Flags duplicates within the same `@layer` block
+      ---
+      duration_ms: 0.052083
+      type: 'test'
+      ...
+    # Subtest: Does not crash on a statement-form at-rule with no block
+    ok 66 - Does not crash on a statement-form at-rule with no block
+      ---
+      duration_ms: 0.119667
+      type: 'test'
+      ...
+    # Subtest: Flags a selector written more than once within one scope
+    ok 67 - Flags a selector written more than once within one scope
+      ---
+      duration_ms: 0.081791
+      type: 'test'
+      ...
+    # Subtest: Recognizes a repeated selector list regardless of order (`.a, .b` vs. `.b, .a`)
+    ok 68 - Recognizes a repeated selector list regardless of order (`.a, .b` vs. `.b, .a`)
+      ---
+      duration_ms: 0.050708
+      type: 'test'
+      ...
+    # Subtest: Does not flag a selector repeated across two separately-written same-condition blocks
+    ok 69 - Does not flag a selector repeated across two separately-written same-condition blocks
+      ---
+      duration_ms: 0.053084
+      type: 'test'
+      ...
+    # Subtest: Flags a declaration repeated within a selector-less at-rule block (`@font-face`)
+    ok 70 - Flags a declaration repeated within a selector-less at-rule block (`@font-face`)
+      ---
+      duration_ms: 0.074083
+      type: 'test'
+      ...
+    # Subtest: Does not flag two independent `@font-face` blocks repeating the same declaration
+    ok 71 - Does not flag two independent `@font-face` blocks repeating the same declaration
+      ---
+      duration_ms: 0.045583
+      type: 'test'
+      ...
+    # Subtest: Flags a declaration repeated within `@page`
+    ok 72 - Flags a declaration repeated within `@page`
+      ---
+      duration_ms: 0.038167
+      type: 'test'
+      ...
+    1..72
+ok 4 - Analysis
+  ---
+  duration_ms: 13.617833
+  type: 'suite'
+  ...
+# Subtest: CLI
+    # Subtest: Shows help with `--help`
+    ok 1 - Shows help with `--help`
+      ---
+      duration_ms: 72.082208
+      type: 'test'
+      ...
+    # Subtest: Analyzes the working directory when no file is given
+    ok 2 - Analyzes the working directory when no file is given
+      ---
+      duration_ms: 78.502375
+      type: 'test'
+      ...
+    # Subtest: Refuses `--fix` without a target when nothing can answer the prompt
+    ok 3 - Refuses `--fix` without a target when nothing can answer the prompt
+      ---
+      duration_ms: 63.387083
+      type: 'test'
+      ...
+    # Subtest: Runs `--fix` without a prompt when the target is named explicitly
+    ok 4 - Runs `--fix` without a prompt when the target is named explicitly
+      ---
+      duration_ms: 78.914417
+      type: 'test'
+      ...
+    # Subtest: `--fix` atomically replaces a file while preserving its mode
+    ok 5 - `--fix` atomically replaces a file while preserving its mode
+      ---
+      duration_ms: 79.751416
+      type: 'test'
+      ...
+    # Subtest: `--fix` follows a symlink target instead of replacing the link
+    ok 6 - `--fix` follows a symlink target instead of replacing the link
+      ---
+      duration_ms: 78.125417
+      type: 'test'
+      ...
+    # Subtest: Runs `--fix` without a target once the prompt is answered
+    ok 7 - Runs `--fix` without a target once the prompt is answered
+      ---
+      duration_ms: 80.14425
+      type: 'test'
+      ...
+    # Subtest: Aborts `--fix` without a target on a declined prompt
+    ok 8 - Aborts `--fix` without a target on a declined prompt
+      ---
+      duration_ms: 64.253041
+      type: 'test'
+      ...
+    # Subtest: Aborts `--fix` without a target on EOF
+    ok 9 - Aborts `--fix` without a target on EOF
+      ---
+      duration_ms: 62.814208
+      type: 'test'
+      ...
+    # Subtest: Excludes a selector via `-i` (short for `--ignore-selector`)
+    ok 10 - Excludes a selector via `-i` (short for `--ignore-selector`)
+      ---
+      duration_ms: 70.092916
+      type: 'test'
+      ...
+    # Subtest: Warns in report mode when merging would grow the file rather than shrink it
+    ok 11 - Warns in report mode when merging would grow the file rather than shrink it
+      ---
+      duration_ms: 78.765625
+      type: 'test'
+      ...
+    # Subtest: Warns in `--fix` mode when consolidation grows the file rather than shrinks it
+    ok 12 - Warns in `--fix` mode when consolidation grows the file rather than shrinks it
+      ---
+      duration_ms: 80.547209
+      type: 'test'
+      ...
+    # Subtest: Rejects `--savings-only` without `--fix`
+    ok 13 - Rejects `--savings-only` without `--fix`
+      ---
+      duration_ms: 62.718
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only` leaves a file untouched when consolidation would grow it
+    ok 14 - `--fix --savings-only` leaves a file untouched when consolidation would grow it
+      ---
+      duration_ms: 75.330125
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only` still writes a file whose consolidation shrinks it
+    ok 15 - `--fix --savings-only` still writes a file whose consolidation shrinks it
+      ---
+      duration_ms: 78.610875
+      type: 'test'
+      ...
+    # Subtest: `--fix --aggressive --savings-only` withholds a growing aggressive merge
+    ok 16 - `--fix --aggressive --savings-only` withholds a growing aggressive merge
+      ---
+      duration_ms: 82.4925
+      type: 'test'
+      ...
+    # Subtest: `--fix` prints the skipped-group detail before the counts summary, so the outcome survives at the end of a long list
+    ok 17 - `--fix` prints the skipped-group detail before the counts summary, so the outcome survives at the end of a long list
+      ---
+      duration_ms: 81.781959
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only` keeps the merges that pay for themselves and reports the rest as withheld
+    ok 18 - `--fix --savings-only` keeps the merges that pay for themselves and reports the rest as withheld
+      ---
+      duration_ms: 82.740083
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only` distinguishes a partly consolidated file from an untouched one in the overall summary
+    ok 19 - `--fix --savings-only` distinguishes a partly consolidated file from an untouched one in the overall summary
+      ---
+      duration_ms: 84.332208
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only -` still writes the untouched style sheet to STDOUT when withholding
+    ok 20 - `--fix --savings-only -` still writes the untouched style sheet to STDOUT when withholding
+      ---
+      duration_ms: 77.351375
+      type: 'test'
+      ...
+    # Subtest: Loads `savingsOnly: true` from the config file
+    ok 21 - Loads `savingsOnly: true` from the config file
+      ---
+      duration_ms: 79.152417
+      type: 'test'
+      ...
+    # Subtest: Still warns to test when an aggressive cross-block fold nets fewer applied entries than the default pass would
+    ok 22 - Still warns to test when an aggressive cross-block fold nets fewer applied entries than the default pass would
+      ---
+      duration_ms: 78.328167
+      type: 'test'
+      ...
+    # Subtest: Still previews `--aggressive` when it would restructure merges into fewer entries
+    ok 23 - Still previews `--aggressive` when it would restructure merges into fewer entries
+      ---
+      duration_ms: 158.496834
+      type: 'test'
+      ...
+    # Subtest: Does not hint “may merge with `--aggressive`” when the aggressive pass skips the group too
+    ok 24 - Does not hint “may merge with `--aggressive`” when the aggressive pass skips the group too
+      ---
+      duration_ms: 68.70275
+      type: 'test'
+      ...
+    # Subtest: Suppresses the `--aggressive` re-run hint on a withheld run when aggressive would grow the file too
+    ok 25 - Suppresses the `--aggressive` re-run hint on a withheld run when aggressive would grow the file too
+      ---
+      duration_ms: 79.285875
+      type: 'test'
+      ...
+    # Subtest: Notes when the `--aggressive` extras would grow the file rather than shrink it
+    ok 26 - Notes when the `--aggressive` extras would grow the file rather than shrink it
+      ---
+      duration_ms: 148.936541
+      type: 'test'
+      ...
+    # Subtest: Suppresses the `--aggressive` preview under `--savings-only` when the gated re-run would save less
+    ok 27 - Suppresses the `--aggressive` preview under `--savings-only` when the gated re-run would save less
+      ---
+      duration_ms: 156.953541
+      type: 'test'
+      ...
+    # Subtest: Repeats `--savings-only` in the command the `--aggressive` preview suggests
+    ok 28 - Repeats `--savings-only` in the command the `--aggressive` preview suggests
+      ---
+      duration_ms: 76.636
+      type: 'test'
+      ...
+    # Subtest: Processes multiple files in one invocation, with a header per file
+    ok 29 - Processes multiple files in one invocation, with a header per file
+      ---
+      duration_ms: 83.502792
+      type: 'test'
+      ...
+    # Subtest: `--fix` consolidates each of multiple files independently
+    ok 30 - `--fix` consolidates each of multiple files independently
+      ---
+      duration_ms: 80.608458
+      type: 'test'
+      ...
+    # Subtest: Labels each file’s own summary with its path, and closes with an all-files table, in report mode
+    ok 31 - Labels each file’s own summary with its path, and closes with an all-files table, in report mode
+      ---
+      duration_ms: 156.113708
+      type: 'test'
+      ...
+    # Subtest: Separates shrinking and growing files in the overall summary table
+    ok 32 - Separates shrinking and growing files in the overall summary table
+      ---
+      duration_ms: 80.108792
+      type: 'test'
+      ...
+    # Subtest: Reports a net shrink in the overall summary table when a shrinking file outweighs a growing one
+    ok 33 - Reports a net shrink in the overall summary table when a shrinking file outweighs a growing one
+      ---
+      duration_ms: 80.547292
+      type: 'test'
+      ...
+    # Subtest: Excludes an unreadable/unparseable file from the overall summary, but counts it
+    ok 34 - Excludes an unreadable/unparseable file from the overall summary, but counts it
+      ---
+      duration_ms: 79.048917
+      type: 'test'
+      ...
+    # Subtest: The all-files table’s `-s` Total is `n/a` only when nothing would be saved anywhere in the run, not just because one file declined
+    ok 35 - The all-files table’s `-s` Total is `n/a` only when nothing would be saved anywhere in the run, not just because one file declined
+      ---
+      duration_ms: 82.447125
+      type: 'test'
+      ...
+    # Subtest: Disambiguates same-named files in the all-files table by extending just enough of their path
+    ok 36 - Disambiguates same-named files in the all-files table by extending just enough of their path
+      ---
+      duration_ms: 81.778541
+      type: 'test'
+      ...
+    # Subtest: Wraps a File cell too long for the terminal at a path separator, keeping every column flush
+    ok 37 - Wraps a File cell too long for the terminal at a path separator, keeping every column flush
+      ---
+      duration_ms: 79.188667
+      type: 'test'
+      ...
+    # Subtest: Labels each file’s own summary and closes with an overall summary, in `--fix` mode
+    ok 38 - Labels each file’s own summary and closes with an overall summary, in `--fix` mode
+      ---
+      duration_ms: 81.038625
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only` reports withheld files in the overall summary
+    ok 39 - `--fix --savings-only` reports withheld files in the overall summary
+      ---
+      duration_ms: 78.035958
+      type: 'test'
+      ...
+    # Subtest: Rolls up the aggressive columns/hint across files in the overall summary, under report and `--fix` mode alike
+    ok 40 - Rolls up the aggressive columns/hint across files in the overall summary, under report and `--fix` mode alike
+      ---
+      duration_ms: 160.119333
+      type: 'test'
+      ...
+    # Subtest: Repeats `--savings-only` in the overall summary’s aggressive bullet, too
+    ok 41 - Repeats `--savings-only` in the overall summary’s aggressive bullet, too
+      ---
+      duration_ms: 78.021
+      type: 'test'
+      ...
+    # Subtest: Recursively finds `.css` files under a directory, skipping `node_modules` and dotfolders
+    ok 42 - Recursively finds `.css` files under a directory, skipping `node_modules` and dotfolders
+      ---
+      duration_ms: 81.151417
+      type: 'test'
+      ...
+    # Subtest: Reports a clean error for a directory with no `.css` files
+    ok 43 - Reports a clean error for a directory with no `.css` files
+      ---
+      duration_ms: 63.678458
+      type: 'test'
+      ...
+    # Subtest: Skips a named preprocessor source rather than consolidating it, leaving the file untouched
+    ok 44 - Skips a named preprocessor source rather than consolidating it, leaving the file untouched
+      ---
+      duration_ms: 65.788292
+      type: 'test'
+      ...
+    # Subtest: A skipped preprocessor source does not stop a `.css` file named alongside it
+    ok 45 - A skipped preprocessor source does not stop a `.css` file named alongside it
+      ---
+      duration_ms: 78.623333
+      type: 'test'
+      ...
+    # Subtest: `--exit-zero` does not forgive a skipped preprocessor source
+    ok 46 - `--exit-zero` does not forgive a skipped preprocessor source
+      ---
+      duration_ms: 65.269583
+      type: 'test'
+      ...
+    # Subtest: `--ignore-path` excludes a preprocessor source before it is reported as skipped
+    ok 47 - `--ignore-path` excludes a preprocessor source before it is reported as skipped
+      ---
+      duration_ms: 66.766792
+      type: 'test'
+      ...
+    # Subtest: Accepts a named file without an extension, which is no preprocessor source
+    ok 48 - Accepts a named file without an extension, which is no preprocessor source
+      ---
+      duration_ms: 77.059875
+      type: 'test'
+      ...
+    # Subtest: Reports a concise, zoomed-in error for a CSS syntax error, not the whole source
+    ok 49 - Reports a concise, zoomed-in error for a CSS syntax error, not the whole source
+      ---
+      duration_ms: 67.097542
+      type: 'test'
+      ...
+    # Subtest: A syntax error in one file does not stop the others from being processed
+    ok 50 - A syntax error in one file does not stop the others from being processed
+      ---
+      duration_ms: 79.738
+      type: 'test'
+      ...
+    # Subtest: Reads from STDIN with `-` in report mode
+    ok 51 - Reads from STDIN with `-` in report mode
+      ---
+      duration_ms: 78.999458
+      type: 'test'
+      ...
+    # Subtest: `--fix -` writes the consolidated CSS to stdout, and status to STDERR
+    ok 52 - `--fix -` writes the consolidated CSS to stdout, and status to STDERR
+      ---
+      duration_ms: 74.896917
+      type: 'test'
+      ...
+    # Subtest: `--fix -` still writes the full style sheet to STDOUT when nothing is consolidated
+    ok 53 - `--fix -` still writes the full style sheet to STDOUT when nothing is consolidated
+      ---
+      duration_ms: 66.964417
+      type: 'test'
+      ...
+    # Subtest: Rejects combining `-` with other file arguments
+    ok 54 - Rejects combining `-` with other file arguments
+      ---
+      duration_ms: 61.779584
+      type: 'test'
+      ...
+    # Subtest: Loads `ignoreSelectors` from `css-dedup.config.js` in the working directory
+    ok 55 - Loads `ignoreSelectors` from `css-dedup.config.js` in the working directory
+      ---
+      duration_ms: 67.90475
+      type: 'test'
+      ...
+    # Subtest: Loads a config file from an explicit `--config` path
+    ok 56 - Loads a config file from an explicit `--config` path
+      ---
+      duration_ms: 68.645959
+      type: 'test'
+      ...
+    # Subtest: An absent `css-dedup.config.js` is silently ignored
+    ok 57 - An absent `css-dedup.config.js` is silently ignored
+      ---
+      duration_ms: 69.325584
+      type: 'test'
+      ...
+    # Subtest: `-a` is the short flag for `--aggressive` (with `--fix`, since report mode always shows both variants)
+    ok 58 - `-a` is the short flag for `--aggressive` (with `--fix`, since report mode always shows both variants)
+      ---
+      duration_ms: 79.809708
+      type: 'test'
+      ...
+    # Subtest: Loads `aggressive: true` from the config file for `--fix`
+    ok 59 - Loads `aggressive: true` from the config file for `--fix`
+      ---
+      duration_ms: 76.138166
+      type: 'test'
+      ...
+    # Subtest: Excludes a file via `--ignore-path`/`-p`, matched against the path relative to the working directory
+    ok 60 - Excludes a file via `--ignore-path`/`-p`, matched against the path relative to the working directory
+      ---
+      duration_ms: 157.261375
+      type: 'test'
+      ...
+    # Subtest: Reports that files were excluded, not that none were found, when `--ignore-path` removes every discovered file
+    ok 61 - Reports that files were excluded, not that none were found, when `--ignore-path` removes every discovered file
+      ---
+      duration_ms: 64.629875
+      type: 'test'
+      ...
+    # Subtest: Excludes a file matching `ignorePaths` from the config file
+    ok 62 - Excludes a file matching `ignorePaths` from the config file
+      ---
+      duration_ms: 80.418792
+      type: 'test'
+      ...
+    # Subtest: Warns when `--fix` rewrites a file that references a source map
+    ok 63 - Warns when `--fix` rewrites a file that references a source map
+      ---
+      duration_ms: 79.004
+      type: 'test'
+      ...
+    # Subtest: Does not warn about a source map when nothing was consolidated
+    ok 64 - Does not warn about a source map when nothing was consolidated
+      ---
+      duration_ms: 67.729041
+      type: 'test'
+      ...
+    # Subtest: `dedup()` reports a stale source map only when it rewrote a style sheet that references one
+    ok 65 - `dedup()` reports a stale source map only when it rewrote a style sheet that references one
+      ---
+      duration_ms: 5.458292
+      type: 'test'
+      ...
+    # Subtest: Rejects a single-dash long-option spelling (`-fix`) instead of silently clustering it as `-f -i x`
+    ok 66 - Rejects a single-dash long-option spelling (`-fix`) instead of silently clustering it as `-f -i x`
+      ---
+      duration_ms: 61.114167
+      type: 'test'
+      ...
+    # Subtest: Still allows genuine short-flag clustering (`-fa` for `-f -a`)
+    ok 67 - Still allows genuine short-flag clustering (`-fa` for `-f -a`)
+      ---
+      duration_ms: 78.802459
+      type: 'test'
+      ...
+    # Subtest: Processes multiple files correctly when reads are prefetched concurrently
+    ok 68 - Processes multiple files correctly when reads are prefetched concurrently
+      ---
+      duration_ms: 87.57075
+      type: 'test'
+      ...
+    1..68
+ok 5 - CLI
+  ---
+  duration_ms: 5533.42025
+  type: 'suite'
+  ...
+# Subtest: Exit code
+    # Subtest: Report mode exits 0 despite findings
+    ok 1 - Report mode exits 0 despite findings
+      ---
+      duration_ms: 80.866459
+      type: 'test'
+      ...
+    # Subtest: `-z` is the short form
+    ok 2 - `-z` is the short form
+      ---
+      duration_ms: 80.362584
+      type: 'test'
+      ...
+    # Subtest: `--fix` exits 0 despite a group skipped as unsafe, and still applies the safe merge
+    ok 3 - `--fix` exits 0 despite a group skipped as unsafe, and still applies the safe merge
+      ---
+      duration_ms: 78.315334
+      type: 'test'
+      ...
+    # Subtest: `--fix --savings-only` exits 0 despite a withheld file
+    ok 4 - `--fix --savings-only` exits 0 despite a withheld file
+      ---
+      duration_ms: 81.561041
+      type: 'test'
+      ...
+    # Subtest: Does not forgive a file that fails to read or parse
+    ok 5 - Does not forgive a file that fails to read or parse
+      ---
+      duration_ms: 66.988
+      type: 'test'
+      ...
+    # Subtest: Does not forgive a file discovered but unreadable at read time
+    ok 6 - Does not forgive a file discovered but unreadable at read time
+      ---
+      duration_ms: 63.246375
+      type: 'test'
+      ...
+    # Subtest: A read/parse failure still fails the run even alongside a clean file
+    ok 7 - A read/parse failure still fails the run even alongside a clean file
+      ---
+      duration_ms: 68.837875
+      type: 'test'
+      ...
+    # Subtest: A missing file still fails the run, even with `--exit-zero`
+    ok 8 - A missing file still fails the run, even with `--exit-zero`
+      ---
+      duration_ms: 66.279208
+      type: 'test'
+      ...
+    # Subtest: Loads `exitZero: true` from the config file
+    ok 9 - Loads `exitZero: true` from the config file
+      ---
+      duration_ms: 83.8115
+      type: 'test'
+      ...
+    # Subtest: `--no-exit-zero` overrides `exitZero: true` from the config file
+    ok 10 - `--no-exit-zero` overrides `exitZero: true` from the config file
+      ---
+      duration_ms: 79.520958
+      type: 'test'
+      ...
+    # Subtest: `-e` is the short form for `--no-exit-zero`
+    ok 11 - `-e` is the short form for `--no-exit-zero`
+      ---
+      duration_ms: 80.755917
+      type: 'test'
+      ...
+    # Subtest: Help text lists `-z, --exit-zero` and `-e, --no-exit-zero`
+    ok 12 - Help text lists `-z, --exit-zero` and `-e, --no-exit-zero`
+      ---
+      duration_ms: 63.931667
+      type: 'test'
+      ...
+    1..12
+ok 6 - Exit code
+  ---
+  duration_ms: 894.763666
+  type: 'suite'
+  ...
+# Subtest: Quiet mode
+    # Subtest: Report mode: suppresses the findings and skipped-group detail, keeps the summary table
+    ok 1 - Report mode: suppresses the findings and skipped-group detail, keeps the summary table
+      ---
+      duration_ms: 164.060792
+      type: 'test'
+      ...
+    # Subtest: `--fix --quiet`: suppresses the skipped-group detail listing, keeps the summary bullets
+    ok 2 - `--fix --quiet`: suppresses the skipped-group detail listing, keeps the summary bullets
+      ---
+      duration_ms: 80.808458
+      type: 'test'
+      ...
+    # Subtest: Multi-file `--quiet` run: suppresses each file’s path header, keeps per-file and overall summaries
+    ok 3 - Multi-file `--quiet` run: suppresses each file’s path header, keeps per-file and overall summaries
+      ---
+      duration_ms: 82.801375
+      type: 'test'
+      ...
+    # Subtest: `-q` is the short form for `--quiet`
+    ok 4 - `-q` is the short form for `--quiet`
+      ---
+      duration_ms: 79.074667
+      type: 'test'
+      ...
+    # Subtest: Help text lists `-q, --quiet`
+    ok 5 - Help text lists `-q, --quiet`
+      ---
+      duration_ms: 61.535
+      type: 'test'
+      ...
+    1..5
+ok 7 - Quiet mode
+  ---
+  duration_ms: 468.410125
+  type: 'suite'
+  ...
+# Subtest: Fixtures
+    # Subtest: basic.css reports the expected duplicate count
+    ok 1 - basic.css reports the expected duplicate count
+      ---
+      duration_ms: 78.17575
+      type: 'test'
+      ...
+    # Subtest: media-queries.css only flags the duplicate inside the shared `@media` scope
+    ok 2 - media-queries.css only flags the duplicate inside the shared `@media` scope
+      ---
+      duration_ms: 79.967542
+      type: 'test'
+      ...
+    # Subtest: nesting.css flags the duplicate between nested rules, not against the parent’s own declaration
+    ok 3 - nesting.css flags the duplicate between nested rules, not against the parent’s own declaration
+      ---
+      duration_ms: 77.687375
+      type: 'test'
+      ...
+    # Subtest: layers.css flags the duplicate inside the shared `@layer` block and doesn’t crash on the statement form
+    ok 4 - layers.css flags the duplicate inside the shared `@layer` block and doesn’t crash on the statement form
+      ---
+      duration_ms: 78.253
+      type: 'test'
+      ...
+    # Subtest: hacks.css reports no findings once hack selectors are excluded
+    ok 5 - hacks.css reports no findings once hack selectors are excluded
+      ---
+      duration_ms: 66.808167
+      type: 'test'
+      ...
+    # Subtest: hacks.css reports a finding with `--no-ignore-selectors-defaults`
+    ok 6 - hacks.css reports a finding with `--no-ignore-selectors-defaults`
+      ---
+      duration_ms: 76.78925
+      type: 'test'
+      ...
+    # Subtest: hacks.css reports a finding with `-n`
+    ok 7 - hacks.css reports a finding with `-n`
+      ---
+      duration_ms: 80.637334
+      type: 'test'
+      ...
+    # Subtest: merge-safety.css report mode explains the unsafe group, then closes with the summary table
+    ok 8 - merge-safety.css report mode explains the unsafe group, then closes with the summary table
+      ---
+      duration_ms: 79.136709
+      type: 'test'
+      ...
+    # Subtest: merge-safety.css --fix consolidates the safe pair and skips the unsafe one
+    ok 9 - merge-safety.css --fix consolidates the safe pair and skips the unsafe one
+      ---
+      duration_ms: 80.194167
+      type: 'test'
+      ...
+    # Subtest: `--fix` omits the “unsafe to auto-merge” qualifier when nothing was skipped
+    ok 10 - `--fix` omits the “unsafe to auto-merge” qualifier when nothing was skipped
+      ---
+      duration_ms: 79.170208
+      type: 'test'
+      ...
+    # Subtest: basic.css report mode suggests the byte savings from running `--fix`
+    ok 11 - basic.css report mode suggests the byte savings from running `--fix`
+      ---
+      duration_ms: 79.432916
+      type: 'test'
+      ...
+    # Subtest: aggressive.css finds nothing under default rules, but the report table still quotes the aggressive column
+    ok 12 - aggressive.css finds nothing under default rules, but the report table still quotes the aggressive column
+      ---
+      duration_ms: 69.557834
+      type: 'test'
+      ...
+    # Subtest: aggressive.css lists the aggressive-only duplicate in detail even though report mode ignores `--aggressive`
+    ok 13 - aggressive.css lists the aggressive-only duplicate in detail even though report mode ignores `--aggressive`
+      ---
+      duration_ms: 71.882041
+      type: 'test'
+      ...
+    # Subtest: Rejects bare `--aggressive` without `--fix`
+    ok 14 - Rejects bare `--aggressive` without `--fix`
+      ---
+      duration_ms: 61.494167
+      type: 'test'
+      ...
+    # Subtest: A column reads `n/a`, not `0 B (0.0%)`, when its own mode has 0 findings
+    ok 15 - A column reads `n/a`, not `0 B (0.0%)`, when its own mode has 0 findings
+      ---
+      duration_ms: 71.293958
+      type: 'test'
+      ...
+    # Subtest: A column reads `n/a` when its findings are all unsafe, even though `findings > 0`
+    ok 16 - A column reads `n/a` when its findings are all unsafe, even though `findings > 0`
+      ---
+      duration_ms: 80.777583
+      type: 'test'
+      ...
+    # Subtest: Highlights the best savings column(s) in bold green, excluding `n/a`
+    ok 17 - Highlights the best savings column(s) in bold green, excluding `n/a`
+      ---
+      duration_ms: 161.085667
+      type: 'test'
+      ...
+    # Subtest: Marks nothing when every non-`n/a` column would grow the file
+    ok 18 - Marks nothing when every non-`n/a` column would grow the file
+      ---
+      duration_ms: 76.504625
+      type: 'test'
+      ...
+    # Subtest: Highlights the all-files table’s best column(s) per row, including the `Total` row
+    ok 19 - Highlights the all-files table’s best column(s) per row, including the `Total` row
+      ---
+      duration_ms: 83.54975
+      type: 'test'
+      ...
+    # Subtest: aggressive.css --fix --aggressive merges across the blocks, drops the emptied one, and suggests testing
+    ok 20 - aggressive.css --fix --aggressive merges across the blocks, drops the emptied one, and suggests testing
+      ---
+      duration_ms: 78.680959
+      type: 'test'
+      ...
+    # Subtest: merge-safety.css --fix without `--aggressive` notes what a re-run with it would add
+    ok 21 - merge-safety.css --fix without `--aggressive` notes what a re-run with it would add
+      ---
+      duration_ms: 79.469333
+      type: 'test'
+      ...
+    # Subtest: merge-safety.css -f consolidates the safe pair (short flag)
+    ok 22 - merge-safety.css -f consolidates the safe pair (short flag)
+      ---
+      duration_ms: 78.918042
+      type: 'test'
+      ...
+    1..22
+ok 8 - Fixtures
+  ---
+  duration_ms: 1770.006666
+  type: 'suite'
+  ...
+# Subtest: Parallel runs
+    # Subtest: Report mode: output is identical to the same run on one thread
+    ok 1 - Report mode: output is identical to the same run on one thread
+      ---
+      duration_ms: 202.28525
+      type: 'test'
+      ...
+    # Subtest: `--fix`: output and the files written are identical to the same run on one thread
+    ok 2 - `--fix`: output and the files written are identical to the same run on one thread
+      ---
+      duration_ms: 203.305375
+      type: 'test'
+      ...
+    # Subtest: `--fix --aggressive` and `--fix --savings-only`: identical to the same runs on one thread
+    ok 3 - `--fix --aggressive` and `--fix --savings-only`: identical to the same runs on one thread
+      ---
+      duration_ms: 398.804667
+      type: 'test'
+      ...
+    # Subtest: `--quiet`: identical to the same run on one thread
+    ok 4 - `--quiet`: identical to the same run on one thread
+      ---
+      duration_ms: 208.854167
+      type: 'test'
+      ...
+    # Subtest: Per-file reports stay in file order, however the workers finish
+    ok 5 - Per-file reports stay in file order, however the workers finish
+      ---
+      duration_ms: 204.15775
+      type: 'test'
+      ...
+    # Subtest: Auto: a run over both floors uses the pool with `CSS_DEDUP_WORKERS` unset
+    ok 6 - Auto: a run over both floors uses the pool with `CSS_DEDUP_WORKERS` unset
+      ---
+      duration_ms: 209.765042
+      type: 'test'
+      ...
+    # Subtest: A run under either floor stays on one thread
+    ok 7 - A run under either floor stays on one thread
+      ---
+      duration_ms: 0.049792
+      type: 'test'
+      ...
+    # Subtest: `CSS_DEDUP_WORKERS` overrides both the pool size and the floors
+    ok 8 - `CSS_DEDUP_WORKERS` overrides both the pool size and the floors
+      ---
+      duration_ms: 0.070584
+      type: 'test'
+      ...
+    # Subtest: Auto: the pool leaves one core to the main thread
+    ok 9 - Auto: the pool leaves one core to the main thread
+      ---
+      duration_ms: 0.031542
+      type: 'test'
+      ...
+    # Subtest: A file that fails to parse fails only itself, in place
+    ok 10 - A file that fails to parse fails only itself, in place
+      ---
+      duration_ms: 201.316333
+      type: 'test'
+      ...
+    # Subtest: `CSS_DEDUP_WORKERS` is listed in the help text
+    ok 11 - `CSS_DEDUP_WORKERS` is listed in the help text
+      ---
+      duration_ms: 63.758958
+      type: 'test'
+      ...
+    1..11
+ok 9 - Parallel runs
+  ---
+  duration_ms: 1692.655291
+  type: 'suite'
+  ...
+# Subtest: Deduplication
+    # Subtest: Treats a `)` inside a `/* … */` comment as text when scanning a `min()` call
+    ok 1 - Treats a `)` inside a `/* … */` comment as text when scanning a `min()` call
+      ---
+      duration_ms: 3.165375
+      type: 'test'
+      ...
+    # Subtest: Treats a comma inside a `/* … */` comment as text when sorting `min()` arguments
+    ok 2 - Treats a comma inside a `/* … */` comment as text when sorting `min()` arguments
+      ---
+      duration_ms: 0.067541
+      type: 'test'
+      ...
+    # Subtest: Merges a duplicate declaration into the selector list of the last rule
+    ok 3 - Merges a duplicate declaration into the selector list of the last rule
+      ---
+      duration_ms: 1.869417
+      type: 'test'
+      ...
+    # Subtest: Keeps the shortest equivalent value, regardless of which occurrence it came from
+    ok 4 - Keeps the shortest equivalent value, regardless of which occurrence it came from
+      ---
+      duration_ms: 0.48025
+      type: 'test'
+      ...
+    # Subtest: Prefers the shortest value even when the target rule’s own text is longer
+    ok 5 - Prefers the shortest value even when the target rule’s own text is longer
+      ---
+      duration_ms: 0.465125
+      type: 'test'
+      ...
+    # Subtest: Does not merge across a `var()` case difference
+    ok 6 - Does not merge across a `var()` case difference
+      ---
+      duration_ms: 0.814833
+      type: 'test'
+      ...
+    # Subtest: Merges equivalent `var()` spellings, keeping the shortest
+    ok 7 - Merges equivalent `var()` spellings, keeping the shortest
+      ---
+      duration_ms: 0.31425
+      type: 'test'
+      ...
+    # Subtest: Removes a rule left empty after consolidation
+    ok 8 - Removes a rule left empty after consolidation
+      ---
+      duration_ms: 0.433666
+      type: 'test'
+      ...
+    # Subtest: Preserves other declarations on the merged-from rule
+    ok 9 - Preserves other declarations on the merged-from rule
+      ---
+      duration_ms: 0.350375
+      type: 'test'
+      ...
+    # Subtest: Skips merging when an intervening rule sets the same property
+    ok 10 - Skips merging when an intervening rule sets the same property
+      ---
+      duration_ms: 1.696375
+      type: 'test'
+      ...
+    # Subtest: Consolidates to a fixed point (a merge that creates a twin gets folded in the same run)
+    ok 11 - Consolidates to a fixed point (a merge that creates a twin gets folded in the same run)
+      ---
+      duration_ms: 0.418
+      type: 'test'
+      ...
+    # Subtest: Merges the safe sub-runs of a group an intervening rule splits, still reporting the split
+    ok 12 - Merges the safe sub-runs of a group an intervening rule splits, still reporting the split
+      ---
+      duration_ms: 0.338625
+      type: 'test'
+      ...
+    # Subtest: Merges a safe sub-run even when another occurrence stays alone on the blocker’s far side
+    ok 13 - Merges a safe sub-run even when another occurrence stays alone on the blocker’s far side
+      ---
+      duration_ms: 0.20525
+      type: 'test'
+      ...
+    # Subtest: Merges past an intervening rule whose selector is provably mutually exclusive with the group’s
+    ok 14 - Merges past an intervening rule whose selector is provably mutually exclusive with the group’s
+      ---
+      duration_ms: 0.361
+      type: 'test'
+      ...
+    # Subtest: Still skips when the intervening rule’s selector is not provably exclusive from the group’s
+    ok 15 - Still skips when the intervening rule’s selector is not provably exclusive from the group’s
+      ---
+      duration_ms: 0.110583
+      type: 'test'
+      ...
+    # Subtest: Still skips when the differing attribute sits across a descendant combinator on a repeatable element
+    ok 16 - Still skips when the differing attribute sits across a descendant combinator on a repeatable element
+      ---
+      duration_ms: 0.122167
+      type: 'test'
+      ...
+    # Subtest: Still skips a multi-selector intervening rule if any one of its selectors isn’t provably exclusive
+    ok 17 - Still skips a multi-selector intervening rule if any one of its selectors isn’t provably exclusive
+      ---
+      duration_ms: 0.187625
+      type: 'test'
+      ...
+    # Subtest: Leaves the file untouched when nothing is applied
+    ok 18 - Leaves the file untouched when nothing is applied
+      ---
+      duration_ms: 0.092584
+      type: 'test'
+      ...
+    # Subtest: Never merges selector hack rules
+    ok 19 - Never merges selector hack rules
+      ---
+      duration_ms: 0.078291
+      type: 'test'
+      ...
+    # Subtest: Never merges a rule with a mixed hack/normal selector list, and never drops its hack selector
+    ok 20 - Never merges a rule with a mixed hack/normal selector list, and never drops its hack selector
+      ---
+      duration_ms: 0.062834
+      type: 'test'
+      ...
+    # Subtest: Merges duplicate declarations between nested rules
+    ok 21 - Merges duplicate declarations between nested rules
+      ---
+      duration_ms: 0.190458
+      type: 'test'
+      ...
+    # Subtest: Does not merge across different `@layer` blocks
+    ok 22 - Does not merge across different `@layer` blocks
+      ---
+      duration_ms: 0.244166
+      type: 'test'
+      ...
+    # Subtest: Does not merge duplicates split across two separately-written blocks with the same condition
+    ok 23 - Does not merge duplicates split across two separately-written blocks with the same condition
+      ---
+      duration_ms: 0.1425
+      type: 'test'
+      ...
+    # Subtest: Does not merge duplicates split across two separately-written nesting hosts with the same selector
+    ok 24 - Does not merge duplicates split across two separately-written nesting hosts with the same selector
+      ---
+      duration_ms: 0.102542
+      type: 'test'
+      ...
+    # Subtest: Skips merging when an intervening rule sets an overlapping shorthand/longhand property
+    ok 25 - Skips merging when an intervening rule sets an overlapping shorthand/longhand property
+      ---
+      duration_ms: 0.115333
+      type: 'test'
+      ...
+    # Subtest: Splits a non-target occurrence’s overlapping extra into its own residual rule after the merge
+    ok 26 - Splits a non-target occurrence’s overlapping extra into its own residual rule after the merge
+      ---
+      duration_ms: 0.318375
+      type: 'test'
+      ...
+    # Subtest: Skips merging when an intervening rule sets a property overlapping only via a shared longhand (`border-top`/`border-color`)
+    ok 27 - Skips merging when an intervening rule sets a property overlapping only via a shared longhand (`border-top`/`border-color`)
+      ---
+      duration_ms: 0.122541
+      type: 'test'
+      ...
+    # Subtest: Splits the target (last) occurrence’s own overlapping extra into its own residual rule after the merge
+    ok 28 - Splits the target (last) occurrence’s own overlapping extra into its own residual rule after the merge
+      ---
+      duration_ms: 0.139042
+      type: 'test'
+      ...
+    # Subtest: Splits overlapping extras from multiple group members into residual rules, in their original relative order
+    ok 29 - Splits overlapping extras from multiple group members into residual rules, in their original relative order
+      ---
+      duration_ms: 0.209333
+      type: 'test'
+      ...
+    # Subtest: Coordinates a merge across two entangled groups sharing a single hub rule
+    ok 30 - Coordinates a merge across two entangled groups sharing a single hub rule
+      ---
+      duration_ms: 0.424375
+      type: 'test'
+      ...
+    # Subtest: Coordinates a merge across two entangled groups with unrelated (non-overlapping) properties
+    ok 31 - Coordinates a merge across two entangled groups with unrelated (non-overlapping) properties
+      ---
+      duration_ms: 0.33775
+      type: 'test'
+      ...
+    # Subtest: Keeps a hub declaration sitting between two anchors, as its own residual rule in the same slot
+    ok 32 - Keeps a hub declaration sitting between two anchors, as its own residual rule in the same slot
+      ---
+      duration_ms: 0.264209
+      type: 'test'
+      ...
+    # Subtest: Keeps the file’s blank-line convention for a hub’s split-off piece, even when the hub itself sits last with an anomalous gap
+    ok 33 - Keeps the file’s blank-line convention for a hub’s split-off piece, even when the hub itself sits last with an anomalous gap
+      ---
+      duration_ms: 0.328375
+      type: 'test'
+      ...
+    # Subtest: Folds identical twin rules into one rule with the combined selector list
+    ok 34 - Folds identical twin rules into one rule with the combined selector list
+      ---
+      duration_ms: 0.224875
+      type: 'test'
+      ...
+    # Subtest: Folds three identical twin rules at once
+    ok 35 - Folds three identical twin rules at once
+      ---
+      duration_ms: 0.198125
+      type: 'test'
+      ...
+    # Subtest: Folds twin rules with overlapping properties when their declaration order agrees
+    ok 36 - Folds twin rules with overlapping properties when their declaration order agrees
+      ---
+      duration_ms: 0.125708
+      type: 'test'
+      ...
+    # Subtest: Folds twin rules with non-overlapping properties even when their declaration order differs
+    ok 37 - Folds twin rules with non-overlapping properties even when their declaration order differs
+      ---
+      duration_ms: 0.12725
+      type: 'test'
+      ...
+    # Subtest: Merges entangled rules whose extra declaration overlaps no shared property, leaving the extra behind
+    ok 38 - Merges entangled rules whose extra declaration overlaps no shared property, leaving the extra behind
+      ---
+      duration_ms: 0.31725
+      type: 'test'
+      ...
+    # Subtest: Resolves an entangled group fenced by an overlapping extra across fixed-point passes
+    ok 39 - Resolves an entangled group fenced by an overlapping extra across fixed-point passes
+      ---
+      duration_ms: 0.384667
+      type: 'test'
+      ...
+    # Subtest: Keeps the file’s blank-line convention for a per-group merged rule created after a blocked cluster falls back to sub-run merges
+    ok 40 - Keeps the file’s blank-line convention for a per-group merged rule created after a blocked cluster falls back to sub-run merges
+      ---
+      duration_ms: 0.421292
+      type: 'test'
+      ...
+    # Subtest: Skips a cluster with two candidate hubs (two rules holding every group’s shared declaration)
+    ok 41 - Skips a cluster with two candidate hubs (two rules holding every group’s shared declaration)
+      ---
+      duration_ms: 0.206417
+      type: 'test'
+      ...
+    # Subtest: Merges a chain of entangled groups whose properties don’t overlap, one merged rule per group
+    ok 42 - Merges a chain of entangled groups whose properties don’t overlap, one merged rule per group
+      ---
+      duration_ms: 0.605208
+      type: 'test'
+      ...
+    # Subtest: Resolves an overlap-constrained entangled chain across fixed-point passes
+    ok 43 - Resolves an overlap-constrained entangled chain across fixed-point passes
+      ---
+      duration_ms: 0.227708
+      type: 'test'
+      ...
+    # Subtest: Places a target’s pre-shared extra in a residual before the merge, preserving its original within-rule order
+    ok 44 - Places a target’s pre-shared extra in a residual before the merge, preserving its original within-rule order
+      ---
+      duration_ms: 0.100583
+      type: 'test'
+      ...
+    # Subtest: Keeps the file’s blank-line convention before a target’s post-shared extra residual
+    ok 45 - Keeps the file’s blank-line convention before a target’s post-shared extra residual
+      ---
+      duration_ms: 0.124959
+      type: 'test'
+      ...
+    # Subtest: Keeps the file’s blank-line convention before the merged rule, when a target’s pre-shared extra shifts it down into a residual’s old slot
+    ok 46 - Keeps the file’s blank-line convention before the merged rule, when a target’s pre-shared extra shifts it down into a residual’s old slot
+      ---
+      duration_ms: 0.122833
+      type: 'test'
+      ...
+    # Subtest: Ignores comment-to-rule gaps when voting on the file’s normal separator, even when several outnumber it
+    ok 47 - Ignores comment-to-rule gaps when voting on the file’s normal separator, even when several outnumber it
+      ---
+      duration_ms: 0.217875
+      type: 'test'
+      ...
+    # Subtest: Joins merged selectors on one line by default
+    ok 48 - Joins merged selectors on one line by default
+      ---
+      duration_ms: 0.084541
+      type: 'test'
+      ...
+    # Subtest: Joins merged selectors one per line when that’s the file’s existing convention
+    ok 49 - Joins merged selectors one per line when that’s the file’s existing convention
+      ---
+      duration_ms: 0.239667
+      type: 'test'
+      ...
+    # Subtest: Matches the merged rule’s own indentation when joining selectors one per line
+    ok 50 - Matches the merged rule’s own indentation when joining selectors one per line
+      ---
+      duration_ms: 0.247667
+      type: 'test'
+      ...
+    # Subtest: Reports byte counts before and after consolidation
+    ok 51 - Reports byte counts before and after consolidation
+      ---
+      duration_ms: 0.104917
+      type: 'test'
+      ...
+    # Subtest: Reports zero bytes saved when nothing is applied
+    ok 52 - Reports zero bytes saved when nothing is applied
+      ---
+      duration_ms: 0.067542
+      type: 'test'
+      ...
+    # Subtest: Folds a rule repeating the same selector into the last one, earlier declarations first
+    ok 53 - Folds a rule repeating the same selector into the last one, earlier declarations first
+      ---
+      duration_ms: 0.112625
+      type: 'test'
+      ...
+    # Subtest: Folds three same-selector rules into one
+    ok 54 - Folds three same-selector rules into one
+      ---
+      duration_ms: 0.096458
+      type: 'test'
+      ...
+    # Subtest: Preserves the same-selector cascade when folding (conflicting values keep their order)
+    ok 55 - Preserves the same-selector cascade when folding (conflicting values keep their order)
+      ---
+      duration_ms: 0.093167
+      type: 'test'
+      ...
+    # Subtest: Collapses a duplicate declaration the same-selector fold brings into one rule
+    ok 56 - Collapses a duplicate declaration the same-selector fold brings into one rule
+      ---
+      duration_ms: 0.103792
+      type: 'test'
+      ...
+    # Subtest: Skips a same-selector fold when an intervening rule touches a moved property
+    ok 57 - Skips a same-selector fold when an intervening rule touches a moved property
+      ---
+      duration_ms: 0.087
+      type: 'test'
+      ...
+    # Subtest: Leaves a same-selector rule holding nested rules where it is
+    ok 58 - Leaves a same-selector rule holding nested rules where it is
+      ---
+      duration_ms: 0.069541
+      type: 'test'
+      ...
+    # Subtest: Merges equivalent color spellings, keeping the shortest
+    ok 59 - Merges equivalent color spellings, keeping the shortest
+      ---
+      duration_ms: 0.119084
+      type: 'test'
+      ...
+    # Subtest: Removes an exact duplicate declaration repeated within one rule
+    ok 60 - Removes an exact duplicate declaration repeated within one rule
+      ---
+      duration_ms: 0.079959
+      type: 'test'
+      ...
+    # Subtest: Catches a same-rule duplicate after normalizing case and equivalent zero values
+    ok 61 - Catches a same-rule duplicate after normalizing case and equivalent zero values
+      ---
+      duration_ms: 0.107084
+      type: 'test'
+      ...
+    # Subtest: Removes a declaration repeated within a selector-less at-rule block (`@font-face`)
+    ok 62 - Removes a declaration repeated within a selector-less at-rule block (`@font-face`)
+      ---
+      duration_ms: 0.681
+      type: 'test'
+      ...
+    # Subtest: Keeps the shortest equivalent value among same-rule duplicates
+    ok 63 - Keeps the shortest equivalent value among same-rule duplicates
+      ---
+      duration_ms: 0.077542
+      type: 'test'
+      ...
+    # Subtest: Collapses more than two duplicate occurrences within one rule down to one
+    ok 64 - Collapses more than two duplicate occurrences within one rule down to one
+      ---
+      duration_ms: 0.085
+      type: 'test'
+      ...
+    # Subtest: Never touches a same-rule duplicate on a selector hack rule
+    ok 65 - Never touches a same-rule duplicate on a selector hack rule
+      ---
+      duration_ms: 0.053333
+      type: 'test'
+      ...
+    # Subtest: Cleans up a same-rule duplicate before also merging that rule across the scope
+    ok 66 - Cleans up a same-rule duplicate before also merging that rule across the scope
+      ---
+      duration_ms: 0.123833
+      type: 'test'
+      ...
+    1..66
+ok 10 - Deduplication
+  ---
+  duration_ms: 21.808625
+  type: 'suite'
+  ...
+# Subtest: Minified style sheets
+    # Subtest: Does not introduce a space after the comma when joining selectors in an otherwise minified rule
+    ok 1 - Does not introduce a space after the comma when joining selectors in an otherwise minified rule
+      ---
+      duration_ms: 0.106875
+      type: 'test'
+      ...
+    # Subtest: Does not introduce spaces
+    ok 2 - Does not introduce spaces
+      ---
+      duration_ms: 0.149875
+      type: 'test'
+      ...
+    # Subtest: Preserves the spaced-comma convention when the source already writes selector lists that way
+    ok 3 - Preserves the spaced-comma convention when the source already writes selector lists that way
+      ---
+      duration_ms: 0.089084
+      type: 'test'
+      ...
+    # Subtest: Falls back to spaced commas for singleton-selector rules that already space their braces
+    ok 4 - Falls back to spaced commas for singleton-selector rules that already space their braces
+      ---
+      duration_ms: 0.082584
+      type: 'test'
+      ...
+    1..4
+ok 11 - Minified style sheets
+  ---
+  duration_ms: 0.488375
+  type: 'suite'
+  ...
+# Subtest: Aggressive mode
+    # Subtest: Treats `hsl()` and hex as equivalent (rounding-based)
+    ok 1 - Treats `hsl()` and hex as equivalent (rounding-based)
+      ---
+      duration_ms: 0.52325
+      type: 'test'
+      ...
+    # Subtest: Handles legacy comma `hsla()` and hue units
+    ok 2 - Handles legacy comma `hsla()` and hue units
+      ---
+      duration_ms: 0.162375
+      type: 'test'
+      ...
+    # Subtest: Treats percentage `rgb()` channels as equivalent (rounding-based)
+    ok 3 - Treats percentage `rgb()` channels as equivalent (rounding-based)
+      ---
+      duration_ms: 0.248584
+      type: 'test'
+      ...
+    # Subtest: Treats property aliases as equivalent (`word-wrap`/`overflow-wrap`, `grid-gap`/`gap`)
+    ok 4 - Treats property aliases as equivalent (`word-wrap`/`overflow-wrap`, `grid-gap`/`gap`)
+      ---
+      duration_ms: 0.149625
+      type: 'test'
+      ...
+    # Subtest: Merges a property-alias duplicate, keeping the last occurrence’s spelling
+    ok 5 - Merges a property-alias duplicate, keeping the last occurrence’s spelling
+      ---
+      duration_ms: 0.159625
+      type: 'test'
+      ...
+    # Subtest: Merges across two separately-written same-condition blocks, removing the emptied one
+    ok 6 - Merges across two separately-written same-condition blocks, removing the emptied one
+      ---
+      duration_ms: 0.144667
+      type: 'test'
+      ...
+    # Subtest: Still honors an intervening rule inside the merged scope when merging across blocks
+    ok 7 - Still honors an intervening rule inside the merged scope when merging across blocks
+      ---
+      duration_ms: 0.384375
+      type: 'test'
+      ...
+    # Subtest: Keeps an emptied `@layer` shell (its first appearance sets layer order)
+    ok 8 - Keeps an emptied `@layer` shell (its first appearance sets layer order)
+      ---
+      duration_ms: 0.181083
+      type: 'test'
+      ...
+    # Subtest: Keeps a block that was already empty in the source
+    ok 9 - Keeps a block that was already empty in the source
+      ---
+      duration_ms: 0.069542
+      type: 'test'
+      ...
+    # Subtest: Merges past an intervening rule whose subject compound shares no class with the group’s
+    ok 10 - Merges past an intervening rule whose subject compound shares no class with the group’s
+      ---
+      duration_ms: 0.566208
+      type: 'test'
+      ...
+    # Subtest: Still blocks on an intervening rule sharing a class with the group
+    ok 11 - Still blocks on an intervening rule sharing a class with the group
+      ---
+      duration_ms: 0.198291
+      type: 'test'
+      ...
+    # Subtest: Does not merge across blocks with different conditions
+    ok 12 - Does not merge across blocks with different conditions
+      ---
+      duration_ms: 0.109541
+      type: 'test'
+      ...
+    # Subtest: Does not merge same-selector nesting hosts under different ancestors
+    ok 13 - Does not merge same-selector nesting hosts under different ancestors
+      ---
+      duration_ms: 0.156875
+      type: 'test'
+      ...
+    # Subtest: Never merges across anonymous `@layer` blocks (each is its own layer)
+    ok 14 - Never merges across anonymous `@layer` blocks (each is its own layer)
+      ---
+      duration_ms: 0.173458
+      type: 'test'
+      ...
+    # Subtest: A namespaced type or attribute selector never counts as likely disjoint
+    ok 15 - A namespaced type or attribute selector never counts as likely disjoint
+      ---
+      duration_ms: 0.190916
+      type: 'test'
+      ...
+    # Subtest: Does not treat invalid legacy color syntax as equivalent to a valid color
+    ok 16 - Does not treat invalid legacy color syntax as equivalent to a valid color
+      ---
+      duration_ms: 0.186125
+      type: 'test'
+      ...
+    # Subtest: Clamps out-of-range `rgb()` channels consistently (`300` like `1000`)
+    ok 17 - Clamps out-of-range `rgb()` channels consistently (`300` like `1000`)
+      ---
+      duration_ms: 0.104542
+      type: 'test'
+      ...
+    1..17
+ok 12 - Aggressive mode
+  ---
+  duration_ms: 3.854708
+  type: 'suite'
+  ...
+# Subtest: Savings only
+    # Subtest: Withholds a growing consolidation, returning the style sheet untouched
+    ok 1 - Withholds a growing consolidation, returning the style sheet untouched
+      ---
+      duration_ms: 0.49
+      type: 'test'
+      ...
+    # Subtest: Applies a shrinking consolidation identically to an ungated run
+    ok 2 - Applies a shrinking consolidation identically to an ungated run
+      ---
+      duration_ms: 0.193875
+      type: 'test'
+      ...
+    # Subtest: Composes with aggressive mode (a growing aggressive result is withheld)
+    ok 3 - Composes with aggressive mode (a growing aggressive result is withheld)
+      ---
+      duration_ms: 0.274167
+      type: 'test'
+      ...
+    # Subtest: Applies the merges that pay for themselves and declines only the ones that don’t
+    ok 4 - Applies the merges that pay for themselves and declines only the ones that don’t
+      ---
+      duration_ms: 0.655
+      type: 'test'
+      ...
+    # Subtest: Never grows the style sheet, whichever mix of merges a file offers
+    ok 5 - Never grows the style sheet, whichever mix of merges a file offers
+      ---
+      duration_ms: 0.993709
+      type: 'test'
+      ...
+    # Subtest: Leaves a file untouched when every merge it offers would grow it
+    ok 6 - Leaves a file untouched when every merge it offers would grow it
+      ---
+      duration_ms: 0.102041
+      type: 'test'
+      ...
+    # Subtest: Reports no `withheld` when every merge pays for itself
+    ok 7 - Reports no `withheld` when every merge pays for itself
+      ---
+      duration_ms: 0.1605
+      type: 'test'
+      ...
+    # Subtest: Declining a merge on a nesting host still merges the rules nested inside it
+    ok 8 - Declining a merge on a nesting host still merges the rules nested inside it
+      ---
+      duration_ms: 0.227542
+      type: 'test'
+      ...
+    # Subtest: Weighs each safe run of a blocked group on its own
+    ok 9 - Weighs each safe run of a blocked group on its own
+      ---
+      duration_ms: 0.295541
+      type: 'test'
+      ...
+    # Subtest: Declines an entangled cluster as a whole, leaving the style sheet untouched
+    ok 10 - Declines an entangled cluster as a whole, leaving the style sheet untouched
+      ---
+      duration_ms: 0.329375
+      type: 'test'
+      ...
+    # Subtest: Applies an entangled cluster that pays for itself, exactly as an ungated run does
+    ok 11 - Applies an entangled cluster that pays for itself, exactly as an ungated run does
+      ---
+      duration_ms: 0.611292
+      type: 'test'
+      ...
+    # Subtest: Restores leading whitespace when a declined merge emptied two rules at the top of the file
+    ok 12 - Restores leading whitespace when a declined merge emptied two rules at the top of the file
+      ---
+      duration_ms: 0.431041
+      type: 'test'
+      ...
+    # Subtest: Prices a merge from the rules it touches, not from the whole style sheet
+    ok 13 - Prices a merge from the rules it touches, not from the whole style sheet
+      ---
+      duration_ms: 34.51575
+      type: 'test'
+      ...
+    # Subtest: Declining a merge leaves the merges around it byte-identical to an ungated run
+    ok 14 - Declining a merge leaves the merges around it byte-identical to an ungated run
+      ---
+      duration_ms: 0.329292
+      type: 'test'
+      ...
+    1..14
+ok 13 - Savings only
+  ---
+  duration_ms: 39.748667
+  type: 'suite'
+  ...
+# Subtest: Byte magnitudes
+    # Subtest: States sizes in decimal KB, and in MB past the million-byte line
+    ok 1 - States sizes in decimal KB, and in MB past the million-byte line
+      ---
+      duration_ms: 0.415084
+      type: 'test'
+      ...
+    # Subtest: Falls back to a plain byte count where KB would round to “0.0”, so a small saving doesn’t read as nothing
+    ok 2 - Falls back to a plain byte count where KB would round to “0.0”, so a small saving doesn’t read as nothing
+      ---
+      duration_ms: 11.8005
+      type: 'test'
+      ...
+    # Subtest: Signs both the magnitude and the percentage in a savings cell, and neither for an exact no-op
+    ok 3 - Signs both the magnitude and the percentage in a savings cell, and neither for an exact no-op
+      ---
+      duration_ms: 0.189917
+      type: 'test'
+      ...
+    # Subtest: Signs only the percentage in a summary bullet’s magnitude, and marks `--aggressive` extras as “more bytes”
+    ok 4 - Signs only the percentage in a summary bullet’s magnitude, and marks `--aggressive` extras as “more bytes”
+      ---
+      duration_ms: 0.067333
+      type: 'test'
+      ...
+    # Subtest: Groups thousands, so a large byte count stays readable
+    ok 5 - Groups thousands, so a large byte count stays readable
+      ---
+      duration_ms: 0.09775
+      type: 'test'
+      ...
+    # Subtest: Treats a zero “before” size as 0%, rather than dividing by it
+    ok 6 - Treats a zero “before” size as 0%, rather than dividing by it
+      ---
+      duration_ms: 0.072959
+      type: 'test'
+      ...
+    1..6
+ok 14 - Byte magnitudes
+  ---
+  duration_ms: 13.254041
+  type: 'suite'
+  ...
+# Subtest: Summary clauses
+    # Subtest: Switches verb and conjunction on the direction of the byte delta
+    ok 1 - Switches verb and conjunction on the direction of the byte delta
+      ---
+      duration_ms: 0.217375
+      type: 'test'
+      ...
+    # Subtest: Folds before → after counts into the applied clause, keeping “and” even when the file grew
+    ok 2 - Folds before → after counts into the applied clause, keeping “and” even when the file grew
+      ---
+      duration_ms: 0.201042
+      type: 'test'
+      ...
+    # Subtest: States the overall net with its sign on both figures
+    ok 3 - States the overall net with its sign on both figures
+      ---
+      duration_ms: 0.141708
+      type: 'test'
+      ...
+    # Subtest: Names a declaration count in the aggressive preview, or falls back to “Further consolidation” at zero
+    ok 4 - Names a declaration count in the aggressive preview, or falls back to “Further consolidation” at zero
+      ---
+      duration_ms: 0.210792
+      type: 'test'
+      ...
+    # Subtest: Carries `--savings-only` into the command the aggressive preview suggests
+    ok 5 - Carries `--savings-only` into the command the aggressive preview suggests
+      ---
+      duration_ms: 0.077708
+      type: 'test'
+      ...
+    # Subtest: Quotes the combined total, not just its own delta, in the aggressive preview’s trailing note
+    ok 6 - Quotes the combined total, not just its own delta, in the aggressive preview’s trailing note
+      ---
+      duration_ms: 0.043541
+      type: 'test'
+      ...
+    # Subtest: Pluralizes on the count
+    ok 7 - Pluralizes on the count
+      ---
+      duration_ms: 0.024167
+      type: 'test'
+      ...
+    # Subtest: Sums by an accessor, including over an empty list
+    ok 8 - Sums by an accessor, including over an empty list
+      ---
+      duration_ms: 0.040042
+      type: 'test'
+      ...
+    1..8
+ok 15 - Summary clauses
+  ---
+  duration_ms: 1.118333
+  type: 'suite'
+  ...
+# Subtest: Outcome bullets
+    # Subtest: Reports an all-shrinking split in past tense for `--fix`, with no flag to suggest
+    ok 1 - Reports an all-shrinking split in past tense for `--fix`, with no flag to suggest
+      ---
+      duration_ms: 0.109416
+      type: 'test'
+      ...
+    # Subtest: Recommends the flag in present tense for a preview
+    ok 2 - Recommends the flag in present tense for a preview
+      ---
+      duration_ms: 0.032208
+      type: 'test'
+      ...
+    # Subtest: Uses “and grew” for an applied all-growing split but “but grow” for a preview
+    ok 3 - Uses “and grew” for an applied all-growing split but “but grow” for a preview
+      ---
+      duration_ms: 0.039
+      type: 'test'
+      ...
+    # Subtest: Itemizes a mixed split as a gerund list for `--fix`, with no contrast left to draw
+    ok 4 - Itemizes a mixed split as a gerund list for `--fix`, with no contrast left to draw
+      ---
+      duration_ms: 0.04375
+      type: 'test'
+      ...
+    # Subtest: Adds the `--savings-only` follow-up line only for a mixed preview
+    ok 5 - Adds the `--savings-only` follow-up line only for a mixed preview
+      ---
+      duration_ms: 0.052375
+      type: 'test'
+      ...
+    # Subtest: Lets an aggregate note replace the mixed split’s own net, so two differently-scoped “total:” figures never sit back to back
+    ok 6 - Lets an aggregate note replace the mixed split’s own net, so two differently-scoped “total:” figures never sit back to back
+      ---
+      duration_ms: 0.04525
+      type: 'test'
+      ...
+    # Subtest: Returns “null” when neither side of the split has a file, so the caller prints no bullet at all
+    ok 7 - Returns “null” when neither side of the split has a file, so the caller prints no bullet at all
+      ---
+      duration_ms: 0.0255
+      type: 'test'
+      ...
+    1..7
+ok 16 - Outcome bullets
+  ---
+  duration_ms: 0.409875
+  type: 'suite'
+  ...
+# Subtest: Report table columns
+    # Subtest: Renders a findings cell plus one savings cell per pass
+    ok 1 - Renders a findings cell plus one savings cell per pass
+      ---
+      duration_ms: 0.693667
+      type: 'test'
+      ...
+    # Subtest: Shows `n/a` for a pass that wouldn’t touch the file, but a real figure for a net-zero one that would
+    ok 2 - Shows `n/a` for a pass that wouldn’t touch the file, but a real figure for a net-zero one that would
+      ---
+      duration_ms: 0.044167
+      type: 'test'
+      ...
+    # Subtest: Totals findings and savings across files, against their combined original size
+    ok 3 - Totals findings and savings across files, against their combined original size
+      ---
+      duration_ms: 0.089208
+      type: 'test'
+      ...
+    # Subtest: Marks the Total `n/a` only when every file’s own pass was, since one real merge means something happens in the run
+    ok 4 - Marks the Total `n/a` only when every file’s own pass was, since one real merge means something happens in the run
+      ---
+      duration_ms: 0.054375
+      type: 'test'
+      ...
+    1..4
+ok 17 - Report table columns
+  ---
+  duration_ms: 0.921917
+  type: 'suite'
+  ...
+# Subtest: Report table highlighting
+    # Subtest: Marks the single best column, shifted past the columns preceding the savings ones
+    ok 1 - Marks the single best column, shifted past the columns preceding the savings ones
+      ---
+      duration_ms: 0.109542
+      type: 'test'
+      ...
+    # Subtest: Marks every column in a tie
+    ok 2 - Marks every column in a tie
+      ---
+      duration_ms: 0.031875
+      type: 'test'
+      ...
+    # Subtest: Excludes an `n/a` column from winning and from setting the bar the others are measured against
+    ok 3 - Excludes an `n/a` column from winning and from setting the bar the others are measured against
+      ---
+      duration_ms: 0.027
+      type: 'test'
+      ...
+    # Subtest: Marks nothing when every column grows the file, since growth isn’t an improvement to point at
+    ok 4 - Marks nothing when every column grows the file, since growth isn’t an improvement to point at
+      ---
+      duration_ms: 0.061083
+      type: 'test'
+      ...
+    # Subtest: Still marks an exact no-op, which beats growth
+    ok 5 - Still marks an exact no-op, which beats growth
+      ---
+      duration_ms: 0.02625
+      type: 'test'
+      ...
+    # Subtest: Marks nothing when every column is `n/a`
+    ok 6 - Marks nothing when every column is `n/a`
+      ---
+      duration_ms: 0.023458
+      type: 'test'
+      ...
+    1..6
+ok 18 - Report table highlighting
+  ---
+  duration_ms: 0.368875
+  type: 'suite'
+  ...
+# Subtest: Report table layout
+    # Subtest: Sizes every column from its header and each row’s actual content
+    ok 1 - Sizes every column from its header and each row’s actual content
+      ---
+      duration_ms: 0.172083
+      type: 'test'
+      ...
+    # Subtest: Trims the trailing gutter, so no line carries padding past its last cell
+    ok 2 - Trims the trailing gutter, so no line carries padding past its last cell
+      ---
+      duration_ms: 0.033208
+      type: 'test'
+      ...
+    # Subtest: Keeps columns flush when a highlight is applied
+    ok 3 - Keeps columns flush when a highlight is applied
+      ---
+      duration_ms: 0.2065
+      type: 'test'
+      ...
+    # Subtest: Wraps an over-long cell at the last `/` that fits, rather than widening the table or cutting mid-segment
+    ok 4 - Wraps an over-long cell at the last `/` that fits, rather than widening the table or cutting mid-segment
+      ---
+      duration_ms: 0.130375
+      type: 'test'
+      ...
+    # Subtest: Leaves a cell with no early enough `/` whole, overflowing that one line instead of breaking mid-word
+    ok 5 - Leaves a cell with no early enough `/` whole, overflowing that one line instead of breaking mid-word
+      ---
+      duration_ms: 0.048042
+      type: 'test'
+      ...
+    # Subtest: Widens the wrap column to fit the longest post-wrap tail, so a wrapped row’s later columns stay flush
+    ok 6 - Widens the wrap column to fit the longest post-wrap tail, so a wrapped row’s later columns stay flush
+      ---
+      duration_ms: 0.079041
+      type: 'test'
+      ...
+    # Subtest: Never sizes the wrap column below its own header, however tight the budget
+    ok 7 - Never sizes the wrap column below its own header, however tight the budget
+      ---
+      duration_ms: 0.03575
+      type: 'test'
+      ...
+    # Subtest: Renders without a wrap column when none is asked for, however long a cell is
+    ok 8 - Renders without a wrap column when none is asked for, however long a cell is
+      ---
+      duration_ms: 0.502791
+      type: 'test'
+      ...
+    1..8
+ok 19 - Report table layout
+  ---
+  duration_ms: 1.270666
+  type: 'suite'
+  ...
+# Subtest: File label disambiguation
+    # Subtest: Uses the basename alone when it is already unique
+    ok 1 - Uses the basename alone when it is already unique
+      ---
+      duration_ms: 0.209625
+      type: 'test'
+      ...
+    # Subtest: Extends colliding labels by one segment at a time until each is unique
+    ok 2 - Extends colliding labels by one segment at a time until each is unique
+      ---
+      duration_ms: 0.083792
+      type: 'test'
+      ...
+    # Subtest: Never grows a label that is already unique, so one long outlier path doesn’t drag the others out
+    ok 3 - Never grows a label that is already unique, so one long outlier path doesn’t drag the others out
+      ---
+      duration_ms: 0.056833
+      type: 'test'
+      ...
+    # Subtest: Passes `(stdin)` through untouched
+    ok 4 - Passes `(stdin)` through untouched
+      ---
+      duration_ms: 0.031209
+      type: 'test'
+      ...
+    # Subtest: Stops extending at the path root rather than looping
+    ok 5 - Stops extending at the path root rather than looping
+      ---
+      duration_ms: 0.037292
+      type: 'test'
+      ...
+    1..5
+ok 20 - File label disambiguation
+  ---
+  duration_ms: 0.476791
+  type: 'suite'
+  ...
+# Subtest: Plugin: Analysis
+    # Subtest: Warns about a duplicate declaration
+    ok 1 - Warns about a duplicate declaration
+      ---
+      duration_ms: 5.025542
+      type: 'test'
+      ...
+    # Subtest: Does not touch the CSS in report mode
+    ok 2 - Does not touch the CSS in report mode
+      ---
+      duration_ms: 0.344583
+      type: 'test'
+      ...
+    # Subtest: Warns about a redundant same-rule declaration
+    ok 3 - Warns about a redundant same-rule declaration
+      ---
+      duration_ms: 0.376542
+      type: 'test'
+      ...
+    # Subtest: Warns about a selector written more than once in one scope
+    ok 4 - Warns about a selector written more than once in one scope
+      ---
+      duration_ms: 0.306667
+      type: 'test'
+      ...
+    1..4
+ok 21 - Plugin: Analysis
+  ---
+  duration_ms: 6.583541
+  type: 'suite'
+  ...
+# Subtest: Plugin: Dedup
+    # Subtest: Merges a duplicate declaration in place
+    ok 1 - Merges a duplicate declaration in place
+      ---
+      duration_ms: 1.193667
+      type: 'test'
+      ...
+    # Subtest: Warns about a skipped (unsafe) merge
+    ok 2 - Warns about a skipped (unsafe) merge
+      ---
+      duration_ms: 0.515666
+      type: 'test'
+      ...
+    # Subtest: `savingsOnly: true` leaves the CSS untouched when consolidation would grow it, and warns
+    ok 3 - `savingsOnly: true` leaves the CSS untouched when consolidation would grow it, and warns
+      ---
+      duration_ms: 0.675792
+      type: 'test'
+      ...
+    # Subtest: `savingsOnly: true` still applies a shrinking consolidation
+    ok 4 - `savingsOnly: true` still applies a shrinking consolidation
+      ---
+      duration_ms: 0.478625
+      type: 'test'
+      ...
+    # Subtest: Applies aggressive merges with `aggressive: true`
+    ok 5 - Applies aggressive merges with `aggressive: true`
+      ---
+      duration_ms: 1.200208
+      type: 'test'
+      ...
+    1..5
+ok 22 - Plugin: Dedup
+  ---
+  duration_ms: 4.476792
+  type: 'suite'
+  ...
+# Subtest: Plugin: PostCSS integration
+    # Subtest: Exposes the `postcss: true` marker PostCSS requires to accept the plugin
+    ok 1 - Exposes the `postcss: true` marker PostCSS requires to accept the plugin
+      ---
+      duration_ms: 0.071625
+      type: 'test'
+      ...
+    # Subtest: A later plugin in the same pipeline sees the deduped output
+    ok 2 - A later plugin in the same pipeline sees the deduped output
+      ---
+      duration_ms: 0.324666
+      type: 'test'
+      ...
+    # Subtest: Fix mode is idempotent: A second pass over its own output finds nothing to warn about
+    ok 3 - Fix mode is idempotent: A second pass over its own output finds nothing to warn about
+      ---
+      duration_ms: 0.239875
+      type: 'test'
+      ...
+    1..3
+ok 23 - Plugin: PostCSS integration
+  ---
+  duration_ms: 0.688417
+  type: 'suite'
+  ...
+1..23
+# tests 377
+# suites 23
+# pass 377
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10456.907458

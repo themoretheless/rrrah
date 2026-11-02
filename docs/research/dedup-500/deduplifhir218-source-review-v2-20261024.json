@@ -1,0 +1,317 @@
+{
+  "index": 218,
+  "repository": "DSACMS/dedupliFHIR",
+  "commit": "2b3279c656c10402e57c87fee5ae0c09eed3d44a",
+  "tracked_blob_count": 70,
+  "whole_file_reads": [
+    {
+      "path": "cli/deduplifhirLib/normalization.py",
+      "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/04-normalization.py",
+      "sha256": "8d664d9ac025071122a46dc7766267520e758450313c155f07314663a066c604",
+      "git_blob_sha1": "f98597e4f1a5505ec502e09bd00f9617581da640"
+    },
+    {
+      "path": "cli/ecqm_dedupe.py",
+      "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/02-ecqm_dedupe.py",
+      "sha256": "0af580566c1240db03416c2e377891b0ab4c714c985dcd269c1a9b260288f929",
+      "git_blob_sha1": "42bd62a6a87d97256daacc3431c5fa0e29bffd4f"
+    },
+    {
+      "path": "cli/deduplifhirLib/settings.py",
+      "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/06-settings.py",
+      "sha256": "a271ffcb79d84a14cccd2dcdfc772e985f97f55cf458a88d5753211109ebefed",
+      "git_blob_sha1": "161462375c0e4aa25f6038d9360b2cdb418b0410"
+    },
+    {
+      "path": "cli/deduplifhirLib/__init__.py",
+      "local": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/03-__init__.py",
+      "sha256": "999bd46304716c6334eb7de10b6669e51dd4913593949cd2259f70b6ac530045",
+      "git_blob_sha1": "4d4db51a6d21b2237edf2a64ec85e57c4dc167fe"
+    }
+  ],
+  "whole_file_read_count": 4,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "original_tests_run": 0,
+  "authored_pure_controls_passed": 6,
+  "control_receipt": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/normalization-controls-20261024.json",
+  "decision": "reject-domain",
+  "findings": [
+    "Original regex-based name normalization deletes non-ASCII letters and punctuation; distinct inputs collapse. Verified with four isolated original-function controls.",
+    "Abbreviation matching requires surrounding spaces, so prefix Dr differs from interior Dr.",
+    "No dates, patient data processing, clinical interpretation, external API, or production file mutation performed.",
+    "Inventory contains PDFs, PNG, ICNS and SVG plus generated locks and sample CSV; these remain unreviewed, not counted as viewed.",
+    "parse_fhir_dates reverses enumerate variables, treating integer index as address; one-address input raises TypeError. Multiple address dicts fail sorted before normalization. Two synthetic isolated controls reproduced errors.",
+    "read_fhir_data accesses misspelled resouce for middle name and catches only IndexError; normal resource object can raise KeyError. Static, not executed.",
+    "CLI clusters predictions at0.95 then chooses first row per cluster for uniques cache, while requested output exports full mapping. Cluster membership is not byte equality.",
+    "Cache files use fixed global temp names and are written before output extension validation; no atomic publication or per-run isolation visible. Static review only."
+  ],
+  "remaining": [
+    {
+      "path": ".env",
+      "bytes": 17
+    },
+    {
+      "path": ".flake8",
+      "bytes": 150
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "bytes": 660
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "bytes": 759
+    },
+    {
+      "path": ".github/SUPPORT.md",
+      "bytes": 584
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "bytes": 300
+    },
+    {
+      "path": ".github/workflows/auto_merge.yml",
+      "bytes": 617
+    },
+    {
+      "path": ".github/workflows/checks.yml",
+      "bytes": 1704
+    },
+    {
+      "path": ".github/workflows/linux_release.yml",
+      "bytes": 4308
+    },
+    {
+      "path": ".github/workflows/repoHygieneCheck.yml",
+      "bytes": 2238
+    },
+    {
+      "path": ".github/workflows/updateCodeJSON.yml",
+      "bytes": 637
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 1212
+    },
+    {
+      "path": ".pylintrc",
+      "bytes": 270
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 1333
+    },
+    {
+      "path": "CODEOWNERS.md",
+      "bytes": 413
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "bytes": 1680
+    },
+    {
+      "path": "COMMUNITY_GUIDELINES.md",
+      "bytes": 2823
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 7375
+    },
+    {
+      "path": "GOVERNANCE.md",
+      "bytes": 398
+    },
+    {
+      "path": "ISSUE_TEMPLATE.md",
+      "bytes": 346
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 7048
+    },
+    {
+      "path": "MAINTAINERS.md",
+      "bytes": 1237
+    },
+    {
+      "path": "Makefile",
+      "bytes": 177
+    },
+    {
+      "path": "PULL_REQUEST_TEMPLATE.md",
+      "bytes": 1464
+    },
+    {
+      "path": "README.md",
+      "bytes": 10647
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 1190
+    },
+    {
+      "path": "cli/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "cli/deduplifhirLib/splink_settings.json",
+      "bytes": 213
+    },
+    {
+      "path": "cli/deduplifhirLib/tests/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "cli/deduplifhirLib/tests/duplicate_data_generator.py",
+      "bytes": 9704
+    },
+    {
+      "path": "cli/deduplifhirLib/tests/main_test.py",
+      "bytes": 8558
+    },
+    {
+      "path": "cli/deduplifhirLib/tests/test_data.csv",
+      "bytes": 94796
+    },
+    {
+      "path": "cli/deduplifhirLib/tests/test_data_columns.json",
+      "bytes": 1799
+    },
+    {
+      "path": "cli/deduplifhirLib/utils.py",
+      "bytes": 7804
+    },
+    {
+      "path": "code.json",
+      "bytes": 2278
+    },
+    {
+      "path": "docs/deduplifhir_aco_conversation_guide.pdf",
+      "bytes": 57084
+    },
+    {
+      "path": "example-spdx-headers.md",
+      "bytes": 1082
+    },
+    {
+      "path": "frontend/assets/DedupliFHIR-Icon-Linux.png",
+      "bytes": 73637
+    },
+    {
+      "path": "frontend/assets/DedupliFHIR-Icon-MacOS.icns",
+      "bytes": 281574
+    },
+    {
+      "path": "frontend/assets/DedupliFHIR-Icon-Windows.icns",
+      "bytes": 211751
+    },
+    {
+      "path": "frontend/assets/logo-cms.svg",
+      "bytes": 6453
+    },
+    {
+      "path": "frontend/constants.js",
+      "bytes": 286
+    },
+    {
+      "path": "frontend/css/style.css",
+      "bytes": 1208
+    },
+    {
+      "path": "frontend/eslint.config.mjs",
+      "bytes": 556
+    },
+    {
+      "path": "frontend/index.html",
+      "bytes": 2890
+    },
+    {
+      "path": "frontend/main.js",
+      "bytes": 4420
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "bytes": 351899
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 1588
+    },
+    {
+      "path": "frontend/pages/error.html",
+      "bytes": 1000
+    },
+    {
+      "path": "frontend/pages/loading.html",
+      "bytes": 529
+    },
+    {
+      "path": "frontend/pages/success.html",
+      "bytes": 2039
+    },
+    {
+      "path": "frontend/preload.js",
+      "bytes": 337
+    },
+    {
+      "path": "frontend/renderer/renderer-success.js",
+      "bytes": 985
+    },
+    {
+      "path": "frontend/renderer/renderer.js",
+      "bytes": 1015
+    },
+    {
+      "path": "frontend/tests/frontend.spec.js",
+      "bytes": 6143
+    },
+    {
+      "path": "insert_license_headers.sh",
+      "bytes": 503
+    },
+    {
+      "path": "poetry.lock",
+      "bytes": 106772
+    },
+    {
+      "path": "poetry.toml",
+      "bytes": 46
+    },
+    {
+      "path": "profile/README.md",
+      "bytes": 2477
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 668
+    },
+    {
+      "path": "pytest.ini",
+      "bytes": 0
+    },
+    {
+      "path": "repolinter.json",
+      "bytes": 7883
+    },
+    {
+      "path": "research/sept-2024/ACO-Coordinator-P2P-meeting_9-5-2024.pptx.pdf",
+      "bytes": 999388
+    },
+    {
+      "path": "research/sept-2024/how-to-find-possible-duplicates.md",
+      "bytes": 1592
+    },
+    {
+      "path": "research/sept-2024/request-for-ACO-participants.md",
+      "bytes": 31
+    },
+    {
+      "path": "set-up-python-env.sh",
+      "bytes": 45
+    }
+  ],
+  "address_control_receipt": "docs/research/dedup-500/evidence/DSACMS--dedupliFHIR/address-parser-controls-20261024.json",
+  "previous_audit": "docs/research/dedup-500/deduplifhir218-source-review-v1-20261024.json"
+}

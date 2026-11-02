@@ -1,0 +1,9 @@
+{
+  "controls_passed": 3,
+  "scope": "Unchanged MinHash/shingles modules;Node22.23.4 native TS stripping;malformed buffer/direct primitive and schema-permitted minWords1/ngram10 configuration;full application and DB not run",
+  "findings": [
+    "One-word signatures deserialized as192 permutations yield191/192 similarity despite differing stored value;undefined tail comparisons counted.",
+    "Two different two-word texts with ngram10,minWords1 yield empty shingle sets and matching initial signatures1;caller filtering not qualified.",
+    "Direct zero-permutation constructor yields NaN;app schema min16 blocks this value."
+  ]
+}

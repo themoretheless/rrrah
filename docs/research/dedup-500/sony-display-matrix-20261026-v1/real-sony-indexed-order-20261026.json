@@ -1,0 +1,158 @@
+{
+  "binary_sha256": "3d3991888c640072533dc75c1f507ddb4c13052fb89f4468942e32ca08b2eb75",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+  },
+  "rows": [
+    {
+      "order": "reverse",
+      "input_order": [
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw"
+      ],
+      "exit_code": 0,
+      "seconds": 24.928515583043918,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-indexed-order-reverse-20261026.log",
+      "log_sha256": "9cbbf3ab81bddf28750dfa489051fd20a42057736ce6a508e3ee813bd4bbfa90",
+      "pairs": [
+        {
+          "left": 1,
+          "right": 2,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 1,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "candidate": true,
+          "geometry": true
+        }
+      ],
+      "expected": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "managed_released": true,
+      "issues_empty": true,
+      "managed_peak_bytes": 1404919168,
+      "managed_peak_mib": 1339.8353271484375,
+      "normalised_accepted_scenes": [
+        "2414",
+        "2418"
+      ]
+    },
+    {
+      "order": "interleaved",
+      "input_order": [
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw"
+      ],
+      "exit_code": 0,
+      "seconds": 25.087037625024095,
+      "stable": true,
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-indexed-order-interleaved-20261026.log",
+      "log_sha256": "cedf32649bcce71872d99e6f4d1dd2d3248377d6239ee0a3bc8af8af4691fd0b",
+      "pairs": [
+        {
+          "left": 1,
+          "right": 2,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 1,
+          "right": 3,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 1,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 3,
+          "candidate": false,
+          "geometry": false
+        },
+        {
+          "left": 2,
+          "right": 4,
+          "candidate": true,
+          "geometry": true
+        },
+        {
+          "left": 3,
+          "right": 4,
+          "candidate": false,
+          "geometry": false
+        }
+      ],
+      "expected": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "managed_released": true,
+      "issues_empty": true,
+      "managed_peak_bytes": 1404919168,
+      "managed_peak_mib": 1339.8353271484375,
+      "normalised_accepted_scenes": [
+        "2414",
+        "2418"
+      ]
+    }
+  ],
+  "same_binary_forward_control": "real-sony-indexed-white-anchor-20261026.json",
+  "scope": "Same-binary four-file collection order controls: reversed and interleaved orders, including TIFF-first RAW comparisons. Both expected physical scene pairs retained, all cross-scene candidates rejected, input hashes stable and managed memory released.",
+  "limitations": [
+    "Finite two-scene collection, not broad recall or precision.",
+    "Candidate membership invariant does not imply identical geometry coefficients or residual counts.",
+    "Managed peak depends on decode order; these are observations, not allocator RSS or performance qualification."
+  ]
+}

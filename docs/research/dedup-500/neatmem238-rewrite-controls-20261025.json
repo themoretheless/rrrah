@@ -1,0 +1,18 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original rewrite module AST with dependency imports omitted and simple response/prompt adapters; no model/provider/network. Direct function inputs; caller validation unreviewed.",
+  "authored_controls": [
+    {
+      "name": "valid JSON array raises outside fallback catch",
+      "passed": true
+    },
+    {
+      "name": "expansions stringify objects and retain uncapped string length",
+      "passed": true
+    },
+    {
+      "name": "zero context budget keeps whole newest turn through negative-zero slice",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# Example compose file
+
+services:
+  hydrusvideodeduplicator:
+    build: .
+    container_name: hydrusvideodeduplicator
+    volumes:
+      - ./db:/usr/src/app/db          # Database directory
+    # - <cert file>:/usr/src/app/cert # Optional, SSL cert
+    environment:
+      HYDRUS_API_KEY: <your key>
+    # HYDRUS_API_URL: http://localhost:45869 # Optional, default is Docker host
+    # HYDRUS_QUERY: '["system:limit is 2", "character:edward"]' # Optional, JSON array of search parameters
+    # VERBOSE: 'true'
+    # See full list of options on the wiki
+
+    # If default API_URL does not connect to Hydrus on Docker host,
+    # try using network_mode: host and set API_URL to http://localhost:45869
+    network_mode: host

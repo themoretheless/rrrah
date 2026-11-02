@@ -1,0 +1,14 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test raw_selected",
+  "passed": 4,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-sensor-first-reflected-cancel-20261026.log",
+  "log_sha256": "5f0f22141c5e86be13994b7f0d5c108884b8f14139cc6847bbfc512ea38a3010",
+  "test_source_sha256": "3f0fdbac6d3185b20476a43adf45b66415e64ae40f12a39a343da17155550c4f",
+  "scope": "Authored mixed DNG/BMP budget regression expanded to ordinary and reflected pair APIs, both caller orders. Each of four paths succeeds under the isolated-RAW-derived cap, checks one-shot cancellation at first/middle/final baseline callback, requires exact LocalFileError::Cancelled with zero retained managed memory, then retries successfully. Independent original raster-first overlap still refuses allocation.",
+  "cancellation_attempts": 12,
+  "limitations": [
+    "Sampled cancellation positions, not exhaustive per-callback qualification.",
+    "Tiny fixture deliberately has no geometry; this proves resource and lifecycle behavior, not visual recall or precision."
+  ]
+}

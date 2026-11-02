@@ -1,0 +1,38 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 16.57s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 15 tests
+test raster::tiff_fax::cursor_decode_benchmark::native_group4_cursor_alternating_benchmark ... ignored, paired complete borrowed-source TIFF decode benchmark; excludes file I/O and display
+test raster::tiff_fax::mixed::tests::bit_window_alternating_microbenchmark ... ignored, isolated CPU bit-window microbenchmark; no viewer/FPS claim
+test raster::tiff_fax::mixed::tests::dense_group4_reference_cursor_alternating_benchmark ... ignored, paired real compressed-strip row-decoder benchmark; no file-open/FPS claim
+test raster::tiff_fax::mixed::tests::cancellation_between_lookup_and_consumption_keeps_position ... ok
+test raster::tiff_fax::mixed::tests::rle_rows_align_ignore_padding_and_refuse_incomplete_or_overwide_runs ... ok
+test raster::tiff_fax::mixed::tests::mixed_rows_require_full_eol_first_1d_exact_runs_and_real_consumption ... ok
+test raster::tiff_fax::mixed::tests::word_aligned_rle_rows_consume_real_padding_and_reset_per_strip ... ok
+test raster::tiff_fax::mixed_admission_tests::mixed_source_tight_budget_cancel_and_uncompressed_refusal_release_all_credit ... ok
+test raster::tiff_fax::group4_refusal_tests::group4_premature_end_options_and_tight_admission_do_not_publish_partial_pixels ... ok
+test raster::tiff_fax::rle_admission_tests::rle_budget_inverse_photometric_and_invalid_strips_preserve_all_credit ... ok
+test raster::tiff_fax::refusal_tests::fax3_refusals_preserve_budget_and_no_missing_rows_are_synthesized ... ok
+test raster::tiff_fax::tests::original_go_fax3_matches_pillow_with_budget_and_rejection ... ok
+test raster::tiff_fax::mixed::tests::reference_cursor_matches_binary_search_for_every_dense_row_and_consumed_bit ... ok
+test raster::tiff_fax::mixed::tests::three_byte_windows_match_bitwise_reference_at_all_alignments_and_eof ... ok
+test raster::tiff_fax::reference_tests::libtiff_fax3_multistrip_fill_endian_and_orientation_match_oracles ... ok
+
+test result: ok. 12 passed; 0 failed; 3 ignored; 0 measured; 243 filtered out; finished in 0.04s

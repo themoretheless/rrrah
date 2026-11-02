@@ -1,0 +1,74 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "sipcode120-source-review-v28-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/lib/starNudge.ts",
+      "local": "install-src_lib_starNudge.ts",
+      "git_blob": "b5b349a06dfee51375d713d85650ba6de22d1c77",
+      "sha256": "81815ec9fec022e0f4ff8653700cb83d158c4174734a3f36568fbcb3c1aa28e6",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/hygiene/settingsJson.ts",
+      "local": "install-src_modules_hygiene_settingsJson.ts",
+      "git_blob": "cb38231349f11f2941261c72dee61deb18d7676c",
+      "sha256": "ab9cfe2aada12e9594751210cbdbc07b010f4215e7661fb72c8dc08131d28f47",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/hygiene/types.ts",
+      "local": "install-src_modules_hygiene_types.ts",
+      "git_blob": "a9e99ba18282447ddd82198ce4a101888ece5c16",
+      "sha256": "01030b2c24777b265b18527cc53e953c19be7273b6d20f110e356f0d9618436c",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/install.ts",
+      "local": "install-src_modules_proxy_install.ts",
+      "git_blob": "13f3efac035bef7165c92d4e5faab3364b0367d5",
+      "sha256": "28ba8a57a06c76f2dedff9a8c2a4c88776af60c3babc563fe4fe82f1cd7916e0",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/integration/proxy-install-roundtrip.test.ts",
+      "local": "install-tests_integration_proxy-install-roundtrip.test.ts",
+      "git_blob": "45fc806a6927c14c45de8fa805863903bab21193",
+      "sha256": "0cf95e0fd7148b07d2a654c63a754c8d5ed9f0948dd08062bb5f337c996ee0c4",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/hygiene/settingsJson.test.ts",
+      "local": "install-tests_modules_hygiene_settingsJson.test.ts",
+      "git_blob": "f98a03f872cd25b93da1fc07b83c1fdb1a7b9505",
+      "sha256": "3dea14525671106a22873f672b00223f10426137678a2b88be7f4e16c63fd79d",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/proxy-command.test.ts",
+      "local": "install-tests_modules_proxy_proxy-command.test.ts",
+      "git_blob": "af689e6a39785e7f874c32e1710f442d778b16ae",
+      "sha256": "b3eb023447356169b93a6da1ef83d83f0a1151d03aa2e2a355a459b0eede2c0a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 106,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "new_original_tests_distinct": 33,
+  "original_tests_distinct_passed_total": 393,
+  "new_authored_controls_passed": 3,
+  "authored_upstream_controls_total_distinct": 62,
+  "findings": [
+    "Original install replaces malformed settings with fresh object and returns success on owned filesystem.",
+    "Reinstall and uninstall remove foreign hook sharing same matcher entry as sipcode hook."
+  ],
+  "scope": "Original sources and tests, Vitest2.1.9;owned filesystem only;generated installed hook not executed here;no user settings touched.",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred",
+  "harness_setup_failures": [
+    "Initial command module missing from isolated runtime;copied previously reviewed pinned module.",
+    "Initial own temporary directory parent incorrect;corrected before three controls passed."
+  ]
+}

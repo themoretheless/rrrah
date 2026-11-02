@@ -1,0 +1,35 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 56.28s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 1 test
+
+thread 'raster::tiff_fax::reference_tests::libtiff_fax3_multistrip_fill_endian_and_orientation_match_oracles' (49949182) panicked at crates/rrrah-decode/src/tiff_fax.rs:201:73:
+fax2w-wl-fill1-opt0-ori1.tiff: The decoder for Tiff does not support the format features compression method Unknown(32771) is unsupported
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster::tiff_fax::reference_tests::libtiff_fax3_multistrip_fill_endian_and_orientation_match_oracles ... FAILED
+
+failures:
+
+failures:
+    raster::tiff_fax::reference_tests::libtiff_fax3_multistrip_fill_endian_and_orientation_match_oracles
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 256 filtered out; finished in 0.26s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

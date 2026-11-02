@@ -1,0 +1,110 @@
+{
+  "repository": "wh1le/better-web",
+  "commit": "7ec8505c13971ee34e133d3b6922f96ab931cd45",
+  "scope": "AST extracted original bodies; stdlib temporary inputs. No MinHash/LSH dependency, browser, model, CLI or network run.",
+  "original_callbacks": 6,
+  "authored_controls": 8,
+  "results": [
+    {
+      "name": "test_parse_ublacklist_wildcard",
+      "kind": "original isolated callback",
+      "passed": true
+    },
+    {
+      "name": "test_parse_ublacklist_plain",
+      "kind": "original isolated callback",
+      "passed": true
+    },
+    {
+      "name": "test_parse_ublacklist_comment",
+      "kind": "original isolated callback",
+      "passed": true
+    },
+    {
+      "name": "test_parse_ublacklist_empty",
+      "kind": "original isolated callback",
+      "passed": true
+    },
+    {
+      "name": "test_load_blocklist_file",
+      "kind": "original isolated callback",
+      "passed": true
+    },
+    {
+      "name": "test_load_blocklist_missing",
+      "kind": "original isolated callback",
+      "passed": true
+    },
+    {
+      "name": "case whitespace normalization",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": [
+        "ab",
+        "bc",
+        "cd"
+      ]
+    },
+    {
+      "name": "empty text creates empty-string shingle",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": [
+        ""
+      ]
+    },
+    {
+      "name": "zero size creates empty-string shingle",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": [
+        ""
+      ]
+    },
+    {
+      "name": "negative size accepted without validation",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": [
+        "",
+        "ab"
+      ]
+    },
+    {
+      "name": "different query resources collapse",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": [
+        {
+          "url": "https://x.test/watch?v=1"
+        }
+      ]
+    },
+    {
+      "name": "explicit port bypasses bare-domain match",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": false
+    },
+    {
+      "name": "rewrite also changes path",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": "https://example.com/old.reddit.com"
+    },
+    {
+      "name": "200 chars included in digest but not stats",
+      "kind": "authored isolated control",
+      "passed": true,
+      "observed": {
+        "file": "x.json",
+        "query": "q",
+        "total": 1,
+        "usable": 0,
+        "filtered": 0,
+        "chars": 0,
+        "tokens": 0
+      }
+    }
+  ]
+}

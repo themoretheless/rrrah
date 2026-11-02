@@ -1,0 +1,66 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 30.78s
+     Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
+
+running 1 test
+test first30_remaining::foreground_submit_contention_pairs ... FOREGROUND_PAIR control=true pair=0 mode=1 iterations=2000 total_ns=1264708 p50_ns=416 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=0 mode=0 iterations=2000 total_ns=1236667 p50_ns=417 p95_ns=1084 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=1 mode=0 iterations=2000 total_ns=1301000 p50_ns=417 p95_ns=1083 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=1 mode=1 iterations=2000 total_ns=1307167 p50_ns=417 p95_ns=1083 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=2 mode=1 iterations=2000 total_ns=1273125 p50_ns=417 p95_ns=1125 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=2 mode=0 iterations=2000 total_ns=1272292 p50_ns=417 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=3 mode=0 iterations=2000 total_ns=1343625 p50_ns=417 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=3 mode=1 iterations=2000 total_ns=1358042 p50_ns=458 p95_ns=1167 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=4 mode=1 iterations=2000 total_ns=1368833 p50_ns=458 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=4 mode=0 iterations=2000 total_ns=1282416 p50_ns=417 p95_ns=1041 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=5 mode=0 iterations=2000 total_ns=1305250 p50_ns=417 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=5 mode=1 iterations=2000 total_ns=1424542 p50_ns=459 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=6 mode=1 iterations=2000 total_ns=1360000 p50_ns=458 p95_ns=1084 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=6 mode=0 iterations=2000 total_ns=1320458 p50_ns=458 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=7 mode=0 iterations=2000 total_ns=1323292 p50_ns=458 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=7 mode=1 iterations=2000 total_ns=1335083 p50_ns=458 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=8 mode=1 iterations=2000 total_ns=1346666 p50_ns=458 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=8 mode=0 iterations=2000 total_ns=1343167 p50_ns=417 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=9 mode=0 iterations=2000 total_ns=1343625 p50_ns=417 p95_ns=1083 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=true pair=9 mode=1 iterations=2000 total_ns=1337584 p50_ns=417 p95_ns=1125 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=0 mode=1 iterations=2000 total_ns=1352292 p50_ns=459 p95_ns=1083 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=0 mode=0 iterations=2000 total_ns=2017083 p50_ns=708 p95_ns=1500 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=1 mode=0 iterations=2000 total_ns=1898000 p50_ns=666 p95_ns=1500 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=1 mode=1 iterations=2000 total_ns=1339875 p50_ns=459 p95_ns=1084 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=2 mode=1 iterations=2000 total_ns=1335583 p50_ns=458 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=2 mode=0 iterations=2000 total_ns=2042167 p50_ns=708 p95_ns=1500 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=3 mode=0 iterations=2000 total_ns=1992000 p50_ns=708 p95_ns=1458 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=3 mode=1 iterations=2000 total_ns=1357083 p50_ns=458 p95_ns=1167 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=4 mode=1 iterations=2000 total_ns=1379916 p50_ns=458 p95_ns=1125 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=4 mode=0 iterations=2000 total_ns=1979125 p50_ns=708 p95_ns=1500 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=5 mode=0 iterations=2000 total_ns=1757375 p50_ns=625 p95_ns=1459 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=5 mode=1 iterations=2000 total_ns=1305750 p50_ns=417 p95_ns=1166 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=6 mode=1 iterations=2000 total_ns=1386959 p50_ns=500 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=6 mode=0 iterations=2000 total_ns=2091000 p50_ns=708 p95_ns=1417 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=7 mode=0 iterations=2000 total_ns=2025209 p50_ns=667 p95_ns=1541 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=7 mode=1 iterations=2000 total_ns=1342875 p50_ns=458 p95_ns=1125 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=8 mode=1 iterations=2000 total_ns=1403667 p50_ns=500 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=8 mode=0 iterations=2000 total_ns=2040750 p50_ns=709 p95_ns=1417 lock_p50_ns=0 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=9 mode=0 iterations=2000 total_ns=2067333 p50_ns=750 p95_ns=1417 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+FOREGROUND_PAIR control=false pair=9 mode=1 iterations=2000 total_ns=1358167 p50_ns=458 p95_ns=1125 lock_p50_ns=41 lock_p95_ns=42 latest_exact=true
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 437 filtered out; finished in 0.15s
+

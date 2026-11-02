@@ -1,0 +1,72 @@
+TAP version 13
+# Subtest: Jev scope leaves ordinary DCP active elsewhere while preserving independent pins
+ok 1 - Jev scope leaves ordinary DCP active elsewhere while preserving independent pins
+  ---
+  duration_ms: 6.0325
+  type: 'test'
+  ...
+# Subtest: unresolvable Jev project scope holds pruning closed
+ok 2 - unresolvable Jev project scope holds pruning closed
+  ---
+  duration_ms: 0.676583
+  type: 'test'
+  ...
+# Subtest: fixture comparison measures both potential reduction and conservative retention overhead
+ok 3 - fixture comparison measures both potential reduction and conservative retention overhead
+  ---
+  duration_ms: 156.105583
+  type: 'test'
+  ...
+# {"schema":"jev-fixture-comparison/v1","scenario":"approved-obsolete","serializedFixtureTokenEstimates":{"original":655,"currentDcp":655,"proposed":362},"singleRunTransformMs":{"currentDcp":0.04625000000000057,"proposed":0.149084000000002},"mockedRequests":1,"protectedFixturePreserved":true,"realAccuracyCostCacheAndWorkflowLatency":"not measured"}
+# {"schema":"jev-fixture-comparison/v1","scenario":"unapproved-duplicate","serializedFixtureTokenEstimates":{"original":1115,"currentDcp":818,"proposed":818},"singleRunTransformMs":{"currentDcp":1.3514590000000055,"proposed":0.14112499999998818},"mockedRequests":0,"protectedFixturePreserved":true,"realAccuracyCostCacheAndWorkflowLatency":"not measured"}
+# Subtest: disabled, unknown, declined and no-candidate paths perform zero inference
+ok 4 - disabled, unknown, declined and no-candidate paths perform zero inference
+  ---
+  duration_ms: 3.797625
+  type: 'test'
+  ...
+# Subtest: one approved batch scores once, omits only its body, and repeated hooks do not recount inference
+ok 5 - one approved batch scores once, omits only its body, and repeated hooks do not recount inference
+  ---
+  duration_ms: 2.2055
+  type: 'test'
+  ...
+# Subtest: pins, source changes and input invalidation defeat low scores
+ok 6 - pins, source changes and input invalidation defeat low scores
+  ---
+  duration_ms: 2.142791
+  type: 'test'
+  ...
+# Subtest: a new explicit brief invalidates previous-task scores even when the new disclosure is declined
+ok 7 - a new explicit brief invalidates previous-task scores even when the new disclosure is declined
+  ---
+  duration_ms: 2.197208
+  type: 'test'
+  ...
+# Subtest: unscored results are neither protected nor omitted, leaving deterministic strategies free
+ok 8 - unscored results are neither protected nor omitted, leaving deterministic strategies free
+  ---
+  duration_ms: 1.274208
+  type: 'test'
+  ...
+# Subtest: late responses and changed payload scope stay retained
+ok 9 - late responses and changed payload scope stay retained
+  ---
+  duration_ms: 2.9015
+  type: 'test'
+  ...
+# Subtest: partial, overridden, instruction-bearing, symlinked and unmatched output is ineligible
+ok 10 - partial, overridden, instruction-bearing, symlinked and unmatched output is ineligible
+  ---
+  duration_ms: 1.557583
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 284.267125

@@ -10,12 +10,22 @@ fn sixty_tied_candidates_survive_with_inclusive_distance_boundaries() {
         mean_linear_rgb: [0.5; 3],
         luminance_stddev: 0.2,
     };
-    let mut entries = (0..60_u64)
-        .map(|id| (id, query.clone()))
-        .collect::<Vec<_>>();
+    let mut entries = (0..60_u64).map(|id| (id, query.clone())).collect::<Vec<_>>();
     // Each of four channels contributes one or two differing bits.
-    entries.push((100, Fingerprint { variants: [[1; 4]; 8], ..query.clone() }));
-    entries.push((u64::MAX, Fingerprint { variants: [[3; 4]; 8], ..query.clone() }));
+    entries.push((
+        100,
+        Fingerprint {
+            variants: [[1; 4]; 8],
+            ..query.clone()
+        },
+    ));
+    entries.push((
+        u64::MAX,
+        Fingerprint {
+            variants: [[3; 4]; 8],
+            ..query.clone()
+        },
+    ));
     for reverse in [false, true] {
         if reverse {
             entries.reverse();
@@ -32,7 +42,10 @@ fn sixty_tied_candidates_survive_with_inclusive_distance_boundaries() {
                     expected.push((u64::MAX, 8));
                 }
                 assert_eq!(
-                    candidates.iter().map(|c| (c.id, c.evidence.distance)).collect::<Vec<_>>(),
+                    candidates
+                        .iter()
+                        .map(|c| (c.id, c.evidence.distance))
+                        .collect::<Vec<_>>(),
                     expected,
                     "radius={radius}, transforms={transforms}, reverse={reverse}"
                 );
@@ -391,7 +404,10 @@ fn dense_zero_fingerprints_are_not_silently_discarded() {
     for radius in [0, 1, 64] {
         let mut expected: Vec<_> = (0..257).map(|id| Candidate { id, distance: 0 }).collect();
         if radius == 64 {
-            expected.push(Candidate { id: 257, distance: 64 });
+            expected.push(Candidate {
+                id: 257,
+                distance: 64,
+            });
         }
         assert_eq!(index.search(0, radius), expected);
         assert_eq!(
@@ -399,11 +415,16 @@ fn dense_zero_fingerprints_are_not_silently_discarded() {
             Err(IndexError::Budget)
         );
         assert_eq!(
-            index.try_search_with_cancel(0, radius, expected.len(), || false).unwrap(),
+            index
+                .try_search_with_cancel(0, radius, expected.len(), || false)
+                .unwrap(),
             expected
         );
         // A limited lookup must not remove dense buckets from subsequent searches.
         assert_eq!(index.search(0, radius), expected);
     }
-    assert_eq!(index.search(u64::MAX, 0), vec![Candidate { id: 257, distance: 0 }]);
+    assert_eq!(
+        index.search(u64::MAX, 0),
+        vec![Candidate { id: 257, distance: 0 }]
+    );
 }

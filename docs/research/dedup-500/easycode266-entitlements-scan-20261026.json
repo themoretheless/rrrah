@@ -1,0 +1,28 @@
+{
+  "repository": "music4kid/EasyCode-Xcode",
+  "commit": "45e460d0fbb04300c52afbc68415a794568beccb",
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/scan_folder",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/music4kid--EasyCode-Xcode/remaining-pinned/EC/EC.entitlements",
+    "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/music4kid--EasyCode-Xcode/remaining-pinned/EasyCode/EasyCode.entitlements"
+  ],
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "inputs": [
+    {
+      "path": "docs/research/dedup-500/evidence/music4kid--EasyCode-Xcode/remaining-pinned/EC/EC.entitlements",
+      "bytes": 368,
+      "sha256": "8422d1334fe8a85b47f7a5d970a3b0f32c61ffa4a0137fdcd2c0ad8c89117808"
+    },
+    {
+      "path": "docs/research/dedup-500/evidence/music4kid--EasyCode-Xcode/remaining-pinned/EasyCode/EasyCode.entitlements",
+      "bytes": 368,
+      "sha256": "8422d1334fe8a85b47f7a5d970a3b0f32c61ffa4a0137fdcd2c0ad8c89117808"
+    }
+  ],
+  "oracle": "direct original-byte equality",
+  "exit_code": 0,
+  "stdout": "Group 1: 2 files, 368 bytes each\n  \"/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/music4kid--EasyCode-Xcode/remaining-pinned/EC/EC.entitlements\"\n  \"/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/music4kid--EasyCode-Xcode/remaining-pinned/EasyCode/EasyCode.entitlements\"\n",
+  "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 5888 bytes read, 0 diagnostics\n",
+  "scope": "Existing release binary on two pinned originals; not a fresh-build or whole-suite qualification",
+  "passed": true
+}

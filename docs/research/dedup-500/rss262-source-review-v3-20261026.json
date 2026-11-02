@@ -1,0 +1,315 @@
+{
+  "index": 262,
+  "repository": "RhoninSeiei/astrbot_plugin_rss_forwarder",
+  "commit": "436d7c45aed97e8c89c575d13d8c86cdbadbf8c2",
+  "tracked_blob_count": 72,
+  "whole_file_reads": [
+    {
+      "path": "tests/test_semantic_dedup.py",
+      "local": "docs/research/dedup-500/evidence/RhoninSeiei--astrbot_plugin_rss_forwarder/05-test_semantic_dedup.py",
+      "sha256": "60910f720d591563e9aeb7e4542bbee0877bf5681908e35b90d6de51eedec833",
+      "git_blob_sha1": "243613a7e5df698140223f7e123278bacc3bae06"
+    },
+    {
+      "path": "semantic_dedup.py",
+      "local": "docs/research/dedup-500/evidence/RhoninSeiei--astrbot_plugin_rss_forwarder/02-semantic_dedup.py",
+      "sha256": "70df6e621a409d6e3015fd597b203f8fceb3fb824d83945b92180787d68766f5",
+      "git_blob_sha1": "bb4fcdc03e9daf741fe9d4bc2670ac3dfceb0972"
+    },
+    {
+      "path": "aggregate_card_image.py",
+      "local": "docs/research/dedup-500/evidence/RhoninSeiei--astrbot_plugin_rss_forwarder/03-aggregate_card_image.py",
+      "sha256": "18c33d17e76725267739f938dd7c4246818758a1f8a680adbae3c42a84ca0c50",
+      "git_blob_sha1": "6b8ece43fd25b44e683a7e893475256f274b6682"
+    }
+  ],
+  "whole_file_read_count": 3,
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "findings": [
+    "Whole test module contains four async unit tests: duplicate with selected provider and matched ID, below-confidence pass-through, missing-ID pass-through, and same-event digest grouping. All LLM responses are deterministic fakes; storage is fake or absent, and AstrBot is stubbed. These tests do not establish semantic accuracy, file-byte equality, image similarity, real provider behavior, timeout/resource bounds, or persistence atomicity. No upstream tests executed.",
+    "Parser controls on original module code confirm duplicate=\"false\" becomes True through bool(string), string Infinity confidence is clamped to 1, and fractional/bool group indices are coerced to integers. check validates nonempty match ID but never membership in supplied candidate IDs. Digest application bounds group indices against all original items rather than only the prompt candidate subset. These permissive decisions cannot be used as exact file equality.",
+    "LLM await has wait_for but storage lookup/provider resolution precede it without local deadline; synchronous llm_generate invocation also occurs before try. TTL and max candidates have minimum but no upper limit. Failures usually allow content through with a reason; caller policy/persistence still requires review.",
+    "AggregateCardImageRenderer is presentation only, with no image duplicate metric. Per-section text lines are bounded but section count and overall image height/allocation have no local ceiling. Output naming uses sanitized digest ID plus whole seconds, allowing same-digest concurrent/same-second overwrite; saves are direct, not atomic. Cache trimming deletes all PNGs beyond newest 20 in supplied output directory, without ownership/name prefix filtering, and suppresses cleanup exceptions. Local-image conversion is eager RGBA without explicit image context lifetime. Do not copy this renderer cleanup policy into a read-only file scanner. No Pillow rendering or cleanup executed."
+  ],
+  "remaining": [
+    {
+      "path": ".astrbot-plugin/i18n/en-US.json",
+      "bytes": 4888
+    },
+    {
+      "path": ".astrbot-plugin/i18n/ja-JP.json",
+      "bytes": 5518
+    },
+    {
+      "path": ".astrbot-plugin/i18n/zh-CN.json",
+      "bytes": 4504
+    },
+    {
+      "path": ".github/workflows/tests.yml",
+      "bytes": 448
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 4741
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 10770
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 34531
+    },
+    {
+      "path": "README.en.md",
+      "bytes": 9388
+    },
+    {
+      "path": "README.ja.md",
+      "bytes": 10600
+    },
+    {
+      "path": "README.md",
+      "bytes": 24958
+    },
+    {
+      "path": "ROADMAP.md",
+      "bytes": 781
+    },
+    {
+      "path": "_conf_schema.json",
+      "bytes": 23809
+    },
+    {
+      "path": "assets/daily_digest/SOURCES.md",
+      "bytes": 465
+    },
+    {
+      "path": "assets/daily_digest/corner_accent.png",
+      "bytes": 1304
+    },
+    {
+      "path": "assets/daily_digest/feed-icon.svg",
+      "bytes": 1128
+    },
+    {
+      "path": "assets/daily_digest/footer_signature.png",
+      "bytes": 5473
+    },
+    {
+      "path": "assets/daily_digest/gptimage_asset_sheet.png",
+      "bytes": 1181310
+    },
+    {
+      "path": "assets/daily_digest/header_badge.png",
+      "bytes": 2534
+    },
+    {
+      "path": "assets/daily_digest/rss_mark.png",
+      "bytes": 3755
+    },
+    {
+      "path": "assets/fonts/wqy-zenhei-copyright.txt",
+      "bytes": 2618
+    },
+    {
+      "path": "assets/fonts/wqy-zenhei.ttc",
+      "bytes": 16791251
+    },
+    {
+      "path": "commands.py",
+      "bytes": 20078
+    },
+    {
+      "path": "config.py",
+      "bytes": 35264
+    },
+    {
+      "path": "daily_digest_image.py",
+      "bytes": 11078
+    },
+    {
+      "path": "dispatcher.py",
+      "bytes": 63593
+    },
+    {
+      "path": "docs/assets/rss-forwarder-panel-feeds.svg",
+      "bytes": 5934
+    },
+    {
+      "path": "docs/assets/rss-forwarder-panel-job.svg",
+      "bytes": 5381
+    },
+    {
+      "path": "docs/assets/rss-forwarder-panel-targets.svg",
+      "bytes": 4647
+    },
+    {
+      "path": "docs/llm/README.md",
+      "bytes": 1130
+    },
+    {
+      "path": "docs/llm/current-state.md",
+      "bytes": 3611
+    },
+    {
+      "path": "docs/llm/decisions.md",
+      "bytes": 5739
+    },
+    {
+      "path": "docs/llm/operations.md",
+      "bytes": 2793
+    },
+    {
+      "path": "docs/llm/project-map.md",
+      "bytes": 3440
+    },
+    {
+      "path": "docs/llm/roadmap.md",
+      "bytes": 1329
+    },
+    {
+      "path": "docs/superpowers/plans/2026-07-15-source-tls-probe.md",
+      "bytes": 39985
+    },
+    {
+      "path": "docs/superpowers/specs/2026-07-15-source-tls-probe-design.md",
+      "bytes": 7964
+    },
+    {
+      "path": "fetcher.py",
+      "bytes": 6922
+    },
+    {
+      "path": "logo.png",
+      "bytes": 161409
+    },
+    {
+      "path": "main.py",
+      "bytes": 3643
+    },
+    {
+      "path": "metadata.yaml",
+      "bytes": 287
+    },
+    {
+      "path": "pages/source-diagnostics/app.js",
+      "bytes": 16888
+    },
+    {
+      "path": "pages/source-diagnostics/index.html",
+      "bytes": 8081
+    },
+    {
+      "path": "pages/source-diagnostics/style.css",
+      "bytes": 8819
+    },
+    {
+      "path": "parser.py",
+      "bytes": 11834
+    },
+    {
+      "path": "pipeline.py",
+      "bytes": 48934
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 52
+    },
+    {
+      "path": "scheduler.py",
+      "bytes": 70171
+    },
+    {
+      "path": "source_http.py",
+      "bytes": 15956
+    },
+    {
+      "path": "source_probe.py",
+      "bytes": 18666
+    },
+    {
+      "path": "source_probe_api.py",
+      "bytes": 17514
+    },
+    {
+      "path": "storage.py",
+      "bytes": 31932
+    },
+    {
+      "path": "tests/test_aggregate_card_image.py",
+      "bytes": 5289
+    },
+    {
+      "path": "tests/test_aggregate_dispatcher.py",
+      "bytes": 8901
+    },
+    {
+      "path": "tests/test_commands.py",
+      "bytes": 17313
+    },
+    {
+      "path": "tests/test_config_translation.py",
+      "bytes": 22719
+    },
+    {
+      "path": "tests/test_cron_aggregate.py",
+      "bytes": 19384
+    },
+    {
+      "path": "tests/test_dispatcher.py",
+      "bytes": 42569
+    },
+    {
+      "path": "tests/test_fetcher.py",
+      "bytes": 13459
+    },
+    {
+      "path": "tests/test_parser.py",
+      "bytes": 5495
+    },
+    {
+      "path": "tests/test_pipeline.py",
+      "bytes": 13989
+    },
+    {
+      "path": "tests/test_scheduler.py",
+      "bytes": 44653
+    },
+    {
+      "path": "tests/test_source_http.py",
+      "bytes": 40471
+    },
+    {
+      "path": "tests/test_source_probe.py",
+      "bytes": 28638
+    },
+    {
+      "path": "tests/test_source_probe_api.py",
+      "bytes": 51314
+    },
+    {
+      "path": "tests/test_source_probe_compat.py",
+      "bytes": 8572
+    },
+    {
+      "path": "tests/test_source_probe_page.py",
+      "bytes": 12415
+    },
+    {
+      "path": "tests/test_storage.py",
+      "bytes": 10843
+    },
+    {
+      "path": "tests/test_twitter_source.py",
+      "bytes": 27625
+    },
+    {
+      "path": "twitter_source.py",
+      "bytes": 20450
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/rss262-source-review-v2-20261026.json",
+  "parser_controls": "docs/research/dedup-500/rss262-parser-controls-20261026.json"
+}

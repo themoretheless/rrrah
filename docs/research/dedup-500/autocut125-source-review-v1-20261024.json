@@ -1,0 +1,63 @@
+{
+  "repository": "rafcopy/auto-cut-agent",
+  "commit": "528503b9dbd9c06045096498c4201182a498ad41",
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "3bc79685dadc7be9bc75f43bc51335c0cd90b99f",
+      "sha256": "0719a081c59fe15fa801beb86bf4bc2063727bb75bc5b45a48203a02c59a8663",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "4941b83cbcbb5ca78f6cfa0aa5218359ea3c9dc1",
+      "sha256": "10d98e1ba1b52a88f4c35f6d9d1440dcdcafbf985140403b5b9e26fcfa2a7cba",
+      "whole_text_read": true
+    },
+    {
+      "path": "extension/js/core.js",
+      "local": "03-core.js",
+      "git_blob": "7c970d621a02d0350cffc7d11ee487a09e603e29",
+      "sha256": "b3f9e265279998eec2772237c32cd64904e7de1390903fe5ab7b3abdb3c92b98",
+      "whole_text_read": true
+    },
+    {
+      "path": "extension/js/main.js",
+      "local": "04-main.js",
+      "git_blob": "86fc9aa5157fa9b6e3c5ab91b1dff3985f33dbd8",
+      "sha256": "f571b86f19652b09bc7ae71e28d780d5c98fd47acaf81b5b8de064c57aa84463",
+      "whole_text_read": true
+    },
+    {
+      "path": "scripts/test.js",
+      "local": "05-test.js",
+      "git_blob": "bd5836acc871dd5e9d05529cdef63b2170a6237e",
+      "sha256": "fd13913f09a8bc296423afbeb7d56dd3644d8dbc806f86bb085672a95299afbe",
+      "whole_text_read": true
+    },
+    {
+      "path": "extension/jsx/host.jsx",
+      "local": "deep-host.jsx",
+      "git_blob": "5612a22e37e3872fd641d312979387d72658e47b",
+      "sha256": "e4b9b6035e60ef68a6a107aa5444203b238c42e40ec09feaaf1a48cec7ca2453",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 6,
+  "tracked_blobs": 14,
+  "whole_repo_complete": false,
+  "original_tests_passed": 59,
+  "authored_controls_passed": 7,
+  "controls": "autocut125-controls-20261024",
+  "findings": [
+    "Pinned reviewed main/core implement audio-level silence cut planning;prior registry claim of LLM repeated-take decisions unsupported and corrected.",
+    "Malformed silence numeric dot yields NaN range without frame snapping.",
+    "NaN speed bypasses nonunit-speed guard.",
+    "Plain object path set drops inherited keys constructor/toString/__proto__;synthetic relative paths only,actual host path form not qualified."
+  ],
+  "decision": "reject-domain",
+  "production_adoption": false,
+  "qualification": "Original Node test script and full host definition with$ shim;actual Premiere/CEP/FFmpeg not executed;analysisPaths extracted original function with trackTarget fixture"
+}

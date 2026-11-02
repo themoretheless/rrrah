@@ -1,0 +1,113 @@
+{
+  "repository": "maxkhim/laravel-storage-dedupler",
+  "commit": "7720046f9b1c9056a47de0d84a1384e667d3f367",
+  "previous_audit": "docs/research/dedup-500/laravel118-source-review-v1-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/Services/DeduplerService.php",
+      "local": "core-src_Services_DeduplerService.php",
+      "git_blob": "2b98e25f8cd5254e2fe287d4a4d5d5c0a95ccc17",
+      "sha256": "517fbeecd3cd86c6f2879c06075355c4dc283207ca2a21024d3e3c2745ad0f23",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Contracts/FileSourceInterface.php",
+      "local": "core-src_Contracts_FileSourceInterface.php",
+      "git_blob": "09d92ed80d5f24970cda48cfd55f5cc2bb0c02cf",
+      "sha256": "4be1a6ea5c5227fc8884cde870bca2429312942f31493c94bfc76423d8d7dbe8",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/FileSources/ContentAdapter.php",
+      "local": "core-src_FileSources_ContentAdapter.php",
+      "git_blob": "e7dd1a2e0e5e14f321bb4e6794b6cd60a5a6382a",
+      "sha256": "73b577e14beccd3db221a50ccf10cc8f2810f7a70f5baf12d43d4dea5909827a",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/FileSources/LocalFileAdapter.php",
+      "local": "core-src_FileSources_LocalFileAdapter.php",
+      "git_blob": "26d747b8581605ddb50aa5b5884d29fbc20c2413",
+      "sha256": "6f5f3a1ba96cd1db6fb9ca1d417ef9ccd20e50101eedf6ca15a8d1a1b85195c3",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/FileSources/StreamAdapter.php",
+      "local": "core-src_FileSources_StreamAdapter.php",
+      "git_blob": "179ae9d0a5904e277d6bb53cb227e848b8b3f860",
+      "sha256": "7706f8270f8ce212893489930d9c8a219da55ad33b8c05f8e35e3a1457c403a5",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/FileSources/UploadedFileAdapter.php",
+      "local": "core-src_FileSources_UploadedFileAdapter.php",
+      "git_blob": "f30a1192c5ae67fbcd4acc6a42bba2f8b0f47f74",
+      "sha256": "f2f02b08980584bd13a2255ad91fc3c7905af8b6f78801a36076a4bae1468f79",
+      "whole_text_read": true
+    },
+    {
+      "path": "composer.json",
+      "local": "core-composer.json",
+      "git_blob": "a8e48a07da63baa33831bdb3b3a4788effbbfb60",
+      "sha256": "21df6d124145fd826d31e603ca77ab0f752e4d64ec1039498754085aeca55ba2",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Models/UniqueFile.php",
+      "local": "core-src_Models_UniqueFile.php",
+      "git_blob": "49fc671f03540b97a933db93a78c54febeb01129",
+      "sha256": "15cd2ff2c621d0bce3a4a6a7a2f8bdd18b282ec4407d9f215043e8fb2ee6304f",
+      "whole_text_read": true
+    },
+    {
+      "path": "database/migrations/2025_10_24_144419_create_dedupler_unique_files_table.php",
+      "local": "core-database_migrations_2025_10_24_144419_create_dedupler_unique_files_table.php",
+      "git_blob": "546318246966186d19b09897b4b841e603e151db",
+      "sha256": "1680d0d2bcb31f5dd6bcbb36b1520f64585c456883d707b18186fc9382112cce",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Feature/DeduplerUniqueFileTest.php",
+      "local": "core-tests_Feature_DeduplerUniqueFileTest.php",
+      "git_blob": "343f7891799651ee150c75d7ff87d2b807d7d527",
+      "sha256": "ce4d031f79030d37d276ada39c60dbb7e151efd3f260c1367cef69f59929946f",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/Feature/DeduplerLegacyMigrationTest.php",
+      "local": "05-DeduplerLegacyMigrationTest.php",
+      "git_blob": "31af39ba574683ca08987bcde23c591bad269db5",
+      "sha256": "e7ca591697787416224148b41d42d48b661d1dd1a19ab60fb820dee9e6e9fc32",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 13,
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "upstream_tests_run": false,
+  "runtime_blocker": "php not in PATH or /opt/homebrew/opt; no PHP/Laravel native execution claimed",
+  "findings": [
+    {
+      "finding": "Full content SHA1/MD5 computed, but reuse branch uses SHA1-only DB lookup without comparing MD5, bytes, existence, status or requested disk",
+      "evidence": "source only; no collision or storage fixture executed"
+    },
+    {
+      "finding": "ContentAdapter isValid uses !empty(content), excludes empty file and PHP string zero",
+      "evidence": "source only; PHP runtime unavailable"
+    },
+    {
+      "finding": "StreamAdapter checks resource only; rewind results ignored by adapter and service, and read loop does not handle failed fread explicitly",
+      "evidence": "source only; non-seekable/hard-error runtime remains unqualified"
+    },
+    {
+      "finding": "delete and deleteFileRecord discard Storage delete return then delete DB record; no transaction shown between physical and DB operations",
+      "evidence": "source only; framework/storage behavior unqualified"
+    },
+    {
+      "finding": "Two test sources contain11 test methods, ordinary same-source reuse and small stream/content uploads; no observed empty/zero, nonseekable, concurrency or partial storage failure regression",
+      "evidence": "whole test sources read, zero cases executed"
+    }
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

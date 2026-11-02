@@ -1,0 +1,36 @@
+{
+  "repository": "shiliyu1991-lang/cocos-psd-prefab-2x",
+  "commit": "fcbcbdcab4d1c7aef3a2ad9660b64660ad243ec9",
+  "whole_files_read": [
+    {
+      "path": "main.js",
+      "local": "02-main.js",
+      "git_blob": "9aed754c941daa23fd1cfd5bd59333861d843345",
+      "sha256": "05314a8d5280b1496c946681c26b5bd29a91a262a4f115309461d699fbea1dde",
+      "whole_text_read": true
+    },
+    {
+      "path": "psd2prefab.js",
+      "local": "03-psd2prefab.js",
+      "git_blob": "ead8eb234151542af7ecf1fc146e76b3279f98c4",
+      "sha256": "b9b06014dd248c1f54e06cfae6e84e5947d08d5f5aaca71dca275d80dc9eccc1",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 2,
+  "tracked_blobs": 13,
+  "whole_repo_complete": false,
+  "partial_source_review": "lib/convert.js perceptual hash,scanSimilar,pixelKey,globalPNGtable blocks only;notwhole662linefile",
+  "authored_controls_passed": 3,
+  "original_upstream_tests_run": false,
+  "scope": "Original perceptualHash/gray/downsample/hamming/pixelKey function source unchanged;native Node crypto;owned RGBA buffers only;no PSD parser,PNG encoder,Cocos editor or asset writes",
+  "findings": [
+    "Black and white opaque flat tiles have equal aHash/dHash while decodedpixel hash differs;candidate fingerprints cannot establish equality.",
+    "Dimensions are included in decodedpixel key.",
+    "pixelKey accepts truncated1byte buffer for8x8 dimensions;invalid primitive boundary only,PNG caller data not qualified.",
+    "scanSimilar union-find allows chains;reports distanceMax and requires user-approved mergeMap.Source-only integration,not executed."
+  ],
+  "controls": "cocos154-controls-20261024/results.json",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

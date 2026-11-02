@@ -1,0 +1,24 @@
+{
+  "scope": "Original complete command modules with explicit toast observer, owned branch/session fixtures; no actual UI, host command dispatch, durable pin writes or user session modification",
+  "authored_controls_run": 4,
+  "observations": [
+    "malformed ID 5abc rejected",
+    "unsafe integer string rounds to different existing numeric compression ID and suspends that record",
+    "invalid sweep limit warns but stages all three eligible results since user boundary",
+    "failed protection callback prevents suspension"
+  ],
+  "notices": [
+    {
+      "text": "pi-dcp: compression #9007199254740992 suspended; present originals protected, archived results require recall",
+      "level": "info"
+    },
+    {
+      "text": "pi-dcp sweep: \"5abc\" is not a positive integer; ignoring",
+      "level": "warning"
+    },
+    {
+      "text": "pi-dcp sweep: staged compression #1 over 3 tool result(s). Run \"/dcp decompress 1\" to undo before the next message.",
+      "level": "info"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "scope": "Complete unchanged original strategy test module under real pytest.\n\nPackage namespaces/logger are adapters. Original full constants/common/hash/\ncluster/semantic/strategy modules loaded; cosine embedding helper is a sentinel\nthat raises if called. No CLIP extraction/cosine path is qualified by these tests.\n",
+  "pytest_exit_code": 0,
+  "passed": 18,
+  "failed": 0,
+  "reports": [
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestDedupeStrategyRegistry::test_builtins_present",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestDedupeStrategyRegistry::test_builtins_marked_is_builtin",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestDedupeStrategyRegistry::test_clip_strategy_requires_embeddings_flag",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestRegisterDedupeStrategy::test_happy_path",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestRegisterDedupeStrategy::test_idempotent_same_def",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestRegisterDedupeStrategy::test_reserved_builtin_name_rejected",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestRegisterDedupeStrategy::test_collision_without_replace_rejected",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestRegisterDedupeStrategy::test_replace_overrides",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestRegisterDedupeStrategy::test_reset_preserves_builtins",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestResolveStrategy::test_none_name_returns_none",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestResolveStrategy::test_unknown_name_falls_back",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestResolveStrategy::test_clip_without_embeddings_falls_back",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestResolveStrategy::test_clip_with_embeddings_resolved",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestResolveStrategy::test_plugin_strategy_resolved",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestBuiltinStrategiesRoundTrip::test_hash_strategy_dedupes_near_duplicates",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestBuiltinStrategiesRoundTrip::test_none_strategy_keeps_all",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestBuiltinStrategiesRoundTrip::test_clip_strategy_raises_without_embeddings",
+      "when": "call",
+      "outcome": "passed"
+    },
+    {
+      "node": "docs/research/dedup-500/evidence/Arkalogy--best-photo-picker/remaining-pinned/tests/test_dedupe_strategy_registry.py::TestPluginStrategyOverridesRecompute::test_plugin_strategy_invoked",
+      "when": "call",
+      "outcome": "passed"
+    }
+  ],
+  "pytest_version": "9.1.1"
+}

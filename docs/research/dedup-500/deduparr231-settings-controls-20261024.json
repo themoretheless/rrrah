@@ -1,0 +1,37 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "transpiler": "5.9.3",
+  "scope": "Original extracted handleSaveConfiguration body; transition/query/toast/fetch/config APIs are in-memory recorders. Applied means adapter recorded preceding success, not real DB persistence. Payload omission does not by itself prove backend clear behavior. No network/settings/email/scheduler mutation.",
+  "authored_controls": [
+    {
+      "name": "second step failure leaves first deep-scan update applied",
+      "passed": true,
+      "observed": {
+        "steps": [
+          "deep"
+        ],
+        "toast": "Save failed"
+      }
+    },
+    {
+      "name": "scheduler failure leaves earlier two updates applied",
+      "passed": true,
+      "observed": {
+        "steps": [
+          "deep",
+          "setup"
+        ],
+        "toast": "Save failed"
+      }
+    },
+    {
+      "name": "cleared optional service fields omitted from successful save payload",
+      "passed": true,
+      "observed": {
+        "radarr_fields_sent": false,
+        "toast": "Configuration saved"
+      }
+    }
+  ]
+}

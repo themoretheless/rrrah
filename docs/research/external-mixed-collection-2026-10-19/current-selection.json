@@ -1,0 +1,40 @@
+{
+  "scope": "content-unique external source files, byte/header-size selected; no rrrah decode-based filtering",
+  "selection_limits": {
+    "max_source_bytes": 1048576,
+    "max_known_width_or_height": 1024,
+    "unknown_dimensions": "retained under runtime budget"
+  },
+  "available_unique": 8623,
+  "selection_exclusions": {
+    "duplicate_source_bytes": 1423,
+    "dimensions_over_1024": 458,
+    "size_over_1MiB_or_not_file": 126,
+    "pillow_pixel_limit": 15
+  },
+  "selected": 1024,
+  "extensions": {
+    ".avif": 46,
+    ".bmp": 18,
+    ".exr": 61,
+    ".gif": 24,
+    ".hdr": 8,
+    ".heic": 12,
+    ".jpeg": 32,
+    ".jpg": 285,
+    ".jxl": 3,
+    ".png": 408,
+    ".tif": 55,
+    ".tiff": 36,
+    ".webp": 36
+  },
+  "unknown_dimensions": 112,
+  "full_manifest_sha256": "b94493d6cc19a2d7cc8793e791da24fb1c4b1579609aa1a7ca2403188df72a16",
+  "raw_logs_retained_outside_repository": "/Users/themoretheless/.codex/tmp/rrrah-current-mixed-20261024",
+  "source_hashes": {
+    "scripts/select-external-raster-collection.py": "014485e990226865c99c904c5e3080a862984bf83b8ab0a322d37210380fb59a",
+    "crates/rrrah-app/src/external_collection_qualification.rs": "d69847ce2cb4d478e3d09ac8d8003d33673d93de6d3305701cb715ea91b6188b",
+    "crates/rrrah-app/src/main.rs": "298761bf6e969730243f45a6ae8ab061689a2dcc3cd2998298597824378ed77e",
+    "crates/rrrah-app/src/gallery.rs": "f098cb500fccb6b9260837cb0ce2168aaff32710a7fee1c66e51c12f1040e37d"
+  }
+}

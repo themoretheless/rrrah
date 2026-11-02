@@ -1,0 +1,89 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v24-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/rewriters/base.ts",
+      "local": "rewriter-src_modules_proxy_rewriters_base.ts",
+      "git_blob": "5379935c19e8ce28bb291d98853e755c43ba6206",
+      "sha256": "8ab3369f0cc694a106d1f558f1c2b9002d7f027ab66cd6fd8cd3b370180c2f35",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/cat.ts",
+      "local": "rewriter-src_modules_proxy_rewriters_cat.ts",
+      "git_blob": "7f7e408aa11890bb3720c12492cfba29b78ebf5e",
+      "sha256": "4cac11f4d9b73a0bb0f26cc6904fe5a388ac2086ba043b5b39e6bb667f02fb00",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/nativeGrep.ts",
+      "local": "rewriter-src_modules_proxy_rewriters_nativeGrep.ts",
+      "git_blob": "62b9f9f50471202f5b4ee27689c4f4f5f8c68921",
+      "sha256": "bc6a026679544c289822521abef6ec977828538d6d1c8b0fc9bfa538cb4c9618",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/rewriters/nativeGlob.ts",
+      "local": "rewriter-src_modules_proxy_rewriters_nativeGlob.ts",
+      "git_blob": "c17af50e28c8fe6b1ccec49b3faf7647a9331317",
+      "sha256": "65f42fa186e2dff6584c7ae6a772f4ecc97f1a7efee311d4811a1ed4e781271b",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/cat.test.ts",
+      "local": "rewriter-tests_modules_proxy_rewriters_cat.test.ts",
+      "git_blob": "4e268ea6e4c20ed84d24fe4388886cec5134b208",
+      "sha256": "dffdbbc984efbdcb84cba286eb66e69ba4a846f0de12793c341b196aee468b10",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/nativeGrep.test.ts",
+      "local": "rewriter-tests_modules_proxy_rewriters_nativeGrep.test.ts",
+      "git_blob": "3e6c2d8046100df9c9f4b3dcc41d4c7b6fdb749c",
+      "sha256": "a333544622903e645f1429004ad4d6bfa2fff54f35e7ad646e9ac683e2ae1d4c",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/nativeGlob.test.ts",
+      "local": "rewriter-tests_modules_proxy_rewriters_nativeGlob.test.ts",
+      "git_blob": "1c40643d80a4c63889a39505436cd1ce68d7bddf",
+      "sha256": "761c609ae73d9842fc3e9435e2969f4e3a01cc77128d00f9bf63bb242c521604",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 84,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 285,
+    "numPassedTests": 285,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 17,
+  "authored_upstream_controls_total_distinct": 53,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "findings": [
+      "cat -n numbering removedbyrewrittenawk",
+      "Smallfilewithoutfinalnewlinechangedbyawkprint",
+      "350linepositiveelides50lineswith200head100tailandmarker"
+    ],
+    "scope": "Originalcatrewriter/basewithruntimeimportlocationchanged;realownedfiles andactual/bin/bash+cat+awk;notarbitrarycommands,hosttoolAPI,orbinaryfileidentity",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/cat-owned-CXVmmh"
+  },
+  "findings": [
+    "Originalcatrewriterdiscards-nflagandchangesactualoutput;smallno-finalLFgetsnewlineadded. Notbyte-preservingfileloader.",
+    "Large350linepositiveproduces200head+marker+100tail301lines,explicit50lineelision.",
+    "Originalcatpreservesmalltestonlyassertsawkprogramtext,notexecution.",
+    "NativeGrep/Globtestsverifyinjectedobjectfields,preserveexplicitheadlimit;actualhostGlobschema/capbehaviornotqualified."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

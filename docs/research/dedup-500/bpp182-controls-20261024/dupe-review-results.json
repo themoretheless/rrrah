@@ -1,0 +1,21 @@
+{
+  "scope": "Complete original ESM module under Node VM;explicit API/toast/window/timer adapters. No network,userfiles,UI actions,deletion or actual browser.",
+  "authored_controls_passed": 3,
+  "results": [
+    {
+      "case": "all_group_members_assigned_similarity_one",
+      "input_similarity": 0.125,
+      "observed_similarity": 1,
+      "scope": "Original UI mapping with adapter API payload;not real backend payload/browser/rendering or mathematical similarity."
+    },
+    {
+      "case": "empty_group_list_does_not_open_compare",
+      "passed": true
+    },
+    {
+      "case": "API_failure_reports_error_without_opening_compare",
+      "passed": true
+    }
+  ],
+  "node": "v22.23.4"
+}

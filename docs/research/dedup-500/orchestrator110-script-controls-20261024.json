@@ -1,0 +1,7 @@
+{
+  "scope": "Unchanged upstream script in owned temp tree with deliberately failing dummy binary; timeout/sleep replaced to avoid delay. No MCP server/inference calls.",
+  "exit_code": 0,
+  "stdout": "=== MCP Deduplication Validation Test ===\nBinary: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/orchestrator110-script-20261024/target/release/mcp.exe\n\nStep 1: Initializing MCP server...\nStep 2: Sending batch_infer with 20 identical prompts...\nStep 3: Querying pipeline_status...\n\n=== Raw MCP Responses ===\n\n\n=== Parsed Results ===\nbatch_infer response: not found\npipeline_status response line found: no\n\n=== Test Complete ===\n",
+  "stderr": "",
+  "finding": "Empty failed backend yields successful script exit without dedup assertions."
+}

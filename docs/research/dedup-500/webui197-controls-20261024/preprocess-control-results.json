@@ -1,0 +1,12 @@
+{
+  "cases": 2,
+  "scope": "Unchanged AST-extracted load_image/preprocess_image, actual Pillow/OpenCV/NumPy and owned synthetic images; no model inference.",
+  "findings": [
+    "Fully transparent PNGs with different hidden RGB yield different prepared tensors: convert RGB discards alpha without canonical composition.",
+    "JPEG EXIF orientation6 ignored: loaded tensor equals untransposed decoded pixels and differs from explicit exif_transpose reference."
+  ],
+  "versions": {
+    "opencv": "5.0.0",
+    "numpy": "2.5.4"
+  }
+}

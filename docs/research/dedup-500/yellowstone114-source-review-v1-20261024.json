@@ -1,0 +1,91 @@
+{
+  "repository": "rpcpool/yellowstone-grpc-kafka",
+  "commit": "1daa7fd50461c31a2c6fe5d547bda2c3515620ac",
+  "tracked_blobs": 25,
+  "new_whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "sha256": "ca1b0da2395a1531e80a2a597235f27b98b6a42baad2e5958899d1bdddd53c81",
+      "git_blob": "89059f0ada88bfb2bd96bcb10d3ca1db5f090796",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/kafka/dedup.rs",
+      "local": "02-dedup.rs",
+      "sha256": "dd558e14111d3ccb4d663b2815e2e68d1deb1a45b9430911e25fdfab0615b2e4",
+      "git_blob": "b4e78841b3a98d421fb1ffc6d8b3a11bec050f82",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/config.rs",
+      "local": "03-config.rs",
+      "sha256": "99ba2c74bbcae6f6c7d108cd76cfcda7e6a0ef14cd31454dafa93e45c41e1245",
+      "git_blob": "21560f39b813c76c8e83882f3c4368ac3cd7efe4",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "04-lib.rs",
+      "sha256": "92af971a76f1ec0dc788e17fbfc49f51461b972061d9c351f6057160e7c3d906",
+      "git_blob": "19178b28d9adb737ad94df9d06679cf083388f63",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/metrics.rs",
+      "local": "05-metrics.rs",
+      "sha256": "58fe5729d32de051b0ad76e7f40e7083720f466aaa8a00ecc3cc41adb587d0f5",
+      "git_blob": "f51902759702d879b768f91347e6d5361be50571",
+      "whole_text_read": true
+    },
+    {
+      "path": "Cargo.toml",
+      "local": "06-Cargo.toml",
+      "sha256": "b73347fa845727df441161030266c3ba4144384ad1563568148eaae17fe5a720",
+      "git_blob": "6f524efb991c6e0ed108508f1fbff6468e583201",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/kafka/mod.rs",
+      "local": "07-kafka-mod.rs",
+      "sha256": "7f21053eced00e0b79d7d32f7031c8edfa1ad3d24f9cc9ca717a11ea50df481d",
+      "git_blob": "661db05d172121716875d28e0832513f5e364b56",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/kafka/config.rs",
+      "local": "08-kafka-config.rs",
+      "sha256": "0da9b7dc4dfbca3509116434df013821030504afc9bf40dbb195e67b13386458",
+      "git_blob": "6cda8abaf866d184b267445d6b58e7628d7ccda9",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 8,
+  "whole_repo_complete": false,
+  "runtime": {
+    "original_tests_run": 0,
+    "authored_controls_distinct": 6,
+    "debug_controls_passed": 5,
+    "release_controls_passed": 1,
+    "retained_harness": "docs/research/dedup-500/yellowstone114-controls-20261024",
+    "scope": "Original complete dedup module unchanged with appended own tests; isolated current Rust, real Tokio1.53.2/async-trait0.1.92; semver compatible with upstream manifest, not upstream Cargo.lock/full crate; no Kafka/gRPC/network."
+  },
+  "findings": [
+    "Atomic mutex-protected admission: exactly one of32 identical concurrent cloned requests accepted.",
+    "Identity is slot plus32-byte hash, not file bytes; same hash in different slots accepted.",
+    "Window retains difference75 then removes difference76; lower-than-current-minimum slots rejected.",
+    "slot-75 underflows at initialslot0: debug panic reproduced; optimized default-overflow-check-disabled build removes just-inserted entry and allows identical repeated message; native control reproduced.",
+    "Slot-window eviction does not bound hashes per slot;1000 distinct owned hashes retained at same slot.",
+    "Config only offers memory backend; three original config roundtrip tests present but not executed.",
+    "Metrics server source reviewed without executing listener.",
+    "Root license retained but not whole-read this increment; no code adoption."
+  ],
+  "remaining": [
+    "17 blobs not whole-read incl license,lock,CLI,grpc and workflows",
+    "Caller slot extraction/reachability of low-slot0 not reviewed",
+    "Full upstream build and native Kafka/gRPC integration unqualified"
+  ],
+  "decision": "reject-domain",
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

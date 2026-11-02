@@ -1,0 +1,5609 @@
+{
+  "repository": "muldon/dupeRep",
+  "commit": "ac279e54568cbb2df42ec152bbf6db49fd0bc007",
+  "classes": [
+    {
+      "path": "target/classes/br/ufu/facom/lascam/DupeApplication.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/DupeApplication.class",
+      "sha256": "bbaf89e2f28ab3ce706eff8e9e08094528a5b06d085236fbe1d8c6223e4fee0b",
+      "git_blob_sha1": "d94e1d1039819a8dd8ed292d3fec4f4c0fb8cc40",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/DupeApplication",
+      "source_file": "DupeApplication.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "configure",
+          "descriptor": "(Lorg/springframework/boot/builder/SpringApplicationBuilder;)Lorg/springframework/boot/builder/SpringApplicationBuilder;",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/DupeApp.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/DupeApp.class",
+      "sha256": "c7ad682c619cdf476136384a7e23c32cf2067938576db01767033cfef3229caf",
+      "git_blob_sha1": "c6a14f26975c72383cd259ef292ba24b09fbcd0a",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/DupeApp",
+      "source_file": "DupeApp.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "initTime",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "generalInitTime",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "observation",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "maxCreationDate",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "lote",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "maxResultSize",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "percentOfTestedQuestions",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "featureGen",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "classify",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tagFilter",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "database",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "classifyService",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/ClassifyService;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "featuresService",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/FeaturesService;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "dupeUtils",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/util/DupeUtils;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "init",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "RuntimeVisibleAnnotations"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/Experiment.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/Experiment.class",
+      "sha256": "ea4c933be564195874de86f19da32789a3ba1ef3fb708208964ab998e7d58120",
+      "git_blob_sha1": "8ea11ee7089db6d68af33d3fee9a781a50f43c53",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/Experiment",
+      "source_file": "Experiment.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tag",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "numberOfTestedQuestions",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "date",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "ttWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "ccWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bbWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "topicTopicWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "btWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tbWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "aaWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tagTagWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bm25k",
+          "descriptor": "Ljava/lang/Float;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bm25b",
+          "descriptor": "Ljava/lang/Float;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "observacao",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "duration",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "lote",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "base",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "app",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "maxresultsize",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "estimateWeights",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "trm",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTag",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTag",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getNumberOfTestedQuestions",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setNumberOfTestedQuestions",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getDate",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setDate",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "toString",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTtWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTtWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCcWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCcWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBbWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBbWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBtWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBtWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTbWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTbWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBm25k",
+          "descriptor": "()Ljava/lang/Float;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBm25k",
+          "descriptor": "(Ljava/lang/Float;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBm25b",
+          "descriptor": "()Ljava/lang/Float;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBm25b",
+          "descriptor": "(Ljava/lang/Float;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getObservacao",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setObservacao",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getLote",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setLote",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBase",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBase",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getMaxresultsize",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setMaxresultsize",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getDuration",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setDuration",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getAaWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setAaWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTrm",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTrm",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTagTagWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTagTagWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getApp",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setApp",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getEstimateWeights",
+          "descriptor": "()Ljava/lang/Boolean;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setEstimateWeights",
+          "descriptor": "(Ljava/lang/Boolean;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTopicTopicWeight",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTopicTopicWeight",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/Feature.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/Feature.class",
+      "sha256": "e53e04529a907e6bbc28966c232a68c4b9a369d1afa4afa160267920f7005ed5",
+      "git_blob_sha1": "d1e27a2b7e60b3789279e98f63cc129f5e46f998",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/Feature",
+      "source_file": "Feature.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "pairId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "type",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "cosine",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "termOverlap",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "entityOverlap",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "typeOverlap",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "wordNet",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPairId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setPairId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getType",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setType",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCosine",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCosine",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTermOverlap",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTermOverlap",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getEntityOverlap",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setEntityOverlap",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTypeOverlap",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTypeOverlap",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getWordNet",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setWordNet",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "toString",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/Pair.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/Pair.class",
+      "sha256": "4f4492c29d737e4b34feb0b36c2c2068006ccb39ad2f7d86c50536c1cab576c8",
+      "git_blob_sha1": "8ad4f7ffe9103bd2e36ce10e43c69f159ae4332e",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/Pair",
+      "source_file": "Pair.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "question1",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "question2",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "duplicated",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "maintag",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "features",
+          "descriptor": "Ljava/util/HashMap;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getQuestion1",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setQuestion1",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getQuestion2",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setQuestion2",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getDuplicated",
+          "descriptor": "()Ljava/lang/Boolean;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setDuplicated",
+          "descriptor": "(Ljava/lang/Boolean;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getMaintag",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setMaintag",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getFeatures",
+          "descriptor": "()Ljava/util/HashMap;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setFeatures",
+          "descriptor": "(Ljava/util/HashMap;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/Post.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/Post.class",
+      "sha256": "2d530a751efe1538edf0c65d160565342c113857f30104042a4ac30e3a79ea9c",
+      "git_blob_sha1": "9e75e1aee772bbb37e122ffb3e4f52a929d03589",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/Post",
+      "source_file": "Post.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "serialVersionUID",
+          "descriptor": "J",
+          "attributes": [
+            "ConstantValue"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "postTypeId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "acceptedAnswerId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "parentId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "creationDate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "score",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "viewCount",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "body",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "ownerUserId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "lastEditorUserId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "lastEditorDisplayName",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "lastEditDate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "lastActivityDate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "title",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tags",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "answerCount",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "commentCount",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "favoriteCount",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "closedDate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "communityOwnedDate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tagsSyn",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "code",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "topKrelatedQuestions",
+          "descriptor": "Ljava/util/ArrayList;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPostTypeId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setPostTypeId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getAcceptedAnswerId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setAcceptedAnswerId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getParentId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setParentId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCreationDate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCreationDate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getScore",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setScore",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getViewCount",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setViewCount",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBody",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBody",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getOwnerUserId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setOwnerUserId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getLastEditorUserId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setLastEditorUserId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getLastEditorDisplayName",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setLastEditorDisplayName",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getLastEditDate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setLastEditDate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getLastActivityDate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setLastActivityDate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTitle",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTitle",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTags",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTags",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getAnswerCount",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setAnswerCount",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCommentCount",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCommentCount",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getFavoriteCount",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setFavoriteCount",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getClosedDate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setClosedDate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCommunityOwnedDate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCommunityOwnedDate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "toString",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTagsSyn",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTagsSyn",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCode",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCode",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/PostLink.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/PostLink.class",
+      "sha256": "834d9787c3215173a683c848790d10005f39875651fe650e5f75439993e51bcd",
+      "git_blob_sha1": "9962577f86d6f9fda79392466fd46c0568970e5b",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/PostLink",
+      "source_file": "PostLink.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "serialVersionUID",
+          "descriptor": "J",
+          "attributes": [
+            "ConstantValue"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "creationDate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "postId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "relatedPostId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "linkTypeId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "posicao",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(Ljava/lang/Integer;Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCreationDate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCreationDate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPostId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setPostId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRelatedPostId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRelatedPostId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getLinkTypeId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setLinkTypeId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "toString",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPosicao",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setPosicao",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/Question.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/Question.class",
+      "sha256": "e18673a40fd5acedfde7f0dc11f4a87c535901ab4751d84e44dad72ee8af6dc0",
+      "git_blob_sha1": "e1f76e437c821adca2a1acf43c7ee8e803d21d4f",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/Question",
+      "source_file": "Question.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "title",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "body",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tags",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "code",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "errormessages",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "closeddate",
+          "descriptor": "Ljava/sql/Timestamp;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "originaltags",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "titleText",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "titleEntity",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "titleEntityType",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bodyText",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bodyEntity",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bodyEntityType",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tagText",
+          "descriptor": "Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "relatedPostId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(Ljava/lang/Integer;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTitle",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTitle",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBody",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBody",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTags",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTags",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTitleText",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTitleText",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTitleEntity",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTitleEntity",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTitleEntityType",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTitleEntityType",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBodyText",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBodyText",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBodyEntity",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBodyEntity",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBodyEntityType",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBodyEntityType",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRelatedPostId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRelatedPostId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "toString",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTagText",
+          "descriptor": "()Ledu/stanford/nlp/stats/Counter;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTagText",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCode",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCode",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCloseddate",
+          "descriptor": "()Ljava/sql/Timestamp;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setCloseddate",
+          "descriptor": "(Ljava/sql/Timestamp;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getOriginaltags",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setOriginaltags",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getErrormessages",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setErrormessages",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/domain/RecallRate.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/domain/RecallRate.class",
+      "sha256": "b005a5224cccfbbd65e5a0e3eceeadfb4e6613f9b6b2119eabfbe1e183610076",
+      "git_blob_sha1": "82cbae0735792457638b5870a67151a9c45738a5",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/domain/RecallRate",
+      "source_file": "RecallRate.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "id",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "origem",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits50000",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits10000",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits1000",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits100",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits50",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits20",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits10",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits5",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits1",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_50000",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_10000",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_1000",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_100",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_50",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_20",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_10",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_5",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "recallrate_1",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "experimentId",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getOrigem",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setOrigem",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits50000",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits50000",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits10000",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits10000",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits1000",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits1000",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits100",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits100",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits50",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits50",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits20",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits20",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits10",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits10",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits5",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits5",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getHits1",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setHits1",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_50000",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_50000",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_10000",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_10000",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_1000",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_1000",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_100",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_100",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_50",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_50",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_20",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_20",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_10",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_10",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_5",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_5",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRecallrate_1",
+          "descriptor": "()Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setRecallrate_1",
+          "descriptor": "(Ljava/lang/Double;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "toString",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hashCode",
+          "descriptor": "()I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "equals",
+          "descriptor": "(Ljava/lang/Object;)Z",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getExperimentId",
+          "descriptor": "()Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setExperimentId",
+          "descriptor": "(Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/ExperimentRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/ExperimentRepository.class",
+      "sha256": "d3a97306ddbdbe9f0781dc4c291571d15a5af6fc11d065d3fbbcaf417600aaab",
+      "git_blob_sha1": "18ba6d3dc81f5d0ca1676044201163e5945079f9",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/ExperimentRepository",
+      "source_file": "ExperimentRepository.java",
+      "members": []
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/FeatureRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/FeatureRepository.class",
+      "sha256": "909d5b7dcfce45fc8c4acc13e7360b1a88cea20d5ea7054d345f98847e672b70",
+      "git_blob_sha1": "0eb90bd68b4f7dc63ffd6bac062b92c9cddcca40",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/FeatureRepository",
+      "source_file": "FeatureRepository.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "findByPairId",
+          "descriptor": "(Ljava/lang/Integer;Lorg/springframework/data/domain/Sort;)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "deleteByTag",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/GenericRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/GenericRepository.class",
+      "sha256": "5582e1ed7088eb16f892aeefca644bdb13f517c13943a39e9cda347227d1b2a7",
+      "git_blob_sha1": "e3f6e0a3e40788a8acd54e6b030925df94300769",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/GenericRepository",
+      "source_file": "GenericRepository.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "getAllPostLinks",
+          "descriptor": "()Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPostsLinksByPostId",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTotalAnswersByQuestion",
+          "descriptor": "(Ljava/lang/Integer;)I",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "fetchQuestionsAtRandom",
+          "descriptor": "(ILjava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "fetchPairs",
+          "descriptor": "(Ljava/lang/Integer;Ljava/lang/String;Z)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hasQuestionAnswers",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/lang/Boolean;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "fetchQuestionsByTag",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/Integer;)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "findClosedDuplicatedNonMastersByTag",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/GenericRepositoryImpl.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/GenericRepositoryImpl.class",
+      "sha256": "4caab732efa609dfcb12e1b005aee3bd668852116b3cc1be290c2ee10caaf301",
+      "git_blob_sha1": "b29e52aa231f2c6eede87722e45e1256161108b8",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/GenericRepositoryImpl",
+      "source_file": "GenericRepositoryImpl.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "em",
+          "descriptor": "Ljavax/persistence/EntityManager;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPostsLinksByPostId",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getAllPostLinks",
+          "descriptor": "()Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTotalAnswersByQuestion",
+          "descriptor": "(Ljava/lang/Integer;)I",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "findClosedDuplicatedNonMastersByTag",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "fetchQuestionsAtRandom",
+          "descriptor": "(ILjava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "fetchPairs",
+          "descriptor": "(Ljava/lang/Integer;Ljava/lang/String;Z)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "fetchQuestionsByTag",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/Integer;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "hasQuestionAnswers",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/lang/Boolean;",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/PairRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/PairRepository.class",
+      "sha256": "e946b545de0177e1f4ff4cf8fcb7e28678ade244872e9259cf6cc0a2b8b22d6c",
+      "git_blob_sha1": "13803a43af24dda096965378609a155dc97dba85",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/PairRepository",
+      "source_file": "PairRepository.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "deleteByMaintag",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": []
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/PostLinksRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/PostLinksRepository.class",
+      "sha256": "d6dd32ba271633cc4d53bd87dd703614d987c7ee8117b11867641b008aacbbdb",
+      "git_blob_sha1": "b258803c826ad7466f83fb1449caa5f01c2fe0b2",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/PostLinksRepository",
+      "source_file": "PostLinksRepository.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "getByPostId",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/PostsRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/PostsRepository.class",
+      "sha256": "4c4639e786dfba34fd93111233cdbfcc1114b505ea44475d2eafb4c5ac9d57e9",
+      "git_blob_sha1": "be3fcd8282815f020f9fa02a5d2780cd810eedf0",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/PostsRepository",
+      "source_file": "PostsRepository.java",
+      "members": []
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/repository/RecallRateRepository.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/repository/RecallRateRepository.class",
+      "sha256": "2eb836dfc525189fec63c8759d1ee62fcbfe6ad058c7d8fc2ea468cf483dfba5",
+      "git_blob_sha1": "3487d06c764b994d4dca96000302a2c97a8c4242",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/repository/RecallRateRepository",
+      "source_file": "RecallRateRepository.java",
+      "members": []
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/service/ClassifyService.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/service/ClassifyService.class",
+      "sha256": "2e73809c84482ac0c0ccc8a64a7195ce4189c3df59b09507882c73f9d3f02365",
+      "git_blob_sha1": "1ea8f2e2d8e62b3168f5ef3048c2c3d7272b021b",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/service/ClassifyService",
+      "source_file": "ClassifyService.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "maxResultSize",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "trm",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "percentOfTestedQuestions",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "database",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "limitPairsForTest",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "limitIndexQuestionsForTests",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "bm25ParameterK",
+          "descriptor": "Ljava/lang/Float;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "bm25ParameterB",
+          "descriptor": "Ljava/lang/Float;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tagFilter",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "observation",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "lote",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "rankingStanfordClassifier",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "rankingWekaClassifier",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "rankingSumCosine",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "rankingTrm",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "rankingDupPredictor",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "toTest",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "dateFormat",
+          "descriptor": "Ljava/text/SimpleDateFormat;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "postsRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/PostsRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "experimentRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/ExperimentRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "recallRateRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/RecallRateRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "genericRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/GenericRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "featureRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/FeatureRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "dupeUtils",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/util/DupeUtils;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "terrierSearcher",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/TerrierSearcherPL2;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "luceneSearcherBM25",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/LuceneSearcherBM25;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "rawClosedDuplicatedNonMastersByTag",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "initTimeQuestion",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "initTimeLoop",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "endTimeQuestion",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "endTimeLoop",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "duplicatedPairs",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "nonDuplicated",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "stanfordClassifier",
+          "descriptor": "Ledu/stanford/nlp/classify/LogisticClassifier;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "cls",
+          "descriptor": "Lweka/classifiers/functions/Logistic;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "verifyHitInMemory",
+          "descriptor": "(Ljava/lang/Integer;Ljava/util/List;Ljava/lang/String;)Ljava/lang/Integer;",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "trainStanfordClassifier",
+          "descriptor": "()Ledu/stanford/nlp/classify/LogisticClassifier;",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "trainWekaClassifier",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "run",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<clinit>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/service/FeaturesService.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/service/FeaturesService.class",
+      "sha256": "2e551bccef57df717c9bd998c17d3c27d96e702af70cfd5c7c2efaa4cf31c256",
+      "git_blob_sha1": "0240748c5551f3fef2ae6681fec1275dad6ebc32",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/service/FeaturesService",
+      "source_file": "FeaturesService.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "postsRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/PostsRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "genericRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/GenericRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "pairRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/PairRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "dupeUtils",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/util/DupeUtils;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "postLinksRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/PostLinksRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "featureRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/FeatureRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tagFilter",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "maxCreationDate",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "rawClosedDuplicatedNonMastersByTag",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "nonDuplicatedQuestions",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "pairCount",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "initTime",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "postsLinks",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "findClosedDuplicatedNonMastersByTag",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "findNonDuplicatedQuestions",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "cleanOldData",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "generateFeaturesForDuplicatedQuestions",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "generateFeaturesForNonDuplicatedQuestions",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPostsLinksByPostId",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "findPostById",
+          "descriptor": "(Ljava/lang/Integer;)Lbr/ufu/facom/lascam/dupe/domain/Post;",
+          "attributes": [
+            "Code",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getAllPostLinks",
+          "descriptor": "()Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTagFilter",
+          "descriptor": "()Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setTagFilter",
+          "descriptor": "(Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/service/LuceneSearcherBM25.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/service/LuceneSearcherBM25.class",
+      "sha256": "6a04ee1603eeca7f3954d299b59f01b81f98c40f67f40e54df6101b9a044fad3",
+      "git_blob_sha1": "f5cc1c637df9ddd4e170028334072675cb94eb74",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/service/LuceneSearcherBM25",
+      "source_file": "LuceneSearcherBM25.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "genericRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/GenericRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "standardAnalyzer",
+          "descriptor": "Lorg/apache/lucene/analysis/Analyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "englishAnalyzerWithStopWords",
+          "descriptor": "Lorg/apache/lucene/analysis/Analyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "englishAnalyzerOnlyStemming",
+          "descriptor": "Lorg/apache/lucene/analysis/Analyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "whiteSpace",
+          "descriptor": "Lorg/apache/lucene/analysis/Analyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "index",
+          "descriptor": "Lorg/apache/lucene/store/Directory;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "indexedListSize",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "hits",
+          "descriptor": "[Lorg/apache/lucene/search/ScoreDoc;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "searcher",
+          "descriptor": "Lorg/apache/lucene/search/IndexSearcher;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "reader",
+          "descriptor": "Lorg/apache/lucene/index/IndexReader;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "parseErrosNum",
+          "descriptor": "Ljava/lang/Integer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "questionsCache",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "questionsParseErrors",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "config",
+          "descriptor": "Lorg/apache/lucene/index/IndexWriterConfig;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "englishQPWithStopWordsAnalyzer",
+          "descriptor": "Lorg/apache/lucene/queryparser/classic/QueryParser;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "englishQPOnlyStemmingAnalyzer",
+          "descriptor": "Lorg/apache/lucene/queryparser/classic/QueryParser;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "whiteSpaceQP",
+          "descriptor": "Lorg/apache/lucene/queryparser/classic/QueryParser;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "initializeConfigs",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "buildSearchManager",
+          "descriptor": "(Ljava/lang/String;Ljava/util/List;)V",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "performParse",
+          "descriptor": "(Lorg/apache/lucene/queryparser/classic/QueryParser;Ljava/lang/String;Lbr/ufu/facom/lascam/dupe/domain/Post;Ljava/lang/String;Ljava/lang/Boolean;)Lorg/apache/lucene/search/Query;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "search",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Post;Ljava/lang/Integer;)Ljava/lang/Integer;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getQuestion",
+          "descriptor": "(I)Ljava/lang/Integer;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getDocno",
+          "descriptor": "(I)Ljava/lang/Integer;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "finalize",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "addQuestion",
+          "descriptor": "(Lorg/apache/lucene/index/IndexWriter;Ljava/lang/String;Ljava/lang/Integer;)V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getQuestionById",
+          "descriptor": "(Ljava/lang/Integer;)Lbr/ufu/facom/lascam/dupe/domain/Post;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "escapeTags",
+          "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setSearchSimilarityParams",
+          "descriptor": "(Ljava/lang/Float;Ljava/lang/Float;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/service/TerrierSearcherPL2.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/service/TerrierSearcherPL2.class",
+      "sha256": "fdb4daba4d3c0d55d0a852f94d3807cb4611ad91dfd766e9a7eff7959a61f74f",
+      "git_blob_sha1": "90c45f2a5e509f955b56561527e4c7c39a05dfc9",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/service/TerrierSearcherPL2",
+      "source_file": "TerrierSearcherPL2.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "genericRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/GenericRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "queryingManager",
+          "descriptor": "Lorg/terrier/querying/Manager;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "results",
+          "descriptor": "Lorg/terrier/matching/ResultSet;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "maxResultSize",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "buildSearchManager",
+          "descriptor": "(Ljava/lang/String;Ljava/util/List;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "search",
+          "descriptor": "(Ljava/lang/String;)Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getDocno",
+          "descriptor": "(I)Ljava/lang/Integer;",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/CosineSimilarity$values.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/CosineSimilarity$values.class",
+      "sha256": "df83b0e97530acc7eeb56bf336c4d9f0400c3a841d9d2629cd4fe559bffd15c0",
+      "git_blob_sha1": "9332d3cd9189ec83dab3af1310ee2d58855c655f",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/CosineSimilarity$values",
+      "source_file": "CosineSimilarity.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "val1",
+          "descriptor": "I",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "val2",
+          "descriptor": "I",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "this$0",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/util/CosineSimilarity;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/util/CosineSimilarity;II)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "updateValues",
+          "descriptor": "(II)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/CosineSimilarity.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/CosineSimilarity.class",
+      "sha256": "6ff0fed2f075f655c9ee5d5002728cc9824d6f4c98fafa849bb398fad79bda3f",
+      "git_blob_sha1": "edf8710c62200b84c434665e06b36712a16f9a04",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/CosineSimilarity",
+      "source_file": "CosineSimilarity.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCosineSimilarityScore",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCosineSimilarity",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)D",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "cosineSimilarity",
+          "descriptor": "([D[D)D",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTermFrequencyMap",
+          "descriptor": "([Ljava/lang/String;)Ljava/util/Map;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "cosineSimilarity",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)D",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/DupeUtils$1.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/DupeUtils$1.class",
+      "sha256": "334bacc35ee14c5e9d768804e4924033d14a3b4a6704b2d8c03424f01fbff6e6",
+      "git_blob_sha1": "94452f6770c75f776fdf73be920b4b93f8a336f9",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/DupeUtils$1",
+      "source_file": "DupeUtils.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "compare",
+          "descriptor": "(Ljava/util/Map$Entry;Ljava/util/Map$Entry;)I",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "compare",
+          "descriptor": "(Ljava/lang/Object;Ljava/lang/Object;)I",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/DupeUtils$2.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/DupeUtils$2.class",
+      "sha256": "6c41674f2cfb8fc030f50121bab24a761d0ac6bef46d38e62f68176b35cffad3",
+      "git_blob_sha1": "49972f5383d941daaebce8756e8bcdd9118f92f3",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/DupeUtils$2",
+      "source_file": "DupeUtils.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "compare",
+          "descriptor": "(Ljava/util/Map$Entry;Ljava/util/Map$Entry;)I",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "compare",
+          "descriptor": "(Ljava/lang/Object;Ljava/lang/Object;)I",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/DupeUtils.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/DupeUtils.class",
+      "sha256": "fb87a48945c2c5f468b075e6907e649126f1a4ddf0d451cbf1f263e701acfcd6",
+      "git_blob_sha1": "ee6088eeea44de26bd4d0e35d2ac344c5c481293",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/DupeUtils",
+      "source_file": "DupeUtils.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "logger",
+          "descriptor": "Lorg/slf4j/Logger;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "factory",
+          "descriptor": "Lorg/apache/lucene/util/AttributeFactory;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "standardTokenizer",
+          "descriptor": "Lorg/apache/lucene/analysis/standard/StandardTokenizer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "calcularWordNet",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "calcularEntityOverlap",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "calcularEntityTypeOverlap",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "allPostLinks",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "props",
+          "descriptor": "Ljava/util/Properties;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "pipeline",
+          "descriptor": "Ledu/stanford/nlp/pipeline/StanfordCoreNLP;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "db",
+          "descriptor": "Ledu/cmu/lti/lexical_db/ILexicalDatabase;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "rcs",
+          "descriptor": "Ledu/cmu/lti/ws4j/RelatednessCalculator;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "posPairs",
+          "descriptor": "Ljava/util/List;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "allDuplicatedQuestionsIds",
+          "descriptor": "Ljava/util/Set;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "bucketDuplicatiosMap",
+          "descriptor": "Ljava/util/Map;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "genericRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/GenericRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "featureRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/FeatureRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "luceneSearcherBM25",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/LuceneSearcherBM25;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "configsInitialized",
+          "descriptor": "Ljava/lang/Boolean;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "wekaAttributes",
+          "descriptor": "Ljava/util/ArrayList;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "initTime",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "endTime",
+          "descriptor": "J",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "ttWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "ccWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "bbWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "btWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tbWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "eeWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "aaWeight",
+          "descriptor": "Ljava/lang/Double;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "cs1",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/util/CosineSimilarity;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "trm",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "tagFilter",
+          "descriptor": "Ljava/lang/String;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "loadWekaFeatures",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "initializeConfigs",
+          "descriptor": "()V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPostsLinks",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "generateBuckets",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCodeValues",
+          "descriptor": "(Ljava/util/regex/Pattern;Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "extractFeatures",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Post;Lbr/ufu/facom/lascam/dupe/domain/Post;)Ljava/util/HashMap;",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "computeCossineForCodes",
+          "descriptor": "(Ljava/util/regex/Pattern;Ljava/lang/String;Ljava/lang/String;)Lbr/ufu/facom/lascam/dupe/domain/Feature;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "computeFeatures",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)Lbr/ufu/facom/lascam/dupe/domain/Feature;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "computeCountersForQuestion",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Question;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "computeTokenNerPos",
+          "descriptor": "(Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "termOverlap",
+          "descriptor": "(Ledu/stanford/nlp/stats/Counter;Ledu/stanford/nlp/stats/Counter;)Ljava/lang/Double;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getFeaturesFromDB",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Pair;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getSumOfCosines",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Pair;)Ljava/lang/Double;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "createFeatures",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Pair;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "createFeaturesForSimpleClassifier",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Pair;)[D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getCosineBasedOnFeatureWeight",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/Double;)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "extractFeaturesForTrainingStanfordClassifier",
+          "descriptor": "(Ljava/util/List;Ljava/lang/String;)Ledu/stanford/nlp/classify/Dataset;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "extractFeaturesForTrainingWekaClassifier",
+          "descriptor": "(Ljava/util/List;Ljava/lang/String;Lweka/core/Instances;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getWekaInstance",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Pair;Ljava/util/List;Ljava/lang/String;)Lweka/core/Instance;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "entriesSortedByValuesDesc",
+          "descriptor": "(Ljava/util/Map;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "entriesSortedByValues",
+          "descriptor": "(Ljava/util/Map;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRelatedPostIds",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Post;)Ljava/util/Set;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getRelatedPostIds",
+          "descriptor": "(Ljava/lang/Integer;)Ljava/util/Set;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getBucketDuplicatiosMap",
+          "descriptor": "()Ljava/util/Map;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getDataBase",
+          "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "reportElapsedTime",
+          "descriptor": "(JLjava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "calculateCosine",
+          "descriptor": "(Ljava/lang/String;Ljava/lang/String;)D",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getWords",
+          "descriptor": "(Ljava/util/regex/Pattern;Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "redondear",
+          "descriptor": "(FI)F",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "redondear",
+          "descriptor": "(DI)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "readFile",
+          "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getAllPostLinks",
+          "descriptor": "()Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setAllPostLinks",
+          "descriptor": "(Ljava/util/List;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setBlanks",
+          "descriptor": "(Lbr/ufu/facom/lascam/dupe/domain/Post;)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getQueryComplementByTag",
+          "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getWekaAttributes",
+          "descriptor": "()Ljava/util/ArrayList;",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "setWekaAttributes",
+          "descriptor": "(Ljava/util/ArrayList;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/SimpleLogisticClassifier$Instance.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/SimpleLogisticClassifier$Instance.class",
+      "sha256": "32feeb2c96630d79737a98d35f6832e94533f6b2ae039b58b0ab7d0b46b4ea5a",
+      "git_blob_sha1": "bac549bf119fe9b62b9ef9ced1ecf75533cdd78f",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/SimpleLogisticClassifier$Instance",
+      "source_file": "SimpleLogisticClassifier.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "label",
+          "descriptor": "D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "x",
+          "descriptor": "[D",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(D[D)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/classes/br/ufu/facom/lascam/dupe/util/SimpleLogisticClassifier.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/classes/br/ufu/facom/lascam/dupe/util/SimpleLogisticClassifier.class",
+      "sha256": "ff3857772de9c5fdfc753d94f38a0bcf37510f39b94d34c99fc65d65a0d0b67b",
+      "git_blob_sha1": "efc0cd1ddbbca2d8f7a86bc1a57c50b037a375aa",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/dupe/util/SimpleLogisticClassifier",
+      "source_file": "SimpleLogisticClassifier.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "rate",
+          "descriptor": "D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "weights",
+          "descriptor": "[D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "ITERATIONS",
+          "descriptor": "I",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(I)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "sigmoid",
+          "descriptor": "(D)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "train",
+          "descriptor": "(Ljava/util/List;)V",
+          "attributes": [
+            "Code",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "classify",
+          "descriptor": "([D)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "readDataSet",
+          "descriptor": "(Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Code",
+            "Exceptions",
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Code",
+            "Exceptions"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/DupeTest.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/DupeTest.class",
+      "sha256": "583865dba655d1ba694cbfe5383a7b5ef725ffee9835534664edf182e1aab7e6",
+      "git_blob_sha1": "63f25296101c85daaffef296a52f6dc4f4b6bbc1",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/DupeTest",
+      "source_file": "DupeTest.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "featuresService",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/FeaturesService;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "dupeUtils",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/util/DupeUtils;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "classifyService",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/ClassifyService;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "postsRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/PostsRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "genericRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/GenericRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "pairRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/PairRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "featureRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/FeatureRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "experimentRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/ExperimentRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "recallRateRepository",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/repository/RecallRateRepository;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "luceneSearcherBM25",
+          "descriptor": "Lbr/ufu/facom/lascam/dupe/service/LuceneSearcherBM25;",
+          "attributes": [
+            "RuntimeVisibleAnnotations"
+          ]
+        },
+        {
+          "kind": "field",
+          "name": "TAG_REGEX",
+          "descriptor": "Ljava/util/regex/Pattern;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "TAG_REGEX_POSTSQUESTIONS",
+          "descriptor": "Ljava/util/regex/Pattern;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<clinit>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getTagValues",
+          "descriptor": "(Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Signature",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "dupeTest",
+          "descriptor": "()V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "testSearch",
+          "descriptor": "()V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "addDoc",
+          "descriptor": "(Lorg/apache/lucene/index/IndexWriter;Ljava/lang/String;Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "gravaResultados",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/LibLinearTest.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/LibLinearTest.class",
+      "sha256": "449cd367eef3654c0ff7c1c3271d43f60f0e1ae99c422dd6cc91fda858ed18ba",
+      "git_blob_sha1": "a2dcb627e3dc617b1851ac6b02f8732a11b64b99",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/LibLinearTest",
+      "source_file": "LibLinearTest.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "GROUPS_ARRAY",
+          "descriptor": "[D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp1",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp2",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp3",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp4",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp5",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp6",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp7",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "tp8",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "up1",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "up2",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "up3",
+          "descriptor": "[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "trainingSetWithUnknown",
+          "descriptor": "[[Lde/bwaldvogel/liblinear/FeatureNode;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<clinit>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/LibLinearTest2.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/LibLinearTest2.class",
+      "sha256": "a8a4a08cfaa37e63bba47ae7c8b6512efa8663838b3885dd84096ff1e4bb3372",
+      "git_blob_sha1": "bd81e7f6262912e5207c218d4c7d0053e4184906",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/LibLinearTest2",
+      "source_file": "LibLinearTest2.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/LibLinearTest3.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/LibLinearTest3.class",
+      "sha256": "5018b49ff5004284586a8076f87c2cb9c052df5dc536982ff475cf93c91f7845",
+      "git_blob_sha1": "0ec639bae93149cea4abf1801ec034f3ed369399",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/LibLinearTest3",
+      "source_file": "LibLinearTest3.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/LogisticClassifierTest1.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/LogisticClassifierTest1.class",
+      "sha256": "0beff39868b132303f9cb9a3fe8d7f95dba4698c410e3531d13eba554f9013ef",
+      "git_blob_sha1": "b0d3659b5f43920491a9007b7e9f340fe658c05d",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/LogisticClassifierTest1",
+      "source_file": "LogisticClassifierTest1.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "classifier",
+          "descriptor": "Ledu/stanford/nlp/classify/LogisticClassifier;",
+          "attributes": [
+            "Signature"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/MalletClassifierTest.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/MalletClassifierTest.class",
+      "sha256": "f70387f8775575ef2c0b4a2d750d1ff02a3a4a33d5a5e451c317ad9a174e827a",
+      "git_blob_sha1": "dab537284c48e3fa6ade904d2d1c78eb4c7afdd3",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/MalletClassifierTest",
+      "source_file": "MalletClassifierTest.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/SimpleLogisticClassifierTest1$Instance.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/SimpleLogisticClassifierTest1$Instance.class",
+      "sha256": "1d4d08c5ab2aec13f6724bda4cd05386f816d89acb6995cd9c0e3c0e8fb109a2",
+      "git_blob_sha1": "cca37f44c5914c25e2696ef3d77633c1ae7d81e8",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/SimpleLogisticClassifierTest1$Instance",
+      "source_file": "SimpleLogisticClassifierTest1.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "label",
+          "descriptor": "D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "x",
+          "descriptor": "[D",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(D[D)V",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/SimpleLogisticClassifierTest1.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/SimpleLogisticClassifierTest1.class",
+      "sha256": "e8dd114fd404ad7cc4093cf67a927b4a5401ae4ce557a65e8143080ba894cc53",
+      "git_blob_sha1": "ed7cbdb646aff76fca17661cf492b75ea1e3cfb7",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/SimpleLogisticClassifierTest1",
+      "source_file": "SimpleLogisticClassifierTest1.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "rate",
+          "descriptor": "D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "weights",
+          "descriptor": "[D",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "ITERATIONS",
+          "descriptor": "I",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "(I)V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "sigmoid",
+          "descriptor": "(D)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "train",
+          "descriptor": "(Ljava/util/List;)V",
+          "attributes": [
+            "Signature",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "classify",
+          "descriptor": "([D)D",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "readDataSet",
+          "descriptor": "(Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Exceptions",
+            "Signature",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/Tests.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/Tests.class",
+      "sha256": "c43ea1d63d71e9538d5ca3bd80c5e73e7b7b5837f0fefbbe736f010d32da8f42",
+      "git_blob_sha1": "f7c547ab901f22805fec87b07b49b672a7bf997d",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/Tests",
+      "source_file": "Tests.java",
+      "members": [
+        {
+          "kind": "field",
+          "name": "whiteSpaceQP",
+          "descriptor": "Lorg/apache/lucene/queryparser/classic/QueryParser;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "standardAnalyzer",
+          "descriptor": "Lorg/apache/lucene/analysis/standard/StandardAnalyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "whiteSpace",
+          "descriptor": "Lorg/apache/lucene/analysis/Analyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "standardQP",
+          "descriptor": "Lorg/apache/lucene/queryparser/classic/QueryParser;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "englishAnalyzerWithStopWords",
+          "descriptor": "Lorg/apache/lucene/analysis/Analyzer;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "englishQP",
+          "descriptor": "Lorg/apache/lucene/queryparser/classic/QueryParser;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "bm25ParameterK",
+          "descriptor": "Ljava/lang/Float;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "bm25ParameterB",
+          "descriptor": "Ljava/lang/Float;",
+          "attributes": []
+        },
+        {
+          "kind": "field",
+          "name": "twoDForm",
+          "descriptor": "Ljava/text/DecimalFormat;",
+          "attributes": []
+        },
+        {
+          "kind": "method",
+          "name": "<clinit>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "testStemmingStop",
+          "descriptor": "()V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "tokenizeStopStem",
+          "descriptor": "(Ljava/lang/String;)Ljava/lang/String;",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "getPalavras",
+          "descriptor": "(Ljava/util/regex/Pattern;Ljava/lang/String;)Ljava/util/List;",
+          "attributes": [
+            "Signature",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "performStemmingStopWords",
+          "descriptor": "(Lorg/apache/lucene/queryparser/classic/QueryParser;Ljava/lang/String;)Ljava/lang/String;",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "testSearch",
+          "descriptor": "()V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "addDoc",
+          "descriptor": "(Lorg/apache/lucene/index/IndexWriter;Ljava/lang/String;Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "redondear",
+          "descriptor": "(FI)F",
+          "attributes": [
+            "Code"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "target/test-classes/br/ufu/facom/lascam/WekaLogisticClassifierTest.class",
+      "local": "docs/research/dedup-500/evidence/muldon--dupeRep/remaining-pinned/target/test-classes/br/ufu/facom/lascam/WekaLogisticClassifierTest.class",
+      "sha256": "24b3c6e11235c517027694126c9f8831ffa7435fde8de8aad1702439c9dd3041",
+      "git_blob_sha1": "0f6ce3cbd20057516cc203c252ea3020ee602299",
+      "method": "Full classfile framing/constant-pool/member/attribute parse to EOF; Code payload not disassembled or executed",
+      "major": 52,
+      "minor": 0,
+      "class_name": "br/ufu/facom/lascam/WekaLogisticClassifierTest",
+      "source_file": "WekaLogisticClassifierTest.java",
+      "members": [
+        {
+          "kind": "method",
+          "name": "<init>",
+          "descriptor": "()V",
+          "attributes": [
+            "Code"
+          ]
+        },
+        {
+          "kind": "method",
+          "name": "main",
+          "descriptor": "([Ljava/lang/String;)V",
+          "attributes": [
+            "Exceptions",
+            "Code"
+          ]
+        }
+      ]
+    }
+  ]
+}

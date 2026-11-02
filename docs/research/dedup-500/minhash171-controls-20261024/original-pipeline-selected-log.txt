@@ -1,0 +1,224 @@
+test_binary_outputs_match_pre_consolidation_fixture (original_minhash171_pipeline_tests.TestMinhashPipeline.test_binary_outputs_match_pre_consolidation_fixture) ... 2026-10-24 07:23:32.629 | DEBUG    | minhash_dedup.minhash:__init__:184 - Initialized SignatureStage with language: eng
+2026-10-24 07:23:32.629 | INFO     | minhash_dedup.minhash:run:263 - Starting signature generation for rank 0, world_size 2
+2026-10-24 07:23:32.631 | INFO     | minhash_dedup.minhash:run:304 - Sorting buckets...
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:337 - Finished processing 3 documents
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:339 - Bucket 0: 3 signatures written
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:339 - Bucket 1: 3 signatures written
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:341 - Signature generation completed for rank 0
+2026-10-24 07:23:32.632 | DEBUG    | minhash_dedup.minhash:__init__:184 - Initialized SignatureStage with language: eng
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:263 - Starting signature generation for rank 1, world_size 2
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:304 - Sorting buckets...
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:337 - Finished processing 3 documents
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:339 - Bucket 0: 2 signatures written
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:339 - Bucket 1: 2 signatures written
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:341 - Signature generation completed for rank 1
+2026-10-24 07:23:32.632 | INFO     | minhash_dedup.minhash:run:415 - Starting bucket comparison for bucket 0, worker 0 (rank=0, world_size=2)
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:420 - Found 2 signature files in bucket 0
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:424 - Running worker 1/1 on bucket 000. Hash range: [0, 4294967295]
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:449 - Finished initializing signatures priority queue.
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:500 - Finished processing bucket 0, worker 0, producing 2 dups
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:415 - Starting bucket comparison for bucket 1, worker 0 (rank=1, world_size=2)
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:420 - Found 2 signature files in bucket 1
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:424 - Running worker 1/1 on bucket 001. Hash range: [0, 4294967295]
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:449 - Finished initializing signatures priority queue.
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:500 - Finished processing bucket 1, worker 0, producing 2 dups
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:run:752 - Stage 2.5 rank 0/2 processing host band 0 shard 0/1 (1 files)
+2026-10-24 07:23:32.633 | INFO     | minhash_dedup.minhash:_process_target_band:619 - Band 0: loading target buckets
+Band 0: load target:   0%|          | 0/1 [00:00<?, ?it/s]                                                          Band 0: scan band 1:   0%|          | 0/1 [00:00<?, ?it/s]                                                          2026-10-24 07:23:32.639 | INFO     | minhash_dedup.minhash:_process_target_band:705 - Band 0: scanned 2 buckets in other bands, kept 2, dropped 0 (strict_subset=0, equality_tiebreak=0)
+2026-10-24 07:23:32.639 | INFO     | minhash_dedup.minhash:run:775 - Stage 2.5 rank 0 done. kept=2, dropped=0
+2026-10-24 07:23:32.639 | INFO     | minhash_dedup.minhash:run:752 - Stage 2.5 rank 1/2 processing host band 1 shard 0/1 (1 files)
+2026-10-24 07:23:32.639 | INFO     | minhash_dedup.minhash:_process_target_band:619 - Band 1: loading target buckets
+Band 1: load target:   0%|          | 0/1 [00:00<?, ?it/s]                                                          Band 1: scan band 0:   0%|          | 0/1 [00:00<?, ?it/s]                                                          2026-10-24 07:23:32.639 | INFO     | minhash_dedup.minhash:_process_target_band:705 - Band 1: scanned 2 buckets in other bands, kept 0, dropped 2 (strict_subset=0, equality_tiebreak=2)
+2026-10-24 07:23:32.639 | INFO     | minhash_dedup.minhash:run:775 - Stage 2.5 rank 1 done. kept=0, dropped=2
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 3, 'num_buckets': 2, 'hashes_per_bucket': 2, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 32, 'hash_fc': 'sha1'}}
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 32263.88it/s]
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Puncture rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:log_round_summary:1197 - Round 1 bound summary: original-form=2, post Wt-1 preclusion=2, post support-dominated reduction=2, ending bound=2, candidate keys=0, suppressed docs=0, removed buckets=0, improvement=0.0
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 36314.32it/s]
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:compute_cov_bound:1366 - Completed loading, Number of unique buckets: 2, unique docs: 4, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:compute_cov_bound:1372 - 2: 2
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:compute_cov_bound:1373 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:compute_cov_bound:1375 - 1: 4
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Covering rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:compute_cov_bound:1408 - Full coverage achieved by 2 weight-1 covering buckets (0 equal-support docs compressed); this is unbeatable and no further covering iteration is needed
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:compute_cov_bound:1413 - Covering bucket count bound: 2, Restricted covering bound: 2, covered docs: 4, cover_buckets.dups export skipped
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 40920.04it/s]
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 2, unique docs: 4, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1567 - 2: 2
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1570 - 1: 4
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Cluster rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 0
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1596 - No residual buckets remain after weight-1 preprocessing
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 2, clustered docs: 4,  Compressed docs: 0, Cluster freq stats:
+2026-10-24 07:23:32.640 | INFO     | minhash_dedup.minhash:run:1720 - 2: 2
+2026-10-24 07:23:32.641 | WARNING  | minhash_dedup.minhash:run:1798 - No .remove file for rank=0.
+2026-10-24 07:23:32.642 | DEBUG    | minhash_dedup.minhash:__init__:184 - Initialized SignatureStage with language: eng
+2026-10-24 07:23:32.642 | INFO     | minhash_dedup.minhash:run:263 - Starting signature generation for rank 0, world_size 2
+2026-10-24 07:23:32.642 | INFO     | minhash_dedup.minhash:run:304 - Sorting buckets...
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:337 - Finished processing 3 documents
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:339 - Bucket 0: 3 signatures written
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:339 - Bucket 1: 3 signatures written
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:341 - Signature generation completed for rank 0
+2026-10-24 07:23:32.643 | DEBUG    | minhash_dedup.minhash:__init__:184 - Initialized SignatureStage with language: eng
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:263 - Starting signature generation for rank 1, world_size 2
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:304 - Sorting buckets...
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:337 - Finished processing 3 documents
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:339 - Bucket 0: 2 signatures written
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:339 - Bucket 1: 2 signatures written
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:341 - Signature generation completed for rank 1
+2026-10-24 07:23:32.643 | INFO     | minhash_dedup.minhash:run:415 - Starting bucket comparison for bucket 0, worker 0 (rank=0, world_size=2)
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:420 - Found 2 signature files in bucket 0
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:424 - Running worker 1/1 on bucket 000. Hash range: [0, np.uint64(2305843009213693951)]
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:449 - Finished initializing signatures priority queue.
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:500 - Finished processing bucket 0, worker 0, producing 2 dups
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:415 - Starting bucket comparison for bucket 1, worker 0 (rank=1, world_size=2)
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:420 - Found 2 signature files in bucket 1
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:424 - Running worker 1/1 on bucket 001. Hash range: [0, np.uint64(2305843009213693951)]
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:449 - Finished initializing signatures priority queue.
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:500 - Finished processing bucket 1, worker 0, producing 2 dups
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:run:752 - Stage 2.5 rank 0/2 processing host band 0 shard 0/1 (1 files)
+2026-10-24 07:23:32.644 | INFO     | minhash_dedup.minhash:_process_target_band:619 - Band 0: loading target buckets
+Band 0: load target:   0%|          | 0/1 [00:00<?, ?it/s]                                                          Band 0: scan band 1:   0%|          | 0/1 [00:00<?, ?it/s]                                                          2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:_process_target_band:705 - Band 0: scanned 2 buckets in other bands, kept 2, dropped 0 (strict_subset=0, equality_tiebreak=0)
+2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:run:775 - Stage 2.5 rank 0 done. kept=2, dropped=0
+2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:run:752 - Stage 2.5 rank 1/2 processing host band 1 shard 0/1 (1 files)
+2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:_process_target_band:619 - Band 1: loading target buckets
+Band 1: load target:   0%|          | 0/1 [00:00<?, ?it/s]                                                          Band 1: scan band 0:   0%|          | 0/1 [00:00<?, ?it/s]                                                          2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:_process_target_band:705 - Band 1: scanned 2 buckets in other bands, kept 0, dropped 2 (strict_subset=0, equality_tiebreak=2)
+2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:run:775 - Stage 2.5 rank 1 done. kept=0, dropped=2
+2026-10-24 07:23:32.645 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 3, 'num_buckets': 2, 'hashes_per_bucket': 2, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'sha1'}}
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 34521.02it/s]
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Puncture rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:log_round_summary:1197 - Round 1 bound summary: original-form=2, post Wt-1 preclusion=2, post support-dominated reduction=2, ending bound=2, candidate keys=0, suppressed docs=0, removed buckets=0, improvement=0.0
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 38479.85it/s]
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:compute_cov_bound:1366 - Completed loading, Number of unique buckets: 2, unique docs: 4, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:compute_cov_bound:1372 - 2: 2
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:compute_cov_bound:1373 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:compute_cov_bound:1375 - 1: 4
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Covering rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:compute_cov_bound:1408 - Full coverage achieved by 2 weight-1 covering buckets (0 equal-support docs compressed); this is unbeatable and no further covering iteration is needed
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:compute_cov_bound:1413 - Covering bucket count bound: 2, Restricted covering bound: 2, covered docs: 4, cover_buckets.dups export skipped
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 36631.48it/s]
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 2, unique docs: 4, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1567 - 2: 2
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1570 - 1: 4
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Cluster rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 0
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1596 - No residual buckets remain after weight-1 preprocessing
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 2, clustered docs: 4,  Compressed docs: 0, Cluster freq stats:
+2026-10-24 07:23:32.646 | INFO     | minhash_dedup.minhash:run:1720 - 2: 2
+2026-10-24 07:23:32.647 | WARNING  | minhash_dedup.minhash:run:1798 - No .remove file for rank=0.
+ok
+test_constructors_preserve_supported_options (original_minhash171_pipeline_tests.TestMinhashPipeline.test_constructors_preserve_supported_options) ... 2026-10-24 07:23:32.649 | DEBUG    | minhash_dedup.minhash:__init__:184 - Initialized SignatureStage with language: eng
+2026-10-24 07:23:32.649 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 3, 'num_buckets': 2, 'hashes_per_bucket': 2, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+ok
+test_constructors_reject_removed_noop_options (original_minhash171_pipeline_tests.TestMinhashPipeline.test_constructors_reject_removed_noop_options) ... 2026-10-24 07:23:32.650 | DEBUG    | minhash_dedup.minhash:__init__:184 - Initialized SignatureStage with language: eng
+2026-10-24 07:23:32.650 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+ok
+test_residual_cover_export_and_equal_support_aliases (original_minhash171_pipeline_tests.TestMinhashPipeline.test_residual_cover_export_and_equal_support_aliases) ... 2026-10-24 07:23:32.651 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+Reading dup files:   0%|          | 0/3 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 3/3 [00:00<00:00, 31223.11it/s]
+2026-10-24 07:23:32.651 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1134 - Puncture rebuild compressed 1 residual equal-support docs
+2026-10-24 07:23:32.651 | INFO     | minhash_dedup.minhash:compute_punct_bound:1218 - Puncture round 1, clustering on bucket weight 3
+2026-10-24 07:23:32.651 | INFO     | minhash_dedup.minhash:log_round_summary:1197 - Round 1 bound summary: original-form=1, post Wt-1 preclusion=1, post support-dominated reduction=1, ending bound=1, candidate keys=4, suppressed docs=0, removed buckets=0, improvement=0.0
+Reading dup files:   0%|          | 0/3 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 3/3 [00:00<00:00, 38130.04it/s]
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1366 - Completed loading, Number of unique buckets: 6, unique docs: 5, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1372 - 2: 3
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1372 - 3: 3
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1373 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1375 - 3: 5
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1134 - Covering rebuild compressed 1 residual equal-support docs
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1424 - Covering on bucket weight 3
+Reading covering buckets:   0%|          | 0/3 [00:00<?, ?it/s]Reading covering buckets: 100%|██████████| 3/3 [00:00<00:00, 38597.89it/s]
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:compute_cov_bound:1529 - Covering bucket count bound: 2, Restricted covering bound: 2, covered docs: 5, equal-support docs compressed: 1
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/3 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 3/3 [00:00<00:00, 37560.93it/s]
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 6, unique docs: 5, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1567 - 2: 3
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1567 - 3: 3
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1570 - 3: 5
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1134 - Cluster rebuild compressed 1 residual equal-support docs
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 1
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1606 - Clustering on bucket weight 3
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 1, clustered docs: 5,  Compressed docs: 1, Cluster freq stats:
+2026-10-24 07:23:32.652 | INFO     | minhash_dedup.minhash:run:1720 - 5: 1
+ok
+test_source_priority_ties_preserve_bucket_feasibility (original_minhash171_pipeline_tests.TestMinhashPipeline.test_source_priority_ties_preserve_bucket_feasibility) ... 2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 28532.68it/s]
+2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 2, unique docs: 2, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:run:1567 - 2: 2
+2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:run:1570 - 2: 2
+2026-10-24 07:23:32.654 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1134 - Cluster rebuild compressed 1 residual equal-support docs
+2026-10-24 07:23:32.655 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 1
+2026-10-24 07:23:32.655 | INFO     | minhash_dedup.minhash:run:1606 - Clustering on bucket weight 2
+2026-10-24 07:23:32.655 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 1, clustered docs: 2,  Compressed docs: 1, Cluster freq stats:
+2026-10-24 07:23:32.655 | INFO     | minhash_dedup.minhash:run:1720 - 2: 1
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/3 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 3/3 [00:00<00:00, 36472.21it/s]
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 3, unique docs: 3, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1567 - 2: 3
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1570 - 2: 3
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 0
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1606 - Clustering on bucket weight 2
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 1, clustered docs: 3,  Compressed docs: 0, Cluster freq stats:
+2026-10-24 07:23:32.656 | INFO     | minhash_dedup.minhash:run:1720 - 3: 1
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/2 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 2/2 [00:00<00:00, 32263.88it/s]
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 2, unique docs: 3, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1567 - 2: 2
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1570 - 1: 2
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1570 - 2: 1
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1119 - Cluster rebuild precluded 2 weight-1 buckets; weight-1 bucket count now 2
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 0
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1596 - No residual buckets remain after weight-1 preprocessing
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 2, clustered docs: 3,  Compressed docs: 0, Cluster freq stats:
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1720 - 1: 1
+2026-10-24 07:23:32.657 | INFO     | minhash_dedup.minhash:run:1720 - 2: 1
+2026-10-24 07:23:32.658 | INFO     | minhash_dedup.minhash:__init__:868 - SelectionStage config: {'n_grams': 20, 'num_buckets': 14, 'hashes_per_bucket': 9, 'seed': 1, 'norm_config': {'lowercase': True, 'norm_whitespace': True, 'remove_punctuation': True, 'norm_unicode_diacritics': True, 'norm_numbers': True, 'norm_weekdays': False, 'norm_monthnames': False}, 'hash_config': {'precision': 64, 'hash_fc': 'xxhash'}}
+2026-10-24 07:23:32.658 | INFO     | minhash_dedup.minhash:run:1545 - Loading dup files...
+Reading dup files:   0%|          | 0/5 [00:00<?, ?it/s]Reading dup files: 100%|██████████| 5/5 [00:00<00:00, 39053.11it/s]
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1561 - Completed loading, Number of unique buckets: 5, unique docs: 6, Bucket Duplicate freq stats:
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1567 - 2: 3
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1567 - 3: 2
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1568 - Doc weight distribution (weight: number_of_docs):
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1570 - 2: 6
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:_preclude_w1_and_rebuild_layers:1134 - Cluster rebuild compressed 2 residual equal-support docs
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1592 - equal-support docs compressed: 2
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1606 - Clustering on bucket weight 2
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1718 - Number of effective clusters: 2, clustered docs: 6,  Compressed docs: 2, Cluster freq stats:
+2026-10-24 07:23:32.659 | INFO     | minhash_dedup.minhash:run:1720 - 3: 2
+ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.033s
+
+OK
+{
+  "scope": "Five unchanged original pipeline test bodies; entrypoint subprocess test deferred.",
+  "test_source_sha256": "b19e3a390b3721d761be1d0f52341e7a478c5321b68976f4f90122b82ae694bc",
+  "original_tests_run": 5,
+  "passed": 5,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "executed_names": [
+    "test_binary_outputs_match_pre_consolidation_fixture",
+    "test_constructors_preserve_supported_options",
+    "test_constructors_reject_removed_noop_options",
+    "test_residual_cover_export_and_equal_support_aliases",
+    "test_source_priority_ties_preserve_bucket_feasibility"
+  ],
+  "excluded_not_run": [
+    "test_all_stage_entrypoints_with_two_reader_ranks"
+  ],
+  "qualification": "Original complete module imported,selected original TestCase bodies against unchanged real package/NumPy/fsspec; no stage/method adapters. Source scripts/entrypoint subprocess path not executed."
+}

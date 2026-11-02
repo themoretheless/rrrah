@@ -1,0 +1,25 @@
+{
+  "scope": "Pinned original rbtree.c and headers, synthetic single-thread integer keys; no dedup integration, augmented metadata, concurrency or performance qualification",
+  "harness": "docs/research/dedup-500/dupe264-rbtree-control-20261026.c",
+  "build": {
+    "argv": [
+      "cc",
+      "-std=gnu11",
+      "-O2",
+      "-I",
+      "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/markfasheh--duperemove/remaining-pinned",
+      "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/dupe264-rbtree-control-20261026.c",
+      "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/markfasheh--duperemove/remaining-pinned/rbtree.c",
+      "-o",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/dupe264-rbtree-_rw_q1e0/control"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "run": {
+    "exit": 0,
+    "stdout": "PASS: 257 inserts, same-key replacement, 257 erases; order, parents, red rule and black height checked after every operation\n",
+    "stderr": ""
+  }
+}

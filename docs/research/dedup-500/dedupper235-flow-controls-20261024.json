@@ -1,0 +1,36 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original HashService.calculate and HashLogic.handleHashHit bodies extracted via Flow AST. Actual native fs stream/crypto on own temporary4byte fixture and nonexistent path; judgment uses in-memory DB/state/access/result stubs. No remote services, database, native pHash, user-file deletion or full upstream Jest.",
+  "authored_controls": [
+    {
+      "name": "real temporary-file exact stream hash positive",
+      "passed": true,
+      "observed": "12dada1fff4d4787ade3333147202c3b443e376f"
+    },
+    {
+      "name": "missing read and excluded type share empty-string result",
+      "passed": true,
+      "observed": {
+        "missing": "",
+        "excluded": ""
+      }
+    },
+    {
+      "name": "missing retained path with recovery=false",
+      "passed": true,
+      "observed": {
+        "action": "delete",
+        "accessChecks": 0
+      }
+    },
+    {
+      "name": "missing retained path with recovery=true",
+      "passed": true,
+      "observed": {
+        "action": "save",
+        "accessChecks": 1
+      }
+    }
+  ]
+}

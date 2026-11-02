@@ -746,3 +746,105 @@ fn raw_renderer_5x5_gpu_demosaic_algorithms_auto_raise_tile_halo_and_preserve_li
         assert_eq!(actual[3], 1.0);
     }
 }
+
+#[test]
+fn comparison_preserves_all_orientations_pan_zoom_and_resize() {
+    let gpu = common::qualification_gpu().expect("actual GPU required");
+    eprintln!("COMPARISON_MATRIX adapter={}", gpu.adapter_name());
+    let inverse = rrrah_core::invert_3x3(rrrah_core::SRGB_TO_XYZ_D65).unwrap();
+    let mut source = common::profiled_pattern_mosaic(
+        64,
+        48,
+        4095.,
+        [1.4, 1., 0.8, 1.],
+        [inverse[0], inverse[1], inverse[2], [0.; 3]],
+        |x, y| (256 + (x / 2) * 31 + (y / 2) * 23 + ((y % 2) * 2 + x % 2) * 73) as u16,
+    );
+    let mut cases = 0;
+    for format in [common::READBACK_FORMAT, wgpu::TextureFormat::Rgba16Float] {
+        let budget = rrrah_core::MemoryBudget::new(65536);
+        let mut renderer = RawRenderer::new_with_budget(&gpu.device, format, budget.clone());
+        if format == wgpu::TextureFormat::Rgba16Float {
+            renderer
+                .set_output_mode(&gpu.queue, RawOutputMode::SceneLinear)
+                .unwrap();
+        }
+        for orientation in [
+            rrrah_core::Orientation::Normal,
+            rrrah_core::Orientation::HorizontalFlip,
+            rrrah_core::Orientation::Rotate180,
+            rrrah_core::Orientation::VerticalFlip,
+            rrrah_core::Orientation::Transpose,
+            rrrah_core::Orientation::Rotate90,
+            rrrah_core::Orientation::Transverse,
+            rrrah_core::Orientation::Rotate270,
+        ] {
+            source.metadata.orientation = orientation;
+            renderer.upload_mosaic(&gpu.device, &gpu.queue, &source).unwrap();
+            let resident = renderer.resident_bytes();
+            for size in [[96, 80], [137, 93]] {
+                for zoom in [1.1, 2.] {
+                    for pan in [[0., 0.], [3., -2.]] {
+                        let read = |renderer: &RawRenderer| {
+                            if format == wgpu::TextureFormat::Rgba16Float {
+                                gpu.render_existing_raw_half(renderer, size)
+                                    .into_iter()
+                                    .flat_map(u16::to_le_bytes)
+                                    .collect::<Vec<_>>()
+                            } else {
+                                gpu.render_existing_raw(renderer, size).pixels
+                            }
+                        };
+                        let view = ViewParameters {
+                            viewport: [size[0] as f32, size[1] as f32],
+                            zoom,
+                            pan,
+                            ..Default::default()
+                        };
+                        renderer.set_comparison(&gpu.queue, 0., 0.);
+                        renderer.update_view(&gpu.queue, view);
+                        let before = read(&renderer);
+                        renderer.update_view(
+                            &gpu.queue,
+                            ViewParameters {
+                                exposure_stops: 1.,
+                                ..view
+                            },
+                        );
+                        let after = read(&renderer);
+                        assert_ne!(before, after);
+                        renderer.set_comparison(&gpu.queue, 0.5, 0.);
+                        let split = read(&renderer);
+                        let stride = if format == wgpu::TextureFormat::Rgba16Float {
+                            8
+                        } else {
+                            4
+                        };
+                        for pixel in 0..(size[0] * size[1]) as usize {
+                            let offset = pixel * stride;
+                            let reference = if (pixel % size[0] as usize) < (size[0] / 2) as usize {
+                                &before
+                            } else {
+                                &after
+                            };
+                            assert_eq!(
+                                &split[offset..offset + stride],
+                                &reference[offset..offset + stride],
+                                "{orientation:?} {size:?} {zoom} {pan:?} pixel={pixel}"
+                            );
+                        }
+                        assert_eq!(renderer.resident_bytes(), resident);
+                        assert_eq!(budget.used(), resident);
+                        cases += 1;
+                    }
+                }
+            }
+        }
+        drop(renderer);
+        assert_eq!(budget.used(), 0);
+    }
+    assert_eq!(cases, 128);
+    eprintln!(
+        "COMPARISON_MATRIX_COMPLETE cases=128 every_SDR_HDR_pixel_exact=true resident_unchanged=true final=0"
+    );
+}

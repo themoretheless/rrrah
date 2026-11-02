@@ -1,0 +1,56 @@
+name: Run RSS Pipeline
+
+on:
+  schedule:
+    - cron: '0 6,17 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-rss:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        category: [rss_newsletters, rss_blogs, rss_aggregators]
+    steps:
+      - name: Invoke run-pipeline Edge Function (${{ matrix.category }})
+        env:
+          CATEGORY: ${{ matrix.category }}
+          SUPABASE_FUNCTIONS_URL: ${{ secrets.SUPABASE_FUNCTIONS_URL }}
+          MCP_ACCESS_KEY: ${{ secrets.MCP_ACCESS_KEY }}
+        run: |
+          max_attempts=3
+          attempt=0
+
+          while [ $attempt -lt $max_attempts ]; do
+            attempt=$((attempt + 1))
+
+            response=$(curl -s -w "\n%{http_code}" -X POST \
+              "$SUPABASE_FUNCTIONS_URL/run-pipeline" \
+              -H "Content-Type: application/json" \
+              -H "x-brain-key: $MCP_ACCESS_KEY" \
+              -H "x-trigger: github_actions" \
+              -d "{\"source\": \"$CATEGORY\"}" \
+              --max-time 540)
+
+            http_code=$(echo "$response" | tail -1)
+            body=$(echo "$response" | sed '$d')
+
+            echo "Attempt $attempt - HTTP Status: $http_code"
+            echo "Response: $body"
+
+            if [ "$http_code" = "200" ]; then
+              captured=$(echo "$body" | jq -r ".sources.\"$CATEGORY\".captured // 0")
+              failed=$(echo "$body" | jq -r ".sources.\"$CATEGORY\".failed // 0")
+              echo "::notice::$CATEGORY complete: $captured captured, $failed failed"
+              exit 0
+            fi
+
+            if [ $attempt -lt $max_attempts ]; then
+              echo "Retrying in 30s..."
+              sleep 30
+            fi
+          done
+
+          echo "::error::$CATEGORY pipeline failed after $max_attempts attempts (last status: $http_code)"
+          exit 1

@@ -1,0 +1,105 @@
+Failed to compute hashes for /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/bpp182-pixels-u513185a/invalid.png: cannot identify image file '/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/bpp182-pixels-u513185a/invalid.png'
+{
+  "scope": "Original full phash module, actual OpenCV/NumPy/Pillow; logger module shim.\n\nOriginal is_transient and errno set extracted from retry.py into namespace shim.\nFive original top-level test functions executed; four global-cluster test methods\npreviously qualified separately. No full application package graph or HEIC plugin.\n",
+  "original_top_level_test_results": [
+    {
+      "name": "test_different_images_have_large_distance",
+      "passed": true
+    },
+    {
+      "name": "test_hamming_distance_known",
+      "passed": true
+    },
+    {
+      "name": "test_hamming_distance_symmetric",
+      "passed": true
+    },
+    {
+      "name": "test_identical_images_have_zero_distance",
+      "passed": true
+    },
+    {
+      "name": "test_similar_images_have_small_distance",
+      "passed": true
+    }
+  ],
+  "original_top_level_tests_passed": 5,
+  "authored_controls_passed": 6,
+  "observations": [
+    {
+      "case": "opposite_gradient_pixels",
+      "hashes": [
+        -1,
+        0
+      ],
+      "original_distance": 1,
+      "fixed_width64_distance": 64
+    },
+    {
+      "case": "original_png_loading_preserves_signed_hash_counterexample",
+      "hashes": [
+        [
+          -1,
+          1085102592571150095
+        ],
+        [
+          0,
+          -1085102592571150096
+        ]
+      ],
+      "original_dhash_distance": 1
+    },
+    {
+      "case": "distinct_constant_black_white_collide_in_both_hashes",
+      "hashes": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "encoded_bytes_equal": false,
+      "qualification": "Perceptual collision,not byte/pixel equality."
+    },
+    {
+      "case": "invalid_image_returns_unknown_hashes",
+      "result": [
+        null,
+        null
+      ]
+    },
+    {
+      "case": "jpeg_exif6_orientation_matches_independent_explicit_rotation",
+      "shape": [
+        40,
+        24
+      ]
+    },
+    {
+      "case": "invisible_rgb_changes_hashes",
+      "fully_transparent": true,
+      "hashes": [
+        [
+          -1,
+          1085102592571150095
+        ],
+        [
+          0,
+          -1085102592571150096
+        ]
+      ],
+      "qualification": "Original grayscale loader ignores alpha; equal visible composition does not imply equal fingerprints at radius0."
+    }
+  ],
+  "versions": {
+    "python": "3.14.9 (main, Oct 21 2026, 06:02:15) [Clang 21.0.0 (clang-2100.3.34.2)]",
+    "opencv": "5.0.0",
+    "numpy": "2.5.4",
+    "pillow": "13.0.0"
+  },
+  "source_sha256": "5f95f24206a937578c96dcb881e72af143d7564937118c06a9066fa0d74ac738",
+  "limits": "Finite synthetic arrays/owned local PNG; no real corpus accuracy, HEIC, EXIF orientation qualification, whole application/CLI or performance."
+}

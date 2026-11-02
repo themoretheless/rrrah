@@ -1,0 +1,1079 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package core
+
+import (
+	"context"
+	"crypto/sha256"
+	"errors"
+	"fmt"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"time"
+
+	"github.com/autobrr/upbrr/internal/config"
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	"github.com/autobrr/upbrr/internal/imagehosting"
+	"github.com/autobrr/upbrr/internal/logging"
+	paths "github.com/autobrr/upbrr/internal/pathing/layout"
+	"github.com/autobrr/upbrr/internal/preparedrelease"
+	"github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+type mediaRepository interface {
+	api.ScreenshotLifecycleRepository
+	ListTrackerMetadataByPath(ctx context.Context, path string) ([]api.TrackerMetadata, error)
+	SaveTrackerMetadata(ctx context.Context, metadata api.TrackerMetadata) error
+	ListUploadedImagesByPath(ctx context.Context, binding api.PreparedMediaBinding) ([]api.UploadedImageLink, error)
+	DeleteUploadedImage(ctx context.Context, binding api.PreparedMediaBinding, imagePath string, host string) error
+}
+
+type mediaScreenshotService interface {
+	Plan(ctx context.Context, subject api.ScreenshotSubject, count int) (api.ScreenshotPlan, error)
+	Capture(
+		ctx context.Context,
+		subject api.ScreenshotSubject,
+		selections []api.ScreenshotSelection,
+		purpose api.ScreenshotPurpose,
+	) (api.ScreenshotResult, error)
+	PreviewFrame(ctx context.Context, subject api.ScreenshotSubject, discID string, timestampSeconds float64) (api.ScreenshotPreview, error)
+	Delete(ctx context.Context, subject api.ScreenshotSubject, imagePath string) error
+	SaveFinalSelections(ctx context.Context, subject api.ScreenshotSubject, images []api.ScreenshotImage) error
+}
+
+type mediaDVDMenuService interface {
+	Capture(ctx context.Context, subject api.DVDMenuSubject, maxItems int) (api.DVDMenuCaptureResult, error)
+	List(ctx context.Context, subject api.DVDMenuSubject) ([]api.ScreenshotImage, error)
+	Delete(ctx context.Context, subject api.DVDMenuSubject, imagePath string) error
+	Capability(ctx context.Context) (api.DVDMenuEngineInfo, error)
+}
+
+type mediaImageHostingService interface {
+	ListCandidates(ctx context.Context, subject api.ImageHostingSubject) ([]api.ScreenshotImage, error)
+	Upload(
+		ctx context.Context,
+		subject api.ImageHostingSubject,
+		host string,
+		usageScope string,
+		images []api.ScreenshotImage,
+	) ([]api.UploadedImageLink, error)
+}
+
+// mediaModule owns screenshot, disc-menu, and image-host workflow policy. It
+// borrows its services, repository, and prepared-release state from Core.
+type mediaModule struct {
+	cfg           config.Config
+	logger        api.Logger
+	dvdMenus      mediaDVDMenuService
+	images        mediaImageHostingService
+	repo          mediaRepository
+	mediaReuse    api.MediaReuseRepository
+	registry      *trackers.Registry
+	preparedFacts *preparedrelease.Module
+}
+
+func newMediaModule(
+	cfg config.Config,
+	logger api.Logger,
+	services api.ServiceSet,
+	repo mediaRepository,
+	mediaReuse api.MediaReuseRepository,
+	registry *trackers.Registry,
+	preparedFacts *preparedrelease.Module,
+) *mediaModule {
+	return &mediaModule{
+		cfg:           cfg,
+		logger:        logger,
+		dvdMenus:      services.DVDMenus,
+		images:        services.Images,
+		repo:          repo,
+		mediaReuse:    mediaReuse,
+		registry:      registry,
+		preparedFacts: preparedFacts,
+	}
+}
+
+func imageHostingSubject(meta api.UploadSubject) api.ImageHostingSubject {
+	return api.NewImageHostingSubject(meta)
+}
+
+func (m *mediaModule) dvdMenuCapability(ctx context.Context) (api.DVDMenuEngineInfo, error) {
+	if m == nil || m.dvdMenus == nil {
+		return api.DVDMenuEngineInfo{}, errors.New("core: DVD menu service not configured")
+	}
+	return wrapCoreResult(m.dvdMenus.Capability(ctx))
+}
+
+type menuImageContent struct {
+	contentType string
+	bytes       []byte
+	discID      string
+	attachment  api.MediaAttachment
+}
+
+type acceptedMenuImage struct {
+	image      api.ScreenshotImage
+	attachment api.MediaAttachment
+}
+
+// importAcceptedMenuImageContents persists browser/API-uploaded image bytes in
+// managed release storage and returns private image identities for workflow use.
+func (m *mediaModule) importAcceptedMenuImageContents(
+	ctx context.Context,
+	input api.MediaPlanInput,
+	contents []menuImageContent,
+) (api.DVDMenuSubject, []acceptedMenuImage, error) {
+	if len(contents) == 0 {
+		return api.DVDMenuSubject{}, nil, nil
+	}
+	if m.preparedFacts == nil || m.repo == nil {
+		return api.DVDMenuSubject{}, nil, errors.New("core: menu image import is unavailable")
+	}
+	subject, err := m.preparedFacts.ResolveDVDMenuSubject(ctx, input)
+	if err != nil {
+		return api.DVDMenuSubject{}, nil, fmt.Errorf("core: resolve staged menu image subject: %w", err)
+	}
+	tmpRoot, err := db.Subdir(m.cfg.MainSettings.DBPath, "tmp")
+	if err != nil {
+		return api.DVDMenuSubject{}, nil, fmt.Errorf("core: resolve tmp root: %w", err)
+	}
+	tmpDir, _, err := paths.ReleaseTempDirFor(tmpRoot, subject.SourcePath, api.ReleaseInfo{})
+	if err != nil {
+		return api.DVDMenuSubject{}, nil, fmt.Errorf("core: create release tmp dir: %w", err)
+	}
+	now := time.Now().UTC()
+	images := make([]acceptedMenuImage, 0, len(contents))
+	records := make([]api.Screenshot, 0, len(contents))
+	selections := make([]api.ScreenshotFinalSelection, 0, len(contents))
+	created := make([]string, 0, len(contents))
+	seen := make(map[string]struct{}, len(contents))
+	for _, content := range contents {
+		if err := ctx.Err(); err != nil {
+			removeMenuImportFiles(created)
+			return api.DVDMenuSubject{}, nil, fmt.Errorf("core: stage menu image canceled: %w", err)
+		}
+		extension, extensionErr := stagedMenuImageExtension(content.contentType)
+		if extensionErr != nil || len(content.bytes) == 0 {
+			removeMenuImportFiles(created)
+			return api.DVDMenuSubject{}, nil, internalerrors.ErrInvalidInput
+		}
+		discID, discName, discErr := resolveMenuImageDisc(subject.Discs, content.discID)
+		if discErr != nil {
+			removeMenuImportFiles(created)
+			return api.DVDMenuSubject{}, nil, discErr
+		}
+		destPath, wasCreated, writeErr := writeManagedMenuImage(tmpDir, content.bytes, extension, discID)
+		if writeErr != nil {
+			removeMenuImportFiles(created)
+			return api.DVDMenuSubject{}, nil, writeErr
+		}
+		if _, duplicate := seen[destPath]; duplicate {
+			continue
+		}
+		seen[destPath] = struct{}{}
+		if wasCreated {
+			created = append(created, destPath)
+		}
+		image := api.ScreenshotImage{
+			DiscID:    discID,
+			DiscName:  discName,
+			Index:     len(images),
+			Path:      destPath,
+			Purpose:   api.ScreenshotPurposeMenu,
+			SizeBytes: int64(len(content.bytes)),
+		}
+		images = append(images, acceptedMenuImage{image: image, attachment: content.attachment})
+		records = append(records, api.Screenshot{
+			DiscID:     discID,
+			ImagePath:  destPath,
+			Purpose:    api.ScreenshotPurposeMenu,
+			CapturedAt: now,
+		})
+		selections = append(selections, api.ScreenshotFinalSelection{
+			DiscID:     discID,
+			ImagePath:  destPath,
+			Order:      len(selections),
+			Source:     api.ScreenshotSelectionSourceMenu,
+			SelectedAt: now,
+		})
+	}
+	if err := m.repo.AppendManualMenuScreenshots(ctx, subject.MediaBinding, records, selections); err != nil {
+		removeMenuImportFiles(created)
+		return api.DVDMenuSubject{}, nil, fmt.Errorf("core: save staged menu selections: %w", err)
+	}
+	return subject, images, nil
+}
+
+func stagedMenuImageExtension(contentType string) (string, error) {
+	switch strings.ToLower(strings.TrimSpace(strings.SplitN(contentType, ";", 2)[0])) {
+	case "image/png":
+		return ".png", nil
+	case "image/jpeg":
+		return ".jpg", nil
+	case "image/webp":
+		return ".webp", nil
+	default:
+		return "", internalerrors.ErrInvalidInput
+	}
+}
+
+func writeManagedMenuImage(tmpDir string, data []byte, extension string, discID string) (string, bool, error) {
+	sum := sha256.Sum256(data)
+	discSegment := strings.Map(func(char rune) rune {
+		switch {
+		case char >= 'a' && char <= 'z', char >= 'A' && char <= 'Z', char >= '0' && char <= '9', char == '-', char == '_':
+			return char
+		default:
+			return '_'
+		}
+	}, strings.TrimSpace(discID))
+	if discSegment == "" {
+		discSegment = "single"
+	}
+	destPath := filepath.Join(tmpDir, fmt.Sprintf("manual-disc-%s-dvd-menu-%x%s", discSegment, sum[:8], extension))
+	if info, err := os.Stat(destPath); err == nil {
+		if info.IsDir() {
+			return "", false, internalerrors.ErrInvalidInput
+		}
+		return destPath, false, nil
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return "", false, fmt.Errorf("core: inspect managed menu image: %w", err)
+	}
+	staged, err := os.CreateTemp(tmpDir, ".manual-dvd-menu-*.partial")
+	if err != nil {
+		return "", false, fmt.Errorf("core: stage menu image: %w", err)
+	}
+	stagedPath := staged.Name()
+	cleanup := true
+	defer func() {
+		if cleanup {
+			_ = os.Remove(stagedPath)
+		}
+	}()
+	if _, err := staged.Write(data); err != nil {
+		_ = staged.Close()
+		return "", false, fmt.Errorf("core: write staged menu image: %w", err)
+	}
+	if err := staged.Close(); err != nil {
+		return "", false, fmt.Errorf("core: close staged menu image: %w", err)
+	}
+	if err := os.Rename(stagedPath, destPath); err != nil {
+		if info, statErr := os.Stat(destPath); statErr == nil && !info.IsDir() {
+			return destPath, false, nil
+		}
+		return "", false, fmt.Errorf("core: finalize staged menu image: %w", err)
+	}
+	cleanup = false
+	return destPath, true, nil
+}
+
+func resolveMenuImageDisc(discs []api.DVDMenuDiscSubject, requested string) (string, string, error) {
+	requested = strings.TrimSpace(requested)
+	if requested == "" {
+		if len(discs) == 1 {
+			return discs[0].ID, discs[0].Name, nil
+		}
+		if len(discs) == 0 {
+			return "", "", nil
+		}
+		return "", "", internalerrors.ErrInvalidInput
+	}
+	for _, disc := range discs {
+		if disc.ID == requested {
+			return disc.ID, disc.Name, nil
+		}
+	}
+	return "", "", internalerrors.ErrInvalidInput
+}
+
+func removeMenuImportFiles(paths []string) {
+	for _, pathValue := range paths {
+		_ = os.Remove(pathValue)
+	}
+}
+
+func (m *mediaModule) resolveAcceptedImageUpload(
+	ctx context.Context,
+	input api.ImageHostingInput,
+) (api.UploadSubject, []trackers.ImageUploadTarget, error) {
+	if m.images == nil {
+		return api.UploadSubject{}, nil, errors.New("core: image hosting service not configured")
+	}
+	if m.preparedFacts == nil {
+		return api.UploadSubject{}, nil, errors.New("core: canonical preparation is not configured")
+	}
+	subject, err := m.preparedFacts.ResolveUploadSubject(ctx, api.UploadSubjectInput{
+		Release:  input.Release,
+		Trackers: append([]string(nil), input.Trackers...),
+	})
+	if err != nil {
+		return api.UploadSubject{}, nil, fmt.Errorf("core: resolve image upload subject: %w", err)
+	}
+	targets, err := m.resolveImageUploadTargets(ctx, input.Trackers, subject, input.Host, input.ExcludedHosts)
+	if err != nil {
+		return api.UploadSubject{}, nil, err
+	}
+	return subject, targets, nil
+}
+
+func (m *mediaModule) resolveImageUploadTargets(
+	ctx context.Context,
+	trackerNames []string,
+	subject api.UploadSubject,
+	host string,
+	excludedHosts []string,
+) ([]trackers.ImageUploadTarget, error) {
+	normalizedHost := strings.ToLower(strings.TrimSpace(host))
+
+	// The workflow already supplied its exact downstream-eligible projection set.
+	// Do not reapply legacy prepared-subject removals or client matches here.
+	resolvedTrackers := trackers.ResolveExplicitTrackersWithRegistry(trackerNames, logging.FromContext(ctx, m.logger), m.registry)
+	var targets []trackers.ImageUploadTarget
+	var err error
+	if normalizedHost == "" {
+		targets, err = trackers.NeededImageUploadTargetsForMetadataExcludingWithRegistry(
+			m.registry,
+			m.cfg,
+			resolvedTrackers,
+			normalizedHost,
+			excludedHosts,
+			subject,
+		)
+	} else {
+		targets, err = trackers.ExplicitImageUploadTargetsForMetadataExcludingWithRegistry(
+			m.registry,
+			m.cfg,
+			resolvedTrackers,
+			normalizedHost,
+			excludedHosts,
+			subject,
+		)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("core: %w", err)
+	}
+	if len(targets) == 0 {
+		if normalizedHost == "" {
+			return nil, nil
+		}
+		return nil, fmt.Errorf("core: image host %q is tracker-scoped but no active tracker can use it", normalizedHost)
+	}
+	normalized := make([]trackers.ImageUploadTarget, 0, len(targets))
+	for _, target := range targets {
+		target = normalizeImageUploadTarget(target)
+		if target.Host == "" {
+			continue
+		}
+		normalized = append(normalized, target)
+	}
+	if len(normalized) == 0 {
+		return nil, fmt.Errorf(
+			"core: image host %q resolved image upload targets were filtered out after tracker eligibility and normalization",
+			normalizedHost,
+		)
+	}
+	return normalized, nil
+}
+
+func (m *mediaModule) resolveFallbackImageUploadTargets(
+	host string,
+	trackerNames []string,
+	excludedHosts []string,
+	meta api.UploadSubject,
+) ([]trackers.ImageUploadTarget, error) {
+	normalizedHost := strings.ToLower(strings.TrimSpace(host))
+	if len(trackerNames) == 0 {
+		return nil, nil
+	}
+	targets, err := trackers.NeededImageUploadTargetsForMetadataExcludingWithRegistry(m.registry, m.cfg, trackerNames, normalizedHost, excludedHosts, meta)
+	if err != nil {
+		return nil, fmt.Errorf("core: %w", err)
+	}
+	normalized := make([]trackers.ImageUploadTarget, 0, len(targets))
+	for _, target := range targets {
+		target = normalizeImageUploadTarget(target)
+		if target.Host == "" {
+			continue
+		}
+		normalized = append(normalized, target)
+	}
+	return normalized, nil
+}
+
+func (m *mediaModule) uploadImagesToTargetsWithFallback(
+	ctx context.Context,
+	meta api.UploadSubject,
+	host string,
+	excludedHosts []string,
+	targets []trackers.ImageUploadTarget,
+	images []api.ScreenshotImage,
+	retainedLinks []api.UploadedImageLink,
+	blockedRetainedLinks []api.UploadedImageLink,
+) (api.UploadImagesResult, error) {
+	view := *m
+	view.logger = logging.FromContext(ctx, m.logger)
+	m = &view
+
+	type scheduledAttempt struct {
+		target   trackers.ImageUploadTarget
+		fallback bool
+		links    []api.UploadedImageLink
+		err      error
+		done     bool
+	}
+	type completedAttempt struct {
+		index int
+		links []api.UploadedImageLink
+		err   error
+	}
+
+	attempts := make([]*scheduledAttempt, 0, len(targets))
+	attemptByTarget := make(map[string]*scheduledAttempt, len(targets))
+	failedHosts := make(map[string]struct{}, len(targets)+len(excludedHosts))
+	allowFallback := strings.TrimSpace(host) == ""
+	for _, excludedHost := range excludedHosts {
+		if normalized := strings.ToLower(strings.TrimSpace(excludedHost)); normalized != "" {
+			failedHosts[normalized] = struct{}{}
+		}
+	}
+	coveredTrackers := make(map[string]struct{})
+	results := make(chan completedAttempt)
+	pending := 0
+
+	targetKey := func(target trackers.ImageUploadTarget) string {
+		return strings.ToLower(strings.TrimSpace(target.Host)) + "\x00" + normalizeImageUploadUsageScope(target.UsageScope)
+	}
+	markCovered := func(target trackers.ImageUploadTarget) {
+		for _, tracker := range target.Trackers {
+			name := strings.ToUpper(strings.TrimSpace(tracker))
+			if name != "" {
+				coveredTrackers[name] = struct{}{}
+			}
+		}
+	}
+	uncoveredTrackers := func(trackersList []string) []string {
+		result := make([]string, 0, len(trackersList))
+		for _, tracker := range trackersList {
+			name := strings.ToUpper(strings.TrimSpace(tracker))
+			if name == "" {
+				continue
+			}
+			if _, covered := coveredTrackers[name]; !covered {
+				result = appendUniqueNormalizedTracker(result, name)
+			}
+		}
+		return result
+	}
+	launch := func(target trackers.ImageUploadTarget, fallback bool) bool {
+		target = normalizeImageUploadTarget(target)
+		target.Trackers = uncoveredTrackers(target.Trackers)
+		if target.Host == "" || len(target.Trackers) == 0 {
+			return false
+		}
+		key := targetKey(target)
+		if existing := attemptByTarget[key]; existing != nil {
+			for _, tracker := range target.Trackers {
+				existing.target.Trackers = appendUniqueNormalizedTracker(existing.target.Trackers, tracker)
+			}
+			if existing.done && existing.err == nil {
+				markCovered(existing.target)
+			}
+			return false
+		}
+		attempt := &scheduledAttempt{target: target, fallback: fallback}
+		index := len(attempts)
+		attempts = append(attempts, attempt)
+		attemptByTarget[key] = attempt
+		pending++
+		go func() {
+			targetImages := images
+			if target.ReuseOnly {
+				available := uploadedImagesByPathForTarget(retainedLinks, target)
+				targetImages = slices.DeleteFunc(slices.Clone(images), func(image api.ScreenshotImage) bool {
+					_, ok := available[normalizedUploadImagePath(image.Path)]
+					return !ok
+				})
+			}
+			links, err := m.uploadImagesToTarget(ctx, meta, target, targetImages, retainedLinks, blockedRetainedLinks, fallback)
+			results <- completedAttempt{
+				index: index,
+				links: links,
+				err:   err,
+			}
+		}()
+		return true
+	}
+	if allowFallback && len(retainedLinks) > 0 {
+		for _, retainedTarget := range m.retainedFallbackImageUploadTargets(host, meta, sortedMapKeys(failedHosts), targets, images, retainedLinks) {
+			launch(retainedTarget, true)
+			markCovered(retainedTarget)
+		}
+	}
+
+	for _, target := range targets {
+		launch(target, false)
+	}
+	var schedulerErr error
+	for pending > 0 {
+		completed := <-results
+		pending--
+		attempt := attempts[completed.index]
+		attempt.links = completed.links
+		attempt.err = completed.err
+		attempt.done = true
+		if completed.err == nil {
+			markCovered(attempt.target)
+		}
+		if completed.err == nil || schedulerErr != nil {
+			continue
+		}
+		if failure, ok := api.AsOperationFailure(completed.err); ok && failure.Code == api.OperationFailureUnknownOutcome {
+			schedulerErr = completed.err
+			continue
+		}
+		failedHost := strings.ToLower(strings.TrimSpace(attempt.target.Host))
+		if failedHost != "" {
+			failedHosts[failedHost] = struct{}{}
+		}
+		if !allowFallback {
+			continue
+		}
+		blockedTrackers := uncoveredTrackers(attempt.target.Trackers)
+		if len(blockedTrackers) == 0 {
+			continue
+		}
+		fallbackTargets, err := m.resolveFallbackImageUploadTargets(host, blockedTrackers, sortedMapKeys(failedHosts), meta)
+		if err != nil {
+			schedulerErr = err
+			continue
+		}
+		startedTargets := make([]trackers.ImageUploadTarget, 0, len(fallbackTargets))
+		for _, fallbackTarget := range fallbackTargets {
+			if launch(fallbackTarget, true) {
+				startedTargets = append(startedTargets, fallbackTarget)
+			}
+		}
+		if len(startedTargets) > 0 {
+			m.logger.Infof(
+				"core: starting image upload fallback failed_hosts=%s fallback_hosts=%s trackers=%v",
+				strings.Join(sortedMapKeys(failedHosts), ","),
+				strings.Join(uploadTargetHosts(startedTargets), ","),
+				uploadTargetTrackers(startedTargets),
+			)
+		}
+	}
+	if schedulerErr != nil {
+		return api.UploadImagesResult{}, schedulerErr
+	}
+
+	allLinks := make([]api.UploadedImageLink, 0, len(images)*len(attempts))
+	failures := make([]api.UploadImageHostFailure, 0)
+	attemptResults := make([]api.UploadImageHostAttemptResult, 0, len(attempts))
+	for _, attempt := range attempts {
+		allLinks = append(allLinks, attempt.links...)
+		attemptResult := api.UploadImageHostAttemptResult{
+			Host:       attempt.target.Host,
+			UsageScope: attempt.target.UsageScope,
+			Trackers:   append([]string(nil), attempt.target.Trackers...),
+			Fallback:   attempt.fallback,
+			Links:      append([]api.UploadedImageLink(nil), attempt.links...),
+		}
+		if attempt.err == nil {
+			attemptResults = append(attemptResults, attemptResult)
+			continue
+		}
+		attemptFailure := api.UploadImageHostFailure{
+			Host:       attempt.target.Host,
+			UsageScope: attempt.target.UsageScope,
+			Trackers:   append([]string(nil), attempt.target.Trackers...),
+			Message:    logging.SanitizeMessage(uploadFailureMessage(attempt.err)),
+		}
+		attemptResult.Failure = &attemptFailure
+		attemptResults = append(attemptResults, attemptResult)
+		remainingTrackers := uncoveredTrackers(attempt.target.Trackers)
+		if len(attempt.target.Trackers) > 0 && len(remainingTrackers) == 0 {
+			continue
+		}
+		failures = append(failures, api.UploadImageHostFailure{
+			Host:       attempt.target.Host,
+			UsageScope: attempt.target.UsageScope,
+			Trackers:   remainingTrackers,
+			Message:    logging.SanitizeMessage(uploadFailureMessage(attempt.err)),
+		})
+	}
+	return api.UploadImagesResult{
+		Links:       allLinks,
+		Failures:    failures,
+		FailedHosts: sortedMapKeys(failedHosts),
+		Attempts:    attemptResults,
+	}, nil
+}
+
+func uploadTargetHosts(targets []trackers.ImageUploadTarget) []string {
+	hosts := make([]string, 0, len(targets))
+	seen := make(map[string]struct{}, len(targets))
+	for _, target := range targets {
+		host := strings.ToLower(strings.TrimSpace(target.Host))
+		if host == "" {
+			continue
+		}
+		if _, ok := seen[host]; ok {
+			continue
+		}
+		seen[host] = struct{}{}
+		hosts = append(hosts, host)
+	}
+	slices.Sort(hosts)
+	return hosts
+}
+
+func uploadTargetTrackers(targets []trackers.ImageUploadTarget) []string {
+	trackersList := make([]string, 0)
+	for _, target := range targets {
+		for _, tracker := range target.Trackers {
+			trackersList = appendUniqueNormalizedTracker(trackersList, tracker)
+		}
+	}
+	slices.Sort(trackersList)
+	return trackersList
+}
+
+func sortedMapKeys(values map[string]struct{}) []string {
+	keys := make([]string, 0, len(values))
+	for key := range values {
+		if strings.TrimSpace(key) == "" {
+			continue
+		}
+		keys = append(keys, key)
+	}
+	slices.Sort(keys)
+	return keys
+}
+
+func normalizeImageUploadTarget(target trackers.ImageUploadTarget) trackers.ImageUploadTarget {
+	target.Host = strings.ToLower(strings.TrimSpace(target.Host))
+	target.UsageScope = normalizeImageUploadUsageScope(target.UsageScope)
+	trackersList := make([]string, 0, len(target.Trackers))
+	for _, tracker := range target.Trackers {
+		trackersList = appendUniqueNormalizedTracker(trackersList, tracker)
+	}
+	target.Trackers = trackersList
+	return target
+}
+
+func appendUniqueNormalizedTracker(trackersList []string, tracker string) []string {
+	name := strings.ToUpper(strings.TrimSpace(tracker))
+	if name == "" {
+		return trackersList
+	}
+	if slices.Contains(trackersList, name) {
+		return trackersList
+	}
+	return append(trackersList, name)
+}
+
+func (m *mediaModule) uploadImagesToTarget(
+	ctx context.Context,
+	meta api.UploadSubject,
+	target trackers.ImageUploadTarget,
+	images []api.ScreenshotImage,
+	retainedLinks []api.UploadedImageLink,
+	blockedRetainedLinks []api.UploadedImageLink,
+	fallback bool,
+) ([]api.UploadedImageLink, error) {
+	view := *m
+	view.logger = logging.FromContext(ctx, m.logger)
+	m = &view
+
+	target.Host = strings.ToLower(strings.TrimSpace(target.Host))
+	target.UsageScope = normalizeImageUploadUsageScope(target.UsageScope)
+	progressTarget := api.ImageUploadProgressTarget{
+		AttemptID:  target.Host + "|" + target.UsageScope,
+		Host:       target.Host,
+		UsageScope: target.UsageScope,
+		Trackers:   slices.Clone(target.Trackers),
+		Fallback:   fallback,
+		Total:      len(images),
+	}
+	progressCtx := api.WithImageUploadProgressTarget(ctx, progressTarget)
+	emitCoreImageUploadProgress(progressCtx, progressTarget, api.ImageUploadProgressRunning, 0, 0, 0, "Preparing host upload.")
+	accountScope, err := imagehosting.AudioAccountScope(m.cfg, m.registry, target.Host)
+	if err != nil {
+		return nil, fmt.Errorf("core: fingerprint audio host account: %w", err)
+	}
+	compatibleLinks := func(links []api.UploadedImageLink) []api.UploadedImageLink {
+		return slices.DeleteFunc(slices.Clone(links), func(link api.UploadedImageLink) bool {
+			return slices.ContainsFunc(images, func(image api.ScreenshotImage) bool {
+				return image.Purpose == api.ScreenshotPurposeAudioAnalysis && normalizedUploadImagePath(image.Path) == normalizedUploadImagePath(link.ImagePath)
+			}) && (link.Purpose != api.ScreenshotPurposeAudioAnalysis || link.AccountScope != accountScope)
+		})
+	}
+	retainedLinks = compatibleLinks(retainedLinks)
+	results, missing := uploadedImageLinksForTarget(retainedLinks, target, images)
+	if len(missing) > 0 && m.repo != nil {
+		existing, err := m.repo.ListUploadedImagesByPath(ctx, meta.MediaBinding)
+		if err != nil {
+			emitCoreImageUploadProgress(progressCtx, progressTarget, api.ImageUploadProgressFailed, 0, 0, 0, "Existing uploads could not be checked.")
+			return nil, fmt.Errorf("core: %w", err)
+		}
+		existing = excludeBlockedRetainedImageLinks(compatibleLinks(existing), blockedRetainedLinks, target)
+		results, missing = uploadedImageLinksForTarget(append(existing, retainedLinks...), target, images)
+	}
+	progressTarget.Reused = len(results)
+	strictAudioBatch := slices.ContainsFunc(images, func(image api.ScreenshotImage) bool {
+		return image.Purpose == api.ScreenshotPurposeAudioAnalysis
+	})
+	progressCtx = api.WithImageUploadProgressTarget(ctx, progressTarget)
+	if len(missing) == 0 {
+		m.logger.Tracef(
+			"core: reusing uploaded images host=%s tracker=%s scope=%s trackers=%v count=%d",
+			target.Host,
+			m.imageHostOwnerLogValue(target.Host),
+			target.UsageScope,
+			target.Trackers,
+			len(results),
+		)
+		emitCoreImageUploadProgress(
+			progressCtx,
+			progressTarget,
+			api.ImageUploadProgressCompleted,
+			len(results),
+			0,
+			0,
+			"Reused existing host uploads.",
+		)
+		return results, nil
+	}
+	emitCoreImageUploadProgress(
+		progressCtx,
+		progressTarget,
+		api.ImageUploadProgressRunning,
+		len(results),
+		0,
+		0,
+		fmt.Sprintf("Uploading %d images; %d already ready.", len(missing), len(results)),
+	)
+
+	m.logger.Debugf(
+		"core: uploading missing images host=%s tracker=%s scope=%s trackers=%v missing=%d reused=%d",
+		target.Host,
+		m.imageHostOwnerLogValue(target.Host),
+		target.UsageScope,
+		target.Trackers,
+		len(missing),
+		len(results),
+	)
+	uploaded, err := m.images.Upload(progressCtx, imageHostingSubject(meta), target.Host, target.UsageScope, missing)
+	results = mergeUploadedImageLinks(images, results, uploaded)
+	if err != nil && !strictAudioBatch && m.partialHostUploadIsUsable(target, len(images), len(results), err) {
+		emitCoreImageUploadResult(progressCtx, progressTarget, len(uploaded), err)
+		return results, nil
+	}
+	if err == nil && strictAudioBatch && !uploadedImageLinksCoverTarget(results, target, images) {
+		err = errors.New("audio analysis image upload is incomplete")
+	}
+	emitCoreImageUploadResult(progressCtx, progressTarget, len(uploaded), err)
+	if err != nil {
+		return results, fmt.Errorf("core: %w", err)
+	}
+	return results, nil
+}
+
+func uploadedImageLinksCoverTarget(
+	links []api.UploadedImageLink,
+	target trackers.ImageUploadTarget,
+	images []api.ScreenshotImage,
+) bool {
+	_, missing := uploadedImageLinksForTarget(links, target, images)
+	return len(missing) == 0
+}
+
+func uploadedImageLinksForTarget(
+	links []api.UploadedImageLink,
+	target trackers.ImageUploadTarget,
+	images []api.ScreenshotImage,
+) ([]api.UploadedImageLink, []api.ScreenshotImage) {
+	linksByPath := uploadedImagesByPathForTarget(links, target)
+	results := make([]api.UploadedImageLink, 0, len(images))
+	missing := make([]api.ScreenshotImage, 0, len(images))
+	for _, image := range images {
+		key := normalizedUploadImagePath(image.Path)
+		if key == "" {
+			missing = append(missing, image)
+			continue
+		}
+		if link, ok := linksByPath[key]; ok {
+			results = append(results, link)
+			continue
+		}
+		missing = append(missing, image)
+	}
+	return results, missing
+}
+
+func excludeBlockedRetainedImageLinks(
+	existing []api.UploadedImageLink,
+	blocked []api.UploadedImageLink,
+	target trackers.ImageUploadTarget,
+) []api.UploadedImageLink {
+	blockedByPath := uploadedImagesByPathForTarget(blocked, target)
+	if len(blockedByPath) == 0 {
+		return existing
+	}
+	filtered := make([]api.UploadedImageLink, 0, len(existing))
+	for _, link := range existing {
+		if !strings.EqualFold(strings.TrimSpace(link.Host), target.Host) ||
+			!strings.EqualFold(normalizeImageUploadUsageScope(link.UsageScope), normalizeImageUploadUsageScope(target.UsageScope)) {
+			filtered = append(filtered, link)
+			continue
+		}
+		if _, isBlocked := blockedByPath[normalizedUploadImagePath(link.ImagePath)]; !isBlocked {
+			filtered = append(filtered, link)
+		}
+	}
+	return filtered
+}
+
+func mergeUploadedImageLinks(
+	images []api.ScreenshotImage,
+	reused []api.UploadedImageLink,
+	uploaded []api.UploadedImageLink,
+) []api.UploadedImageLink {
+	byPath := make(map[string]api.UploadedImageLink, len(reused)+len(uploaded))
+	for _, link := range reused {
+		if pathKey := normalizedUploadImagePath(link.ImagePath); pathKey != "" {
+			byPath[pathKey] = link
+		}
+	}
+	for _, link := range uploaded {
+		if pathKey := normalizedUploadImagePath(link.ImagePath); pathKey != "" {
+			byPath[pathKey] = link
+		}
+	}
+	merged := make([]api.UploadedImageLink, 0, len(reused)+len(uploaded))
+	for _, image := range images {
+		if link, ok := byPath[normalizedUploadImagePath(image.Path)]; ok {
+			merged = append(merged, link)
+			delete(byPath, normalizedUploadImagePath(image.Path))
+		}
+	}
+	for _, links := range [][]api.UploadedImageLink{reused, uploaded} {
+		for _, link := range links {
+			pathKey := normalizedUploadImagePath(link.ImagePath)
+			if _, ok := byPath[pathKey]; !ok {
+				continue
+			}
+			merged = append(merged, link)
+			delete(byPath, pathKey)
+		}
+	}
+	return merged
+}
+
+func (m *mediaModule) retainedFallbackImageUploadTargets(
+	host string,
+	meta api.UploadSubject,
+	excludedHosts []string,
+	targets []trackers.ImageUploadTarget,
+	images []api.ScreenshotImage,
+	retainedLinks []api.UploadedImageLink,
+) []trackers.ImageUploadTarget {
+	covered := make([]trackers.ImageUploadTarget, 0, len(targets))
+	for _, target := range targets {
+		for _, tracker := range target.Trackers {
+			trackerConfig, _ := config.TrackerConfigByName(m.cfg.Trackers.Trackers, tracker)
+			configuredHost := strings.TrimSpace(trackerConfig.ImageHost)
+			// A cached fallback cannot replace a configured host before it fails.
+			if configuredHost != "" && strings.EqualFold(configuredHost, strings.TrimSpace(target.Host)) {
+				continue
+			}
+			failedHosts := make(map[string]struct{}, len(excludedHosts)+1)
+			for _, excludedHost := range excludedHosts {
+				if normalized := strings.ToLower(strings.TrimSpace(excludedHost)); normalized != "" {
+					failedHosts[normalized] = struct{}{}
+				}
+			}
+			if normalized := strings.ToLower(strings.TrimSpace(target.Host)); normalized != "" {
+				failedHosts[normalized] = struct{}{}
+			}
+			for {
+				fallbackTargets, err := m.resolveFallbackImageUploadTargets(host, []string{tracker}, sortedMapKeys(failedHosts), meta)
+				if err != nil {
+					break
+				}
+				matched, advanced := false, false
+				for _, fallbackTarget := range fallbackTargets {
+					fallbackTarget = normalizeImageUploadTarget(fallbackTarget)
+					if uploadedImageLinksCoverTarget(retainedLinks, fallbackTarget, images) {
+						covered = append(covered, fallbackTarget)
+						matched = true
+						break
+					}
+					if _, seen := failedHosts[fallbackTarget.Host]; !seen && fallbackTarget.Host != "" {
+						failedHosts[fallbackTarget.Host] = struct{}{}
+						advanced = true
+					}
+				}
+				if matched || !advanced {
+					break
+				}
+			}
+		}
+	}
+	return covered
+}
+
+// partialHostUploadIsUsable reports whether a partially failed host batch still
+// published enough images for the target's trackers to upload with. The
+// allowance is the configured min_successful_image_uploads floor, which is
+// disabled at zero so every failed image keeps failing the batch. Requested
+// counts below the floor cannot clear it, so those batches stay strict.
+func (m *mediaModule) partialHostUploadIsUsable(
+	target trackers.ImageUploadTarget,
+	requested int,
+	published int,
+	err error,
+) bool {
+	if failure, ok := api.AsOperationFailure(err); ok && failure.Code == api.OperationFailureUnknownOutcome {
+		return false
+	}
+	minimum := m.cfg.ScreenshotHandling.ResolvedMinSuccessfulUploads()
+	if minimum <= 0 || published < minimum || requested < minimum {
+		return false
+	}
+	m.logger.Warnf(
+		"core: accepting partial image host upload host=%s tracker=%s trackers=%v requested=%d published=%d minimum=%d decision=continue err=%s",
+		target.Host,
+		m.imageHostOwnerLogValue(target.Host),
+		target.Trackers,
+		requested,
+		published,
+		minimum,
+		logging.SanitizeMessage(uploadFailureMessage(err)),
+	)
+	return true
+}
+
+func emitCoreImageUploadResult(
+	ctx context.Context,
+	target api.ImageUploadProgressTarget,
+	uploaded int,
+	err error,
+) {
+	if err == nil {
+		emitCoreImageUploadProgress(
+			ctx,
+			target,
+			api.ImageUploadProgressCompleted,
+			target.Total,
+			uploaded,
+			0,
+			"Host upload complete.",
+		)
+		return
+	}
+	failed := max(0, target.Total-target.Reused-uploaded)
+	emitCoreImageUploadProgress(
+		ctx,
+		target,
+		api.ImageUploadProgressFailed,
+		target.Reused+uploaded+failed,
+		uploaded,
+		failed,
+		fmt.Sprintf("%d of %d host uploads failed.", failed, target.Total-target.Reused),
+	)
+}
+
+func emitCoreImageUploadProgress(
+	ctx context.Context,
+	target api.ImageUploadProgressTarget,
+	status api.ImageUploadProgressStatus,
+	completed int,
+	succeeded int,
+	failed int,
+	message string,
+) {
+	total := max(0, target.Total)
+	api.EmitImageUploadProgress(ctx, api.ImageUploadProgressUpdate{
+		AttemptID:  target.AttemptID,
+		Host:       target.Host,
+		UsageScope: target.UsageScope,
+		Trackers:   slices.Clone(target.Trackers),
+		Fallback:   target.Fallback,
+		Completed:  max(0, min(completed, total)),
+		Total:      total,
+		Succeeded:  max(0, succeeded),
+		Failed:     max(0, failed),
+		Reused:     max(0, min(target.Reused, total)),
+		Status:     status,
+		Message:    strings.TrimSpace(message),
+	})
+}
+
+func uploadFailureMessage(err error) string {
+	if err == nil {
+		return ""
+	}
+	if unwrapped := errors.Unwrap(err); unwrapped != nil {
+		return unwrapped.Error()
+	}
+	return err.Error()
+}
+
+func uploadedImagesByPathForTarget(images []api.UploadedImageLink, target trackers.ImageUploadTarget) map[string]api.UploadedImageLink {
+	matches := make(map[string]api.UploadedImageLink, len(images))
+	for _, image := range images {
+		if !strings.EqualFold(strings.TrimSpace(image.Host), target.Host) {
+			continue
+		}
+		if !strings.EqualFold(normalizeImageUploadUsageScope(image.UsageScope), normalizeImageUploadUsageScope(target.UsageScope)) {
+			continue
+		}
+		key := normalizedUploadImagePath(image.ImagePath)
+		if key == "" {
+			continue
+		}
+		matches[key] = image
+	}
+	return matches
+}
+
+func normalizedUploadImagePath(pathValue string) string {
+	trimmed := strings.TrimSpace(pathValue)
+	if trimmed == "" {
+		return ""
+	}
+	absPath, err := filepath.Abs(trimmed)
+	if err != nil {
+		return filepath.Clean(trimmed)
+	}
+	return filepath.Clean(absPath)
+}
+
+func normalizeImageUploadUsageScope(scope string) string {
+	trimmed := strings.TrimSpace(scope)
+	if trimmed == "" || strings.EqualFold(trimmed, "global") {
+		return "global"
+	}
+	if strings.HasPrefix(strings.ToLower(trimmed), "tracker:") {
+		tracker := strings.ToUpper(strings.TrimSpace(trimmed[len("tracker:"):]))
+		if tracker == "" {
+			return "global"
+		}
+		return "tracker:" + tracker
+	}
+	return trimmed
+}
+
+// imageHostOwnerLogValue identifies tracker-owned hosts in core upload logs.
+func (m *mediaModule) imageHostOwnerLogValue(host string) string {
+	if tracker := trackers.TrackerForOwnedImageHost(m.registry, host); tracker != "" {
+		return tracker
+	}
+	return "shared"
+}

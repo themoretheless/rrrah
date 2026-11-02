@@ -1,0 +1,12 @@
+{
+  "runtime": "v22.23.4",
+  "controls_passed": 4,
+  "findings": [
+    "First PreToolUse records observation before actual Read;second identical request denied without any completed Read in fixture",
+    "Fresh full-byte hash lets changed same-size content pass after restoredmtime",
+    "Partial Read passes and doesnot append cache",
+    "Missing source passes rather than denied"
+  ],
+  "scope": "Original full hook with4 runtime import targets redirected to owned path/cache/prewarm seams and original decision module;real original hashFile reads owned files;warmfill not exercised;no actual tool execution or Claude session",
+  "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/hook-owned-0gNOLg"
+}

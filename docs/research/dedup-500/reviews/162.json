@@ -2,9 +2,9 @@
   "index": 162,
   "repository": "VenomVendor/DeduplicateSMS",
   "commit": "da9fe1545661e610bc94ba295ec5ce09f6c772cd",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "2/42 pinned files wholly read; Static only; no JDK/Android execution or user data access",
   "decision": "reject-domain",
-  "finding": "Android SMS AsyncTask and duplicate list; record-domain comparisons.",
+  "finding": "Static: duplicate decisions retain only Java 32-bit String.hashCode; no key/field equality confirmation. Static: normalized message, phone and optional date are concatenated without field framing; TYPE and DATE_SENT not compared. Static: splice removes range(fromIndex, splicedList.size()), not range(fromIndex,toIndex); nonzero start can remove wrong range.",
   "available_source_evidence": [
     {
       "path": "app/src/main/java/com/venomvendor/sms/deduplicate/activity/Deduplication.java",
@@ -64,5 +64,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/sms162-source-review-v1-20261024.json",
+  "full_repository_read": false,
+  "upstream_test_scope": "Static only; no JDK/Android execution or user data access",
+  "original_test_bodies_run": 0
 }

@@ -1,0 +1,62 @@
+name: Windows publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to attach the executables to (e.g. v0.12.0). Leave empty to only build.'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build windows exe
+    runs-on: windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install uv
+        run : |
+          python -m pip install uv
+
+      - name: Install CLI dependencies
+        run : |
+          uv venv --clear
+          uv pip install pyinstaller
+          uv pip install .
+
+      - name: Build CLI
+        run: uv run pyinstaller build_files/windows/hydrusvideodeduplicator.spec
+
+      # Install the GUI dependencies after the CLI build to avoid bundling unnecessary
+      # GUI dependencies in the CLI build. Pyinstaller bundles all dependencies by default.
+      - name: Install GUI dependencies
+        run : |
+          uv venv --clear
+          uv pip install pyinstaller
+          uv pip install ".[gui]"
+
+      - name: Build GUI
+        run: uv run pyinstaller build_files/windows/hydrusvideodeduplicator-gui.spec
+
+      - name: Upload
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228
+        if: github.event_name == 'release' || inputs.tag != ''
+        with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          files: |
+            dist/hydrusvideodeduplicator-windows-x86_64.exe
+            dist/hydrusvideodeduplicator-gui-windows-x86_64.exe

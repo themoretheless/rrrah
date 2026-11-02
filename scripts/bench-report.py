@@ -22,6 +22,11 @@ import random
 import statistics
 import sys
 import copy
+import os
+import uuid
+from contextlib import nullcontext
+import stat
+import time
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -210,6 +215,51 @@ def load_baseline(path: Path) -> dict[tuple[str, ...], dict[str, Any]]:
     return result
 
 
+REPORT_LOCK_TIMEOUT_SECONDS = 5.0
+
+def atomic_write_report(path: Path, payload: str) -> None:
+    """Publish whole JSON; cooperating POSIX writers recover interrupted temporaries."""
+    path = path.resolve()
+    path.parent.mkdir(parents=True, exist_ok=True)
+    prefix = f".{path.name}.rrrah-report-"
+    # Keep the lock inode: removing it would permit two groups of writers.
+    lock = (path.parent / f".{path.name}.rrrah-report.lock").open("a+b") if os.name == "posix" else nullcontext()
+    with lock as stream_lock:
+        if os.name == "posix":
+            import fcntl
+            deadline = time.monotonic() + REPORT_LOCK_TIMEOUT_SECONDS
+            while True:
+                try:
+                    fcntl.flock(stream_lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(f"report publication lock is busy: {path}")
+                    time.sleep(0.01)
+            for orphan in path.parent.iterdir():
+                if not orphan.name.startswith(prefix) or not orphan.name.endswith(".tmp"):
+                    continue
+                suffix = orphan.name[len(prefix):-4]
+                if len(suffix) == 32 and all(c in "0123456789abcdef" for c in suffix):
+                    orphan.unlink(missing_ok=True)
+        temporary = path.parent / (prefix + uuid.uuid4().hex + ".tmp")
+        owned_temporary = False
+        try:
+            mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else None
+            fd = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o666)
+            owned_temporary = True
+            with os.fdopen(fd, "w", encoding="utf-8") as stream:
+                if mode is not None:
+                    os.chmod(temporary, mode)
+                stream.write(payload)
+                stream.flush()
+                os.fsync(stream.fileno())
+            os.replace(temporary, path)
+        finally:
+            if owned_temporary:
+                temporary.unlink(missing_ok=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input", nargs="?", default="target/bench/results.csv")
@@ -356,8 +406,7 @@ def main() -> int:
         ] if any(group.get("warnings") for group in groups) else [],
     }
     if args.json_out:
-        args.json_out.parent.mkdir(parents=True, exist_ok=True)
-        args.json_out.write_text(json.dumps(json_safe(report), indent=2) + "\n", encoding="utf-8")
+        atomic_write_report(args.json_out, json.dumps(json_safe(report), indent=2) + "\n")
 
     print("fixture\tmode\tworkers\tbackend\tn\tp50_ms\tp95_ms\tp99_ms\tmean_ms\tstdev_ms\tMAD_ms\toutliers\tCI95_p50_ms")
     for group in groups:

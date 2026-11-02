@@ -1,0 +1,110 @@
+version: "2"
+
+issues:
+  max-same-issues: 0
+
+formatters:
+  enable:
+    - goimports
+    - gofmt
+    - golines
+
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/autobrr/upbrr
+    golines:
+      max-len: 160
+      tab-len: 4
+      shorten-comments: false
+      reformat-tags: false
+      chain-split-dots: false
+
+  exclusions:
+    paths:
+      - _test\.go$
+
+linters:
+  enable:
+    - bodyclose
+    - asciicheck
+    - bidichk
+    - canonicalheader
+    - contextcheck
+    - copyloopvar
+    - depguard
+    - durationcheck
+    - errname
+    - errchkjson
+    - errorlint
+    - exhaustive
+    - exptostd
+    - fatcontext
+    - gocheckcompilerdirectives
+    - forcetypeassert
+    - gocritic
+    - gosec
+    - loggercheck
+    - makezero
+    - mirror
+    - misspell
+    - noctx
+    - nilnesserr
+    - nolintlint
+    - nosprintfhostport
+    - perfsprint
+    - prealloc
+    - predeclared
+    - reassign
+    - recvcheck
+    - rowserrcheck
+    - revive
+    - sqlclosecheck
+    - spancheck
+    - testifylint
+    - unconvert
+    - unparam
+    - usestdlibvars
+    - usetesting
+    - unused
+    - wastedassign
+    - wrapcheck
+    - whitespace
+
+  settings:
+    recvcheck:
+      exclusions:
+        - Category.Scan
+
+    exhaustive:
+      default-signifies-exhaustive: false
+
+    misspell:
+      ignore-rules:
+        - alltime
+        - hardlink
+        - hardlinked
+
+    depguard:
+      rules:
+        local-filesystem-paths:
+          deny:
+            - pkg: "path$"
+              desc: use filepath for local filesystem paths; path is allowed only for slash-delimited URL, torrent, or API payload paths
+
+  exclusions:
+    generated: lax
+
+    paths:
+      - ^tmp/
+
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+
+    rules:
+      - path: _test\.go
+        linters:
+          - gosec

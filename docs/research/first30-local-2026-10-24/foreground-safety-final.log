@@ -1,0 +1,40 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 22.88s
+     Running unittests src/main.rs (target/debug/deps/rrrah-ae18d7943590843b)
+
+running 3 tests
+test first30_remaining::concurrent_submit_cancel_and_queue_refusal_preserve_latest_intent ... ok
+test first30_remaining::foreground_submit_contention_pairs ... ignored, manual actual foreground submit contention A/A and A/B; no decoder latency claim
+test first30_remaining::releasing_flight_before_publication_can_erase_the_latest_request ... ok
+
+successes:
+
+---- first30_remaining::concurrent_submit_cancel_and_queue_refusal_preserve_latest_intent stdout ----
+FOREGROUND_SAFETY producers=1,2,4 cancelled_old=true final_exact=true disconnected_refused=true
+
+---- first30_remaining::releasing_flight_before_publication_can_erase_the_latest_request stdout ----
+EARLY_UNLOCK_NEGATIVE old_replaces_new=true newest_decode_lost=true production_serializes=true
+
+
+successes:
+    first30_remaining::concurrent_submit_cancel_and_queue_refusal_preserve_latest_intent
+    first30_remaining::releasing_flight_before_publication_can_erase_the_latest_request
+
+test result: ok. 2 passed; 0 failed; 1 ignored; 0 measured; 440 filtered out; finished in 0.01s
+

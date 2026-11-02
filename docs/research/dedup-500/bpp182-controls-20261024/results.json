@@ -1,0 +1,60 @@
+{
+  "scope": "Original AST functions, real owned in-memory SQLite; logger-only adapter.",
+  "controls_passed": 5,
+  "observations": [
+    {
+      "case": "db_hamming",
+      "observed": 1,
+      "fixed_width_64_reference": 64,
+      "mismatch_reproduced": true
+    },
+    {
+      "case": "phash_hamming",
+      "observed": 1,
+      "fixed_width_64_reference": 64,
+      "mismatch_reproduced": true
+    },
+    {
+      "case": "60_second_window_chain",
+      "endpoint_seconds": 100,
+      "returned": 3,
+      "rows": [
+        [
+          1,
+          1,
+          3
+        ],
+        [
+          2,
+          1,
+          3
+        ],
+        [
+          3,
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "case": "empty_candidate_early_return_leaves_previous_cluster",
+      "returned": 0,
+      "rows": [
+        [
+          9,
+          9
+        ]
+      ]
+    },
+    {
+      "case": "opposite_64bit_hashes_cluster_at_threshold8",
+      "returned": 2,
+      "true_distance": 64
+    }
+  ],
+  "source_sha256": {
+    "04-dedupe.py": "d38c1b34d206ce3149fa26e3cf8807d339139596cecca50ec6507279d023026d",
+    "05-phash.py": "5f95f24206a937578c96dcb881e72af143d7564937118c06a9066fa0d74ac738"
+  },
+  "limits": "No cv2 image decoding, full original tests, real user database, performance or production adoption."
+}

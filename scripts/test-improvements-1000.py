@@ -47,5 +47,28 @@ class ExecutionValidation(unittest.TestCase):
         errors, _ = validator.validate(data, self.markdown)
         self.assertIn('first 30 tasks require execution metadata', errors)
 
+    def batch_errors(self, change):
+        data = copy.deepcopy(self.data)
+        data['execution_batches'] = [{'ids': ['RR-0001'], 'summary': {'verified': 1},
+                                     'report': data['tasks'][0]['execution']['report']}]
+        change(data['execution_batches'][0])
+        return validator.validate(data, self.markdown)[0]
+
+    def test_batch_summary_mismatch_is_refused(self):
+        self.assertIn('execution batch summary inconsistent', self.batch_errors(lambda b: b.update(summary={})))
+
+    def test_batch_duplicate_and_unknown_ids_are_refused(self):
+        for ids in [['RR-0001', 'RR-0001'], ['RR-9999']]:
+            self.assertIn('execution batch IDs must be existing and unique', self.batch_errors(lambda b: b.update(ids=ids)))
+
+    def test_batch_missing_execution_is_refused(self):
+        data=copy.deepcopy(self.data)
+        data['execution_batches']=[{'ids':['RR-1000'],'summary':{},'report':data['tasks'][0]['execution']['report']}]
+        data['tasks'][-1].pop('execution',None)
+        self.assertIn('execution batch task missing execution',validator.validate(data,self.markdown)[0])
+
+    def test_batch_report_outside_repository_is_refused(self):
+        self.assertIn('execution batch report missing or unsafe',self.batch_errors(lambda b:b.update(report='../outside')))
+
 if __name__ == '__main__':
     unittest.main()

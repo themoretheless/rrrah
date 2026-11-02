@@ -1,0 +1,7 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+import {MinHash} from '../evidence/rknightion--paperless-ngx-dedupe/03-minhash.ts';
+import {textToShingles} from '../evidence/rknightion--paperless-ngx-dedupe/deep-shingles.ts';
+const a=MinHash.deserialize(Buffer.from(new Uint32Array([1]).buffer),192);const b=MinHash.deserialize(Buffer.from(new Uint32Array([2]).buffer),192);assert.equal(a.jaccard(b),191/192);
+const sa=textToShingles('alpha beta',10,1),sb=textToShingles('different words',10,1);assert.equal(sa.size,0);assert.equal(sb.size,0);const ma=new MinHash(192),mb=new MinHash(192);ma.update(sa);mb.update(sb);assert.equal(ma.jaccard(mb),1);
+assert(Number.isNaN(new MinHash(0).jaccard(new MinHash(0))));
+const out={controls_passed:3,scope:'Unchanged MinHash/shingles modules;Node22.23.4 native TS stripping;malformed buffer/direct primitive and schema-permitted minWords1/ngram10 configuration;full application and DB not run',findings:['One-word signatures deserialized as192 permutations yield191/192 similarity despite differing stored value;undefined tail comparisons counted.','Two different two-word texts with ngram10,minWords1 yield empty shingle sets and matching initial signatures1;caller filtering not qualified.','Direct zero-permutation constructor yields NaN;app schema min16 blocks this value.']};fs.writeFileSync(new URL('results.json',import.meta.url),JSON.stringify(out,null,2)+'\n');console.log(out);

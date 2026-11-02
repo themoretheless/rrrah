@@ -1,0 +1,22 @@
+{
+  "name": "Treliq PR Triage",
+  "description": "AI-powered PR triage, scoring, and duplicate detection for open-source maintainers",
+  "url": "https://github.com/mahsumaktas/treliq",
+  "hook_attributes": {
+    "url": "https://YOUR_SERVER_URL/webhooks",
+    "active": true
+  },
+  "redirect_url": "https://YOUR_SERVER_URL/setup",
+  "public": true,
+  "default_events": [
+    "pull_request",
+    "installation",
+    "installation_repositories"
+  ],
+  "default_permissions": {
+    "pull_requests": "write",
+    "contents": "read",
+    "checks": "read",
+    "issues": "write"
+  }
+}

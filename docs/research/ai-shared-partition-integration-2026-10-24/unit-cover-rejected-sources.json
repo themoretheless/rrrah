@@ -1,0 +1,64 @@
+{
+  "decoder_sha256": "4737b886fd6e461e5a3be72742b067afc669b2397457c12415b807261c9b3916",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "aa07744f4418f6272cb04c8779f22a2a1b9777c4bc95ff0f059d9df178ca50e1",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "334e157b26c664f66f71a825815715e8418d0539de55396b2681b73fdf96ca68",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "scope": "Rejected exact single-region unit-square occlusion pilot; source restored after real-file comparison. Local work gain does not imply whole-page gain.",
+  "artifacts": {
+    "unit-cover-rejected-poppler.json": "ff3324de5aad77b2fb36959a9ca556a95457700fce01293d085f76189026b3f8",
+    "unit-cover-rejected-kernel.log": "b764de6d45cb1ef5f228bf018e8deea91ded82cf6dfe53d2787020f85dfbc776",
+    "unit-cover-rejected.patch": "74b40297afea3db596e2b66af180f8c2d2865f845e5f7ab307e0b98308b1391b"
+  },
+  "full_encode": {
+    "terminal_result": "test result: ok. 107 passed; 0 failed; 6 ignored; 0 measured; 96 filtered out; finished in 117.65s",
+    "log_sha256": "139bc985c7b1a2f1426331e5a85e2ace1f9bde105dd52285c384dbf291d047ba",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-unit-cover-full-encode-20261102.log"
+  },
+  "public_feature": {
+    "terminal_result": "test result: ok. 256 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 69.10s",
+    "log_sha256": "fb5aff0ba3773387bdd175dcea8be18cb2bd85d4425e56319a01562e9f882a27",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-unit-cover-feature-vector-20261102.log"
+  },
+  "restored_source_sha256": "d0bbf3736ffa659df47e9bae82ad4c5f823ecc636b5e2d453e03c7a8cab2b150",
+  "stage_deltas": [
+    {
+      "scans": 0,
+      "initial_paint": 0,
+      "initial_visit": 0,
+      "dense": 0,
+      "total": 0,
+      "patches": 1455
+    },
+    {
+      "scans": 0,
+      "initial_paint": -2,
+      "initial_visit": 0,
+      "dense": 2,
+      "total": 0,
+      "patches": 323
+    },
+    {
+      "scans": 0,
+      "initial_paint": 0,
+      "initial_visit": 0,
+      "dense": 0,
+      "total": 0,
+      "patches": 245
+    },
+    {
+      "scans": 0,
+      "initial_paint": 746,
+      "initial_visit": 0,
+      "dense": -746,
+      "total": 0,
+      "patches": 788
+    }
+  ],
+  "rejected_patch_reproduces_trial_source": true,
+  "restored_decoder_sha256": "a92a4a456273f17f4ef28d1991367c1d07a47d3daf7c3a40da21c776f5e89840",
+  "restored_decoder_identical_to_qualified_initial_profile": true
+}

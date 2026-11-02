@@ -1,0 +1,13 @@
+{
+  "scope": "Original pure Rockwell conversion method; artificial Ladder string only; no PLC/runtime execution.",
+  "input": "BST XIC(A) NXB XIC(B) BND OTE(Y);",
+  "actual_pseudo_st": "IF A AND B THEN\n    Y := TRUE;\nELSE\n    Y := FALSE;\nEND_IF;",
+  "expected_parallel_condition": "A OR B",
+  "actual_condition": "A AND B",
+  "counterexample_inputs": {
+    "A": true,
+    "B": false
+  },
+  "expected_output": true,
+  "actual_condition_value": false
+}

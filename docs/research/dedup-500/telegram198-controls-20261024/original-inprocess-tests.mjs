@@ -1,0 +1,10 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
+const raw=fs.readFileSync('docs/research/dedup-500/evidence/botnick--telegram-media-downloader/03-dbscan.js');const m=await import('data:text/javascript;base64,'+raw.toString('base64'));const tests=[];
+const expect=x=>({toEqual:y=>assert.deepEqual(JSON.parse(JSON.stringify(x)),JSON.parse(JSON.stringify(y))),toBe:y=>assert.equal(x,y),toBeLessThan:y=>assert.ok(x<y)});
+const ctx=vm.createContext({...m,expect,Buffer,console,describe:(name,fn)=>fn(),it:(name,fn)=>tests.push({name,fn})});
+const facesSource=fs.readFileSync('docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/ai/faces.js','utf8');
+const wrappers=facesSource.slice(facesSource.indexOf('function _resolveClusterOpts'),facesSource.indexOf('// The old worker path')).replace(/export /g,'');
+vm.runInContext(wrappers,ctx);
+let text=fs.readFileSync('docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/tests/ai/dbscan.test.js','utf8');text=text.replace(/^import .*;\s*$/gm,'');vm.runInContext(text,ctx);
+const selected=tests.filter(t=>!['worker result equals the in-process result','rejects with AbortError when the signal fires','small inputs run inline and match'].includes(t.name));assert.equal(selected.length,13);for(const t of selected)await t.fn();
+fs.writeFileSync('docs/research/dedup-500/telegram198-controls-20261024/original-inprocess-test-results.json',JSON.stringify({original_test_bodies_passed:13,names:selected.map(t=>t.name),registered_cases:tests.length,not_executed:tests.length-13,scope:'Thirteen unchanged original test callbacks; actual original in-process faces wrappers extracted unchanged executed in VM registration/expect adapter against actual original complete DBSCAN module. No Vitest runner or faces wrappers/GoCore. Original under5s assertion passed;not a before-after performance claim.'},null,2)+'\n');console.log('13 original in-process test bodies passed;remaining',tests.length-13,'not executed');

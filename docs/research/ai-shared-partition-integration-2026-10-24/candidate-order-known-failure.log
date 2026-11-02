@@ -1,0 +1,25 @@
+
+running 1 test
+FOUR_TRIANGLE shared=false indices=[182, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+FOUR_TRIANGLE shared=false indices=[166, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+FOUR_TRIANGLE shared=false indices=[166, 182, 144] area=0.001419239855912846 exact=0.0014192398559128333
+FOUR_TRIANGLE shared=false indices=[166, 182, 131] area=0.0017168854884317484 exact=0.0017168854884317152
+FOUR_TRIANGLE shared=false indices=[166, 182, 131, 144] area=0.0017168854884317484 exact=0.0027273082196554543
+FOUR_TRIANGLE shared=true indices=[182, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+FOUR_TRIANGLE shared=true indices=[166, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+FOUR_TRIANGLE shared=true indices=[166, 182, 144] area=0.001419239855912846 exact=0.0014192398559128333
+FOUR_TRIANGLE shared=true indices=[166, 182, 131] area=0.0017168854884317484 exact=0.0017168854884317152
+FOUR_TRIANGLE shared=true indices=[166, 182, 131, 144] area=0.0017168854884317484 exact=0.0027273082196554543
+
+thread 'encode::ordered_pixel::shared_fragment_store::tests::four_triangle_overlay_matches_exact_union' (6703502) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/shared_fragment_store.rs:2153:9:
+four-triangle overlay must preserve the independently proved input union
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test encode::ordered_pixel::shared_fragment_store::tests::four_triangle_overlay_matches_exact_union ... FAILED
+
+failures:
+
+failures:
+    encode::ordered_pixel::shared_fragment_store::tests::four_triangle_overlay_matches_exact_union
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 190 filtered out; finished in 0.00s
+

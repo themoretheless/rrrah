@@ -1,0 +1,31 @@
+{
+  "scope": "Original PruneStage binary bucket reader; real owned files, folder adapter only.",
+  "source_sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+  "authored_controls_run": 4,
+  "original_tests_run": 0,
+  "observations": [
+    {
+      "case": "valid binary records preserve reader and max uint32 document IDs",
+      "passed": true
+    },
+    {
+      "case": "short-count.dups",
+      "error": "Corrupt .dups file short-count.dups: truncated bucket count"
+    },
+    {
+      "case": "short-pair.dups",
+      "error": "Corrupt .dups file short-pair.dups: truncated pair payload"
+    },
+    {
+      "case": "empty binary file yields no rows",
+      "passed": true
+    }
+  ],
+  "not_executed": [
+    "complete PruneStage",
+    "BucketStage heap merge",
+    "cross-band subset algorithm",
+    "scheduler",
+    "real corpus"
+  ]
+}

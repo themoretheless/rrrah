@@ -1,0 +1,289 @@
+# Threads Affiliate Poster ID — Full Documentation for LLMs
+
+> Comprehensive single-file documentation optimized for LLM consumption. Includes full README, AGENTS instructions, and key concepts.
+
+## Repository Identity
+
+- **Name**: `threads-affiliate`
+- **URL**: https://github.com/d4ncboz/threads-affiliate
+- **License**: MIT
+- **Language**: Python 3.10+
+- **Maintainer**: @d4ncboz
+
+## What This Project Does
+
+Automates posting 2-3 post chains to Threads (Meta) for Indonesian affiliate marketers. Primary use case: Shopee Indonesia affiliate links. Built-in anti-spam: category rotation, hook similarity detection, link reuse prevention, human-like typing.
+
+## Critical Technical Decisions
+
+### 1. Session Cookies (Not OAuth)
+
+Threads has no public OAuth. Authentication is done via session cookies extracted from a logged-in Chrome browser:
+- Instagram cookies → `.instagram.com` domain
+- Threads cookies → `.threads.com` domain
+- Meta SSO bridge: Login at threads.com/login → "Continue with Instagram"
+
+Cookies stored at `~/.threads_poster/cookies/session.json` (chmod 600, NEVER committed).
+
+### 2. Playwright Headless Chromium
+
+Why Playwright over Selenium:
+- Better headless support
+- Built-in clipboard permissions (needed for link insertion)
+- Better CDP integration
+- Auto-wait semantics
+
+### 3. Markdown Affiliate Database
+
+Why Markdown over SQLite/JSON:
+- Human-editable in any text editor
+- Version-controllable (but `.gitignore`d for privacy)
+- Simple parsing logic
+- Status visible at a glance with ✅/❌ icons
+
+### 4. 3-Post Chain Limit
+
+Threads native limit for chain posts. Going beyond breaks the UI flow. Our format:
+- Post 1: Hook (catches attention, 50-80 chars)
+- Post 2: Review body (substance, 150-300 chars)
+- Post 3: CTA + affiliate link (clipboard-pasted for cleanliness)
+
+### 5. Hook Style Rotation
+
+9 hook styles per category, enforced no-repeat in last 2 posts. Why 9 styles:
+- Threads spam detection clusters posts by style
+- 9 styles × 4 categories = 36 combinations
+- Even with 3 posts/day, full cycle takes 12+ days
+
+## Operational Workflows
+
+### Setup (Human-Required Steps)
+
+1. Create Instagram + Threads account (manual, must be at least 2 weeks old before automation)
+2. Apply for Shopee Affiliate at affiliate.shopee.co.id (24-48h approval)
+3. Build affiliate link database (`data/affiliate_links.md`, target 30-100 links)
+4. Extract cookies: `python -m threads_poster.cli setup --extract-cookies`
+
+### Daily Operation (Automatable)
+
+For each scheduled slot:
+1. Read DB → pick next UNUSED link in rotation category
+2. Generate content via templates (hook + review + CTA)
+3. Run dedup check (link, hook style, hook similarity)
+4. If pass: invoke Playwright posting flow
+5. On success: mark link USED, record to history
+6. On fail: log error, exit with appropriate code (see Exit Codes)
+
+### Schedule Recommendation
+
+WIB (UTC+7) timezone:
+- 08:00 → skincare
+- 13:00 → parfum
+- 20:00 → haircare
+(rotate makeup in on alternate days)
+
+Max 3 posts/day. >5/day triggers Threads spam ban.
+
+## CLI Commands
+
+```bash
+# Setup
+python -m threads_poster.cli setup --extract-cookies
+python -m threads_poster.cli setup --validate-cookies
+python -m threads_poster.cli setup --list-chrome-profiles
+
+# Single post (full args)
+python -m threads_poster.cli post \
+  --product "Product Name" \
+  --link "https://s.shopee.co.id/XXXXX" \
+  --category {skincare|parfum|haircare|makeup} \
+  --hook-style {edukasi|validasi_mental|storytelling|problem_solving|hook_pancingan|transformasi|social_proof|urgency|controversy} \
+  --image /path/to/image.jpg \
+  --headed  # debug only
+
+# Auto-pick from database
+python -m threads_poster.cli post-auto --category skincare
+
+# Database management
+python -m threads_poster.cli db --stats
+python -m threads_poster.cli db --list-unused --category skincare
+python -m threads_poster.cli db --add --category skincare --product "X" --link "https://s.shopee.co.id/X"
+python -m threads_poster.cli db --reset  # WARNING: confirms before reset
+
+# Schedule helper
+python -m threads_poster.cli schedule
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| 0 | Success |
+| 1 | Generic error/exception |
+| 2 | Cookies expired or invalid |
+| 3 | Dedup rejected (link/hook reused) |
+| 4 | No UNUSED links available in DB |
+| 5 | Playwright/network failure |
+| 6 | Image file not found |
+| 7 | Account locked/suspended |
+
+## Environment Variables
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `THREADS_COOKIES_PATH` | `~/.threads_poster/cookies/session.json` | Cookie file |
+| `THREADS_DB_PATH` | `data/affiliate_links.md` | Database |
+| `THREADS_HISTORY_PATH` | `data/post_history.json` | History |
+| `THREADS_TEMPLATES_DIR` | `templates/` | Templates |
+| `THREADS_HEADLESS` | `true` | Playwright headless mode |
+| `THREADS_USERNAME` | (none) | For post verification |
+| `THREADS_TIMEOUT_MS` | `30000` | Operation timeout |
+| `THREADS_LOG_LEVEL` | `INFO` | Logging level |
+
+## Hard Constraints
+
+These are enforced by the toolkit and MUST NOT be bypassed:
+
+1. **Link reuse**: Same affiliate link never posted twice (dedup will reject)
+2. **Hook style burst**: Same hook style not used in last 2 posts
+3. **Hook text similarity**: New post's hook must have <60% word overlap with last 5 posts
+4. **Cookies handling**: Session cookies are HttpOnly when applicable; never written to logs
+5. **Posting rate**: Recommended max 3/day; toolkit can enforce but doesn't auto-throttle
+
+## Hook Template Schema
+
+Each category has its own JSON file at `templates/hooks_{category}.json`:
+
+```json
+{
+  "_meta": {
+    "category": "skincare",
+    "language": "id-ID",
+    "tone": "casual-genz",
+    "audience": "Indonesian 16-30 yo",
+    "version": "1.0"
+  },
+  "hooks": {
+    "edukasi": ["Hook variant 1 {product}", "Hook variant 2 {product}", ...],
+    "validasi_mental": [...],
+    "storytelling": [...],
+    "problem_solving": [...],
+    "hook_pancingan": [...],
+    "transformasi": [...],
+    "social_proof": [...],
+    "urgency": [...],
+    "controversy": [...]
+  }
+}
+```
+
+- `{product}` placeholder gets replaced with actual product name
+- Each style needs at least 2-3 variants for randomization
+- Hooks should be <80 chars (mobile first-line visibility)
+- Max 2 emojis per hook
+- Forbidden words (trigger spam): "promo", "diskon gila", "beli sekarang"
+
+## Database Schema
+
+`data/affiliate_links.md` is a Markdown file with one table per category:
+
+```markdown
+## SKINCARE
+
+| # | Product | Link | Status | Last Used |
+|---|---------|------|--------|-----------|
+| 1 | Product A | `https://s.shopee.co.id/XXXXX` | ❌ UNUSED | - |
+| 2 | Product B | `https://s.shopee.co.id/YYYYY` | ✅ USED (2026-06-28) — edukasi | 2026-06-28 |
+```
+
+- Required columns: #, Product, Link, Status, Last Used
+- Link MUST be wrapped in backticks
+- Link MUST be `s.shopee.co.id/...` short link
+- Status: `❌ UNUSED` or `✅ USED (date) — note`
+
+## Post History Schema
+
+`data/post_history.json`:
+
+```json
+{
+  "posts": [
+    {
+      "date": "2026-06-29T08:00:00",
+      "hook_category": "edukasi",
+      "category": "skincare",
+      "hook_text": "First 80 chars of post 1",
+      "product": "Product Name",
+      "affiliate_link": "https://s.shopee.co.id/XXXXX",
+      "num_posts": 3,
+      "status": "posted"
+    }
+  ]
+}
+```
+
+Maximum 100 entries (auto-trim on save).
+
+## Indonesian Language Conventions
+
+Hook templates use specific Indonesian gen-Z casual register:
+
+- **Pronouns**: `gw`/`gue` (1st person), `lo` (2nd person) — NOT `aku`/`kamu`
+- **Emojis**: Max 2 per hook, placed at sentence end
+- **Length**: Hook ≤ 80 chars
+- **Tone**: Confident but not aggressive, conversational not formal
+- **Hashtags**: Allowed in CTAs but not in hooks
+- **Forbidden words**: "promo", "diskon gila", "beli sekarang" (triggers Threads spam filter)
+
+When generating new hooks, follow this pattern. When user asks for translations to formal Indonesian, output them in a separate `templates/hooks_*_formal.json` file.
+
+## Security & Privacy
+
+### Never Commit These Files
+
+The `.gitignore` excludes:
+- `*.cookies.json`
+- `~/.threads_poster/`
+- `cookies/`
+- `data/affiliate_links.md`
+- `data/post_history.json`
+- `logs/`
+
+### Token Handling
+
+- All cookies are read-only after extraction
+- File permissions enforced at `600` (owner read/write only)
+- Validation always happens before posting (no stale-cookie attempts)
+- Re-extraction available via `setup --extract-cookies`
+
+## Common Errors → Canonical Fixes
+
+| Error | Fix |
+|-------|-----|
+| `Cookies not found` | Run `setup --extract-cookies` |
+| `Missing critical Instagram cookies` | Re-login to IG in Chrome, re-extract |
+| `Editor element not found after 14s` | Threads UI changed; check `poster.py` selectors |
+| `No UNUSED links available` | Add more links via `db --add` |
+| `DEDUP REJECTED: Link already used` | Pick different product (normal behavior) |
+| `Action Blocked` on Threads | Account flagged; stop automation 24-48h |
+| `Could not read Username for github.com` | Use HTTPS with embedded token, or set up SSH |
+
+## Ethics & ToS Compliance
+
+- Threads/Meta ToS: This tool operates in a grey area (mimics human action via cookie auth). Mitigated by rate limiting, anti-spam features, and human-like patterns.
+- Shopee Affiliate ToS: Users MUST disclose affiliate relationship (hashtag or bio mention).
+- Indonesian Law: UU PDP, UU ITE, KOMINFO AI disclosure (if using AI-generated content).
+- The tool will NOT: scrape user data, auto-follow/DM, bypass 2FA, create fake accounts, use proxies for rate-limit evasion.
+
+## License
+
+MIT License. See LICENSE file.
+
+## Issues & Contributions
+
+- Bug reports: https://github.com/d4ncboz/threads-affiliate/issues
+- Pull requests welcome for: new hook templates, dedup improvements, other platform support (Lazada, TikTok Shop, Tokopedia), translations.
+
+---
+
+This document is intended to be the single source of truth for any LLM/AI agent integrating with or working on this project. For human-readable docs, see README.md and docs/ directory.

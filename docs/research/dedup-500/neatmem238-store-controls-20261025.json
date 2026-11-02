@@ -1,0 +1,22 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original MemoryStore with dependency imports omitted, constructor bypassed, recording-only vector/history and identity lemma adapters. No persistent writes, model, real store or original integration tests.",
+  "authored_controls": [
+    {
+      "name": "add rejects app_id keyword",
+      "passed": true
+    },
+    {
+      "name": "delete_all rejects app_id keyword",
+      "passed": true
+    },
+    {
+      "name": "default get_all requests only 20 backend records",
+      "passed": true
+    },
+    {
+      "name": "history failure occurs after vector insertion with no rollback call",
+      "passed": true
+    }
+  ]
+}

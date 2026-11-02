@@ -1,0 +1,67 @@
+{
+  "repository": "routineLife1/MultiPassDedup",
+  "commit": "fc724a0a99d4818366677b102049289126b61744",
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "cc84c249093fda3c2f2c4abfa4451320e6a82fad",
+      "sha256": "5eedefbb2944d4e0d7911def905270366324aab4ac0f735d31c55587601fa123",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "be8b9cfba9f3441fcd476b1074876b431963184c",
+      "sha256": "089943d6719545d7c3f768ee86247bc370e06459e0050940cab0c035a22ec13e",
+      "whole_text_read": true
+    },
+    {
+      "path": "MultiPassDedup.ipynb",
+      "local": "03-MultiPassDedup.ipynb",
+      "git_blob": "83974d4e2d3aae91a39e72e36819ba1eb0a72efc",
+      "sha256": "e8eeba9f03ce76c256b7b3c2effcef935d64aa17ae5588b9fa43d7813834a2bf",
+      "whole_text_read": true
+    },
+    {
+      "path": "models/gmflow/matching.py",
+      "local": "04-matching.py",
+      "git_blob": "f1243a17ca08ee8cb9650da5b3ea59c5d7ab2558",
+      "sha256": "fbf95fb3cc097ccfa8a3a889fc85ca2577c8f47623b739d3f395c699ec0ebac1",
+      "whole_text_read": true
+    },
+    {
+      "path": "models/gimm/src/models/generalizable_INR/gmflow/matching.py",
+      "local": "05-matching.py",
+      "git_blob": "1740200905d5d291e2a1a1fd53b444e62403a64e",
+      "sha256": "00b6efdaa53f08636de59a20b662caa69639d430a51fbe14a0ed11c9ce4133a6",
+      "whole_text_read": true
+    },
+    {
+      "path": "infer.py",
+      "local": "deep-infer.py",
+      "git_blob": "d211aa773e5b392d78a2cb0a5433b99f7fb9f2b1",
+      "sha256": "e409caffcc14beb40f16dd3591bdc5d94b1b3e1203b88cd6b1816d7ff679e77e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 6,
+  "tracked_blobs": 135,
+  "whole_repo_complete": false,
+  "authored_controls_passed": 4,
+  "original_tests_run": false,
+  "controls": "multipass135-controls-20261024/results.json",
+  "findings": [
+    "Scene detection and hardware acceleration default false despite README describing enabled defaults.",
+    "Negative n_pass accepted;source main range(n_pass) then tail loop has no infer calls:nontermination consequence source-only,not run.",
+    "NaN target_fps accepted;source <=src_fps check does not reject it.",
+    "Explicit positive parameters parse as intended.",
+    "Main repeatedly updates/interpolates frame caches;no file equivalence groups.",
+    "Global feature correlation allocates B*(H*W)^2 entries:source complexity only;no measured memory/performance.",
+    "RootMIT read;bundled model nested license scope incomplete;no code adoption."
+  ],
+  "scope": "Original argparse function AST unchanged;standard library;synthetic filenames only;no model/PyTorch/GPU/video/CLI main execution",
+  "decision": "reference",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

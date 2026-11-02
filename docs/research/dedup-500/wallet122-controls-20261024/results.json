@@ -1,0 +1,10 @@
+{
+  "controls_passed": 3,
+  "scope": "Original pure mergeTrades function only;synthetic records;no browser or service requests",
+  "findings": [
+    "Absent signature fallback merges different mints with same wallet/token/timeMs.",
+    "Repeated same signature merges as expected.",
+    "51 unique input trades intentionally truncated to newest50."
+  ],
+  "runtime": "v22.23.4"
+}

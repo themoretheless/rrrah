@@ -1,0 +1,25 @@
+{
+  "scope": "Original five serendipity-digest callbacks; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "passes p_brain_id to serendipity_digest RPC",
+      "passed": true
+    },
+    {
+      "name": "returns formatted digest with 4 slots",
+      "passed": true
+    },
+    {
+      "name": "empty results returns no-thoughts message",
+      "passed": true
+    },
+    {
+      "name": "RPC error returns isError",
+      "passed": true
+    },
+    {
+      "name": "missing brain context returns error",
+      "passed": true
+    }
+  ]
+}

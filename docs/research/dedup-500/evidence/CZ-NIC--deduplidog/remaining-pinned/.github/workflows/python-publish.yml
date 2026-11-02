@@ -1,0 +1,23 @@
+name: Upload Python Package
+on:
+  push:
+    tags:
+      - '[0-9]+\.[0-9]+\.[0-9]+'
+      - '[0-9]+\.[0-9]+\.[0-9]+-?rc\.?[0-9]+'
+
+jobs:
+  pypi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Replace media paths in README.md
+        run: sed -E 's#(\]\((asset/[a-zA-Z0-9._-]+))#](https://github.com/CZ-NIC/deduplidog/blob/main/\2?raw=True#g' README.md | less > README.md.tmp && mv README.md.tmp README.md
+      - name: Build the package
+        run: python3 -m pip install --upgrade build && python3 -m build
+      - name: Publish package
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_GITHUB_DEDUPLIDOG }}

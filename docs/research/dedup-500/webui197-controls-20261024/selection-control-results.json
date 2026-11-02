@@ -1,0 +1,38 @@
+{
+  "scope": "AST-extracted original functions, decorators removed; JSON substitutes only TOML serialization, gr.update returns dictionary, filesystem operation is recording stub. No files touched, no full UI/model runtime.",
+  "cases": [
+    {
+      "case": "negative-index",
+      "planned_groups": [
+        [
+          "D"
+        ]
+      ],
+      "operation": "remove"
+    },
+    {
+      "case": "repeated-index",
+      "planned_groups": [
+        [
+          "A",
+          "A"
+        ]
+      ],
+      "operation": "remove"
+    },
+    {
+      "case": "all-select",
+      "selection": {
+        "0": [
+          0,
+          1
+        ],
+        "1": [
+          0,
+          1
+        ]
+      },
+      "scope": "Explicit select-all feature, not auto-selection defect; no per-group keeper guard in confirm_cluster."
+    }
+  ]
+}

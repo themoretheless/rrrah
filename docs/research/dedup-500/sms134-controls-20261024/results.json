@@ -1,0 +1,11 @@
+{
+  "controls_passed": 4,
+  "scope": "Full original module imported without CLI main;actual lxml6.0.2;upstream fixture and synthetic XML only;no user backups",
+  "findings": [
+    "Independent equality assertions confirm7to2 messages for multiple_duplicates fixture.",
+    "Different service_center metadata intentionally ignored in domain key;not byte identity.",
+    "Different data payload strings kept separately.",
+    "Default mode keeps SMS/MMS separately but shared log representative map can report MMS as kept representative for removed SMS."
+  ],
+  "cross_tag_log": "Removing sms:\n    date: 1000\n    body: same\n\nIn favor of keeping mms:\n    date: 1000\n    body: same\n\n"
+}

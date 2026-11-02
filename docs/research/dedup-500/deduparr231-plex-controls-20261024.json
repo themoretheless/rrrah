@@ -1,0 +1,41 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original Plex scan/filter/sample bodies, all library/items/media metadata supplied as in-memory fixtures. Device collision synthetic. No Plex client, auth, server, filesystem, network or refresh calls executed.",
+  "authored_controls": [
+    {
+      "name": "separate same-title entries with one version each omitted",
+      "passed": true,
+      "observed": {}
+    },
+    {
+      "name": "multi-version single movie retained",
+      "passed": true,
+      "observed": [
+        "Movie|2020"
+      ]
+    },
+    {
+      "name": "empty media parts count as non-sample version",
+      "passed": true,
+      "observed": [
+        "Show|S01E01"
+      ]
+    },
+    {
+      "name": "same show episode key overwrites earlier multi-version item",
+      "passed": true,
+      "observed": 1
+    },
+    {
+      "name": "hardlink filter ignores devices with identical inode",
+      "passed": true,
+      "observed": {}
+    },
+    {
+      "name": "sample substring in parent excludes arbitrary content",
+      "passed": true,
+      "observed": true
+    }
+  ]
+}

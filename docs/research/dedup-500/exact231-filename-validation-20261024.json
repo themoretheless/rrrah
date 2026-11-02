@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-24",
+  "crate": "rrrah-dedup",
+  "toolchain": "1.98.1",
+  "target": "exact_files",
+  "offline": true,
+  "tests": [
+    {
+      "name": "normalized_parent_names_do_not_merge_distinct_physical_paths",
+      "passed": 1,
+      "failed": 0,
+      "filtered": 43,
+      "exit_code": 0
+    },
+    {
+      "name": "shared_filename_suffixes_and_extensionless_names_preserve_content_partitions",
+      "passed": 1,
+      "failed": 0,
+      "filtered": 43,
+      "exit_code": 0
+    }
+  ],
+  "test_source_sha256": "76910f82adb01575a079d28cce83bd05373f0a1f1a19b36848b0a89e7ff794dd",
+  "exact_source_sha256": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+  "scope": "Two focused existing regression tests; not a fresh full44 run or universal platform/case proof; no implementation edits this batch."
+}

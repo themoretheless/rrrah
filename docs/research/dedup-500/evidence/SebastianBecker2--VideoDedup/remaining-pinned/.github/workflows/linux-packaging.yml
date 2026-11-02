@@ -1,0 +1,220 @@
+# Build Linux DEB/RPM/Pacman/Snap/Flatpak from staged dotnet publish; optional SBOM. Extend matrix for arm64 as needed.
+name: Linux packaging
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master, Linux]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  linux-packages:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set SOURCE_DATE_EPOCH
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install packaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot dpkg-dev lintian rpm python3 curl ca-certificates git \
+            flatpak flatpak-builder snapd squashfuse fuse3
+
+      - name: Install Snapcraft
+        run: |
+          sudo systemctl start snapd.socket snapd.service 2>/dev/null || true
+          timeout 180 sudo snap wait system seed.ready 2>/dev/null || true
+          # Match snap base (core24) to ubuntu-latest (24.04); core22 often fails to install here.
+          sudo snap install core24
+          sudo snap install snapcraft --classic
+
+      - name: Flatpak runtimes for flatpak-builder
+        run: |
+          flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+          flatpak install -y --user flathub org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08 org.freedesktop.Sdk.Extension.dotnet8//24.08
+
+      - name: Stage, package, lint, Docker smoke tests
+        run: python3 packaging/ci/linux_build_and_test.py --arch ${{ matrix.arch }}
+
+      - name: SBOM (syft)
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+          ./packaging/tools/sbom-and-attest.sh ${{ matrix.arch }}
+        continue-on-error: true
+
+      # packaging/out/ is gitignored; upload each package format as its own artifact.
+      - name: Stage metadata for artifact upload
+        run: |
+          set -euo pipefail
+          staging="${RUNNER_TEMP}/linux-metadata-staging"
+          rm -rf "${staging}"
+          mkdir -p "${staging}"
+          cp packaging/out/metadata.json "${staging}/"
+          cp "packaging/out/SHA256SUMS-${{ matrix.arch }}.txt" "${staging}/"
+          if [[ -d "packaging/out/${{ matrix.arch }}/sbom" ]]; then
+            cp -a "packaging/out/${{ matrix.arch }}/sbom" "${staging}/"
+          fi
+
+      - name: Upload DEB package
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-deb-${{ matrix.arch }}-${{ github.sha }}
+          if-no-files-found: error
+          path: packaging/out/${{ matrix.arch }}/deb
+
+      - name: Upload RPM package
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-rpm-${{ matrix.arch }}-${{ github.sha }}
+          if-no-files-found: error
+          path: packaging/out/${{ matrix.arch }}/rpm
+
+      - name: Upload Pacman package
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-pacman-${{ matrix.arch }}-${{ github.sha }}
+          if-no-files-found: error
+          path: packaging/out/${{ matrix.arch }}/pacman
+
+      - name: Upload Snap package
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-snap-${{ matrix.arch }}-${{ github.sha }}
+          if-no-files-found: error
+          path: packaging/out/${{ matrix.arch }}/snap
+
+      - name: Upload Flatpak package
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-flatpak-${{ matrix.arch }}-${{ github.sha }}
+          if-no-files-found: error
+          path: packaging/out/${{ matrix.arch }}/flatpak
+
+      - name: Upload packaging metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-metadata-${{ matrix.arch }}-${{ github.sha }}
+          if-no-files-found: error
+          path: ${{ runner.temp }}/linux-metadata-staging
+
+  e2e-grpc-firewall:
+    needs: linux-packages
+    runs-on: ubuntu-latest
+    env:
+      # Prebuilt debian/fedora images (Flathub runtime for flatpak); plain fedora:40 fails with "No remote refs found for flathub".
+      VD_USE_FIREWALL_SMOKE_BASE: "1"
+      # Avoid pulling mcr.microsoft.com/dotnet/runtime (often blocked on GitHub Actions); setup-dotnet provides the runtime.
+      VD_SMOKE_USE_HOST_DOTNET: "1"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, distro: debian, format: deb, firewall: nft }
+          - { arch: amd64, distro: debian, format: deb, firewall: iptables }
+          - { arch: amd64, distro: ubuntu, format: deb, firewall: ufw }
+          - { arch: amd64, distro: fedora, format: rpm, firewall: nft }
+          - { arch: amd64, distro: fedora, format: rpm, firewall: firewalld }
+          - { arch: amd64, distro: rocky, format: rpm, firewall: iptables }
+          - { arch: amd64, distro: opensuse, format: rpm, firewall: nft }
+          - { arch: amd64, distro: arch, format: staged, firewall: iptables }
+          - { arch: amd64, distro: manjaro, format: staged, firewall: nft }
+          - { arch: amd64, distro: arch, format: pacman, firewall: iptables }
+          - { arch: amd64, distro: manjaro, format: pacman, firewall: nft }
+          - { arch: amd64, distro: ubuntu, format: snap, firewall: nft }
+          - { arch: amd64, distro: fedora, format: flatpak, firewall: nft }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set SOURCE_DATE_EPOCH
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download built packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: linux-*-${{ matrix.arch }}-${{ github.sha }}
+          path: ${{ runner.temp }}/vd-pkg-art
+          # false (default): one subdirectory per artifact name (required by restore script).
+          merge-multiple: false
+
+      - name: Restore packaging/out from artifacts
+        run: |
+          chmod +x packaging/ci/restore_linux_package_artifacts.sh
+          ./packaging/ci/restore_linux_package_artifacts.sh "${{ matrix.arch }}" "${RUNNER_TEMP}/vd-pkg-art"
+
+      - name: Install helpers for stage.sh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 git
+
+      - name: Stage server tree (staged E2E + openSUSE RPM fallback)
+        run: python3 packaging/tools/stage.py --arch ${{ matrix.arch }}
+
+      - name: E2E gRPC through firewall
+        run: |
+          chmod +x packaging/tests/e2e/*.sh
+          python3 ./packaging/tests/e2e/docker_grpc_firewall.py \
+            --arch ${{ matrix.arch }} \
+            --distro ${{ matrix.distro }} \
+            --format ${{ matrix.format }} \
+            --firewall ${{ matrix.firewall }}
+
+  e2e-grpc-deep-smoke:
+    needs: linux-packages
+    runs-on: ubuntu-latest
+    env:
+      VD_SMOKE_USE_HOST_DOTNET: "1"
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Set SOURCE_DATE_EPOCH
+        run: echo "SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download built packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: linux-*-${{ matrix.arch }}-${{ github.sha }}
+          path: ${{ runner.temp }}/vd-pkg-art
+          merge-multiple: false
+
+      - name: Restore packaging/out from artifacts
+        run: |
+          chmod +x packaging/ci/restore_linux_package_artifacts.sh
+          ./packaging/ci/restore_linux_package_artifacts.sh "${{ matrix.arch }}" "${RUNNER_TEMP}/vd-pkg-art"
+
+      - name: gRPC deep smoke (VideoDedupGrpcSmoke + VideoDedupGrpcComparisonSmoke)
+        run: |
+          chmod +x packaging/tests/e2e/*.sh
+          python3 ./packaging/tests/e2e/docker_grpc_deep_smoke.py --arch ${{ matrix.arch }}

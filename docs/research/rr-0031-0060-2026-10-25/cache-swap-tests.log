@@ -1,0 +1,82 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.40s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_cache-a642c2ff8cc4bc0c)
+
+running 31 tests
+test swap::raster_tests::cancelled_stream_restore_retains_disk_entry_and_releases_partial_allocation ... ok
+test swap::raster_tests::corrupt_and_truncated_raster_restore_release_memory_and_remove_entry ... ok
+test swap::raster_tests::corrupt_old_restore_cannot_remove_replacement_for_same_key ... ok
+test swap::raster_tests::every_animation_v5_wire_mutation_preserves_neighbour_timing_and_retry ... ok
+test swap::raster_tests::every_wire_bit_truncation_and_tail_failure_preserves_neighbour_and_retry ... ok
+test swap::raster_tests::idle_ttl_maintenance_releases_files_and_quota_but_keeps_live_handles ... ok
+test swap::raster_tests::nonzero_ttl_keeps_fresh_swap_then_reclaims_without_lookup ... ok
+test swap::raster_tests::raster_disk_byte_count_ttl_and_queue_limits_are_independent ... ok
+test swap::raster_tests::raster_ram_eviction_spills_and_pressure_restore_preserves_visible_frame ... ok
+test swap::raster_tests::raster_swap_preserves_hdr_metadata_and_retries_memory_pressure ... ok
+test swap::raster_tests::sustained_collection_restores_under_full_memory_pressure ... ignored, manual 60-second collection swap pressure soak
+test swap::raster_tests::ttl_worker_reclaims_idle_swap_without_foreground_calls ... ok
+test swap::raster_tests::ttl_worker_reclaims_swap_under_continuous_barriers ... ok
+test swap::write_cancellation_tests::admission_reports_oversize_busy_and_completed_duplicate_without_leaking ... ok
+test swap::write_cancellation_tests::cancelled_generation_cleanup_preserves_new_generation_marker ... ok
+test swap::write_cancellation_tests::cancelled_payload_preparation_does_not_evict_completed_disk_object ... ok
+test swap::write_cancellation_tests::cancelled_restore_waiter_returns_before_active_admission_releases ... ok
+test swap::write_cancellation_tests::cancelling_active_and_queued_spills_releases_owners_and_allows_new_writes ... ok
+test swap::write_cancellation_tests::codec_failure_after_write_rolls_back_disk_memory_and_pending_key ... ok
+test swap::write_cancellation_tests::concurrent_restores_cannot_double_spend_retired_generation_allowance ... ok
+test swap::write_cancellation_tests::external_budgets_cannot_bypass_local_queue_or_restore_caps ... ok
+test swap::write_cancellation_tests::failed_queue_admission_releases_key_for_retry ... ok
+test swap::write_cancellation_tests::failed_replacement_obeys_hard_quota_and_exposes_lru_eviction_boundary ... ok
+test swap::write_cancellation_tests::full_channel_releases_rejected_payload_and_accepts_same_key_later ... ok
+test swap::write_cancellation_tests::oversized_queue_is_rejected_before_store_creation ... ok
+test swap::write_cancellation_tests::restore_rebinding_preserves_aggregate_cap_until_last_old_owner_releases ... ok
+test swap::write_cancellation_tests::restore_rebinding_to_existing_budget_counts_nested_owners_once ... ok
+test swap::write_cancellation_tests::stalled_writer_keeps_producer_nonblocking_and_bounds_count_bytes_and_owners ... ok
+test swap::write_cancellation_tests::terminal_shutdown_joins_idle_worker_and_releases_temporary_directory ... ok
+test swap::write_cancellation_tests::transient_restore_cancellation_retains_entry_and_releases_allocated_pixels ... ok
+test swap::write_cancellation_tests::zero_queue_count_disables_spills_without_retaining_memory ... ok
+
+successes:
+
+---- swap::raster_tests::every_animation_v5_wire_mutation_preserves_neighbour_timing_and_retry stdout ----
+RASTER_SWAP_CORRUPTION animated=true cases=856 neighbouring_object_preserved=true retries=856 final=0
+
+---- swap::raster_tests::every_wire_bit_truncation_and_tail_failure_preserves_neighbour_and_retry stdout ----
+RASTER_SWAP_CORRUPTION animated=false cases=748 neighbouring_object_preserved=true retries=748 final=0
+
+---- swap::write_cancellation_tests::stalled_writer_keeps_producer_nonblocking_and_bounds_count_bytes_and_owners stdout ----
+STALLED_SWAP_QUEUE cases=18 producer_admissions=1152 recovery_restores=18 final=0
+
+
+successes:
+    swap::raster_tests::cancelled_stream_restore_retains_disk_entry_and_releases_partial_allocation
+    swap::raster_tests::corrupt_and_truncated_raster_restore_release_memory_and_remove_entry
+    swap::raster_tests::corrupt_old_restore_cannot_remove_replacement_for_same_key
+    swap::raster_tests::every_animation_v5_wire_mutation_preserves_neighbour_timing_and_retry
+    swap::raster_tests::every_wire_bit_truncation_and_tail_failure_preserves_neighbour_and_retry
+    swap::raster_tests::idle_ttl_maintenance_releases_files_and_quota_but_keeps_live_handles
+    swap::raster_tests::nonzero_ttl_keeps_fresh_swap_then_reclaims_without_lookup
+    swap::raster_tests::raster_disk_byte_count_ttl_and_queue_limits_are_independent
+    swap::raster_tests::raster_ram_eviction_spills_and_pressure_restore_preserves_visible_frame
+    swap::raster_tests::raster_swap_preserves_hdr_metadata_and_retries_memory_pressure
+    swap::raster_tests::ttl_worker_reclaims_idle_swap_without_foreground_calls
+    swap::raster_tests::ttl_worker_reclaims_swap_under_continuous_barriers
+    swap::write_cancellation_tests::admission_reports_oversize_busy_and_completed_duplicate_without_leaking
+    swap::write_cancellation_tests::cancelled_generation_cleanup_preserves_new_generation_marker
+    swap::write_cancellation_tests::cancelled_payload_preparation_does_not_evict_completed_disk_object
+    swap::write_cancellation_tests::cancelled_restore_waiter_returns_before_active_admission_releases
+    swap::write_cancellation_tests::cancelling_active_and_queued_spills_releases_owners_and_allows_new_writes
+    swap::write_cancellation_tests::codec_failure_after_write_rolls_back_disk_memory_and_pending_key
+    swap::write_cancellation_tests::concurrent_restores_cannot_double_spend_retired_generation_allowance
+    swap::write_cancellation_tests::external_budgets_cannot_bypass_local_queue_or_restore_caps
+    swap::write_cancellation_tests::failed_queue_admission_releases_key_for_retry
+    swap::write_cancellation_tests::failed_replacement_obeys_hard_quota_and_exposes_lru_eviction_boundary
+    swap::write_cancellation_tests::full_channel_releases_rejected_payload_and_accepts_same_key_later
+    swap::write_cancellation_tests::oversized_queue_is_rejected_before_store_creation
+    swap::write_cancellation_tests::restore_rebinding_preserves_aggregate_cap_until_last_old_owner_releases
+    swap::write_cancellation_tests::restore_rebinding_to_existing_budget_counts_nested_owners_once
+    swap::write_cancellation_tests::stalled_writer_keeps_producer_nonblocking_and_bounds_count_bytes_and_owners
+    swap::write_cancellation_tests::terminal_shutdown_joins_idle_worker_and_releases_temporary_directory
+    swap::write_cancellation_tests::transient_restore_cancellation_retains_entry_and_releases_allocated_pixels
+    swap::write_cancellation_tests::zero_queue_count_disables_spills_without_retaining_memory
+
+test result: ok. 30 passed; 0 failed; 1 ignored; 0 measured; 127 filtered out; finished in 6.06s
+

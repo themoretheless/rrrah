@@ -1,0 +1,64 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v13-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/warningSink.mjs",
+      "local": "graph-content_warningSink.mjs",
+      "sha256": "d6fa6fbc48f7906b3e833db709f62f6c886363e30f4f8e55f6c3abe594869e5c",
+      "git_blob": "dfbb10a13fbccd05537890d96d70360bf0b831dc",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/canonicalPath.mjs",
+      "local": "graph-content_canonicalPath.mjs",
+      "sha256": "1e8390aa94a0ad71fac3d127c4087ea75efd302eb5bba9a09959a9bc64132912",
+      "git_blob": "5c4708801d23567fb05f69fd41bd206f44fc5713",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 26,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 21,
+    "original_tests_total_distinct": 255,
+    "new_authored_controls_passed": 3,
+    "total_authored_controls_distinct": 40,
+    "scanner_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "canonical_harness": "docs/research/dedup-500/zotero116-canonical-controls-20261024",
+    "import_graph": "docs/research/dedup-500/zotero116-scanner-import-graph-20261024.json",
+    "scope": "Complete original scanner tests unchanged with original transitive9module imports verified against pinned tree. Baseline fetched and loaded but not whole-read or exercised as baseline workflow. Canonical native controls use original modules and owned read-only Zotero collection adapters; no real folder creation."
+  },
+  "findings": [
+    {
+      "finding": "All21 original scanner cases pass with unmodified original fileImporter/canonical/storage/baseline graph. These are mocked filesystem/symlink cases, not real Gecko symlink or native filesystem proof.",
+      "evidence": "native original Vitest report"
+    },
+    {
+      "finding": "Topic? andTopic* sibling names both map to Topic_ disk path. Upstream explicitly acknowledges this collision limitation; native controls reproduce it. No production adoption.",
+      "evidence": "native original module control plus source comment"
+    },
+    {
+      "finding": "relativePathToCollection uses raw-name equality; sanitized Topic_ does not resolve either Topic? orTopic* with createIfMissingfalse. Not a reversible mapping for this case, contrary broad header claim. No live duplicate-collection creation.",
+      "evidence": "native control"
+    },
+    {
+      "finding": "With candidate list childDepth2 first andtopLevelDepth1 second, chooseCanonicalCollection selects shorter path, not documented first-seen priority. Existing/preferred options still higher precedence by source; not exhaustively tested.",
+      "evidence": "native control"
+    },
+    {
+      "finding": "Warning ring bounded100 but category totals persist untilclear. Exposes stored entry objects, and category accepts arbitrarystring; no runtime volume/memory claim.",
+      "evidence": "whole source read"
+    }
+  ],
+  "remaining": [
+    "74blobs not whole-read including baseline",
+    "Full original suite/actual Zotero/runtime and license/release qualification incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

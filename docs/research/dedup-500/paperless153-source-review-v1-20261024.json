@@ -1,0 +1,71 @@
+{
+  "repository": "rknightion/paperless-ngx-dedupe",
+  "commit": "515e32d2216f32ab7b8818e95aed25197c57cb8e",
+  "whole_files_read": [
+    {
+      "path": "packages/core/src/dedup/analysis-hash.ts",
+      "local": "02-analysis-hash.ts",
+      "git_blob": "cc5741f9714b6a1fb51bedc97168ff337278baa7",
+      "sha256": "3f0e8a7800b6897e4049a037586f437ba4187c0db433cd871ccb0b3957e6f303",
+      "whole_text_read": true
+    },
+    {
+      "path": "packages/core/src/dedup/minhash.ts",
+      "local": "03-minhash.ts",
+      "git_blob": "64ead5098f8b3b8553231baed8fe7e6dd50fc29f",
+      "sha256": "5ccf5f94e405515adc05d137edc00e7bd1b57cb92ea9a025d431abbd9006ec1f",
+      "whole_text_read": true
+    },
+    {
+      "path": "packages/core/src/dedup/shingles.ts",
+      "local": "deep-shingles.ts",
+      "git_blob": "68ed43f1025053189f9f1057bfc0fd2bf5e172ed",
+      "sha256": "b420ef6f50bc3d64cb3a29e39da10b0275f061db4e239c7ea74c816a0771d6a2",
+      "whole_text_read": true
+    },
+    {
+      "path": "packages/core/src/dedup/types.ts",
+      "local": "deep-types.ts",
+      "git_blob": "2badfec23c3d79e44912c4dd5b899bafe8697016",
+      "sha256": "0d39ba7c9fc761580d602ea12cb1f054c7faa060ff17ab07f4465f43de4df648",
+      "whole_text_read": true
+    },
+    {
+      "path": "packages/core/src/dedup/__tests__/minhash.test.ts",
+      "local": "deep-minhash.test.ts",
+      "git_blob": "6fe87a10cfc58857dfedb45cc54d3437a1158188",
+      "sha256": "b1b031aed5b9c6faa3bf90ca4d08357da4a15ec8affb06a896649f501eff5458",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 5,
+  "tracked_blobs": 717,
+  "whole_repo_complete": false,
+  "original_selected_tests_passed": 8,
+  "original_runtime": "Vitest2.1.9 Node22.23.4;unchanged8tests,minhashmodule only;not fullproject dependency/build qualification",
+  "authored_controls_passed": 3,
+  "scope": "Unchanged MinHash/shingles modules;Node22.23.4 native TS stripping;malformed buffer/direct primitive and schema-permitted minWords1/ngram10 configuration;full application and DB not run",
+  "findings": [
+    "One-word signatures deserialized as192 permutations yield191/192 similarity despite differing stored value;undefined tail comparisons counted.",
+    "Two different two-word texts with ngram10,minWords1 yield empty shingle sets and matching initial signatures1;caller filtering not qualified.",
+    "Direct zero-permutation constructor yields NaN;app schema min16 blocks this value."
+  ],
+  "caller_source_followup": {
+    "path": "packages/core/src/dedup/analyze.ts",
+    "ranges": [
+      "150-205",
+      "235-265",
+      "278-314"
+    ],
+    "whole_file_read": false,
+    "findings": [
+      "Main signature generation only checks !shingles,not.size;empty Set admitted in reviewedblock.",
+      "Main pipeline uses jaccardFromArrays,not deserialize-instance jaccard;do not present malformed-instance191/192 as reproduced production pipeline defect.",
+      "Final scoring and database flow not executed."
+    ]
+  },
+  "controls": "paperless153-controls-20261024/results.json",
+  "original_harness": "paperless153-original-tests-20261024",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

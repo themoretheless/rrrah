@@ -154,6 +154,47 @@ impl From<SwapHandle> for StoredPayload {
     }
 }
 
+// The existing expiry key plan is retained; detached values use fixed stack
+// storage rather than a second Vec proportional to the expired population.
+const EXPIRED_RELEASE_BATCH: usize = 64;
+fn detach_expired_batch<K: Clone + Eq + Hash>(
+    index: &mut WeightedLru<K, StoredPayload>,
+    keys: &mut impl Iterator<Item = K>,
+    cutoff: std::time::Instant,
+) -> [Option<StoredPayload>; EXPIRED_RELEASE_BATCH] {
+    let mut released = std::array::from_fn(|_| None);
+    for slot in &mut released {
+        let Some(key) = keys.next() else { break };
+        *slot = index.remove_if_expired_at(&key, cutoff);
+    }
+    released
+}
+fn prune_swap_expired<K: Clone + Eq + Hash>(
+    index: &Mutex<WeightedLru<K, StoredPayload>>,
+    cancelled: &dyn Fn() -> bool,
+) -> std::io::Result<usize> {
+    let cutoff = std::time::Instant::now();
+    let mut keys = index
+        .lock()
+        .map_err(|_| std::io::Error::other("swap index poisoned"))?
+        .expired_keys_for_prune(cutoff)
+        .into_iter();
+    let mut count = 0;
+    while keys.len() != 0 && !cancelled() {
+        let released = {
+            let mut cache = index
+                .lock()
+                .map_err(|_| std::io::Error::other("swap index poisoned"))?;
+            detach_expired_batch(&mut cache, &mut keys, cutoff)
+        };
+        count += released.iter().flatten().count();
+        // No index guard survives here. Drop may unlink files; consumers with
+        // existing handles retain the allocation and disk quota independently.
+        drop(released);
+    }
+    Ok(count)
+}
+
 /// Bound channel bookkeeping independently of payload byte admission.
 pub const MAX_SWAP_QUEUE_COUNT: usize = 1024;
 
@@ -286,9 +327,8 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                         // maintenance. In particular, barriers do not touch LRU.
                         let now = std::time::Instant::now();
                         if now >= next_maintenance {
-                            if let Ok(mut index) = worker_index.lock() {
-                                index.prune_expired();
-                            }
+                            let _ =
+                                prune_swap_expired(&worker_index, &|| worker_cancel.load(Ordering::Acquire));
                             next_maintenance = now + maintenance_period;
                         }
                         let wait = next_maintenance.saturating_duration_since(std::time::Instant::now());
@@ -2285,5 +2325,255 @@ mod raster_tests {
         drop(restored);
         drop(ram);
         assert_eq!(root.used(), 0);
+    }
+}
+
+#[cfg(test)]
+mod rr56_qualification {
+    use super::*;
+    fn quantile(mut v: Vec<u128>, percent: usize) -> u128 {
+        v.sort_unstable();
+        v[(v.len() * percent).div_ceil(100) - 1]
+    }
+    #[test]
+    #[ignore = "actual swap-file TTL mutex A/A A/B with 1/2/4 consumers; fixed-stack release candidate"]
+    fn ttl_release_outside_lock_pairs() {
+        let root = tempfile::tempdir().unwrap();
+        for consumers in [1, 2, 4] {
+            for control in [true, false] {
+                for pair in 0..13 {
+                    for mode in [pair % 2, 1 - pair % 2] {
+                        let mut waits = Vec::new();
+                        let mut holds = Vec::new();
+                        let mut cleanup = Vec::new();
+                        let mut extra_capacity = 0;
+                        for _ in 0..10 {
+                            let store = SwapStore::new(
+                                root.path(),
+                                SwapLimits {
+                                    max_bytes: 256,
+                                    max_objects: Some(8),
+                                },
+                            )
+                            .unwrap();
+                            let handles: Vec<_> = (0..8)
+                                .map(|_| store.write_chunks(32, [&[7u8; 32][..]], || false).unwrap())
+                                .collect();
+                            let held = handles[0].clone();
+                            let index = Arc::new(Mutex::new(WeightedLru::with_limits(CacheLimits {
+                                max_bytes: 256,
+                                max_entries: Some(8),
+                                ttl: Some(std::time::Duration::from_millis(20)),
+                            })));
+                            {
+                                let mut index = index.lock().unwrap();
+                                for (key, handle) in handles.into_iter().enumerate() {
+                                    assert!(index.insert(key, StoredPayload::from(handle), 32));
+                                }
+                                assert_eq!(index.len(), 8);
+                            }
+                            std::thread::sleep(std::time::Duration::from_millis(25));
+                            let barrier = Arc::new(std::sync::Barrier::new(consumers + 1));
+                            let mut threads = Vec::new();
+                            for _ in 0..consumers {
+                                let index = index.clone();
+                                let barrier = barrier.clone();
+                                threads.push(std::thread::spawn(move || {
+                                    barrier.wait();
+                                    let start = std::time::Instant::now();
+                                    let cache = index.lock().unwrap();
+                                    let wait = start.elapsed().as_nanos();
+                                    assert!(cache.is_empty());
+                                    wait
+                                }));
+                            }
+                            let mut cache = index.lock().unwrap();
+                            barrier.wait();
+                            let start = std::time::Instant::now();
+                            if control || mode == 1 {
+                                let cutoff = std::time::Instant::now();
+                                let mut keys = cache.expired_keys_for_prune(cutoff).into_iter();
+                                let removed = detach_expired_batch(&mut cache, &mut keys, cutoff);
+                                assert_eq!(removed.iter().flatten().count(), 8);
+                                assert_eq!(keys.len(), 0);
+                                extra_capacity = 0; // no additional heap collection
+                                drop(cache);
+                                holds.push(start.elapsed().as_nanos());
+                                drop(removed);
+                            } else {
+                                assert_eq!(cache.prune_expired(), 8);
+                                drop(cache);
+                                holds.push(start.elapsed().as_nanos());
+                            }
+                            cleanup.push(start.elapsed().as_nanos());
+                            for thread in threads {
+                                waits.push(thread.join().unwrap());
+                            }
+                            assert_eq!(store.usage().unwrap().objects, 1);
+                            assert_eq!(store.usage().unwrap().bytes, 32);
+                            let mut read = [0; 32];
+                            store.read_into(&held, &mut read, || false).unwrap();
+                            assert_eq!(read, [7; 32]);
+                            drop(held);
+                            assert_eq!(store.usage().unwrap().objects, 0);
+                            assert_eq!(store.usage().unwrap().bytes, 0);
+                        }
+                        if pair >= 3 {
+                            eprintln!(
+                                "SWAP_TTL_PAIR consumers={consumers} control={control} pair={} mode={mode} wait_p50_ns={} wait_p95_ns={} hold_p95_ns={} cleanup_p95_ns={} temporary_capacity_bytes={extra_capacity} final_objects=0",
+                                pair - 3,
+                                quantile(waits.clone(), 50),
+                                quantile(waits, 95),
+                                quantile(holds, 95),
+                                quantile(cleanup, 95)
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod bounded_expiry_tests {
+    use super::*;
+    #[test]
+    fn multi_batch_cancellation_retry_and_leases_preserve_quota() {
+        let root = tempfile::tempdir().unwrap();
+        let count = EXPIRED_RELEASE_BATCH * 3 + 7;
+        let store = SwapStore::new(
+            root.path(),
+            SwapLimits {
+                max_bytes: (count * 32) as u64,
+                max_objects: Some(count),
+            },
+        )
+        .unwrap();
+        let mut index = WeightedLru::with_limits(CacheLimits {
+            max_bytes: (count * 32) as u64,
+            max_entries: Some(count),
+            ttl: Some(std::time::Duration::from_millis(30)),
+        });
+        let handles: Vec<_> = (0..count)
+            .map(|_| store.write_chunks(32, [&[9u8; 32][..]], || false).unwrap())
+            .collect();
+        let held = handles[0].clone();
+        for (key, handle) in handles.into_iter().enumerate() {
+            assert!(index.insert(key, StoredPayload::from(handle), 32));
+        }
+        std::thread::sleep(std::time::Duration::from_millis(40));
+        let index = Mutex::new(index);
+        let checks = std::cell::Cell::new(0);
+        let removed = prune_swap_expired(&index, &|| {
+            let n = checks.get();
+            checks.set(n + 1);
+            n > 0
+        })
+        .unwrap();
+        assert_eq!(removed, EXPIRED_RELEASE_BATCH);
+        assert_eq!(index.lock().unwrap().len(), count - removed);
+        // Discover the abandoned suffix despite the first planning scan.
+        assert_eq!(prune_swap_expired(&index, &|| false).unwrap(), count - removed);
+        assert!(index.lock().unwrap().is_empty());
+        assert_eq!(store.usage().unwrap().objects, 1);
+        let mut data = [0; 32];
+        store.read_into(&held, &mut data, || false).unwrap();
+        assert_eq!(data, [9; 32]);
+        drop(held);
+        assert_eq!(store.usage().unwrap().bytes, 0);
+        assert_eq!(store.usage().unwrap().objects, 0);
+        eprintln!(
+            "BOUNDED_TTL entries={count} release_batch={EXPIRED_RELEASE_BATCH} stack_bytes={} additional_heap_collections=0 cancelled_after_batch=true final_objects=0",
+            std::mem::size_of::<[Option<StoredPayload>; EXPIRED_RELEASE_BATCH]>()
+        );
+    }
+    #[test]
+    fn shared_index_can_be_acquired_while_detached_files_are_still_live() {
+        let root = tempfile::tempdir().unwrap();
+        let store = SwapStore::new(
+            root.path(),
+            SwapLimits {
+                max_bytes: 32,
+                max_objects: Some(1),
+            },
+        )
+        .unwrap();
+        let handle = store.write_chunks(32, [&[5u8; 32][..]], || false).unwrap();
+        let mut cache = WeightedLru::with_limits(CacheLimits {
+            max_bytes: 32,
+            max_entries: Some(1),
+            ttl: Some(std::time::Duration::ZERO),
+        });
+        assert!(cache.insert(0, StoredPayload::from(handle), 32));
+        let index = Arc::new(Mutex::new(cache));
+        let cutoff = std::time::Instant::now();
+        let mut keys = index.lock().unwrap().expired_keys_for_prune(cutoff).into_iter();
+        let detached = {
+            let mut guard = index.lock().unwrap();
+            detach_expired_batch(&mut guard, &mut keys, cutoff)
+        };
+        let reader = index.clone();
+        std::thread::spawn(move || {
+            assert!(reader.try_lock().unwrap().is_empty());
+        })
+        .join()
+        .unwrap();
+        assert_eq!(store.usage().unwrap().objects, 1);
+        drop(detached);
+        assert_eq!(store.usage().unwrap().objects, 0);
+    }
+}
+
+#[cfg(test)]
+mod expiry_scaling_qualification {
+    use super::*;
+    #[test]
+    #[ignore = "manual real-file multi-batch TTL cleanup pairs"]
+    fn real_file_multi_batch_pairs() {
+        let root = tempfile::tempdir().unwrap();
+        for count in [129, 1025] {
+            for pair in 0..4 {
+                for candidate in [pair % 2 == 0, pair % 2 != 0] {
+                    let store = SwapStore::new(
+                        root.path(),
+                        SwapLimits {
+                            max_bytes: (count * 32) as u64,
+                            max_objects: Some(count),
+                        },
+                    )
+                    .unwrap();
+                    let handles: Vec<_> = (0..count)
+                        .map(|_| store.write_chunks(32, [&[7u8; 32][..]], || false).unwrap())
+                        .collect();
+                    let mut cache = WeightedLru::with_limits(CacheLimits {
+                        max_bytes: (count * 32) as u64,
+                        max_entries: Some(count),
+                        ttl: Some(std::time::Duration::ZERO),
+                    });
+                    for (key, handle) in handles.into_iter().enumerate() {
+                        assert!(cache.insert(key, StoredPayload::from(handle), 32));
+                    }
+                    let index = Mutex::new(cache);
+                    let started = std::time::Instant::now();
+                    let removed = if candidate {
+                        prune_swap_expired(&index, &|| false).unwrap()
+                    } else {
+                        index.lock().unwrap().prune_expired()
+                    };
+                    let elapsed = started.elapsed().as_nanos();
+                    assert_eq!(removed, count);
+                    assert!(index.lock().unwrap().is_empty());
+                    assert_eq!(store.usage().unwrap().objects, 0);
+                    assert_eq!(store.usage().unwrap().bytes, 0);
+                    if pair != 0 {
+                        eprintln!(
+                            "TTL_SCALING count={count} pair={} candidate={candidate} cleanup_ns={elapsed} removed={removed} additional_payload_heap=0 final_objects=0",
+                            pair - 1
+                        );
+                    }
+                }
+            }
+        }
     }
 }

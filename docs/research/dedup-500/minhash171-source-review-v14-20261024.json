@@ -1,0 +1,309 @@
+{
+  "repository": "icodywu/minhash-dedup",
+  "commit": "aa5825b2f3fa1f100e477370cd212f02f30bf755",
+  "reviewed_whole_files": [
+    {
+      "path": "scripts/dedup_params.py",
+      "sha256": "f4fc1014ab8cee5b37b617aabb3cdeb5e7145ed4ff596b51ca969aecf5aa62a3",
+      "git_blob_sha1": "8a80cdeb8c496658dbb4bb77c6322e4db1e45c37",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_driver.sh",
+      "sha256": "0f87aa168d3347286cf9004f0c1343a3d1c397484461a3873ac4445661be9c6d",
+      "git_blob_sha1": "1173eb6320395669146780322a13a7317275169b",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_minhash_analysis.py",
+      "sha256": "44504061dce9b39de0a35689144db4cdf5d7082060f5ff0baaafdfc4c0dc0458",
+      "git_blob_sha1": "8f2cd3ff3672bb17a0c6fdd9a1f14cf68e1aedb9",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/minhash.py",
+      "sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+      "git_blob_sha1": "022c1eab5c8e7dc7875cee94fb3e69369388e8b6",
+      "whole_file_read": true,
+      "lines": 2224
+    },
+    {
+      "path": "src/minhash_dedup/signatures.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/signatures.py",
+      "sha256": "a7ebcff242cbae0bcfdec7e573cd37336ab003c5f8928c4af5b64d20e2558b57",
+      "git_blob_sha1": "79d267927d60d48c3b894713ef6e666594e64384",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/runtime.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/runtime.py",
+      "sha256": "6acb2dc5e76cc0445bcee4f256184e4970f47c8fcc4d8a5e81074d869a46e0e1",
+      "git_blob_sha1": "36c21dcf77c566c3d0aeafbcb10025e5a591aa45",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/__init__.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/__init__.py",
+      "sha256": "441dcaf2fac5330d907005a339765e021d2b29a17ae140355955c9f688b11251",
+      "git_blob_sha1": "757f671f77809a8b699ad5226d883e7e7af56ed4",
+      "whole_file_read": true
+    },
+    {
+      "path": "pyproject.toml",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/pyproject.toml",
+      "sha256": "9147a5ecb6e7b6dcdedcebc38c042db5c70ebc68a7f76466bd5e6e00bc369299",
+      "git_blob_sha1": "e042167938895253931efc409df614d21ad4152d",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/io.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/io.py",
+      "sha256": "089bf8f79a42844f67669be15b88643be5332066499d7378bd503c628624ae15",
+      "git_blob_sha1": "889b7d6ee144dedacc366ae63d674389cdfe3f2f",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/jsonl.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/jsonl.py",
+      "sha256": "6f7fe6b39fb568a4448f8290377c7a536dcc82a3765c5f34877fd34c3ef736ea",
+      "git_blob_sha1": "1b59ca5c7cd66eef1cc9fe21ee6dd11842117e12",
+      "whole_file_read": true
+    },
+    {
+      "path": "README.md",
+      "sha256": "f13e3bd8632d99d0270b094fb73021708dab672c5aec70ff60e73f5608d753f1",
+      "git_blob_sha1": "8360a9417762c507b338a33fa81bb2d95203506e",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/partition.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/partition.py",
+      "sha256": "98ff620f073e0ff19467f7f70aa1a623f169bafd2202293528ac0b25f01f486c",
+      "git_blob_sha1": "40120f115b7f7a18887485f694b44868446ee3ab",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/checkpoints.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/src/minhash_dedup/checkpoints.py",
+      "sha256": "40222e64c18c5025f8fe95014287653eec1a025ade110f16a8ef441fdc1f9fe8",
+      "git_blob_sha1": "b83b4841b9b9ca36163f077592b9f543f892affc",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_partition.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/tests/test_partition.py",
+      "sha256": "e78305471da2b2beeeeaab4bfb9525b766393dda1e9c822f8c80405d243b14e3",
+      "git_blob_sha1": "16c6c7405d2c10bb7c19e15496a12cf8ea545308",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_minhash_pipeline.py",
+      "local": "docs/research/dedup-500/evidence/icodywu--minhash-dedup/remaining-pinned/tests/test_minhash_pipeline.py",
+      "sha256": "b19e3a390b3721d761be1d0f52341e7a478c5321b68976f4f90122b82ae694bc",
+      "git_blob_sha1": "a2a5ffffda9103c52f7d1643e51334adb57c9f1b",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_stage1.py",
+      "sha256": "8a65db4e5504541069b80f79bf3e0a9b540cb088720ff03d7ea022080dd49a19",
+      "git_blob_sha1": "1b3f554c94fc577abe47ed9706b6e29cb217389f",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_stage2.5.py",
+      "sha256": "26f33e99c836043ed663f8594288b8748f9b9052d8e1dbf2eda5c90cee830946",
+      "git_blob_sha1": "4ecbcacc0a4db9a1ff84cb69d4917a8bfbececb7",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_stage2.py",
+      "sha256": "8305d4e4243410aae85543c6dc1934ce497c61c5ddae7bcd68aeed841ea286ea",
+      "git_blob_sha1": "cdeb9878b5759fce6ca1ee95bdcd742b34544979",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_stage3.py",
+      "sha256": "a3b513bb543193311699ab188d25a87aedb11ec0ab42b961b646e7b6bec2911d",
+      "git_blob_sha1": "823333ea8d4075014f48db67cd9b3e6816772341",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_stage4.py",
+      "sha256": "2b0b75bfed04d3c62c102fcd73adfd9037276985f5a7e8b1175514496c168179",
+      "git_blob_sha1": "7b047099cb54ddf778023652195753f1f97cfb4a",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_support.py",
+      "sha256": "b1611a9f5320270cbf7885f9115fa14cde7e596f9a3cc62954314f90f47c1fb2",
+      "git_blob_sha1": "bd386ccbcffbe614e314b3775c77faa03b651584",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 15,
+  "tree_blob_count": 37,
+  "full_repository_read": false,
+  "original_analysis_tests_read": 13,
+  "original_tests_run": 49,
+  "authored_controls_run": 28,
+  "controls": [
+    "docs/research/dedup-500/minhash171-controls-20261024/signature-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/bucket-reader-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/prune-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/support-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/support-initial-failure.txt",
+    "docs/research/dedup-500/minhash171-controls-20261024/selection-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/filter-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/tuple-reader-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/native-pipeline-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/native-pipeline-log.txt",
+    "docs/research/dedup-500/minhash171-controls-20261024/original-analysis-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/original-analysis-log.txt",
+    "docs/research/dedup-500/minhash171-controls-20261024/snapshot-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/original-partition-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/original-partition-log.txt",
+    "docs/research/dedup-500/minhash171-controls-20261024/original-pipeline-selected-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/original-pipeline-selected-log.txt"
+  ],
+  "runtime_scope": "Pinned original signature arithmetic methods with real NumPy, config DTO only.\n\nNo tokenization/NLTK, stage IO, corpus, scheduler or signature-analysis kernel.\n",
+  "findings": [
+    "Original signature arithmetic with actual NumPy: fixed-seed/order and multiplicity invariants pass;32-bit range/shape pass.",
+    "Original direct get_signature(empty) raises ValueError; complete reviewed run() guards empty shingles and skips document signatures. Not a full pipeline bug.",
+    "Source: get_shingles strips ASCII punctuation and normalizes whitespace, preserves case and ignores legacy norm_config; therefore signature resemblance is not raw byte identity.",
+    "Source: per-band signature files independently sorted after all local records loaded into NumPy; peak-memory scalability not measured.",
+    "Source: signature file rewrite opens final path wb and tofile; comment calls atomic but no temporary-path rename in this method. Failure durability untested.",
+    "Analysis test bodies cover sorted-band document alignment, reader-scoped IDs, missing/duplicate/unknown IDs, sampling and empty/removal cases; no original cases executed because Numba/runtime graph not qualified.",
+    "Slurm driver and parameter script wholly read, not executed; no scheduler, corpus, S3 or user data access.",
+    "Executed unchanged original PruneStage _iter_bucket_rows/key helpers with actual owned files: uint32 max document ID preserves reader scope; truncated count and truncated pair raise explicit ValueError; empty file yields no rows. Folder access is adapter; no full pruning pipeline qualification.",
+    "Source-only complete BucketStage: band hash equality defines duplicate bucket; secondary hash affects heap order but deliberately does not split equality group. Not proof of text/byte equality.",
+    "Source-only BucketStage worker layout assumes positive workers_per_bucket=world_size//num_buckets; caller/scheduler configuration not validated in runtime controls.",
+    "Source-only file sorting check arr.nbytes%record_size cannot detect trailing bytes already omitted by NumPy structured fromfile; actual corrupted signature production recovery not tested.",
+    "Executed complete original PruneStage with actual owned files, local folder adapter and timing/log/progress adapters: strict subset removed while superset preserves full member set; equal cross-band groups retain lower UID. Not distributed/corpus precision evidence.",
+    "Executed same input/output folder boundary: original _rewrite_pruned_band opens final output wb before iterating corresponding source, so owned nonempty file truncates to empty. Earlier fully read dedup_params declares distinct buckets/buckets_pruned paths; normal stage wiring not yet qualified, so not claiming default pipeline data loss.",
+    "Source: target key_to_aidx maps each document to one bucket within target band; correctness assumes each document belongs to at most one bucket per band. Invalid overlapping target buckets not exercised.",
+    "Source: _load_dup_buckets uses struct.unpack directly, unlike Prune iterator explicit truncated record checks; malformed errors differ, complete selection recovery not qualified.",
+    "Executed original equal-support helper against independent support-set reference on all128 subsets of seven nonempty buckets over3 keys: compressed rows,smallest representatives,alias count andweights match. Finite exhaustive check, not universal proof.",
+    "Executed dominance helper over same128 cases: every removed compressed representative has a surviving subset-support witness in these cases; no new keys introduced.",
+    "Rejected authored assumption preserved: each bucket need not stay nonempty. Counterexample [[0],[0,1]] reduces [None,[1]]; initial failed assertion was review-harness mistake, not upstream defect.",
+    "Explicit chain supports A:{0},B:{0,1},C:{1} remain unchanged by dominance helper. Initial predicted suppression ofB was not observed; helper is not full minimal-support elimination or final clustering.",
+    "Source search locates dominated-support helper call inside compute_punct_bound diagnostic; final run()/assignment semantics not yet reviewed and no connected-component equivalence claim made.",
+    "Executed complete original SelectionStage and original binary loader with actual owned binary inputs/outputs and explicit folder/output-manager,timing/stat/log/progress adapters; unused config DTO only. No signature/corpus/distributed/optional analysis qualification.",
+    "All128 finite hypergraphs on3 IDs satisfy output ID coverage,one retained representative per cluster,serialized cluster-size parity,and original-bucket witness for each assigned nonrepresentative. Not universal proof of optimality or pairwise similarity.",
+    "Executed chain buckets[1,2],[2,3] emits clusters[1,2] and[3],removing2. This directly confirms final selection differs from transitive connected components on this fixture.",
+    "Whole diagnostic compute_punct_bound and compute_cov_bound read; they are separate from run() removal decisions. Dominance helper belongs to diagnostic path, so prior helper observation is not a final clustering verdict.",
+    "Complete2224-line core file wholly read, including FilterStage,Numba kernel and signature alignment/memmap analysis. Reading kernel is not native compiled execution.",
+    "Executed original FilterStage with owned removal files,no clusters files: missing all sidecars passes original documents without metadata changes; sorted removals1,2 retain0,3 and assign unknown-cluster metadata.",
+    "Unsorted owned removal IDs2,1 silently retain1 because streaming pointer cannot move backward; original SelectionStage writes sorted IDs, so malformed boundary only, not reproduced default end-to-end failure.",
+    "Truncated first removal record raises struct.error; no partial deletion of real inputs/user data exercised.",
+    "Analysis aligns IDs independently per band, checks duplicate/missing/unexpected IDs, supports sampling and cleans temporary directory in finally;13 original analysis tests still unexecuted and Numba/performance not qualified.",
+    "Source: optional diagnostics all-pairs count grows quadratically up to sample cap10million documents; no feasibility/performance claim from source.",
+    "Executed original read_tuples_from_file: aligned buffered and unlimited modes preserve3 owned little-endian records;zero buffer rejected.",
+    "Valid complete owned byte stream delivering5-byte reads for8-byte records causes struct.error instead of accumulation. Generic stream-boundary reproduction only; actual fsspec backend/default pipeline short-read behavior unqualified.",
+    "Complete signatures/runtime/package init/pyproject read; HashConfig supports32/64-bit SHA1 truncation or xxhash, which do not independently confirm content equality.",
+    "Runtime Stage metrics count/time locally; no measured scalability or correctness guarantee from those counters.",
+    "Package NumPy/NLTK/fsspec/loguru/orjson/tqdm/xxhash base dependencies and optional Numba>=0.59 analysis identified; dependency graph not fully imported and13 original analysis cases still unexecuted.",
+    "Complete original local module graph imported in isolated Python3.14 environment with actual declared base dependencies; no package/module/algorithm adapters in native five-stage control.",
+    "Executed original Signature->Bucket(two ranks)->Prune(two ranks)->Selection->Filter with real local fsspec/metadata tuple reading:5 owned documents retain0,3,4; identical1 and punctuation-normalized2 removed; representative dup_doc_count2;short no-shingle document retained.",
+    "This requalifies normal local binary/metadata IO for one small fixture; generic short-read boundary failure remains and does not imply local fsspec read failure.",
+    "Native base pipeline optional Numba analysis disabled;13 original analysis tests still not executed. Real S3,Slurm,compressed JSONL source/sink and corpus-scale accuracy/recall not qualified.",
+    "All13 unchanged original analysis unittest cases execute and pass with0skipped against byte-verified original package modules,actual Numba0.68.0/llvmlite0.50.0 and NumPy2.5.4; compiled CPU dispatcher signature recorded. No AST/method adapters in this run.",
+    "Tests verify independently sorted bands align signatures by reader/document ID,32/64-bit strict/non-strict paths,seeded sampling,duplicate/unexpected/missing IDs,missing/duplicate reader files,empty/all-removed/single retained doc cases.",
+    "README wholly read: retention feasibility is per discovered bucket; greedy selection not exact optimum,LSH false positives remain,and signature audit does not alter removals. Historical synthetic percentages not reproduced here.",
+    "Runtime analysis test wall time is not a scalable corpus benchmark; no precision/recall,whole-format support or image equality claim.",
+    "Executed unchanged original ReaderPlan/StageCheckpoints on actual owned local fsspec files: unchanged plan accepted and changed-size input rejected.",
+    "Same-size changed JSONL input alpha->bravo accepted by ReaderPlan.shard; SHA256 differs. No input content binding in checked method; stale removal applied to changed stream not executed.",
+    "Output checkpoint accepts changed owned bytesAAAA->BBBB with same length and restored mtime; metadata inventory weakness, explicitly documented as no content hashes, not a novel undocumented guarantee breach.",
+    "Source: reader plan uses temp write/fsync+exclusive hardlink publication and validates ordered roots/config/world-size; stage checkpoint binds parent generation/options and expected outputs. Atomic publication does not itself establish content identity.",
+    "Source: checkpoint retries clear their own output dirs and reject symlinked directory; owned test only called begin on fresh owned root, no user cleanup or scheduler action performed.",
+    "All12 complete unchanged original partition tests pass with0skips and original full package modules: weighted allocation/capacity/ties,elastic rank coverage,source ordering,logical-vs-active size,explicit file lists,metadata size checks,plan-bound completion,legacy missing plan rejection,failed atomic publication and4-thread agreement.",
+    "Original changed-file test rewrites to different size and checks size mismatch; it does not cover same-size content edits demonstrated in authored snapshot control. Passing suite does not contradict that limitation.",
+    "Original failed publication test injects os.link failure and checks no partial plan; this is actual local atomic-publication test with explicit upstream fault injection,not distributed/S3 recovery proof.",
+    "Five selected unchanged original pipeline tests pass: supported/removed constructor options,32/64bit SHA1 signature/bucket digests and pruning/cluster digests,retained docs/metadata,residual cover/equal-support alias exports,source-priority/structural tie fixtures.",
+    "Native tests execute puncture/cover diagnostics plus final selection and filtering through actual original runtime and local IO,not just isolated methods. Saved expected digests verify parity with upstream fixture,not universal correctness or benchmark speed.",
+    "Original full module read; sixth entrypoint subprocess test deliberately excluded until its script dependencies are wholly inspected,not counted skipped/passed.",
+    "Four original priority cases explicitly check at most one retained member per discovered bucket;structure can override source priority as documented. No corpus-wide semantic similarity/recall claim."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "21/37wholefilesread;49originaltests pass,0skip;support module complete. Elastic/checkpoint/demo tests and remaining docs/scripts incomplete.",
+  "deferred": "Native pHash.org/ASAN remains deferred",
+  "binary_reader_runtime_scope": "Original PruneStage binary bucket reader; real owned files, folder adapter only.",
+  "previous_audit": "docs/research/dedup-500/minhash171-source-review-v13-20261024.json",
+  "prune_runtime_scope": "Complete original PruneStage with local-folder, timing/log/progress adapters.\n\nActual owned binary files and original run/process/rewrite algorithms; no\nsignature generation, distributed execution or full corpus pipeline.\n",
+  "support_runtime_scope": "Original support-compression/dominance helpers, finite exhaustive owned graphs.\n\nNo MinHash extraction, threshold matching, representative run(), corpus or IO.\n",
+  "selection_runtime_scope": "Complete original SelectionStage and binary loader; owned finite bucket files.\n\nAdapters: Stage timing/stats, local folders/output manager, log/progress only.\nNo MinHash generation, distributed job, optional signature analysis or corpus.\n",
+  "filter_runtime_scope": "Complete original FilterStage, owned removal files; no cluster metadata files.\n\nStage/folder/log/stat labels are adapters. Metadata tuple reader deliberately\nraises if called: cluster-metadata loading is not qualified by these controls.\n",
+  "tuple_reader_runtime_scope": "Unchanged original read_tuples_from_file function, actual stdlib byte streams.",
+  "native_runtime_original_modules": [
+    {
+      "path": "src/minhash_dedup/__init__.py",
+      "sha256": "441dcaf2fac5330d907005a339765e021d2b29a17ae140355955c9f688b11251"
+    },
+    {
+      "path": "src/minhash_dedup/io.py",
+      "sha256": "089bf8f79a42844f67669be15b88643be5332066499d7378bd503c628624ae15"
+    },
+    {
+      "path": "src/minhash_dedup/jsonl.py",
+      "sha256": "6f7fe6b39fb568a4448f8290377c7a536dcc82a3765c5f34877fd34c3ef736ea"
+    },
+    {
+      "path": "src/minhash_dedup/runtime.py",
+      "sha256": "6acb2dc5e76cc0445bcee4f256184e4970f47c8fcc4d8a5e81074d869a46e0e1"
+    },
+    {
+      "path": "src/minhash_dedup/signatures.py",
+      "sha256": "a7ebcff242cbae0bcfdec7e573cd37336ab003c5f8928c4af5b64d20e2558b57"
+    },
+    {
+      "path": "src/minhash_dedup/minhash.py",
+      "sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129"
+    },
+    {
+      "path": "src/minhash_dedup/partition.py",
+      "sha256": "98ff620f073e0ff19467f7f70aa1a623f169bafd2202293528ac0b25f01f486c"
+    },
+    {
+      "path": "src/minhash_dedup/checkpoints.py",
+      "sha256": "40222e64c18c5025f8fe95014287653eec1a025ade110f16a8ef441fdc1f9fe8"
+    }
+  ],
+  "native_pipeline_scope": "Complete unchanged original five-stage pipeline, actual local fsspec IO.\n\nOwned text documents only. No stage/algorithm adapters or optional analysis;\nnot a large-corpus, image/file-byte equality, S3 or scheduler qualification.\n",
+  "native_runtime_versions": {
+    "numpy": "2.5.4",
+    "fsspec": "2026.9.0",
+    "nltk": "3.10.4",
+    "loguru": "0.7.3",
+    "orjson": "3.13.0",
+    "tqdm": "4.70.1",
+    "xxhash": "4.0.2"
+  },
+  "original_tests_passed": 49,
+  "original_tests_skipped": 0,
+  "original_analysis_runtime_scope": "Actual original full package graph and original full unittest module; real Numba JIT, local signature files and memmaps; no method adapters,corpus-scale performance,S3 or scheduler",
+  "numba_runtime_versions": {
+    "numba": "0.68.0",
+    "llvmlite": "0.50.0",
+    "numpy": "2.5.4",
+    "fsspec": "2026.9.0"
+  },
+  "compiled_numba_signatures": [
+    "(Array(uint64, 2, 'C', False, aligned=True), int64, int64, int64, int64, Array(int64, 1, 'C', False, aligned=True), Array(int64, 1, 'C', False, aligned=True))"
+  ],
+  "snapshot_runtime_scope": "Original ReaderPlan/StageCheckpoints, actual local fsspec and owned files.\n\nTests metadata binding only, not stale-filter deletion or distributed recovery.\n",
+  "original_partition_runtime_scope": "Original full test module and partition/io/jsonl/runtime graph; actual temporary files and ThreadPoolExecutor, injected publication failure as upstream test specifies. No method adapters or Slurm/S3/corpus execution.",
+  "original_pipeline_selected_runtime_scope": "Original complete module imported,selected original TestCase bodies against unchanged real package/NumPy/fsspec; no stage/method adapters. Source scripts/entrypoint subprocess path not executed.",
+  "original_entrypoint_test": {
+    "name": "test_all_stage_entrypoints_with_two_reader_ranks",
+    "passed": true,
+    "log": "docs/research/dedup-500/minhash171-controls-20261024/original-entrypoint-log.txt",
+    "scope": "Unchanged original test, scripts and complete original package; owned temporary local JSONL; separate subprocesses for five stages with two reader ranks. Checks 3 kept,1 removed and IDs/subset/data_label/duplicate count. No S3/Slurm or corpus-scale claim."
+  },
+  "qualifications": [],
+  "original_support_tests": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0,
+    "log": "docs/research/dedup-500/minhash171-controls-20261024/original-support-log.txt",
+    "scope": "Unchanged full original test_support.py,unchanged original completepackage graph,actualfsspec local/memory filesystems,gzip,xxhash and JSONL. Original mocks inject close/open failures. No S3/Slurm/corpus/performance."
+  }
+}

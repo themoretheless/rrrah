@@ -1,0 +1,426 @@
+namespace VideoDedupClient.Dialogs
+{
+    using System.Collections.Concurrent;
+    using System.Diagnostics;
+    using Google.Protobuf.WellKnownTypes;
+    using Grpc.Core;
+    using SmartTimer;
+    using VideoDedupGrpc;
+    using VideoDedupClient.ExtensionMethods.DataGridViewExtensions;
+    using VideoDedupClient.ExtensionMethods.ISynchronizeInvokeExtensions;
+    using static VideoDedupGrpc.OperationInfo.Types;
+    using static VideoDedupGrpc.VideoDedupGrpcService;
+
+    public partial class VideoDedupDlg : Form
+    {
+        private static VideoDedupGrpcServiceClient GrpcClient =>
+            Program.GrpcClient;
+
+        private string? logToken;
+        private ConcurrentDictionary<int, LogEntry> LogEntries { get; } = new();
+
+        private int CurrentDuplicateCount { get; set; }
+
+        private Timer StatusTimer { get; }
+
+        /// <summary>
+        /// Prevents stacked certificate prompts from repeated status timer ticks.
+        /// Cleared after a successful status response or when the user saves client config.
+        /// </summary>
+        private bool suppressTlsCertPromptUntilSuccess;
+
+        private bool certificateOfferInProgress;
+
+        public VideoDedupDlg()
+        {
+            InitializeComponent();
+            StatusTimer = new Timer(StatusTimerCallback);
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            StiProgress.UpdateStatusInfo(new OperationInfo
+            {
+                OperationType = OperationType.Connecting,
+                ProgressStyle = ProgressStyle.Marquee,
+                StartTime = Timestamp.FromDateTime(DateTime.UtcNow),
+            });
+            _ = StatusTimer.StartSingle(0);
+
+            base.OnLoad(e);
+        }
+
+        private void OfferUpdateServerCertificate()
+        {
+            if (certificateOfferInProgress)
+            {
+                return;
+            }
+
+            certificateOfferInProgress = true;
+            try
+            {
+                if (System.Windows.Forms.MessageBox.Show(
+                    this,
+                    "The connection to the server failed, possibly because the TLS " +
+                    "certificate is missing or out of date.\n\n" +
+                    "Do you want to select the VideoDedup.crt file from your server now?",
+                    "VideoDedup",
+                    System.Windows.Forms.MessageBoxButtons.YesNo,
+                    System.Windows.Forms.MessageBoxIcon.Question) != System.Windows.Forms.DialogResult.Yes)
+            {
+                return;
+            }
+
+            using var dlg = new System.Windows.Forms.OpenFileDialog
+            {
+                Filter = "Certificate (*.crt)|*.crt|All files (*.*)|*.*",
+                Title = "Select VideoDedup.crt from the server",
+            };
+            if (dlg.ShowDialog(this) != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
+            }
+
+            if (!Program.TryImportPinnedServerCertificate(
+                    dlg.FileName,
+                    out var err))
+            {
+                _ = System.Windows.Forms.MessageBox.Show(
+                    this,
+                    "Could not import the certificate:\n" + err,
+                    "VideoDedup",
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Warning);
+                return;
+            }
+
+            _ = System.Windows.Forms.MessageBox.Show(
+                this,
+                "The server certificate was saved. The app will try to reconnect.",
+                "VideoDedup",
+                System.Windows.Forms.MessageBoxButtons.OK,
+                System.Windows.Forms.MessageBoxIcon.Information);
+            }
+            finally
+            {
+                certificateOfferInProgress = false;
+            }
+        }
+
+        private void StatusTimerCallback(object? param)
+        {
+            try
+            {
+                var prevAddress = Program.Configuration.ServerAddress;
+                var status = GrpcClient.GetCurrentStatus(new Empty());
+
+                this.InvokeIfRequired(() =>
+                {
+                    // Workaround! We have to make sure the Status response
+                    // is from the current ServerAddress. If the address changed
+                    // while we were waiting for the response, we get into
+                    // trouble! This is not perfect, but it works for now.
+                    if (prevAddress != Program.Configuration.ServerAddress)
+                    {
+                        suppressTlsCertPromptUntilSuccess = false;
+                        return;
+                    }
+
+                    suppressTlsCertPromptUntilSuccess = false;
+
+                    if (logToken != status.LogToken)
+                    {
+                        // Has to be in this order
+                        // Otherwise clearing the DGV causes cell value requests
+                        // in this thread before continuing here.
+                        // Which has a high chance of adding items in the
+                        // LogEntries list, which are subsequently cleared,
+                        // leaving empty cells in the DGV that won't be filled.
+                        DgvLog.RowCount = 0;
+                        LogEntries.Clear();
+                    }
+                    logToken = status.LogToken;
+
+                    // If we are scrolled down, we auto scroll
+                    var prevRowCount = DgvLog.RowCount;
+                    DgvLog.RowCount = status.LogCount;
+                    if (DgvLog.GetLastDisplayedScrollingRowIndex(false) + 1
+                        >= prevRowCount)
+                    {
+                        DgvLog.FirstDisplayedScrollingRowIndex =
+                            DgvLog.RowCount - 1;
+                    }
+
+                    StiProgress.UpdateStatusInfo(
+                        status.OperationInfo,
+                        status.TotalDuplicatesCount,
+                        status.PreparedDuplicatesCount);
+
+                    CurrentDuplicateCount = status.TotalDuplicatesCount;
+                    BtnResolveDuplicates.Enabled =
+                        status.PreparedDuplicatesCount > 0;
+                    BtnDiscardDuplicates.Enabled = BtnResolveDuplicates.Enabled;
+                });
+            }
+            catch (RpcException ex)
+            {
+                Debug.Print("Status request failed with: " + ex.Message);
+                var usesTls = !string.Equals(
+                    Program.Configuration.Protocol,
+                    "http",
+                    StringComparison.OrdinalIgnoreCase);
+                if (usesTls && Program.IsLikelyCertificateOrTlsFailure(ex))
+                {
+                    this.InvokeIfRequired(() =>
+                    {
+                        if (suppressTlsCertPromptUntilSuccess || certificateOfferInProgress)
+                        {
+                            return;
+                        }
+
+                        suppressTlsCertPromptUntilSuccess = true;
+                        OfferUpdateServerCertificate();
+                    });
+                }
+
+                this.InvokeIfRequired(() =>
+                {
+                    BtnResolveDuplicates.Enabled = false;
+                    StiProgress.UpdateStatusInfo(new OperationInfo
+                    {
+                        OperationType = OperationType.Connecting,
+                        ProgressStyle = ProgressStyle.Marquee,
+                        StartTime = Timestamp.FromDateTime(DateTime.UtcNow),
+                    });
+                });
+            }
+            finally
+            {
+                _ = StatusTimer.StartSingle(
+                    Program.Configuration.StatusRequestInterval);
+            }
+        }
+
+        private void DgvLog_CellValueNeeded(object sender,
+            DataGridViewCellValueEventArgs e)
+        {
+            var logIndex = e.RowIndex;
+
+            if (LogEntries.TryGetValue(logIndex, out var logEntry))
+            {
+                if (logEntry.Status == LogEntryStatus.Present)
+                {
+                    e.Value = logEntry.Message;
+                }
+                return;
+            }
+
+            e.Value = "";
+
+            if (logToken is null)
+            {
+                return;
+            }
+
+            // Find first displayed row that has no log present or requested
+            var start = logIndex;
+            for (; start > DgvLog.FirstDisplayedScrollingRowIndex; start--)
+            {
+                if (LogEntries.TryGetValue(start - 1, out var _))
+                {
+                    break;
+                }
+            }
+
+            // Find last displayed row that has no log present or requested
+            var end = logIndex;
+            for (; end < DgvLog.GetLastDisplayedScrollingRowIndex(true); end++)
+            {
+                if (LogEntries.TryGetValue(end + 1, out var _))
+                {
+                    break;
+                }
+            }
+
+            var count = end - start + 1;
+
+            RequestLogEntries(logToken, start, count);
+        }
+
+        private async void RequestLogEntries(string logToken, int start, int count)
+        {
+            foreach (var index in Enumerable.Range(start, count))
+            {
+                _ = LogEntries.TryAdd(index, new LogEntry());
+            }
+
+            try
+            {
+                var logData = await
+                    GrpcClient.GetLogEntriesAsync(new GetLogEntriesRequest
+                    {
+                        Count = count,
+                        LogToken = logToken,
+                        Start = start,
+                    });
+
+                if (start + count > DgvLog.RowCount)
+                {
+                    return;
+                }
+
+                var logIndex = start;
+                foreach (var logEntry in logData.LogEntries)
+                {
+                    _ = LogEntries[logIndex++] = new LogEntry(logEntry);
+                }
+
+                foreach (var index in Enumerable.Range(start, count))
+                {
+                    DgvLog.UpdateCellValue(0, index);
+                }
+            }
+            catch (Exception)
+            {
+                foreach (var index in Enumerable.Range(start, count))
+                {
+                    _ = LogEntries.TryRemove(index, out _);
+                }
+            }
+        }
+
+        private void BtnServerConfig_Click(object sender, EventArgs e)
+        {
+            using var dlg = new ServerConfigDlg();
+            try
+            {
+                dlg.ConfigurationSettings =
+                    GrpcClient.GetConfiguration(new Empty());
+                dlg.SystemInfo = GrpcClient.GetSystemInfo(new Empty());
+            }
+            catch (Exception)
+            {
+                _ = MessageBox.Show(
+                    "Unable to retrieve configuration from server.",
+                    "Connection Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            if (dlg.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            while (true)
+            {
+                try
+                {
+                    _ = GrpcClient.SetConfiguration(dlg.ConfigurationSettings);
+                    return;
+                }
+                catch (Exception)
+                {
+                    if (MessageBox.Show(
+                            "Unable to send configuration to the server." +
+                            $"{Environment.NewLine}Do you want to try again?",
+                            "Connection Error",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Error)
+                        == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void BtnClientConfig_Click(object sender, EventArgs e)
+        {
+            using var dlg = new ClientConfigDlg
+            {
+                Configuration = Program.Configuration,
+            };
+
+            if (dlg.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            if (dlg.Configuration is null)
+            {
+                return;
+            }
+
+            var previousConfig = Program.Configuration;
+            if (previousConfig.ServerAddress != dlg.Configuration.ServerAddress
+                || previousConfig.Port != dlg.Configuration.Port
+                || previousConfig.Protocol != dlg.Configuration.Protocol
+                || previousConfig.PinnedCertificatePath != dlg.Configuration.PinnedCertificatePath)
+            {
+                DgvLog.RowCount = 0;
+                LogEntries.Clear();
+                StiProgress.Clear();
+                suppressTlsCertPromptUntilSuccess = false;
+            }
+
+            Program.Configuration = dlg.Configuration;
+            Program.SaveConfig();
+            _ = StatusTimer.StartSingle(
+                Program.Configuration.StatusRequestInterval);
+        }
+
+        private void BtnResolveConflicts_Click(object sender, EventArgs e)
+        {
+            using var dlg = new ResolveDuplicateDlg();
+            var result = dlg.ShowDialog();
+        }
+
+        private void CloseToolStripMenuItem_Click(object sender, EventArgs e) =>
+            Application.Exit();
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using var dlg = new AboutDlg();
+            _ = dlg.ShowDialog();
+        }
+
+        private void ClientConfigurationToolStripMenuItem_Click(
+            object sender,
+            EventArgs e) =>
+            BtnClientConfig.PerformClick();
+
+        private void ServerConfigurationToolStripMenuItem_Click(
+            object sender,
+            EventArgs e) =>
+            BtnServerConfig.PerformClick();
+
+        private void BtnDiscard_Click(object sender, EventArgs e)
+        {
+            var selection = MessageBox.Show(
+                $"There are {CurrentDuplicateCount} duplicates to resolve." +
+                $"{Environment.NewLine}Are you sure you want to discard them?",
+                "Discard duplicates?",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (selection == DialogResult.No)
+            {
+                return;
+            }
+
+            try
+            {
+                _ = GrpcClient.DiscardDuplicates(new Empty());
+            }
+            catch (Exception) { }
+        }
+
+        private void VideoDedupDlg_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

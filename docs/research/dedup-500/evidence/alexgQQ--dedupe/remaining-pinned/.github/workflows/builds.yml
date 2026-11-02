@@ -1,0 +1,50 @@
+name: Create new release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build linux amd64
+        env:
+          CONTAINER: 1.24.3-main
+          ARCH: amd64
+        run: >
+          docker run
+          -v .:/go/src/github.com/alexgQQ/go-image-deduper
+          -w /go/src/github.com/alexgQQ/go-image-deduper
+          -e CGO_ENABLED=0
+          -e VERSION=$GITHUB_REF_NAME
+          -e BINARY=dedupe.linux-${ARCH}
+          docker.elastic.co/beats-dev/golang-crossbuild:${CONTAINER}
+          --build-cmd "make build"
+          -p linux/${ARCH}
+
+      - name: Build windows amd64
+        env:
+          CONTAINER: 1.24.3-main
+          ARCH: amd64
+        run: >
+          docker run
+          -v .:/go/src/github.com/alexgQQ/go-image-deduper
+          -w /go/src/github.com/alexgQQ/go-image-deduper
+          -e CGO_ENABLED=0
+          -e VERSION=$GITHUB_REF_NAME
+          -e BINARY=dedupe.windows-${ARCH}.exe
+          docker.elastic.co/beats-dev/golang-crossbuild:${CONTAINER}
+          --build-cmd "make build"
+          -p windows/${ARCH}
+
+      - name: create new release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/dedupe*
+          fail_on_unmatched_files: true
+          generate_release_notes: true

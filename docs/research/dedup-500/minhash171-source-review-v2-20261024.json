@@ -1,0 +1,63 @@
+{
+  "repository": "icodywu/minhash-dedup",
+  "commit": "aa5825b2f3fa1f100e477370cd212f02f30bf755",
+  "reviewed_whole_files": [
+    {
+      "path": "scripts/dedup_params.py",
+      "sha256": "f4fc1014ab8cee5b37b617aabb3cdeb5e7145ed4ff596b51ca969aecf5aa62a3",
+      "git_blob_sha1": "8a80cdeb8c496658dbb4bb77c6322e4db1e45c37",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_driver.sh",
+      "sha256": "0f87aa168d3347286cf9004f0c1343a3d1c397484461a3873ac4445661be9c6d",
+      "git_blob_sha1": "1173eb6320395669146780322a13a7317275169b",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_minhash_analysis.py",
+      "sha256": "44504061dce9b39de0a35689144db4cdf5d7082060f5ff0baaafdfc4c0dc0458",
+      "git_blob_sha1": "8f2cd3ff3672bb17a0c6fdd9a1f14cf68e1aedb9",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 3,
+  "tree_blob_count": 37,
+  "full_repository_read": false,
+  "partial_source_review": {
+    "path": "src/minhash_dedup/minhash.py",
+    "lines_read": [
+      1,
+      565
+    ],
+    "total_lines": 2224,
+    "sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+    "scope": "Imports/config/HashSig/signature reader/SignatureStage/BucketStage wholly read; PruneStage header,key helpers,binary bucket iterator and start _collect_band_files only. Core2224-line file not wholly read."
+  },
+  "original_analysis_tests_read": 13,
+  "original_tests_run": 0,
+  "authored_controls_run": 8,
+  "controls": [
+    "docs/research/dedup-500/minhash171-controls-20261024/signature-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/bucket-reader-results.json"
+  ],
+  "runtime_scope": "Pinned original signature arithmetic methods with real NumPy, config DTO only.\n\nNo tokenization/NLTK, stage IO, corpus, scheduler or signature-analysis kernel.\n",
+  "findings": [
+    "Original signature arithmetic with actual NumPy: fixed-seed/order and multiplicity invariants pass;32-bit range/shape pass.",
+    "Original direct get_signature(empty) raises ValueError; complete reviewed run() guards empty shingles and skips document signatures. Not a full pipeline bug.",
+    "Source: get_shingles strips ASCII punctuation and normalizes whitespace, preserves case and ignores legacy norm_config; therefore signature resemblance is not raw byte identity.",
+    "Source: per-band signature files independently sorted after all local records loaded into NumPy; peak-memory scalability not measured.",
+    "Source: signature file rewrite opens final path wb and tofile; comment calls atomic but no temporary-path rename in this method. Failure durability untested.",
+    "Analysis test bodies cover sorted-band document alignment, reader-scoped IDs, missing/duplicate/unknown IDs, sampling and empty/removal cases; no original cases executed because Numba/runtime graph not qualified.",
+    "Slurm driver and parameter script wholly read, not executed; no scheduler, corpus, S3 or user data access.",
+    "Executed unchanged original PruneStage _iter_bucket_rows/key helpers with actual owned files: uint32 max document ID preserves reader scope; truncated count and truncated pair raise explicit ValueError; empty file yields no rows. Folder access is adapter; no full pruning pipeline qualification.",
+    "Source-only complete BucketStage: band hash equality defines duplicate bucket; secondary hash affects heap order but deliberately does not split equality group. Not proof of text/byte equality.",
+    "Source-only BucketStage worker layout assumes positive workers_per_bucket=world_size//num_buckets; caller/scheduler configuration not validated in runtime controls.",
+    "Source-only file sorting check arr.nbytes%record_size cannot detect trailing bytes already omitted by NumPy structured fromfile; actual corrupted signature production recovery not tested."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "3/37 whole files;core1-565/2224 partial;cross-band pruning,selection,filter,analysis runtime and rest of repository incomplete",
+  "deferred": "Native pHash.org/ASAN remains deferred",
+  "binary_reader_runtime_scope": "Original PruneStage binary bucket reader; real owned files, folder adapter only.",
+  "previous_audit": "docs/research/dedup-500/minhash171-source-review-v1-20261024.json"
+}

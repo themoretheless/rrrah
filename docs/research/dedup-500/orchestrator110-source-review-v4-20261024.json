@@ -1,0 +1,34 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v3-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "src/enhanced/dedup.rs",
+      "local": "06-dedup.rs",
+      "git_blob": "1205a4c90c4fec0bafde66c28ae54b4c48e2a370",
+      "sha256": "d30308490f3cbccaa9b3e6cf5f89200e8dde915d10ef16a0e95ccf14425a9b43",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 4,
+  "whole_repo_complete": false,
+  "runtime": {
+    "authored_controls": 4,
+    "passed": 4,
+    "harness": "docs/research/dedup-500/orchestrator110-enhanced-controls-20261024/enhanced_pure.rs",
+    "scope": "Unchangedextractedpurefunctions/constantscompiledwithrealSHA2/hex;noMoka/embedder/cache/tokensemanticsrun"
+  },
+  "findings": [
+    "Nativecontrolconfirmsmetadataequalsseparatoralias:mapa=b->cversusa->b=cidenticalkey. NoSHAcollisionsearch.",
+    "same_specificsaccepts-10versus10becauseminusstripped,acceptsnosharedcontentwordpair;different10/11refused. Guardonly,notsemanticcachefalsepositiveproof.",
+    "Advancedcacheusesper-tokenownerfencingunlikesimplerequestmodule;positivearchitectureobservation.",
+    "Tokenclonecontractfirstcompletiononlynotobviouslyenforced:complete storesAtomicBooltruewithoutCASandbroadcastseverycall,faildoesnotatomicallymarkcompleted. Sourceonly,noclonebehaviorruntime.",
+    "wait_for_resultfetchesentrythensubscribes,possiblecompletion-before-subscribeinterleavingrequiresdeterministicconcurrencytest. Notclaimedreproduceddeadlock.",
+    "SemanticindexscanisglobalwithinDeduplicatoranddoesnotvisiblyfilterkeysessions;callerinstanceisolationunreviewed.",
+    "clearinvalidatesrequestsnotembeddings;latestanswersrequiredformatchingbutrepopulationlifecycleunqualified."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

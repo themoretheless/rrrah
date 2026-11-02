@@ -1,0 +1,62 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 17s
+     Running tests/jpeg_orientation.rs (target/debug/deps/jpeg_orientation-12d158f212c76139)
+
+running 1 test
+test all_jpeg_exif_orientations_preserve_normalized_profiled_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+     Running tests/png_alpha_channels.rs (target/debug/deps/png_alpha_channels-077955c363723598)
+
+running 2 tests
+test png_gray_alpha_and_rgba_preserve_opacity_in_selected_frame_identity ... ok
+test png_trns_palette_and_color_keys_match_explicit_rgba ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster_equality.rs (target/debug/deps/raster_equality-abb93d33288dd193)
+
+running 7 tests
+test malformed_associated_alpha_refuses_releases_memory_and_retries ... ok
+test untagged_policy_is_explicit_cached_and_does_not_override_declared_linear_color ... ok
+test independent_lossless_encodings_preserve_pixels_alpha_and_one_code_negatives ... ok
+test associated_tiff_alpha_matches_independent_straight_png ... ok
+test cross_encoding_batch_confirms_every_pair_and_rejects_single_pixel_edits ... ok
+test indexed_cross_encoding_collection_preserves_all_equal_pairs_and_one_pixel_negative ... ok
+test indexed_alpha_encodings_ignore_hidden_rgb_and_separate_visible_edits ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s
+
+     Running tests/raw_selected.rs (target/debug/deps/raw_selected-112c57d39c0cea2b)
+
+running 2 tests
+test sensor_dng_development_preserves_copy_and_changed_mosaic_evidence ... ok
+test sensor_cache_revalidates_changed_mosaic_with_restored_size_and_mtime ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+     Running tests/tiny_raster.rs (target/debug/deps/tiny_raster-dcaea4d4a85b7550)
+
+running 2 tests
+test zero_axis_headers_return_errors_without_retaining_budget ... ok
+test single_axis_images_decode_fingerprint_and_confirm_pixels ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+

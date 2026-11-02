@@ -1,0 +1,39 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 37.73s
+     Running tests/ico_dib.rs (target/debug/deps/ico_dib-99b594afce90b72b)
+
+running 2 tests
+test dib_icon_limits_and_invalid_frame_refuse_without_retained_memory ... FAILED
+test dib_icon_depth_rank_alpha_and_and_mask_survive_normalization ... ok
+
+failures:
+
+---- dib_icon_limits_and_invalid_frame_refuse_without_retained_memory stdout ----
+
+thread 'dib_icon_limits_and_invalid_frame_refuse_without_retained_memory' (74370434) panicked at crates/rrrah-dedup/tests/ico_dib.rs:128:9:
+limits=AnimationBudget { max_frames: 1, max_pixels: 4, max_file_bytes: 1024 }, index=0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    dib_icon_limits_and_invalid_frame_refuse_without_retained_memory
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test ico_dib`

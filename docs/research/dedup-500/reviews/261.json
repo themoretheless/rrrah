@@ -2,7 +2,7 @@
   "index": 261,
   "repository": "SebastianBecker2/VideoDedup",
   "commit": "32c17793ea3a996501306355bc28d7c7cfbccba4",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "Pinned307tracked paths assessed by explicit methods:268whole text/source,19XML structures,9PNG,3ICO,1GIF decode/thumbnail review,7PEheaders; all original hashes freshly reverified. ExternalLFS2video bodies, full-resolution GIF frames and DLL internals/runtime remain open.",
   "decision": "reference",
   "finding": "C# video dedup engine and duplicate manager with packaging tests; inspect frame comparison before use.",
   "available_source_evidence": [
@@ -94,5 +94,8 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/video261-source-review-v109-20261102.json",
+  "assessment_coverage": "307/307 tracked blobs have scoped assessment: 268 whole source reads, 19 structural RESX, 13 image resources, 7 static PE headers. Not full source/runtime qualification; LFS media pending.",
+  "all_tracked_paths_assessed": true
 }

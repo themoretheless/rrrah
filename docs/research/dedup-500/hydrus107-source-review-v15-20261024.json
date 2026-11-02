@@ -1,0 +1,41 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v14-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "docs/img/preview.png",
+      "local": "71-preview.png",
+      "git_blob": "f4d61e5621bd105ed8bdd387ff08aff86e31d5c1",
+      "sha256": "73761a51e6f1c016e63a834a533a7369029943f67595625d0211f15826528831",
+      "whole_visual_review": true,
+      "dimensions": [
+        736,
+        266
+      ]
+    },
+    {
+      "path": "docs/img/reset_duplicates.png",
+      "local": "72-reset_duplicates.png",
+      "git_blob": "0e12e8414865b78349ea0bafdbc83172bd8e5b2c",
+      "sha256": "9513280202fc7bb44d57fbbe475ee770392d6b3cf6c8ae165da86a656baaf418",
+      "whole_visual_review": true,
+      "dimensions": [
+        1193,
+        301
+      ]
+    }
+  ],
+  "whole_files_read_total": 72,
+  "remaining_without_whole_review": 5,
+  "whole_repo_complete": false,
+  "new_authored_controls": 0,
+  "authored_controls_total": 25,
+  "findings": [
+    "Preview image visually decoded: terminal version0.1.12, custom query filesize<10MB,448alreadyhashed,368/368hashing,448/448search,nonewduplicates. Historical screenshot, not0.12.0 current runtime evidence or correctness benchmark.",
+    "Reset illustration visually decoded: Hydrus preparation tab,767eligible,740/767searched96%,context action reset potential duplicates. UI instructions only, not evidence actual reset performed in this review."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

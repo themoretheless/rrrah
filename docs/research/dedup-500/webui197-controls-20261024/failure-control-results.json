@@ -1,0 +1,19 @@
+{
+  "scope": "Complete unchanged original operations module; owned temporary source; only shutil copy2/move replaced with raising mocks. No real move/remove/rename. Original function creates owned output directories and catches the failure.",
+  "cases": [
+    {
+      "operation": "copy",
+      "attempts": 1,
+      "return_value": null,
+      "source_preserved": true,
+      "error_logged": true
+    },
+    {
+      "operation": "move",
+      "attempts": 1,
+      "return_value": null,
+      "source_preserved": true,
+      "error_logged": true
+    }
+  ]
+}

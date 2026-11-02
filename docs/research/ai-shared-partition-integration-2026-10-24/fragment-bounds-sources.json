@@ -1,0 +1,43 @@
+{
+  "decoder_sha256": "7fb9c13b2384668939d509fbb9c151c81e3c0e2bc06afb0f209213955a242e29",
+  "test_sha256": "73236ee9e5434a46daabb2b22b90a5a5a4dcdfd0161c2723eb3997770d9d3ac8",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "2da329af117ed3c0b8c3167534b2fdd6bcdc5a071ba36e5cda4595ec0e9e5a26",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "9eac5628f7ca2523d665482b1a53bf27f1a150752fb12be3630b758681e893ce",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f",
+    "scripts/benchmark-ordered-cell-cpu.py": "a2a7dcc7def9fd12b19ae3eaa15f84c918027d9aebb812b6900eb9adb0737cc8",
+    "scripts/analyze-split-cpu.py": "23cae4a1281fb0ce30b64471b3130f927538ab3221227094cce859e158665624"
+  },
+  "cpu_before_sha256": "4bcc6d2e1482c79caf9fad85717cf89c36f5e87e8473bd0b7e6789359197890d",
+  "before_sources_match_accepted_checkpoint": true,
+  "fixed_cpu_test_body_identical": true,
+  "fixed_cpu_test_body_sha256": "0c0d0d599fdb9e9a28591e5a051e9747a5df8b337f5bde38c5edc9e053734ee0",
+  "fixture_sha256": "5d386d4f9397d03831302b8f8a100f07096751d03d1f82ab3b9ddcc3e6b08722",
+  "artifacts": {
+    "fragment-bounds-kernel.log": "f917b32630ead6c9db1ccb20069b89026b3c4fe9eade7f4b684e38ddf6768b34",
+    "fragment-bounds-full-encode.log": "829b7d5681a91a2f612a7669c4c59da177c76197c00d0229689e409123d58cba",
+    "fragment-bounds-feature-vector.log": "228c9a363a96e4cef5833634b2c39d9a398da4993ebb33fe5748e78da8a3e919",
+    "fragment-bounds-feature-build.log": "5b37a977d644c574c9a36e20e3c6becc5e59b44eb1b18983b5df7fbba73709b4",
+    "fragment-bounds-poppler.json": "3667d6fb60cd88b7f8e12e819782281482ef37c0f042b12bf939647d429a4d01",
+    "fragment-bounds-change.patch": "c0141c21e9c6d29d6d84c4a99c80fc3714580a3cf90610c216143220f5118e35",
+    "fragment-bounds-default-vector.log": "1ce881a45c5754fcfe2679477683def97ba1dffaaa9dc0a41c37132867d16c9c",
+    "fragment-bounds-cpu.json": "5ee5bf6c173803034f586bc3d7aee2bcc334cc25daf1ef3f25b60ecd48c901de",
+    "fragment-bounds-cpu.log": "3952c032b496566573dbc973bb7aa1b1bdcc7b670cdecacf0198b1c3668296d6"
+  },
+  "patch_reproduces_current_sources": true,
+  "rejected_axis_aligned_queries": {
+    "original_log_sha256": "cf81b28de8a70132a100cac81345e17b6813797ca4cc8bcbb768af74cbd9ff59",
+    "original_log_location": "/Users/themoretheless/.codex/tmp/rrrah-fragment-bounds-kernel-20261102.log",
+    "baseline_work": 1267,
+    "rejected_work": 1360,
+    "failure_excerpt": [
+      "thread 'encode::ordered_pixel::exact_orientation_tests::bulk_carry_overflow_does_not_scan_beyond_output_room' (9040160) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/ordered_pixel.rs:2138:9:",
+      "batch scan wasted work before fragment-limit refusal",
+      "note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace"
+    ],
+    "fix": "Only oblique edges enter the fragment cache; the final unchanged overflow assertion passes at1267/1267."
+  },
+  "cpu_timing_method": "Six interspersed AA controls, sixteen alternating AB/BA pairs, eight native repetitions each; builds and correctness jobs completed before timing; startup excluded; zero-size admission credits."
+}

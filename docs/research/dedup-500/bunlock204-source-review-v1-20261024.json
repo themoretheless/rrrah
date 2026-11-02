@@ -1,0 +1,28 @@
+{
+  "index": 204,
+  "repository": "IlyaSemenov/bunlock-dedupe",
+  "commit": "9e020bbbe6f2e6d282779fa2ed62446494e827e8",
+  "whole_file_reads": [
+    {
+      "path": "src/dedupe/index.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/04-index.ts",
+      "sha256": "1255ab71774a0209784776779e494bb059ffa3ef543825e541accdaff8243658"
+    },
+    {
+      "path": "src/bunlock/ranges.ts",
+      "local": "docs/research/dedup-500/evidence/IlyaSemenov--bunlock-dedupe/remaining-pinned/src/bunlock/ranges.ts",
+      "sha256": "2380a4d552469cd6c1cc83cdb0213f5c45ce130e098e8f160c67ce4360edbc6c"
+    }
+  ],
+  "whole_file_read_count": 2,
+  "tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Public entrypoint exposes package-version duplicate analysis,lock text rewriting and version update safety; not file/image content comparison.",
+    "Range helper explicitly preserves unknown as undefined for unsupported protocols/invalid semver. Required or unknown-compatible optional peer stays reachable; only known-incompatible optional peer excluded. This conservative unknown handling is a useful contract principle, not transferable semver logic for image equality.",
+    "Bare-name override authoritative even when uninterpretable; no fallback to declaration. Bun-version behavior stated in comments not independently verified or executed."
+  ],
+  "remaining": "Other source/tests/media and actual Bun runtime unreviewed."
+}

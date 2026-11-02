@@ -1,0 +1,3210 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package btn
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"maps"
+	"net/http"
+	"net/http/httptest"
+	"net/url"
+	"os"
+	"path/filepath"
+	"strconv"
+	"strings"
+	"sync"
+	"sync/atomic"
+	"testing"
+	"time"
+
+	"github.com/autobrr/go-torrent/bencode"
+	"github.com/autobrr/go-torrent/metainfo"
+
+	"github.com/autobrr/upbrr/internal/authmaterial/authfixture"
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/cookies"
+	servicedb "github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/internal/services/db/dbfixture"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+// httpHandlerErrorRecorder lets httptest handlers capture assertion failures
+// and report them from the owning test goroutine.
+type httpHandlerErrorRecorder struct {
+	t        *testing.T
+	mu       sync.Mutex
+	messages []string
+}
+
+// newHTTPHandlerErrorRecorder binds handler-side assertion collection to the
+// owning test.
+func newHTTPHandlerErrorRecorder(t *testing.T) *httpHandlerErrorRecorder {
+	t.Helper()
+	return &httpHandlerErrorRecorder{t: t}
+}
+
+// Errorf records a handler assertion failure without calling testing.T from the
+// server goroutine.
+func (r *httpHandlerErrorRecorder) Errorf(format string, args ...any) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.messages = append(r.messages, fmt.Sprintf(format, args...))
+}
+
+// Check fails the owning test if any handler assertions were recorded.
+func (r *httpHandlerErrorRecorder) Check() {
+	r.t.Helper()
+
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	if len(r.messages) > 0 {
+		r.t.Fatalf("handler assertion failed: %s", strings.Join(r.messages, "; "))
+	}
+}
+
+// captureBTNLogger records selected log messages from upload paths under test.
+type captureBTNLogger struct {
+	mu       sync.Mutex
+	debugs   []string
+	infos    []string
+	warnings []string
+}
+
+func (l *captureBTNLogger) Tracef(string, ...any) {}
+
+func (l *captureBTNLogger) Debugf(format string, args ...any) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.debugs = append(l.debugs, fmt.Sprintf(format, args...))
+}
+
+func (l *captureBTNLogger) Infof(format string, args ...any) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.infos = append(l.infos, fmt.Sprintf(format, args...))
+}
+
+func (l *captureBTNLogger) Warnf(format string, args ...any) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	l.warnings = append(l.warnings, fmt.Sprintf(format, args...))
+}
+
+func (l *captureBTNLogger) Errorf(string, ...any) {}
+
+// containsInfo reports whether any captured info message contains value.
+func (l *captureBTNLogger) containsInfo(value string) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for _, info := range l.infos {
+		if strings.Contains(info, value) {
+			return true
+		}
+	}
+	return false
+}
+
+// containsDebug reports whether any captured debug message contains value.
+func (l *captureBTNLogger) containsDebug(value string) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for _, debug := range l.debugs {
+		if strings.Contains(debug, value) {
+			return true
+		}
+	}
+	return false
+}
+
+// containsWarning reports whether any captured warning contains value.
+func (l *captureBTNLogger) containsWarning(value string) bool {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	for _, warning := range l.warnings {
+		if strings.Contains(warning, value) {
+			return true
+		}
+	}
+	return false
+}
+
+func TestBTNUploadEndToEndSuccess(t *testing.T) {
+	t.Parallel()
+
+	var autofillCalls atomic.Int32
+	var uploadCalls atomic.Int32
+	var loginCalls atomic.Int32
+	var downloadCalls atomic.Int32
+	var uploadFormMu sync.Mutex
+	uploadFormValues := map[string]string{}
+	uploadFileCount := 0
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/login.php" && r.Method == http.MethodPost:
+			loginCalls.Add(1)
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte("ok"))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodGet:
+			if got := r.Header.Get("Cookie"); !strings.Contains(got, "session=new") {
+				handlerErrs.Errorf("expected refreshed cookie on upload validation")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodPost:
+			contentType := r.Header.Get("Content-Type")
+			if strings.HasPrefix(contentType, "application/x-www-form-urlencoded") {
+				autofillCalls.Add(1)
+				_, _ = w.Write([]byte(`
+					<input name="artist" value="Example Show" />
+					<input name="title" value="Episode One" />
+					<input name="seriesid" value="999" />
+					<input name="year" value="2025" />
+					<input name="tags" value="action" />
+					<input name="image" value="https://img.example/poster.jpg" />
+					<textarea name="album_desc">Episode overview: TBA</textarea>
+					<select name="format"><option selected value="MKV">MKV</option></select>
+					<select name="bitrate"><option selected value="H.265">H.265</option></select>
+					<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+					<select name="resolution"><option selected value="1080p">1080p</option></select>
+				`))
+				return
+			}
+			uploadCalls.Add(1)
+			if err := r.ParseMultipartForm(4 << 20); err != nil {
+				handlerErrs.Errorf("parse multipart form: %v", err)
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			uploadFormMu.Lock()
+			for key, values := range r.MultipartForm.Value {
+				if len(values) == 0 {
+					continue
+				}
+				uploadFormValues[key] = values[0]
+			}
+			uploadFileCount = len(r.MultipartForm.File["file_input"])
+			uploadFormMu.Unlock()
+			w.Header().Set("Location", "/torrents.php?id=123&torrentid=456")
+			w.WriteHeader(http.StatusFound)
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("action") == "download":
+			downloadCalls.Add(1)
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		case r.URL.Path == "/torrents.php":
+			_, _ = w.Write([]byte("ok"))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	tempDir := t.TempDir()
+	dbPath := newBTNAuthDB(t)
+	sourcePath := filepath.Join(tempDir, "Example.Show.S01E01.mkv")
+	if err := os.WriteFile(sourcePath, []byte("video"), 0o600); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	torrentPath := filepath.Join(tempDir, "input.torrent")
+	if err := os.WriteFile(torrentPath, []byte("d8:announce13:https://x.ee"), 0o600); err != nil {
+		t.Fatalf("write torrent: %v", err)
+	}
+	mediaInfoText := "General\nFormat: Matroska\nVideo\nCodec: H.265"
+	mediaInfoPath := writeBTNTestMediaInfo(t, tempDir, mediaInfoText)
+
+	req := trackers.PreparationInput{
+		Tracker: "BTN",
+		Meta: api.UploadSubject{
+			SourcePath:        sourcePath,
+			TorrentPath:       torrentPath,
+			MediaInfoTextPath: mediaInfoPath,
+			ReleaseName:       "Example.Show.S01E01.1080p.WEB-DL.x265-GRP",
+			Type:              "WEBDL",
+			Source:            "WEB-DL",
+			Container:         "MKV",
+			VideoEncode:       "x265",
+			VideoCodec:        "HEVC",
+			SeasonInt:         1,
+			EpisodeInt:        1,
+			EpisodeTitle:      "Episode One",
+			EpisodeOverview:   "Overview",
+			TVDBAiredDate:     "2025-01-01",
+			Identity: api.ExternalIdentity{
+				Category: "TV",
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     1,
+				Episode:    1,
+			},
+			DescriptionOverride: "[b]Test[/b] description",
+			Tag:                 "GRP",
+		},
+		TrackerConfig: config.TrackerConfig{
+			Username: "user",
+			Password: "pass",
+		},
+		Runtime: trackers.PreparationRuntimeFromConfig(config.Config{
+			MainSettings: config.MainSettingsConfig{DBPath: dbPath},
+			Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BTN": {APIKey: strings.Repeat("x", 30)},
+			}},
+		}),
+	}
+
+	summary, err := uploadAt(context.Background(), req, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("upload failed: %v", err)
+	}
+	if summary.Uploaded != 1 {
+		t.Fatalf("expected uploaded=1, got %d", summary.Uploaded)
+	}
+	if len(summary.UploadedTorrents) != 1 {
+		t.Fatalf("expected one uploaded torrent, got %d", len(summary.UploadedTorrents))
+	}
+	if got := summary.UploadedTorrents[0].TorrentID; got != "456" {
+		t.Fatalf("expected torrent id 456, got %q", got)
+	}
+	if strings.TrimSpace(summary.UploadedTorrents[0].TorrentPath) == "" {
+		t.Fatalf("expected tracker torrent path")
+	}
+	payload, err := os.ReadFile(summary.UploadedTorrents[0].TorrentPath)
+	if err != nil {
+		t.Fatalf("expected tracker torrent file: %v", err)
+	}
+	if len(payload) == 0 || payload[0] != 'd' {
+		t.Fatalf("expected bencode torrent payload")
+	}
+
+	if loginCalls.Load() != 1 {
+		t.Fatalf("expected one login call, got %d", loginCalls.Load())
+	}
+	if autofillCalls.Load() != 1 {
+		t.Fatalf("expected one autofill call, got %d", autofillCalls.Load())
+	}
+	if uploadCalls.Load() != 1 {
+		t.Fatalf("expected one upload call, got %d", uploadCalls.Load())
+	}
+	if downloadCalls.Load() != 1 {
+		t.Fatalf("expected one torrent download call, got %d", downloadCalls.Load())
+	}
+
+	uploadFormMu.Lock()
+	defer uploadFormMu.Unlock()
+	if uploadFileCount != 1 {
+		t.Fatalf("expected one file_input upload, got %d", uploadFileCount)
+	}
+	if got := uploadFormValues["type"]; got != "Episode" {
+		t.Fatalf("expected type Episode, got %q", got)
+	}
+	if got := uploadFormValues["format"]; got != "MKV" {
+		t.Fatalf("expected format MKV, got %q", got)
+	}
+	if got := uploadFormValues["bitrate"]; got != "H.265" {
+		t.Fatalf("expected bitrate H.265, got %q", got)
+	}
+	if got := uploadFormValues["media"]; got != "WEB-DL" {
+		t.Fatalf("expected media WEB-DL, got %q", got)
+	}
+	if got := uploadFormValues["resolution"]; got != "1080p" {
+		t.Fatalf("expected resolution 1080p, got %q", got)
+	}
+	if got := uploadFormValues["origin"]; got != "P2P" {
+		t.Fatalf("expected origin P2P, got %q", got)
+	}
+	if got := uploadFormValues["release_desc"]; got != mediaInfoText {
+		t.Fatalf("expected MediaInfo release_desc, got %q", got)
+	}
+	if got := uploadFormValues["scenename"]; got != "Example.Show.S01E01.1080p.WEB-DL.x265-GRP" {
+		t.Fatalf("expected opaque scenename authority, got %q", got)
+	}
+}
+
+func TestBTNUploadAnnounceURLStillUsesExactRegisteredTorrent(t *testing.T) {
+	t.Parallel()
+
+	var downloadCalls atomic.Int32
+	var apiCalls atomic.Int32
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/login.php" && r.Method == http.MethodPost:
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte("ok"))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodGet:
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodPost:
+			contentType := r.Header.Get("Content-Type")
+			if strings.HasPrefix(contentType, "application/x-www-form-urlencoded") {
+				_, _ = w.Write([]byte(`
+					<input name="artist" value="Example Show" />
+					<input name="title" value="Episode One" />
+					<input name="seriesid" value="999" />
+					<textarea name="album_desc">Episode overview: TBA</textarea>
+					<select name="format"><option selected value="MKV">MKV</option></select>
+					<select name="bitrate"><option selected value="H.265">H.265</option></select>
+					<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+					<select name="resolution"><option selected value="1080p">1080p</option></select>
+				`))
+				return
+			}
+			w.Header().Set("Location", "/torrents.php?id=123&torrentid=456")
+			w.WriteHeader(http.StatusFound)
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("action") == "download":
+			downloadCalls.Add(1)
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		case r.URL.Path == "/rpc":
+			apiCalls.Add(1)
+			http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	req := newBTNUploadTestRequest(t)
+	torrentPath := filepath.Join(t.TempDir(), "input.torrent")
+	writeBTNTestTorrent(t, torrentPath)
+	req.Meta.TorrentPath = torrentPath
+	req.TrackerConfig.AnnounceURL = "https://tracker.btn.example/announce/passkey"
+
+	summary, err := uploadAt(context.Background(), req, server.URL)
+	if err != nil {
+		t.Fatalf("upload failed: %v", err)
+	}
+	if downloadCalls.Load() != 1 {
+		t.Fatalf("expected one BTN registered torrent download, got %d", downloadCalls.Load())
+	}
+	if apiCalls.Load() != 0 {
+		t.Fatalf("expected no API fallback calls, got %d", apiCalls.Load())
+	}
+	if got := summary.UploadedTorrents[0].TorrentID; got != "456" {
+		t.Fatalf("expected torrent id 456, got %q", got)
+	}
+
+	torrentMeta, err := metainfo.LoadFromFile(summary.UploadedTorrents[0].TorrentPath)
+	if err != nil {
+		t.Fatalf("read BTN artifact: %v", err)
+	}
+	if torrentMeta.Announce != "https://old.example/announce" {
+		t.Fatal("expected exact tracker-returned announce URL")
+	}
+	if len(torrentMeta.AnnounceList) != 1 || len(torrentMeta.AnnounceList[0]) != 1 ||
+		torrentMeta.AnnounceList[0][0] != "https://old.example/announce" {
+		t.Fatal("expected exact tracker-returned announce-list")
+	}
+	if torrentMeta.Comment != "" {
+		t.Fatalf("expected tracker-returned torrent comment unchanged, got %q", torrentMeta.Comment)
+	}
+}
+
+func TestBTNUploadUsesValidImportedCookiesWithoutCredentials(t *testing.T) {
+	t.Parallel()
+
+	var loginCalls atomic.Int32
+	var autofillCalls atomic.Int32
+	var uploadCalls atomic.Int32
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/login.php":
+			loginCalls.Add(1)
+			http.NotFound(w, r)
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodGet:
+			if got := r.Header.Get("Cookie"); !strings.Contains(got, "session=imported") {
+				handlerErrs.Errorf("expected imported cookie on upload validation")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodPost:
+			if got := r.Header.Get("Cookie"); !strings.Contains(got, "session=imported") {
+				handlerErrs.Errorf("expected imported cookie on upload request")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			if strings.HasPrefix(r.Header.Get("Content-Type"), "application/x-www-form-urlencoded") {
+				autofillCalls.Add(1)
+				_, _ = w.Write([]byte(`
+					<input name="artist" value="Example Show" />
+					<input name="title" value="Episode One" />
+					<input name="seriesid" value="999" />
+					<textarea name="album_desc">Episode overview: TBA</textarea>
+					<select name="format"><option selected value="MKV">MKV</option></select>
+					<select name="bitrate"><option selected value="H.265">H.265</option></select>
+					<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+					<select name="resolution"><option selected value="1080p">1080p</option></select>
+				`))
+				return
+			}
+			uploadCalls.Add(1)
+			w.Header().Set("Location", "/torrents.php?id=123&torrentid=456")
+			w.WriteHeader(http.StatusFound)
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("action") == "download":
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	tempDir := t.TempDir()
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	sourcePath := filepath.Join(tempDir, "Example.Show.S01E01.mkv")
+	if err := os.WriteFile(sourcePath, []byte("video"), 0o600); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	torrentPath := filepath.Join(tempDir, "input.torrent")
+	if err := os.WriteFile(torrentPath, []byte("d8:announce13:https://x.ee"), 0o600); err != nil {
+		t.Fatalf("write torrent: %v", err)
+	}
+
+	req := trackers.PreparationInput{
+		Tracker: "BTN",
+		Meta: api.UploadSubject{
+			SourcePath:  sourcePath,
+			TorrentPath: torrentPath,
+			ReleaseName: "Example.Show.S01E01.1080p.WEB-DL.x265-GRP",
+			Type:        "WEBDL",
+			Source:      "WEB-DL",
+			Container:   "MKV",
+			VideoEncode: "x265",
+			VideoCodec:  "HEVC",
+			SeasonInt:   1,
+			EpisodeInt:  1,
+			Identity:    api.ExternalIdentity{Category: "TV"},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     1,
+				Episode:    1,
+			},
+		},
+		TrackerConfig: config.TrackerConfig{},
+		Runtime: trackers.PreparationRuntimeFromConfig(config.Config{
+			MainSettings: config.MainSettingsConfig{DBPath: dbPath},
+			Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BTN": {APIKey: strings.Repeat("x", 30)},
+			}},
+		}),
+	}
+
+	summary, err := uploadAt(context.Background(), req, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("upload failed: %v", err)
+	}
+	if summary.Uploaded != 1 {
+		t.Fatalf("expected upload success, got %#v", summary)
+	}
+	if loginCalls.Load() != 0 {
+		t.Fatalf("expected no login with valid imported cookies, got %d", loginCalls.Load())
+	}
+	if autofillCalls.Load() != 1 || uploadCalls.Load() != 1 {
+		t.Fatalf("expected autofill/upload calls, got autofill=%d upload=%d", autofillCalls.Load(), uploadCalls.Load())
+	}
+}
+
+func TestBTNUploadStoredCookieLoadErrorPreventsLogin(t *testing.T) {
+	t.Parallel()
+
+	var loginCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/login.php":
+			loginCalls.Add(1)
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			_, _ = w.Write([]byte("ok"))
+		case "/upload.php":
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	dbPath := filepath.Join(t.TempDir(), "upbrr.db")
+	if err := os.WriteFile(dbPath, []byte("not a sqlite database"), 0o600); err != nil {
+		t.Fatalf("write corrupt db: %v", err)
+	}
+
+	_, err := ensureBTNUploadSession(context.Background(), config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, uploadContext{baseURL: server.URL})
+	if err == nil {
+		t.Fatal("expected stored cookie load error")
+	}
+	if errors.Is(err, errBTNCookiesMissing) || strings.Contains(err.Error(), "cookie invalid/missing") {
+		t.Fatalf("expected storage error, got %v", err)
+	}
+	if loginCalls.Load() != 0 {
+		t.Fatalf("expected storage error to prevent login, got %d login calls", loginCalls.Load())
+	}
+}
+
+func TestBTNDryRunRequiresUploadAuthPrerequisites(t *testing.T) {
+	t.Parallel()
+
+	baseReq := newBTNDryRunTestRequest(t, newBTNAuthDB(t))
+	_, err := buildUploadDryRun(context.Background(), baseReq)
+	if err == nil || !strings.Contains(err.Error(), "cookie invalid/missing and username/password not configured") {
+		t.Fatalf("expected BTN dry-run to block API-key-only upload auth, got %v", err)
+	}
+
+	credentialsReq := newBTNDryRunTestRequest(t, newBTNAuthDB(t))
+	credentialsReq.TrackerConfig.Username = "user"
+	credentialsReq.TrackerConfig.Password = "pass"
+	entry, err := buildUploadDryRun(context.Background(), credentialsReq)
+	if err != nil {
+		t.Fatalf("BuildUploadDryRun with credentials: %v", err)
+	}
+	if entry.Status != "ready" {
+		t.Fatalf("expected credentials to satisfy dry-run upload auth prerequisites, got %#v", entry)
+	}
+	if desc, ok := entry.Payload["release_desc"]; !ok || desc != "" {
+		t.Fatalf("expected empty dry-run release_desc without MediaInfo, got value=%q present=%t", desc, ok)
+	}
+
+	cookieDBPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), cookieDBPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet || r.URL.Path != "/upload.php" {
+			http.NotFound(w, r)
+			return
+		}
+		if !strings.Contains(r.Header.Get("Cookie"), "session=imported") {
+			handlerErrs.Errorf("expected imported cookie on dry-run upload validation")
+			http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+			return
+		}
+		_, _ = io.WriteString(w, `<form action="/upload.php"><input name="autofill"></form>`)
+	}))
+	defer server.Close()
+	cookieReq := newBTNDryRunTestRequest(t, cookieDBPath)
+	entry, err = buildUploadDryRunAt(context.Background(), cookieReq, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("BuildUploadDryRun with stored cookies: %v", err)
+	}
+	if entry.Status != "ready" {
+		t.Fatalf("expected stored cookies to satisfy dry-run upload auth prerequisites, got %#v", entry)
+	}
+}
+
+func TestBTNDryRunRejectsStaleStoredCookiesWithoutCredentials(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "stale"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet || r.URL.Path != "/upload.php" {
+			http.NotFound(w, r)
+			return
+		}
+		if !strings.Contains(r.Header.Get("Cookie"), "session=stale") {
+			handlerErrs.Errorf("expected stale cookie on dry-run upload validation")
+			http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+			return
+		}
+		w.WriteHeader(http.StatusUnauthorized)
+		_, _ = io.WriteString(w, `<form action="/login.php"><input name="password"></form>`)
+	}))
+	defer server.Close()
+
+	req := newBTNDryRunTestRequest(t, dbPath)
+
+	_, err := buildUploadDryRunAt(context.Background(), req, server.URL)
+	handlerErrs.Check()
+	if !errors.Is(err, errBTNSessionConfirmedInvalid) {
+		t.Fatalf("expected stale stored cookies to block dry-run readiness, got %v", err)
+	}
+}
+
+func TestBTNDryRunBlocksMissingCanonicalTVSeasonEpisode(t *testing.T) {
+	t.Parallel()
+
+	req := newBTNDryRunTestRequest(t, newBTNAuthDB(t))
+	req.TrackerConfig.Username = "user"
+	req.TrackerConfig.Password = "pass"
+	req.Meta.SeasonInt = 0
+	req.Meta.EpisodeInt = 0
+	req.Meta.Release.Season = 1
+	req.Meta.Release.Episode = 1
+
+	entry, err := buildUploadDryRun(context.Background(), req)
+	if err != nil {
+		t.Fatalf("BuildUploadDryRun: %v", err)
+	}
+	if entry.Status != "blocked" {
+		t.Fatalf("expected canonical TV metadata gap to block dry-run, got %#v", entry)
+	}
+	if !strings.Contains(entry.Message, "canonical TV season/episode missing; BTN upload requires TVDB or metadata season/episode ints and ignores parsed season/episode fallback; refresh metadata or correct canonical season/episode before upload") {
+		t.Fatalf("expected canonical metadata message, got %q", entry.Message)
+	}
+}
+
+func TestBTNExplicitDryRunRunsAutofillAndReportsBothPayloads(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	var formMu sync.Mutex
+	autofillForm := map[string]string{}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/upload.php":
+			if !strings.Contains(r.Header.Get("Cookie"), "session=imported") {
+				handlerErrs.Errorf("expected imported cookie on debug dry-run upload validation")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			_, _ = io.WriteString(w, `<form action="/upload.php"><input name="autofill"></form>`)
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php":
+			if !strings.Contains(r.Header.Get("Cookie"), "session=imported") {
+				handlerErrs.Errorf("expected imported cookie on debug dry-run autofill request")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			if err := r.ParseForm(); err != nil {
+				handlerErrs.Errorf("parse autofill form: %v", err)
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			formMu.Lock()
+			autofillForm["type"] = r.PostForm.Get("type")
+			autofillForm["scene_yesno"] = r.PostForm.Get("scene_yesno")
+			autofillForm["auto_series"] = r.PostForm.Get("auto_series")
+			autofillForm["auto_season"] = r.PostForm.Get("auto_season")
+			autofillForm["tvdb"] = r.PostForm.Get("tvdb")
+			formMu.Unlock()
+			_, _ = io.WriteString(w, `
+				<input name="artist" value="Example Show">
+				<input name="seriesid" value="12345">
+				<input name="title" value="Season 5">
+				<input name="year" value="2026">
+				<select name="format"><option selected value="MKV">MKV</option></select>
+				<select name="bitrate"><option selected value="H.265">H.265</option></select>
+				<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+				<select name="resolution"><option selected value="1080p">1080p</option></select>
+				<textarea name="album_desc">Autofill overview</textarea>
+			`)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	req := newBTNDryRunTestRequest(t, dbPath)
+	req.Meta.MediaInfoTextPath = writeBTNTestMediaInfo(t, filepath.Dir(req.Meta.SourcePath), "General\nFormat: Matroska")
+	req.Intent = trackers.PreparationIntentDryRun
+	req.Meta.TVPack = true
+	req.Meta.EpisodeInt = 0
+	req.Meta.ReleaseName = "Example.Show.S05.1080p.WEB-DL.x265-GRP"
+	req.Meta.SeasonInt = 3
+	req.Meta.Identity.TVDBID = 12345
+	req.Meta.ProviderMetadata.TVDB = &api.TVDBMetadata{
+		TVDBID:           12345,
+		EpisodeSeason:    5,
+		OriginalLanguage: "en",
+	}
+
+	entry, err := buildUploadDryRunAt(context.Background(), req, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("BuildUploadDryRun: %v", err)
+	}
+	if entry.Status != "ready" {
+		t.Fatalf("expected ready debug dry-run, got %#v", entry)
+	}
+	if len(entry.DebugSections) != 2 {
+		t.Fatalf("expected two debug sections, got %#v", entry.DebugSections)
+	}
+	requestSection := entry.DebugSections[0]
+	if requestSection.Title != "BTN autofill request" {
+		t.Fatalf("expected autofill request section, got %#v", requestSection)
+	}
+	if requestSection.Payload["type"] != "Season" || requestSection.Payload["auto_series"] != "12345" || requestSection.Payload["auto_season"] != "S05" || requestSection.Payload["tvdb"] != "Get Info" {
+		t.Fatalf("unexpected autofill request payload %#v", requestSection.Payload)
+	}
+	finalSection := entry.DebugSections[1]
+	if finalSection.Title != "BTN final upload payload after autofill" {
+		t.Fatalf("expected final payload section, got %#v", finalSection)
+	}
+	if finalSection.Payload["type"] != "Season" || finalSection.Payload["seriesid"] != "12345" || finalSection.Payload["artist"] != "Example Show" {
+		t.Fatalf("unexpected final payload %#v", finalSection.Payload)
+	}
+	if finalSection.Payload["album_desc"] != "Autofill overview" {
+		t.Fatalf("expected final debug payload to keep BTN autofill album_desc, got %q", finalSection.Payload["album_desc"])
+	}
+	if finalSection.Payload["release_desc"] != "General\nFormat: Matroska" {
+		t.Fatalf("expected final debug payload release_desc to use MediaInfo, got %q", finalSection.Payload["release_desc"])
+	}
+	if len(finalSection.Files) == 0 || finalSection.Files[0].Field != "file_input" {
+		t.Fatalf("expected final debug section files, got %#v", finalSection.Files)
+	}
+	if entry.Payload["artist"] != "Example Show" {
+		t.Fatalf("expected top-level debug payload to use autofill result, got %#v", entry.Payload)
+	}
+	if entry.Payload["release_desc"] != "General\nFormat: Matroska" {
+		t.Fatalf("expected top-level debug payload release_desc to use MediaInfo, got %q", entry.Payload["release_desc"])
+	}
+
+	formMu.Lock()
+	gotForm := maps.Clone(autofillForm)
+	formMu.Unlock()
+	if gotForm["type"] != "Season" || gotForm["scene_yesno"] != "No" || gotForm["auto_series"] != "12345" || gotForm["auto_season"] != "S05" || gotForm["tvdb"] != "Get Info" {
+		t.Fatalf("unexpected submitted autofill form %#v", gotForm)
+	}
+}
+
+func TestBTNExplicitDryRunRetriesExplicitTVDBAutofillFailureWithReleaseName(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	var autofillCalls atomic.Int32
+	var uploadCalls atomic.Int32
+	var formsMu sync.Mutex
+	forms := make([]url.Values, 0, 2)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/upload.php":
+			_, _ = io.WriteString(w, `<form action="/upload.php"><input name="autofill"></form>`)
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php" && strings.HasPrefix(r.Header.Get("Content-Type"), "application/x-www-form-urlencoded"):
+			if err := r.ParseForm(); err != nil {
+				http.Error(w, "bad form", http.StatusBadRequest)
+				return
+			}
+			formsMu.Lock()
+			forms = append(forms, maps.Clone(r.PostForm))
+			formsMu.Unlock()
+			if autofillCalls.Add(1) == 1 {
+				_, _ = io.WriteString(w, `<input name="artist" value="Autofill Fail"><input name="title" value="Autofill Fail">`)
+				return
+			}
+			writeBTNTestAutofillResponse(w, "Expected Show")
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php":
+			uploadCalls.Add(1)
+			http.Error(w, "unexpected upload", http.StatusInternalServerError)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	logger := &captureBTNLogger{}
+	req := newBTNDryRunTestRequest(t, dbPath)
+	req.Intent = trackers.PreparationIntentDryRun
+	req.Logger = logger
+	req.Meta.MediaInfoTextPath = writeBTNTestMediaInfo(t, filepath.Dir(req.Meta.SourcePath), "General\nFormat: Matroska")
+	req.Meta.Identity.TVDBID = 12345
+	req.Meta.ProviderMetadata.TVDB = &api.TVDBMetadata{
+		TVDBID:           12345,
+		NameEnglish:      "Expected Show",
+		EpisodeSeason:    1,
+		EpisodeNumber:    1,
+		OriginalLanguage: "en",
+	}
+
+	entry, err := buildUploadDryRunAt(context.Background(), req, server.URL)
+	if err != nil {
+		t.Fatalf("BuildUploadDryRun: %v", err)
+	}
+	formsMu.Lock()
+	gotForms := append([]url.Values(nil), forms...)
+	formsMu.Unlock()
+	if entry.Status != "ready" || len(entry.RequiredActions) != 0 || entry.Payload["artist"] != "Expected Show" {
+		t.Fatalf("fallback dry-run entry = %#v", entry)
+	}
+	if autofillCalls.Load() != 2 || uploadCalls.Load() != 0 || len(gotForms) != 2 ||
+		gotForms[0].Get("scene_yesno") != "No" || gotForms[0].Get("auto_series") != "12345" ||
+		gotForms[1].Get("scene_yesno") != "Yes" || gotForms[1].Get("autofill") != entry.ReleaseName || gotForms[1].Get("auto_series") != "" {
+		t.Fatalf("autofills=%d uploads=%d forms=%#v", autofillCalls.Load(), uploadCalls.Load(), gotForms)
+	}
+	if len(entry.DebugSections) != 2 || entry.DebugSections[0].Payload["scene_yesno"] != "Yes" ||
+		entry.DebugSections[0].Payload["autofill"] != entry.ReleaseName || !logger.containsInfo("reason=tvdb_autofill_failed") {
+		t.Fatalf("fallback debug sections=%#v info=%v", entry.DebugSections, logger.containsInfo("reason=tvdb_autofill_failed"))
+	}
+}
+
+func TestBTNDirectUploadBlocksMismatchedAutofillArtist(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+
+	var autofillCalls atomic.Int32
+	var uploadCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/upload.php":
+			_, _ = io.WriteString(w, `<form action="/upload.php"><input name="autofill"></form>`)
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php" && strings.HasPrefix(r.Header.Get("Content-Type"), "application/x-www-form-urlencoded"):
+			if autofillCalls.Add(1) == 2 {
+				_, _ = io.WriteString(w, `<input name="artist" value="Autofill Fail"><input name="title" value="Autofill Fail">`)
+				return
+			}
+			writeBTNTestAutofillResponse(w, "Unexpected Show")
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php":
+			uploadCalls.Add(1)
+			http.Error(w, "unexpected upload", http.StatusInternalServerError)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	logger := &captureBTNLogger{}
+	req := newBTNDryRunTestRequest(t, dbPath)
+	req.Logger = logger
+	req.Meta.MediaInfoTextPath = writeBTNTestMediaInfo(t, filepath.Dir(req.Meta.SourcePath), "General\nFormat: Matroska")
+	req.Meta.Identity.TVDBID = 12345
+	req.Meta.ProviderMetadata.TVDB = &api.TVDBMetadata{
+		TVDBID:           12345,
+		NameEnglish:      "Expected Show",
+		EpisodeSeason:    1,
+		OriginalLanguage: "en",
+	}
+
+	_, err := uploadAt(context.Background(), req, server.URL)
+	var failure *trackers.PreparationFailure
+	if !errors.As(err, &failure) || failure.Code() != "confirmation_required" {
+		t.Fatalf("direct mismatch failure = %v", err)
+	}
+	if uploadCalls.Load() != 0 {
+		t.Fatalf("mismatched autofill submitted %d uploads", uploadCalls.Load())
+	}
+	if !logger.containsWarning("BTN autofill series mismatch decision=confirmation_required") ||
+		logger.containsWarning("Unexpected Show") || logger.containsWarning("Expected Show") {
+		t.Fatal("expected fixed mismatch warning without provider values")
+	}
+	req.Meta.Options.InteractionMode = api.InteractionModeUnattended
+	_, err = uploadAt(context.Background(), req, server.URL)
+	if !errors.As(err, &failure) || failure.Code() != trackers.PreparationFailureCodeSkipped {
+		t.Fatalf("unattended mismatch failure = %v", err)
+	}
+	if autofillCalls.Load() != 3 || uploadCalls.Load() != 0 ||
+		!logger.containsWarning("BTN autofill series mismatch decision=skip") ||
+		!logger.containsInfo("reason=tvdb_autofill_failed") {
+		t.Fatalf("unattended autofills=%d uploads=%d", autofillCalls.Load(), uploadCalls.Load())
+	}
+}
+
+func TestBTNPreparedUploadRetriesMismatchWithReleaseNameAutofill(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	var autofillCalls atomic.Int32
+	var uploadCalls atomic.Int32
+	var formsMu sync.Mutex
+	forms := make([]url.Values, 0, 2)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/upload.php":
+			_, _ = io.WriteString(w, `<form action="/upload.php"><input name="autofill"></form>`)
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php" && strings.HasPrefix(r.Header.Get("Content-Type"), "application/x-www-form-urlencoded"):
+			if err := r.ParseForm(); err != nil {
+				http.Error(w, "bad form", http.StatusBadRequest)
+				return
+			}
+			formsMu.Lock()
+			forms = append(forms, maps.Clone(r.PostForm))
+			formsMu.Unlock()
+			artist := "Unexpected Show"
+			if autofillCalls.Add(1) == 2 {
+				artist = "Expected Show"
+			}
+			writeBTNTestAutofillResponse(w, artist)
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php":
+			uploadCalls.Add(1)
+			w.Header().Set("Location", "/torrents.php?id=123&torrentid=456")
+			w.WriteHeader(http.StatusFound)
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("action") == "download":
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		case r.URL.Path == "/torrents.php":
+			_, _ = io.WriteString(w, "ok")
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	logger := &captureBTNLogger{}
+	req := newBTNDryRunTestRequest(t, dbPath)
+	req.Logger = logger
+	req.Meta.MediaInfoTextPath = writeBTNTestMediaInfo(t, filepath.Dir(req.Meta.SourcePath), "General\nFormat: Matroska")
+	req.Meta.Identity.TVDBID = 12345
+	req.Meta.ProviderMetadata.TVDB = &api.TVDBMetadata{
+		TVDBID:           12345,
+		NameEnglish:      "Expected Show",
+		EpisodeSeason:    1,
+		EpisodeNumber:    1,
+		OriginalLanguage: "en",
+	}
+	plan := prepareBTNTestUploadPlan(t, req, server.URL)
+	initial := plan.DryRun()
+	if len(initial.RequiredActions) != 1 || initial.RequiredActions[0].Kind != api.RequiredActionResolveTrackerPreparation ||
+		initial.RequiredActions[0].Prompt != `BTN autofill returned series "Unexpected Show", but upbrr tvdb is a different series "Expected Show". Continue uploading this result to BTN?` {
+		t.Fatalf("initial required action = %#v", initial.RequiredActions)
+	}
+	resolved, err := plan.ResolveAction(context.Background(), api.RequiredActionResolveTrackerPreparation, false)
+	if err != nil {
+		t.Fatalf("resolve mismatch: %v", err)
+	}
+	if len(resolved.DryRun().RequiredActions) != 0 {
+		t.Fatalf("fallback required actions = %#v", resolved.DryRun().RequiredActions)
+	}
+	formsMu.Lock()
+	gotForms := append([]url.Values(nil), forms...)
+	formsMu.Unlock()
+	if len(gotForms) != 2 || gotForms[0].Get("scene_yesno") != "No" || gotForms[0].Get("auto_series") != "12345" ||
+		gotForms[1].Get("scene_yesno") != "Yes" || gotForms[1].Get("autofill") != initial.ReleaseName || gotForms[1].Get("auto_series") != "" {
+		t.Fatalf("autofill forms = %#v", gotForms)
+	}
+	if !logger.containsInfo("BTN trying release-name scene autofill") {
+		t.Fatal("missing release-name autofill info log")
+	}
+	summary, err := resolved.Submit(context.Background())
+	if err != nil || summary.Uploaded != 1 || uploadCalls.Load() != 1 {
+		t.Fatalf("fallback submit summary=%#v uploads=%d err=%v", summary, uploadCalls.Load(), err)
+	}
+}
+
+func TestBTNPreparedUploadPromptsWhenReleaseNameAutofillAfterExplicitFailureMismatches(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(context.Background(), dbPath, "BTN", map[string]string{"session": "imported"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	var autofillCalls atomic.Int32
+	var uploadCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/upload.php":
+			_, _ = io.WriteString(w, `<form action="/upload.php"><input name="autofill"></form>`)
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php" && strings.HasPrefix(r.Header.Get("Content-Type"), "application/x-www-form-urlencoded"):
+			if autofillCalls.Add(1) == 1 {
+				_, _ = io.WriteString(w, `<input name="artist" value="Autofill Fail"><input name="title" value="Autofill Fail">`)
+				return
+			}
+			writeBTNTestAutofillResponse(w, "Unexpected Show")
+		case r.Method == http.MethodPost && r.URL.Path == "/upload.php":
+			uploadCalls.Add(1)
+			http.Error(w, "unexpected upload", http.StatusInternalServerError)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	logger := &captureBTNLogger{}
+	req := newBTNDryRunTestRequest(t, dbPath)
+	req.Logger = logger
+	req.Meta.MediaInfoTextPath = writeBTNTestMediaInfo(t, filepath.Dir(req.Meta.SourcePath), "General\nFormat: Matroska")
+	req.Meta.Identity.TVDBID = 12345
+	req.Meta.ProviderMetadata.TVDB = &api.TVDBMetadata{
+		TVDBID:           12345,
+		NameEnglish:      "Expected Show",
+		EpisodeSeason:    1,
+		EpisodeNumber:    1,
+		OriginalLanguage: "en",
+	}
+	plan := prepareBTNTestUploadPlan(t, req, server.URL)
+	actions := plan.DryRun().RequiredActions
+	if len(actions) != 1 || !strings.Contains(actions[0].Prompt, `BTN release-name autofill also returned series "Unexpected Show"`) ||
+		!strings.Contains(actions[0].Prompt, `upbrr tvdb is a different series "Expected Show"`) || len(actions[0].Options) != 2 || actions[0].Options[1].Label != "Skip BTN" {
+		t.Fatalf("fallback required action = %#v", actions)
+	}
+	_, err := plan.ResolveAction(context.Background(), api.RequiredActionResolveTrackerPreparation, false)
+	var failure *trackers.PreparationFailure
+	if !errors.As(err, &failure) || failure.Code() != trackers.PreparationFailureCodeSkipped {
+		t.Fatalf("decline error = %v", err)
+	}
+	if autofillCalls.Load() != 2 || uploadCalls.Load() != 0 || !logger.containsInfo("reason=tvdb_autofill_failed") {
+		t.Fatalf("autofills=%d uploads=%d info=%v", autofillCalls.Load(), uploadCalls.Load(), logger.containsInfo("reason=tvdb_autofill_failed"))
+	}
+}
+
+func TestBTNUploadBlocksMissingCanonicalTVSeasonEpisode(t *testing.T) {
+	t.Parallel()
+
+	var requestCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCalls.Add(1)
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	t.Cleanup(server.Close)
+
+	logger := &captureBTNLogger{}
+	req := newBTNDryRunTestRequest(t, newBTNAuthDB(t))
+	req.TrackerConfig.Username = "user"
+	req.TrackerConfig.Password = "pass"
+	req.Logger = logger
+	req.Meta.SeasonInt = 0
+	req.Meta.EpisodeInt = 0
+	req.Meta.Release.Season = 1
+	req.Meta.Release.Episode = 1
+
+	_, err := uploadAt(context.Background(), req, server.URL)
+	if err == nil {
+		t.Fatal("expected canonical TV metadata gap to block upload")
+	}
+	want := "canonical TV season/episode missing; BTN upload requires TVDB or metadata season/episode ints and ignores parsed season/episode fallback; refresh metadata or correct canonical season/episode before upload"
+	if !strings.Contains(err.Error(), want) {
+		t.Fatalf("expected canonical metadata error, got %v", err)
+	}
+	if !logger.containsWarning(want) {
+		t.Fatal("expected canonical metadata warning")
+	}
+	if requestCalls.Load() != 0 {
+		t.Fatalf("expected upload to fail before remote calls, got %d calls", requestCalls.Load())
+	}
+}
+
+func TestResolveSessionForTrackerAuthLoginStorageErrorPreventsLogin(t *testing.T) {
+	t.Parallel()
+
+	var loginCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/login.php":
+			loginCalls.Add(1)
+			_, _ = w.Write([]byte(`<form><input name="codenumber" /></form><p>2FA required</p>`))
+		case "/upload.php":
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	dbPath := filepath.Join(t.TempDir(), "upbrr.db")
+	if err := os.WriteFile(dbPath, []byte("not a sqlite database"), 0o600); err != nil {
+		t.Fatalf("write corrupt db: %v", err)
+	}
+
+	err := resolveSessionForTrackerAuthLoginAt(context.Background(), config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, api.TrackerAuthLoginRequest{}, server.URL)
+	if err == nil {
+		t.Fatal("expected stored cookie load error")
+	}
+	if errors.Is(err, errBTNCookiesMissing) || strings.Contains(err.Error(), "2FA required") {
+		t.Fatalf("expected storage error, got %v", err)
+	}
+	if loginCalls.Load() != 0 {
+		t.Fatalf("expected storage error to prevent login or 2FA, got %d login calls", loginCalls.Load())
+	}
+}
+
+func TestResolveSessionForTrackerAuthLoginDecryptErrorPreventsPersistence(t *testing.T) {
+	t.Parallel()
+
+	var loginCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/login.php":
+			loginCalls.Add(1)
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			_, _ = w.Write([]byte("ok"))
+		case "/upload.php":
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	ctx := context.Background()
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(ctx, dbPath, "BTN", map[string]string{"session": "old"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	corruptBTNCookieAuthTag(t, dbPath)
+
+	err := resolveSessionForTrackerAuthLoginAt(ctx, config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, api.TrackerAuthLoginRequest{}, server.URL)
+	if err == nil {
+		t.Fatal("expected stored cookie decrypt error")
+	}
+	if errors.Is(err, errBTNCookiesMissing) || strings.Contains(err.Error(), "cookie invalid/missing") {
+		t.Fatalf("expected decrypt storage error, got %v", err)
+	}
+	if loginCalls.Load() != 0 {
+		t.Fatalf("expected decrypt error to prevent login, got %d login calls", loginCalls.Load())
+	}
+	if _, loadErr := loadBTNCookies(ctx, dbPath); loadErr == nil || !strings.Contains(loadErr.Error(), "decryption failed") {
+		t.Fatalf("expected original corrupt cookie to remain unreadable, got %v", loadErr)
+	}
+}
+
+func TestBTNPrepareUploadDataBoundsExplicitAutofillFailureFallback(t *testing.T) {
+	t.Parallel()
+
+	baseReq := trackers.PreparationInput{Meta: api.UploadSubject{
+		Identity:    api.ExternalIdentity{Category: "TV"},
+		ReleaseName: "Show.S01E01",
+		Type:        "WEBDL",
+		Source:      "WEB-DL",
+		Container:   "MKV",
+		VideoEncode: "x265",
+		VideoCodec:  "HEVC",
+		SeasonInt:   1,
+		EpisodeInt:  1,
+		Release:     api.ReleaseInfo{Resolution: "1080p"},
+	}}
+	for _, tt := range []struct {
+		name          string
+		tvdbID        int
+		wantAutofills int32
+	}{
+		{name: "release name already selected", wantAutofills: 1},
+		{
+			name:          "TVDB lookup retries release name once",
+			tvdbID:        12345,
+			wantAutofills: 2,
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var autofillCalls atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				autofillCalls.Add(1)
+				_, _ = io.WriteString(w, `<input name="artist" value="Autofill Fail"><input name="title" value="Autofill Fail">`)
+			}))
+			t.Cleanup(server.Close)
+
+			req := baseReq
+			req.Meta.Identity.TVDBID = tt.tvdbID
+			_, err := prepareUploadData(context.Background(), req, uploadContext{
+				baseURL:   server.URL,
+				uploadURL: server.URL + "/upload.php",
+				client:    server.Client(),
+			})
+			if !errors.Is(err, errBTNExplicitAutofillFailure) {
+				t.Fatalf("expected explicit autofill failure, got %v", err)
+			}
+			if autofillCalls.Load() != tt.wantAutofills {
+				t.Fatalf("autofill calls=%d, want %d", autofillCalls.Load(), tt.wantAutofills)
+			}
+		})
+	}
+}
+
+func TestBTNPrepareUploadDataDoesNotRetryOtherAutofillFailures(t *testing.T) {
+	t.Parallel()
+
+	baseReq := trackers.PreparationInput{Meta: api.UploadSubject{
+		Identity:    api.ExternalIdentity{Category: "TV", TVDBID: 12345},
+		ReleaseName: "Show.S01E01",
+		Type:        "WEBDL",
+		Source:      "WEB-DL",
+		Container:   "MKV",
+		VideoEncode: "x265",
+		VideoCodec:  "HEVC",
+		SeasonInt:   1,
+		EpisodeInt:  1,
+		Release:     api.ReleaseInfo{Resolution: "1080p"},
+	}}
+	for _, tt := range []struct {
+		name       string
+		statusCode int
+		body       string
+	}{
+		{
+			name:       "missing required HTML field",
+			statusCode: http.StatusOK,
+			body:       `<input name="title" value="Episode One">`,
+		},
+		{
+			name:       "HTTP failure",
+			statusCode: http.StatusBadGateway,
+			body:       "upstream unavailable",
+		},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			var autofillCalls atomic.Int32
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				autofillCalls.Add(1)
+				w.WriteHeader(tt.statusCode)
+				_, _ = io.WriteString(w, tt.body)
+			}))
+			t.Cleanup(server.Close)
+
+			_, err := prepareUploadData(context.Background(), baseReq, uploadContext{
+				baseURL:   server.URL,
+				uploadURL: server.URL + "/upload.php",
+				client:    server.Client(),
+			})
+			if err == nil || errors.Is(err, errBTNExplicitAutofillFailure) {
+				t.Fatalf("expected non-explicit autofill error, got %v", err)
+			}
+			if autofillCalls.Load() != 1 {
+				t.Fatalf("autofill calls=%d, want 1", autofillCalls.Load())
+			}
+		})
+	}
+
+	var transportCalls atomic.Int32
+	_, err := prepareUploadData(context.Background(), baseReq, uploadContext{
+		baseURL:   "https://btn.invalid",
+		uploadURL: "https://btn.invalid/upload.php",
+		client: &http.Client{Transport: btnRoundTripFunc(func(*http.Request) (*http.Response, error) {
+			transportCalls.Add(1)
+			return nil, errors.New("transport unavailable")
+		})},
+	})
+	if err == nil || errors.Is(err, errBTNExplicitAutofillFailure) || transportCalls.Load() != 1 {
+		t.Fatalf("transport error=%v calls=%d", err, transportCalls.Load())
+	}
+}
+
+func TestBTNPrepareUploadDataUsesEpisodeIntForTVDBAutoTitle(t *testing.T) {
+	t.Parallel()
+
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	var formMu sync.Mutex
+	autofillForm := map[string]string{}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/upload.php":
+			if err := r.ParseForm(); err != nil {
+				handlerErrs.Errorf("parse autofill form: %v", err)
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			formMu.Lock()
+			autofillForm["scene_yesno"] = r.PostForm.Get("scene_yesno")
+			autofillForm["auto_series"] = r.PostForm.Get("auto_series")
+			autofillForm["auto_title"] = r.PostForm.Get("auto_title")
+			formMu.Unlock()
+			_, _ = io.WriteString(w, `
+				<input name="artist" value="Autofill Show">
+				<input name="title" value="Autofill Episode">
+				<input name="seriesid" value="99999">
+				<input name="year" value="1999">
+				<input name="tags" value="autofill">
+				<input name="image" value="https://img.example/autofill.jpg">
+				<textarea name="album_desc">Autofill overview</textarea>
+				<select name="bitrate"><option selected value="H.264">H.264</option></select>
+				<select name="format"><option selected value="MP4">MP4</option></select>
+				<select name="media"><option selected value="HDTV">HDTV</option></select>
+				<select name="resolution"><option selected value="2160p">2160p</option></select>
+			`)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	uploadCtx := uploadContext{
+		baseURL:   server.URL,
+		uploadURL: server.URL + "/upload.php",
+		client:    server.Client(),
+	}
+	logger := &captureBTNLogger{}
+	req := trackers.PreparationInput{
+		Logger: logger,
+		Meta: api.UploadSubject{
+			ReleaseName:         "Example.Show.S02E07.1080p.WEB-DL.x265-GRP",
+			Type:                "WEBDL",
+			Source:              "WEB-DL",
+			Container:           "MKV",
+			VideoEncode:         "x265",
+			VideoCodec:          "HEVC",
+			SeasonInt:           2,
+			EpisodeInt:          7,
+			EpisodeTitle:        "Episode Seven",
+			EpisodeOverview:     "Overview",
+			DescriptionOverride: "Description",
+			Identity:            api.ExternalIdentity{Category: "TV", TVDBID: 12345},
+			ProviderMetadata: api.SourceScopedMetadata{
+				TVDB: &api.TVDBMetadata{
+					TVDBID:                 12345,
+					Name:                   "Native Show",
+					NameEnglish:            "English Show",
+					Year:                   2026,
+					Poster:                 "https://img.example/tvdb.jpg",
+					Genres:                 "drama mystery",
+					OriginalLanguage:       "jpn",
+					EpisodeSeason:          4,
+					EpisodeNumber:          12,
+					EpisodeName:            "Native Episode",
+					EpisodeNameEnglish:     "English Episode",
+					EpisodeOverview:        "Native overview",
+					EpisodeOverviewEnglish: "English overview",
+					EpisodeAired:           "2026-02-03",
+				},
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     9,
+				Episode:    9,
+			},
+			Tag: "GRP",
+		},
+	}
+
+	payload, err := prepareUploadData(context.Background(), req, uploadCtx)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("prepareUploadData: %v", err)
+	}
+	if payload["type"] != "Episode" {
+		t.Fatalf("expected Episode upload type, got %q", payload["type"])
+	}
+	if payload["seriesid"] != "99999" {
+		t.Fatalf("expected BTN autofill series id in payload, got %q", payload["seriesid"])
+	}
+	if payload["artist"] != "Autofill Show" {
+		t.Fatalf("expected BTN autofill series title, got %q", payload["artist"])
+	}
+	if payload["title"] != "Autofill Episode" {
+		t.Fatalf("expected BTN autofill episode title, got %q", payload["title"])
+	}
+	if payload["year"] != "1999" {
+		t.Fatalf("expected BTN autofill year, got %q", payload["year"])
+	}
+	if payload["tags"] != "autofill" {
+		t.Fatalf("expected BTN autofill tags, got %q", payload["tags"])
+	}
+	if payload["image"] != "https://img.example/autofill.jpg" {
+		t.Fatalf("expected BTN autofill image, got %q", payload["image"])
+	}
+	if payload["format"] != "MKV" {
+		t.Fatalf("expected metadata format, got %q", payload["format"])
+	}
+	if payload["bitrate"] != "H.265" {
+		t.Fatalf("expected metadata bitrate, got %q", payload["bitrate"])
+	}
+	if payload["media"] != "WEB-DL" {
+		t.Fatalf("expected metadata media, got %q", payload["media"])
+	}
+	if payload["resolution"] != "1080p" {
+		t.Fatalf("expected metadata resolution, got %q", payload["resolution"])
+	}
+	if !logger.containsInfo(`BTN autofill format mismatch metadata_format="MKV" autofill_format="MP4" decision=metadata`) {
+		t.Fatal("expected format mismatch info log")
+	}
+	if !logger.containsInfo(`BTN autofill bitrate mismatch metadata_bitrate="H.265" autofill_bitrate="H.264" decision=metadata`) {
+		t.Fatal("expected bitrate mismatch info log")
+	}
+	if !logger.containsInfo(`BTN autofill media mismatch metadata_media="WEB-DL" autofill_media="HDTV" decision=metadata`) {
+		t.Fatal("expected media mismatch info log")
+	}
+	if !logger.containsInfo(`BTN autofill resolution mismatch metadata_resolution="1080p" autofill_resolution="2160p" decision=metadata`) {
+		t.Fatal("expected resolution mismatch info log")
+	}
+	if payload["album_desc"] != "Autofill overview" {
+		t.Fatalf("expected BTN autofill album_desc to win, got %q", payload["album_desc"])
+	}
+	if desc, ok := payload["release_desc"]; !ok || desc != "" {
+		t.Fatalf("expected empty release_desc without MediaInfo, got value=%q present=%t", desc, ok)
+	}
+
+	formMu.Lock()
+	gotAutoTitle := autofillForm["auto_title"]
+	gotAutoSeries := autofillForm["auto_series"]
+	gotScene := autofillForm["scene_yesno"]
+	formMu.Unlock()
+	if gotScene != "No" {
+		t.Fatalf("expected TVDB autofill scene flag, got %q", gotScene)
+	}
+	if gotAutoSeries != "12345" {
+		t.Fatalf("expected TVDB series id, got %q", gotAutoSeries)
+	}
+	if gotAutoTitle != "S04E12" {
+		t.Fatalf("expected auto_title S04E12, got %q", gotAutoTitle)
+	}
+}
+
+func TestBTNAutofillArtistActionMatchesTVDBNamesExactly(t *testing.T) {
+	t.Parallel()
+
+	meta := api.UploadSubject{
+		Identity: api.ExternalIdentity{TVDBID: 12345},
+		ProviderMetadata: api.SourceScopedMetadata{TVDB: &api.TVDBMetadata{
+			Name:        "Native Show",
+			NameEnglish: "English Show",
+			Aliases:     []string{"Alias Show"},
+		}},
+	}
+	for _, artist := range []string{"Native Show", "English Show", "Alias Show", " English Show "} {
+		if action := btnAutofillArtistAction(meta, artist, false); action != nil {
+			t.Fatalf("artist %q unexpectedly required confirmation: %#v", artist, action)
+		}
+	}
+	if action := btnAutofillArtistAction(meta, "english show", false); action == nil {
+		t.Fatal("case-mismatched artist did not require confirmation")
+	}
+}
+
+func TestBTNPrepareUploadDataUsesSeasonIntForTVDBSeasonPack(t *testing.T) {
+	t.Parallel()
+
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	var formMu sync.Mutex
+	autofillForm := map[string]string{}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/upload.php":
+			if err := r.ParseForm(); err != nil {
+				handlerErrs.Errorf("parse autofill form: %v", err)
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			formMu.Lock()
+			autofillForm["scene_yesno"] = r.PostForm.Get("scene_yesno")
+			autofillForm["auto_series"] = r.PostForm.Get("auto_series")
+			autofillForm["auto_season"] = r.PostForm.Get("auto_season")
+			formMu.Unlock()
+			_, _ = io.WriteString(w, `
+				<input name="artist" value="Example Show">
+				<input name="seriesid" value="12345">
+				<select name="format"><option selected value="MKV">MKV</option></select>
+				<select name="bitrate"><option selected value="H.265">H.265</option></select>
+				<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+			`)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	uploadCtx := uploadContext{
+		baseURL:   server.URL,
+		uploadURL: server.URL + "/upload.php",
+		client:    server.Client(),
+	}
+	req := trackers.PreparationInput{
+		Meta: api.UploadSubject{
+			ReleaseName:         "Example.Show.S03.1080p.WEB-DL.x265-GRP",
+			Type:                "WEBDL",
+			Source:              "WEB-DL",
+			Container:           "MKV",
+			VideoEncode:         "x265",
+			VideoCodec:          "HEVC",
+			SeasonInt:           3,
+			TVPack:              true,
+			DescriptionOverride: "Description",
+			Identity:            api.ExternalIdentity{Category: "TV", TVDBID: 12345},
+			ProviderMetadata: api.SourceScopedMetadata{
+				TVDB: &api.TVDBMetadata{
+					TVDBID:           12345,
+					OriginalLanguage: "en",
+					EpisodeSeason:    5,
+					Genres:           "Drama, Science-Fiction",
+					Poster:           "https://img.example/tvdb.jpg",
+				},
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     8,
+			},
+			Tag: "GRP",
+		},
+	}
+
+	payload, err := prepareUploadData(context.Background(), req, uploadCtx)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("prepareUploadData: %v", err)
+	}
+	if payload["type"] != "Season" {
+		t.Fatalf("expected Season upload type, got %q", payload["type"])
+	}
+	if payload["tags"] != "Drama, Science Fiction" {
+		t.Fatalf("expected TVDB genre tags, got %q", payload["tags"])
+	}
+	if payload["image"] != "https://img.example/tvdb.jpg" {
+		t.Fatalf("expected TVDB poster image, got %q", payload["image"])
+	}
+
+	formMu.Lock()
+	gotAutoSeason := autofillForm["auto_season"]
+	gotAutoSeries := autofillForm["auto_series"]
+	gotScene := autofillForm["scene_yesno"]
+	formMu.Unlock()
+	if gotScene != "No" {
+		t.Fatalf("expected TVDB autofill scene flag, got %q", gotScene)
+	}
+	if gotAutoSeries != "12345" {
+		t.Fatalf("expected TVDB series id, got %q", gotAutoSeries)
+	}
+	if gotAutoSeason != "S05" {
+		t.Fatalf("expected auto_season S05, got %q", gotAutoSeason)
+	}
+}
+
+func TestBTNPrepareUploadDataBlocksMissingCanonicalTVMetadataBeforeAutofill(t *testing.T) {
+	t.Parallel()
+
+	var requestCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requestCalls.Add(1)
+		w.WriteHeader(http.StatusInternalServerError)
+	}))
+	t.Cleanup(server.Close)
+
+	uploadCtx := uploadContext{
+		baseURL:   server.URL,
+		uploadURL: server.URL + "/upload.php",
+		client:    server.Client(),
+	}
+	req := trackers.PreparationInput{
+		Meta: api.UploadSubject{
+			ReleaseName: "Example.Show.S01E01.1080p.WEB-DL.x265-GRP",
+			Type:        "WEBDL",
+			Source:      "WEB-DL",
+			Container:   "MKV",
+			VideoEncode: "x265",
+			VideoCodec:  "HEVC",
+			Identity:    api.ExternalIdentity{Category: "TV"},
+			ProviderMetadata: api.SourceScopedMetadata{
+				TVDB: &api.TVDBMetadata{TVDBID: 12345, OriginalLanguage: "en"},
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     1,
+				Episode:    1,
+			},
+			Tag: "GRP",
+		},
+	}
+
+	_, err := prepareUploadData(context.Background(), req, uploadCtx)
+	if err == nil {
+		t.Fatal("expected canonical TV metadata error")
+	}
+	if !strings.Contains(err.Error(), "canonical TV season/episode missing") {
+		t.Fatalf("expected canonical metadata error, got %v", err)
+	}
+	if requestCalls.Load() != 0 {
+		t.Fatalf("expected metadata error before autofill HTTP call, got %d calls", requestCalls.Load())
+	}
+}
+
+func TestBTNUploadCredentialLoginDoesNotPersistUnvalidatedSession(t *testing.T) {
+	t.Parallel()
+
+	ctx := t.Context()
+	dbPath := newBTNAuthDB(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/login.php":
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			_, _ = w.Write([]byte("ok"))
+		case "/upload.php":
+			_, _ = w.Write([]byte(`<form action="/login.php"><input type="password" name="password" /></form>`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	_, err := ensureBTNUploadSession(ctx, config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, uploadContext{baseURL: server.URL})
+	resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+	if !ok || !resolution.Transient || resolution.ConfirmedInvalid {
+		t.Fatalf("expected transient session validation error, got %v", err)
+	}
+	if values, err := loadBTNCookies(ctx, dbPath); err == nil {
+		t.Fatalf("expected invalid login cookies not to persist, got %#v", values)
+	}
+}
+
+func TestBTNUploadSessionKeepsStoredCookiesOnRedirectFailure(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	if err := cookies.SaveTrackerCookieMap(t.Context(), dbPath, "BTN", map[string]string{"session": "stored"}); err != nil {
+		t.Fatalf("SaveTrackerCookieMap: %v", err)
+	}
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.Contains(r.Header.Get("Cookie"), "session=stored") {
+			http.Error(w, "missing stored session", http.StatusInternalServerError)
+			return
+		}
+		http.Redirect(w, r, "/synthetic-secret.php?token=synthetic-secret", http.StatusFound)
+	}))
+	t.Cleanup(server.Close)
+
+	_, err := ensureBTNUploadSession(t.Context(), config.TrackerConfig{}, dbPath, uploadContext{baseURL: server.URL})
+	resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+	if !ok || !resolution.Transient || resolution.ConfirmedInvalid {
+		t.Fatalf("expected transient session validation error, got %v", err)
+	}
+	if strings.Contains(err.Error(), "synthetic-secret") || strings.Contains(err.Error(), "token=") {
+		t.Fatalf("expected safe redirect diagnostic, got %q", err)
+	}
+	values, err := loadBTNCookies(t.Context(), dbPath)
+	if err != nil || values["session"] != "stored" {
+		t.Fatalf("expected stored cookies preserved, values=%#v err=%v", values, err)
+	}
+}
+
+func TestValidateBTNClientSessionRequiresUploadFormStructure(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		body    string
+		wantErr bool
+	}{
+		{
+			name:    "help page upload text rejected",
+			body:    `<html><h1>Upload help</h1><p>Use the upload page to submit releases.</p></html>`,
+			wantErr: true,
+		},
+		{
+			name:    "logged out upload help rejected",
+			body:    `<html><h1>Upload</h1><p>Please log in before using the upload page.</p></html>`,
+			wantErr: true,
+		},
+		{
+			name:    "transient success body rejected",
+			body:    `<html><body>ok</body></html>`,
+			wantErr: true,
+		},
+		{
+			name:    "real upload form accepted",
+			body:    `<form action="/upload.php"><input name="file_input" /></form>`,
+			wantErr: false,
+		},
+		{
+			name:    "autofill upload form accepted",
+			body:    `<form action="upload.php"><input name="autofill" /></form>`,
+			wantErr: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				_, _ = w.Write([]byte(tt.body))
+			}))
+			t.Cleanup(server.Close)
+
+			err := validateBTNClientSession(t.Context(), server.Client(), server.URL)
+			if tt.wantErr && err == nil {
+				t.Fatal("expected upload auth page validation error")
+			}
+			if tt.wantErr {
+				resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+				if !ok || !resolution.Transient || resolution.ConfirmedInvalid || errors.Is(err, errBTNSessionConfirmedInvalid) {
+					t.Fatalf("expected transient upload marker validation error, got %v", err)
+				}
+			}
+			if !tt.wantErr && err != nil {
+				t.Fatalf("validateBTNClientSession: %v", err)
+			}
+		})
+	}
+}
+
+func TestValidateBTNClientSessionReportsRedirectAndLayoutDiagnostics(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name                 string
+		handler              http.HandlerFunc
+		wantConfirmedInvalid bool
+		want                 []string
+		absent               []string
+	}{
+		{
+			name: "unauthorized remains confirmed invalid",
+			handler: func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(http.StatusUnauthorized)
+			},
+			wantConfirmedInvalid: true,
+			want:                 []string{"status=401", "/upload.php"},
+		},
+		{
+			name: "forbidden remains confirmed invalid",
+			handler: func(w http.ResponseWriter, _ *http.Request) {
+				w.WriteHeader(http.StatusForbidden)
+			},
+			wantConfirmedInvalid: true,
+			want:                 []string{"status=403", "/upload.php"},
+		},
+		{
+			name: "non-login redirect reports path and detail",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/upload.php":
+					http.Redirect(w, r, "/torrents.php?token=synthetic-secret", http.StatusFound)
+				case "/torrents.php":
+					w.WriteHeader(http.StatusServiceUnavailable)
+					_, _ = io.WriteString(w, `<div role="alert">Upload maintenance in progress</div>`)
+				default:
+					http.NotFound(w, r)
+				}
+			},
+			want:   []string{"status=503", "/torrents.php?token=[REDACTED]", "response_bytes=", "response_truncated=false", `response_detail="Upload maintenance in progress"`},
+			absent: []string{"synthetic-secret", "token=synthetic-secret"},
+		},
+		{
+			name: "login redirect remains confirmed invalid and reports path",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/upload.php":
+					http.Redirect(w, r, "/login.php?passkey=synthetic-secret", http.StatusFound)
+				case "/login.php":
+					_, _ = io.WriteString(w, `<form action="/login.php"><input name="password"></form>`)
+				default:
+					http.NotFound(w, r)
+				}
+			},
+			wantConfirmedInvalid: true,
+			want:                 []string{"status=200", "/login.php?passkey=[REDACTED]"},
+			absent:               []string{"synthetic-secret"},
+		},
+		{
+			name: "login-status redirect remains transient",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/upload.php":
+					http.Redirect(w, r, "/login-status.php", http.StatusFound)
+				case "/login-status.php":
+					_, _ = io.WriteString(w, `<form action="/login.php"><input name="password"></form>`)
+				default:
+					http.NotFound(w, r)
+				}
+			},
+			want: []string{"status=200", "/login-status.php", "page_state=logged_out_marker"},
+		},
+		{
+			name: "non-login redirect with logged-out page remains transient",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/upload.php":
+					http.Redirect(w, r, "/torrents.php", http.StatusFound)
+				case "/torrents.php":
+					_, _ = io.WriteString(w, `<div role="alert">Please log in before continuing</div>`)
+				default:
+					http.NotFound(w, r)
+				}
+			},
+			want: []string{"status=200", "/torrents.php", "page_state=logged_out_marker", `response_detail="Please log in before continuing"`},
+		},
+		{
+			name: "ordinary unknown redirect path is visible",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/upload.php":
+					http.Redirect(w, r, "/diagnostics.php", http.StatusFound)
+				case "/diagnostics.php":
+					_, _ = io.WriteString(w, `<div role="alert">Upload maintenance in progress</div>`)
+				default:
+					http.NotFound(w, r)
+				}
+			},
+			want: []string{"status=200", "/diagnostics.php", "response_bytes=", `response_detail="Upload maintenance in progress"`},
+		},
+		{
+			name: "unknown short redirect path is visible",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				switch r.URL.Path {
+				case "/upload.php":
+					http.Redirect(w, r, "/alice.php", http.StatusFound)
+				case "/alice.php":
+					_, _ = io.WriteString(w, `<div role="alert">Upload maintenance in progress</div>`)
+				default:
+					http.NotFound(w, r)
+				}
+			},
+			want: []string{"status=200", "/alice.php", "response_bytes=", `response_detail="Upload maintenance in progress"`},
+		},
+		{
+			name: "same upload path reports redacted layout detail",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				_, _ = io.WriteString(w, `<div role="alert">Upload form disabled: passkey=synthetic-secret</div>`)
+				_, _ = io.WriteString(w, strings.Repeat(" ", 1024*1024))
+			},
+			want:   []string{"page validation failed", "status=200", "response_bytes=1048577", "response_truncated=true", "page_state=upload_form_missing", `response_detail="response exceeded 1 MiB; Upload form disabled: passkey=[REDACTED]"`},
+			absent: []string{"synthetic-secret", "passkey=synthetic-secret"},
+		},
+		{
+			name: "same upload path shows redacted prose and truncation",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				_, _ = io.WriteString(w, `Account Jane Example token=synthetic-secret`)
+				_, _ = io.WriteString(w, strings.Repeat("x", 1024*1024))
+			},
+			want:   []string{"page validation failed", "status=200", "response_truncated=true", "page_state=upload_form_missing", "Account Jane Example", "token=[REDACTED]"},
+			absent: []string{"synthetic-secret", "token=synthetic-secret"},
+		},
+		{
+			name: "same upload path missing-location redirect remains transient",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				w.WriteHeader(http.StatusFound)
+			},
+			want: []string{"unexpected status", "status=302", "response_bytes=0", "response_truncated=false"},
+		},
+		{
+			name: "same upload path non-auth client error remains transient",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				w.WriteHeader(http.StatusTooManyRequests)
+			},
+			want: []string{"unexpected status", "status=429", "response_bytes=0", "response_truncated=false"},
+		},
+		{
+			name: "same upload path server error remains transient",
+			handler: func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path != "/upload.php" {
+					http.NotFound(w, r)
+					return
+				}
+				w.WriteHeader(http.StatusServiceUnavailable)
+			},
+			want: []string{"response unavailable", "status=503", "response_bytes=0", "response_truncated=false"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			server := httptest.NewServer(tt.handler)
+			t.Cleanup(server.Close)
+
+			err := validateBTNClientSession(t.Context(), server.Client(), server.URL)
+			if err == nil {
+				t.Fatal("expected upload auth validation error")
+			}
+			if tt.wantConfirmedInvalid != errors.Is(err, errBTNSessionConfirmedInvalid) {
+				t.Fatalf("confirmed-invalid classification=%t, want %t: %v", errors.Is(err, errBTNSessionConfirmedInvalid), tt.wantConfirmedInvalid, err)
+			}
+			resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+			if !ok {
+				t.Fatalf("expected tracker-owned resolution error, got %v", err)
+			}
+			if tt.wantConfirmedInvalid {
+				if !resolution.ConfirmedInvalid || resolution.Transient || resolution.PublicDetail == "" {
+					t.Fatalf("expected confirmed-invalid public tracker diagnostic, got %#v", resolution)
+				}
+			} else if !resolution.Transient || resolution.ConfirmedInvalid || resolution.PublicDetail == "" {
+				t.Fatalf("expected transient public tracker diagnostic, got %#v", resolution)
+			}
+			for _, want := range tt.want {
+				if !strings.Contains(resolution.PublicDetail, want) {
+					t.Fatalf("public detail=%q, want %q", resolution.PublicDetail, want)
+				}
+			}
+			for _, absent := range tt.absent {
+				if strings.Contains(resolution.PublicDetail, absent) {
+					t.Fatalf("public detail=%q, must not contain %q", resolution.PublicDetail, absent)
+				}
+			}
+		})
+	}
+}
+
+func TestValidateBTNClientSessionRedactsSensitiveURLAndResponseDetails(t *testing.T) {
+	t.Parallel()
+
+	var serverURL string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/upload.php":
+			redirectURL := strings.Replace(serverURL, "http://", "http://synthetic-user:synthetic-password@", 1) +
+				"/%61nnounce/%30%31%32%33%34%35%36%37%38%39abcdef?pass%6bey=synthetic-passkey&sessionId=synthetic-session&token=synthetic-token"
+			http.Redirect(w, r, redirectURL, http.StatusFound)
+		case "/announce/0123456789abcdef":
+			_, _ = io.WriteString(w, `<div role="alert">Maintenance for https://synthetic-user:synthetic-password@remote.invalid/%61nnounce/%30%31%32%33%34%35%36%37%38%39abcdef?pass%6bey=synthetic-passkey&amp;sessionId=synthetic-session&amp;token=synthetic-token session-id="synthetic-session-hyphen"</div>`)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	serverURL = server.URL
+	t.Cleanup(server.Close)
+
+	err := validateBTNClientSession(t.Context(), server.Client(), server.URL)
+	resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+	if !ok || !resolution.Transient || resolution.ConfirmedInvalid {
+		t.Fatalf("expected transient tracker-owned diagnostic, got %v", err)
+	}
+	for _, want := range []string{
+		"final_url=http://[REDACTED]@",
+		"/announce/[REDACTED]?passkey=[REDACTED]&sessionId=[REDACTED]&token=[REDACTED]",
+		"response_detail=\"Maintenance for https://[REDACTED]@remote.invalid/announce/[REDACTED]?passkey=[REDACTED]&sessionId=[REDACTED]&token=[REDACTED] session-id=\\\"[REDACTED]\\\"\"",
+	} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("error=%q, want %q", err, want)
+		}
+	}
+	for _, secret := range []string{"synthetic-user", "synthetic-password", "0123456789abcdef", "synthetic-passkey", "synthetic-session", "synthetic-session-hyphen", "synthetic-token"} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("error=%q, must not contain %q", err, secret)
+		}
+	}
+}
+
+func TestValidateBTNClientSessionKeepsRedirectFailureSafeAndTransient(t *testing.T) {
+	t.Parallel()
+
+	redirectCause := errors.New("redirect to https://tracker.invalid/synthetic-secret.php?token=synthetic-secret username password not configured")
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/upload.php" {
+			http.NotFound(w, r)
+			return
+		}
+		http.Redirect(w, r, "/synthetic-secret.php?token=synthetic-secret", http.StatusFound)
+	}))
+	t.Cleanup(server.Close)
+	client := server.Client()
+	client.CheckRedirect = func(*http.Request, []*http.Request) error {
+		return redirectCause
+	}
+
+	err := validateBTNClientSession(t.Context(), client, server.URL)
+	if !errors.Is(err, redirectCause) {
+		t.Fatalf("expected redirect cause preserved, got %v", err)
+	}
+	resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+	if !ok || !resolution.Transient || resolution.ConfirmedInvalid {
+		t.Fatalf("expected transient tracker-owned redirect error, got %v", err)
+	}
+	for _, secret := range []string{"synthetic-secret", "tracker.invalid", "username", "password", "not configured"} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("redirect failure leaked %q in %q", secret, err)
+		}
+	}
+}
+
+func TestValidateBTNClientSessionKeepsBodyReadFailureSafeAndTransient(t *testing.T) {
+	t.Parallel()
+
+	readCause := errors.New("read https://tracker.invalid/upload.php?token=synthetic-secret username=synthetic-user failed")
+	client := &http.Client{Transport: btnRoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Body:       io.NopCloser(btnErrorReader{err: readCause}),
+			Request:    req,
+		}, nil
+	})}
+
+	err := validateBTNClientSession(t.Context(), client, "https://tracker.invalid")
+	if !errors.Is(err, readCause) {
+		t.Fatalf("expected read cause preserved, got %v", err)
+	}
+	resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+	if !ok || !resolution.Transient || resolution.ConfirmedInvalid {
+		t.Fatalf("expected transient tracker-owned read error, got %v", err)
+	}
+	for _, secret := range []string{"tracker.invalid", "synthetic-secret", "synthetic-user", "username", "token="} {
+		if strings.Contains(err.Error(), secret) {
+			t.Fatalf("read failure leaked %q in %q", secret, err)
+		}
+	}
+}
+
+func TestValidateBTNClientSessionClassifiesInvalidBeforeBodyRead(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name      string
+		status    int
+		finalPath string
+	}{
+		{
+			name:      "unauthorized",
+			status:    http.StatusUnauthorized,
+			finalPath: btnUploadPath,
+		},
+		{
+			name:      "forbidden",
+			status:    http.StatusForbidden,
+			finalPath: btnUploadPath,
+		},
+		{
+			name:      "login redirect",
+			status:    http.StatusOK,
+			finalPath: btnLoginPath,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			readCause := errors.New("response body read failed")
+			client := &http.Client{Transport: btnRoundTripperFunc(func(req *http.Request) (*http.Response, error) {
+				responseRequest := req.Clone(req.Context())
+				responseRequest.URL = &url.URL{
+					Scheme: "https",
+					Host:   "tracker.invalid",
+					Path:   tt.finalPath,
+				}
+				return &http.Response{
+					StatusCode: tt.status,
+					Body:       io.NopCloser(btnErrorReader{err: readCause}),
+					Request:    responseRequest,
+				}, nil
+			})}
+
+			err := validateBTNClientSession(t.Context(), client, "https://tracker.invalid")
+			resolution, ok := errors.AsType[*trackers.AuthResolutionError](err)
+			if !ok || !resolution.ConfirmedInvalid || resolution.Transient || !errors.Is(err, errBTNSessionConfirmedInvalid) {
+				t.Fatalf("expected confirmed-invalid tracker-owned error, got %v", err)
+			}
+			if errors.Is(err, readCause) {
+				t.Fatal("decisive invalid-auth signal must take precedence over body read failure")
+			}
+		})
+	}
+}
+
+type btnRoundTripperFunc func(*http.Request) (*http.Response, error)
+
+func (fn btnRoundTripperFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return fn(req)
+}
+
+type btnErrorReader struct {
+	err error
+}
+
+func (r btnErrorReader) Read([]byte) (int, error) {
+	return 0, r.err
+}
+
+func TestExtractAutofillFieldsSelectsOptionsOrderIndependently(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name string
+		body string
+		want string
+	}{
+		{
+			name: "selected before value",
+			body: `<select name="media">
+				<option value="HDTV">HDTV</option>
+				<option selected value="WEB-DL">WEB-DL</option>
+			</select>`,
+			want: "WEB-DL",
+		},
+		{
+			name: "value before selected",
+			body: `<select name="media">
+				<option value="HDTV">HDTV</option>
+				<option value="WEB-DL" selected>WEB-DL</option>
+			</select>`,
+			want: "WEB-DL",
+		},
+		{
+			name: "first value fallback",
+			body: `<select name="media">
+				<option value="HDTV">HDTV</option>
+				<option value="WEB-DL">WEB-DL</option>
+			</select>`,
+			want: "HDTV",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			fields := extractAutofillFields(tt.body)
+			if got := fields["media"]; got != tt.want {
+				t.Fatalf("media option = %q, want %q", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestReadBTNTorrentResponseBodySizeLimit(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		size    int
+		wantErr bool
+	}{
+		{
+			name: "limit size accepted",
+			size: btnTorrentMaxBytes,
+		},
+		{
+			name:    "over limit rejected",
+			size:    btnTorrentMaxBytes + 1,
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			body := bytes.Repeat([]byte("d"), tt.size)
+			got, err := readBTNTorrentResponseBody(bytes.NewReader(body))
+			if tt.wantErr {
+				if err == nil {
+					t.Fatal("expected oversized torrent response error")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("readBTNTorrentResponseBody: %v", err)
+			}
+			if len(got) != tt.size {
+				t.Fatalf("torrent response length = %d, want %d", len(got), tt.size)
+			}
+		})
+	}
+}
+
+func TestResolveSessionForTrackerAuthLoginPersistsCookies(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	dbPath := newBTNAuthDB(t)
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/login.php":
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			_, _ = w.Write([]byte("ok"))
+		case "/upload.php":
+			if got := r.Header.Get("Cookie"); !strings.Contains(got, "session=new") {
+				handlerErrs.Errorf("expected refreshed cookie on validation")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	err := resolveSessionForTrackerAuthLoginAt(ctx, config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, api.TrackerAuthLoginRequest{}, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("ResolveSessionForTrackerAuthLogin: %v", err)
+	}
+	values, err := loadBTNCookies(ctx, dbPath)
+	if err != nil {
+		t.Fatalf("loadBTNCookies: %v", err)
+	}
+	if values["session"] != "new" {
+		t.Fatalf("expected persisted BTN cookies, got %#v", values)
+	}
+}
+
+func TestResolveSessionForTrackerAuthLoginIgnoresIncidentalTwoFactorText(t *testing.T) {
+	t.Parallel()
+
+	ctx := context.Background()
+	dbPath := newBTNAuthDB(t)
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/login.php":
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			_, _ = w.Write([]byte(`<html><p>Keep your two-factor recovery codes safe.</p></html>`))
+		case "/upload.php":
+			if got := r.Header.Get("Cookie"); !strings.Contains(got, "session=new") {
+				handlerErrs.Errorf("expected refreshed cookie on validation")
+				http.Error(w, "handler assertion failed", http.StatusInternalServerError)
+				return
+			}
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	err := resolveSessionForTrackerAuthLoginAt(ctx, config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, api.TrackerAuthLoginRequest{}, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("ResolveSessionForTrackerAuthLogin: %v", err)
+	}
+	values, err := loadBTNCookies(ctx, dbPath)
+	if err != nil {
+		t.Fatalf("loadBTNCookies: %v", err)
+	}
+	if values["session"] != "new" {
+		t.Fatalf("expected persisted BTN cookies, got %#v", values)
+	}
+}
+
+func TestResolveSessionForTrackerAuthLoginRequiresManual2FA(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/login.php" {
+			http.NotFound(w, r)
+			return
+		}
+		_, _ = w.Write([]byte(`<form><input name="codenumber" /></form><p>2FA required</p>`))
+	}))
+	t.Cleanup(server.Close)
+
+	err := resolveSessionForTrackerAuthLoginAt(context.Background(), config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, api.TrackerAuthLoginRequest{}, server.URL)
+	if err == nil || !strings.Contains(err.Error(), "2FA required") {
+		t.Fatalf("expected 2FA required error, got %v", err)
+	}
+}
+
+func TestResolveSessionForTrackerAuthLoginMarksSubmitted2FARejected(t *testing.T) {
+	t.Parallel()
+
+	dbPath := newBTNAuthDB(t)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/login.php" {
+			http.NotFound(w, r)
+			return
+		}
+		_, _ = w.Write([]byte(`<p>invalid code</p>`))
+	}))
+	t.Cleanup(server.Close)
+
+	err := resolveSessionForTrackerAuthLoginAt(context.Background(), config.TrackerConfig{
+		Username: "user",
+		Password: "pass",
+	}, dbPath, api.TrackerAuthLoginRequest{Code: "000000"}, server.URL)
+	if !errors.Is(err, ErrSubmitted2FARejected) {
+		t.Fatalf("expected submitted 2FA rejection marker, got %v", err)
+	}
+}
+
+func TestBTNUploadPreservesRemoteIdentityWhenRegisteredTorrentDownloadFails(t *testing.T) {
+	t.Parallel()
+
+	var apiSearchCalls atomic.Int32
+	var apiDownloadCalls atomic.Int32
+	var apiDownloadID atomic.Value
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/login.php" && r.Method == http.MethodPost:
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte("ok"))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodGet:
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodPost:
+			contentType := r.Header.Get("Content-Type")
+			if strings.HasPrefix(contentType, "application/x-www-form-urlencoded") {
+				_, _ = w.Write([]byte(`
+					<input name="artist" value="Example Show" />
+					<input name="title" value="Episode One" />
+					<input name="seriesid" value="999" />
+					<textarea name="album_desc">Episode overview: TBA</textarea>
+					<select name="format"><option selected value="MKV">MKV</option></select>
+					<select name="bitrate"><option selected value="H.265">H.265</option></select>
+					<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+					<select name="resolution"><option selected value="1080p">1080p</option></select>
+				`))
+				return
+			}
+			w.Header().Set("Location", "/torrents.php?id=123&torrentid=456")
+			w.WriteHeader(http.StatusFound)
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("action") == "download":
+			// Force fallback: looks like HTML page, not bencoded torrent payload.
+			_, _ = w.Write([]byte("<html>not a torrent</html>"))
+		case r.URL.Path == "/rpc" && r.Method == http.MethodPost:
+			var rpc struct {
+				Method string                     `json:"method"`
+				Params map[string]json.RawMessage `json:"params"`
+			}
+			_ = json.NewDecoder(r.Body).Decode(&rpc)
+			switch rpc.Method {
+			case "getTorrents":
+				apiSearchCalls.Add(1)
+				_, _ = w.Write([]byte(`{"result":{"torrents":{"779":{"GroupID":"123","ReleaseName":"Example.Show.S01E01.1080p.WEB-DL.H.265-GRP"},"778":{"GroupID":"123","ReleaseName":"Example.Show.S01E01.720p.WEB-DL.H.265-GRP"},"777":{"GroupID":"999","ReleaseName":"Example.Show.S01E01.1080p.WEB-DL.H.265-GRP"}}}}`))
+			case "getTorrentById":
+				apiDownloadCalls.Add(1)
+				var selectedID string
+				if len(rpc.Params) > 1 {
+					_ = json.Unmarshal(rpc.Params["id"], &selectedID)
+				}
+				apiDownloadID.Store(selectedID)
+				_, _ = w.Write([]byte(`{"result":{"DownloadURL":"http://` + r.Host + `/mock-download"}}`))
+			default:
+				http.NotFound(w, r)
+			}
+		case r.URL.Path == "/mock-download":
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	tempDir := t.TempDir()
+	dbPath := newBTNAuthDB(t)
+	sourcePath := filepath.Join(tempDir, "Example.Show.S01E01.mkv")
+	if err := os.WriteFile(sourcePath, []byte("video"), 0o600); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	torrentPath := filepath.Join(tempDir, "input.torrent")
+	if err := os.WriteFile(torrentPath, []byte("d8:announce13:https://x.ee"), 0o600); err != nil {
+		t.Fatalf("write torrent: %v", err)
+	}
+
+	req := trackers.PreparationInput{
+		Tracker: "BTN",
+		Meta: api.UploadSubject{
+			SourcePath:          sourcePath,
+			TorrentPath:         torrentPath,
+			ReleaseName:         "Example.Show.S01E01.1080p.WEB-DL.x265-GRP",
+			Type:                "WEBDL",
+			Source:              "WEB-DL",
+			Container:           "MKV",
+			VideoEncode:         "x265",
+			VideoCodec:          "HEVC",
+			SeasonInt:           1,
+			EpisodeInt:          1,
+			EpisodeTitle:        "Episode One",
+			EpisodeOverview:     "Overview",
+			TVDBAiredDate:       "2025-01-01",
+			DescriptionOverride: "[b]Test[/b] description",
+			Identity: api.ExternalIdentity{
+				Category: "TV",
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     1,
+				Episode:    1,
+			},
+			Tag: "GRP",
+		},
+		TrackerConfig: config.TrackerConfig{
+			Username: "user",
+			Password: "pass",
+			Unknown: map[string]any{
+				"api_url": server.URL + "/rpc",
+			},
+		},
+		Runtime: trackers.PreparationRuntimeFromConfig(config.Config{
+			MainSettings: config.MainSettingsConfig{DBPath: dbPath},
+			Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BTN": {APIKey: strings.Repeat("x", 30)},
+			}},
+		}),
+	}
+
+	summary, err := uploadAt(context.Background(), req, server.URL)
+	if err != nil {
+		t.Fatalf("upload failed: %v", err)
+	}
+	if summary.Uploaded != 1 {
+		t.Fatalf("expected uploaded=1, got %d", summary.Uploaded)
+	}
+	if len(summary.UploadedTorrents) != 1 {
+		t.Fatalf("expected one uploaded torrent, got %d", len(summary.UploadedTorrents))
+	}
+	if got := summary.UploadedTorrents[0].TorrentID; got != "456" {
+		t.Fatalf("expected accepted remote torrent id 456, got %q", got)
+	}
+	if got := summary.UploadedTorrents[0].TorrentURL; !strings.Contains(got, "torrentid=456") {
+		t.Fatalf("expected summary URL to retain accepted torrent id, got %q", got)
+	}
+	if got := summary.UploadedTorrents[0].DownloadURL; !strings.Contains(got, "action=download") || !strings.Contains(got, "id=456") {
+		t.Fatalf("expected summary download URL to retain accepted torrent id, got %q", got)
+	}
+	if summary.UploadedTorrents[0].TorrentPath != "" {
+		t.Fatalf("expected invalid registered torrent to be omitted, got %q", summary.UploadedTorrents[0].TorrentPath)
+	}
+	if apiSearchCalls.Load() != 0 {
+		t.Fatalf("expected no API identity replacement search, got %d", apiSearchCalls.Load())
+	}
+	if apiDownloadCalls.Load() != 0 {
+		t.Fatalf("expected no API identity replacement download, got %d", apiDownloadCalls.Load())
+	}
+	if got, _ := apiDownloadID.Load().(string); got != "" {
+		t.Fatalf("expected no API download id, got %q", got)
+	}
+}
+
+func TestBTNSeasonPackReservationFailsClosedOnMalformedAPISearch(t *testing.T) {
+	t.Parallel()
+
+	var apiSearchCalls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/rpc" || r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		var rpc struct {
+			Method string `json:"method"`
+		}
+		_ = json.NewDecoder(r.Body).Decode(&rpc)
+		if rpc.Method != "getTorrents" {
+			http.NotFound(w, r)
+			return
+		}
+		apiSearchCalls.Add(1)
+		_, _ = w.Write([]byte(`{"result":{"torrents":"api_key=secret-value"}}`))
+	}))
+	defer server.Close()
+
+	req := trackers.PreparationInput{
+		Meta: api.UploadSubject{
+			TVPack:    true,
+			SeasonInt: 1,
+			Tag:       "NTb",
+			Identity: api.ExternalIdentity{
+				TVDBID:   123456,
+				Category: "TV",
+			},
+		},
+	}
+
+	err := checkBTNSeasonPackReservation(context.Background(), uploadContext{
+		apiURL:   server.URL + "/rpc",
+		apiToken: strings.Repeat("x", 30),
+	}, req)
+	if err == nil || !strings.Contains(err.Error(), "parse torrents search response") {
+		t.Fatalf("expected malformed BTN API search to fail closed, got %v", err)
+	}
+	if strings.Contains(err.Error(), "secret-value") {
+		t.Fatal("expected malformed BTN API search error to redact provider details")
+	}
+	if apiSearchCalls.Load() != 1 {
+		t.Fatalf("expected one API search call, got %d", apiSearchCalls.Load())
+	}
+}
+
+func TestBTNSeasonPackReservationUsesTranslatedTVDBSeason(t *testing.T) {
+	t.Parallel()
+
+	var apiSearchCalls atomic.Int32
+	now := strconv.FormatInt(time.Now().Unix(), 10)
+	old := strconv.FormatInt(time.Now().Add(-3*time.Hour).Unix(), 10)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/rpc" || r.Method != http.MethodPost {
+			http.NotFound(w, r)
+			return
+		}
+		var rpc struct {
+			Method string `json:"method"`
+		}
+		_ = json.NewDecoder(r.Body).Decode(&rpc)
+		if rpc.Method != "getTorrents" {
+			http.NotFound(w, r)
+			return
+		}
+		apiSearchCalls.Add(1)
+		_, _ = fmt.Fprintf(w, `{"result":{"results":"3","torrents":{"10":{"ReleaseName":"Example.Show.S05E01.1080p-NTb","Origin":"Internal","Time":%q},"9":{"ReleaseName":"Example.Show.S05E02.1080p-NTb","Origin":"Internal","Time":%q},"8":{"ReleaseName":"Example.Show.S03E01.1080p-NTb","Origin":"Internal","Time":%q}}}}`, old, now, old)
+	}))
+	defer server.Close()
+
+	req := trackers.PreparationInput{
+		Meta: api.UploadSubject{
+			TVPack:    true,
+			SeasonInt: 3,
+			Tag:       "NTb",
+			Identity: api.ExternalIdentity{
+				TVDBID:   123456,
+				Category: "TV",
+			},
+			ProviderMetadata: api.SourceScopedMetadata{
+				TVDB: &api.TVDBMetadata{EpisodeSeason: 5},
+			},
+		},
+	}
+
+	err := checkBTNSeasonPackReservation(context.Background(), uploadContext{
+		apiURL:   server.URL + "/rpc",
+		apiToken: strings.Repeat("x", 30),
+	}, req)
+	if err == nil || !strings.Contains(err.Error(), "BTN 2-hour reservation period") {
+		t.Fatalf("expected translated TVDB season reservation to block")
+	}
+	if apiSearchCalls.Load() != 1 {
+		t.Fatalf("expected one API search call, got %d", apiSearchCalls.Load())
+	}
+}
+
+func TestBTNReservationBoundary(t *testing.T) {
+	t.Parallel()
+
+	now := time.Unix(1_800_000_000, 0)
+	if !btnReservationActive(now, now.Add(-2*time.Hour+time.Nanosecond)) {
+		t.Fatal("expected reservation to remain active immediately before expiry")
+	}
+	if btnReservationActive(now, now.Add(-2*time.Hour)) {
+		t.Fatal("expected reservation to expire at two hours")
+	}
+	if btnReservationActive(now, now.Add(-2*time.Hour-time.Nanosecond)) {
+		t.Fatal("expected reservation to remain expired after two hours")
+	}
+}
+
+func TestBTNSeasonPackReservationRequiresCompleteTimestampEvidence(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		response   string
+		wantErr    string
+		wantStatus int
+	}{
+		{
+			name:     "missing time",
+			response: `{"result":{"results":"1","torrents":{"1":{"ReleaseName":"Example.Show.S01E01.1080p-NTb","Origin":"Internal"}}}}`,
+			wantErr:  "valid timestamp",
+		},
+		{
+			name:     "malformed time",
+			response: `{"result":{"results":"1","torrents":{"1":{"ReleaseName":"Example.Show.S01E01.1080p-NTb","Origin":"Internal","Time":"later"}}}}`,
+			wantErr:  "valid timestamp",
+		},
+		{
+			name:     "fractional time",
+			response: `{"result":{"results":"1","torrents":{"1":{"ReleaseName":"Example.Show.S01E01.1080p-NTb","Origin":"Internal","Time":1.5}}}}`,
+			wantErr:  "valid timestamp",
+		},
+		{
+			name:     "no match",
+			response: `{"result":{"results":0,"torrents":false}}`,
+		},
+		{
+			name:       "request failure",
+			wantErr:    "evidence unavailable",
+			wantStatus: http.StatusServiceUnavailable,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				if tt.wantStatus != 0 {
+					http.Error(w, "unavailable", tt.wantStatus)
+					return
+				}
+				_, _ = w.Write([]byte(tt.response))
+			}))
+			defer server.Close()
+
+			err := checkBTNSeasonPackReservation(context.Background(), uploadContext{
+				apiURL:   server.URL,
+				apiToken: strings.Repeat("x", 30),
+			}, btnReservationTestInput())
+			if tt.wantErr == "" && err != nil {
+				t.Fatalf("unexpected reservation error: %v", err)
+			}
+			if tt.wantErr != "" && (err == nil || !strings.Contains(err.Error(), tt.wantErr)) {
+				t.Fatalf("reservation error=%v, want %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestBTNSeasonPackReservationPaginatesBeforeBlocking(t *testing.T) {
+	t.Parallel()
+
+	var calls atomic.Int32
+	old := strconv.FormatInt(time.Now().Add(-3*time.Hour).Unix(), 10)
+	recent := strconv.FormatInt(time.Now().Add(-time.Hour).Unix(), 10)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var rpc struct {
+			Params map[string]json.RawMessage `json:"params"`
+		}
+		if err := json.NewDecoder(r.Body).Decode(&rpc); err != nil || len(rpc.Params) != 4 {
+			t.Errorf("decode reservation request: params=%d err=%v", len(rpc.Params), err)
+			http.Error(w, "invalid request", http.StatusBadRequest)
+			return
+		}
+		var offset int
+		if err := json.Unmarshal(rpc.Params["offset"], &offset); err != nil {
+			t.Errorf("decode reservation offset: %v", err)
+			http.Error(w, "invalid offset", http.StatusBadRequest)
+			return
+		}
+		call := calls.Add(1)
+		if want := int(call - 1); offset != want {
+			t.Errorf("reservation offset=%d, want %d", offset, want)
+			http.Error(w, "unexpected offset", http.StatusBadRequest)
+			return
+		}
+		switch call {
+		case 1:
+			_, _ = fmt.Fprintf(w, `{"result":{"results":"2","torrents":{"1":{"ReleaseName":"Example.Show.S01E01.1080p-NTb","Origin":"Internal","Time":%q}}}}`, old)
+		case 2:
+			_, _ = fmt.Fprintf(w, `{"result":{"results":"2","torrents":{"2":{"ReleaseName":"Example.Show.S01E02.1080p-NTb","Origin":"Internal","Time":%q}}}}`, recent)
+		default:
+			http.Error(w, "unexpected request", http.StatusInternalServerError)
+		}
+	}))
+	defer server.Close()
+
+	err := checkBTNSeasonPackReservation(context.Background(), uploadContext{
+		apiURL:   server.URL,
+		apiToken: strings.Repeat("x", 30),
+	}, btnReservationTestInput())
+	if err == nil || !strings.Contains(err.Error(), "2-hour reservation period") {
+		t.Fatalf("expected complete multi-page evidence to block, got %v", err)
+	}
+	if calls.Load() != 2 {
+		t.Fatalf("expected two reservation pages, got %d", calls.Load())
+	}
+}
+
+func TestBTNSeasonPackReservationRejectsPartialSearch(t *testing.T) {
+	t.Parallel()
+
+	var calls atomic.Int32
+	old := strconv.FormatInt(time.Now().Add(-3*time.Hour).Unix(), 10)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		if calls.Add(1) == 1 {
+			_, _ = fmt.Fprintf(w, `{"result":{"results":"2","torrents":{"1":{"ReleaseName":"Example.Show.S01E01.1080p-NTb","Origin":"Internal","Time":%q}}}}`, old)
+			return
+		}
+		http.Error(w, "unavailable", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+
+	err := checkBTNSeasonPackReservation(context.Background(), uploadContext{
+		apiURL:   server.URL,
+		apiToken: strings.Repeat("x", 30),
+	}, btnReservationTestInput())
+	if err == nil || !strings.Contains(err.Error(), "evidence unavailable") {
+		t.Fatalf("expected partial reservation evidence to be unavailable, got %v", err)
+	}
+	if calls.Load() != 2 {
+		t.Fatalf("expected two reservation requests, got %d", calls.Load())
+	}
+}
+
+func TestBTNSeasonPackReservationRejectsDuplicateIDs(t *testing.T) {
+	t.Parallel()
+
+	var calls atomic.Int32
+	old := strconv.FormatInt(time.Now().Add(-3*time.Hour).Unix(), 10)
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		_, _ = fmt.Fprintf(w, `{"result":{"results":"2","torrents":{"1":{"ReleaseName":"Example.Show.S01E01.1080p-NTb","Origin":"Internal","Time":%q}}}}`, old)
+	}))
+	defer server.Close()
+
+	err := checkBTNSeasonPackReservation(context.Background(), uploadContext{
+		apiURL:   server.URL,
+		apiToken: strings.Repeat("x", 30),
+	}, btnReservationTestInput())
+	if err == nil || !strings.Contains(err.Error(), "duplicate torrent id") {
+		t.Fatalf("expected duplicate reservation evidence to fail, got %v", err)
+	}
+	if calls.Load() != 2 {
+		t.Fatalf("expected duplicate evidence on second request, got %d requests", calls.Load())
+	}
+}
+
+func btnReservationTestInput() trackers.PreparationInput {
+	return trackers.PreparationInput{Meta: api.UploadSubject{
+		TVPack:    true,
+		SeasonInt: 1,
+		Tag:       "NTb",
+		Identity: api.ExternalIdentity{
+			TVDBID:   123456,
+			Category: "TV",
+		},
+	}}
+}
+
+func TestBTNUploadFollowsIntermediateDetailPage(t *testing.T) {
+	t.Parallel()
+
+	var downloadCalls atomic.Int32
+	var detailCalls atomic.Int32
+	var apiCalls atomic.Int32
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/login.php" && r.Method == http.MethodPost:
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte("ok"))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodGet:
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodPost:
+			contentType := r.Header.Get("Content-Type")
+			if strings.HasPrefix(contentType, "application/x-www-form-urlencoded") {
+				_, _ = w.Write([]byte(`
+					<input name="artist" value="Example Show" />
+					<input name="title" value="Episode One" />
+					<input name="seriesid" value="999" />
+					<textarea name="album_desc">Episode overview: TBA</textarea>
+					<select name="format"><option selected value="MKV">MKV</option></select>
+					<select name="bitrate"><option selected value="H.265">H.265</option></select>
+					<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+					<select name="resolution"><option selected value="1080p">1080p</option></select>
+				`))
+				return
+			}
+			_, _ = w.Write([]byte(`
+				<p>Warning you need to download the torrent file before continuing.</p>
+				<form action="/torrents.php?id=123"><button>Continue</button></form>
+			`))
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("action") == "download":
+			downloadCalls.Add(1)
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("id") == "123":
+			detailCalls.Add(1)
+			if r.URL.Query().Get("torrentid") == "" {
+				http.Redirect(w, r, "/torrents.php?id=123&torrentid=456", http.StatusFound)
+				return
+			}
+			_, _ = io.WriteString(w, "uploaded torrent")
+		case r.URL.Path == "/rpc":
+			apiCalls.Add(1)
+			http.NotFound(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	req := newBTNUploadTestRequest(t)
+	summary, err := uploadAt(context.Background(), req, server.URL)
+	if err != nil {
+		t.Fatalf("upload failed: %v", err)
+	}
+	if got := summary.UploadedTorrents[0].TorrentID; got != "456" {
+		t.Fatalf("expected intermediate torrent id 456, got %q", got)
+	}
+	if got := summary.UploadedTorrents[0].TorrentURL; !strings.Contains(got, "id=123") || !strings.Contains(got, "torrentid=456") {
+		t.Fatalf("expected canonical torrent URL from detail page, got %q", got)
+	}
+	payload, err := os.ReadFile(summary.UploadedTorrents[0].TorrentPath)
+	if err != nil {
+		t.Fatalf("expected tracker torrent file: %v", err)
+	}
+	if len(payload) == 0 || payload[0] != 'd' {
+		t.Fatalf("expected bencode torrent payload from resolved torrent download")
+	}
+	if downloadCalls.Load() != 1 {
+		t.Fatalf("expected one resolved torrent download call, got %d", downloadCalls.Load())
+	}
+	if detailCalls.Load() != 2 {
+		t.Fatalf("expected detail redirect and final page calls, got %d", detailCalls.Load())
+	}
+	if apiCalls.Load() != 0 {
+		t.Fatalf("expected no API calls, got %d", apiCalls.Load())
+	}
+}
+
+func TestBTNUploadIntermediateFailureFallsBackToAPI(t *testing.T) {
+	t.Parallel()
+
+	var apiSearchCalls atomic.Int32
+	var uploadedName atomic.Value
+	handlerErrs := newHTTPHandlerErrorRecorder(t)
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.URL.Path == "/login.php" && r.Method == http.MethodPost:
+			http.SetCookie(w, &http.Cookie{
+				Name:  "session",
+				Value: "new",
+				Path:  "/",
+			})
+			w.WriteHeader(http.StatusOK)
+			_, _ = w.Write([]byte("ok"))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodGet:
+			_, _ = w.Write([]byte(`<form action="/upload.php"><input name="file_input" /></form>`))
+		case r.URL.Path == "/upload.php" && r.Method == http.MethodPost:
+			contentType := r.Header.Get("Content-Type")
+			if strings.HasPrefix(contentType, "application/x-www-form-urlencoded") {
+				_, _ = w.Write([]byte(`
+					<input name="artist" value="Example Show" />
+					<input name="title" value="Episode One" />
+					<input name="seriesid" value="999" />
+					<textarea name="album_desc">Episode overview: TBA</textarea>
+					<select name="format"><option selected value="MKV">MKV</option></select>
+					<select name="bitrate"><option selected value="H.265">H.265</option></select>
+					<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+					<select name="resolution"><option selected value="1080p">1080p</option></select>
+				`))
+				return
+			}
+			if err := r.ParseMultipartForm(1 << 20); err != nil {
+				handlerErrs.Errorf("parse upload: %v", err)
+				return
+			}
+			defer func() {
+				if err := r.MultipartForm.RemoveAll(); err != nil {
+					handlerErrs.Errorf("remove multipart form: %v", err)
+				}
+			}()
+			uploadedName.Store(r.FormValue("scenename"))
+			_, _ = w.Write([]byte(`
+				<p>Warning you need to download the torrent file before continuing.</p>
+				<form action="/torrents.php?id=123"><button>Continue</button></form>
+			`))
+		case r.URL.Path == "/torrents.php" && r.URL.Query().Get("id") == "123":
+			http.Error(w, "detail unavailable", http.StatusInternalServerError)
+		case r.URL.Path == "/rpc" && r.Method == http.MethodPost:
+			var rpc struct {
+				Method string                     `json:"method"`
+				Params map[string]json.RawMessage `json:"params"`
+			}
+			_ = json.NewDecoder(r.Body).Decode(&rpc)
+			switch rpc.Method {
+			case "getTorrents":
+				apiSearchCalls.Add(1)
+				_ = json.NewEncoder(w).Encode(map[string]any{"result": map[string]any{"torrents": map[string]any{
+					"779": map[string]any{
+						"GroupID":     "123",
+						"GroupName":   "S01E01",
+						"ReleaseName": uploadedName.Load(),
+						"DownloadURL": "http://" + r.Host + "/mock-download",
+					},
+				}}})
+			default:
+				handlerErrs.Errorf("unexpected API method: %s", rpc.Method)
+				http.NotFound(w, r)
+			}
+		case r.URL.Path == "/mock-download":
+			_, _ = w.Write(btnRegisteredTorrentFixture())
+		default:
+			http.NotFound(w, r)
+		}
+	}))
+	defer server.Close()
+
+	req := newBTNUploadTestRequest(t)
+	req.TrackerConfig.Unknown = map[string]any{"api_url": server.URL + "/rpc"}
+	summary, err := uploadAt(context.Background(), req, server.URL)
+	handlerErrs.Check()
+	if err != nil {
+		t.Fatalf("upload failed: %v", err)
+	}
+	if got := summary.UploadedTorrents[0].TorrentID; got != "779" {
+		t.Fatalf("expected API fallback torrent id 779, got %q", got)
+	}
+	if got := summary.UploadedTorrents[0].TorrentURL; !strings.Contains(got, "id=123") || !strings.Contains(got, "torrentid=779") {
+		t.Fatalf("expected API fallback canonical URL, got %q", got)
+	}
+	if apiSearchCalls.Load() != 1 {
+		t.Fatalf("expected one API search call, got %d", apiSearchCalls.Load())
+	}
+}
+
+func newBTNUploadTestRequest(t *testing.T) trackers.PreparationInput {
+	t.Helper()
+
+	tempDir := t.TempDir()
+	dbPath := newBTNAuthDB(t)
+	sourcePath := filepath.Join(tempDir, "Example.Show.S01E01.mkv")
+	if err := os.WriteFile(sourcePath, []byte("video"), 0o600); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	torrentPath := filepath.Join(tempDir, "input.torrent")
+	if err := os.WriteFile(torrentPath, []byte("d8:announce13:https://x.ee"), 0o600); err != nil {
+		t.Fatalf("write torrent: %v", err)
+	}
+
+	return trackers.PreparationInput{
+		Tracker: "BTN",
+		Meta: api.UploadSubject{
+			SourcePath:          sourcePath,
+			TorrentPath:         torrentPath,
+			ReleaseName:         "Example.Show.S01E01.1080p.WEB-DL.x265-GRP",
+			Type:                "WEBDL",
+			Source:              "WEB-DL",
+			Container:           "MKV",
+			VideoEncode:         "x265",
+			VideoCodec:          "HEVC",
+			SeasonInt:           1,
+			EpisodeInt:          1,
+			EpisodeTitle:        "Episode One",
+			EpisodeOverview:     "Overview",
+			TVDBAiredDate:       "2025-01-01",
+			DescriptionOverride: "[b]Test[/b] description",
+			Identity: api.ExternalIdentity{
+				Category: "TV",
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     1,
+				Episode:    1,
+			},
+			Tag: "GRP",
+		},
+		TrackerConfig: config.TrackerConfig{
+			Username: "user",
+			Password: "pass",
+		},
+		Runtime: trackers.PreparationRuntimeFromConfig(config.Config{
+			MainSettings: config.MainSettingsConfig{DBPath: dbPath},
+			Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BTN": {APIKey: strings.Repeat("x", 30)},
+			}},
+		}),
+	}
+}
+
+func writeBTNTestTorrent(t *testing.T, torrentPath string) {
+	t.Helper()
+
+	payload := btnRegisteredTorrentFixture()
+	if err := os.MkdirAll(filepath.Dir(torrentPath), 0o700); err != nil {
+		t.Fatalf("create torrent dir: %v", err)
+	}
+	if err := os.WriteFile(torrentPath, payload, 0o600); err != nil {
+		t.Fatalf("write torrent: %v", err)
+	}
+}
+
+func btnRegisteredTorrentFixture() []byte {
+	infoBytes, err := bencode.Marshal(map[string]any{
+		"name":         "Example.Show.S01E01.mkv",
+		"length":       int64(1),
+		"piece length": int64(16 * 1024),
+		"pieces":       strings.Repeat("\x00", 20),
+	})
+	if err != nil {
+		panic(err)
+	}
+	var payload bytes.Buffer
+	torrentMeta := metainfo.MetaInfo{
+		Announce:     "https://old.example/announce",
+		AnnounceList: metainfo.AnnounceList{{"https://old.example/announce"}},
+		InfoBytes:    infoBytes,
+	}
+	if err := torrentMeta.Write(&payload); err != nil {
+		panic(err)
+	}
+	return payload.Bytes()
+}
+
+func writeBTNTestMediaInfo(t *testing.T, dir string, content string) string {
+	t.Helper()
+
+	path := filepath.Join(dir, "mediainfo.txt")
+	if err := os.WriteFile(path, []byte(content), 0o600); err != nil {
+		t.Fatalf("write MediaInfo: %v", err)
+	}
+	return path
+}
+
+func newBTNAuthDB(t *testing.T) string {
+	t.Helper()
+
+	dbPath := filepath.Join(t.TempDir(), "upbrr.db")
+	dbfixture.WriteMigrated(t, dbPath)
+	authfixture.Write(t, dbPath)
+	return dbPath
+}
+
+// corruptBTNCookieAuthTag keeps the BTN cookie row present while making its
+// encrypted value fail authentication, exercising decrypt-error handling without
+// falling back to the missing-cookie path.
+func corruptBTNCookieAuthTag(t *testing.T, dbPath string) {
+	t.Helper()
+
+	ctx := context.Background()
+	repo, err := servicedb.OpenWithLoggerContext(ctx, dbPath, api.NopLogger{})
+	if err != nil {
+		t.Fatalf("OpenWithLoggerContext: %v", err)
+	}
+	defer repo.Close()
+
+	result, err := repo.RawDB().ExecContext(ctx, `UPDATE tracker_cookies SET auth_tag = ? WHERE tracker_id = ? AND cookie_name = ?`, "AAAAAAAAAAAAAAAAAAAAAA==", "BTN", "session")
+	if err != nil {
+		t.Fatalf("corrupt BTN cookie auth tag: %v", err)
+	}
+	affected, err := result.RowsAffected()
+	if err != nil {
+		t.Fatalf("corrupt BTN cookie rows affected: %v", err)
+	}
+	if affected != 1 {
+		t.Fatalf("expected one corrupt BTN cookie row, got %d", affected)
+	}
+}
+
+// newBTNDryRunTestRequest returns a minimal TV upload request with a BTN API key.
+// Callers add credentials or stored cookies to exercise dry-run auth gating.
+func newBTNDryRunTestRequest(t *testing.T, dbPath string) trackers.PreparationInput {
+	t.Helper()
+
+	tempDir := t.TempDir()
+	sourcePath := filepath.Join(tempDir, "Example.Show.S01E01.mkv")
+	if err := os.WriteFile(sourcePath, []byte("video"), 0o600); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	torrentPath := filepath.Join(tempDir, "input.torrent")
+	if err := os.WriteFile(torrentPath, []byte("d8:announce13:https://x.ee"), 0o600); err != nil {
+		t.Fatalf("write torrent: %v", err)
+	}
+	return trackers.PreparationInput{
+		Tracker: "BTN",
+		Meta: api.UploadSubject{
+			SourcePath:          sourcePath,
+			TorrentPath:         torrentPath,
+			ReleaseName:         "Example.Show.S01E01.1080p.WEB-DL.x265-GRP",
+			Type:                "WEBDL",
+			Source:              "WEB-DL",
+			Container:           "MKV",
+			VideoEncode:         "x265",
+			VideoCodec:          "HEVC",
+			SeasonInt:           1,
+			EpisodeInt:          1,
+			EpisodeTitle:        "Episode One",
+			EpisodeOverview:     "Overview",
+			TVDBAiredDate:       "2025-01-01",
+			DescriptionOverride: "[b]Test[/b] description",
+			Identity: api.ExternalIdentity{
+				Category: "TV",
+			},
+			Release: api.ReleaseInfo{
+				Resolution: "1080p",
+				Season:     1,
+				Episode:    1,
+			},
+		},
+		TrackerConfig: config.TrackerConfig{},
+		Runtime: trackers.PreparationRuntimeFromConfig(config.Config{
+			MainSettings: config.MainSettingsConfig{DBPath: dbPath},
+			Trackers: config.TrackersConfig{Trackers: map[string]config.TrackerConfig{
+				"BTN": {APIKey: strings.Repeat("x", 30)},
+			}},
+		}),
+	}
+}
+
+func prepareBTNTestUploadPlan(t *testing.T, req trackers.PreparationInput, baseURL string) trackers.TrackerPlan {
+	t.Helper()
+	req.Intent = trackers.PreparationIntentUpload
+	var nameFailure *trackers.PreparationFailure
+	req, nameFailure = trackers.PrepareInputWithReleaseNamePolicy(req, Profile().ReleaseNamePolicy)
+	if nameFailure != nil {
+		t.Fatalf("prepare release name: %v", nameFailure)
+	}
+	plan, failure := trackers.PrepareAdapter(
+		context.Background(),
+		req,
+		nil,
+		func(ctx context.Context, input trackers.PreparationInput) (trackers.PreparedOperation, error) {
+			return prepareUploadAt(ctx, input, baseURL)
+		},
+	)
+	if failure != nil {
+		t.Fatalf("prepare BTN upload plan: %v", failure)
+	}
+	return plan
+}
+
+func writeBTNTestAutofillResponse(w io.Writer, artist string) {
+	_, _ = fmt.Fprintf(w, `
+		<input name="artist" value="%s">
+		<input name="seriesid" value="999">
+		<input name="title" value="Episode One">
+		<input name="year" value="2026">
+		<select name="format"><option selected value="MKV">MKV</option></select>
+		<select name="bitrate"><option selected value="H.265">H.265</option></select>
+		<select name="media"><option selected value="WEB-DL">WEB-DL</option></select>
+		<select name="resolution"><option selected value="1080p">1080p</option></select>
+	`, artist)
+}

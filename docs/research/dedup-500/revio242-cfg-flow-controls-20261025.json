@@ -1,0 +1,38 @@
+{
+  "method": "Unmodified standalone module; synthetic ST and separately constructed basic blocks, no PLC runtime",
+  "observed": {
+    "read_modify_write_uses": [],
+    "forward_definition_chains": [
+      {
+        "variable": "x",
+        "def_block": 0,
+        "def_line": 2,
+        "use_block": 0,
+        "use_line": 1
+      }
+    ],
+    "isolated_CASE_edge_error": "type object 'EdgeType' has no attribute 'CONDITIONAL'",
+    "parsed_CASE_summary": {
+      "total_blocks": 1,
+      "total_edges": 0,
+      "entry_block": 0,
+      "exit_blocks": [],
+      "unreachable_blocks": [],
+      "loops": 0,
+      "cyclomatic_complexity": 1,
+      "def_use_chains": 0,
+      "warnings": []
+    },
+    "parsed_CASE_findings": [
+      {
+        "rule_id": "CFG-004",
+        "rule_name": "Dead store (value never read)",
+        "severity": "info",
+        "description": "Variable 'y' is assigned at line 4 but the value is never read before being overwritten.",
+        "line_number": 4
+      }
+    ]
+  },
+  "correction": "Initial expectation parsed CASE would reach missing enum failed: parser collapsed sample into one block. Missing enum confirmed only with explicit synthetic blocks. No false empty-results runtime claim for that sample.",
+  "original_tests_run": false
+}

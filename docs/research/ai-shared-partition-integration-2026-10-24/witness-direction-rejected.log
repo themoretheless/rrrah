@@ -1,0 +1,16 @@
+running 1 test
+test encode::ordered_pixel::exact_orientation_tests::retained_area_cache_matches_direct_classification_after_dense_paints ... SUPPORT_DIRECTION uncertain cut=[(0.9908554268621977, 0.8799552036361388), (0.9908554268621987, 0.8799552036361398), (0.9908554268622556, 0.8799552036361968), (0.9908554268622269, 0.8799552036361685), (0.9908554268621993, 0.8799552036361404)]
+
+thread 'encode::ordered_pixel::exact_orientation_tests::retained_area_cache_matches_direct_classification_after_dense_paints' (5113622) panicked at /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/ordered_pixel.rs:1806:75:
+called `Result::unwrap()` on an `Err` value: Conditioning
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    encode::ordered_pixel::exact_orientation_tests::retained_area_cache_matches_direct_classification_after_dense_paints
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 185 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`

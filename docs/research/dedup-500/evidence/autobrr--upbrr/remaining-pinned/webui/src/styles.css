@@ -1,0 +1,156 @@
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/preflight" layer(base);
+@import "tailwindcss/utilities" layer(utilities);
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--semantic-muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--semantic-accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-destructive-text: var(--destructive-text);
+  --color-border: var(--border);
+  --color-input: var(--control-border);
+  --color-ring: var(--control-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-status-success: var(--status-success);
+  --color-status-warning: var(--status-warning);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  color-scheme: light;
+  --primary-text: color-mix(in oklab, var(--primary) 15%, var(--foreground));
+  --destructive-text: color-mix(in oklab, var(--destructive) 50%, var(--foreground));
+  --destructive-action: color-mix(in oklab, var(--destructive) 75%, black);
+  --control-border: color-mix(in oklab, var(--foreground) 70%, var(--card));
+  --control-ring: color-mix(in oklab, var(--ring) 50%, var(--foreground));
+  font-family: var(--font-sans, system-ui, sans-serif);
+  --status-success: oklch(0.42 0.13 155);
+  --status-warning: oklch(0.45 0.13 72);
+}
+
+:root.dark {
+  color-scheme: dark;
+  --status-success: oklch(0.75 0.13 155);
+  --status-warning: oklch(0.8 0.13 72);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--foreground);
+  min-height: 100vh;
+  background: var(--background);
+}
+
+:where(input:is([type="checkbox"], [type="radio"]):not(.sr-only)) {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--primary);
+}
+
+:root:is([data-theme="the-kyle"], [data-theme="swizzin"]) body {
+  letter-spacing: var(--tracking-normal, normal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer base {
+  h1 {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: clamp(1.875rem, 3vw, 2.75rem);
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+
+  :where(input:not([type="checkbox"]):not([type="radio"])) {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--control-border);
+    background: var(--card);
+    color: var(--card-foreground);
+    font-size: 1rem;
+  }
+
+  select option {
+    color: var(--popover-foreground);
+    background: var(--popover);
+  }
+
+  :where(button:not([role="checkbox"]):not([role="switch"])) {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    padding: 9px 16px;
+    cursor: pointer;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  :where(button:disabled) {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  button.primary {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-weight: 600;
+    box-shadow: var(--shadow);
+  }
+
+  button.ghost {
+    background: transparent;
+    border-color: var(--control-border);
+    color: var(--foreground);
+  }
+
+  h2 {
+    margin: 0 0 12px;
+    font-size: 1.1rem;
+  }
+}

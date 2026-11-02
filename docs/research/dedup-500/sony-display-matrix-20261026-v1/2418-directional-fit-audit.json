@@ -1,0 +1,45 @@
+{
+  "input_log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-known-display.log",
+  "input_log_sha256": "d9db310ba5318b5ac73e6d6a8941e664ce4650cb4dcb362b71d3a2d7e146fc37",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "1dee5d40b8fa2e4e4b9afb2f8899c64083f404686de6e08da476467c0ed57991",
+    "crates/rrrah-dedup/tests/photometric.rs": "ad99e04482025edde15577b0df9762e5207aa71bc76aba14ae1eb04deaa0892f"
+  },
+  "forward_gain": [
+    0.9972413381311885,
+    1.06498737356075,
+    0.9384124505440917
+  ],
+  "reverse_gain": [
+    0.9729295582302241,
+    0.9275945527441691,
+    1.0348617577133716
+  ],
+  "forward_times_reverse_gain": [
+    0.9702455745568948,
+    0.9878764864562712,
+    0.9711271580301712
+  ],
+  "fit_samples_each_direction": 22108891,
+  "observed": "Each direction independently fits covariance/source variance on opaque in-range pairs; residual comparisons clamp after applying each fitted transform. Gains are not reciprocal. All channels are unconstrained.",
+  "mathematical_interpretation": "For identical paired samples under unconstrained ordinary least squares, forward_gain * reverse_gain equals squared correlation, not necessarily one. Here products around 0.970-0.988 indicate non-affine residuals in the fit sample set.",
+  "limits": "This explains why reverse models need not invert forward models; it does not prove which decoder/development stage caused the non-affine residuals or justify loosening acceptance. No confirmed arithmetic or inverse-transform bug identified.",
+  "focused_validation": {
+    "command": [
+      "cargo",
+      "+1.98.1",
+      "test",
+      "--offline",
+      "-p",
+      "rrrah-dedup",
+      "--test",
+      "photometric"
+    ],
+    "terminal_session": 38854,
+    "exit_code": 0,
+    "passed": 7,
+    "failed": 0,
+    "ignored": 0,
+    "scope": "Synthetic photometric policy, HDR/alpha preservation, inverse/reflected transforms, cancellation and fit failures; not real-camera acceptance."
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "repository": "d4ncboz/threads-affiliate",
+  "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
+  "previous_audit": "docs/research/dedup-500/threads119-source-review-v1-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "threads_poster/cli.py",
+      "local": "04-cli.py",
+      "git_blob": "414ebaa3f69b78c7cda6164f92d559b64e5c51ba",
+      "sha256": "699ac9a3f3eb13f18b9fbe2c836959155978bd948584254110c87229d608a631",
+      "whole_text_read": true
+    },
+    {
+      "path": "examples/batch_schedule.py",
+      "local": "08-batch_schedule.py",
+      "git_blob": "a1e47fdc0269ee6db151d192655ebaa7b72ce5e5",
+      "sha256": "b2a2b650b8cd3823a27dfba611818d36bf5bf1f87df7fdbd8023acf5a5fab440",
+      "whole_text_read": true
+    },
+    {
+      "path": "examples/cron_integration.sh",
+      "local": "09-cron_integration.sh",
+      "git_blob": "875a9148e9874aab57178ccc9150cc1e220828b1",
+      "sha256": "f91090d27e5dc8b93bbf1c2be20ee4921b14219f3a47c15953a78664bdedaae5",
+      "whole_text_read": true
+    },
+    {
+      "path": "threads_poster/database.py",
+      "local": "next-threads_poster_database.py",
+      "git_blob": "dcd91206b7f8a958e98e2463f4335f0000a195fe",
+      "sha256": "71dbd68a73282c707fca1cfc9dcc29c461ed745ee85d9dfdade9f07260ef241e",
+      "whole_text_read": true
+    },
+    {
+      "path": "schemas/post-history.schema.json",
+      "local": "next-schemas_post-history.schema.json",
+      "git_blob": "4ae019bf9d0be5a9677cfff55ee6085c6255f4dc",
+      "sha256": "47e8d9254a97e586cfe947773b71ab262f3b78f1fa6f319eeeb92012721c5497",
+      "whole_text_read": true
+    },
+    {
+      "path": "requirements.txt",
+      "local": "next-requirements.txt",
+      "git_blob": "cdda2872d55bfc2c68490509af0629621582a7d6",
+      "sha256": "c157febfab9bfcd5c7ececd67551d0ec2a682cc2dc3816606ba632a4ed0812cb",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 10,
+  "tracked_blobs": 35,
+  "whole_repo_complete": false,
+  "original_test_functions_total_distinct": 6,
+  "new_original_functions_passed": 4,
+  "authored_controls_total_distinct": 3,
+  "runtime_scope": "Original6 test/fixture AST bodies and3 original standalone modules;not package imports or pytest discovery,not browser/posting.",
+  "findings": [
+    "CLI and batch call original check then post then record;retention limitation reachable in ordinary post flow.",
+    "History schema explicitly declares maxItems100;this is intended retention contradicting never-reused-ever wording,not an accidental schema violation.",
+    "CLI post-auto uses next-unused DB which adds separate used-link state;do not infer every auto-post repeats after eviction.",
+    "History and Markdown DB writes use whole-file write_text without locks/atomic commit;concurrent lost updates remain source-only,not reproduced."
+  ],
+  "harness": "docs/research/dedup-500/threads119-controls-20261024",
+  "production_changes": false,
+  "remaining": "25 blobs not whole-read;full package/poster/browser/runtime unqualified",
+  "native_phash_asan": "deferred"
+}

@@ -1,0 +1,13 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test ico_dib",
+  "passed": 4,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-ico-persisted-frame-limit-20261026.log",
+  "log_sha256": "3e3b46a1bd8414889167149f25ba58c0f640c74bc9a2d13b0694204aa1b6f302",
+  "test_source_sha256": "01c3ca268c774cdb700046b0f937c85918ea0a8375d4ee0ce9c33796d58a5ae6",
+  "scope": "Each of two selected authored DIB ICO frames is cold independently and repeatably warm. After atomic cache save/reload, both stricter max_frames=1 requests refuse with exact FrameLimit observed=2,limit=1; retry at max_frames=2 still hits the correct preserved cache entry. Managed memory is released on all tested paths.",
+  "limitations": [
+    "Finite persisted-cache fixture; no crash durability or all historical cache-version migration proof.",
+    "Frame identity separation is checked through cold admission and per-entry repeatability, not assumed fingerprint inequality for flat colors."
+  ]
+}

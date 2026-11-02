@@ -58,7 +58,7 @@ where
         }
 
         let color_type = match tiff_color_type {
-            tiff::ColorType::Gray(1) => ColorType::L8,
+            tiff::ColorType::Gray(1 | 2 | 4) => ColorType::L8,
             tiff::ColorType::Gray(8) => ColorType::L8,
             tiff::ColorType::Gray(16) => ColorType::L16,
             tiff::ColorType::GrayA(8) => ColorType::La8,
@@ -94,6 +94,8 @@ where
 
         let original_color_type = match tiff_color_type {
             tiff::ColorType::Gray(1) => ExtendedColorType::L1,
+            tiff::ColorType::Gray(2) => ExtendedColorType::L2,
+            tiff::ColorType::Gray(4) => ExtendedColorType::L4,
             tiff::ColorType::CMYK(8) => ExtendedColorType::Cmyk8,
             tiff::ColorType::CMYK(16) => ExtendedColorType::Cmyk16,
             _ => color_type.into(),
@@ -402,15 +404,25 @@ impl<R: BufRead + Seek> ImageDecoder for TiffDecoder<R> {
                     out_cur.write_all(bytemuck::cast_slice(&cmyk_to_rgb16(cmyk)))?;
                 }
             }
-            DecodingResult::U8(v) if self.original_color_type == ExtendedColorType::L1 => {
+            DecodingResult::U8(v) if matches!(self.original_color_type,
+                ExtendedColorType::L1 | ExtendedColorType::L2 | ExtendedColorType::L4) => {
+                let bits = match self.original_color_type {
+                    ExtendedColorType::L1 => 1,
+                    ExtendedColorType::L2 => 2,
+                    ExtendedColorType::L4 => 4,
+                    _ => unreachable!(),
+                };
                 let width = self.dimensions.0;
-                let row_bytes = width.div_ceil(8);
-
-                for (in_row, out_row) in v
-                    .chunks_exact(row_bytes as usize)
-                    .zip(buf.chunks_exact_mut(width as usize))
-                {
-                    out_row.copy_from_slice(&utils::expand_bits(1, width, in_row));
+                let per_byte = 8 / bits;
+                let row_bytes = width.div_ceil(per_byte);
+                let mask = (1u8 << bits) - 1;
+                let scale = 255 / mask;
+                for (in_row, out_row) in v.chunks_exact(row_bytes as usize)
+                    .zip(buf.chunks_exact_mut(width as usize)) {
+                    for (x, pixel) in out_row.iter_mut().enumerate() {
+                        let shift = 8 - bits * (x as u32 % per_byte + 1);
+                        *pixel = ((in_row[x / per_byte as usize] >> shift) & mask) * scale;
+                    }
                 }
             }
             DecodingResult::U8(v) => {

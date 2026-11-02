@@ -1,0 +1,241 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 19.19s
+     Running tests/tga_interleave_metal.rs (target/debug/deps/tga_interleave_metal-be341053a0210e6b)
+
+running 1 test
+test legacy_tga_rows_match_ffmpeg_and_survive_swap_and_metal ... TGA adapter: Metal Apple M4 Max
+tga-interleave-rgb-h1-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h1-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h3-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgb-h7-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h1-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h3-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-rgba-h7-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h1-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h3-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-2way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga-interleave-gray-h7-4way-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode0-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode1-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode2-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode3-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-alpha-mode4-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin0-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin0-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin1-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin1-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin2-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin2-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin3-raw.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-2-1-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-1-2-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-7-7-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+tga2-aspect-0-0-origin3-rle.tga: declared fixture samples; defined-alpha SDR<=1/HDR<=1ulp (type2 transport only); native+prepared RAM/lease/swap/pressure/cancel/retry exact; final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.18s

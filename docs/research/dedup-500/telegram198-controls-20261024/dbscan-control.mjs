@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
+const source='docs/research/dedup-500/evidence/botnick--telegram-media-downloader/03-dbscan.js';
+const raw=fs.readFileSync(source);const m=await import('data:text/javascript;base64,'+raw.toString('base64'));
+const run=points=>{const p=m.packPoints(points);return Array.from(m.dbscanFlat(p.data,p.n,p.dim,{eps:.81,minPts:3}));};
+const early=run([[2.4],[0],[.8],[1.6]]);assert.equal(early[0],-1);assert.equal(early[3],0);
+const natural=run([[0],[.8],[1.6],[2.4]]);assert.deepEqual(natural,[0,0,0,0]);
+const chain=m.packPoints([[0],[.75],[1.5]]);assert.deepEqual(Array.from(m.dbscanFlat(chain.data,3,1,{eps:.8,minPts:2})),[0,0,0]);
+const report={source_sha256:crypto.createHash('sha256').update(raw).digest('hex'),scope:'Complete unchanged original ESM module via data URL, actual Node Float32 arrays;synthetic numeric vectors only,no faces/model/Telegram/DB.',cases:3,results:{early_border:early,natural_order:natural,chain_endpoints_distance:1.5,chain_eps:.8},findings:['Documented original noise-border quirk reproduced: previously visited noise only reclaimed from seed neighborhood,not later core expansion. Order changes membership.','Density connectivity groups endpoints farther apart than eps;no pairwise identity guarantee.']};fs.writeFileSync('docs/research/dedup-500/telegram198-controls-20261024/dbscan-control-results.json',JSON.stringify(report,null,2)+'\n');console.log('3 original-module numeric controls passed');

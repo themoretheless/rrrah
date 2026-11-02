@@ -1,0 +1,166 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 35.64s
+     Running tests/tiff_pages_metal.rs (target/debug/deps/tiff_pages_metal-8dba981172dc8edd)
+
+running 6 tests
+test distinct_tiff_page_profiles_keep_selected_color_through_swap ... TIFF page ICC adapter: Metal Apple M4 Max
+TIFF page ICC: sRGB->linear->sRGB; identical source codes; LittleCMS RGB8 within1; fallback override refused; reverse swap SDR/HDR exact; final=0
+ok
+test fax3_sources_survive_ram_swap_pressure_cancel_and_metal ... Fax3 adapter: Metal Apple M4 Max
+go-bw-gopher-fax3.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill2-opt4-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill1-opt4-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8l-fill1-opt0-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8l-fill2-opt4-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8b-fill1-opt4-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8b-fill2-opt0-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill1-opt1-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill2-opt5-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill1-opt5-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill2-opt1-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8l-fill1-opt1-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8l-fill2-opt5-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8b-fill1-opt5-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8b-fill2-opt1-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill1-opt0-ori2.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill2-opt1-ori2.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill1-opt4-ori3.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill2-opt5-ori3.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8l-fill1-opt0-ori4.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8l-fill2-opt1-ori4.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8b-fill1-opt4-ori5.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-w8b-fill2-opt5-ori5.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wl-fill2-opt4-ori7.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-wb-fill1-opt5-ori7.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-wl-fill2-opt1-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-wb-fill1-opt4-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-wb-fill2-opt5-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-w8l-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-w8l-fill2-opt1-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-w8b-fill1-opt4-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax3-long-w8b-fill2-opt5-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+go-bw-gopher-fax4.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-wl-fill2-opt0-ori2.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-wb-fill1-opt0-ori3.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-wb-fill2-opt0-ori4.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-w8l-fill1-opt0-ori5.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-w8l-fill2-opt0-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-w8b-fill1-opt0-ori7.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-w8b-fill2-opt0-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-wl-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-wb-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-wb-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-w8l-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-w8l-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-w8b-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-long-w8b-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax4-dense-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-wl-fill2-opt0-ori2.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-wb-fill1-opt0-ori3.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-wb-fill2-opt0-ori4.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-w8l-fill1-opt0-ori5.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-w8l-fill2-opt0-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-w8b-fill1-opt0-ori7.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-w8b-fill2-opt0-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-wl-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-wb-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-wb-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-w8l-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-w8l-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-w8b-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2-long-w8b-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-wl-fill2-opt0-ori2.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-wb-fill1-opt0-ori3.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-wb-fill2-opt0-ori4.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-w8l-fill1-opt0-ori5.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-w8l-fill2-opt0-ori6.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-w8b-fill1-opt0-ori7.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-w8b-fill2-opt0-ori8.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-wl-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-wb-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-wb-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-w8l-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-w8l-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-w8b-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-long-w8b-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-wl-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-wl-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-wb-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-wb-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-w8l-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-w8l-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-w8b-fill1-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+fax2w-single-w8b-fill2-opt0-ori1.tiff: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0
+ok
+test independent_compressed_tiff_pages_keep_native_bits_and_metal_swap ... TIFF precision adapter: Metal Apple M4 Max
+TIFF precision: precision-uint16-little-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-uint16-little-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-uint16-big-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-uint16-big-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-little-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-little-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-big-same.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+TIFF precision: precision-float32-big-changed.tif; native samples exact; ICC selected metadata; reverse swap; SDR/HDR exact; final=0
+ok
+test palette_tiff_native16_survives_pressure_cancel_swap_and_metal ... Palette TIFF adapter: Metal Apple M4 Max
+go-video-001-paletted.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette16-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette16-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette16-big-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette16-big-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed1-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed1-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed2-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed2-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed4-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed4-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed1-big-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed1-big-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed2-big-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed2-big-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed4-big-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-packed4-big-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-wide16-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-wide16-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-wide16-big-le.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+palette-wide16-big-be.tiff: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0
+ok
+test selected_tiff_pages_survive_ram_ttl_swap_and_metal ... TIFF pages adapter: Metal Apple M4 Max
+TIFF pages: classic-le; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+TIFF pages: classic-be; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+TIFF pages: big-le; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+TIFF pages: big-be; selected metadata; visible TTL pin; full-pressure RAM hit; reverse swap; SDR/HDR exact; final=0
+ok
+test signed_hdr_tiff_pages_preserve_alpha_orientation_and_metal ... TIFF signed HDR adapter: Metal Apple M4 Max
+TIFF signed HDR: le; above-one negative signed-zero; straight/associated alpha; orientation6; pressure/cancel retry; native bits and SDR/HDR exact; final=0
+TIFF signed HDR: be; above-one negative signed-zero; straight/associated alpha; orientation6; pressure/cancel retry; native bits and SDR/HDR exact; final=0
+ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.42s

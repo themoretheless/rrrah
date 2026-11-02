@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64;x86</Platforms>
+    <!-- Disable auto generating Assembly Info so we can use
+         our own project wide versioning schema.-->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Deterministic>false</Deterministic>
+    <Configurations>Debug;Release</Configurations>
+    <PublishDir>bin\publish\</PublishDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Versioning\Versioning.cs" Link="Versioning.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Versioning\Versioning.csproj">
+      <TreatAsUsed>true</TreatAsUsed>
+    </ProjectReference>
+    <ProjectReference Include="..\VideoDedupServer\VideoDedupServer.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="!$([System.String]::Copy('$(RuntimeIdentifier)').StartsWith('linux'))">
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\avcodec-61.dll">
+      <Link>avcodec-61.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\avdevice-61.dll">
+      <Link>avdevice-61.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\avfilter-10.dll">
+      <Link>avfilter-10.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\avformat-61.dll">
+      <Link>avformat-61.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\avutil-59.dll">
+      <Link>avutil-59.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\swresample-5.dll">
+      <Link>swresample-5.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="..\FfmpegLib\Libs\ffmpeg\x64\swscale-8.dll">
+      <Link>swscale-8.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="9.0.5" />
+  </ItemGroup>
+</Project>

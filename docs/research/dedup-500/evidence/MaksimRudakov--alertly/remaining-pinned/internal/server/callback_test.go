@@ -1,0 +1,614 @@
+package server
+
+import (
+	"context"
+	"errors"
+	"io"
+	"log/slog"
+	"sync"
+	"testing"
+	"time"
+
+	"github.com/MaksimRudakov/alertly/internal/alertmanager"
+	"github.com/MaksimRudakov/alertly/internal/metrics"
+	"github.com/MaksimRudakov/alertly/internal/telegram"
+)
+
+func init() {
+	metrics.Init()
+}
+
+func TestParseCallbackData(t *testing.T) {
+	cases := []struct {
+		in         string
+		wantAct    string
+		wantFP     string
+		wantDur    string
+		wantErr    bool
+		descripion string
+	}{
+		{"s|abc|1h", "s", "abc", "1h", false, "normal"},
+		{"s|9bcf23a1e4d08b17|24h", "s", "9bcf23a1e4d08b17", "24h", false, "fp16"},
+		{"s|abc", "", "", "", true, "too few fields"},
+		{"s|abc|1h|extra", "", "", "", true, "too many fields"},
+		{"|abc|1h", "", "", "", true, "empty action"},
+		{"s||1h", "", "", "", true, "empty fp"},
+		{"s|abc|", "", "", "", true, "empty duration"},
+		{"", "", "", "", true, "empty"},
+	}
+	for _, c := range cases {
+		t.Run(c.descripion, func(t *testing.T) {
+			act, fp, dur, err := ParseCallbackData(c.in)
+			if c.wantErr {
+				if err == nil {
+					t.Fatalf("expected error for %q", c.in)
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if act != c.wantAct || fp != c.wantFP || dur != c.wantDur {
+				t.Errorf("got (%q,%q,%q), want (%q,%q,%q)", act, fp, dur, c.wantAct, c.wantFP, c.wantDur)
+			}
+		})
+	}
+}
+
+func TestBuildCallbackDataSize(t *testing.T) {
+	// sha256-16 fingerprint + typical duration — must stay within 64 bytes.
+	data := BuildCallbackData(CallbackActionSilence, "9bcf23a1e4d08b17", "24h")
+	if len(data) > 64 {
+		t.Errorf("callback_data too long: %d bytes", len(data))
+	}
+}
+
+// --- fake telegram client --------------------------------------------------
+
+type fakeTG struct {
+	mu              sync.Mutex
+	answers         []answer
+	editedMarkups   []edit
+	editedTexts     []edit
+	sentMessages    []sent
+	sendErr         error
+	answerErr       error
+	editReplyErr    error
+	editTextErr     error
+	callbacksCalled int
+}
+
+type answer struct {
+	ID        string
+	Text      string
+	ShowAlert bool
+}
+type sent struct {
+	ChatID   int64
+	ThreadID *int
+	Text     string
+}
+type edit struct {
+	ChatID    int64
+	MessageID int64
+	Text      string
+	Markup    *telegram.InlineKeyboardMarkup
+}
+
+func (f *fakeTG) SendMessage(_ context.Context, chatID int64, threadID *int, text string, _ *telegram.SendOptions) (int64, error) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.sentMessages = append(f.sentMessages, sent{ChatID: chatID, ThreadID: threadID, Text: text})
+	return 0, f.sendErr
+}
+func (f *fakeTG) GetMe(context.Context) error { return nil }
+func (f *fakeTG) GetUpdates(context.Context, int64, time.Duration) ([]telegram.Update, error) {
+	return nil, nil
+}
+func (f *fakeTG) AnswerCallbackQuery(_ context.Context, id, text string, showAlert bool) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.callbacksCalled++
+	f.answers = append(f.answers, answer{ID: id, Text: text, ShowAlert: showAlert})
+	return f.answerErr
+}
+func (f *fakeTG) EditMessageText(_ context.Context, chatID, messageID int64, text string, m *telegram.InlineKeyboardMarkup) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.editedTexts = append(f.editedTexts, edit{ChatID: chatID, MessageID: messageID, Text: text, Markup: m})
+	return f.editTextErr
+}
+func (f *fakeTG) EditMessageReplyMarkup(_ context.Context, chatID, messageID int64, m *telegram.InlineKeyboardMarkup) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.editedMarkups = append(f.editedMarkups, edit{ChatID: chatID, MessageID: messageID, Markup: m})
+	return f.editReplyErr
+}
+
+// --- fake AM client --------------------------------------------------------
+
+type fakeAM struct {
+	labels        map[string]map[string]string
+	getErr        error
+	silenceErr    error
+	silenceID     string
+	createdReqs   []alertmanager.SilenceRequest
+	deleteErr     error
+	deletedIDs    []string
+	mu            sync.Mutex
+	getAlertCalls int
+	statusInfo    alertmanager.StatusInfo
+	statusErr     error
+	overview      alertmanager.AlertsOverview
+	overviewErr   error
+}
+
+func (f *fakeAM) Status(context.Context) (alertmanager.StatusInfo, error) {
+	if f.statusErr != nil {
+		return alertmanager.StatusInfo{}, f.statusErr
+	}
+	return f.statusInfo, nil
+}
+
+func (f *fakeAM) AlertsOverview(context.Context, string) (alertmanager.AlertsOverview, error) {
+	if f.overviewErr != nil {
+		return alertmanager.AlertsOverview{}, f.overviewErr
+	}
+	return f.overview, nil
+}
+
+func (f *fakeAM) GetAlertLabels(_ context.Context, fp, _ string) (map[string]string, error) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.getAlertCalls++
+	if f.getErr != nil {
+		return nil, f.getErr
+	}
+	l, ok := f.labels[fp]
+	if !ok {
+		return nil, alertmanager.ErrAlertNotFound
+	}
+	return l, nil
+}
+
+func (f *fakeAM) CreateSilence(_ context.Context, req alertmanager.SilenceRequest) (string, error) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.createdReqs = append(f.createdReqs, req)
+	if f.silenceErr != nil {
+		return "", f.silenceErr
+	}
+	if f.silenceID == "" {
+		return "silence-1", nil
+	}
+	return f.silenceID, nil
+}
+
+func (f *fakeAM) DeleteSilence(_ context.Context, id string) error {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	f.deletedIDs = append(f.deletedIDs, id)
+	return f.deleteErr
+}
+
+// --- tests -----------------------------------------------------------------
+
+func newHandler(tg *fakeTG, am *fakeAM, cache *alertmanager.LabelCache, chats, users []int64) *CallbackHandler {
+	// The callback handler requires callback_data to carry the fingerprint
+	// tracked for the message; tests press buttons for fp1 unless they
+	// re-register another one.
+	tracker := NewButtonTracker(time.Hour, 0)
+	tracker.Register(-100, 42, "fp1")
+	return NewCallbackHandler(CallbackDeps{
+		Logger:        slog.New(slog.NewTextHandler(io.Discard, nil)),
+		Telegram:      tg,
+		AM:            am,
+		Cache:         cache,
+		Tracker:       tracker,
+		ChatAllowlist: chats,
+		UserAllowlist: users,
+		Durations:     map[string]time.Duration{"1h": time.Hour, "24h": 24 * time.Hour},
+	})
+}
+
+func mkCallback(data string, chatID int64, userID int64) *telegram.CallbackQuery {
+	return &telegram.CallbackQuery{
+		ID:      "cbid",
+		From:    telegram.User{ID: userID, Username: "alice"},
+		Message: &telegram.Message{MessageID: 42, Chat: telegram.Chat{ID: chatID}},
+		Data:    data,
+	}
+}
+
+func TestCallback_HappyPath_AMHasLabels(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{
+		"fp1": {"alertname": "X", "severity": "warning"},
+	}}
+	cache := alertmanager.NewLabelCache(time.Hour, 10)
+	h := newHandler(tg, am, cache, []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(am.createdReqs) != 1 {
+		t.Fatalf("expected 1 silence, got %d", len(am.createdReqs))
+	}
+	if len(am.createdReqs[0].Matchers) != 2 {
+		t.Errorf("matchers: %+v", am.createdReqs[0].Matchers)
+	}
+	if len(tg.editedMarkups) != 1 || tg.editedMarkups[0].Markup != nil {
+		t.Errorf("expected markup stripped, got %+v", tg.editedMarkups)
+	}
+	if len(tg.answers) != 1 || tg.answers[0].ShowAlert {
+		t.Errorf("answer: %+v", tg.answers)
+	}
+}
+
+func TestCallback_FallbackToCache(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{}} // empty → not found
+	cache := alertmanager.NewLabelCache(time.Hour, 10)
+	cache.Put("fp-resolved", map[string]string{"alertname": "Gone"})
+	h := newHandler(tg, am, cache, []int64{-100}, nil)
+
+	h.deps.Tracker.Register(-100, 42, "fp-resolved")
+	h.Handle(context.Background(), mkCallback("s|fp-resolved|1h", -100, 1))
+
+	if len(am.createdReqs) != 1 {
+		t.Errorf("expected silence from cached labels, got %d", len(am.createdReqs))
+	}
+}
+
+func TestCallback_RejectsUnlistedChat(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{"fp1": {"a": "1"}}}
+	h := newHandler(tg, am, nil, []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -999, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Error("silence must not be created from unlisted chat")
+	}
+	if len(tg.answers) != 1 || !tg.answers[0].ShowAlert {
+		t.Errorf("expected show_alert answer, got %+v", tg.answers)
+	}
+}
+
+func TestCallback_RejectsUnlistedUser(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{"fp1": {"a": "1"}}}
+	h := newHandler(tg, am, nil, []int64{-100}, []int64{999})
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Error("silence must not be created for unlisted user")
+	}
+}
+
+func TestCallback_InvalidDuration(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{"fp1": {"a": "1"}}}
+	h := newHandler(tg, am, nil, []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|fp1|99h", -100, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Error("unsupported duration must not create silence")
+	}
+	if tg.answers[0].Text != "⚠️ Unsupported silence duration." {
+		t.Errorf("answer: %+v", tg.answers[0])
+	}
+}
+
+func TestCallback_AlertNotFound(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{}}
+	cache := alertmanager.NewLabelCache(time.Hour, 10)
+	h := newHandler(tg, am, cache, []int64{-100}, nil)
+
+	h.deps.Tracker.Register(-100, 42, "fp-unknown")
+	h.Handle(context.Background(), mkCallback("s|fp-unknown|1h", -100, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Error("silence must not be created when alert is unknown")
+	}
+}
+
+func TestCallback_AMErrorPropagates(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{
+		labels: map[string]map[string]string{"fp1": {"a": "1"}},
+		silenceErr: &alertmanager.APIError{
+			StatusCode: 400, Body: "bad matcher",
+		},
+	}
+	h := newHandler(tg, am, nil, []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(tg.editedMarkups) != 0 {
+		t.Error("markup must not be stripped when silence failed")
+	}
+	if len(tg.answers) != 1 || !tg.answers[0].ShowAlert {
+		t.Error("expected error answer with show_alert")
+	}
+}
+
+func TestCallback_GetLabelsErrorPropagates(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{getErr: errors.New("boom")}
+	h := newHandler(tg, am, nil, []int64{-100}, nil)
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+	if len(am.createdReqs) != 0 {
+		t.Error("silence must not be created if GetAlertLabels errors")
+	}
+}
+
+func TestCallback_InvalidDataNoSilence(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{}
+	h := newHandler(tg, am, nil, []int64{-100}, nil)
+	h.Handle(context.Background(), mkCallback("garbage", -100, 1))
+	if len(am.createdReqs) != 0 {
+		t.Error("silence must not be created for invalid data")
+	}
+	if am.getAlertCalls != 0 {
+		t.Error("AM must not be queried for invalid data")
+	}
+}
+
+func TestCallback_ExpiredWindow(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{"fp1": {"a": "1"}}}
+	// Build a handler with an empty tracker — simulating expired / unknown message.
+	tracker := NewButtonTracker(time.Hour, 0)
+	h := NewCallbackHandler(CallbackDeps{
+		Logger:        slog.New(slog.NewTextHandler(io.Discard, nil)),
+		Telegram:      tg,
+		AM:            am,
+		Cache:         alertmanager.NewLabelCache(time.Hour, 10),
+		Tracker:       tracker,
+		ChatAllowlist: []int64{-100},
+		Durations:     map[string]time.Duration{"1h": time.Hour},
+	})
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Error("expired window must not create silence")
+	}
+	if len(tg.editedMarkups) != 1 || tg.editedMarkups[0].Markup != nil {
+		t.Errorf("expected keyboard strip, got %+v", tg.editedMarkups)
+	}
+	if len(tg.answers) != 1 || !tg.answers[0].ShowAlert {
+		t.Error("expected show_alert toast")
+	}
+}
+
+func TestCallback_ConsumeOnSuccess(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{"fp1": {"a": "1"}}}
+	tracker := NewButtonTracker(time.Hour, 0)
+	tracker.Register(-100, 42, "fp1")
+
+	h := NewCallbackHandler(CallbackDeps{
+		Logger:        slog.New(slog.NewTextHandler(io.Discard, nil)),
+		Telegram:      tg,
+		AM:            am,
+		Cache:         alertmanager.NewLabelCache(time.Hour, 10),
+		Tracker:       tracker,
+		ChatAllowlist: []int64{-100},
+		Durations:     map[string]time.Duration{"1h": time.Hour},
+	})
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if tracker.Valid(-100, 42) {
+		t.Error("tracker entry must be consumed after successful silence")
+	}
+}
+
+func TestSilenceCreatedBy(t *testing.T) {
+	if got := silenceCreatedBy(telegram.User{ID: 5, Username: "bob"}); got != "telegram:@bob" {
+		t.Errorf("with username: %q", got)
+	}
+	if got := silenceCreatedBy(telegram.User{ID: 5}); got != "telegram:5" {
+		t.Errorf("without username: %q", got)
+	}
+}
+
+// --- silence_matchers + undo ------------------------------------------------
+
+func newUndoHandler(tg *fakeTG, am *fakeAM, matchers []string) (*CallbackHandler, *ButtonTracker) {
+	tracker := NewButtonTracker(time.Hour, 0)
+	tracker.Register(-100, 42, "fp1")
+	undo := NewButtonTracker(5*time.Minute, 0)
+	h := NewCallbackHandler(CallbackDeps{
+		Logger:          slog.New(slog.NewTextHandler(io.Discard, nil)),
+		Telegram:        tg,
+		AM:              am,
+		Cache:           alertmanager.NewLabelCache(time.Hour, 10),
+		Tracker:         tracker,
+		ChatAllowlist:   []int64{-100},
+		Durations:       map[string]time.Duration{"1h": time.Hour},
+		SilenceMatchers: matchers,
+		UndoTracker:     undo,
+	})
+	return h, undo
+}
+
+func TestCallback_SilenceMatchersFilter(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{
+		"fp1": {"alertname": "X", "namespace": "prod", "pod": "api-123", "severity": "warning"},
+	}}
+	h, _ := newUndoHandler(tg, am, []string{"alertname", "namespace"})
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(am.createdReqs) != 1 {
+		t.Fatalf("expected 1 silence, got %d", len(am.createdReqs))
+	}
+	got := map[string]string{}
+	for _, m := range am.createdReqs[0].Matchers {
+		got[m.Name] = m.Value
+	}
+	if len(got) != 2 || got["alertname"] != "X" || got["namespace"] != "prod" {
+		t.Errorf("matchers filtered wrong: %+v", am.createdReqs[0].Matchers)
+	}
+}
+
+func TestCallback_SilenceMatchersNoneMatch_Refused(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{
+		"fp1": {"severity": "warning"},
+	}}
+	h, _ := newUndoHandler(tg, am, []string{"alertname"})
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Fatalf("zero-matcher silence must be refused, got %d requests", len(am.createdReqs))
+	}
+	if len(tg.answers) != 1 || !tg.answers[0].ShowAlert {
+		t.Errorf("expected alert answer, got %+v", tg.answers)
+	}
+}
+
+func TestCallback_UndoFlow(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{
+		labels:    map[string]map[string]string{"fp1": {"alertname": "X"}},
+		silenceID: "sil-42",
+	}
+	h, undo := newUndoHandler(tg, am, nil)
+
+	// 1. Silence: keyboard must be replaced with an Undo button, not stripped.
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+	if len(tg.editedMarkups) != 1 {
+		t.Fatalf("expected 1 markup edit, got %d", len(tg.editedMarkups))
+	}
+	m := tg.editedMarkups[0].Markup
+	if m == nil || len(m.InlineKeyboard) != 1 || len(m.InlineKeyboard[0]) != 1 {
+		t.Fatalf("expected undo keyboard, got %+v", m)
+	}
+	undoData := m.InlineKeyboard[0][0].CallbackData
+	if undoData != "u|sil-42|-" {
+		t.Fatalf("undo callback data: %q", undoData)
+	}
+	if !undo.Valid(-100, 42) {
+		t.Fatal("undo tracker should hold the message")
+	}
+
+	// 2. Undo press: silence deleted, keyboard stripped, tracker consumed.
+	h.Handle(context.Background(), mkCallback(undoData, -100, 1))
+	if len(am.deletedIDs) != 1 || am.deletedIDs[0] != "sil-42" {
+		t.Fatalf("expected DeleteSilence(sil-42), got %v", am.deletedIDs)
+	}
+	last := tg.editedMarkups[len(tg.editedMarkups)-1]
+	if last.Markup != nil {
+		t.Errorf("keyboard should be stripped after undo, got %+v", last.Markup)
+	}
+	if undo.Valid(-100, 42) {
+		t.Error("undo tracker entry should be consumed")
+	}
+
+	// 3. Second undo press: window is gone, no second delete.
+	h.Handle(context.Background(), mkCallback(undoData, -100, 1))
+	if len(am.deletedIDs) != 1 {
+		t.Errorf("expected no second delete, got %v", am.deletedIDs)
+	}
+}
+
+func TestCallback_UndoExpiredWindow(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{}
+	tracker := NewButtonTracker(time.Hour, 0)
+	h := NewCallbackHandler(CallbackDeps{
+		Logger:        slog.New(slog.NewTextHandler(io.Discard, nil)),
+		Telegram:      tg,
+		AM:            am,
+		Cache:         alertmanager.NewLabelCache(time.Hour, 10),
+		Tracker:       tracker,
+		ChatAllowlist: []int64{-100},
+		Durations:     map[string]time.Duration{"1h": time.Hour},
+		UndoTracker:   NewButtonTracker(5*time.Minute, 0), // nothing registered
+	})
+
+	h.Handle(context.Background(), mkCallback("u|sil-1|-", -100, 1))
+
+	if len(am.deletedIDs) != 0 {
+		t.Errorf("expired undo must not delete, got %v", am.deletedIDs)
+	}
+	if len(tg.answers) != 1 || !tg.answers[0].ShowAlert {
+		t.Errorf("expected alert answer, got %+v", tg.answers)
+	}
+}
+
+func TestCallback_UndoDisabled_KeyboardStripped(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{"fp1": {"alertname": "X"}}}
+	h := newHandler(tg, am, alertmanager.NewLabelCache(time.Hour, 10), []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(tg.editedMarkups) != 1 || tg.editedMarkups[0].Markup != nil {
+		t.Errorf("with undo disabled the keyboard must be stripped, got %+v", tg.editedMarkups)
+	}
+}
+
+func TestCallback_FingerprintMismatchRejected(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{labels: map[string]map[string]string{
+		"fp1":    {"alertname": "X"},
+		"forged": {"alertname": "Everything"},
+	}}
+	h := newHandler(tg, am, nil, []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|forged|1h", -100, 1))
+
+	if len(am.createdReqs) != 0 {
+		t.Fatalf("silence must not be created for a fingerprint the message does not carry, got %d", len(am.createdReqs))
+	}
+	if am.getAlertCalls != 0 {
+		t.Errorf("AM must not be queried, got %d calls", am.getAlertCalls)
+	}
+	if len(tg.answers) != 1 || !tg.answers[0].ShowAlert {
+		t.Errorf("expected alert answer, got %+v", tg.answers)
+	}
+}
+
+func TestCallback_UndoSilenceMismatchRejected(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{
+		labels:    map[string]map[string]string{"fp1": {"alertname": "X"}},
+		silenceID: "sil-42",
+	}
+	h, undo := newUndoHandler(tg, am, nil)
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	h.Handle(context.Background(), mkCallback("u|sil-other|-", -100, 1))
+
+	if len(am.deletedIDs) != 0 {
+		t.Fatalf("foreign silence must not be deleted, got %v", am.deletedIDs)
+	}
+	if !undo.Valid(-100, 42) {
+		t.Error("undo entry must survive a mismatched press")
+	}
+}
+
+func TestCallback_AMFailureFallsBackToCache(t *testing.T) {
+	tg := &fakeTG{}
+	am := &fakeAM{getErr: errors.New("decode alerts: unexpected EOF")}
+	cache := alertmanager.NewLabelCache(time.Hour, 10)
+	cache.Put("fp1", map[string]string{"alertname": "X", "namespace": "prod"})
+	h := newHandler(tg, am, cache, []int64{-100}, nil)
+
+	h.Handle(context.Background(), mkCallback("s|fp1|1h", -100, 1))
+
+	if len(am.createdReqs) != 1 {
+		t.Fatalf("expected silence from cached labels on AM failure, got %d", len(am.createdReqs))
+	}
+	if len(am.createdReqs[0].Matchers) != 2 {
+		t.Errorf("matchers: %+v", am.createdReqs[0].Matchers)
+	}
+}

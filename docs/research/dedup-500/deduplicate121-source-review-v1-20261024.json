@@ -1,0 +1,29 @@
+{
+  "repository": "LoicGoulefert/deduplicate",
+  "commit": "4dd4bcdb70ad93a11a2c3f4ac04de4e37a968816",
+  "whole_files_read": [
+    {
+      "path": "deduplicate/deduplicate.py",
+      "git_blob": "c9be39d1fc1769f3d0ef443db0439de497509fc3",
+      "sha256": "e22f846f14694c83cd8545535ae3c75d16ccc9961c2b696679f396d4827a8184",
+      "whole_text_read": true
+    },
+    {
+      "path": "setup.py",
+      "git_blob": "589c2af927090fe2099b4c761900b1ad618cf22e",
+      "sha256": "2e09c62d5cc107feb60b8ae0a5c7484d0d94a06ed087788fb9195924a0769fd1",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 2,
+  "tracked_blobs": 22,
+  "whole_repo_complete": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Spatial line overlap removal using Shapely buffer and STRtree;does not compare file bytes or raster images.",
+    "Spatial index rebuilt for each processed line;performance implication source-only,unbenchmarked.",
+    "setup declares shapely>=1.8.0 but source imports top-level union_all and expects index-returning STRtree query;dependency compatibility not runtime-tested."
+  ],
+  "tests_run": false,
+  "production_adoption": false
+}

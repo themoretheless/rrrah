@@ -1,0 +1,114 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9.58s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-72191398ce43797e)
+
+running 5 tests
+test edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline ... ok
+test histogram::tests::histogram_matches_analytic_cpu_oracle_and_refuses_budget_metal ... ok
+test histogram::tests::histogram_shader_validates_and_storage_is_bounded ... ok
+test histogram::tests::latest_generation_replaces_pending_and_obsolete_result_is_not_published_metal ... ok
+test histogram::tests::newer_frame_supersedes_result_even_within_one_decode_generation_metal ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 73 filtered out; finished in 2.10s
+
+     Running tests/ai_native_transport.rs (target/debug/deps/ai_native_transport-57df9cf21d3462f1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/camera_color_readback.rs (target/debug/deps/camera_color_readback-78a9dfff992e086b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 13 filtered out; finished in 0.00s
+
+     Running tests/compute_readback.rs (target/debug/deps/compute_readback-173c09fa22d3fd92)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/filmstrip_readback.rs (target/debug/deps/filmstrip_readback-ecf3fa163a6f9d5b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.00s
+
+     Running tests/model_readback.rs (target/debug/deps/model_readback-2d619d5979e107e1)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/raster_readback.rs (target/debug/deps/raster_readback-6afa41f6ead9425a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 36 filtered out; finished in 0.00s
+
+     Running tests/raster_timing.rs (target/debug/deps/raster_timing-6afc254bbd213d18)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/raw_linear_readback.rs (target/debug/deps/raw_linear_readback-b2fed5a88b64872f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/raw_orientation_readback.rs (target/debug/deps/raw_orientation_readback-bad4962dcaefb99e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.00s
+
+     Running tests/readback.rs (target/debug/deps/readback-47f8ee0337bfaf0d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+     Running tests/real_bayer_compute.rs (target/debug/deps/real_bayer_compute-371f648c8eacab04)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/resource_lease.rs (target/debug/deps/resource_lease-2bcbdbed27813a62)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.00s
+
+     Running tests/rgbe_compute_readback.rs (target/debug/deps/rgbe_compute_readback-a9dd08ce823950eb)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 7 filtered out; finished in 0.00s
+
+     Running tests/rgbe_view_readback.rs (target/debug/deps/rgbe_view_readback-4df59fdee053b32d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+

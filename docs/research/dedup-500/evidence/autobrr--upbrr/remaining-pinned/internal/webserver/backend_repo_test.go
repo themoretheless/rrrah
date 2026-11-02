@@ -1,0 +1,2252 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package webserver
+
+import (
+	"bytes"
+	"context"
+	"database/sql"
+	"encoding/json"
+	"errors"
+	"io"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"sync"
+	"testing"
+	"time"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/cookies"
+	"github.com/autobrr/upbrr/internal/core"
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	"github.com/autobrr/upbrr/internal/logging"
+	"github.com/autobrr/upbrr/internal/releaseworkflow"
+	"github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func TestNewBackendKeepsSharedRepositoryUsableAfterCoreClose(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "startup.db")
+	cfg := config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "x", DBPath: repoPath},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+
+	backend, err := NewBackendWithContext(context.Background(), cfg, newEventHub())
+	if err != nil {
+		t.Fatalf("new backend: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = backend.Close()
+	})
+
+	if backend.coreOwner == nil {
+		t.Fatal("expected startup core to be initialized")
+	}
+	if err := backend.coreOwner.Close(); err != nil {
+		t.Fatalf("close core: %v", err)
+	}
+	if backend.repo == nil {
+		t.Fatal("expected startup repo to be initialized")
+	}
+
+	if err := backend.repo.Save(context.Background(), db.FileMetadata{
+		Path:      filepath.Join(t.TempDir(), "after-startup.mkv"),
+		Title:     "After Startup",
+		UpdatedAt: time.Now().UTC().Truncate(time.Second),
+	}); err != nil {
+		t.Fatalf("expected startup repo to remain usable after core close: %v", err)
+	}
+}
+
+func TestNewBackendInitializesConfigActivationFingerprint(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "activation.db")
+	cfg := backendConfigTestConfig(repoPath)
+	backend, err := NewBackendWithContext(t.Context(), cfg, newEventHub())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+
+	activation, err := backend.repo.LoadConfigActivation(t.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := config.EffectiveConfigFingerprint(cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.ActiveGeneration != 0 || activation.Fingerprint != want {
+		t.Fatalf("initial activation = %#v, want generation=0 fingerprint=%q", activation, want)
+	}
+}
+
+func TestStartupReconcilesNewDefaultsBeforeConfigIsSaved(t *testing.T) {
+	ctx := t.Context()
+	repoPath := filepath.Join(t.TempDir(), "activation.db")
+	repo, err := db.OpenContext(ctx, repoPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = repo.Close() })
+	if err := repo.MigrateContext(ctx); err != nil {
+		t.Fatal(err)
+	}
+	previous := backendConfigTestConfig(repoPath)
+	initial, err := InitializeRuntimeConfigActivation(ctx, repo, previous, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	current := previous
+	current.Metadata.KeepImages = !previous.Metadata.KeepImages
+	want, err := config.EffectiveConfigFingerprint(current)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if initial.Fingerprint == want {
+		t.Fatal("test defaults did not change fingerprint")
+	}
+	activation, err := InitializeRuntimeConfigActivation(ctx, repo, current, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.ActiveGeneration != 1 || activation.Fingerprint != want {
+		t.Fatalf("default-only upgrade = %#v, want generation=1 fingerprint=%q", activation, want)
+	}
+}
+
+func TestNewBackendReconcilesExpiredOpeningInput(t *testing.T) {
+	ctx := t.Context()
+	repoPath := filepath.Join(t.TempDir(), "activation.db")
+	repo, err := db.OpenContext(ctx, repoPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = repo.Close() })
+	if err := repo.MigrateContext(ctx); err != nil {
+		t.Fatal(err)
+	}
+	previous := backendConfigTestConfig(repoPath)
+	if _, err := InitializeRuntimeConfigActivation(ctx, repo, previous, nil); err != nil {
+		t.Fatal(err)
+	}
+	oldSlot := api.ActiveInputRecord{
+		State:          api.ActiveInputOpening,
+		Revision:       1,
+		Fence:          1,
+		OwnerID:        "owner",
+		CoordinatorID:  "previous-process",
+		LeaseExpiresAt: time.Now().UTC().Add(-time.Minute),
+		ReservationID:  "opening",
+		RequestedPath:  "synthetic-source",
+		IdempotencyKey: "open",
+	}
+	payload, err := json.Marshal(oldSlot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := repo.RawDB().ExecContext(ctx, `UPDATE active_input SET revision = ?, fence = ?, record_json = ? WHERE singleton = 1`,
+		oldSlot.Revision, oldSlot.Fence, payload); err != nil {
+		t.Fatal(err)
+	}
+	current := previous
+	current.Metadata.KeepImages = !previous.Metadata.KeepImages
+	backend, err := NewBackendWithContext(ctx, current, newEventHub())
+	if err != nil {
+		t.Fatalf("start backend after prior-process input: %v", err)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+	activation, err := backend.repo.LoadConfigActivation(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.ActiveGeneration != 1 {
+		t.Fatalf("activation generation = %d, want 1", activation.ActiveGeneration)
+	}
+	slot, err := backend.repo.LoadActiveInput(ctx)
+	if err != nil || slot.State != api.ActiveInputEmpty {
+		t.Fatalf("recovered startup input = %#v, err=%v", slot, err)
+	}
+}
+
+func TestNewBackendReconcilesRetiredA4KActivationFingerprint(t *testing.T) {
+	t.Parallel()
+	ctx := t.Context()
+	repoPath := filepath.Join(t.TempDir(), "activation.db")
+	repo, err := db.OpenContext(ctx, repoPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+	if err := repo.MigrateContext(ctx); err != nil {
+		t.Fatal(err)
+	}
+	cfg := backendConfigTestConfig(repoPath)
+	cfg.Trackers.Trackers = map[string]config.TrackerConfig{"A4K": {APIKey: "synthetic-key", Anon: true}}
+	if err := config.SaveToDatabase(ctx, &cfg, repo); err != nil {
+		t.Fatal(err)
+	}
+	stored, err := config.LoadFromDatabase(ctx, repo)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stored.MainSettings.DBPath = repoPath
+
+	// Previous releases included A4K in the embedded tracker schema.
+	currentTrackersJSON, err := json.Marshal(stored.Trackers)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var trackersDoc struct {
+		DefaultTrackers  config.CSVList            `json:"DefaultTrackers"`
+		PreferredTracker string                    `json:"PreferredTracker"`
+		Trackers         map[string]map[string]any `json:"Trackers"`
+	}
+	if err := json.Unmarshal(currentTrackersJSON, &trackersDoc); err != nil {
+		t.Fatal(err)
+	}
+	trackersDoc.Trackers["A4K"] = map[string]any{
+		"LinkDirName":           "",
+		"APIKey":                "synthetic-key",
+		"ImageHost":             "",
+		"Anon":                  true,
+		"ModQ":                  false,
+		"FaviconURL":            "",
+		"TorrentClient":         "",
+		"Internal":              false,
+		"DupeBypassGroups":      []any{},
+		"PersonalReleaseGroups": []any{},
+		"InternalGroups":        []any{},
+	}
+	legacyTrackersJSON, err := json.Marshal(trackersDoc)
+	if err != nil {
+		t.Fatal(err)
+	}
+	withoutDBPath := *stored
+	withoutDBPath.MainSettings.DBPath = ""
+	currentJSON, err := json.Marshal(withoutDBPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	legacyJSON := bytes.Replace(currentJSON, currentTrackersJSON, legacyTrackersJSON, 1)
+	if bytes.Equal(legacyJSON, currentJSON) && !bytes.Equal(currentTrackersJSON, legacyTrackersJSON) {
+		t.Fatal("could not substitute prior tracker shape")
+	}
+	legacyFingerprint, err := api.CanonicalWorkflowFingerprint(json.RawMessage(legacyJSON))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := repo.InitializeConfigActivationFingerprint(ctx, legacyFingerprint); err != nil {
+		t.Fatal(err)
+	}
+
+	backend, err := NewBackendWithContext(ctx, *stored, newEventHub())
+	if err != nil {
+		t.Fatalf("retired A4K config blocked startup: %v", err)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+	activation, err := repo.LoadConfigActivation(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := config.EffectiveConfigFingerprint(*stored)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.ActiveGeneration != 1 || activation.Fingerprint != want ||
+		!slices.Equal(activation.Impacts, []api.ConfigImpact{api.ConfigImpactProvider}) {
+		t.Fatalf("startup did not advance activation to current config: %#v", activation)
+	}
+}
+
+func TestStartupReconcilesStoredConfigChanges(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		change func(*config.Config)
+	}{
+		{"tracker addition", func(cfg *config.Config) {
+			cfg.Trackers.Trackers = map[string]config.TrackerConfig{"NEW": {APIKey: "synthetic-key"}}
+		}},
+		{"setting change", func(cfg *config.Config) {
+			cfg.Metadata.KeepImages = !cfg.Metadata.KeepImages
+		}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := t.Context()
+			repoPath := filepath.Join(t.TempDir(), "activation.db")
+			repo, err := db.OpenContext(ctx, repoPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Cleanup(func() { _ = repo.Close() })
+			if err := repo.MigrateContext(ctx); err != nil {
+				t.Fatal(err)
+			}
+			cfg := backendConfigTestConfig(repoPath)
+			if err := config.SaveToDatabase(ctx, &cfg, repo); err != nil {
+				t.Fatal(err)
+			}
+			previous, err := config.LoadFromDatabase(ctx, repo)
+			if err != nil {
+				t.Fatal(err)
+			}
+			previousFingerprint, err := config.EffectiveConfigFingerprint(*previous)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if _, err := repo.InitializeConfigActivationFingerprint(ctx, previousFingerprint); err != nil {
+				t.Fatal(err)
+			}
+			tc.change(previous)
+			if err := config.SaveToDatabase(ctx, previous, repo); err != nil {
+				t.Fatal(err)
+			}
+			current, err := config.LoadFromDatabase(ctx, repo)
+			if err != nil {
+				t.Fatal(err)
+			}
+			current.MainSettings.DBPath = repoPath
+			want, err := config.EffectiveConfigFingerprint(*current)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if want == previousFingerprint {
+				t.Fatal("test config did not change fingerprint")
+			}
+			activation, err := InitializeRuntimeConfigActivation(ctx, repo, *current, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if activation.ActiveGeneration != 1 || activation.Fingerprint != want {
+				t.Fatalf("reconciled activation = %#v, want generation=1 fingerprint=%q", activation, want)
+			}
+			repeat, err := InitializeRuntimeConfigActivation(ctx, repo, *current, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if repeat.ActiveGeneration != 1 || repeat.Fingerprint != want {
+				t.Fatalf("repeated startup changed activation: %#v", repeat)
+			}
+		})
+	}
+}
+
+func TestStartupDiscardsUnresolvedWorkflowEffectsBeforeActivation(t *testing.T) {
+	for _, test := range []struct {
+		name          string
+		changedConfig bool
+	}{
+		{name: "changed config", changedConfig: true},
+		{name: "unchanged config"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			ctx := t.Context()
+			repoPath := filepath.Join(t.TempDir(), "activation.db")
+			repo, err := db.OpenContext(ctx, repoPath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Cleanup(func() { _ = repo.Close() })
+			if err := repo.MigrateContext(ctx); err != nil {
+				t.Fatal(err)
+			}
+			previous := backendConfigTestConfig(repoPath)
+			initial, err := InitializeRuntimeConfigActivation(ctx, repo, previous, nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			now := time.Now().UTC().Format(time.RFC3339Nano)
+			if _, err := repo.RawDB().ExecContext(ctx, `INSERT INTO release_workflow_states (
+				owner_id, workflow_id, revision, status, creation_key, creation_fingerprint, state_json, created_at, updated_at
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, "owner", "workflow", 1, "active", "", "", []byte(`{}`), now, now); err != nil {
+				t.Fatal(err)
+			}
+			for _, effect := range []struct {
+				id     string
+				status api.WorkflowEffectStatus
+			}{
+				{id: "started-effect", status: api.WorkflowEffectStatusStarted},
+				{id: "unknown-effect", status: api.WorkflowEffectStatusUnknown},
+				{id: "succeeded-effect", status: api.WorkflowEffectStatusSucceeded},
+			} {
+				if _, err := repo.RawDB().ExecContext(ctx, `INSERT INTO release_workflow_effects (
+					owner_id, workflow_id, operation_id, effect_id, kind, scope_id, semantic_fingerprint,
+					status, started_at, updated_at
+				) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, "owner", "workflow", "operation", effect.id,
+					"image_hosting", effect.id, "synthetic", effect.status, now, now); err != nil {
+					t.Fatal(err)
+				}
+			}
+			current := previous
+			if test.changedConfig {
+				current.Metadata.KeepImages = !previous.Metadata.KeepImages
+			}
+			activation, err := InitializeRuntimeConfigActivation(ctx, repo, current, nil)
+			if err != nil {
+				t.Fatalf("startup activation with interrupted effects: %v", err)
+			}
+			wantGeneration := initial.ActiveGeneration
+			if test.changedConfig {
+				wantGeneration++
+			}
+			if activation.ActiveGeneration != wantGeneration {
+				t.Fatalf("activation generation = %d, want %d", activation.ActiveGeneration, wantGeneration)
+			}
+			for _, effect := range []struct {
+				id     string
+				status api.WorkflowEffectStatus
+			}{
+				{id: "started-effect", status: api.WorkflowEffectStatusFailed},
+				{id: "unknown-effect", status: api.WorkflowEffectStatusFailed},
+				{id: "succeeded-effect", status: api.WorkflowEffectStatusSucceeded},
+			} {
+				var status string
+				if err := repo.RawDB().QueryRowContext(ctx, `SELECT status FROM release_workflow_effects WHERE effect_id = ?`,
+					effect.id).Scan(&status); err != nil || status != string(effect.status) {
+					t.Fatalf("effect %s status = %q, err=%v, want %s", effect.id, status, err, effect.status)
+				}
+			}
+		})
+	}
+}
+
+func TestStartupWaitsForLiveInputBeforeDiscardingUnresolvedEffect(t *testing.T) {
+	ctx := t.Context()
+	repoPath := filepath.Join(t.TempDir(), "activation.db")
+	repo, err := db.OpenContext(ctx, repoPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = repo.Close() })
+	if err := repo.MigrateContext(ctx); err != nil {
+		t.Fatal(err)
+	}
+	previous := backendConfigTestConfig(repoPath)
+	initial, err := InitializeRuntimeConfigActivation(ctx, repo, previous, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	now := time.Now().UTC()
+	formattedNow := now.Format(time.RFC3339Nano)
+	if _, err := repo.RawDB().ExecContext(ctx, `INSERT INTO release_workflow_states (
+		owner_id, workflow_id, revision, status, creation_key, creation_fingerprint, state_json, created_at, updated_at
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`, "owner", "workflow", 1, "active", "", "", []byte(`{}`),
+		formattedNow, formattedNow); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := repo.RawDB().ExecContext(ctx, `INSERT INTO release_workflow_effects (
+		owner_id, workflow_id, operation_id, effect_id, kind, scope_id, semantic_fingerprint,
+		status, started_at, updated_at
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, "owner", "workflow", "operation", "effect",
+		"image_hosting", "synthetic", "synthetic", api.WorkflowEffectStatusUnknown, formattedNow, formattedNow); err != nil {
+		t.Fatal(err)
+	}
+	slot := api.ActiveInputRecord{
+		State:          api.ActiveInputOpening,
+		Revision:       1,
+		Fence:          1,
+		OwnerID:        "owner",
+		CoordinatorID:  "previous-process",
+		LeaseExpiresAt: now.Add(500 * time.Millisecond),
+		ReservationID:  "opening",
+		RequestedPath:  "synthetic-source",
+	}
+	payload, err := json.Marshal(slot)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := repo.RawDB().ExecContext(ctx, `UPDATE active_input SET revision = ?, fence = ?, record_json = ? WHERE singleton = 1`,
+		slot.Revision, slot.Fence, payload); err != nil {
+		t.Fatal(err)
+	}
+	current := previous
+	current.Metadata.KeepImages = !previous.Metadata.KeepImages
+	startupCtx, cancel := context.WithTimeout(ctx, 3*time.Second)
+	defer cancel()
+	activation, err := InitializeRuntimeConfigActivation(startupCtx, repo, current, nil)
+	if err != nil {
+		t.Fatalf("startup activation after input lease expires: %v", err)
+	}
+	if activation.ActiveGeneration != initial.ActiveGeneration+1 {
+		t.Fatalf("activation generation = %d, want %d", activation.ActiveGeneration, initial.ActiveGeneration+1)
+	}
+	var effectStatus string
+	if err := repo.RawDB().QueryRowContext(ctx, `SELECT status FROM release_workflow_effects WHERE effect_id = 'effect'`).Scan(&effectStatus); err != nil ||
+		effectStatus != string(api.WorkflowEffectStatusFailed) {
+		t.Fatalf("effect after startup = %q, err=%v", effectStatus, err)
+	}
+}
+
+func TestNewBackendRejectsChangedConfigActivationFingerprint(t *testing.T) {
+	t.Parallel()
+	ctx := t.Context()
+	repoPath := filepath.Join(t.TempDir(), "activation.db")
+	repo, err := db.OpenContext(ctx, repoPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer repo.Close()
+	if err := repo.MigrateContext(ctx); err != nil {
+		t.Fatal(err)
+	}
+	cfg := backendConfigTestConfig(repoPath)
+	if err := config.SaveToDatabase(ctx, &cfg, repo); err != nil {
+		t.Fatal(err)
+	}
+	fingerprint, err := config.EffectiveConfigFingerprint(cfg)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := repo.InitializeConfigActivationFingerprint(ctx, fingerprint); err != nil {
+		t.Fatal(err)
+	}
+	changed := cfg
+	changed.Metadata.KeepImages = !cfg.Metadata.KeepImages
+	if _, err := NewBackendWithContext(ctx, changed, newEventHub()); !errors.Is(err, api.ErrConfigActivationChanged) {
+		t.Fatalf("changed config startup error = %v, want config activation changed", err)
+	}
+	activation, err := repo.LoadConfigActivation(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.ActiveGeneration != 0 || activation.Fingerprint != fingerprint {
+		t.Fatalf("rejected startup changed active config generation: %#v", activation)
+	}
+}
+
+func TestBackendDefersConfigActivationWhileRuntimeIsBorrowed(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "borrowed-activation.db")
+	backend, err := NewBackendWithContext(t.Context(), backendConfigTestConfig(repoPath), newEventHub())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+	borrowed, err := backend.borrowRuntime()
+	if err != nil {
+		t.Fatal(err)
+	}
+	initialGeneration := backend.runtimeSnapshot().generationID
+	updated := backend.currentConfig()
+	updated.Metadata.KeepImages = true
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatal(err)
+	}
+	activation, err := backend.SaveConfigActivation(t.Context(), payload)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.Status != api.ConfigActivationPending || backend.runtimeSnapshot().generationID != initialGeneration {
+		t.Fatalf("borrowed runtime activation = %#v, runtime generation=%d", activation, backend.runtimeSnapshot().generationID)
+	}
+	borrowed.release()
+	activation, err = backend.ConfigActivation(t.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.Status != api.ConfigActivationActive || !backend.currentConfig().Metadata.KeepImages {
+		t.Fatalf("released runtime activation = %#v config=%#v", activation, backend.currentConfig().Metadata)
+	}
+}
+
+func TestBackendActivationDoesNotWaitForLateRuntimeBorrower(t *testing.T) {
+	for _, mode := range []string{"deferred", "immediate", "pending"} {
+		t.Run(mode, func(t *testing.T) {
+			backend, err := NewBackendWithContext(t.Context(), backendConfigTestConfig(filepath.Join(t.TempDir(), "late-borrow.db")), newEventHub())
+			if err != nil {
+				t.Fatal(err)
+			}
+			t.Cleanup(func() { _ = backend.Close() })
+			activator, err := backend.runtimeActivator()
+			if err != nil {
+				t.Fatal(err)
+			}
+			build := activator.deps.build
+			borrowedCh := make(chan backendRuntimeSnapshot)
+			activator.deps.build = func(ctx context.Context, cfg config.Config, repo *db.SQLiteRepository) (RuntimeGeneration, error) {
+				borrowed, borrowErr := backend.borrowRuntime()
+				if borrowErr != nil {
+					return RuntimeGeneration{}, borrowErr
+				}
+				borrowedCh <- borrowed
+				return build(ctx, cfg, repo)
+			}
+			initialGeneration := backend.runtimeSnapshot().generationID
+			candidate := backend.currentConfig()
+			candidate.Metadata.KeepImages = true
+			var pendingID string
+			if mode == "pending" {
+				borrowed, borrowErr := backend.borrowRuntime()
+				if borrowErr != nil {
+					t.Fatal(borrowErr)
+				}
+				pending, pendingErr := activator.ActivateResult(t.Context(), candidate)
+				borrowed.release()
+				if pendingErr != nil || pending.Status != api.ConfigActivationPending {
+					t.Fatalf("initial pending activation = %#v, error = %v", pending, pendingErr)
+				}
+				pendingID = pending.ActivationID
+			}
+			var result api.ConfigActivation
+			var activateErr error
+			done := make(chan struct{})
+			go func() {
+				defer close(done)
+				switch mode {
+				case "immediate":
+					activateErr = activator.ActivateImmediate(t.Context(), candidate)
+				case "pending":
+					result, activateErr = activator.ActivatePending(t.Context())
+				default:
+					result, activateErr = activator.ActivateResult(t.Context(), candidate)
+				}
+			}()
+			var borrowed backendRuntimeSnapshot
+			select {
+			case borrowed = <-borrowedCh:
+			case <-done:
+				t.Fatalf("activation completed without borrowing: %v", activateErr)
+			}
+			release := sync.OnceFunc(borrowed.release)
+			defer release()
+			select {
+			case <-done:
+			case <-time.After(2 * time.Second):
+				release()
+				<-done
+				t.Fatal("activation waited for the borrowed runtime")
+			}
+			if mode == "immediate" {
+				if !errors.Is(activateErr, api.ErrActiveInputBusy) {
+					t.Fatalf("immediate activation error = %v", activateErr)
+				}
+			} else if activateErr != nil || result.Status != api.ConfigActivationPending {
+				t.Fatalf("deferred activation = %#v, error = %v", result, activateErr)
+			}
+			if mode == "pending" && result.ActivationID != pendingID {
+				t.Fatal("pending poll replaced the candidate")
+			}
+			if backend.runtimeSnapshot().generationID != initialGeneration || backend.currentConfig().Metadata.KeepImages {
+				t.Fatal("busy activation replaced the runtime")
+			}
+			activator.deps.build = build
+			release()
+			result, err = backend.ConfigActivation(t.Context())
+			if err != nil || result.Status != api.ConfigActivationActive {
+				t.Fatalf("activation after release = %#v, error = %v", result, err)
+			}
+			if backend.currentConfig().Metadata.KeepImages == (mode == "immediate") {
+				t.Fatal("pending activation was lost or immediate activation was queued")
+			}
+		})
+	}
+}
+
+func TestBackendFailedDeferredActivationRetainsRuntimeAndAcceptsCorrection(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "failed-deferred-activation.db")
+	backend, err := NewBackendWithContext(t.Context(), backendConfigTestConfig(repoPath), newEventHub())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+	initial := backend.currentConfig()
+	borrowed, err := backend.borrowRuntime()
+	if err != nil {
+		t.Fatal(err)
+	}
+	pendingConfig := initial
+	pendingConfig.Metadata.KeepImages = true
+	payload, err := config.ExportToJSON(&pendingConfig)
+	if err != nil {
+		t.Fatal(err)
+	}
+	pending, err := backend.SaveConfigActivation(t.Context(), payload)
+	if err != nil {
+		t.Fatalf("defer config activation: %v", err)
+	}
+	if pending.Status != api.ConfigActivationPending {
+		t.Fatalf("pending activation = %#v", pending)
+	}
+	borrowed.release()
+
+	activator, err := backend.runtimeActivator()
+	if err != nil {
+		t.Fatal(err)
+	}
+	build := activator.deps.build
+	activator.deps.build = func(context.Context, config.Config, *db.SQLiteRepository) (RuntimeGeneration, error) {
+		return RuntimeGeneration{}, errors.New("deferred runtime build failure token=should-not-leak")
+	}
+	failed, err := backend.ConfigActivation(t.Context())
+	if err != nil {
+		t.Fatalf("record deferred activation failure: %v", err)
+	}
+	if failed.Status != api.ConfigActivationFailed || failed.ActivationID != pending.ActivationID ||
+		failed.FailureCode != api.ConfigActivationFailureBuild {
+		t.Fatalf("failed activation = %#v", failed)
+	}
+	if backend.currentConfig().Metadata.KeepImages {
+		t.Fatal("failed activation changed the active runtime")
+	}
+	statusJSON, err := json.Marshal(failed)
+	if err != nil {
+		t.Fatalf("marshal failed activation status: %v", err)
+	}
+	if strings.Contains(string(statusJSON), "should-not-leak") {
+		t.Fatal("failed activation status leaked runtime error detail")
+	}
+	if _, _, err := backend.repo.LoadPendingConfigActivationCandidate(t.Context()); !errors.Is(err, sql.ErrNoRows) {
+		t.Fatalf("failed activation retained encrypted candidate: %v", err)
+	}
+	stored, loadErr := config.LoadFromDatabase(t.Context(), backend.repo)
+	if loadErr == nil && stored.Metadata.KeepImages {
+		t.Fatal("failed activation persisted the deferred config")
+	}
+	if loadErr != nil && !errors.Is(loadErr, internalerrors.ErrNotFound) {
+		t.Fatalf("load stored config after failed activation: %v", loadErr)
+	}
+
+	payload, err = config.ExportToJSON(&initial)
+	if err != nil {
+		t.Fatal(err)
+	}
+	acknowledged, err := backend.SaveConfigActivation(t.Context(), payload)
+	if err != nil {
+		t.Fatalf("acknowledge failed activation with active config: %v", err)
+	}
+	if acknowledged.Status != api.ConfigActivationActive || acknowledged.ActiveGeneration != 0 {
+		t.Fatalf("acknowledged activation = %#v", acknowledged)
+	}
+
+	activator.deps.build = build
+	corrected := initial
+	corrected.Metadata.OnlyID = true
+	payload, err = config.ExportToJSON(&corrected)
+	if err != nil {
+		t.Fatal(err)
+	}
+	active, err := backend.SaveConfigActivation(t.Context(), payload)
+	if err != nil {
+		t.Fatalf("activate corrected config: %v", err)
+	}
+	if active.Status != api.ConfigActivationActive || active.ActiveGeneration != 1 {
+		t.Fatalf("corrected activation = %#v", active)
+	}
+	if !backend.currentConfig().Metadata.OnlyID || backend.currentConfig().Metadata.KeepImages {
+		t.Fatalf("corrected runtime config = %#v", backend.currentConfig().Metadata)
+	}
+	stored, err = config.LoadFromDatabase(t.Context(), backend.repo)
+	if err != nil {
+		t.Fatalf("load corrected stored config: %v", err)
+	}
+	if !stored.Metadata.OnlyID || stored.Metadata.KeepImages {
+		t.Fatalf("corrected stored config = %#v", stored.Metadata)
+	}
+}
+
+func TestBackendImportConfigRejectsDeferredActivationWithoutPendingCandidate(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "import-immediate.db")
+	backend, err := NewBackendWithContext(t.Context(), backendConfigTestConfig(repoPath), newEventHub())
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = backend.Close() })
+	borrowed, err := backend.borrowRuntime()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(borrowed.release)
+	initial := backend.currentConfig()
+	if err := config.SaveToDatabase(t.Context(), &initial, backend.repo); err != nil {
+		t.Fatal(err)
+	}
+	imported := initial
+	imported.Metadata.KeepImages = true
+	content := exportConfigYAMLString(t, &imported)
+
+	if _, _, err := backend.ImportConfig("config.yaml", content); !errors.Is(err, api.ErrActiveInputBusy) {
+		t.Fatalf("deferred import error = %v", err)
+	}
+	activation, err := backend.repo.LoadConfigActivation(t.Context())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if activation.Status != api.ConfigActivationActive || activation.PendingGeneration != 0 {
+		t.Fatalf("deferred import activation = %#v", activation)
+	}
+	stored, err := config.LoadFromDatabase(t.Context(), backend.repo)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if stored.Metadata.KeepImages {
+		t.Fatal("deferred import persisted config without activation")
+	}
+}
+
+func TestBackendGetLogExclusionsReturnsEmptySliceWhenMissing(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "backend-log-exclusions.db")
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	backend := &Backend{repo: repo}
+	patterns, err := backend.GetLogExclusions()
+	if err != nil {
+		t.Fatalf("get log exclusions: %v", err)
+	}
+	if patterns == nil {
+		t.Fatal("expected non-nil empty exclusions")
+	}
+	if len(patterns) != 0 {
+		t.Fatalf("expected no exclusions, got %#v", patterns)
+	}
+}
+
+func TestBackendGetConfigFallsBackToRuntimeConfigWhenDatabaseConfigMissing(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "backend-empty-config.db")
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	cfg, err := config.LoadEmbeddedDefaultConfig()
+	if err != nil {
+		t.Fatalf("load embedded config: %v", err)
+	}
+	cfg.MainSettings.DBPath = repoPath
+	cfg.Logging.Level = "error"
+	backend := &Backend{
+		cfg:  *cfg,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	payload, err := backend.GetConfig()
+	if err != nil {
+		t.Fatalf("get config: %v", err)
+	}
+	exported, err := config.ImportFromJSONEncrypted(payload)
+	if err != nil {
+		t.Fatalf("parse exported config: %v", err)
+	}
+	if exported.MainSettings.DBPath != repoPath {
+		t.Fatalf("DBPath: got %q want %q", exported.MainSettings.DBPath, repoPath)
+	}
+	if len(exported.Trackers.Trackers) == 0 {
+		t.Fatal("expected runtime tracker defaults in fallback config")
+	}
+	if _, loadErr := config.LoadFromDatabase(context.Background(), repo); !errors.Is(loadErr, internalerrors.ErrNotFound) {
+		t.Fatalf("fallback should not persist config rows, load err=%v", loadErr)
+	}
+}
+
+func TestNormalizeExportableConfigDoesNotMutateSource(t *testing.T) {
+	t.Parallel()
+
+	source := config.Config{
+		MainSettings: config.MainSettingsConfig{DBPath: " \t "},
+		Trackers: config.TrackersConfig{
+			DefaultTrackers: config.CSVList{"AITHER"},
+			Trackers: map[string]config.TrackerConfig{
+				"AITHER": {APIKey: "source-token"},
+			},
+		},
+	}
+
+	normalized, err := normalizeExportableConfig(&source, "runtime.db")
+	if err != nil {
+		t.Fatalf("normalize config: %v", err)
+	}
+	defaults, err := config.LoadEmbeddedDefaultConfig()
+	if err != nil {
+		t.Fatalf("load embedded defaults: %v", err)
+	}
+	for trackerName := range defaults.Trackers.Trackers {
+		if _, ok := normalized.Trackers.Trackers[trackerName]; !ok {
+			t.Fatalf("normalized config missing default tracker %q", trackerName)
+		}
+	}
+	if normalized.MainSettings.DBPath != "runtime.db" {
+		t.Fatalf("normalized DBPath: got %q want runtime.db", normalized.MainSettings.DBPath)
+	}
+	if source.MainSettings.DBPath != " \t " {
+		t.Fatalf("source DBPath mutated: got %q", source.MainSettings.DBPath)
+	}
+
+	tracker := normalized.Trackers.Trackers["AITHER"]
+	tracker.APIKey = "changed-token"
+	normalized.Trackers.Trackers["AITHER"] = tracker
+	normalized.Trackers.DefaultTrackers[0] = "BTN"
+
+	if got := source.Trackers.Trackers["AITHER"].APIKey; got != "source-token" {
+		t.Fatal("source tracker map mutated")
+	}
+	if got := source.Trackers.DefaultTrackers[0]; got != "AITHER" {
+		t.Fatalf("source default tracker slice mutated: got %q", got)
+	}
+
+	nilSource := config.Config{}
+	nilNormalized, err := normalizeExportableConfig(&nilSource, "runtime.db")
+	if err != nil {
+		t.Fatalf("normalize nil trackers: %v", err)
+	}
+	if nilNormalized.Trackers.Trackers == nil {
+		t.Fatal("expected normalized tracker map")
+	}
+	if nilNormalized.Trackers.DefaultTrackers == nil {
+		t.Fatal("expected normalized default tracker list")
+	}
+	if nilSource.Trackers.Trackers != nil {
+		t.Fatal("source tracker map mutated from nil")
+	}
+	if nilSource.Trackers.DefaultTrackers != nil {
+		t.Fatal("source default tracker list mutated from nil")
+	}
+}
+
+func TestBackendGetConfigFallbackUsesSingleRuntimeSnapshot(t *testing.T) {
+	t.Parallel()
+
+	tempDir := t.TempDir()
+	repoPath := filepath.Join(tempDir, "backend-empty-snapshot.db")
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	pathA := filepath.Join(tempDir, "runtime-a.db")
+	pathB := filepath.Join(tempDir, "runtime-b.db")
+	cfgA := config.Config{
+		MainSettings:       config.MainSettingsConfig{DBPath: pathA},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+	}
+	cfgB := config.Config{
+		MainSettings:       config.MainSettingsConfig{DBPath: pathB},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 2},
+	}
+	backend := &Backend{
+		cfg:  cfgA,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	assertExport := func(want config.Config) {
+		t.Helper()
+
+		backend.replaceRuntime(want, CoreCapabilities{}, nil)
+		payload, err := backend.GetConfig()
+		if err != nil {
+			t.Fatalf("get config: %v", err)
+		}
+		exported, err := config.ImportFromJSONEncrypted(payload)
+		if err != nil {
+			t.Fatalf("parse exported config: %v", err)
+		}
+		switch exported.MainSettings.DBPath {
+		case pathA:
+			if exported.ScreenshotHandling.Screens != cfgA.ScreenshotHandling.Screens {
+				t.Fatalf("mixed fallback snapshot for %q: screens=%d", pathA, exported.ScreenshotHandling.Screens)
+			}
+		case pathB:
+			if exported.ScreenshotHandling.Screens != cfgB.ScreenshotHandling.Screens {
+				t.Fatalf("mixed fallback snapshot for %q: screens=%d", pathB, exported.ScreenshotHandling.Screens)
+			}
+		default:
+			t.Fatalf("unexpected fallback DBPath %q", exported.MainSettings.DBPath)
+		}
+	}
+	assertExport(cfgA)
+	assertExport(cfgB)
+
+	if _, loadErr := config.LoadFromDatabase(context.Background(), repo); !errors.Is(loadErr, internalerrors.ErrNotFound) {
+		t.Fatalf("fallback should not persist config rows, load err=%v", loadErr)
+	}
+}
+
+func TestBackendGetConfigDatabaseConfigUsesSingleRuntimeSnapshotForDBPath(t *testing.T) {
+	t.Parallel()
+
+	tempDir := t.TempDir()
+	repoPath := filepath.Join(tempDir, "backend-db-snapshot.db")
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	stored := config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "stored"},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 9},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+	if err := config.SaveToDatabase(context.Background(), &stored, repo); err != nil {
+		t.Fatalf("save stored config: %v", err)
+	}
+
+	pathA := filepath.Join(tempDir, "runtime-a.db")
+	pathB := filepath.Join(tempDir, "runtime-b.db")
+	cfgA := config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "runtime-a", DBPath: pathA},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+	cfgB := config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "runtime-b", DBPath: pathB},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 2},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+	backend := &Backend{
+		cfg:  cfgA,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	assertExport := func(wantDBPath string) {
+		t.Helper()
+
+		payload, err := backend.GetConfig()
+		if err != nil {
+			t.Fatalf("get config: %v", err)
+		}
+		exported, err := config.ImportFromJSONEncrypted(payload)
+		if err != nil {
+			t.Fatalf("parse exported config: %v", err)
+		}
+		if exported.ScreenshotHandling.Screens != stored.ScreenshotHandling.Screens {
+			t.Fatalf("expected DB-loaded screens=%d, got %d", stored.ScreenshotHandling.Screens, exported.ScreenshotHandling.Screens)
+		}
+		if exported.MainSettings.TMDBAPI != stored.MainSettings.TMDBAPI {
+			t.Fatal("expected DB-loaded TMDB API")
+		}
+		if exported.MainSettings.DBPath != wantDBPath {
+			t.Fatalf("DBPath fallback: got %q want %q", exported.MainSettings.DBPath, wantDBPath)
+		}
+	}
+	backend.replaceRuntime(cfgA, CoreCapabilities{}, nil)
+	assertExport(pathA)
+	backend.replaceRuntime(cfgB, CoreCapabilities{}, nil)
+	assertExport(pathB)
+}
+
+func TestBackendRequestCapabilitiesRejectPartialRuntimeBundles(t *testing.T) {
+	t.Parallel()
+
+	incomplete := CoreCapabilities{DiagnosticProbe: backendAvailableDiagnosticProbe{}}
+	path := "C:\\releases\\Example.mkv"
+	tests := []struct {
+		name         string
+		capabilities CoreCapabilities
+		want         string
+		call         func(*Backend) error
+	}{
+		{
+			name:         "description render",
+			capabilities: incomplete,
+			want:         "description capability unavailable",
+			call: func(backend *Backend) error {
+				_, err := backend.RenderDescription("text", nil)
+				return err
+			},
+		},
+		{
+			name:         "playlist discover",
+			capabilities: incomplete,
+			want:         "playlist capability unavailable",
+			call: func(backend *Backend) error {
+				_, err := backend.DiscoverPlaylists(context.Background(), path)
+				return err
+			},
+		},
+		{
+			name:         "history delete",
+			capabilities: incomplete,
+			want:         "history capability unavailable",
+			call: func(backend *Backend) error {
+				return backend.DeleteHistoryRelease(path)
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			backend := &Backend{capabilities: tt.capabilities, hub: newEventHub()}
+			err := tt.call(backend)
+			if err == nil || !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("error: got %v want containing %q", err, tt.want)
+			}
+		})
+	}
+}
+
+type backendSnapshotGuardCore struct {
+	wantScreens int
+	errs        chan<- error
+}
+
+type backendAvailableDiagnosticProbe struct{}
+
+func (backendAvailableDiagnosticProbe) DVDMenuCapability(context.Context) (api.DVDMenuEngineInfo, error) {
+	return api.DVDMenuEngineInfo{}, nil
+}
+
+func (c *backendSnapshotGuardCore) check(req api.Request, method string) {
+	if req.Options.Screens != c.wantScreens {
+		select {
+		case c.errs <- errors.New(method + " used mismatched runtime options"):
+		default:
+		}
+	}
+}
+
+func (*backendSnapshotGuardCore) RenderDescription(context.Context, string, map[string]string) (string, error) {
+	return "", nil
+}
+
+func TestBackendRequestsUseSingleRuntimeSnapshot(t *testing.T) {
+	t.Parallel()
+
+	errs := make(chan error, 1)
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-runtime-snapshot.db")
+	cfgA := backendConfigTestConfig(repoPath)
+	cfgA.ScreenshotHandling.Screens = 1
+	cfgB := cfgA
+	cfgB.ScreenshotHandling.Screens = 2
+	backend := &Backend{
+		cfg:          cfgA,
+		capabilities: webTestCapabilities(&backendSnapshotGuardCore{wantScreens: 1, errs: errs}),
+		repo:         repo,
+		hub:          newEventHub(),
+	}
+
+	stop := make(chan struct{})
+	var wg sync.WaitGroup
+	wg.Go(func() {
+		for i := 0; ; i++ {
+			select {
+			case <-stop:
+				return
+			default:
+			}
+			if i%2 == 0 {
+				backend.replaceRuntime(cfgB, webTestCapabilities(&backendSnapshotGuardCore{wantScreens: 2, errs: errs}), nil)
+			} else {
+				backend.replaceRuntime(cfgA, webTestCapabilities(&backendSnapshotGuardCore{wantScreens: 1, errs: errs}), nil)
+			}
+		}
+	})
+	t.Cleanup(func() {
+		close(stop)
+		wg.Wait()
+	})
+
+	for range 200 {
+		runtime, err := backend.requireRuntime()
+		if err != nil {
+			t.Fatalf("require runtime: %v", err)
+		}
+		description, err := runtime.descriptionCore()
+		if err != nil {
+			t.Fatalf("description capability: %v", err)
+		}
+		guard, ok := description.(*backendSnapshotGuardCore)
+		if !ok {
+			t.Fatalf("description capability type: %T", description)
+		}
+		guard.check(api.Request{Options: api.UploadOptions{Screens: runtime.cfg.ScreenshotHandling.Screens}}, "runtime snapshot")
+		select {
+		case err := <-errs:
+			t.Fatal(err)
+		default:
+		}
+	}
+}
+
+func TestBackendSaveConfigAcceptsSameDatabasePathAlias(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-dbpath-alias.db")
+	initial := backendConfigTestConfig(repoPath)
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+	t.Cleanup(func() {
+		if coreSvc := backend.coreOwner; coreSvc != nil {
+			_ = coreSvc.Close()
+		}
+		if logger := backend.currentLogger(); logger != nil {
+			_ = logger.Close()
+		}
+	})
+
+	updated := initial
+	updated.MainSettings.DBPath = filepath.Dir(repoPath) + string(filepath.Separator) + "." + string(filepath.Separator) + filepath.Base(repoPath)
+	updated.Metadata.SkipAutoTorrent = true
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save config with DBPath alias: %v", err)
+	}
+	if got := backend.currentConfig().MainSettings.DBPath; got != repoPath {
+		t.Fatalf("runtime DBPath: got %q want %q", got, repoPath)
+	}
+}
+
+func TestBackendSaveConfigForcesOpenDatabasePath(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-dbpath-change.db")
+	initial := backendConfigTestConfig(repoPath)
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+	t.Cleanup(func() {
+		if coreSvc := backend.coreOwner; coreSvc != nil {
+			_ = coreSvc.Close()
+		}
+		if logger := backend.currentLogger(); logger != nil {
+			_ = logger.Close()
+		}
+	})
+
+	updated := initial
+	updated.MainSettings.DBPath = filepath.Join(t.TempDir(), "different.db")
+	updated.Metadata.SkipAutoTorrent = true
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save config: %v", err)
+	}
+	runtimeCfg := backend.currentConfig()
+	if runtimeCfg.MainSettings.DBPath != repoPath || !runtimeCfg.Metadata.SkipAutoTorrent {
+		t.Fatalf("runtime config = %#v", runtimeCfg)
+	}
+}
+
+func TestBackendSaveConfigAppliesRuntimeConfigImmediately(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "backend-save-config.db")
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	initial := config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "x", DBPath: repoPath},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+	t.Cleanup(func() {
+		if coreSvc := backend.coreOwner; coreSvc != nil {
+			_ = coreSvc.Close()
+		}
+		if logger := backend.currentLogger(); logger != nil {
+			_ = logger.Close()
+		}
+	})
+
+	updated := initial
+	updated.Metadata.SkipAutoTorrent = true
+	updated.Metadata.KeepImages = true
+	updated.ScreenshotHandling.Screens = 5
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save config: %v", err)
+	}
+
+	runtimeCfg := backend.currentConfig()
+	if !runtimeCfg.Metadata.SkipAutoTorrent || !runtimeCfg.Metadata.KeepImages {
+		t.Fatalf("expected metadata settings applied, got %#v", runtimeCfg.Metadata)
+	}
+	if runtimeCfg.ScreenshotHandling.Screens != 5 {
+		t.Fatalf("expected screenshots=5, got %d", runtimeCfg.ScreenshotHandling.Screens)
+	}
+	if backend.coreOwner == nil {
+		t.Fatal("expected runtime core to be rebuilt")
+	}
+}
+
+func TestBackendSaveConfigAfterInvalidStartupMigratesLegacyCookies(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "backend-save-invalid-startup-cookies.db")
+	writeTestAuthFile(t, repoPath, "tester", false)
+	legacyPath := writeBackendLegacyCookieFile(t, repoPath, "BLU", `{"session":"from-legacy"}`)
+
+	startupCfg := backendConfigTestConfig(repoPath)
+	startupCfg.MainSettings.TMDBAPI = ""
+	startupCfg.ScreenshotHandling.Screens = 0
+	backend, err := NewBackendWithContext(context.Background(), startupCfg, newEventHub())
+	if err != nil {
+		t.Fatalf("new backend: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = backend.Close()
+	})
+	if backend.coreOwner != nil {
+		t.Fatal("expected invalid startup to leave core disabled")
+	}
+
+	repaired := backendConfigTestConfig(repoPath)
+	payload, err := config.ExportToJSON(&repaired)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save repaired config: %v", err)
+	}
+	if _, err := os.Stat(legacyPath); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("expected legacy cookie file to be removed after migration, err=%v", err)
+	}
+	values, err := cookies.LoadTrackerCookieMap(context.Background(), repoPath, "BLU")
+	if err != nil {
+		t.Fatalf("load migrated tracker cookies: %v", err)
+	}
+	if got := values["session"]; got != "from-legacy" {
+		t.Fatal("migrated session cookie mismatch")
+	}
+}
+
+func TestBackendInvalidStartupSharesCoordinatorAcrossRuntimeActivations(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "backend-invalid-startup-coordinator.db")
+	startupCfg := backendConfigTestConfig(repoPath)
+	startupCfg.MainSettings.TMDBAPI = ""
+	startupCfg.ScreenshotHandling.Screens = 0
+	backend, err := NewBackendWithContext(t.Context(), startupCfg, newEventHub())
+	if err != nil {
+		t.Fatalf("new backend: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = backend.Close()
+	})
+	if backend.coreOwner != nil {
+		t.Fatal("expected invalid startup to leave core disabled")
+	}
+	coordinator := backend.workflowCoordinator
+	if coordinator == nil {
+		t.Fatal("expected backend coordinator before config repair")
+	}
+
+	repaired := backendConfigTestConfig(repoPath)
+	payload, err := config.ExportToJSON(&repaired)
+	if err != nil {
+		t.Fatalf("export repaired config: %v", err)
+	}
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save repaired config: %v", err)
+	}
+	if got := backendWorkflowCoordinator(t, backend); got != coordinator {
+		t.Fatal("config repair built a core with a different coordinator")
+	}
+	workflowRepo, err := releaseworkflow.NewPersistentRepository(backend.repo)
+	if err != nil {
+		t.Fatalf("new workflow repository: %v", err)
+	}
+	idleWorkflow, err := releaseworkflow.New(
+		workflowRepo,
+		releaseworkflow.NewMemoryPrivateResourceStore(),
+		releaseworkflow.ReleasePreparerFunc{},
+		releaseworkflow.WithCoordinator(coordinator),
+		releaseworkflow.WithActiveInputs(backend.repo, func(_ context.Context, input api.PrepareInput) (api.InputRecord, error) {
+			return api.InputRecord{
+				CanonicalPath: input.SourcePath,
+				SourceVersion: "test-source-version",
+				Manifest:      []byte(`{"identity":{"digest":"test-source-version"}}`),
+			}, nil
+		}),
+	)
+	if err != nil {
+		t.Fatalf("new idle workflow: %v", err)
+	}
+	opened, err := idleWorkflow.OpenInput(t.Context(), "settings-owner", releaseworkflow.OpenInputRequest{
+		Input:          api.PrepareInput{SourcePath: filepath.Join(t.TempDir(), "release.mkv")},
+		IdempotencyKey: "open-idle-input",
+	})
+	if err != nil {
+		t.Fatalf("open idle input: %v", err)
+	}
+	if opened.State != api.ActiveInputActive {
+		t.Fatalf("opened idle input state = %q, want active", opened.State)
+	}
+
+	updated := repaired
+	updated.Metadata.KeepImages = true
+	payload, err = config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export updated config: %v", err)
+	}
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save updated config: %v", err)
+	}
+	if got := backendWorkflowCoordinator(t, backend); got != coordinator {
+		t.Fatal("subsequent config activation built a core with a different coordinator")
+	}
+	activeCore, ok := backend.coreOwner.(*core.Core)
+	if !ok {
+		t.Fatalf("replacement core type = %T, want *core.Core", backend.coreOwner)
+	}
+	active, err := activeCore.GetActiveInput(t.Context(), "settings-owner")
+	if err != nil {
+		t.Fatalf("get idle input from replacement core: %v", err)
+	}
+	if active.Revision <= opened.Revision {
+		t.Fatalf("config activation did not advance active input revision: opened=%d active=%d", opened.Revision, active.Revision)
+	}
+	if _, err := activeCore.ReleaseActiveInput(t.Context(), "settings-owner", api.ReleaseActiveInputRequest{
+		ExpectedRevision: active.Revision,
+	}); err != nil {
+		t.Fatalf("release idle input through replacement core: %v", err)
+	}
+}
+
+func TestBackendSaveConfigRetriesLegacyCookieMigrationAfterAuthAppears(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "backend-save-cookie-retry.db")
+	legacyPath := writeBackendLegacyCookieFile(t, repoPath, "BLU", `{"session":"from-retry"}`)
+
+	startupCfg := backendConfigTestConfig(repoPath)
+	startupCfg.MainSettings.TMDBAPI = ""
+	backend, err := NewBackendWithContext(context.Background(), startupCfg, newEventHub())
+	if err != nil {
+		t.Fatalf("new backend: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = backend.Close()
+	})
+
+	repaired := backendConfigTestConfig(repoPath)
+	payload, err := config.ExportToJSON(&repaired)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save repaired config without auth: %v", err)
+	}
+	if _, err := os.Stat(legacyPath); err != nil {
+		t.Fatalf("expected legacy cookie file to remain without auth helper: %v", err)
+	}
+
+	writeTestAuthFile(t, repoPath, "tester", false)
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("retry save repaired config: %v", err)
+	}
+	if _, err := os.Stat(legacyPath); !errors.Is(err, os.ErrNotExist) {
+		t.Fatalf("expected legacy cookie file to be removed after retry, err=%v", err)
+	}
+	values, err := cookies.LoadTrackerCookieMap(context.Background(), repoPath, "BLU")
+	if err != nil {
+		t.Fatalf("load migrated tracker cookies: %v", err)
+	}
+	if got := values["session"]; got != "from-retry" {
+		t.Fatal("migrated session cookie after retry mismatch")
+	}
+}
+
+func TestBackendLogStreamContinuesAcrossSaveConfigRuntimeReplacement(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-log-stream.db")
+	initial := backendConfigTestConfig(repoPath)
+	initial.Logging.Level = "info"
+	initialLogger, err := logging.New(initial.Logging, repoPath)
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	initialLogger.SetConsoleOutput(io.Discard, io.Discard)
+	backend := &Backend{
+		cfg:           initial,
+		logger:        initialLogger,
+		runtimeBundle: newRuntimeBundle(nil, initialLogger),
+		repo:          repo,
+		hub:           newEventHub(),
+		streams:       make(map[string]*backendLogStream),
+	}
+	t.Cleanup(func() {
+		backend.stopAllLogStreams()
+		if coreSvc := backend.coreOwner; coreSvc != nil {
+			_ = coreSvc.Close()
+		}
+		if logger := backend.currentLogger(); logger != nil {
+			_ = logger.Close()
+		}
+	})
+	events, unsubscribe := backend.hub.Subscribe("session-save")
+	t.Cleanup(unsubscribe)
+
+	streamID, err := backend.StartLogStream("session-save")
+	if err != nil {
+		t.Fatalf("start log stream: %v", err)
+	}
+	initialLogger.Infof("before save")
+	expectLogStreamMessage(t, events, streamID, "before save")
+
+	updated := initial
+	updated.ScreenshotHandling.Screens = 3
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save config: %v", err)
+	}
+	if backend.currentLogger() == initialLogger {
+		t.Fatal("expected save config to replace logger")
+	}
+
+	drainLogStreamEvents(events)
+	initialLogger.Infof("stale after save")
+	assertNoLogStreamEvent(t, events, "old logger should be unsubscribed after save rebind")
+	backend.currentLogger().Infof("after save")
+	expectLogStreamMessage(t, events, streamID, "after save")
+}
+
+func TestBackendStartLogStreamRejectsNilHubWithoutRegisteringStream(t *testing.T) {
+	t.Parallel()
+
+	logger, err := logging.New(config.LoggingConfig{Level: "error"}, filepath.Join(t.TempDir(), "nil-hub-log-stream.db"))
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	logger.SetConsoleOutput(io.Discard, io.Discard)
+	t.Cleanup(func() {
+		_ = logger.Close()
+	})
+	backend := &Backend{
+		logger:  logger,
+		streams: make(map[string]*backendLogStream),
+	}
+
+	streamID, err := backend.StartLogStream("session-nil-hub")
+	if err == nil {
+		t.Fatal("expected nil hub error")
+	}
+	if !strings.Contains(err.Error(), "event hub not initialized") {
+		t.Fatalf("expected event hub error, got %v", err)
+	}
+	if streamID != "" {
+		t.Fatalf("expected empty stream ID, got %q", streamID)
+	}
+	backend.streamMu.Lock()
+	streamCount := len(backend.streams)
+	backend.streamMu.Unlock()
+	if streamCount != 0 {
+		t.Fatalf("expected no registered streams, got %d", streamCount)
+	}
+}
+
+func TestBackendLogStreamContinuesAcrossImportConfigRuntimeReplacement(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-import-log-stream.db")
+	initial := backendConfigTestConfig(repoPath)
+	initial.Logging.Level = "info"
+	initialLogger, err := logging.New(initial.Logging, repoPath)
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	initialLogger.SetConsoleOutput(io.Discard, io.Discard)
+	backend := &Backend{
+		cfg:     initial,
+		logger:  initialLogger,
+		repo:    repo,
+		hub:     newEventHub(),
+		streams: make(map[string]*backendLogStream),
+	}
+	t.Cleanup(func() {
+		backend.stopAllLogStreams()
+		if coreSvc := backend.coreOwner; coreSvc != nil {
+			_ = coreSvc.Close()
+		}
+		if logger := backend.currentLogger(); logger != nil {
+			_ = logger.Close()
+		}
+	})
+	events, unsubscribe := backend.hub.Subscribe("session-import")
+	t.Cleanup(unsubscribe)
+
+	streamID, err := backend.StartLogStream("session-import")
+	if err != nil {
+		t.Fatalf("start log stream: %v", err)
+	}
+	initialLogger.Infof("before import")
+	expectLogStreamMessage(t, events, streamID, "before import")
+
+	imported := initial
+	imported.ScreenshotHandling.Screens = 4
+	content := exportConfigYAMLString(t, &imported)
+	if _, _, err := backend.ImportConfig("config.yaml", content); err != nil {
+		t.Fatalf("import config: %v", err)
+	}
+	if backend.currentLogger() == initialLogger {
+		t.Fatal("expected import config to replace logger")
+	}
+
+	drainLogStreamEvents(events)
+	initialLogger.Infof("stale after import")
+	assertNoLogStreamEvent(t, events, "old logger should be unsubscribed after import rebind")
+	backend.currentLogger().Infof("after import")
+	expectLogStreamMessage(t, events, streamID, "after import")
+}
+
+func TestBackendSaveConfigRejectsInvalidEnvRuntimeConfig(t *testing.T) {
+	t.Setenv("UA_DEFAULT_SCREENS", "0")
+
+	repoPath := filepath.Join(t.TempDir(), "backend-save-config-env.db")
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	initial := config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "x", DBPath: repoPath},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	updated := initial
+	updated.ScreenshotHandling.Screens = 5
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+
+	err = backend.SaveConfig(payload)
+	if err == nil {
+		t.Fatal("expected env-derived runtime validation error")
+	}
+	if !strings.Contains(err.Error(), "screenshot_handling.screens") {
+		t.Fatalf("expected screens validation error, got %v", err)
+	}
+	if got := backend.currentConfig().ScreenshotHandling.Screens; got != 1 {
+		t.Fatalf("expected runtime config to remain unchanged, got screens=%d", got)
+	}
+	if backend.coreOwner != nil {
+		t.Fatal("expected runtime core not to be rebuilt")
+	}
+	if _, loadErr := config.LoadFromDatabase(context.Background(), repo); loadErr == nil {
+		t.Fatal("expected invalid runtime config to be rejected before database save")
+	}
+}
+
+func TestBackendSaveConfigBuildRuntimeFailureDoesNotPersist(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-build-failure.db")
+	initial := backendConfigTestConfig(repoPath)
+	if err := config.SaveToDatabase(context.Background(), &initial, repo); err != nil {
+		t.Fatalf("save initial config: %v", err)
+	}
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	updated := initial
+	updated.Metadata.SkipAutoTorrent = true
+	updated.Logging.FileEnabled = true
+	updated.Logging.MaxTotalSizeMB = 1
+	updated.Logging.MaxFiles = 1
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+	blockBackendLogDir(t, repoPath)
+
+	err = backend.SaveConfig(payload)
+	if err == nil {
+		t.Fatal("expected runtime build failure")
+	}
+
+	assertStoredSkipAutoTorrentUnset(t, repo)
+	if got := backend.currentConfig().Metadata.SkipAutoTorrent; got {
+		t.Fatal("expected runtime config to remain unchanged")
+	}
+	if backend.coreOwner != nil {
+		t.Fatal("expected runtime core not to be rebuilt")
+	}
+}
+
+func TestBackendImportConfigBuildRuntimeFailureDoesNotPersist(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-import-build-failure.db")
+	initial := backendConfigTestConfig(repoPath)
+	if err := config.SaveToDatabase(context.Background(), &initial, repo); err != nil {
+		t.Fatalf("save initial config: %v", err)
+	}
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	imported := initial
+	imported.Metadata.SkipAutoTorrent = true
+	imported.Logging.FileEnabled = true
+	imported.Logging.MaxTotalSizeMB = 1
+	imported.Logging.MaxFiles = 1
+	content := exportConfigYAMLString(t, &imported)
+	blockBackendLogDir(t, repoPath)
+
+	_, _, err := backend.ImportConfig("config.yaml", content)
+	if err == nil {
+		t.Fatal("expected runtime build failure")
+	}
+
+	assertStoredSkipAutoTorrentUnset(t, repo)
+	if got := backend.currentConfig().Metadata.SkipAutoTorrent; got {
+		t.Fatal("expected runtime config to remain unchanged")
+	}
+	if backend.coreOwner != nil {
+		t.Fatal("expected runtime core not to be rebuilt")
+	}
+}
+
+func TestBackendSaveConfigMalformedWebAuthFailsBeforeConfigSave(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-malformed-auth.db")
+	initial := backendConfigTestConfig(repoPath)
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	updated := initial
+	updated.Metadata.SkipAutoTorrent = true
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+	if err := os.WriteFile(AuthFilePath(repoPath), []byte(`{`), 0o600); err != nil {
+		t.Fatalf("write malformed auth file: %v", err)
+	}
+
+	err = backend.SaveConfig(payload)
+	if err == nil {
+		t.Fatal("expected malformed web auth to fail before save")
+	}
+
+	assertFailedConfigSaveRowsAbsent(t, repo)
+	if got := backend.currentConfig().Metadata.SkipAutoTorrent; got {
+		t.Fatal("expected runtime config not to be applied after failed auth sync")
+	}
+}
+
+func TestBackendImportConfigMalformedWebAuthFailsBeforeConfigSave(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-import-malformed-auth.db")
+	initial := backendConfigTestConfig(repoPath)
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	imported := initial
+	imported.Metadata.SkipAutoTorrent = true
+	content := exportConfigYAMLString(t, &imported)
+	if err := os.WriteFile(AuthFilePath(repoPath), []byte(`{`), 0o600); err != nil {
+		t.Fatalf("write malformed auth file: %v", err)
+	}
+
+	_, _, err := backend.ImportConfig("config.yaml", content)
+	if err == nil {
+		t.Fatal("expected malformed web auth to fail before imported config save")
+	}
+
+	assertFailedConfigSaveRowsAbsent(t, repo)
+	if got := backend.currentConfig().Metadata.SkipAutoTorrent; got {
+		t.Fatal("expected runtime config not to be applied after failed auth sync")
+	}
+}
+
+func TestBackendSaveConfigSyncsUsableWebAuthBeforeSave(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-usable-auth.db")
+	writeTestAuthFile(t, repoPath, "tester", false)
+	initial := backendConfigTestConfig(repoPath)
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	updated := initial
+	updated.Metadata.SkipAutoTorrent = true
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+
+	if err := backend.SaveConfig(payload); err != nil {
+		t.Fatalf("save config: %v", err)
+	}
+
+	assertCookieAuthStatePresent(t, repo)
+}
+
+func TestBackendSaveConfigRollsBackCookieMaintenanceWhenRepositorySaveFails(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-save-cookie-rollback.db")
+	writeTestAuthFile(t, repoPath, "tester", false)
+	legacyPath := writeBackendLegacyCookieFile(t, repoPath, "EXAMPLE", `{"session":"cookie-value"}`)
+	installBackendFailMainSettingsTrigger(t, repo)
+	initial := backendConfigTestConfig(repoPath)
+	backend := &Backend{
+		cfg:  initial,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	updated := initial
+	updated.Metadata.SkipAutoTorrent = true
+	payload, err := config.ExportToJSON(&updated)
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+
+	err = backend.SaveConfig(payload)
+	if err == nil {
+		t.Fatal("expected save config to fail")
+	}
+
+	assertFailedConfigSaveRowsAbsent(t, repo)
+	if _, err := os.Stat(legacyPath); err != nil {
+		t.Fatalf("expected legacy cookie file to remain after failed activation: %v", err)
+	}
+	var cookieCount int
+	if err := repo.RawDB().QueryRowContext(context.Background(), `SELECT COUNT(*) FROM tracker_cookies`).Scan(&cookieCount); err != nil {
+		t.Fatalf("count cookies after failed activation: %v", err)
+	}
+	if cookieCount != 0 {
+		t.Fatalf("expected cookie writes to roll back, got count=%d", cookieCount)
+	}
+	if got := backend.currentConfig().Metadata.SkipAutoTorrent; got {
+		t.Fatal("expected runtime config not to be applied after failed config save")
+	}
+}
+
+func openBackendConfigTestRepo(t *testing.T, name string) (*db.SQLiteRepository, string) {
+	t.Helper()
+
+	repoPath := filepath.Join(t.TempDir(), name)
+	ensureMigratedTestDB(t, repoPath)
+	repo, err := db.OpenWithLogger(repoPath, nil)
+	if err != nil {
+		t.Fatalf("open repo: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = repo.Close()
+	})
+	return repo, repoPath
+}
+
+func backendConfigTestConfig(repoPath string) config.Config {
+	return config.Config{
+		MainSettings:       config.MainSettingsConfig{TMDBAPI: "x", DBPath: repoPath},
+		ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+		Logging:            config.LoggingConfig{Level: "error"},
+	}
+}
+
+func backendWorkflowCoordinator(t *testing.T, backend *Backend) *releaseworkflow.Coordinator {
+	t.Helper()
+
+	coreSvc, ok := backend.coreOwner.(*core.Core)
+	if !ok {
+		t.Fatalf("runtime core type = %T, want *core.Core", backend.coreOwner)
+	}
+	coordinator := coreSvc.WorkflowCoordinator()
+	if coordinator == nil {
+		t.Fatal("runtime core has no workflow coordinator")
+	}
+	return coordinator
+}
+
+func writeBackendLegacyCookieFile(t *testing.T, repoPath, trackerID, payload string) string {
+	t.Helper()
+
+	legacyPath, err := db.CookiePath(repoPath, trackerID+".json")
+	if err != nil {
+		t.Fatalf("resolve legacy cookie path: %v", err)
+	}
+	if err := os.WriteFile(legacyPath, []byte(payload), 0o600); err != nil {
+		t.Fatalf("write legacy cookie file: %v", err)
+	}
+	return legacyPath
+}
+
+func exportConfigYAMLString(t *testing.T, cfg *config.Config) string {
+	t.Helper()
+
+	path := filepath.Join(t.TempDir(), "config.yaml")
+	if err := config.ExportToYAML(cfg, path); err != nil {
+		t.Fatalf("export config yaml: %v", err)
+	}
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read config yaml: %v", err)
+	}
+	return string(raw)
+}
+
+func assertFailedConfigSaveRowsAbsent(t *testing.T, repo *db.SQLiteRepository) {
+	t.Helper()
+
+	for _, section := range []string{
+		"MainSettings",
+		"cookies_encryption_salt",
+		"cookies_encryption_auth_state",
+	} {
+		var data string
+		err := repo.RawDB().QueryRowContext(context.Background(),
+			`SELECT data FROM config_settings WHERE section = ?`,
+			section,
+		).Scan(&data)
+		if !errors.Is(err, sql.ErrNoRows) {
+			t.Fatalf("expected %s to be absent after failed sync, got row=%q err=%v", section, data, err)
+		}
+	}
+}
+
+func expectLogStreamMessage(t *testing.T, events <-chan serverEvent, streamID string, want string) {
+	t.Helper()
+
+	select {
+	case event := <-events:
+		if event.Name != "log:stream:"+streamID {
+			t.Fatalf("event name: got %q want %q", event.Name, "log:stream:"+streamID)
+		}
+		var entry logging.Entry
+		if err := json.Unmarshal(event.Data, &entry); err != nil {
+			t.Fatalf("decode log entry: %v", err)
+		}
+		if entry.Message != want {
+			t.Fatalf("log message: got %q want %q", entry.Message, want)
+		}
+	case <-time.After(10 * time.Second):
+		t.Fatalf("timed out waiting for log stream message %q", want)
+	}
+}
+
+func assertNoLogStreamEvent(t *testing.T, events <-chan serverEvent, reason string) {
+	t.Helper()
+
+	select {
+	case event := <-events:
+		t.Fatalf("%s: unexpected event %q", reason, event.Name)
+	case <-time.After(100 * time.Millisecond):
+	}
+}
+
+func drainLogStreamEvents(events <-chan serverEvent) {
+	for {
+		select {
+		case <-events:
+		default:
+			return
+		}
+	}
+}
+
+func assertStoredSkipAutoTorrentUnset(t *testing.T, repo *db.SQLiteRepository) {
+	t.Helper()
+
+	var rawMetadata string
+	if err := repo.RawDB().QueryRowContext(context.Background(),
+		`SELECT data FROM config_settings WHERE section = ?`,
+		"Metadata",
+	).Scan(&rawMetadata); err != nil {
+		t.Fatalf("load raw metadata config section: %v", err)
+	}
+	var metadata map[string]any
+	if err := json.Unmarshal([]byte(rawMetadata), &metadata); err != nil {
+		t.Fatalf("decode raw metadata config section: %v", err)
+	}
+	rawValue, ok := metadata["SkipAutoTorrent"].(bool)
+	if !ok {
+		t.Fatalf("raw metadata config section missing SkipAutoTorrent: %s", rawMetadata)
+	}
+	if rawValue {
+		t.Fatal("raw stored skip_auto_torrent changed unexpectedly")
+	}
+
+	stored, err := config.LoadFromDatabase(context.Background(), repo)
+	if err != nil {
+		t.Fatalf("load stored config: %v", err)
+	}
+	if stored.Metadata.SkipAutoTorrent {
+		t.Fatal("stored skip_auto_torrent changed unexpectedly")
+	}
+}
+
+func blockBackendLogDir(t *testing.T, dbPath string) {
+	t.Helper()
+
+	logDir := filepath.Join(filepath.Dir(dbPath), "logs")
+	if err := os.WriteFile(logDir, []byte("not a directory"), 0o600); err != nil {
+		t.Fatalf("block log dir: %v", err)
+	}
+}
+
+func assertCookieAuthStatePresent(t *testing.T, repo *db.SQLiteRepository) {
+	t.Helper()
+
+	var authState string
+	if err := repo.RawDB().QueryRowContext(context.Background(),
+		`SELECT data FROM config_settings WHERE section = ?`,
+		"cookies_encryption_auth_state",
+	).Scan(&authState); err != nil {
+		t.Fatalf("query cookie auth state: %v", err)
+	}
+	if !strings.Contains(authState, "fingerprint") {
+		t.Fatalf("expected synced cookie auth fingerprint, got %s", authState)
+	}
+}
+
+func installBackendFailMainSettingsTrigger(t *testing.T, repo *db.SQLiteRepository) {
+	t.Helper()
+
+	if _, err := repo.RawDB().ExecContext(context.Background(), `
+		CREATE TRIGGER fail_main_settings_save
+		BEFORE INSERT ON config_settings
+		WHEN NEW.section = 'MainSettings'
+		BEGIN
+			SELECT RAISE(FAIL, 'forced main settings failure');
+		END
+	`); err != nil {
+		t.Fatalf("create failure trigger: %v", err)
+	}
+}
+
+func TestBackendExportConfigRespectsAllowUnencryptedExport(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name                          string
+		allowUnencryptedExport        bool
+		expectExportPlaintext         bool
+		expectExportEncryptedEnvelope bool
+		expectGetConfigEncrypted      bool
+	}{
+		{
+			name:                          "allow unencrypted export",
+			allowUnencryptedExport:        true,
+			expectExportPlaintext:         true,
+			expectExportEncryptedEnvelope: false,
+			expectGetConfigEncrypted:      true,
+		},
+		{
+			name:                          "deny unencrypted export",
+			allowUnencryptedExport:        false,
+			expectExportPlaintext:         false,
+			expectExportEncryptedEnvelope: true,
+			expectGetConfigEncrypted:      true,
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
+			repoPath := filepath.Join(t.TempDir(), "export.db")
+			cfg := config.Config{
+				MainSettings:       config.MainSettingsConfig{TMDBAPI: "plain-secret", DBPath: repoPath},
+				ScreenshotHandling: config.ScreenshotHandlingConfig{Screens: 1},
+				Logging:            config.LoggingConfig{Level: "error"},
+			}
+
+			backend, err := NewBackendWithContext(context.Background(), cfg, newEventHub())
+			if err != nil {
+				t.Fatalf("new backend: %v", err)
+			}
+			t.Cleanup(func() {
+				_ = backend.Close()
+			})
+
+			authPath := filepath.Join(filepath.Dir(repoPath), AuthFileName)
+			// Writing AuthFileName after NewBackend is intentional: ExportConfig reads auth lazily,
+			// so this test ensures NewBackend does not cache allow_unencrypted_export state.
+			authJSON := `{"username":"tester","password_hash":"hash","encryption_key_seed":"seed","allow_unencrypted_export":false}`
+			if tc.allowUnencryptedExport {
+				authJSON = `{"username":"tester","password_hash":"hash","encryption_key_seed":"seed","allow_unencrypted_export":true}`
+			}
+			if err := os.WriteFile(authPath, []byte(authJSON), 0o600); err != nil {
+				t.Fatalf("write auth file: %v", err)
+			}
+
+			if err := config.SaveToDatabase(context.Background(), &cfg, backend.repo); err != nil {
+				t.Fatalf("save config: %v", err)
+			}
+
+			exported, err := backend.ExportConfig()
+			if err != nil {
+				t.Fatalf("export config: %v", err)
+			}
+			if got := strings.Contains(exported, "plain-secret"); got != tc.expectExportPlaintext {
+				t.Fatalf("ExportConfig plaintext presence = %t, want %t; payload=%s", got, tc.expectExportPlaintext, exported)
+			}
+			if got := strings.Contains(exported, "upbrr-enc:v1:"); got != tc.expectExportEncryptedEnvelope {
+				t.Fatalf("ExportConfig encrypted marker presence = %t, want %t; payload=%s", got, tc.expectExportEncryptedEnvelope, exported)
+			}
+
+			editingPayload, err := backend.GetConfig()
+			if err != nil {
+				t.Fatalf("get config: %v", err)
+			}
+			if got := strings.Contains(editingPayload, "upbrr-enc:v1:"); got != tc.expectGetConfigEncrypted {
+				t.Fatalf("GetConfig encrypted marker presence = %t, want %t; payload=%s", got, tc.expectGetConfigEncrypted, editingPayload)
+			}
+		})
+	}
+}
+
+func TestBackendExportConfigAuthorizesAgainstExportSnapshotDBPath(t *testing.T) {
+	t.Parallel()
+
+	repo, repoPath := openBackendConfigTestRepo(t, "backend-export-snapshot-auth.db")
+	tempDir := filepath.Dir(repoPath)
+	pathA := filepath.Join(tempDir, "runtime-a", "state.db")
+	pathB := filepath.Join(tempDir, "runtime-b", "state.db")
+	writeTestAuthFile(t, pathA, "tester", false)
+	writeTestAuthFile(t, pathB, "tester", true)
+
+	cfgA := backendConfigTestConfig(pathA)
+	cfgA.MainSettings.TMDBAPI = "snapshot-secret-a"
+	cfgB := backendConfigTestConfig(pathB)
+	cfgB.MainSettings.TMDBAPI = "snapshot-secret-b"
+	if err := config.SaveToDatabase(context.Background(), &cfgB, repo); err != nil {
+		t.Fatalf("save stored config: %v", err)
+	}
+	backend := &Backend{
+		cfg:  cfgA,
+		repo: repo,
+		hub:  newEventHub(),
+	}
+
+	snapshotCfg, authDBPath, err := backend.exportableConfig()
+	if err != nil {
+		t.Fatalf("exportable config: %v", err)
+	}
+	if snapshotCfg.MainSettings.DBPath != pathB {
+		t.Fatalf("snapshot DBPath: got %q want %q", snapshotCfg.MainSettings.DBPath, pathB)
+	}
+	if authDBPath != pathB {
+		t.Fatalf("auth DBPath: got %q want %q", authDBPath, pathB)
+	}
+
+	backend.replaceRuntime(cfgA, CoreCapabilities{}, nil)
+	allowPlaintext, err := backend.allowUnencryptedExport(authDBPath)
+	if err != nil {
+		t.Fatalf("allow unencrypted export: %v", err)
+	}
+	if !allowPlaintext {
+		t.Fatal("expected plaintext export to remain authorized by snapshot DBPath after runtime replacement")
+	}
+
+	payload, err := backend.ExportConfig()
+	if err != nil {
+		t.Fatalf("export config: %v", err)
+	}
+	if !strings.Contains(payload, "snapshot-secret-b") {
+		t.Fatalf("expected plaintext stored snapshot secret in export, payload=%s", payload)
+	}
+	if strings.Contains(payload, "snapshot-secret-a") {
+		t.Fatalf("export used runtime secret, payload=%s", payload)
+	}
+
+	editingPayload, err := backend.GetConfig()
+	if err != nil {
+		t.Fatalf("get config: %v", err)
+	}
+	if !strings.Contains(editingPayload, "upbrr-enc:v1:") {
+		t.Fatalf("GetConfig should remain encrypted, payload=%s", editingPayload)
+	}
+}
+
+func TestBackendAllowUnencryptedExportMalformedAuthReturnsError(t *testing.T) {
+	t.Parallel()
+
+	repoPath := filepath.Join(t.TempDir(), "malformed-auth.db")
+	if err := os.WriteFile(AuthFilePath(repoPath), []byte(`{`), 0o600); err != nil {
+		t.Fatalf("write malformed auth file: %v", err)
+	}
+
+	allowPlaintext, err := (&Backend{}).allowUnencryptedExport(repoPath)
+	if err == nil {
+		t.Fatal("expected malformed web auth to return an error")
+	}
+	if allowPlaintext {
+		t.Fatal("malformed web auth must not allow plaintext export")
+	}
+}

@@ -1,0 +1,6 @@
+{
+  "cases": 4,
+  "passed": 4,
+  "scope": "Original TS+owned real temp filesystem;Node type stripping,no Bun/fullCLI.",
+  "harness_correction": "Initial expected temp path omitted macOS /var to /private/var canonicalization by cwd;rerun uses realpath root. Not upstream defect."
+}

@@ -1,0 +1,67 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v20-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/hookAstRead.ts",
+      "local": "ast-src_modules_proxy_hookAstRead.ts",
+      "git_blob": "9e489fc3018f9fdec82e82b87437d8fbf63f7289",
+      "sha256": "2d8922889b74392282a2064749165c24ea306fd8c362fe52a55d5d9acdadf388",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/ast/relevance.ts",
+      "local": "ast-src_modules_proxy_ast_relevance.ts",
+      "git_blob": "280c61f0f18f0c1370090622a3ffbebf03c83189",
+      "sha256": "a25082010e7cf257c8492377ebbb53a7081c7ccb797ab04b17a38e3f33b298e3",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/ast/ts-symbols.ts",
+      "local": "ast-src_modules_proxy_ast_ts-symbols.ts",
+      "git_blob": "f228254f8fec2a499aa48fdcd3717011e80fc3ae",
+      "sha256": "b7c2220c1fac77350609468ce4f12d45e56c5a25f293b529d8bfc10e3352c29a",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/ast/py-symbols.ts",
+      "local": "ast-src_modules_proxy_ast_py-symbols.ts",
+      "git_blob": "fc4c41725787ce95bfb9563b26a4ecfa7310389d",
+      "sha256": "dcb2def3a43cf15c284fd2218219401989c1ea645f8349c0086119ac46e2d46e",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/ast/relevance.test.ts",
+      "local": "ast-tests_modules_proxy_ast_relevance.test.ts",
+      "git_blob": "b103ec5f77ce3d68fe089cc7410b451da55a9b09",
+      "sha256": "fd8a312fdcbda834a07b902ffaec1c05f63ab86abab6fefe4997ed8e95977733",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 69,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 203,
+    "numPassedTests": 203,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 18,
+  "authored_upstream_controls_total_distinct": 44,
+  "new_authored_controls": 2,
+  "owned_subset_cases_passed": 12,
+  "prior_owned_subset_cases": 10,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "findings": [
+    "scoreSymbols ignorescapturedAtMs;epocholdandfresh signals scoredidentically andeligible.",
+    "Oneletterasubstringpassesdefault0.7threshold;purepolicyboundary confirmed,notsemanticrelevanceproof.",
+    "hookAstRead precedesdedup,doesnotinvokehashcache aftersuccessfultrim;sourceonly actualASTnotqualified.",
+    "Symbol extractorscachemissingnativebindingasnullandreturnemptyarray;realgrammar extractionnotexecutedinthisturn.",
+    "Hook integrityScore0.7 anddroppedLines*12tokenestimate arefixedheuristics,notmeasuredpercallcontentretention."
+  ],
+  "runtime_scope": "OriginalpurescoringmoduleandtestsonVitest2.1.9;tree-sitternativegrammar/extractor/hookexecutionunqualified",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

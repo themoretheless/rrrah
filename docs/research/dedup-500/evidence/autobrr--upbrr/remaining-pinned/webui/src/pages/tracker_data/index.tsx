@@ -1,0 +1,277 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+import { pageStyle } from "../../components/ui/pageStyle";
+import { useMemo, useState } from "react";
+import type { Dispatch, SetStateAction } from "react";
+import RenderedDescription from "../../components/RenderedDescription";
+import { Button } from "../../components/ui/button";
+import { TrackerIconImage } from "../../components/ui/tracker-icon";
+import type { TrackerIconCache } from "../../hooks/useTrackerIcons";
+import { trackerIconFor } from "../../hooks/useTrackerIcons";
+import type { InputFacet } from "../../releaseSession/types";
+import type { TrackerPreview } from "../../types";
+import { handleExternalLinkClick } from "../../utils/externalLinks";
+
+type Props = {
+  facet: InputFacet;
+  setLightboxImage: Dispatch<SetStateAction<string>>;
+  setLightboxAlt: Dispatch<SetStateAction<string>>;
+  useFavicons?: boolean;
+  faviconOnly?: boolean;
+  trackerIconSrcByName: TrackerIconCache;
+};
+
+export default function TrackerDataPage(props: Props) {
+  const {
+    facet,
+    setLightboxImage,
+    setLightboxAlt,
+    useFavicons = true,
+    faviconOnly = false,
+    trackerIconSrcByName,
+  } = props;
+  const [renderedDescriptions, setRenderedDescriptions] = useState<Record<string, boolean>>({});
+  const trackerData = facet.view.trackerData;
+
+  const trackerDataOrdered = useMemo(() => {
+    const items = trackerData;
+    if (items.length === 0) {
+      return { items: [], primaryIndex: -1 };
+    }
+    const hasActualData = (item: TrackerPreview) =>
+      Boolean(
+        item.Description ||
+        item.DescriptionHTML ||
+        (item.ImageURLs && item.ImageURLs.length > 0) ||
+        item.TMDBID ||
+        item.IMDBID ||
+        item.TVDBID ||
+        item.MALID ||
+        item.InfoHash ||
+        item.Category ||
+        item.Filename,
+      );
+    const primaryIndex = items.findIndex(hasActualData);
+    if (primaryIndex <= 0) {
+      return { items, primaryIndex };
+    }
+    const primary = items[primaryIndex];
+    const rest = items.filter((_, index) => index !== primaryIndex);
+    return { items: [primary, ...rest], primaryIndex: 0 };
+  }, [trackerData]);
+
+  return (
+    <section className="flex flex-col gap-3">
+      <header className="max-w-3xl">
+        <p className={pageStyle.eyebrow}>Tracker Data</p>
+        <h1>Input Metadata</h1>
+        <p className={pageStyle.subtitle}>Tracker-provided metadata, descriptions, and images.</p>
+      </header>
+      {trackerData.length === 0 ? (
+        <p className="text-muted-foreground">No tracker data available.</p>
+      ) : (
+        <div className="grid gap-3">
+          {trackerDataOrdered.items.map((item, index) => {
+            const trackerKey = `${item.Tracker}-${index}`;
+            const isRendered =
+              Boolean(renderedDescriptions[trackerKey]) && Boolean(item.DescriptionHTML);
+            const renderedHTML = isRendered ? item.DescriptionHTML : "";
+            const isPrimary = index === trackerDataOrdered.primaryIndex;
+            const iconSrc = trackerIconFor(trackerIconSrcByName, item.Tracker);
+            const hideTrackerName = faviconOnly && useFavicons;
+            return (
+              <details
+                className="overflow-hidden rounded-lg border border-border bg-card"
+                key={trackerKey}
+                open={isPrimary}
+              >
+                <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-x-3 gap-y-1 px-3 py-2 font-semibold marker:content-[''] [&::-webkit-details-marker]:hidden">
+                  <span className="flex min-w-0 max-w-full items-center gap-2 [overflow-wrap:anywhere]">
+                    <TrackerIconImage
+                      tracker={item.Tracker}
+                      iconSrc={iconSrc}
+                      enabled={useFavicons}
+                    />
+                    {hideTrackerName ? (
+                      <span className="sr-only">{item.Tracker || "Unknown"}</span>
+                    ) : (
+                      item.Tracker || "Unknown"
+                    )}
+                  </span>
+                  <span className="min-w-0 max-w-full text-sm font-medium text-muted-foreground [overflow-wrap:anywhere]">
+                    Torrent ID: {item.TrackerID || "-"}
+                  </span>
+                </summary>
+                <div className="grid gap-3 border-t border-border px-3 pb-3 pt-2">
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-2">
+                    <div>
+                      <p className={pageStyle.label}>Tracker</p>
+                      {item.TorrentURL ? (
+                        <a
+                          className="inline-flex items-center gap-[5px] font-semibold text-foreground underline flex items-center gap-1.5"
+                          href={item.TorrentURL}
+                          aria-label={hideTrackerName ? item.Tracker || "Unknown" : undefined}
+                          target="_blank"
+                          rel="noreferrer"
+                          onAuxClick={handleExternalLinkClick}
+                          onClick={handleExternalLinkClick}
+                        >
+                          <TrackerIconImage
+                            tracker={item.Tracker}
+                            iconSrc={iconSrc}
+                            enabled={useFavicons}
+                          />
+                          {hideTrackerName ? null : item.Tracker || "Unknown"}
+                        </a>
+                      ) : (
+                        <div className={`${pageStyle.value} flex items-center gap-1.5`}>
+                          <TrackerIconImage
+                            tracker={item.Tracker}
+                            iconSrc={iconSrc}
+                            enabled={useFavicons}
+                          />
+                          {hideTrackerName ? (
+                            <span className="sr-only">{item.Tracker || "Unknown"}</span>
+                          ) : (
+                            <span>{item.Tracker || "Unknown"}</span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <p className={pageStyle.label}>Matched</p>
+                      <p className={pageStyle.value}>{item.Matched ? "Yes" : "No"}</p>
+                    </div>
+                    <div>
+                      <p className={pageStyle.label}>Updated</p>
+                      <p className={pageStyle.value}>{item.UpdatedAt || "-"}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-2">
+                    <div className="min-w-0">
+                      <p className={pageStyle.label}>Torrent ID</p>
+                      <p
+                        className={`${pageStyle.value} font-mono text-[0.95rem] [overflow-wrap:anywhere]`}
+                      >
+                        {item.TrackerID || "-"}
+                      </p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className={pageStyle.label}>Info Hash</p>
+                      <p
+                        className={`${pageStyle.value} font-mono text-[0.95rem] [overflow-wrap:anywhere]`}
+                      >
+                        {item.InfoHash || "-"}
+                      </p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className={pageStyle.label}>Category</p>
+                      <p className={`${pageStyle.value} [overflow-wrap:anywhere]`}>
+                        {item.Category || "-"}
+                      </p>
+                    </div>
+                    <div className="min-w-0">
+                      <p className={pageStyle.label}>Filename</p>
+                      <p className={`${pageStyle.value} [overflow-wrap:anywhere]`}>
+                        {item.Filename || "-"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-2">
+                    <div>
+                      <p className={pageStyle.label}>TMDB</p>
+                      <p className={`${pageStyle.value} font-mono text-[0.95rem]`}>
+                        {item.TMDBID || 0}
+                      </p>
+                    </div>
+                    <div>
+                      <p className={pageStyle.label}>IMDB</p>
+                      <p className={`${pageStyle.value} font-mono text-[0.95rem]`}>
+                        {item.IMDBID || 0}
+                      </p>
+                    </div>
+                    <div>
+                      <p className={pageStyle.label}>TVDB</p>
+                      <p className={`${pageStyle.value} font-mono text-[0.95rem]`}>
+                        {item.TVDBID || 0}
+                      </p>
+                    </div>
+                    <div>
+                      <p className={pageStyle.label}>MAL</p>
+                      <p className={`${pageStyle.value} font-mono text-[0.95rem]`}>
+                        {item.MALID || 0}
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-between gap-2">
+                      <h2>Description</h2>
+                      {item.DescriptionHTML ? (
+                        <Button
+                          className="h-7 rounded-full px-2 text-xs"
+                          type="button"
+                          aria-label={`${isRendered ? "Show raw" : "Render"} ${item.Tracker || "Tracker"} entry ${index + 1}`}
+                          onClick={() =>
+                            setRenderedDescriptions((prev) => ({
+                              ...prev,
+                              [trackerKey]: !prev[trackerKey],
+                            }))
+                          }
+                        >
+                          {isRendered ? "Show raw" : "Render"}
+                        </Button>
+                      ) : null}
+                    </div>
+                    {isRendered ? (
+                      <RenderedDescription
+                        html={renderedHTML}
+                        imagePreviews={item.ImagePreviews}
+                        onImageOpen={(url, alt) => {
+                          setLightboxImage(url);
+                          setLightboxAlt(alt);
+                        }}
+                      />
+                    ) : (
+                      <p className="whitespace-pre-wrap text-muted-foreground leading-relaxed">
+                        {item.Description || "No description provided."}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <h2>Images</h2>
+                    {item.ImageURLs.length === 0 ? (
+                      <p className="text-muted-foreground">No images provided.</p>
+                    ) : (
+                      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-2">
+                        {item.ImageURLs.map((url, imageIndex) => (
+                          <button
+                            className="cursor-pointer border-0 bg-transparent p-0"
+                            type="button"
+                            aria-label={`Preview ${item.Tracker || "Tracker"} image ${imageIndex + 1} in entry ${index + 1}`}
+                            key={`${url}-${imageIndex}`}
+                            onClick={() => {
+                              setLightboxImage(url);
+                              setLightboxAlt(`${item.Tracker || "Tracker"} image`);
+                            }}
+                          >
+                            <img
+                              className="w-full rounded-lg border border-border"
+                              src={item.ImagePreviews?.[url] || url}
+                              alt="Tracker"
+                              loading="lazy"
+                            />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </details>
+            );
+          })}
+        </div>
+      )}
+    </section>
+  );
+}

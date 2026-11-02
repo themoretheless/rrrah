@@ -1,0 +1,17 @@
+{
+  "source_sha256": {
+    "crates/rrrah-dedup/src/decode.rs": "724a4cb9d59fe761679e6d36ec11ae3f84387313ca099f049ca150392d949fd2",
+    "crates/rrrah-raw/src/lib.rs": "4bcdbd4e91c5be3d283cf8f61bffb4c7c55fb11c433cede49bdd227d69bff522",
+    "crates/rrrah-develop/src/lib.rs": "f0ba669d3bd890ee258a1a77372a6d30e22f05f44e2e9f2e67a60af5b5e5e0d0",
+    "crates/rrrah-demosaic/src/demosaic.rs": "39809583345e25346fcc6bd6e4e355d9c51e0f9c035638a70babd711735bdbf8"
+  },
+  "observations": [
+    "decode_selected_frame Sensor branch calls DevelopOptions::default directly.",
+    "DecodeRequest contains decode/color/frame policies but no selectable RAW development options.",
+    "DevelopOptions defaults demosaic Auto; dispatch_demosaic chooses AHD for Bayer.",
+    "Pinned LibRaw q0 reference Sony fails existing display recipe; same source q3 AHD reference passes with roughly98percent pixels."
+  ],
+  "implication": "AHD agreement does not close cross-development matching. Any new explicit development recipe must propagate through decoding, fingerprint/cache identity and file/collection confirmation, preserving existing defaults and stale-source checks. Merely switching global default or accepting only AHD reference would shrink coverage.",
+  "status": "verified source policy gap and diagnostic evidence, implementation not changed",
+  "next_evidence": "Retain original linear reference failure; test alternate development or robust comparison with same-source positives plus overlapping/cross-scene precision controls."
+}

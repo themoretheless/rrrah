@@ -1,0 +1,318 @@
+TAP version 13
+# Subtest: Jev scope leaves ordinary DCP active elsewhere while preserving independent pins
+ok 1 - Jev scope leaves ordinary DCP active elsewhere while preserving independent pins
+  ---
+  duration_ms: 4.479042
+  type: 'test'
+  ...
+# Subtest: unresolvable Jev project scope holds pruning closed
+ok 2 - unresolvable Jev project scope holds pruning closed
+  ---
+  duration_ms: 0.481333
+  type: 'test'
+  ...
+# Subtest: fixture comparison measures both potential reduction and conservative retention overhead
+not ok 3 - fixture comparison measures both potential reduction and conservative retention overhead
+  ---
+  duration_ms: 87.832792
+  type: 'test'
+  location: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-benchmark.test.ts:42:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(counts.proposed < counts.currentDcp)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-benchmark.test.ts:73:48)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: disabled, unknown, declined and no-candidate paths perform zero inference
+not ok 4 - disabled, unknown, declined and no-candidate paths perform zero inference
+  ---
+  duration_ms: 2.96125
+  type: 'test'
+  location: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:12:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'no-candidates'
+    - 'declined'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'declined'
+  actual: 'no-candidates'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:16:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: one approved batch scores once, omits only its body, and repeated hooks do not recount inference
+not ok 5 - one approved batch scores once, omits only its body, and repeated hooks do not recount inference
+  ---
+  duration_ms: 2.341958
+  type: 'test'
+  location: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:26:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected "actual" not to be strictly deep-equal to:
+    
+    {
+      content: [
+        {
+          text: "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n" +
+            "const obsolete = 'unused';\n",
+          type: 'text'
+        }
+      ],
+    ...
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    role: 'toolResult'
+    toolCallId: 'old'
+    toolName: 'read'
+    content:
+      0:
+        type: 'text'
+        text: |-
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          
+    isError: false
+    timestamp: 0
+  actual:
+    role: 'toolResult'
+    toolCallId: 'old'
+    toolName: 'read'
+    content:
+      0:
+        type: 'text'
+        text: |-
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          const obsolete = 'unused';
+          
+    isError: false
+    timestamp: 0
+  operator: 'notDeepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:43:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: pins, source changes and input invalidation defeat low scores
+not ok 6 - pins, source changes and input invalidation defeat low scores
+  ---
+  duration_ms: 1.466166
+  type: 'test'
+  location: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:53:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:61:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a new explicit brief invalidates previous-task scores even when the new disclosure is declined
+not ok 7 - a new explicit brief invalidates previous-task scores even when the new disclosure is declined
+  ---
+  duration_ms: 0.667875
+  type: 'test'
+  location: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:66:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'no-candidates'
+    - 'declined'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'declined'
+  actual: 'no-candidates'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:70:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: unscored results are neither protected nor omitted, leaving deterministic strategies free
+ok 8 - unscored results are neither protected nor omitted, leaving deterministic strategies free
+  ---
+  duration_ms: 0.473041
+  type: 'test'
+  ...
+# Subtest: late responses and changed payload scope stay retained
+not ok 9 - late responses and changed payload scope stay retained
+  ---
+  duration_ms: 3.407167
+  type: 'test'
+  location: '/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:84:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'no-candidates'
+    - 'stale'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'stale'
+  actual: 'no-candidates'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/pidcp170-controls-20261024/runtime/test/jev-selection.test.ts:92:9)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: partial, overridden, instruction-bearing, symlinked and unmatched output is ineligible
+ok 10 - partial, overridden, instruction-bearing, symlinked and unmatched output is ineligible
+  ---
+  duration_ms: 1.239541
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 4
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 212.657208

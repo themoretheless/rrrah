@@ -1,0 +1,12 @@
+{
+  "source_sha256": "0c83a0574401bf05e1accf7d57a8af39024c1bce3604836feee0e6eb30297b68",
+  "method": "Unchanged original bbb_tty_notify body with synthetic semaphore and IRQ mapping; sequential calls only, no thread scheduling or kernel execution",
+  "notifications": [
+    115,
+    49
+  ],
+  "semaphore_count": 2,
+  "received_gpio": 49,
+  "finding": "Two notifications preserve two wake tokens but only last GPIO identity. Receiver conditional checks shared received_gpio, so tokens are not a per-event identity queue; actual loss/timing requires kernel/hardware evidence.",
+  "exit_code": 0
+}

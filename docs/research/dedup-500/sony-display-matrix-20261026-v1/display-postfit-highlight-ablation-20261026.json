@@ -1,0 +1,127 @@
+{
+  "records": [
+    {
+      "pair": "2414",
+      "highlight_recovery": true,
+      "counts": [
+        23641348,
+        357695,
+        957
+      ],
+      "forward_rejected": [
+        242696,
+        217429,
+        775
+      ],
+      "reverse_rejected": [
+        236512,
+        259420,
+        768
+      ],
+      "agreement": [
+        0.9807958333333333,
+        0.9793041666666666
+      ],
+      "in_range_failure_rate": [
+        0.010265742884035207,
+        0.010004167275064011
+      ],
+      "binary_sha256": "e5d512f1b3422c9298a1e48471bdcdf9965a89aa1f02d741068cff4cdeaf8686",
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-postfit-bins-20261026.log",
+      "log_sha256": "496ee87187b99e23fa89a31034082beadd1f6706af640ac9b2d2b05dff42fc75"
+    },
+    {
+      "pair": "2414",
+      "highlight_recovery": false,
+      "counts": [
+        23641242,
+        357870,
+        888
+      ],
+      "forward_rejected": [
+        240538,
+        265796,
+        714
+      ],
+      "reverse_rejected": [
+        234509,
+        266009,
+        705
+      ],
+      "agreement": [
+        0.978873,
+        0.9791157083333333
+      ],
+      "in_range_failure_rate": [
+        0.010174507752173089,
+        0.009919487309507681
+      ],
+      "binary_sha256": "e5d512f1b3422c9298a1e48471bdcdf9965a89aa1f02d741068cff4cdeaf8686",
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-postfit-no-recovery-20261026.log",
+      "log_sha256": "c555eeea4c567b3a8d4c8452cd758c3e5f83189943eee3a319a5ecfaab5d0ce9"
+    },
+    {
+      "pair": "2418",
+      "highlight_recovery": true,
+      "counts": [
+        22108891,
+        1887673,
+        3436
+      ],
+      "forward_rejected": [
+        1066992,
+        564112,
+        2964
+      ],
+      "reverse_rejected": [
+        874565,
+        1825030,
+        2917
+      ],
+      "agreement": [
+        0.9319138333333333,
+        0.8873953333333333
+      ],
+      "in_range_failure_rate": [
+        0.048260765318350884,
+        0.0395571627722078
+      ],
+      "binary_sha256": "e5d512f1b3422c9298a1e48471bdcdf9965a89aa1f02d741068cff4cdeaf8686",
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-postfit-bins-20261026.log",
+      "log_sha256": "808274f4ae4d6f4146e299ea6c709f6db90256a5bc93ed0ed0b08bc0d66a2285"
+    },
+    {
+      "pair": "2418",
+      "highlight_recovery": false,
+      "counts": [
+        22111073,
+        1886380,
+        2547
+      ],
+      "forward_rejected": [
+        1028172,
+        1849287,
+        2087
+      ],
+      "reverse_rejected": [
+        849011,
+        1832673,
+        2044
+      ],
+      "agreement": [
+        0.8800189166666667,
+        0.888178
+      ],
+      "in_range_failure_rate": [
+        0.04650032135482525,
+        0.03839754859476969
+      ],
+      "binary_sha256": "e5d512f1b3422c9298a1e48471bdcdf9965a89aa1f02d741068cff4cdeaf8686",
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-postfit-no-recovery-20261026.log",
+      "log_sha256": "f022ed8534aca5bd6e72281531ca927495c3f68219ce42218b71894a411e24a0"
+    }
+  ],
+  "conclusion": "Disabling recovery slightly lowers aggregate in-range residual rate but dramatically worsens 2418 forward out-of-range agreement; reverse stays below90%. Retain recovery default; no sufficient fix established.",
+  "limits": "Range-class membership changes between runs: aggregate rates are not per-pixel transitions. Two camera examples, fixed geometry, diagnostic only; no all-case or heldout precision proof.",
+  "next": "Compare per-pixel residual location and color/demosaic stages without discarding highlight failures."
+}

@@ -1,0 +1,49 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--test",
+    "png_pinned_corpus",
+    "pinned_invalid_png_corpus_is_rejected_without_retaining_memory",
+    "--",
+    "--ignored",
+    "--nocapture"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 68.30753025000013,
+  "source_pins": {
+    "crates/rrrah-dedup/tests/png_pinned_corpus.rs": "8600610cfb6e63fcfbe4a17087a6b4eecf2d8beccc8b7535d41989f7de9cc6ba"
+  },
+  "fixture_pins": {
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xc1n0g08.png": "4059f7e6a1c5bac1801f70e09f9ec1e1297dcdce34055c13ab2703d6d9613c7e",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xc9n2c08.png": "e252a0e7df3e794e52ce4a831edafef76e7043d0d8d84019db0f7fd0b30e20f4",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xcrn0g04.png": "3c0c2a68dd416a7be79400e0e2ceb358ba3191d5309d4bad9dd04b32ff6d5b60",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xcsn0g01.png": "71e4b2826f61556eda39f3a93c8769b14d3ac90f135177b9373061199dbef39a",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xd0n2c08.png": "c1287690808e809dc5d4fb89d8a7fd69ed93521f290abd42021ca00a061a1ba4",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xd3n2c08.png": "00b53c3bbd0641454521b982bc6f6bcfda7c91f1874cefb3a9bac37d80a1a269",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xd9n2c08.png": "16e5b40fb2600db1af20fb79ff715c2869255e2d4bef20702f16534e5dd6a847",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xdtn0g01.png": "f9d1fb2a708703518368c392c74765a6e3e5b49dbb9717df3974452291032df9",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xhdn0g08.png": "318864720c8fc0dbe4884035f2183cc3bd3d92ec60d447879982942600e9fe2e",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xlfn0g04.png": "968fd21abb8acf40fbca90676de3abcb3a6e35b01ba7a3b9190184eafb99c83d",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs1n0g01.png": "776701227c7094dd10b78f508430b8ea4f03471d072096382cbcca628dea1d2b",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs2n0g01.png": "9dd7e93ba9211f0caee09d8f12e37742936c469f45fcad21e577c9f0640cf99e",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs4n0g01.png": "166c8633d116d1c26631cb98f3a75340cf4385fa7ae6a67913bc78e709bcb30d",
+    "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs7n0g01.png": "7a380568beeac969908196ac89cd2347c96ac2f26fdc2b8e0314b62c59f0e308"
+  },
+  "fixtures_unchanged": true,
+  "test_source_unchanged": true,
+  "log": "docs/research/dedup-500/png-invalid-corpus-run-20261102-v1.log",
+  "log_sha256": "c590484e987d158466435adacfb9ceac40c0a076f3b63c0ec32c9a832842970e",
+  "verified_results": {
+    "invalid_png_rejections": 14,
+    "passed_tests": 1,
+    "failed": 0,
+    "fixture_pins_rechecked": true,
+    "scope": "Pinned14invalidinputs only, explicit primary policy, managed budget returns0 after each; not arbitrary corrupt PNG/fuzzing/panic/OOM or total RSS proof."
+  }
+}

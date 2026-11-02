@@ -1,0 +1,922 @@
+{
+  "date": "2026-10-25",
+  "scope": "RR-0031–RR-0060; CPU, local macOS only; existing dirty checkout preserved",
+  "host": {
+    "system": "Darwin",
+    "release": "25.6.0",
+    "machine": "arm64",
+    "python": "3.15.1",
+    "cpu": "Apple M4 Max",
+    "rustc": "rustc 1.98.1 (48a229cea 2026-09-01)"
+  },
+  "summary": {
+    "rejected": 26,
+    "verified": 3,
+    "partial": 1
+  },
+  "native_suites": [
+    {
+      "name": "texture",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-texture",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "96",
+          "0",
+          "3"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "mesh",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-mesh",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "57",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "scientific",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-scientific",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "58",
+          "0",
+          "10"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "develop",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-develop",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "102",
+          "0",
+          "2"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "vfx",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-vfx",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "52",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "layered",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-layered",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "78",
+          "0",
+          "2"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "animation",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-animation",
+        "--lib",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "36",
+          "0",
+          "1"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "cr2",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-raw",
+        "--lib",
+        "camtiff::cr2",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "10",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "mng",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "mng::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "16",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "heif",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-decode",
+        "--lib",
+        "heif::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "8",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "wmf",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-vector",
+        "--lib",
+        "wmf::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "7",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "pdf",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-vector",
+        "--lib",
+        "pdf::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "46",
+          "0",
+          "1"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "cache-swap",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-cache",
+        "--lib",
+        "swap::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "30",
+          "0",
+          "1"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "dedup-model",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--lib",
+        "model_banks::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": false
+    },
+    {
+      "name": "dedup-gradient",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--lib",
+        "gradient::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "9",
+          "0",
+          "2"
+        ]
+      ],
+      "executed_nonzero": true
+    },
+    {
+      "name": "dedup-anchor",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--lib",
+        "anchor_rank",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": false
+    },
+    {
+      "name": "dedup-collection",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--lib",
+        "local_collection::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "0",
+          "0",
+          "0"
+        ]
+      ],
+      "executed_nonzero": false
+    },
+    {
+      "name": "gallery",
+      "command": [
+        "cargo",
+        "test",
+        "-p",
+        "rrrah",
+        "--bin",
+        "rrrah",
+        "gallery::tests::",
+        "--",
+        "--show-output",
+        "--test-threads=1"
+      ],
+      "exit_code": 0,
+      "timed_out": false,
+      "summaries": [
+        [
+          "ok",
+          "53",
+          "0",
+          "17"
+        ]
+      ],
+      "executed_nonzero": true
+    }
+  ],
+  "dedup_decode": {
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah-dedup",
+      "--features",
+      "decode",
+      "--test",
+      "model_tiles",
+      "--test",
+      "model_projected_tiles",
+      "--test",
+      "model_compare",
+      "--test",
+      "bank_partition",
+      "--test",
+      "anchor_rank",
+      "--test",
+      "anchor_rank_file",
+      "--test",
+      "gradient",
+      "--test",
+      "gradient_distinct_locations",
+      "--test",
+      "gradient_collection",
+      "--test",
+      "local_collection",
+      "--test",
+      "opposite_native",
+      "--",
+      "--show-output",
+      "--test-threads=1"
+    ],
+    "exit_code": 0,
+    "timed_out": false,
+    "summaries": [
+      [
+        "ok",
+        "5",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "3",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "6",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "9",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "1",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "4",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "20",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "47",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "8",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "21",
+        "0",
+        "0"
+      ],
+      [
+        "ok",
+        "6",
+        "0",
+        "0"
+      ]
+    ],
+    "targets": [
+      {
+        "name": "anchor_rank",
+        "status": "ok",
+        "passed": 5,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "anchor_rank_file",
+        "status": "ok",
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "bank_partition",
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "gradient",
+        "status": "ok",
+        "passed": 9,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "gradient_collection",
+        "status": "ok",
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "gradient_distinct_locations",
+        "status": "ok",
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "local_collection",
+        "status": "ok",
+        "passed": 20,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "model_compare",
+        "status": "ok",
+        "passed": 47,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "model_projected_tiles",
+        "status": "ok",
+        "passed": 8,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "model_tiles",
+        "status": "ok",
+        "passed": 21,
+        "failed": 0,
+        "ignored": 0
+      },
+      {
+        "name": "opposite_native",
+        "status": "ok",
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0
+      }
+    ]
+  },
+  "allocation_medians": {
+    "dicom": {
+      "legacy": {
+        "malloc": 54140.0,
+        "calloc": 169.0,
+        "realloc": 39.0,
+        "aligned": 7.0,
+        "peak_rss_bytes": 3104768.0
+      },
+      "candidate": {
+        "malloc": 1190.0,
+        "calloc": 169.0,
+        "realloc": 39.0,
+        "aligned": 7.0,
+        "peak_rss_bytes": 2965504.0
+      }
+    },
+    "mng": {
+      "legacy": {
+        "malloc": 342.0,
+        "calloc": 169.0,
+        "realloc": 29.0,
+        "aligned": 7.0,
+        "peak_rss_bytes": 5931008.0
+      },
+      "candidate": {
+        "malloc": 343.0,
+        "calloc": 169.0,
+        "realloc": 30.0,
+        "aligned": 7.0,
+        "peak_rss_bytes": 5980160.0
+      }
+    },
+    "webp": {
+      "legacy": {
+        "malloc": 282.0,
+        "calloc": 169.0,
+        "realloc": 30.0,
+        "aligned": 7.0,
+        "peak_rss_bytes": 2736128.0
+      },
+      "candidate": {
+        "malloc": 283.0,
+        "calloc": 169.0,
+        "realloc": 31.0,
+        "aligned": 7.0,
+        "peak_rss_bytes": 2760704.0
+      }
+    }
+  },
+  "dicom_pairs": {
+    "dicom-pairs-1.log": {
+      "true": {
+        "total_ns": {
+          "median_ratio": 1.001792426076176,
+          "wins": 5
+        },
+        "p50_ns": {
+          "median_ratio": 1.0,
+          "wins": 3
+        },
+        "p95_ns": {
+          "median_ratio": 1.0,
+          "wins": 4
+        }
+      },
+      "false": {
+        "total_ns": {
+          "median_ratio": 0.13180948318309516,
+          "wins": 10
+        },
+        "p50_ns": {
+          "median_ratio": 0.29534608082451863,
+          "wins": 10
+        },
+        "p95_ns": {
+          "median_ratio": 0.12408982715362939,
+          "wins": 10
+        }
+      }
+    },
+    "dicom-pairs-2.log": {
+      "true": {
+        "total_ns": {
+          "median_ratio": 0.998198044853364,
+          "wins": 5
+        },
+        "p50_ns": {
+          "median_ratio": 1.0,
+          "wins": 3
+        },
+        "p95_ns": {
+          "median_ratio": 0.9999853122613243,
+          "wins": 5
+        }
+      },
+      "false": {
+        "total_ns": {
+          "median_ratio": 0.1283953759471652,
+          "wins": 10
+        },
+        "p50_ns": {
+          "median_ratio": 0.2441963153125944,
+          "wins": 10
+        },
+        "p95_ns": {
+          "median_ratio": 0.12125760681116063,
+          "wins": 10
+        }
+      }
+    }
+  },
+  "swap_pairs": {
+    "1": {
+      "True": {
+        "wait_p50_ns": {
+          "median_ratio": 0.973229121406922,
+          "wins": 6
+        },
+        "wait_p95_ns": {
+          "median_ratio": 0.8709362468039624,
+          "wins": 6
+        },
+        "hold_p95_ns": {
+          "median_ratio": 0.9959154977184383,
+          "wins": 6
+        },
+        "cleanup_p95_ns": {
+          "median_ratio": 1.0948628801855464,
+          "wins": 3
+        }
+      },
+      "False": {
+        "wait_p50_ns": {
+          "median_ratio": 0.018029269875340745,
+          "wins": 10
+        },
+        "wait_p95_ns": {
+          "median_ratio": 0.03346422697139667,
+          "wins": 10
+        },
+        "hold_p95_ns": {
+          "median_ratio": 0.011285094985396857,
+          "wins": 10
+        },
+        "cleanup_p95_ns": {
+          "median_ratio": 1.072297116245307,
+          "wins": 3
+        }
+      }
+    },
+    "2": {
+      "True": {
+        "wait_p50_ns": {
+          "median_ratio": 0.9761210271871492,
+          "wins": 6
+        },
+        "wait_p95_ns": {
+          "median_ratio": 0.8200943396226416,
+          "wins": 8
+        },
+        "hold_p95_ns": {
+          "median_ratio": 0.9289055194609354,
+          "wins": 7
+        },
+        "cleanup_p95_ns": {
+          "median_ratio": 0.9753677397399061,
+          "wins": 6
+        }
+      },
+      "False": {
+        "wait_p50_ns": {
+          "median_ratio": 0.020092811774641374,
+          "wins": 10
+        },
+        "wait_p95_ns": {
+          "median_ratio": 0.02712394833970612,
+          "wins": 10
+        },
+        "hold_p95_ns": {
+          "median_ratio": 0.00938381076341891,
+          "wins": 10
+        },
+        "cleanup_p95_ns": {
+          "median_ratio": 1.0158704075022578,
+          "wins": 5
+        }
+      }
+    },
+    "4": {
+      "True": {
+        "wait_p50_ns": {
+          "median_ratio": 0.7111752763161776,
+          "wins": 8
+        },
+        "wait_p95_ns": {
+          "median_ratio": 0.985124418328196,
+          "wins": 5
+        },
+        "hold_p95_ns": {
+          "median_ratio": 0.9672451475006323,
+          "wins": 5
+        },
+        "cleanup_p95_ns": {
+          "median_ratio": 0.9438183674269827,
+          "wins": 5
+        }
+      },
+      "False": {
+        "wait_p50_ns": {
+          "median_ratio": 0.03541019013306332,
+          "wins": 10
+        },
+        "wait_p95_ns": {
+          "median_ratio": 0.04553020626245609,
+          "wins": 10
+        },
+        "hold_p95_ns": {
+          "median_ratio": 0.00976844933627015,
+          "wins": 10
+        },
+        "cleanup_p95_ns": {
+          "median_ratio": 0.8349171892456909,
+          "wins": 6
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "crates/rrrah-animation/src/jng.rs": "49a415d5e117ce09d7d8c2cabea31a1d099dc20456d773577c19240673a068b7",
+    "crates/rrrah-animation/src/raster_color.rs": "99bf87f927d88f978da899b20fddc7be3d7b6ebcfc40df561a073228af89169f",
+    "crates/rrrah-animation/src/webp_animation.rs": "ef2df3128ad4787c75dd99829c1f158c698f45c6652f63950886cd04c599fea5",
+    "crates/rrrah-app/src/gallery.rs": "65f3653f77d7c3fe5d9b8a37d874c7f13d88b22c3e8e469e6869a15c7951791f",
+    "crates/rrrah-cache/src/swap.rs": "46a20f4ba55b9ac29be7bd2bbc857d2582c32392793977b0ee8fa23363b439f1",
+    "crates/rrrah-decode/src/heif.rs": "d2b29a3a18d4a7488d873bdafe328ce0e8c84a8c4dc1878105ed1eb5d57a91fe",
+    "crates/rrrah-decode/src/mng.rs": "9771bf38f8b5b5673c92abb1cc7764c23adf02a73d4f6598783c114af4475937",
+    "crates/rrrah-dedup/src/anchor_rank.rs": "fef4a82a5a07aa061e910d314f194e0343523f58c2fbf447b0b6471ab224bb8d",
+    "crates/rrrah-dedup/src/anchor_rank_file.rs": "94c6e4101501c98fb23a1ffa83d750d52f443a0068c2f6de9a95e4aef652700b",
+    "crates/rrrah-dedup/src/gradient.rs": "77fdc18e635ae557c01ef78d1932f1c558bebd6a8d264cc8e1bf81cf088b889b",
+    "crates/rrrah-dedup/src/local_collection.rs": "84f9a32e1ceb67e12a16bc6dc43292ffd8dd39a5c5e5eb2c500fb7ba2fa25e65",
+    "crates/rrrah-dedup/src/model_banks.rs": "df12d8b8ac0cdd58f7e522eaf12fa27a33361aa1cf779303b94a786699aaa82f",
+    "crates/rrrah-develop/src/raster.rs": "5e6d6e9df1856a052a6361c5fd9d7a3213e90fedd3c993401e524d22e7f5740c",
+    "crates/rrrah-develop/src/thumbnail.rs": "b8146028545ffb3dc158446e46fa7dcd1d1d5edb127802e386f527ea5e2a0c7f",
+    "crates/rrrah-layered/src/psd.rs": "fc58f8eb2e721a02ea0050ae32481597fa71dfa936f489d052bef9f4b73b7a42",
+    "crates/rrrah-mesh/src/lib.rs": "16d7a721379996674b4f5e6c027c90ed40e4a672097f0bdda581fc1ff295e85e",
+    "crates/rrrah-mesh/src/obj_swap.rs": "3472049a125471e5c6d49f08ed26e0d2d09ac951c5ac7f8c769ec88cd70882a6",
+    "crates/rrrah-mesh/src/ply.rs": "2acb94ae46395b7f7256a746f0839a8a60689590cf9aa72bc4425a96172732a9",
+    "crates/rrrah-mesh/src/ply_swap.rs": "4da492ef2b318381a3da932a069a0ee3d116450ff5bc75ef565645ec3ada205d",
+    "crates/rrrah-mesh/src/rr31_60_qualification.rs": "676f33966e8df11050f409935e7fa4915c7912e0c978e998c2d03dfdf598c5c0",
+    "crates/rrrah-raw/src/camtiff/cr2.rs": "d99b9afe392c5ffcf6679b6c7d84eb551de8dd13a901408bf11e03fa6fe647f2",
+    "crates/rrrah-scientific/src/dicom.rs": "cf9fd74875cbd55de0779084c4c97e93b3d3572eb76d7da33d8fc7b9a6732c16",
+    "crates/rrrah-scientific/src/fits.rs": "fdfb46905533a492e652c2009e5a312a764307c7db6a32c7ac6b9791f300a5f4",
+    "crates/rrrah-texture/src/ktx.rs": "1fe0dd84e4829fd6917e1e8ebbc9c950751bfc50a017b5da5ed42616c014561a",
+    "crates/rrrah-texture/src/pvr.rs": "ca88de731b0a9ff0208a644b25940e3a839bb7b2206f46cec774db45b1816138",
+    "crates/rrrah-texture/src/sti.rs": "a6d73c700122cf0f34f03fcc19ad4b039058717953c8c8af85c2730afdb05d9c",
+    "crates/rrrah-vector/src/pdf.rs": "ef05ad1e0acf8c9352e75b41650f711b1a9c09c6c9f3e6e303079e5373d02472",
+    "crates/rrrah-vector/src/wmf.rs": "557f6c8604d671413dd65077e0bda0310e9b9b0d0ded054351f5f866287e7e13",
+    "crates/rrrah-vfx/src/dpx.rs": "70b4fc4d9ffcc1362e007b3b73aeec355d79cdcf10791dbd2551813942cd9048",
+    "scripts/bench-report.py": "fd068bab67999cecfb1d15e905baa570439c66b9d1b5c96f1894b99f541dfbfe",
+    "scripts/qualification_command.py": "b714ecba667896b53d745029649c0078d7b166b7b34f14d48730fb56e339515b",
+    "scripts/qualify-x3f-sd10.py": "68445dd980dedbf833a83035767b92ce214955357aecdf7844a34aa4ea3decef",
+    "scripts/refresh-improvements-1000.py": "7073b8ed2fb6944ce0575b5a7c4796d81b68da0e6bba63079bf8ac06212a1c57",
+    "scripts/test-improvements-1000.py": "f25fea3adfecadd960b7052e69c2954331245089c53476b020171089d2f18c84",
+    "scripts/test-improvements-31-60.py": "bc699b2d46d6b452736f006a6706891593e563fd15c6cc6a599a4985e11149b3",
+    "scripts/validate-improvements-1000.py": "03a9abfd777c585aafe052c201c4364979c9b1a9114dc88d335d34e5ee6f0274"
+  },
+  "limitations": [
+    "26 rejected are narrow hypotheses, not full benchmark acceptance or optimizations",
+    "RR-0056 partial: full drain metadata is unadmitted O(expired count); production worker unchanged",
+    "Zero-test default-feature dedup selections excluded; decode-feature suites reported separately",
+    "No VoiceOver, physical HDR, CUDA/NVIDIA, foreign enclosure, Windows or camera-oracle qualification",
+    "Managed capacity accounting and per-process physical RSS are distinct",
+    "Preliminary stopped DICOM run retained and excluded; instrumented allocation processes excluded from timing",
+    "Finite synthetic metadata-rich DICOM workload does not establish viewer latency or all-DICOM speedup"
+  ]
+}

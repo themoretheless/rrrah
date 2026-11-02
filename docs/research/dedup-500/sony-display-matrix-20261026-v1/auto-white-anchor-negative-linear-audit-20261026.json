@@ -1,0 +1,80 @@
+{
+  "rows": [
+    {
+      "case": "negative-2414-2418",
+      "candidate": [
+        "false"
+      ],
+      "geometry_found": false,
+      "matched_pixels": [],
+      "compared_pixels": [],
+      "projected_agreement": null,
+      "log_sha256": "d6aae6cce9d00f953d0cecf210efc3768346b8c2eef4430e7d299218bd78afc5",
+      "binary_sha256": "2c6e699c6bcd5bd06b8316322b699e66341ee11f4e27127474c68829dab01886"
+    },
+    {
+      "case": "negative-2418-2414",
+      "candidate": [
+        "false"
+      ],
+      "geometry_found": false,
+      "matched_pixels": [],
+      "compared_pixels": [],
+      "projected_agreement": null,
+      "log_sha256": "6769f5b329f879128b02e3e742c96e85aa4690a1f4946d06561155190700c75f",
+      "binary_sha256": "2c6e699c6bcd5bd06b8316322b699e66341ee11f4e27127474c68829dab01886"
+    },
+    {
+      "case": "linear-2414",
+      "candidate": [
+        "false"
+      ],
+      "geometry_found": true,
+      "matched_pixels": [
+        19437284,
+        19504111,
+        19650166,
+        19740109
+      ],
+      "compared_pixels": [
+        24000000,
+        23989514,
+        24000000,
+        23989514
+      ],
+      "projected_agreement": [
+        0.8187569166666666,
+        0.8228640646909312
+      ],
+      "log_sha256": "4f203ab3ad05c8d244ddad581fdcaa9116c575d612efe1e8a570164485c306b7",
+      "binary_sha256": "2c6e699c6bcd5bd06b8316322b699e66341ee11f4e27127474c68829dab01886"
+    },
+    {
+      "case": "linear-2418",
+      "candidate": [
+        "false"
+      ],
+      "geometry_found": true,
+      "matched_pixels": [
+        18659928,
+        18714196,
+        20084296,
+        20188464
+      ],
+      "compared_pixels": [
+        24000000,
+        23994893,
+        24000000,
+        23994893
+      ],
+      "projected_agreement": [
+        0.8368456666666667,
+        0.8413650354681723
+      ],
+      "log_sha256": "6c6799b398c16b1a92493f4a44ba8e162fc53a1eecf52037eaa1019e622770ab",
+      "binary_sha256": "2c6e699c6bcd5bd06b8316322b699e66341ee11f4e27127474c68829dab01886"
+    }
+  ],
+  "conclusion": "Two different-scene controls successfully reject. Both original linear-demosaic positives remain rejected: cross-development coverage is still incomplete. AHD recovery must not replace this failing evidence.",
+  "scope": "Four automatic single-pair controls on two Sony sources; not collection or broad precision proof."
+}

@@ -313,6 +313,9 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
         assert_eq!(digest(&hit), valid[selected].1);
         drop(hit);
         drop(blocker);
+        // TTL bookkeeping retains the identity resolved while the request is live.
+        // A cancelled request must not publish a newly resolved cache key.
+        let ttl_key = (step % 16 == 0).then(|| raster_display_key(&request, None).unwrap());
         generation.store(epoch + 1, Ordering::Release);
         let before = (cache.len(), cache.resident_bytes());
         assert!(preload_raster(&request, None, &mut cache, &gate).is_err());
@@ -327,7 +330,7 @@ fn external_mixed_collection_preserves_navigation_prefetch_ttl_swap_and_pressure
         assert!(cache.set_limits_and_spill(limits));
         if step % 16 == 0 {
             cache.swap().unwrap().wait_idle().unwrap();
-            let mut key = raster_display_key(&request, None).unwrap();
+            let mut key = ttl_key.unwrap();
             key.6 = assumed;
             let mut sentinel = key.clone();
             sentinel.4 = usize::MAX;

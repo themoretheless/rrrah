@@ -1,0 +1,29 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 33.60s
+     Running tests/w3c_png_conformance.rs (target/debug/deps/w3c_png_conformance-853b933ca5b87d1a)
+
+running 1 test
+test external_w3c_linear_hdr_reference_swap_and_metal ... External W3C PNG adapter: Metal Apple M4 Max
+PNG-HLG-FancyColorBars-16bit-CICP-FR.png: all2073600 linear pixels match Decimal (max absolute 0.00000095367431640625); reference SDR<=1code/HDR<=0.2%; native bits+Metal exact after RAM/swap pressure/cancel/retry; root=0
+PNG-PQ-BT.2111-ColorBars-16bit-CICP-FR.png: all2073600 linear pixels match Decimal (max absolute 0); reference SDR<=1code/HDR<=0.2%; native bits+Metal exact after RAM/swap pressure/cancel/retry; root=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 1 filtered out; finished in 4.34s
+

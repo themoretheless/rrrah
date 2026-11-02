@@ -1,0 +1,24 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test local_final_callback -- --nocapture",
+  "passed": 6,
+  "failed": 0,
+  "callback_positions_checked": 128,
+  "baseline_callbacks": 368069,
+  "full_sweep": "Interrupted with exit 130 due runtime cost, not a passing qualification. Explicit opt-in remains available.",
+  "logs": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-auto-cancel-20261026.log",
+      "sha256": "5d748a5558901c340b0010b636af7511704a175e3edf346d1ca7bd86c5fc05ad"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-auto-cancel-sweep-20261026.log",
+      "sha256": "424ad45f064d63f93fe9e9134f6fa5bd4aea09e09daf33722f01fa6d049c30c8"
+    }
+  ],
+  "test_source_sha256": "7b7a91e95e4aa3703d4087dded9172e577a66fe23951e2246b9f8cea34751cdc",
+  "scope": "One-pulse sticky cancellation at sampled callback positions, exact Cancelled error, managed memory zero after each attempt, successful retry. Includes existing final-source-mutation, strict/automatic parity, filtered-mode and local-edit controls.",
+  "limitations": [
+    "Not every callback position qualified.",
+    "Finite fixture and selected API path only."
+  ]
+}

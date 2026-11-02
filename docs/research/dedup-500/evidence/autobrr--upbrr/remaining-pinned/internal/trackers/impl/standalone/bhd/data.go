@@ -1,0 +1,206 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package bhd
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"net/http"
+	"net/url"
+	"strings"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/logging"
+	pathutil "github.com/autobrr/upbrr/internal/pathing"
+	"github.com/autobrr/upbrr/internal/trackers"
+	trackerdata "github.com/autobrr/upbrr/internal/trackers/data"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+const minDataTokenLength = 25
+
+type dataLookup struct {
+	cfg     config.Config
+	http    *http.Client
+	baseURL string
+	logger  api.Logger
+}
+
+// NewDataLookup returns a BHD lookup bound to cfg and httpClient.
+func (d *Definition) NewDataLookup(cfg config.Config, httpClient *http.Client, logger api.Logger) trackers.DataLookup {
+	if logger == nil {
+		logger = api.NopLogger{}
+	}
+	return &dataLookup{
+		cfg:     cfg,
+		http:    httpClient,
+		baseURL: "https://beyond-hd.me/api/torrents",
+		logger:  logger,
+	}
+}
+
+// Lookup resolves a BHD torrent by tracker ID or by folder/file name. Missing
+// API or RSS credentials, an unusable search filter, and missing torrents produce
+// an empty result without an error. HTTP/API failures return an error alongside
+// any metadata obtained before a description or image failure. Description and image
+// fields honor OnlyID and KeepImages independently.
+func (l *dataLookup) Lookup(ctx context.Context, req trackers.DataLookupRequest) (trackers.DataLookupResult, error) {
+	logger := logging.FromContext(ctx, l.logger)
+
+	cfg, apiKey := bhdConfig(l.cfg)
+	rssKey := strings.TrimSpace(cfg.BhdRSSKey)
+	if len(apiKey) < minDataTokenLength || len(rssKey) < minDataTokenLength {
+		return trackers.DataLookupResult{}, nil
+	}
+	endpoint := strings.TrimRight(l.baseURL, "/") + "/" + apiKey
+	payload := map[string]any{}
+	if id := strings.TrimSpace(req.TrackerID); id != "" {
+		payload["action"], payload["torrent_id"] = "details", id
+	} else {
+		payload["action"], payload["rsskey"] = "search", rssKey
+		hasFilter := false
+		if strings.TrimSpace(req.Meta.DiscType) != "" || len(req.Meta.FileList) != 1 {
+			payload["folder_name"], hasFilter = pathutil.Base(req.Meta.SourcePath), true
+		} else if name := strings.TrimSpace(req.SearchName); name != "" {
+			payload["file_name"], hasFilter = name, true
+		}
+		if !hasFilter {
+			return trackers.DataLookupResult{}, nil
+		}
+	}
+	first, single, err := l.requestFirst(ctx, endpoint, payload)
+	if err != nil || len(first) == 0 {
+		return trackers.DataLookupResult{}, err
+	}
+	responseID := bhdString(first["id"])
+	requestedID := strings.TrimSpace(req.TrackerID)
+	result := trackers.DataLookupResult{TrackerID: requestedID, IMDBID: bhdIMDBInt(first["imdb_id"])}
+	if result.TrackerID == "" {
+		result.TrackerID = responseID
+	}
+	if result.TrackerID != "" && (requestedID == "" && single || requestedID != "" && (responseID == "" || responseID == requestedID)) {
+		result.TorrentURL = "https://beyond-hd.me/details/" + url.PathEscape(result.TrackerID)
+	}
+	result.Category, result.TMDBID = parseTMDB(first["tmdb_id"])
+	if strings.TrimSpace(result.TrackerID) == "" {
+		result.TrackerID = bhdString(first["id"])
+	}
+	if req.OnlyID && !req.KeepImages {
+		return result, nil
+	}
+	description := ""
+	descriptionSource := "inline"
+	if bhdString(first["description"]) == "1" {
+		descriptionSource = "separate"
+		torrentID := bhdString(first["id"])
+		if torrentID == "" {
+			torrentID = strings.TrimSpace(req.TrackerID)
+		}
+		if torrentID != "" {
+			body, requestErr := l.request(ctx, endpoint, map[string]any{"action": "description", "torrent_id": torrentID})
+			if requestErr != nil {
+				return result, requestErr
+			}
+			description = bhdString(body["result"])
+			if description == "" {
+				logger.Debugf("bhd: description lookup empty reason=empty_response")
+			}
+		} else {
+			logger.Debugf("bhd: description lookup skipped reason=missing_torrent_id")
+		}
+	} else {
+		description = bhdString(first["description"])
+	}
+	report := CleanDescription(description, BBCodeOptions{})
+	if !req.OnlyID {
+		result.Description = strings.TrimSpace(report.Description)
+	}
+	var imageErr error
+	if req.KeepImages {
+		result.Images, imageErr = trackerdata.PrepareDescriptionImages(ctx, l.http, "BHD", logger, report.Images)
+	}
+	validatedCount := 0
+	for _, image := range result.Images {
+		if image.RawURL != "" {
+			validatedCount++
+		}
+	}
+	logger.Debugf("bhd: description source=%s raw=%d cleaned=%d images=%d validated=%d onlyID=%t keepImages=%t",
+		descriptionSource, len(description), len(result.Description), len(report.Images), validatedCount, req.OnlyID, req.KeepImages)
+	for _, note := range report.Notes {
+		logger.Debugf("bhd: description note kind=%s msg=%s", note.Kind, note.Message)
+	}
+	if imageErr != nil {
+		return result, fmt.Errorf("bhd: prepare description images: %w", imageErr)
+	}
+	return result, nil
+}
+
+func (l *dataLookup) requestFirst(ctx context.Context, endpoint string, payload map[string]any) (map[string]any, bool, error) {
+	body, err := l.request(ctx, endpoint, payload)
+	if err != nil || len(body) == 0 {
+		return nil, false, err
+	}
+	if items, ok := body["results"].([]any); ok && len(items) > 0 {
+		item, _ := items[0].(map[string]any)
+		return item, len(items) == 1, nil
+	}
+	item, _ := body["result"].(map[string]any)
+	return item, true, nil
+}
+
+func (l *dataLookup) request(ctx context.Context, endpoint string, payload map[string]any) (map[string]any, error) {
+	raw, err := json.Marshal(payload)
+	if err != nil {
+		return nil, fmt.Errorf("trackerdata: bhd encode request: %w", err)
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(raw))
+	if err != nil {
+		return nil, fmt.Errorf("trackerdata: bhd request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := l.http.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("trackerdata: bhd request: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, nil
+	}
+	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
+		return nil, fmt.Errorf("trackerdata: bhd request failed status=%d", resp.StatusCode)
+	}
+	result := map[string]any{}
+	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("trackerdata: bhd decode: %w", err)
+	}
+	if bhdInt(result["status_code"]) != 1 {
+		return nil, errors.New("trackerdata: bhd API rejected lookup")
+	}
+	if success, ok := result["success"].(bool); ok && !success {
+		return nil, errors.New("trackerdata: bhd API rejected lookup")
+	}
+	return result, nil
+}
+
+func parseTMDB(value any) (string, int) {
+	raw := strings.ToLower(bhdString(value))
+	if raw == "" || raw == "0" {
+		return "", 0
+	}
+	if after, ok := strings.CutPrefix(raw, "tv/"); ok {
+		return "TV", int(bhdInt(after))
+	}
+	if after, ok := strings.CutPrefix(raw, "movie/"); ok {
+		return "MOVIE", int(bhdInt(after))
+	}
+	return "", int(bhdInt(raw))
+}
+
+func bhdIMDBInt(value any) int {
+	return int(bhdInt(strings.TrimPrefix(strings.ToLower(bhdString(value)), "tt")))
+}

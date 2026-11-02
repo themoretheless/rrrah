@@ -26,7 +26,8 @@ def analyze(text):
     result = {}
     for label, prefix in [("triangles", "SPLIT_CPU"), ("pair", "DENSE_CPU pair"),
                           ("dense50", "DENSE_CPU dense50"), ("dense75", "DENSE_CPU dense75"),
-                          ("sparse64", "DENSE_CPU sparse64")]:
+                          ("dense1236", "DENSE_CPU dense1236"), ("occluded1024", "DENSE_CPU occluded1024"), ("guarded1024", "DENSE_CPU guarded1024"),
+                          ("sparse64", "DENSE_CPU sparse64"), ("sparse256", "DENSE_CPU sparse256")]:
         def pairs(kind, first, second):
             return [tuple(map(int, row)) for row in re.findall(
                 re.escape(prefix) + rf" {kind} pair=\d+ {first}=(\d+) {second}=(\d+)", text)]

@@ -1,0 +1,34 @@
+{
+  "runtime": "v22.23.4",
+  "controls_passed": 3,
+  "normal": [
+    {
+      "path": "healthy.ts",
+      "ext": "ts",
+      "size": 1,
+      "language": "typescript"
+    },
+    {
+      "path": "nested/copy.ts",
+      "ext": "ts",
+      "size": 1,
+      "language": "typescript"
+    }
+  ],
+  "missing": [],
+  "partial": [
+    {
+      "path": "healthy.ts",
+      "ext": "ts",
+      "size": 1,
+      "language": "typescript"
+    }
+  ],
+  "scope": "Original unchanged TypeScript through Node strip-types;owned real filesystem adapter;one injected child read error;not full upstream Vitest or app",
+  "findings": [
+    "256KiB+1 file omitted with no completeness signal",
+    "Missing root returns empty list",
+    "Child enumeration error silently yields partial list retaining healthy source"
+  ],
+  "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/owned-tUGuTP"
+}

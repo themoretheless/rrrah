@@ -1,0 +1,18 @@
+{
+  "checked_at_utc": "2026-11-02T00:24:00.576470+00:00",
+  "command": "cargo +1.98.1 test -p rrrah-dedup --no-default-features --test exact_path_identity",
+  "exit_code": 0,
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "compile_seconds": 3.88,
+  "test_seconds": 0.01,
+  "test": "literal_backslash_and_directory_separator_keep_independent_copy_groups",
+  "source_sha256_after_run": {
+    "crates/rrrah-dedup/src/exact.rs": "6aa6ca528c0a255b37ae2dc0729a22e9597c85ba26371e8e27641c52ba3236ca",
+    "crates/rrrah-dedup/tests/exact_path_identity.rs": "8cd0ba93f8f5231564052061e916adc86dd531105190e9238831f3f5d023620a"
+  },
+  "fixture": "Unix: a literal a\\payload.txt versus nested a/payload.txt have separate inodes and different contents, identical sizes and modified time, each with independent physical copy. Both scan APIs and both explicit root orders plus overlapping directory must preserve exact two-group partition of four files with no alias/issue.",
+  "scope": "Existing regression, newly run after least-depth directory revisit fix; no new production/test code. Unix host only; not Windows or whole-library completion.",
+  "same_exact_source_as_98_pass_receipt": true
+}

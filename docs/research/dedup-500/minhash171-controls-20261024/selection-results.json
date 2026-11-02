@@ -1,0 +1,27 @@
+{
+  "scope": "Complete original SelectionStage and binary loader; owned finite bucket files.\n\nAdapters: Stage timing/stats, local folders/output manager, log/progress only.\nNo MinHash generation, distributed job, optional signature analysis or corpus.\n",
+  "source_sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+  "authored_controls_run": 2,
+  "finite_graphs_checked": 128,
+  "chain": {
+    "removed": [
+      2
+    ],
+    "clusters": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ]
+    ]
+  },
+  "verified_invariants": [
+    "all input document IDs assigned",
+    "exactly one nonremoved representative per cluster",
+    "written cluster size matches members",
+    "each nonrepresentative shares an original bucket with its representative"
+  ],
+  "original_tests_run": 0
+}

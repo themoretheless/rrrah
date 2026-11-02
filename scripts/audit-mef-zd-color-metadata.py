@@ -9,10 +9,13 @@ import struct
 parser = argparse.ArgumentParser()
 parser.add_argument('--source', type=Path, required=True)
 parser.add_argument('--output', type=Path, required=True)
+parser.add_argument('--expected-sha256', default='bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c', choices=[
+    'bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c',
+    'e038801bce8924e519a36c7994086a3dc4cbd2e9d331ca4b755f2b2bdfc75012'])
 args = parser.parse_args()
 data = args.source.read_bytes()
 digest = hashlib.sha256(data).hexdigest()
-assert digest == 'bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c'
+assert digest == args.expected_sha256
 assert data[:4] == b'MM\0*'
 sizes = {1: 1, 2: 1, 3: 2, 4: 4, 5: 8, 7: 1, 9: 4, 10: 8, 11: 4, 12: 8}
 

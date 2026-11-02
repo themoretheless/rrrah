@@ -1,0 +1,42 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 9.32s
+     Running unittests src/main.rs (target/debug/deps/rrrah-82c41dcb3a9b716e)
+
+running 18 tests
+test gallery::tests::folder_scan_retains_all_hundred_thousand_supported_files ... ignored, manual 100000 actual directory entries; enumeration without image decode
+test gallery::tests::sibling_folder_tiles_handles_missing_parent_and_filesystem_root ... ok
+test gallery::tests::folder_scanner_reports_worker_disconnect_instead_of_waiting_forever ... ok
+test gallery::tests::dropping_folder_scanner_cancels_generation_and_stops_idle_worker ... ok
+test gallery::tests::sibling_folder_tiles_ignores_symlinked_dirs ... ok
+test gallery::tests::folder_source_read_observes_superseding_generation_and_publishes_only_latest ... ok
+test gallery::tests::folder_scan_invalidates_a_new_cover_even_if_old_source_is_unchanged ... ok
+test gallery::tests::folder_source_validation_is_background_and_stale_generations_are_discarded ... ok
+test drop_inspection::tests::real_paths_preserve_file_folder_and_refusal_policy ... ok
+test foreground_loader_tests::raster_folder_thumbnail_applies_icc_and_composites_alpha ... ok
+test foreground_loader_tests::rejected_drop_preserves_queued_folder_context_without_opening_it_early ... ok
+test gallery::tests::sibling_folder_tiles_lists_only_dirs_with_supported_images ... ok
+test gallery::tests::folder_scanner_replaces_pending_and_published_stale_folders ... ok
+test gallery::tests::folder_scan_cancels_during_enumeration_without_partial_publication ... ok
+test gallery::tests::streaming_folder_limit_preserves_sorted_prefix_and_name_ties ... ok
+test foreground_loader_tests::opening_empty_folder_never_reloads_previous_animation_from_expired_timer ... ok
+test foreground_loader_tests::opening_empty_folder_cancels_old_load_and_drains_queued_file ... ok
+test foreground_loader_tests::empty_folder_scan_clears_previous_navigation_without_reopening_old_files ... ok
+
+test result: ok. 17 passed; 0 failed; 1 ignored; 0 measured; 394 filtered out; finished in 1.76s
+

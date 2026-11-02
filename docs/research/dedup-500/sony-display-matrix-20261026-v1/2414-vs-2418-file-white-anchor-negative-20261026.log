@@ -1,0 +1,77 @@
+diagnostic_file_white_anchor=DisplayProjectionEvidence {
+    projected: RangePhotometricEvidence {
+        range: FitSampleRange {
+            minimum: 0.0,
+            maximum: 1.0,
+        },
+        evidence: BidirectionalPhotometricEvidence {
+            forward: PhotometricEvidence {
+                gain: [
+                    1.033236320929559,
+                    1.0307592407824502,
+                    1.0294405589677427,
+                ],
+                offset: [
+                    -0.03323632092955897,
+                    -0.03075924078245018,
+                    -0.02944055896774267,
+                ],
+                constrained_channels: [
+                    false,
+                    false,
+                    false,
+                ],
+                fitted_samples: 22375294,
+                pixels: WarpEvidence {
+                    source_pixels: 24000000,
+                    compared_pixels: 24000000,
+                    matched_pixels: 4909832,
+                    maximum_channel_error: 1.0,
+                    squared_error: 4429903.600879603,
+                },
+            },
+            reverse: PhotometricEvidence {
+                gain: [
+                    0.9381476809194721,
+                    0.9402541747181091,
+                    0.9357394682269122,
+                ],
+                offset: [
+                    0.06185231908052791,
+                    0.059745825281890874,
+                    0.06426053177308777,
+                ],
+                constrained_channels: [
+                    false,
+                    false,
+                    false,
+                ],
+                fitted_samples: 22375294,
+                pixels: WarpEvidence {
+                    source_pixels: 24240576,
+                    compared_pixels: 24000000,
+                    matched_pixels: 3702680,
+                    maximum_channel_error: 0.9999877539669203,
+                    squared_error: 4099801.742814023,
+                },
+            },
+        },
+    },
+    strict: BidirectionalEvidence {
+        forward: WarpEvidence {
+            source_pixels: 24000000,
+            compared_pixels: 24000000,
+            matched_pixels: 3845305,
+            maximum_channel_error: 2.9854207038879395,
+            squared_error: 4530016.544087296,
+        },
+        reverse: WarpEvidence {
+            source_pixels: 24240576,
+            compared_pixels: 24000000,
+            matched_pixels: 3845305,
+            maximum_channel_error: 2.9854207038879395,
+            squared_error: 4530016.544087296,
+        },
+    },
+}
+managed_used=0 managed_peak=1016765952

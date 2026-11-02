@@ -1,0 +1,48 @@
+{
+  "render_command": [
+    "/opt/homebrew/bin/dcraw_emu",
+    "-w",
+    "-W",
+    "-o",
+    "1",
+    "-q",
+    "3",
+    "-6",
+    "-T",
+    "-Z",
+    "-",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw"
+  ],
+  "tiff": "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414-ahd.tiff",
+  "tiff_sha256": "3776a3c34b89986246e9a4310053f51cf4254213c892810263622877d528516d",
+  "renderer_sha256": "87231c7b8e3923e2ae701a8b28074fcc98a8f6932835b2597162dc2687a31e40",
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414-ahd.tiff",
+    "--verify-spatial-display"
+  ],
+  "exit_code": 0,
+  "binary_sha256": "724c414d11fa1433809a4652eb359090c87f07178ce59bdf9ecb7e326e74260a",
+  "candidate": [
+    "true"
+  ],
+  "matched_pixels": [
+    "23413733",
+    "23395315",
+    "23539741",
+    "23485225"
+  ],
+  "compared_pixels": [
+    "24000000",
+    "23980004",
+    "24000000",
+    "23980004"
+  ],
+  "managed": [
+    "managed_used=0 managed_peak=1016765952"
+  ],
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-ahd-control.log",
+  "log_sha256": "f09e5500b003d13bfd01cf3db09e092469352b4cd146cce2ddbfb04d642fe013",
+  "scope": "One independent AHD reference versus previous linear-demosaic TIFF control, all other reference flags same. Does not replace original reference, change native policy or prove general cause/precision."
+}

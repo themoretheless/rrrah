@@ -1,0 +1,25 @@
+{
+  "scope": "Current rrrah-dedup release scan_folder on two pinned real webmanifest files; not full suite or performance qualification",
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "run",
+    "--offline",
+    "--release",
+    "-p",
+    "rrrah-dedup",
+    "--example",
+    "scan_folder",
+    "--",
+    "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/media/dark-favicon/site.webmanifest",
+    "docs/research/dedup-500/evidence/andrewwoan--sooahs-room-folio/remaining-pinned/public/media/light-favicon/site.webmanifest"
+  ],
+  "exit_code": 0,
+  "files_observed": 2,
+  "duplicate_groups": 1,
+  "bytes_per_file": 436,
+  "bytes_read": 6976,
+  "diagnostics": 0,
+  "scan_complete": true,
+  "build_reported": "release optimized, 1m40s"
+}

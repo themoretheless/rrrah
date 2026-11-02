@@ -1,0 +1,17 @@
+{
+  "upstream_review": "docs/research/dedup-500/upbrr267-source-review-v183-20261026.json",
+  "decision": "Do not adopt tracker metadata exact_duplicate or upload-slot rules as exact local file equality. Preserve explicit incomplete outcomes and byte confirmation.",
+  "local_source_sha256": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "76910f82adb01575a079d28cce83bd05373f0a1f1a19b36848b0a89e7ff794dd",
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0"
+  },
+  "command": "cargo +1.98.1 test --offline -p rrrah-dedup --test exact_files exact_content_partitions_ignore_extensions_and_check_unsampled_bytes",
+  "exit_code": 0,
+  "passed": 1,
+  "failed": 0,
+  "ignored": 0,
+  "filtered_out": 43,
+  "test_seconds": 0.02,
+  "observed_scope": "Existing regression tests equal bytes across extensions and rejects same-size one-byte differences, including middle of128KiB fixture, both scan and scan_verified, reversed input order. scan_folder directly calls scan_verified and exits1 on incomplete report.",
+  "limits": "One existing focused regression executed; not all library tests, formats, platforms, performance or500-repository completion. No implementation change; no upstream code adopted."
+}

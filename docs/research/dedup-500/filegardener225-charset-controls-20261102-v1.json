@@ -1,0 +1,37 @@
+{
+  "sources": [
+    {
+      "path": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/chardet/compat.py",
+      "sha256": "e669bacab1f079fd49106e4ec643c9952ab99648cb56910687788f805064a643"
+    },
+    {
+      "path": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/chardet/charsetprober.py",
+      "sha256": "678f28d8a88e8f6dc536a607f05ab3847e66d6a766deb23c0dc4e6d98aad9258"
+    },
+    {
+      "path": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/chardet/hebrewprober.py",
+      "sha256": "f2976851fb155dffcbe019c975efc17b04ba1f6c889d5e7af3c7aed271612c76"
+    },
+    {
+      "path": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/chardet/chardistribution.py",
+      "sha256": "714011405af5a132d778908342b0d19143fbefc02f48cce14829c6f152c2579f"
+    }
+  ],
+  "method": "Original AST module bodies executed excluding relative imports; compat uses actual Python3 branch and original base byte filter; model probers are fixed detecting/equal-confidence doubles. No frequency-table or full detector/package execution.",
+  "controls": {
+    "six_two_letter_words_ending_final_kaf": {
+      "bytes_hex": "e0ea20e0ea20e0ea20e0ea20e0ea20e0ea20",
+      "expected_logical_final_boundaries_by_authored_rule": 6,
+      "actual_logical_score": 0,
+      "actual_visual_score": 0,
+      "cause": "Original bytes filter returns bytes; Python3 iteration yields integers, but original Hebrew feed compares current and prior values to text-space sentinel."
+    },
+    "valid_shift_jis_character": {
+      "bytes_hex": "82a0",
+      "stdlib_decoded": "あ",
+      "distribution_order": -1,
+      "scope": "Valid sequence excluded from this frequency evidence function; does not independently prove full detector outcome."
+    }
+  },
+  "scope": "Authored isolated controls only, no upstream suite, locale corpus precision/recall or native rrrah changes."
+}

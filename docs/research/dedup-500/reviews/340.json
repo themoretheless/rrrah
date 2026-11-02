@@ -2,9 +2,9 @@
   "index": 340,
   "repository": "towel42-com/FindDupe",
   "commit": "c56d4706d6e1f237efa92be060338549eff05e88",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All 33 tracked parent-repository blobs: 25 text files and eight visual resources. External SABUtils gitlink not included; upstream runtime/build tests not executed.",
   "decision": "reference",
-  "finding": "C++ two-directory file finder with MD5 workers; no detected test corpus, mutation behavior unqualified.",
+  "finding": "Directory finder groups MD5 without byte confirmation; pinned SABUtils image hash has a first-scanline-only branch. Completion and persisted-filter defects also found; Qt runtime not qualified.",
   "available_source_evidence": [
     {
       "path": "MainWindow/FileFinder.cpp",
@@ -64,5 +64,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/finddupe340-source-review-v9-20261102.json"
 }

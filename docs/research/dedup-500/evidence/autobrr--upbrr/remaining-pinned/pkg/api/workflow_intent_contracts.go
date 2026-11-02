@@ -1,0 +1,194 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+import "time"
+
+// BlurayCandidateSelection records a candidate selected from retained preparation authority.
+type BlurayCandidateSelection struct {
+	ReleaseID string             `json:"releaseId"`
+	Release   ReleaseSnapshotRef `json:"release"`
+}
+
+// WorkflowResourceRef is an opaque reference to one owner-scoped staged resource.
+type WorkflowResourceRef struct {
+	ID          WorkflowResourceID `json:"id"`
+	ContentType string             `json:"contentType,omitempty"`
+	SizeBytes   int64              `json:"sizeBytes,omitempty"`
+}
+
+// MediaCaptureRequirement is one tracker-derived final-media requirement.
+type MediaCaptureRequirement struct {
+	TrackerID       TrackerID         `json:"trackerId"`
+	ScreenshotCount int               `json:"screenshotCount"`
+	DVDMenuCount    int               `json:"dvdMenuCount"`
+	Purpose         ScreenshotPurpose `json:"purpose"`
+}
+
+// MediaPlan is the safe page-facing plan for one exact workflow revision.
+type MediaPlan struct {
+	ID                  MediaPlanID                    `json:"id"`
+	WorkflowID          WorkflowID                     `json:"workflowId"`
+	Revision            WorkflowRevision               `json:"revision"`
+	Release             ReleaseSnapshotRef             `json:"release"`
+	ProjectionSet       TrackerReleaseProjectionSetRef `json:"projectionSet"`
+	DurationSeconds     float64                        `json:"durationSeconds"`
+	FrameRate           float64                        `json:"frameRate"`
+	DiscType            string                         `json:"discType,omitempty"`
+	SuggestedSelections []ScreenshotSelection          `json:"suggestedSelections,omitempty"`
+	// Discs contains ordered per-disc timing and suggestions.
+	Discs        []MediaDiscPlan           `json:"discs,omitempty"`
+	Requirements []MediaCaptureRequirement `json:"requirements,omitempty"`
+	// SavedTrackerImages lists validated tracker image URLs offered for explicit import.
+	SavedTrackerImages []MediaPlanSavedImage `json:"savedTrackerImages,omitempty"`
+	ExistingArtifacts  []MediaArtifact       `json:"existingArtifacts,omitempty"`
+	CreatedAt          time.Time             `json:"createdAt" ts_type:"string"`
+}
+
+// MediaPlanSavedImage is a validated saved image available for media capture.
+// The local artifact path remains private until the workflow retains it.
+type MediaPlanSavedImage struct {
+	TrackerID  TrackerID `json:"trackerId"`
+	Host       string    `json:"host"`
+	URL        string    `json:"url"`
+	PreviewURL string    `json:"previewUrl,omitempty"`
+}
+
+// MediaPlanContentID binds a screenshot plan to its release, projection revision,
+// suggested selections, and saved image URLs. A changed input yields a new ID
+// so an earlier saved-image import cannot be applied to a different plan.
+func MediaPlanContentID(
+	release ReleaseRef,
+	projections TrackerReleaseProjectionSet,
+	selections []ScreenshotSelection,
+	images []MediaPlanSavedImage,
+) (MediaPlanID, error) {
+	fingerprint, err := CanonicalWorkflowFingerprint(struct {
+		Release    ReleaseRef
+		Projection TrackerReleaseProjectionSetID
+		Revision   WorkflowRevision
+		Selections []ScreenshotSelection
+		Images     []MediaPlanSavedImage
+	}{release, projections.ID, projections.Revision, selections, images})
+	if err != nil {
+		return "", err
+	}
+	return MediaPlanID("plan_" + string(fingerprint)[:24]), nil
+}
+
+// MediaDiscPlan is one safe page-facing disc capture plan.
+type MediaDiscPlan struct {
+	DiscID              string                `json:"discId"`
+	DiscName            string                `json:"discName"`
+	DurationSeconds     float64               `json:"durationSeconds"`
+	FrameRate           float64               `json:"frameRate"`
+	SuggestedSelections []ScreenshotSelection `json:"suggestedSelections,omitempty"`
+}
+
+// FramePreview is one non-authoritative opaque frame preview.
+type FramePreview struct {
+	ID               PublicResourceID   `json:"id"`
+	WorkflowID       WorkflowID         `json:"workflowId"`
+	WorkflowRevision WorkflowRevision   `json:"workflowRevision"`
+	Release          ReleaseSnapshotRef `json:"release"`
+	// DiscID identifies the prepared disc used for the preview.
+	DiscID string `json:"discId,omitempty"`
+	// DiscName is the safe page-facing label for DiscID.
+	DiscName         string    `json:"discName,omitempty"`
+	TimestampSeconds float64   `json:"timestampSeconds"`
+	ContentURL       string    `json:"contentUrl"`
+	ExpiresAt        time.Time `json:"expiresAt" ts_type:"string"`
+}
+
+// MediaAttachment describes staged private bytes to attach to retained workflow media.
+type MediaAttachment struct {
+	Resource WorkflowResourceRef `json:"resource"`
+	Kind     MediaArtifactKind   `json:"kind"`
+	Purpose  ScreenshotPurpose   `json:"purpose"`
+	// DiscID is required for a multi-disc attachment and optional for single-disc compatibility.
+	DiscID string `json:"discId,omitempty"`
+	Order  int    `json:"order,omitempty"`
+}
+
+// HostedImageAttempt is the absolute outcome of one host attempt for exact media lineage.
+type HostedImageAttempt struct {
+	ID          PublicResourceID    `json:"id"`
+	Media       MediaArtifactSetRef `json:"media"`
+	Host        string              `json:"host"`
+	UsageScope  string              `json:"usageScope,omitempty"`
+	TrackerIDs  []TrackerID         `json:"trackerIds,omitempty"`
+	Fallback    bool                `json:"fallback"`
+	Status      StageStatus         `json:"status"`
+	ArtifactIDs []PublicResourceID  `json:"artifactIds"`
+	Results     []MediaArtifact     `json:"results,omitempty"`
+	Failures    []WorkflowFailure   `json:"failures,omitempty"`
+	AttemptedAt time.Time           `json:"attemptedAt" ts_type:"string"`
+}
+
+// DescriptionOverrideMutation changes one exact description group only.
+type DescriptionOverrideMutation struct {
+	Descriptions DescriptionSetRef `json:"descriptions"`
+	GroupKey     string            `json:"groupKey"`
+	Source       string            `json:"source"`
+}
+
+// ClientInjectionOutcome records client injection independently from tracker submission.
+type ClientInjectionOutcome struct {
+	Status   StageStatus       `json:"status"`
+	Message  string            `json:"message,omitempty"`
+	Failures []WorkflowFailure `json:"failures,omitempty"`
+}
+
+// TrackerDryRunReport is one safe tracker-scoped dry-run outcome.
+type TrackerDryRunReport struct {
+	Questionnaire       []TrackerQuestionnaireRequirement `json:"questionnaire,omitempty"`
+	TrackerID           TrackerID                         `json:"trackerId"`
+	DisplayName         string                            `json:"displayName"`
+	UploadReleaseName   string                            `json:"uploadReleaseName"`
+	Status              StageStatus                       `json:"status"`
+	Endpoint            string                            `json:"endpoint,omitempty"`
+	Fields              []UploadPlanField                 `json:"fields,omitempty"`
+	Files               []UploadPlanFile                  `json:"files,omitempty"`
+	PreparedOperationID PublicResourceID                  `json:"preparedOperationId,omitempty"`
+	TorrentArtifactID   PublicResourceID                  `json:"torrentArtifactId,omitempty"`
+	TorrentFingerprint  WorkflowFingerprint               `json:"torrentFingerprint,omitempty"`
+	SemanticFingerprint WorkflowFingerprint               `json:"semanticFingerprint"`
+	ClientInjection     ClientInjectionOutcome            `json:"clientInjection"`
+	Warnings            []string                          `json:"warnings,omitempty"`
+	Failures            []WorkflowFailure                 `json:"failures,omitempty"`
+}
+
+// UploadDryRunResult retains one report per applicable tracker.
+type UploadDryRunResult struct {
+	ID               UploadDryRunResultID           `json:"id"`
+	WorkflowID       WorkflowID                     `json:"workflowId"`
+	Revision         WorkflowRevision               `json:"revision"`
+	ProjectionSet    TrackerReleaseProjectionSetRef `json:"projectionSet"`
+	Dupes            DupeAssessmentRef              `json:"dupes"`
+	TrackerApproval  *TrackerApprovalSnapshotRef    `json:"trackerApproval,omitempty"`
+	Media            MediaArtifactSetRef            `json:"media"`
+	Descriptions     DescriptionSetRef              `json:"descriptions"`
+	InputFingerprint WorkflowFingerprint            `json:"inputFingerprint"`
+	NoSeed           bool                           `json:"noSeed"`
+	TrackerIDs       []TrackerID                    `json:"trackerIds"`
+	Reports          []TrackerDryRunReport          `json:"reports"`
+	SucceededCount   int                            `json:"succeededCount"`
+	FailedCount      int                            `json:"failedCount"`
+	SkippedCount     int                            `json:"skippedCount"`
+	Status           StageStatus                    `json:"status"`
+	CreatedAt        time.Time                      `json:"createdAt" ts_type:"string"`
+}
+
+// FailedTrackerRetryRef targets only failed trackers from one exact prior result.
+type FailedTrackerRetryRef struct {
+	Result     UploadResultRef `json:"result"`
+	TrackerIDs []TrackerID     `json:"trackerIds"`
+}
+
+// ClientInjectionRetryRef targets failed client effects from one exact prior
+// result without granting tracker-submission authority.
+type ClientInjectionRetryRef struct {
+	Result     UploadResultRef `json:"result"`
+	TrackerIDs []TrackerID     `json:"trackerIds"`
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "Original module AST with AstrBot and relative config imports omitted; parser-only controls, not upstream tests or live LLM",
+  "cases": [
+    {
+      "payload": {
+        "duplicate": "false",
+        "matched_record_id": "invented",
+        "confidence": 0.99
+      },
+      "parsed_duplicate": true,
+      "parsed_match_id": "invented",
+      "parsed_confidence": 0.99
+    },
+    {
+      "payload": {
+        "duplicate": true,
+        "matched_record_id": "invented",
+        "confidence": "Infinity"
+      },
+      "parsed_duplicate": true,
+      "parsed_match_id": "invented",
+      "parsed_confidence": 1.0
+    }
+  ],
+  "fractional_indices": [
+    1,
+    2
+  ]
+}

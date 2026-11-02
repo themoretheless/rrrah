@@ -1,0 +1,10 @@
+{
+  "method": "Original module AST with lightweight result-model stand-in, synthetic SFC graph; generated code inspected, not executed on PLC",
+  "observed": {
+    "previous_assigned_current_before_P1_comparison": true,
+    "two_TRUE_transitions_emitted_as_independent_IFs": true,
+    "warnings": [],
+    "generated_st": "// SFC Step Enumeration\nTYPE E_SFC_Step : (\n    A, // Initial step\n    B,\n    C\n);\nEND_TYPE\n\n// SFC State Variables\nVAR\n    eCurrentStep : E_SFC_Step := A;\n    ePreviousStep : E_SFC_Step;\nEND_VAR\n\n// Pulse Action Tracking\nVAR\n    b_Entry_Done : BOOL := FALSE;\nEND_VAR\n\n// ========================================\n// SFC State Machine\n// ========================================\n\nePreviousStep := eCurrentStep;\n\nCASE eCurrentStep OF\n    A:\n        // Action: Entry (P1: pulse on activation)\n        IF eCurrentStep <> ePreviousStep THEN\n            x := TRUE;\n        END_IF;\n        // Transitions from A:\n        // \u2192 B\n        IF TRUE THEN\n            eCurrentStep := B;\n        END_IF;\n        // \u2192 C\n        IF TRUE THEN\n            eCurrentStep := C;\n        END_IF;\n\n    B:\n\n    C:\n\nEND_CASE;\n"
+  },
+  "original_tests_run": false
+}

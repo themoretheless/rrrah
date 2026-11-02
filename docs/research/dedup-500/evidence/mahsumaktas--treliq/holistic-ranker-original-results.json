@@ -1,0 +1,33 @@
+{
+  "tests": [
+    {
+      "name": "ranks items with single group (< 50 items)",
+      "passed": true
+    },
+    {
+      "name": "applies bonus to adjustedScore",
+      "passed": true
+    },
+    {
+      "name": "handles LLM failure gracefully (returns empty rankings)",
+      "passed": true
+    },
+    {
+      "name": "works without provider (returns empty)",
+      "passed": true
+    },
+    {
+      "name": "handles tournament with multiple groups",
+      "passed": true
+    },
+    {
+      "name": "includes mixed PR and Issue items",
+      "passed": true
+    },
+    {
+      "name": "filters out invalid item numbers from LLM response",
+      "passed": true
+    }
+  ],
+  "scope": "Original7callback bodies/factories/mock provider;Node assertions/inert logger;no real model/Jest."
+}

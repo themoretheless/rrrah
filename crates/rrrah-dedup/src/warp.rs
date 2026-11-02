@@ -477,6 +477,36 @@ pub struct DisplayProjectionEvidence {
     pub strict: BidirectionalEvidence,
 }
 
+/// Experimental display evidence preserving unit white; never exact pixel identity.
+/// Fits opaque in-range samples and verifies all overlap, including highlights.
+pub fn verify_photometric_white_anchored_display_projection(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: Transform,
+    policy: PhotometricPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<DisplayProjectionEvidence, WarpError> {
+    let range = FitSampleRange {
+        minimum: 0.0,
+        maximum: 1.0,
+    };
+    let projected = verify_ranged_with_fit(
+        source,
+        target,
+        (transform, false),
+        policy,
+        range,
+        Some(range),
+        PhotometricFitMode::WhiteAnchoredLeastSquares,
+        &cancel,
+    )?;
+    let strict = verify_bidirectional(source, target, transform, policy.residual, &cancel)?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(DisplayProjectionEvidence { projected, strict })
+}
+
 #[allow(clippy::too_many_arguments)] // Share the same bounded ranged fitting pipeline.
 fn verify_ranged(
     source: &LinearRgbaView<'_>,
@@ -485,6 +515,29 @@ fn verify_ranged(
     policy: PhotometricPolicy,
     range: FitSampleRange,
     projection: Option<FitSampleRange>,
+    cancel: impl Fn() -> bool,
+) -> Result<RangePhotometricEvidence, WarpError> {
+    verify_ranged_with_fit(
+        source,
+        target,
+        (transform, reflected),
+        policy,
+        range,
+        projection,
+        PhotometricFitMode::RejectOutsidePolicy,
+        cancel,
+    )
+}
+
+#[allow(clippy::too_many_arguments)]
+fn verify_ranged_with_fit(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    (transform, reflected): (Transform, bool),
+    policy: PhotometricPolicy,
+    range: FitSampleRange,
+    projection: Option<FitSampleRange>,
+    fit: PhotometricFitMode,
     cancel: impl Fn() -> bool,
 ) -> Result<RangePhotometricEvidence, WarpError> {
     validate_fit_range(range)?;
@@ -516,7 +569,7 @@ fn verify_ranged(
         photometric: policy,
         radius: 0,
         space: FilterColorSpace::LinearSrgb,
-        fit: PhotometricFitMode::RejectOutsidePolicy,
+        fit,
         fit_range: Some(range),
         projection,
     };
@@ -887,6 +940,55 @@ pub fn verify_filtered_photometric_constrained(
         cancel,
     )
 }
+/// Experimental bounded-window display evidence with a unit-white fit anchor.
+/// Fits opaque in-range averages; projected residuals retain every valid window.
+pub fn verify_filtered_photometric_white_anchored(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: Transform,
+    photometric: PhotometricPolicy,
+    policy: ColorFilterPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<FilteredPhotometricEvidence, WarpError> {
+    let result = verify_filtered_impl(
+        source,
+        target,
+        (transform, false),
+        photometric,
+        policy,
+        PhotometricFitMode::WhiteAnchoredLeastSquares,
+        &cancel,
+    )?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(result)
+}
+
+/// Reflected counterpart with identical range, work and white-anchor semantics.
+pub fn verify_reflected_filtered_photometric_white_anchored(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: Transform,
+    photometric: PhotometricPolicy,
+    policy: ColorFilterPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<FilteredPhotometricEvidence, WarpError> {
+    let result = verify_filtered_impl(
+        source,
+        target,
+        (transform, true),
+        photometric,
+        policy,
+        PhotometricFitMode::WhiteAnchoredLeastSquares,
+        &cancel,
+    )?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(result)
+}
+
 fn verify_filtered_impl(
     source: &LinearRgbaView<'_>,
     target: &LinearRgbaView<'_>,
@@ -946,8 +1048,14 @@ fn verify_filtered_impl(
         radius: filter.radius,
         space,
         fit,
-        fit_range: None,
-        projection: None,
+        fit_range: (fit == PhotometricFitMode::WhiteAnchoredLeastSquares).then_some(FitSampleRange {
+            minimum: 0.0,
+            maximum: 1.0,
+        }),
+        projection: (fit == PhotometricFitMode::WhiteAnchoredLeastSquares).then_some(FitSampleRange {
+            minimum: 0.0,
+            maximum: 1.0,
+        }),
     };
     let forward = verify_photometric_grid(source, target, transform, grid, &cancel)?;
     let reverse = verify_photometric_grid(target, source, inverse, grid, cancel)?;
@@ -1410,6 +1518,8 @@ pub enum PhotometricFitMode {
     RejectOutsidePolicy,
     /// Select the least-squares optimum inside the declared parameter rectangle.
     ConstrainedLeastSquares,
+    /// Fit offset = 1 - gain within both gain and offset bounds.
+    WhiteAnchoredLeastSquares,
 }
 #[derive(Clone, Copy)]
 struct ChannelStats {
@@ -1425,6 +1535,27 @@ struct ChannelFit {
     constrained: bool,
 }
 fn fit_channel(s: ChannelStats, p: PhotometricPolicy, mode: PhotometricFitMode) -> Option<ChannelFit> {
+    if mode == PhotometricFitMode::WhiteAnchoredLeastSquares {
+        let x = s.source - 1.0;
+        let y = s.target - 1.0;
+        let denominator = s.variance + s.samples * x * x;
+        let numerator = s.covariance + s.samples * x * y;
+        let lower = p.minimum_gain.max(1.0 - p.maximum_offset);
+        let upper = p.maximum_gain.min(1.0 + p.maximum_offset);
+        if !denominator.is_finite() || denominator <= 0.0 || !numerator.is_finite() || lower > upper {
+            return None;
+        }
+        let optimum = numerator / denominator;
+        if !optimum.is_finite() {
+            return None;
+        }
+        let gain = optimum.clamp(lower, upper);
+        return Some(ChannelFit {
+            gain,
+            offset: 1.0 - gain,
+            constrained: gain != optimum,
+        });
+    }
     let unconstrained = s.covariance / s.variance;
     let intercept = s.target - unconstrained * s.source;
     if !unconstrained.is_finite() || !intercept.is_finite() {
@@ -1691,6 +1822,39 @@ pub fn verify_reflected_photometric_display_projection(
         policy,
         range,
         Some(range),
+        &cancel,
+    )?;
+    let strict = verify_reflected_bidirectional(source, target, transform, policy.residual, &cancel)?;
+    if cancel() {
+        return Err(WarpError::Cancelled);
+    }
+    Ok(DisplayProjectionEvidence { projected, strict })
+}
+
+/// White-anchored display comparison for reflected similarity geometry.
+/// Fits opaque in-range samples and retains strict reflected residuals.
+///
+/// # Errors
+/// Invalid policy/geometry, insufficient samples, resource excess or cancellation.
+pub fn verify_reflected_photometric_white_anchored_display_projection(
+    source: &LinearRgbaView<'_>,
+    target: &LinearRgbaView<'_>,
+    transform: Transform,
+    policy: PhotometricPolicy,
+    cancel: impl Fn() -> bool,
+) -> Result<DisplayProjectionEvidence, WarpError> {
+    let range = FitSampleRange {
+        minimum: 0.0,
+        maximum: 1.0,
+    };
+    let projected = verify_ranged_with_fit(
+        source,
+        target,
+        (transform, true),
+        policy,
+        range,
+        Some(range),
+        PhotometricFitMode::WhiteAnchoredLeastSquares,
         &cancel,
     )?;
     let strict = verify_reflected_bidirectional(source, target, transform, policy.residual, &cancel)?;

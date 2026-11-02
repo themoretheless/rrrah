@@ -1,0 +1,12 @@
+{
+  "scope": "Original date and formatting functions via AST, stdlib only",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Chronological output claim uses lexical timestamps:09Z before10+02 despite inverse instant order",
+    "Timezone-offset timestamp fails human date conversion and falls back to first10 characters",
+    "Same memory from both speakers appears twice; no ID/text dedup here",
+    "Standard LOCOMO reference-date parsing positive control passes"
+  ],
+  "timezone_output": "2023-01-01",
+  "full_suite_run": false
+}

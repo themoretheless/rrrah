@@ -1,0 +1,50 @@
+webui/node_modules/
+webui/dist/
+webui/package.json.md5
+webui/tsconfig.tsbuildinfo
+documentation/node_modules/
+documentation/build/
+documentation/.docusaurus/
+internal/webserver/assets/*
+!internal/webserver/assets/.keep
+dist/
+docs/*
+webui/public/appearance-bootstrap.js
+!docs/trackerdata/
+docs/trackerdata/*
+!docs/trackerdata/CONTEXT.md
+tmp/
+.trunk/
+*.exe
+/scripts/__pycache__/
+/scripts/*.yaml
+/scripts/*.yml
+/scripts/*.json
+/scripts/*.py
+!/scripts/fetch_metadata_api.py
+!/scripts/upload_release_api.py
+
+# E2E / Playwright artifacts
+webui/playwright-report/
+webui/test-results/
+
+# Lefthook
+.lefthook-local.yml
+.lefthook/
+
+# Lint / formatter caches
+lint-report.json
+webui/.eslintcache
+webui/node_modules/.cache/prettier/
+
+# App Configs
+/config/*.yaml
+/config/*.yml
+/config.converted.yaml
+/config.converted.yml
+/config-export.yaml
+
+#Claude user local settings
+.claude/settings.local.json
+.claude/CLAUDE.local.md
+CLAUDE.local.md

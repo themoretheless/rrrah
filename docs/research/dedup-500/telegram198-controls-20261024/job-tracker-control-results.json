@@ -1,0 +1,21 @@
+{
+  "source": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/job-tracker.js",
+  "sha256": "4fe34e4aae454ac1ed30c73f3aa6fe061f51aee3e806aaa75c76cc5f7764173f",
+  "cases": [
+    {
+      "name": "cooperative cancel returning normally counts success; single flight held until settle",
+      "passed": true
+    },
+    {
+      "name": "error retains previous result; next run succeeds",
+      "passed": true
+    },
+    {
+      "name": "retained old progress callback can update a later running job",
+      "passed": true,
+      "scope": "authored late-callback fixture; actual caller scheduling not established"
+    }
+  ],
+  "passed": 3,
+  "scope": "Actual unchanged dependency-free module; owned synthetic workers, no app/DB/server."
+}

@@ -1,0 +1,33 @@
+{
+  "source": "docs/research/dedup-500/evidence/SylphxAI--media-curator/remaining-pinned/src/services/MetadataDBService.ts",
+  "scope": "Original TS methods transpiled, mocked DB; candidate predicate evaluated separately, no SQLite or full suite",
+  "prepare_error_escapes_Result": true,
+  "matching_bits": 60,
+  "total_bits": 64,
+  "similarity": 0.9375,
+  "candidate_misses_all_four_bands": true,
+  "captured_query": {
+    "sql": "\n          SELECT filePath\n          FROM files\n          WHERE (lshKey1 IN (?, ?, ?, ?) OR lshKey2 IN (?, ?, ?, ?) OR lshKey3 IN (?, ?, ?, ?) OR lshKey4 IN (?, ?, ?, ?))\n            AND filePath != ?\n      ",
+    "params": [
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "0000",
+      "target"
+    ]
+  },
+  "actual_sqlite_candidate_rows": [],
+  "sqlite_version": "3.54.1"
+}

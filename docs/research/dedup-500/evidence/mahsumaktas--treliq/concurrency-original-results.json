@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "name": "respects max concurrent limit",
+      "passed": true
+    },
+    {
+      "name": "retries on failure",
+      "passed": true
+    },
+    {
+      "name": "throws after max retries",
+      "passed": true
+    },
+    {
+      "name": "drains queue correctly",
+      "passed": true
+    },
+    {
+      "name": "handles concurrent execution correctly",
+      "passed": true
+    },
+    {
+      "name": "reduces concurrency via throttle()",
+      "passed": true
+    },
+    {
+      "name": "increases concurrency via recover()",
+      "passed": true
+    },
+    {
+      "name": "does not exceed initial maxConcurrent on recover",
+      "passed": true
+    },
+    {
+      "name": "does not go below minimum (2) on throttle",
+      "passed": true
+    }
+  ],
+  "scope": "Original9callbacks unchanged;Node registration/assert adapter,unchanged controller;real timers,no network or Jest runner."
+}

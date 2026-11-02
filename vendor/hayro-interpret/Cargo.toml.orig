@@ -27,6 +27,7 @@ rustc-hash = { workspace = true }
 image = { workspace = true, features = ["png"] }
 
 [features]
+experimental-shared-partitions = []
 default = ["embed-fonts", "embed-cmaps"]
 # Embed a light-weight set of fonts (around 240KB) that can be used as a substitute for the 14 PDF standard fonts.
 embed-fonts = []

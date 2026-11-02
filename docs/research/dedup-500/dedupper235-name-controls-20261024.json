@@ -1,0 +1,27 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "commit": "747bdd499ac8243e3bf7273c6e4930d52493a4f2",
+  "scope": "Original strip/findMarkedFile bodies and escape helper, source literal constants; native path on current host and in-memory directory-list adapter. No real fs read/mutation, actual mark deletion, database or whole Jest/app.",
+  "authored_controls": [
+    {
+      "name": "strip removes erase substring inside ordinary directory component",
+      "passed": true,
+      "observed": "/root/notfile.jpg"
+    },
+    {
+      "name": "strip removes only first repeated marker directory",
+      "passed": true,
+      "observed": "/root/!erase/file.jpg"
+    },
+    {
+      "name": "ordinary path remains positive control",
+      "passed": true,
+      "observed": "/root/plain.jpg"
+    },
+    {
+      "name": "marked-file search accepts different prefix and returns bare name",
+      "passed": true,
+      "observed": "prefixfoo.!e.jpg"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 5.18s
+     Running tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-bb2972abc174984f)
+
+running 1 test
+test png_narrow_pq_chromatic_alpha_matches_independent_matrix_and_metal ... Narrow PQ chromatic alpha: Metal Apple M4 Max
+
+thread 'png_narrow_pq_chromatic_alpha_matches_independent_matrix_and_metal' (16565370) panicked at crates/rrrah-app/tests/hdr_raster_swap.rs:2304:21:
+png-narrow-pq-chromatic-alpha-8.png: row=1 column=0 channel=0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+FAILED
+
+failures:
+
+failures:
+    png_narrow_pq_chromatic_alpha_matches_independent_matrix_and_metal
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 2.22s
+
+error: test failed, to rerun pass `-p rrrah --test hdr_raster_swap`

@@ -1,0 +1,84 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v19-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/commands/proxy.ts",
+      "local": "dispatch-src_commands_proxy.ts",
+      "git_blob": "426e0c2feb4b995c0067a7fec3a169f24e025c26",
+      "sha256": "31896c7d2177945e24ba799a60a3d5fbd0b53b5f2df094efed4017a58f0e6a24",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/proxyHookScript.ts",
+      "local": "dispatch-src_modules_proxy_proxyHookScript.ts",
+      "git_blob": "e48240aabdf829fe67a2fde89698d5cdc6487e6a",
+      "sha256": "f731d4dbbdea857f6e4e922e97c6c81f6d6dce93513b034546e57608b7cd1a45",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/types.ts",
+      "local": "dispatch-src_modules_proxy_types.ts",
+      "git_blob": "c26f1fe3b104b6eb9b0295fe26bee5006f17ef97",
+      "sha256": "bddc75c4b20b79ac25a9df889b1bdd36f6ce61ac01659c50e9e17da5c84b7324",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/registry.ts",
+      "local": "dispatch-src_modules_proxy_registry.ts",
+      "git_blob": "d3831016e0cbe6428e8980feb5681f0591b0bd5b",
+      "sha256": "5919b5f8acb1b82439c664ea835cff6e5599c731c8025fb43d72802bc16fca69",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/runRewriter.ts",
+      "local": "dispatch-src_modules_proxy_runRewriter.ts",
+      "git_blob": "3905d366e93370ff8123ec73af822d90f2125655",
+      "sha256": "e8bcf92494fcd113d06250448471a2cd9a078b0681861a00ead489c7121a1452",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 64,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 185,
+  "new_original_tests_run": 0,
+  "authored_upstream_controls_total_distinct": 42,
+  "new_authored_controls": 1,
+  "requalified_prior_controls": 1,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "generated_result": {
+    "runtime": "v22.23.4",
+    "requalified_prior_controls": 1,
+    "new_distinct_controls": 1,
+    "first": {
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "second": {
+      "code": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Sipcode dedup: /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-6qTqVG/source.txt is unchanged since turn 1 (sha 446bb12, ~250 tokens). The content is still in your context from that turn. If you genuinely need to re-fetch (e.g. external edits expected), call Read again with offset:0 limit:2000 to force.\"}}",
+      "stderr": ""
+    },
+    "malformed": {
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "statsFiles": 1,
+    "scope": "Originalgeneratedscript executedaschildprocess,originalhook/cache/path/decision/warmfill;registryandASTownedno-opfixtures;homedirpatchedinchildpreloadtoownedrootwithoutenvHOMEchanges;actualhost/AST/registryunqualified;no completedRead tools",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-6qTqVG"
+  },
+  "findings": [
+    "Generatedstdin/stdoutscript reproduces pre-readcache denial across2childinvocationswithoutcompletedRead;realownedcache/stats write.",
+    "Malformedscriptstdin givesexit0/nooutput.",
+    "ASTtrimrouteshavepriorityoverdedup;ownedASTstubreturnsnullsoASTintegrationunqualified.",
+    "ScriptrequiresrunRewriterimportfirstandloadfailure exitsbeforeothermodules;sourceonly.",
+    "Install/uninstall commandwhole-read only;no actualusersettingschanged."
+  ],
+  "runtime_scope": "Originalgeneratedscript+dedupchain,registry/ASTno-opfixtures,child-onlyhomedirpatchwithownedpreload;notactualClaudeCodeinstallation",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

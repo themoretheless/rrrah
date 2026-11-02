@@ -1,0 +1,1551 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package config
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"maps"
+	"net"
+	"net/url"
+	"reflect"
+	"sort"
+	"strconv"
+	"strings"
+	"sync"
+
+	"gopkg.in/yaml.v3"
+
+	imagehostpolicy "github.com/autobrr/upbrr/internal/imagehosting/policy"
+	"github.com/autobrr/upbrr/internal/redaction"
+)
+
+// Config is the complete runtime and persistence configuration. Secret-aware
+// export and database APIs clone it before transforming secret fields.
+type Config struct {
+	MainSettings       MainSettingsConfig             `yaml:"main_settings"`
+	ImageHosting       ImageHostingConfig             `yaml:"image_hosting"`
+	Metadata           MetadataConfig                 `yaml:"metadata"`
+	ScreenshotHandling ScreenshotHandlingConfig       `yaml:"screenshot_handling"`
+	Description        DescriptionSettingsConfig      `yaml:"description_settings"`
+	ClientSetup        ClientSetupConfig              `yaml:"client_setup"`
+	ArrIntegration     ArrIntegrationConfig           `yaml:"arr_integration"`
+	TorrentCreation    TorrentCreationConfig          `yaml:"torrent_creation"`
+	PostUpload         PostUploadConfig               `yaml:"post_upload"`
+	Logging            LoggingConfig                  `yaml:"logging"`
+	Trackers           TrackersConfig                 `yaml:"trackers"`
+	TorrentClients     map[string]TorrentClientConfig `yaml:"torrent_clients"`
+
+	secretReencryptionRequired bool
+}
+
+const (
+	// DefaultInputHistoryLimit is the default number of retained input paths.
+	DefaultInputHistoryLimit = 20
+	// DefaultDVDMenuItems is the default automatic DVD menu capture limit.
+	DefaultDVDMenuItems = 6
+	// MaxDVDMenuItems is the largest accepted automatic DVD menu capture limit.
+	MaxDVDMenuItems = 32
+)
+
+// MainSettingsConfig defines application-wide runtime and presentation settings.
+// TMDB enrichment is disabled when TMDBAPI is empty; other metadata providers
+// and externally supplied metadata IDs remain available.
+type MainSettingsConfig struct {
+	UpdateNotification  bool `yaml:"update_notification"`
+	VerboseNotification bool `yaml:"verbose_notification"`
+	// TMDBAPI is the optional API key used for TMDB lookups and enrichment.
+	TMDBAPI           string `yaml:"tmdb_api"`
+	TrackerPassChecks int    `yaml:"tracker_pass_checks"`
+	InputHistoryLimit int    `yaml:"input_history_limit"`
+	DBPath            string `yaml:"db_path"`
+	UseFavicons       bool   `yaml:"use_favicons"`
+	FaviconOnly       bool   `yaml:"favicon_only"`
+	SceneDetection    bool   `yaml:"scene_detection"`
+}
+
+type mainSettingsConfigAlias MainSettingsConfig
+
+func (c *MainSettingsConfig) UnmarshalYAML(value *yaml.Node) error {
+	var raw mainSettingsConfigAlias
+	raw.InputHistoryLimit = DefaultInputHistoryLimit
+	raw.UseFavicons = true
+	raw.SceneDetection = true
+	if err := value.Decode(&raw); err != nil {
+		return fmt.Errorf("config: decode main settings yaml: %w", err)
+	}
+	*c = MainSettingsConfig(raw)
+	return nil
+}
+
+func (c *MainSettingsConfig) UnmarshalJSON(data []byte) error {
+	var raw mainSettingsConfigAlias
+	raw.InputHistoryLimit = DefaultInputHistoryLimit
+	raw.UseFavicons = true
+	raw.SceneDetection = true
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return fmt.Errorf("config: decode main settings json: %w", err)
+	}
+	*c = MainSettingsConfig(raw)
+	return nil
+}
+
+type ImageHostingConfig struct {
+	Host1             string `yaml:"img_host_1"`
+	Host2             string `yaml:"img_host_2"`
+	Host3             string `yaml:"img_host_3"`
+	Host4             string `yaml:"img_host_4"`
+	Host5             string `yaml:"img_host_5"`
+	Host6             string `yaml:"img_host_6"`
+	ImgBBAPI          string `yaml:"imgbb_api"`
+	LensdumpAPI       string `yaml:"lensdump_api"`
+	PTScreensAPI      string `yaml:"ptscreens_api"`
+	OnlyImageAPI      string `yaml:"onlyimage_api"`
+	DalexniAPI        string `yaml:"dalexni_api"`
+	PassTheImageAPI   string `yaml:"passtheima_ge_api"`
+	ZiplineURL        string `yaml:"zipline_url"`
+	ZiplineAPIKey     string `yaml:"zipline_api_key"`
+	SeedpoolCDNAPI    string `yaml:"seedpool_cdn_api"`
+	SamaritanoEnabled bool   `yaml:"samaritano_enabled"`
+	SamaritanoAPI     string `yaml:"samaritano_api_key"`
+	ShareXURL         string `yaml:"sharex_url"`
+	ShareXAPIKey      string `yaml:"sharex_api_key"`
+	UTPPMAPI          string `yaml:"utppm_api"`
+	LostimgEnabled    bool   `yaml:"lostimg_enabled"`
+	LostimgAPI        string `yaml:"lostimg_api"`
+	ReelflixEnabled   bool   `yaml:"reelflix_enabled"`
+	ReelflixAPI       string `yaml:"reelflix_api"`
+}
+
+// ConditionalHostConfigured reports whether host is a known conditional image
+// host and has both its enable flag and required API key configured.
+func (c ImageHostingConfig) ConditionalHostConfigured(host string) (configured bool, ok bool) {
+	switch strings.ToLower(strings.TrimSpace(host)) {
+	case "lostimg":
+		return c.LostimgEnabled && strings.TrimSpace(c.LostimgAPI) != "", true
+	case "reelflix":
+		return c.ReelflixEnabled && strings.TrimSpace(c.ReelflixAPI) != "", true
+	case "samaritano":
+		return c.SamaritanoEnabled && strings.TrimSpace(c.SamaritanoAPI) != "", true
+	default:
+		return false, false
+	}
+}
+
+type MetadataConfig struct {
+	BTNAPI                    string  `yaml:"btn_api"`
+	SkipAutoTorrent           bool    `yaml:"skip_auto_torrent"`
+	SkipTrackerFilenameLookup bool    `yaml:"skip_tracker_filename_lookup"`
+	UseLargestPlaylist        bool    `yaml:"use_largest_playlist"`
+	KeepImages                bool    `yaml:"keep_images"`
+	OnlyID                    bool    `yaml:"only_id"`
+	UserOverrides             bool    `yaml:"user_overrides"`
+	PingUnit3D                bool    `yaml:"ping_unit3d"`
+	GetBlurayInfo             bool    `yaml:"get_bluray_info"`
+	BlurayScore               float64 `yaml:"bluray_score"`
+	BluraySingleScore         float64 `yaml:"bluray_single_score"`
+	CheckPredb                bool    `yaml:"check_predb"`
+}
+
+type ScreenshotHandlingConfig struct {
+	Screens int `yaml:"screens"`
+	// MaxMenuItems bounds automatic DVD menu captures; zero resolves to DefaultDVDMenuItems.
+	MaxMenuItems         int     `yaml:"max_menu_items"`
+	MinSuccessfulUploads int     `yaml:"min_successful_image_uploads"`
+	CutoffScreens        int     `yaml:"cutoff_screens"`
+	FrameOverlay         bool    `yaml:"frame_overlay"`
+	OverlayTextSize      int     `yaml:"overlay_text_size"`
+	ProcessLimit         int     `yaml:"process_limit"`
+	MaxConcurrentUploads int     `yaml:"max_concurrent_uploads"`
+	FFmpegLimit          bool    `yaml:"ffmpeg_limit"`
+	ToneMap              bool    `yaml:"tone_map"`
+	UseLibplacebo        bool    `yaml:"use_libplacebo"`
+	FFmpegCompression    int     `yaml:"ffmpeg_compression"`
+	TonemapAlgorithm     string  `yaml:"algorithm"`
+	Desat                float64 `yaml:"desat"`
+}
+
+type screenshotHandlingConfigAlias ScreenshotHandlingConfig
+
+// UnmarshalYAML preserves the default menu limit when legacy YAML omits or
+// explicitly zeroes max_menu_items.
+func (c *ScreenshotHandlingConfig) UnmarshalYAML(value *yaml.Node) error {
+	var raw screenshotHandlingConfigAlias
+	raw.MaxMenuItems = DefaultDVDMenuItems
+	if err := value.Decode(&raw); err != nil {
+		return fmt.Errorf("config: decode screenshot handling yaml: %w", err)
+	}
+	if raw.MaxMenuItems == 0 {
+		raw.MaxMenuItems = DefaultDVDMenuItems
+	}
+	*c = ScreenshotHandlingConfig(raw)
+	return nil
+}
+
+// UnmarshalJSON preserves the default menu limit when legacy JSON omits or
+// explicitly zeroes MaxMenuItems.
+func (c *ScreenshotHandlingConfig) UnmarshalJSON(data []byte) error {
+	var raw screenshotHandlingConfigAlias
+	raw.MaxMenuItems = DefaultDVDMenuItems
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return fmt.Errorf("config: decode screenshot handling json: %w", err)
+	}
+	if raw.MaxMenuItems == 0 {
+		raw.MaxMenuItems = DefaultDVDMenuItems
+	}
+	*c = ScreenshotHandlingConfig(raw)
+	return nil
+}
+
+// ResolvedMaxMenuItems returns the configured DVD menu capture limit. Zero in
+// legacy or programmatic configs uses the embedded default.
+func (c *ScreenshotHandlingConfig) ResolvedMaxMenuItems() int {
+	if c.MaxMenuItems == 0 {
+		return DefaultDVDMenuItems
+	}
+	return c.MaxMenuItems
+}
+
+// ResolvedMinSuccessfulUploads returns how many images a host must publish for
+// a tracker before a partially failed image-host batch still counts as usable.
+// Zero or negative disables the allowance, so any failed image fails the batch.
+func (c *ScreenshotHandlingConfig) ResolvedMinSuccessfulUploads() int {
+	if c.MinSuccessfulUploads <= 0 {
+		return 0
+	}
+	return c.MinSuccessfulUploads
+}
+
+type DescriptionSettingsConfig struct {
+	AddLogo                 bool   `yaml:"add_logo"`
+	LogoSize                int    `yaml:"logo_size"`
+	LogoLanguage            string `yaml:"logo_language"`
+	ThumbnailSize           int    `yaml:"thumbnail_size"`
+	ScreensPerRow           string `yaml:"screens_per_row"`
+	EpisodeOverview         bool   `yaml:"episode_overview"`
+	TonemappedHeader        string `yaml:"tonemapped_header"`
+	MultiScreens            int    `yaml:"multiScreens"`
+	PackThumbSize           int    `yaml:"pack_thumb_size"`
+	CharLimit               int    `yaml:"charLimit"`
+	FileLimit               int    `yaml:"fileLimit"`
+	ProcessLimit            int    `yaml:"processLimit"`
+	CustomDescriptionHeader string `yaml:"custom_description_header"`
+	ScreenshotHeader        string `yaml:"screenshot_header"`
+	DiscMenuHeader          string `yaml:"disc_menu_header"`
+	CustomSignature         string `yaml:"custom_signature"`
+	AddBlurayLink           bool   `yaml:"add_bluray_link"`
+	UseBlurayImages         bool   `yaml:"use_bluray_images"`
+	BlurayImageSize         int    `yaml:"bluray_image_size"`
+}
+
+type ClientSetupConfig struct {
+	DefaultClient string  `yaml:"default_torrent_client"`
+	InjectClients CSVList `yaml:"injecting_client_list"`
+	SearchClients CSVList `yaml:"searching_client_list"`
+}
+
+type ArrIntegrationConfig struct {
+	UseSonarr     bool   `yaml:"use_sonarr"`
+	SonarrURL     string `yaml:"sonarr_url"`
+	SonarrAPIKey  string `yaml:"sonarr_api_key"`
+	SonarrURL1    string `yaml:"sonarr_url_1"`
+	SonarrAPIKey1 string `yaml:"sonarr_api_key_1"`
+	SonarrURL2    string `yaml:"sonarr_url_2"`
+	SonarrAPIKey2 string `yaml:"sonarr_api_key_2"`
+	SonarrURL3    string `yaml:"sonarr_url_3"`
+	SonarrAPIKey3 string `yaml:"sonarr_api_key_3"`
+	UseRadarr     bool   `yaml:"use_radarr"`
+	RadarrURL     string `yaml:"radarr_url"`
+	RadarrAPIKey  string `yaml:"radarr_api_key"`
+	RadarrURL1    string `yaml:"radarr_url_1"`
+	RadarrAPIKey1 string `yaml:"radarr_api_key_1"`
+	RadarrURL2    string `yaml:"radarr_url_2"`
+	RadarrAPIKey2 string `yaml:"radarr_api_key_2"`
+	RadarrURL3    string `yaml:"radarr_url_3"`
+	RadarrAPIKey3 string `yaml:"radarr_api_key_3"`
+	EmbyDir       string `yaml:"emby_dir"`
+	EmbyTVDir     string `yaml:"emby_tv_dir"`
+}
+
+// TorrentCreationConfig controls torrent construction and reuse scheduling.
+// RehashCooldown delays rehash-dependent tracker submissions by that many
+// seconds after all reusable tracker submissions finish; negative values act as zero.
+type TorrentCreationConfig struct {
+	MkbrrThreads   int  `yaml:"mkbrr_threads"`
+	PreferMax16    bool `yaml:"prefer_max_16_torrent"`
+	RehashCooldown int  `yaml:"rehash_cooldown"`
+}
+
+type PostUploadConfig struct {
+	InjectDelay              int  `yaml:"inject_delay"`
+	ShowUploadDuration       bool `yaml:"show_upload_duration"`
+	PrintTrackerMessages     bool `yaml:"print_tracker_messages"`
+	PrintTrackerLinks        bool `yaml:"print_tracker_links"`
+	MaxConcurrentTrackers    int  `yaml:"max_concurrent_tracker_uploads"`
+	SearchRequests           bool `yaml:"search_requests"`
+	CrossSeeding             bool `yaml:"cross_seeding"`
+	CrossSeedCheckEverything bool `yaml:"cross_seed_check_everything"`
+}
+
+type LoggingConfig struct {
+	Level          string `yaml:"level"`
+	FileEnabled    bool   `yaml:"file_enabled"`
+	MaxTotalSizeMB int    `yaml:"max_total_size_mb"`
+	MaxFiles       int    `yaml:"max_files"`
+}
+
+// TrackersConfig preserves ordered default selections, one preferred tracker,
+// and tracker settings keyed by configured tracker name.
+type TrackersConfig struct {
+	DefaultTrackers  CSVList                  `yaml:"default_trackers" json:"DefaultTrackers"`
+	PreferredTracker string                   `yaml:"preferred_tracker" json:"PreferredTracker"`
+	Trackers         map[string]TrackerConfig `yaml:"-" json:"Trackers"`
+}
+
+// TrackerConfig stores one tracker's supported settings. Unknown preserves
+// unsupported extension fields across load/save, excluding deprecated URL
+// fields and schema-known fields belonging to another tracker. SkipIfRehash
+// omits the tracker when torrent preparation requires regeneration, including
+// forced regeneration of source data.
+type TrackerConfig struct {
+	LinkDirName         string `yaml:"link_dir_name" json:"LinkDirName"`
+	APIKey              string `yaml:"api_key" json:"APIKey"`
+	PTPAPIUser          string `yaml:"ApiUser" json:"ApiUser"`
+	PTPAPIKey           string `yaml:"ApiKey" json:"ApiKey"`
+	Username            string `yaml:"username" json:"Username"`
+	Password            string `yaml:"password" json:"Password"`
+	Passkey             string `yaml:"passkey" json:"Passkey"`
+	AnnounceURL         string `yaml:"announce_url" json:"AnnounceURL"`
+	MyAnnounceURL       string `yaml:"my_announce_url" json:"MyAnnounceURL"`
+	FaviconURL          string `yaml:"favicon_url" json:"FaviconURL"`
+	UploaderStatus      bool   `yaml:"uploader_status" json:"UploaderStatus"`
+	CustomLayout        string `yaml:"custom_layout" json:"CustomLayout"`
+	TagForCustomRelease string `yaml:"tag_for_custom_release" json:"TagForCustomRelease"`
+	CheckForRules       bool   `yaml:"check_for_rules" json:"CheckForRules"`
+	ModQ                bool   `yaml:"modq" json:"ModQ"`
+	Draft               bool   `yaml:"draft" json:"Draft"`
+	DraftDefault        bool   `yaml:"draft_default" json:"DraftDefault"`
+	Anon                bool   `yaml:"anon" json:"Anon"`
+	ShowGroupIfAnon     bool   `yaml:"show_group_if_anon" json:"ShowGroupIfAnon"`
+	BhdRSSKey           string `yaml:"bhd_rss_key" json:"BhdRSSKey"`
+	CheckRequests       bool   `yaml:"check_requests" json:"CheckRequests"`
+	FullMediainfo       bool   `yaml:"full_mediainfo" json:"FullMediainfo"`
+	UploaderName        string `yaml:"uploader_name" json:"UploaderName"`
+	ImgRehost           bool   `yaml:"img_rehost" json:"ImgRehost"`
+	ImageHost           string `yaml:"image_host" json:"ImageHost"`
+	TorrentClient       string `yaml:"torrent_client" json:"TorrentClient"`
+	UseSpanishTitle     bool   `yaml:"use_spanish_title" json:"UseSpanishTitle"`
+	UseItalianTitle     bool   `yaml:"use_italian_title" json:"UseItalianTitle"`
+	OTPURI              string `yaml:"otp_uri" json:"OTPURI"`
+	SkipIfRehash        bool   `yaml:"skip_if_rehash" json:"SkipIfRehash"`
+	PTGenAPI            string `yaml:"ptgen_api" json:"PTGenAPI"`
+	AddWebSourceToDesc  bool   `yaml:"add_web_source_to_desc" json:"AddWebSourceToDesc"`
+	UseMetadataName     bool   `yaml:"use_metadata_name" json:"UseMetadataName"`
+	InjectDelay         *int   `yaml:"inject_delay" json:"InjectDelay"`
+	ImageCount          int    `yaml:"image_count" json:"ImageCount"`
+	Channel             string `yaml:"channel" json:"Channel"`
+	ImgAPI              string `yaml:"img_api" json:"ImgAPI"`
+	APIUpload           bool   `yaml:"api_upload" json:"APIUpload"`
+	Exclusive           bool   `yaml:"exclusive" json:"Exclusive"`
+	LoginQuestion       string `yaml:"login_question" json:"LoginQuestion"`
+	LoginAnswer         string `yaml:"login_answer" json:"LoginAnswer"`
+	UserID              string `yaml:"user_id" json:"UserID"`
+	// Internal is a deprecated compatibility field. Group-list matches alone
+	// determine tracker-specific internal handling.
+	Internal              bool           `yaml:"internal" json:"Internal"`
+	DupeBypassGroups      CSVList        `yaml:"dupe_bypass_groups" json:"DupeBypassGroups"`
+	PersonalReleaseGroups CSVList        `yaml:"personal_release_groups" json:"PersonalReleaseGroups"`
+	InternalGroups        CSVList        `yaml:"internal_groups" json:"InternalGroups"`
+	Unknown               map[string]any `yaml:"-" json:"-"`
+}
+
+type trackerConfigAlias TrackerConfig
+
+var (
+	trackerTagOnce       sync.Once
+	trackerKnownYAMLKeys map[string]struct{}
+	trackerKnownJSONKeys map[string]struct{}
+	trackerYAMLToJSON    map[string]string
+	trackerJSONToYAML    map[string]string
+
+	trackerSchemaOnce sync.Once
+	trackerSchema     map[string]map[string]struct{}
+)
+
+func initTrackerTagMetadata() {
+	trackerTagOnce.Do(func() {
+		trackerKnownYAMLKeys = make(map[string]struct{})
+		trackerKnownJSONKeys = make(map[string]struct{})
+		trackerYAMLToJSON = make(map[string]string)
+		trackerJSONToYAML = make(map[string]string)
+
+		t := reflect.TypeFor[TrackerConfig]()
+		for field := range t.Fields() {
+			yamlTag := strings.TrimSpace(strings.Split(field.Tag.Get("yaml"), ",")[0])
+			jsonTag := strings.TrimSpace(strings.Split(field.Tag.Get("json"), ",")[0])
+			if yamlTag == "" || yamlTag == "-" || jsonTag == "" || jsonTag == "-" {
+				continue
+			}
+			trackerKnownYAMLKeys[yamlTag] = struct{}{}
+			trackerKnownJSONKeys[jsonTag] = struct{}{}
+			trackerYAMLToJSON[yamlTag] = jsonTag
+			trackerJSONToYAML[jsonTag] = yamlTag
+		}
+	})
+}
+
+func initTrackerSchema() {
+	trackerSchemaOnce.Do(func() {
+		trackerSchema = make(map[string]map[string]struct{})
+
+		var root struct {
+			Trackers map[string]any `yaml:"trackers"`
+		}
+		if err := yaml.Unmarshal(EmbeddedExampleYAML(), &root); err != nil {
+			return
+		}
+
+		for trackerName, raw := range root.Trackers {
+			if strings.EqualFold(trackerName, "default_trackers") || strings.EqualFold(trackerName, "preferred_tracker") {
+				continue
+			}
+			entry, ok := raw.(map[string]any)
+			if !ok {
+				continue
+			}
+			keys := make(map[string]struct{}, len(entry))
+			for key := range entry {
+				keys[key] = struct{}{}
+			}
+			trackerSchema[trackerName] = keys
+		}
+	})
+}
+
+func trackerAllowedYAMLKeys(trackerName string) map[string]struct{} {
+	initTrackerSchema()
+	addGlobal := func(keys map[string]struct{}) map[string]struct{} {
+		keys["favicon_url"] = struct{}{}
+		keys["image_host"] = struct{}{}
+		keys["torrent_client"] = struct{}{}
+		keys["internal"] = struct{}{}
+		keys["dupe_bypass_groups"] = struct{}{}
+		keys["personal_release_groups"] = struct{}{}
+		keys["internal_groups"] = struct{}{}
+		return keys
+	}
+	if len(trackerSchema) == 0 {
+		return nil
+	}
+	if keys, ok := trackerSchema[trackerName]; ok {
+		clone := make(map[string]struct{}, len(keys)+1)
+		for key := range keys {
+			clone[key] = struct{}{}
+		}
+		return addGlobal(clone)
+	}
+	return nil
+}
+
+func trackerAllowedJSONKeys(trackerName string) map[string]struct{} {
+	yamlKeys := trackerAllowedYAMLKeys(trackerName)
+	if len(yamlKeys) == 0 {
+		return nil
+	}
+	initTrackerTagMetadata()
+	converted := make(map[string]struct{}, len(yamlKeys))
+	for yamlKey := range yamlKeys {
+		if jsonKey, ok := trackerYAMLToJSON[yamlKey]; ok {
+			converted[jsonKey] = struct{}{}
+		}
+	}
+	return converted
+}
+
+func filterMapByAllowedKeys(source map[string]any, allowed map[string]struct{}) map[string]any {
+	if len(source) == 0 {
+		return map[string]any{}
+	}
+	if len(allowed) == 0 {
+		clone := make(map[string]any, len(source))
+		maps.Copy(clone, source)
+		return clone
+	}
+	filtered := make(map[string]any, len(allowed))
+	for key := range allowed {
+		if value, ok := source[key]; ok {
+			filtered[key] = value
+		}
+	}
+	return filtered
+}
+
+func mergeUnknownKeys(target map[string]any, unknown map[string]any) {
+	if len(unknown) == 0 {
+		return
+	}
+	for key, value := range unknown {
+		if isDeprecatedTrackerField(key) {
+			continue
+		}
+		if _, exists := target[key]; exists {
+			continue
+		}
+		target[key] = value
+	}
+}
+
+func trackerConfigToJSONMap(cfg TrackerConfig) (map[string]any, error) {
+	alias := trackerConfigAlias(cfg)
+	alias.Unknown = nil
+	// Export paths encrypt known secrets first unless explicitly called for plaintext export.
+	//nolint:gosec // TrackerConfig intentionally serializes API key fields for config export.
+	payload, err := json.Marshal(alias)
+	if err != nil {
+		return nil, fmt.Errorf("config: marshal tracker config to json map: %w", err)
+	}
+	result := map[string]any{}
+	if err := json.Unmarshal(payload, &result); err != nil {
+		return nil, fmt.Errorf("config: unmarshal tracker config json map: %w", err)
+	}
+	return result, nil
+}
+
+func trackerConfigToYAMLMap(cfg TrackerConfig) (map[string]any, error) {
+	alias := trackerConfigAlias(cfg)
+	alias.Unknown = nil
+	// Export paths encrypt known secrets first unless explicitly called for plaintext export.
+	//nolint:gosec // TrackerConfig intentionally serializes API key fields for config export.
+	payload, err := yaml.Marshal(alias)
+	if err != nil {
+		return nil, fmt.Errorf("config: marshal tracker config to yaml map: %w", err)
+	}
+	result := map[string]any{}
+	if err := yaml.Unmarshal(payload, &result); err != nil {
+		return nil, fmt.Errorf("config: unmarshal tracker config yaml map: %w", err)
+	}
+	return result, nil
+}
+
+func parseDefaultTrackersValue(raw any) CSVList {
+	if raw == nil {
+		return CSVList{}
+	}
+	switch value := raw.(type) {
+	case []any:
+		result := make([]string, 0, len(value))
+		for _, item := range value {
+			trimmed := strings.TrimSpace(fmt.Sprintf("%v", item))
+			if trimmed == "" {
+				continue
+			}
+			result = append(result, trimmed)
+		}
+		return CSVList(result)
+	case []string:
+		result := make([]string, 0, len(value))
+		for _, item := range value {
+			trimmed := strings.TrimSpace(item)
+			if trimmed == "" {
+				continue
+			}
+			result = append(result, trimmed)
+		}
+		return CSVList(result)
+	case string:
+		items := strings.Split(value, ",")
+		result := make([]string, 0, len(items))
+		for _, item := range items {
+			trimmed := strings.TrimSpace(item)
+			if trimmed == "" {
+				continue
+			}
+			result = append(result, trimmed)
+		}
+		return CSVList(result)
+	default:
+		return CSVList{}
+	}
+}
+
+func extractTrackerUnknown(raw map[string]any) map[string]any {
+	if len(raw) == 0 {
+		return nil
+	}
+	initTrackerTagMetadata()
+	unknown := make(map[string]any)
+	for key, value := range raw {
+		if isDeprecatedTrackerField(key) {
+			continue
+		}
+		if _, ok := trackerKnownJSONKeys[key]; ok {
+			continue
+		}
+		if _, ok := trackerKnownYAMLKeys[key]; ok {
+			continue
+		}
+		unknown[key] = value
+	}
+	if len(unknown) == 0 {
+		return nil
+	}
+	return unknown
+}
+
+func stripDeprecatedTrackerFields(raw map[string]any) {
+	for key := range raw {
+		if isDeprecatedTrackerField(key) {
+			delete(raw, key)
+		}
+	}
+}
+
+func decodeTrackerConfigFromJSON(raw map[string]any) (TrackerConfig, error) {
+	stripDeprecatedTrackerFields(raw)
+	payload, err := json.Marshal(raw)
+	if err != nil {
+		return TrackerConfig{}, fmt.Errorf("config: marshal tracker config from json: %w", err)
+	}
+	var cfg TrackerConfig
+	if err := json.Unmarshal(payload, &cfg); err != nil {
+		return TrackerConfig{}, fmt.Errorf("config: unmarshal tracker config from json: %w", err)
+	}
+	normalizeTrackerGroupLists(&cfg)
+	cfg.Unknown = extractTrackerUnknown(raw)
+	return cfg, nil
+}
+
+func decodeTrackerConfigFromYAML(raw map[string]any) (TrackerConfig, error) {
+	stripDeprecatedTrackerFields(raw)
+	payload, err := yaml.Marshal(raw)
+	if err != nil {
+		return TrackerConfig{}, fmt.Errorf("config: marshal tracker config from yaml: %w", err)
+	}
+	var cfg TrackerConfig
+	if err := yaml.Unmarshal(payload, &cfg); err != nil {
+		return TrackerConfig{}, fmt.Errorf("config: unmarshal tracker config from yaml: %w", err)
+	}
+	normalizeTrackerGroupLists(&cfg)
+	cfg.Unknown = extractTrackerUnknown(raw)
+	return cfg, nil
+}
+
+func normalizeTrackerGroupLists(cfg *TrackerConfig) {
+	if cfg == nil {
+		return
+	}
+	cfg.DupeBypassGroups = normalizeTrackerGroupList(cfg.DupeBypassGroups)
+	cfg.PersonalReleaseGroups = normalizeTrackerGroupList(cfg.PersonalReleaseGroups)
+	cfg.InternalGroups = normalizeTrackerGroupList(cfg.InternalGroups)
+}
+
+func normalizeTrackerGroupList(values CSVList) CSVList {
+	result := make(CSVList, 0, len(values))
+	seen := make(map[string]struct{}, len(values))
+	for _, value := range values {
+		value = strings.TrimSpace(value)
+		value = strings.TrimPrefix(value, "-")
+		value = strings.TrimSpace(value)
+		if value == "" {
+			continue
+		}
+		key := strings.ToLower(value)
+		if _, ok := seen[key]; ok {
+			continue
+		}
+		seen[key] = struct{}{}
+		result = append(result, value)
+	}
+	return result
+}
+
+func (t TrackersConfig) MarshalJSON() ([]byte, error) {
+	RemoveRetiredTrackerSettings(&t)
+	trackers := make(map[string]map[string]any, len(t.Trackers))
+	for trackerName, trackerCfg := range t.Trackers {
+		normalizeTrackerGroupLists(&trackerCfg)
+		jsonMap, err := trackerConfigToJSONMap(trackerCfg)
+		if err != nil {
+			return nil, err
+		}
+		filtered := filterMapByAllowedKeys(jsonMap, trackerAllowedJSONKeys(trackerName))
+		mergeUnknownKeys(filtered, trackerCfg.Unknown)
+		trackers[trackerName] = filtered
+	}
+
+	type trackersJSON struct {
+		DefaultTrackers  CSVList                   `json:"DefaultTrackers"`
+		PreferredTracker string                    `json:"PreferredTracker"`
+		Trackers         map[string]map[string]any `json:"Trackers"`
+	}
+
+	preferredTracker := strings.TrimSpace(t.PreferredTracker)
+
+	payload, err := json.Marshal(trackersJSON{
+		DefaultTrackers:  t.DefaultTrackers,
+		PreferredTracker: preferredTracker,
+		Trackers:         trackers,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("config: marshal trackers config: %w", err)
+	}
+	return payload, nil
+}
+
+func (t *TrackersConfig) UnmarshalJSON(data []byte) error {
+	if t == nil {
+		return errors.New("trackers: nil target")
+	}
+
+	var root map[string]json.RawMessage
+	if err := json.Unmarshal(data, &root); err != nil {
+		return fmt.Errorf("config: unmarshal trackers config root: %s", redaction.RedactValue(err.Error(), nil))
+	}
+
+	t.DefaultTrackers = CSVList{}
+	t.PreferredTracker = ""
+	t.Trackers = map[string]TrackerConfig{}
+
+	if raw, ok := root["DefaultTrackers"]; ok {
+		var list []string
+		if err := json.Unmarshal(raw, &list); err == nil {
+			t.DefaultTrackers = CSVList(list)
+		}
+	}
+	if raw, ok := root["default_trackers"]; ok {
+		var list []string
+		if err := json.Unmarshal(raw, &list); err == nil {
+			t.DefaultTrackers = CSVList(list)
+		}
+	}
+	if raw, ok := root["PreferredTracker"]; ok {
+		var preferred string
+		if err := json.Unmarshal(raw, &preferred); err == nil {
+			t.PreferredTracker = strings.TrimSpace(preferred)
+		}
+	}
+	if raw, ok := root["preferred_tracker"]; ok {
+		var preferred string
+		if err := json.Unmarshal(raw, &preferred); err == nil {
+			t.PreferredTracker = strings.TrimSpace(preferred)
+		}
+	}
+
+	var rawTrackers map[string]json.RawMessage
+	if raw, ok := root["Trackers"]; ok {
+		if err := json.Unmarshal(raw, &rawTrackers); err != nil {
+			return fmt.Errorf("config: unmarshal trackers map: %s", redaction.RedactValue(err.Error(), nil))
+		}
+	} else {
+		rawTrackers = make(map[string]json.RawMessage)
+		for key, raw := range root {
+			if key == "DefaultTrackers" || key == "default_trackers" || key == "PreferredTracker" || key == "preferred_tracker" {
+				continue
+			}
+			rawTrackers[key] = raw
+		}
+	}
+
+	for trackerName, raw := range rawTrackers {
+		if isRemovedTracker(trackerName) {
+			continue
+		}
+		entry := map[string]any{}
+		if err := json.Unmarshal(raw, &entry); err != nil {
+			continue
+		}
+		cfg, err := decodeTrackerConfigFromJSON(entry)
+		if err != nil {
+			return err
+		}
+		t.Trackers[trackerName] = cfg
+	}
+
+	RemoveRetiredTrackerSettings(t)
+	return nil
+}
+
+func (t TrackersConfig) MarshalYAML() (any, error) {
+	RemoveRetiredTrackerSettings(&t)
+	root := map[string]any{}
+	root["default_trackers"] = []string(t.DefaultTrackers)
+	root["preferred_tracker"] = strings.TrimSpace(t.PreferredTracker)
+
+	for trackerName, trackerCfg := range t.Trackers {
+		normalizeTrackerGroupLists(&trackerCfg)
+		yamlMap, err := trackerConfigToYAMLMap(trackerCfg)
+		if err != nil {
+			return nil, err
+		}
+		filtered := filterMapByAllowedKeys(yamlMap, trackerAllowedYAMLKeys(trackerName))
+		mergeUnknownKeys(filtered, trackerCfg.Unknown)
+		root[trackerName] = filtered
+	}
+
+	return root, nil
+}
+
+func (t *TrackersConfig) UnmarshalYAML(value *yaml.Node) error {
+	if t == nil {
+		return errors.New("trackers: nil target")
+	}
+
+	var root map[string]any
+	if err := value.Decode(&root); err != nil {
+		return fmt.Errorf("config: decode trackers yaml: %w", err)
+	}
+
+	t.DefaultTrackers = parseDefaultTrackersValue(root["default_trackers"])
+	t.PreferredTracker = strings.TrimSpace(fmt.Sprintf("%v", root["preferred_tracker"]))
+	if strings.EqualFold(t.PreferredTracker, "<nil>") {
+		t.PreferredTracker = ""
+	}
+	t.Trackers = map[string]TrackerConfig{}
+
+	if nestedRaw, ok := root["trackers"]; ok {
+		if nested, ok := nestedRaw.(map[string]any); ok {
+			maps.Copy(root, nested)
+		}
+	}
+
+	for key, raw := range root {
+		if isRemovedTracker(key) {
+			continue
+		}
+		if strings.EqualFold(key, "default_trackers") || strings.EqualFold(key, "preferred_tracker") || strings.EqualFold(key, "trackers") {
+			continue
+		}
+		entry, ok := raw.(map[string]any)
+		if !ok {
+			continue
+		}
+		cfg, err := decodeTrackerConfigFromYAML(entry)
+		if err != nil {
+			return err
+		}
+		t.Trackers[key] = cfg
+	}
+
+	RemoveRetiredTrackerSettings(t)
+	return nil
+}
+
+// TorrentClientConfig supports current qBittorrent/watch/qui fields plus
+// legacy aliases. Its resolver methods define field precedence, and marshaling
+// emits the resolved canonical values rather than duplicate aliases.
+type TorrentClientConfig struct {
+	Type          string     `yaml:"type"`
+	TorrentClient string     `yaml:"torrent_client"`
+	URL           string     `yaml:"url"`
+	QuiProxyURL   string     `yaml:"qui_proxy_url"`
+	WatchFolder   string     `yaml:"watch_folder"`
+	StorageDir    string     `yaml:"torrent_storage_dir"`
+	Username      string     `yaml:"username"`
+	Password      string     `yaml:"password"`
+	Category      string     `yaml:"category"`
+	Tags          []string   `yaml:"tags"`
+	TLSSkipVerify *bool      `yaml:"tls_skip_verify"`
+	Linking       string     `yaml:"linking"`
+	AllowFallback *bool      `yaml:"allow_fallback"`
+	LinkedFolder  StringList `yaml:"linked_folder"`
+	LocalPath     StringList `yaml:"local_path"`
+	RemotePath    StringList `yaml:"remote_path"`
+	// AutomaticManagementPaths enables qBittorrent automatic management when
+	// an unlinked injection's original local save path contains any configured value.
+	AutomaticManagementPaths StringList `yaml:"automatic_management_paths"`
+
+	QbitURL                string   `yaml:"qbit_url"`
+	QbitPort               int      `yaml:"qbit_port"`
+	QbitUser               string   `yaml:"qbit_user"`
+	QbitPass               string   `yaml:"qbit_pass"`
+	QbitCategoryValue      string   `yaml:"qbit_cat"`
+	QbitTag                string   `yaml:"qbit_tag"`
+	QbitTagsValue          []string `yaml:"qbit_tags"`
+	QbitCrossCategory      string   `yaml:"qbit_cross_cat"`
+	QbitCrossTag           string   `yaml:"qbit_cross_tag"`
+	UseTrackerAsTag        bool     `yaml:"use_tracker_as_tag"`
+	VerifyWebUICertificate *bool    `yaml:"verify_webui_certificate"`
+}
+
+func (c TorrentClientConfig) MarshalJSON() ([]byte, error) {
+	payload := torrentClientConfigJSONMap(c)
+	data, err := json.Marshal(payload)
+	if err != nil {
+		return nil, fmt.Errorf("config: marshal torrent client config: %w", err)
+	}
+	return data, nil
+}
+
+func (c TorrentClientConfig) MarshalYAML() (any, error) {
+	return torrentClientConfigYAMLMap(c), nil
+}
+
+func torrentClientConfigJSONMap(c TorrentClientConfig) map[string]any {
+	out := map[string]any{}
+	addString := func(key string, value string) {
+		if trimmed := strings.TrimSpace(value); trimmed != "" {
+			out[key] = trimmed
+		}
+	}
+	addStringList := func(key string, values StringList) {
+		if items := nonEmptyStrings(values); len(items) > 0 {
+			out[key] = items
+		}
+	}
+
+	clientType := c.ClientType()
+	addString("Type", clientType)
+	if strings.EqualFold(clientType, "watch") {
+		addString("WatchFolder", c.WatchFolder)
+		addString("StorageDir", c.StorageDir)
+	}
+	addString("QuiProxyURL", c.QuiProxyURL)
+	if strings.TrimSpace(c.QuiProxyURL) == "" {
+		addString("QbitURL", firstNonEmpty(c.QbitURL, c.URL))
+		if c.QbitPort != 0 {
+			out["QbitPort"] = c.QbitPort
+		}
+		addString("QbitUser", c.QbitUsername())
+		addString("QbitPass", c.QbitPassword())
+	}
+	addString("QbitCategoryValue", c.QbitCategory())
+	addString("QbitTag", c.QbitTags())
+	addString("QbitCrossCategory", c.QbitCrossCategory)
+	addString("QbitCrossTag", c.QbitCrossTag)
+	if c.UseTrackerAsTag {
+		out["UseTrackerAsTag"] = c.UseTrackerAsTag
+	}
+	addString("Linking", c.LinkingMode())
+	if c.AllowFallback != nil {
+		out["AllowFallback"] = *c.AllowFallback
+	}
+	addStringList("LinkedFolder", c.LinkedFolder)
+	addStringList("LocalPath", c.LocalPath)
+	addStringList("RemotePath", c.RemotePath)
+	addStringList("AutomaticManagementPaths", c.AutomaticManagementPaths)
+	if c.VerifyWebUICertificate != nil {
+		out["VerifyWebUICertificate"] = *c.VerifyWebUICertificate
+	}
+
+	return out
+}
+
+func torrentClientConfigYAMLMap(c TorrentClientConfig) map[string]any {
+	out := map[string]any{}
+	addString := func(key string, value string) {
+		if trimmed := strings.TrimSpace(value); trimmed != "" {
+			out[key] = trimmed
+		}
+	}
+	addStringList := func(key string, values StringList) {
+		if items := nonEmptyStrings(values); len(items) > 0 {
+			out[key] = items
+		}
+	}
+
+	clientType := c.ClientType()
+	addString("type", clientType)
+	if strings.EqualFold(clientType, "watch") {
+		addString("watch_folder", c.WatchFolder)
+		addString("torrent_storage_dir", c.StorageDir)
+	}
+	addString("qui_proxy_url", c.QuiProxyURL)
+	if strings.TrimSpace(c.QuiProxyURL) == "" {
+		addString("qbit_url", firstNonEmpty(c.QbitURL, c.URL))
+		if c.QbitPort != 0 {
+			out["qbit_port"] = c.QbitPort
+		}
+		addString("qbit_user", c.QbitUsername())
+		addString("qbit_pass", c.QbitPassword())
+	}
+	addString("qbit_cat", c.QbitCategory())
+	addString("qbit_tag", c.QbitTags())
+	addString("qbit_cross_cat", c.QbitCrossCategory)
+	addString("qbit_cross_tag", c.QbitCrossTag)
+	if c.UseTrackerAsTag {
+		out["use_tracker_as_tag"] = c.UseTrackerAsTag
+	}
+	addString("linking", c.LinkingMode())
+	if c.AllowFallback != nil {
+		out["allow_fallback"] = *c.AllowFallback
+	}
+	addStringList("linked_folder", c.LinkedFolder)
+	addStringList("local_path", c.LocalPath)
+	addStringList("remote_path", c.RemotePath)
+	addStringList("automatic_management_paths", c.AutomaticManagementPaths)
+	if c.VerifyWebUICertificate != nil {
+		out["verify_webui_certificate"] = *c.VerifyWebUICertificate
+	}
+
+	return out
+}
+
+// Validate checks the loaded configuration values needed before runtime
+// services can safely start or save settings. An empty TMDBAPI is valid and
+// leaves TMDB enrichment disabled.
+func (c Config) Validate() error {
+	if c.MainSettings.InputHistoryLimit < 0 {
+		return errors.New("config: main_settings.input_history_limit must be zero or greater")
+	}
+	if c.ScreenshotHandling.Screens <= 0 {
+		return errors.New("config: screenshot_handling.screens must be greater than zero")
+	}
+	if c.ScreenshotHandling.MaxMenuItems < 0 {
+		return errors.New("config: screenshot_handling.max_menu_items must be zero or greater")
+	}
+	if c.ScreenshotHandling.MaxMenuItems > MaxDVDMenuItems {
+		return fmt.Errorf("config: screenshot_handling.max_menu_items must not exceed %d", MaxDVDMenuItems)
+	}
+	if c.ScreenshotHandling.FFmpegCompression < 0 || c.ScreenshotHandling.FFmpegCompression > 9 {
+		return errors.New("config: screenshot_handling.ffmpeg_compression must be between 0 and 9")
+	}
+	if c.PostUpload.MaxConcurrentTrackers < 0 {
+		return errors.New("config: post_upload.max_concurrent_tracker_uploads must be zero or greater")
+	}
+	if c.Logging.FileEnabled {
+		if c.Logging.MaxTotalSizeMB <= 0 {
+			return errors.New("config: logging.max_total_size_mb must be greater than zero")
+		}
+		if c.Logging.MaxFiles <= 0 {
+			return errors.New("config: logging.max_files must be greater than zero")
+		}
+	}
+
+	for name, client := range c.TorrentClients {
+		clientType := strings.TrimSpace(client.ClientType())
+		switch {
+		case strings.EqualFold(clientType, "watch"):
+			if strings.TrimSpace(client.WatchFolder) == "" {
+				return fmt.Errorf("config: torrent_clients.%s.watch_folder is required", name)
+			}
+		case strings.EqualFold(clientType, "qbit"), strings.EqualFold(clientType, "qbittorrent"):
+			if strings.TrimSpace(client.QbitHost()) == "" {
+				return fmt.Errorf("config: torrent_clients.%s.url or qbit_url is required", name)
+			}
+			if !client.UsesQuiProxy() {
+				if strings.TrimSpace(client.QbitUsername()) == "" {
+					return fmt.Errorf("config: torrent_clients.%s.username or qbit_user is required", name)
+				}
+				if strings.TrimSpace(client.QbitPassword()) == "" {
+					return fmt.Errorf("config: torrent_clients.%s.password or qbit_pass is required", name)
+				}
+			}
+			switch strings.ToLower(strings.TrimSpace(client.Linking)) {
+			case "", "none", "disabled", "symlink", "hardlink", "reflink":
+			default:
+				return fmt.Errorf("config: torrent_clients.%s.linking must be symlink, hardlink, reflink, or empty", name)
+			}
+			linkMode := strings.ToLower(strings.TrimSpace(client.Linking))
+			if linkMode == "symlink" || linkMode == "hardlink" || linkMode == "reflink" {
+				if len(nonEmptyStrings(client.LinkedFolder)) == 0 {
+					return fmt.Errorf("config: torrent_clients.%s.linked_folder is required when linking is enabled", name)
+				}
+			}
+		case strings.EqualFold(clientType, "qui"):
+			if !client.UsesQuiProxy() {
+				return fmt.Errorf("config: torrent_clients.%s.qui_proxy_url is required", name)
+			}
+		}
+	}
+
+	if err := validateGlobalTorrentClientSelectors(c); err != nil {
+		return err
+	}
+
+	for trackerName, trackerCfg := range c.Trackers.Trackers {
+		torrentClient := strings.TrimSpace(trackerCfg.TorrentClient)
+		if torrentClient != "" {
+			if _, ok := ResolveTorrentClientName(c.TorrentClients, trackerCfg.TorrentClient); !ok {
+				return fmt.Errorf("config: trackers.%s.torrent_client references unknown torrent client %q", trackerName, trackerCfg.TorrentClient)
+			}
+		}
+
+		imageHost := strings.ToLower(strings.TrimSpace(trackerCfg.ImageHost))
+		if imageHost != "" {
+			if !imagehostpolicy.IsUploadHost(imageHost) {
+				return fmt.Errorf("config: trackers.%s.image_host %q is not supported", trackerName, trackerCfg.ImageHost)
+			}
+		}
+	}
+
+	return nil
+}
+
+// validateGlobalTorrentClientSelectors checks the global client selectors that
+// are resolved at search and injection time. This keeps stale global refs from
+// becoming silent runtime skips while preserving blank and "none" sentinels.
+func validateGlobalTorrentClientSelectors(c Config) error {
+	if err := validateGlobalTorrentClientSelector(c.TorrentClients, "client_setup.default_torrent_client", c.ClientSetup.DefaultClient); err != nil {
+		return err
+	}
+	for _, selected := range c.ClientSetup.InjectClients {
+		if err := validateGlobalTorrentClientSelector(c.TorrentClients, "client_setup.injecting_client_list", selected); err != nil {
+			return err
+		}
+	}
+	for _, selected := range c.ClientSetup.SearchClients {
+		if err := validateGlobalTorrentClientSelector(c.TorrentClients, "client_setup.searching_client_list", selected); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// validateGlobalTorrentClientSelector applies the same exact-or-unique-folded
+// lookup rule used by runtime client resolution.
+func validateGlobalTorrentClientSelector(clients map[string]TorrentClientConfig, field string, selected string) error {
+	trimmed := strings.TrimSpace(selected)
+	if trimmed == "" || strings.EqualFold(trimmed, "none") {
+		return nil
+	}
+	if _, ok := ResolveTorrentClientName(clients, selected); !ok {
+		return fmt.Errorf("config: %s references unknown torrent client %q", field, selected)
+	}
+	return nil
+}
+
+// ResolveTorrentClientName resolves a selector to its original map key. A literal
+// map-key match wins; otherwise exactly one trimmed, case-insensitive alias is required.
+func ResolveTorrentClientName(clients map[string]TorrentClientConfig, selected string) (string, bool) {
+	trimmed := strings.TrimSpace(selected)
+	if trimmed == "" {
+		return "", false
+	}
+	if _, ok := clients[selected]; ok {
+		return selected, true
+	}
+
+	match := ""
+	for name := range clients {
+		if strings.EqualFold(strings.TrimSpace(name), trimmed) {
+			if match != "" {
+				return "", false
+			}
+			match = name
+		}
+	}
+	return match, match != ""
+}
+
+// ResolveBTNAPIToken returns the BTN tracker API key from ASCII case variants
+// of "BTN" before falling back to the legacy metadata-level token. Fuzzy or
+// Unicode-equivalent tracker names are not treated as aliases.
+func ResolveBTNAPIToken(cfg Config) string {
+	if token := trackerAPIKeyByName(cfg.Trackers.Trackers, "BTN"); token != "" {
+		return token
+	}
+	token := strings.TrimSpace(cfg.Metadata.BTNAPI)
+	return token
+}
+
+// trackerAPIKeyByName returns an exact tracker token before considering
+// deterministic ASCII-case aliases for the same canonical tracker name.
+func trackerAPIKeyByName(trackers map[string]TrackerConfig, name string) string {
+	if token := trackerAPIKeyForExactName(trackers, name); token != "" {
+		return token
+	}
+	for _, trackerName := range sortedASCIITrackerAliases(trackers, name) {
+		if token := strings.TrimSpace(trackers[trackerName].APIKey); token != "" {
+			return token
+		}
+	}
+	return ""
+}
+
+// trackerAPIKeyForExactName returns the trimmed API key for name without any
+// case folding or alias lookup.
+func trackerAPIKeyForExactName(trackers map[string]TrackerConfig, name string) string {
+	if trackerCfg, ok := trackers[name]; ok {
+		return strings.TrimSpace(trackerCfg.APIKey)
+	}
+	return ""
+}
+
+// TrackerConfigByName returns the exact canonical tracker entry when present,
+// then the first trimmed case-insensitive alias in lexical order.
+func TrackerConfigByName(trackers map[string]TrackerConfig, name string) (TrackerConfig, bool) {
+	canonical := strings.TrimSpace(name)
+	if trackerCfg, ok := trackers[canonical]; ok {
+		return trackerCfg, true
+	}
+	aliases := make([]string, 0, 1)
+	for trackerName := range trackers {
+		if strings.EqualFold(strings.TrimSpace(trackerName), canonical) {
+			aliases = append(aliases, trackerName)
+		}
+	}
+	if len(aliases) == 0 {
+		return TrackerConfig{}, false
+	}
+	sort.Strings(aliases)
+	return trackers[aliases[0]], true
+}
+
+// MergeMissingTrackerDefaults backfills tracker stubs from the embedded example
+// config so older saved configs can discover newly added trackers in the WebUI.
+// Existing exact tracker names are preserved; ASCII case variants of "BTN" are
+// treated as the BTN entry so default backfill and legacy metadata tokens do not
+// create a duplicate canonical "BTN" entry.
+// CZT keeps user credentials in Passkey only, so stale URL, APIKey, and
+// AnnounceURL values are removed while preserving the passkey.
+// Legacy Metadata.BTNAPI is moved into the BTN tracker APIKey when needed, then
+// cleared once a tracker token is available. Legacy RF image-host settings are
+// moved into the global image-hosting section.
+// The returned flag reports whether cfg was modified.
+func MergeMissingTrackerDefaults(cfg *Config) (bool, error) {
+	report, err := MergeMissingTrackerDefaultsWithReport(cfg)
+	return report.Changed, err
+}
+
+// TrackerDefaultsMergeReport describes semantic tracker-default changes made by
+// [MergeMissingTrackerDefaultsWithReport]. Changed reports whether cfg was
+// modified; ChangedSections contains sorted JSON root section names to persist,
+// including Metadata when a legacy metadata BTN token is cleared.
+type TrackerDefaultsMergeReport struct {
+	Changed         bool
+	ChangedSections []string
+}
+
+func (r *TrackerDefaultsMergeReport) markChanged(section string) {
+	r.Changed = true
+	if section != "" {
+		r.ChangedSections = append(r.ChangedSections, section)
+	}
+}
+
+// MergeMissingTrackerDefaultsWithReport backfills semantic tracker defaults and
+// reports the root sections that should be persisted. It may initialize nil
+// tracker maps for runtime use without marking cfg changed. Legacy
+// Metadata.BTNAPI is copied to the BTN tracker before Metadata is marked for
+// clearing so callers can persist both affected sections together.
+func MergeMissingTrackerDefaultsWithReport(cfg *Config) (TrackerDefaultsMergeReport, error) {
+	var report TrackerDefaultsMergeReport
+	if cfg == nil {
+		return report, nil
+	}
+	if cfg.Trackers.Trackers == nil {
+		cfg.Trackers.Trackers = map[string]TrackerConfig{}
+	}
+	if cfg.Trackers.DefaultTrackers == nil {
+		cfg.Trackers.DefaultTrackers = CSVList{}
+	}
+	imageHostingChanged, trackersChanged := migrateLegacyReelflixImageHosting(cfg)
+	if imageHostingChanged {
+		report.markChanged("ImageHosting")
+	}
+	if trackersChanged {
+		report.markChanged("Trackers")
+	}
+	defaults, err := loadEmbeddedDefaultTemplate()
+	if err != nil || defaults == nil || len(defaults.Trackers.Trackers) == 0 {
+		if err != nil {
+			return report, fmt.Errorf("load embedded tracker defaults: %w", err)
+		}
+		return report, errors.New("load embedded tracker defaults: embedded default trackers missing")
+	}
+	for trackerName, trackerCfg := range defaults.Trackers.Trackers {
+		existingName, existing, ok := trackerDefaultMergeEntry(cfg.Trackers.Trackers, trackerName)
+		if !ok {
+			cfg.Trackers.Trackers[trackerName] = cloneEmbeddedTrackerConfig(trackerCfg)
+			report.markChanged("Trackers")
+			continue
+		}
+		if asciiEqualFold(trackerName, "CZT") {
+			if strings.TrimSpace(existing.APIKey) != "" || strings.TrimSpace(existing.AnnounceURL) != "" {
+				existing.APIKey = ""
+				existing.AnnounceURL = ""
+				cfg.Trackers.Trackers[existingName] = existing
+				report.markChanged("Trackers")
+			}
+			continue
+		}
+	}
+	if token := strings.TrimSpace(cfg.Metadata.BTNAPI); token != "" {
+		if trackerAPIKeyByName(cfg.Trackers.Trackers, "BTN") == "" {
+			btnName := trackerBTNMergeName(cfg.Trackers.Trackers)
+			btnCfg := cfg.Trackers.Trackers[btnName]
+			if strings.TrimSpace(btnCfg.APIKey) == "" {
+				btnCfg.APIKey = token
+				cfg.Trackers.Trackers[btnName] = btnCfg
+				report.markChanged("Trackers")
+			}
+		}
+		if trackerAPIKeyByName(cfg.Trackers.Trackers, "BTN") != "" {
+			cfg.Metadata.BTNAPI = ""
+			report.markChanged("Metadata")
+		}
+	}
+	for trackerName, trackerCfg := range cfg.Trackers.Trackers {
+		if !asciiEqualFold(trackerName, "CZT") {
+			continue
+		}
+		if strings.TrimSpace(trackerCfg.APIKey) == "" && strings.TrimSpace(trackerCfg.AnnounceURL) == "" {
+			continue
+		}
+		trackerCfg.APIKey = ""
+		trackerCfg.AnnounceURL = ""
+		cfg.Trackers.Trackers[trackerName] = trackerCfg
+		report.markChanged("Trackers")
+	}
+	report.ChangedSections = sortedUniqueStrings(report.ChangedSections)
+	return report, nil
+}
+
+func migrateLegacyReelflixImageHosting(cfg *Config) (bool, bool) {
+	if cfg == nil || len(cfg.Trackers.Trackers) == 0 {
+		return false, false
+	}
+	name, trackerCfg, ok := trackerDefaultMergeEntry(cfg.Trackers.Trackers, "RF")
+	if !ok {
+		return false, false
+	}
+
+	imageHostingChanged := false
+	if strings.TrimSpace(cfg.ImageHosting.ReelflixAPI) == "" && strings.TrimSpace(trackerCfg.ImgAPI) != "" {
+		cfg.ImageHosting.ReelflixAPI = trackerCfg.ImgAPI
+		imageHostingChanged = true
+	}
+	if !cfg.ImageHosting.ReelflixEnabled && strings.EqualFold(strings.TrimSpace(trackerCfg.ImageHost), "reelflix") {
+		cfg.ImageHosting.ReelflixEnabled = true
+		imageHostingChanged = true
+	}
+
+	trackersChanged := false
+	if trackerCfg.ImgAPI != "" {
+		trackerCfg.ImgAPI = ""
+		trackersChanged = true
+	}
+	if strings.EqualFold(strings.TrimSpace(trackerCfg.ImageHost), "reelflix") {
+		trackerCfg.ImageHost = ""
+		trackersChanged = true
+	}
+	if trackersChanged {
+		cfg.Trackers.Trackers[name] = trackerCfg
+	}
+	return imageHostingChanged, trackersChanged
+}
+
+// trackerDefaultMergeEntry returns the exact tracker entry when present, then
+// the first ASCII-case alias in sorted order.
+func trackerDefaultMergeEntry(trackers map[string]TrackerConfig, name string) (string, TrackerConfig, bool) {
+	if trackerCfg, ok := trackers[name]; ok {
+		return name, trackerCfg, true
+	}
+	aliases := sortedASCIITrackerAliases(trackers, name)
+	if len(aliases) > 0 {
+		trackerName := aliases[0]
+		return trackerName, trackers[trackerName], true
+	}
+	return "", TrackerConfig{}, false
+}
+
+// trackerBTNMergeName selects the tracker map key that should receive a legacy
+// metadata BTN token during default backfill.
+func trackerBTNMergeName(trackers map[string]TrackerConfig) string {
+	if _, ok := trackers["BTN"]; ok {
+		return "BTN"
+	}
+	aliases := sortedASCIITrackerAliases(trackers, "BTN")
+	if len(aliases) > 0 {
+		return aliases[0]
+	}
+	return "BTN"
+}
+
+// sortedASCIITrackerAliases returns non-exact tracker keys that match name
+// under ASCII-only case folding.
+func sortedASCIITrackerAliases(trackers map[string]TrackerConfig, name string) []string {
+	aliases := make([]string, 0, len(trackers))
+	for trackerName := range trackers {
+		if trackerName != name && asciiEqualFold(trackerName, name) {
+			aliases = append(aliases, trackerName)
+		}
+	}
+	sort.Strings(aliases)
+	return aliases
+}
+
+// asciiEqualFold compares fixed tracker names using ASCII-only case folding so
+// Unicode-equivalent names are not treated as tracker aliases.
+func asciiEqualFold(value string, target string) bool {
+	if len(value) != len(target) {
+		return false
+	}
+	for i := 0; i < len(value); i++ {
+		left := value[i]
+		right := target[i]
+		if 'A' <= left && left <= 'Z' {
+			left += 'a' - 'A'
+		}
+		if 'A' <= right && right <= 'Z' {
+			right += 'a' - 'A'
+		}
+		if left != right {
+			return false
+		}
+	}
+	return true
+}
+
+// QbitHost returns QuiProxyURL when set; otherwise it resolves QbitURL before
+// legacy URL, adds an http scheme when absent, and applies QbitPort when the
+// URL has no explicit port.
+func (c TorrentClientConfig) QbitHost() string {
+	if strings.TrimSpace(c.QuiProxyURL) != "" {
+		host := strings.TrimSpace(c.QuiProxyURL)
+		if !strings.Contains(host, "://") {
+			host = "http://" + host
+		}
+		return host
+	}
+	host := strings.TrimSpace(c.QbitURL)
+	if host == "" {
+		host = strings.TrimSpace(c.URL)
+	}
+	if host == "" {
+		return ""
+	}
+	if !strings.Contains(host, "://") {
+		host = "http://" + host
+	}
+	parsed, err := url.Parse(host)
+	if err != nil {
+		return host
+	}
+	if c.QbitPort != 0 && parsed.Port() == "" {
+		parsed.Host = net.JoinHostPort(parsed.Hostname(), strconv.Itoa(c.QbitPort))
+	}
+	return parsed.String()
+}
+
+// ClientType resolves Type before legacy TorrentClient and defaults to "qbit".
+func (c TorrentClientConfig) ClientType() string {
+	if strings.TrimSpace(c.Type) != "" {
+		return strings.TrimSpace(c.Type)
+	}
+	if strings.TrimSpace(c.TorrentClient) != "" {
+		return strings.TrimSpace(c.TorrentClient)
+	}
+	return "qbit"
+}
+
+// QbitUsername resolves QbitUser before legacy Username.
+func (c TorrentClientConfig) QbitUsername() string {
+	if strings.TrimSpace(c.QbitUser) != "" {
+		return strings.TrimSpace(c.QbitUser)
+	}
+	return strings.TrimSpace(c.Username)
+}
+
+// QbitPassword resolves QbitPass before legacy Password.
+func (c TorrentClientConfig) QbitPassword() string {
+	if strings.TrimSpace(c.QbitPass) != "" {
+		return strings.TrimSpace(c.QbitPass)
+	}
+	return strings.TrimSpace(c.Password)
+}
+
+// QbitCategory resolves QbitCategoryValue before legacy Category.
+func (c TorrentClientConfig) QbitCategory() string {
+	if strings.TrimSpace(c.QbitCategoryValue) != "" {
+		return strings.TrimSpace(c.QbitCategoryValue)
+	}
+	return strings.TrimSpace(c.Category)
+}
+
+// QbitTags resolves QbitTag, then QbitTagsValue, then legacy Tags, removing
+// blank slice entries and joining multiple tags with commas.
+func (c TorrentClientConfig) QbitTags() string {
+	if strings.TrimSpace(c.QbitTag) != "" {
+		return strings.TrimSpace(c.QbitTag)
+	}
+	if len(c.QbitTagsValue) > 0 {
+		items := make([]string, 0, len(c.QbitTagsValue))
+		for _, value := range c.QbitTagsValue {
+			trimmed := strings.TrimSpace(value)
+			if trimmed == "" {
+				continue
+			}
+			items = append(items, trimmed)
+		}
+		return strings.Join(items, ",")
+	}
+	if len(c.Tags) > 0 {
+		items := make([]string, 0, len(c.Tags))
+		for _, value := range c.Tags {
+			trimmed := strings.TrimSpace(value)
+			if trimmed == "" {
+				continue
+			}
+			items = append(items, trimmed)
+		}
+		return strings.Join(items, ",")
+	}
+	return ""
+}
+
+// LinkingMode returns a lowercase mode and normalizes "none" or "disabled" to empty.
+func (c TorrentClientConfig) LinkingMode() string {
+	mode := strings.ToLower(strings.TrimSpace(c.Linking))
+	switch mode {
+	case "none", "disabled":
+		return ""
+	default:
+		return mode
+	}
+}
+
+// FallbackAllowed defaults to true when AllowFallback is unset.
+func (c TorrentClientConfig) FallbackAllowed() bool {
+	return c.AllowFallback == nil || *c.AllowFallback
+}
+
+// QbitTLSSkipVerify resolves TLSSkipVerify first, then inverts the legacy
+// VerifyWebUICertificate value, and otherwise defaults to false.
+func (c TorrentClientConfig) QbitTLSSkipVerify() bool {
+	if c.TLSSkipVerify != nil {
+		return *c.TLSSkipVerify
+	}
+	if c.VerifyWebUICertificate != nil {
+		return !*c.VerifyWebUICertificate
+	}
+	return false
+}
+
+// UsesQuiProxy reports whether a non-blank QuiProxyURL is configured.
+func (c TorrentClientConfig) UsesQuiProxy() bool {
+	return strings.TrimSpace(c.QuiProxyURL) != ""
+}
+
+// ResolveTrackerDomain preserves the trimmed tracker identifier in its first
+// result. Domain resolution is no longer performed, so the second result is empty.
+func ResolveTrackerDomain(_ *Config, trackerNameOrDomain string) (string, string) {
+	name := strings.TrimSpace(trackerNameOrDomain)
+	if name == "" {
+		return "", ""
+	}
+	return name, ""
+}
+
+func nonEmptyStrings[S ~[]string](values S) []string {
+	result := make([]string, 0, len(values))
+	for _, value := range values {
+		trimmed := strings.TrimSpace(value)
+		if trimmed == "" {
+			continue
+		}
+		result = append(result, trimmed)
+	}
+	return result
+}
+
+func firstNonEmpty(values ...string) string {
+	for _, value := range values {
+		if trimmed := strings.TrimSpace(value); trimmed != "" {
+			return trimmed
+		}
+	}
+	return ""
+}

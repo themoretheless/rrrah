@@ -1,0 +1,19 @@
+{
+  "method": "Original assignments/classes AST bodies; import replaced solely by byte/int wrap_ord helper; not upstream suite or end-to-end decoder",
+  "source_sha256": "c9fb66a7441a17a4493b9489b3c23b2d4e40178af03f6dde6de0902f804cd4e6",
+  "controls": [
+    {
+      "case": "Split3byte character skip remains2 after consuming remainder and later complete chunk",
+      "observed_skip": 2,
+      "observed_relations": 0
+    },
+    {
+      "case": "DirectSJISconstruction lacks base reset state",
+      "exception": "'SJISContextAnalysis' object has no attribute '_mDone'"
+    },
+    {
+      "case": "Explicit reset followed by empty feed returns normally",
+      "passed": true
+    }
+  ]
+}

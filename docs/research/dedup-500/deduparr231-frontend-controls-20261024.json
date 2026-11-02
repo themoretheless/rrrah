@@ -1,0 +1,52 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "transpiler": "5.9.3",
+  "scope": "Original AST-selected API helper declarations and mutation onSuccess arrows. VM fetch/toast/query invalidation/React element stubs only. No HTTP, mounted React app, browser or actual deletion invoked.",
+  "authored_controls": [
+    {
+      "name": "HTTP200 success=false passes API wrapper without rejection",
+      "passed": true,
+      "observed": {
+        "success": false,
+        "errors": [
+          "fixture failure"
+        ]
+      }
+    },
+    {
+      "name": "HTTP failure rejects",
+      "passed": true,
+      "observed": "API request failed: fixture HTTP failure"
+    },
+    {
+      "name": "startScanMutation uses completion notification for success=false",
+      "passed": true,
+      "observed": {
+        "title": "Scan Complete",
+        "variant": null
+      }
+    },
+    {
+      "name": "deleteMutation uses completion notification for success=false",
+      "passed": true,
+      "observed": {
+        "title": "Deletion Complete",
+        "variant": null
+      }
+    },
+    {
+      "name": "devScanMutation uses completion notification for success=false",
+      "passed": true,
+      "observed": {
+        "title": "Dev Scan Complete",
+        "variant": null
+      }
+    },
+    {
+      "name": "sets_updated=5 displayed as zero existing sets",
+      "passed": true,
+      "observed": "Found 2 duplicate files. 0 new sets, 0 existing sets (5 total)."
+    }
+  ]
+}

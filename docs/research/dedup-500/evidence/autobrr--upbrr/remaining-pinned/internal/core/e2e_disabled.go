@@ -1,0 +1,27 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+//go:build !e2e
+
+package core
+
+import (
+	"context"
+
+	"github.com/autobrr/upbrr/internal/config"
+	"github.com/autobrr/upbrr/internal/releaseworkflow"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func maybeApplyE2EServices(context.Context, *api.ServiceSet, config.Config, api.RepositoryCapabilities, *trackers.Registry, api.Logger) error {
+	return nil
+}
+
+func e2eReleaseWorkflowOptions() []releaseworkflow.Option {
+	return nil
+}
+
+func maybeApplyE2ENamingRegistry(registry *trackers.Registry) (*trackers.Registry, error) {
+	return registry, nil
+}

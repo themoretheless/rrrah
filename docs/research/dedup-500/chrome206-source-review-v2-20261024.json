@@ -1,0 +1,44 @@
+{
+  "index": 206,
+  "repository": "tsiemens/ChromeTabDeduper",
+  "commit": "625591ec7b9390b2aa9845b457db6bb91ecd1473",
+  "whole_file_reads": [
+    {
+      "path": "res/js/eventPage.js",
+      "local": "docs/research/dedup-500/evidence/tsiemens--ChromeTabDeduper/02-eventPage.js",
+      "sha256": "86e4449ae80d3e91e60d104be90cb365d2c61e8c910d5d200829bdeb84b73643"
+    },
+    {
+      "path": "res/js/popup.js",
+      "local": "docs/research/dedup-500/evidence/tsiemens--ChromeTabDeduper/04-popup.js",
+      "sha256": "7c71b5a88f713d7d66a0ebebbe564736520b815d7f3c7813ba94175b444e63f4"
+    },
+    {
+      "path": "test/basic_test.js",
+      "local": "docs/research/dedup-500/evidence/tsiemens--ChromeTabDeduper/05-basic_test.js",
+      "sha256": "105da81618ab03a1465577fd6674e0d35b9803cf4302c9ce83995de5fd811361"
+    },
+    {
+      "path": "res/js/utils.js",
+      "local": "docs/research/dedup-500/evidence/tsiemens--ChromeTabDeduper/remaining-pinned/res/js/utils.js",
+      "sha256": "836a54786cbd647adcb8d976f8008fe4088f662eac96748441bbb45175140894"
+    }
+  ],
+  "whole_file_read_count": 4,
+  "tracked_blob_count": 29,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "tests_run": 0,
+  "decision": "reject-domain",
+  "findings": [
+    "Event page triggers handleTab on many tab/window/storage events;queue/coalescing behavior requires unread utils implementation.",
+    "Popup concatenates tab title/favicon into innerHTML;no escaping visible in this file. Actual extension/browser behavior not executed. Nested click handler uses event.target attribute rather than registered element;child clicks may lack data-tabid,source observation not reproduced.",
+    "Only viewed basic_test.js contains QUnit assert.ok(true),smoke setup only;does not test deduplication or actual Chrome APIs.",
+    "Utils wholly read387 lines and unchanged module executed with synthetic objects/options-provider adapter:4 authored controls pass. Defaults merge http/https and fragments with equal title,keep differing titles;strip title delimiter can merge distinct titles;plain string rule example.com matches exampleXcom because String.match treats it as regex before prefix check. No actual browser actions.",
+    "handleTab only updates duplicate-members badge,does not automatically close tabs. No coalescing/cancellation/generation guard around async queries;actual stale badge race not reproduced. Failed options parse preserves previous field yet initialized becomes true;initial invalid rules may leave undefined field,not yet tested. URL exemptions ignore negate flag here. Domain remains URL/title identity,not file/image equality."
+  ],
+  "remaining": "Core utils,remaining sources/tests/assets and Chrome extension runtime unreviewed.",
+  "previous_audit": "docs/research/dedup-500/chrome206-source-review-v1-20261024.json",
+  "authored_controls_run": 4,
+  "controls": "docs/research/dedup-500/evidence/tsiemens--ChromeTabDeduper/identity-control-results.json"
+}

@@ -1176,6 +1176,39 @@ fn photographic_heif_pq_full_resolution_swap_and_metal() {
     );
 }
 
+#[test]
+#[ignore = "requires actual Metal adapter"]
+fn png_narrow_pq_integer_codes_survive_pressure_swap_and_metal() {
+    let root = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    let cases: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/raster/png-narrow-pq-reference.json"
+    ))
+    .unwrap();
+    for case in cases.as_array().unwrap() {
+        let name = case["name"].as_str().unwrap();
+        let mut request = rrrah_decode::DecodeRequest::new(root.join(name));
+        request.pq_reference_white_nits = Some(100.);
+        let decoded = rrrah_decode::decode_raster(&request).unwrap();
+        assert_eq!((decoded.width(), decoded.height()), (60, 48));
+        let RasterPixels::Rgba32Float(values) = decoded.pixels() else {
+            panic!()
+        };
+        for (index, pixel) in values.chunks_exact(4).enumerate() {
+            let band = (index % 60) / 10;
+            let expected = case["neutral_linear"][band].as_f64().unwrap();
+            for actual in &pixel[..3] {
+                assert!((f64::from(*actual) - expected).abs() <= expected.abs().max(1.) * 1e-5);
+            }
+            assert_eq!(pixel[3], 1.);
+        }
+        drop(decoded);
+        qualify_hdr_still_transport(name);
+        eprintln!(
+            "{name}: all 2880 neutral pixels match Decimal; managed RAM/pressure/cancel/swap; Metal SDR/HDR exact"
+        );
+    }
+}
+
 fn qualify_hdr_still_transport(name: &str) {
     let hlg = name.contains("hlg");
     let gpu = common::qualification_gpu().expect("HDR still transport requires a GPU");
@@ -1291,6 +1324,10 @@ fn qualify_hdr_still_transport(name: &str) {
     let pressure = budget.try_reserve(budget.limit()).unwrap();
     assert!(swap.try_get(&1, || false).is_err());
     drop(pressure);
+    if name.starts_with("png-narrow-pq-") {
+        assert!(swap.try_get(&1, || budget.used() > 0).unwrap().is_none());
+        assert_eq!(budget.used(), 0);
+    }
     let restored = swap.try_get(&1, || false).unwrap().unwrap();
     assert_eq!(restored.color_space(), &RasterColorSpace::LinearSrgb);
     assert_eq!((restored.width(), restored.height()), extent);
@@ -2220,4 +2257,136 @@ fn adopted_neutral_metadata_survives_v4_swap_pressure_and_metal() {
     eprintln!(
         "Adopted neutral metadata: cases=2; independent full matrix; V4 pressure/cancel/retry; Metal SDR/HDR exact; root=0"
     );
+}
+
+#[test]
+#[ignore = "requires actual Metal adapter"]
+fn png_narrow_pq_chromatic_alpha_matches_independent_matrix_and_metal() {
+    let gpu = common::qualification_gpu().expect("required Metal adapter");
+    eprintln!("Narrow PQ chromatic alpha: {}", gpu.adapter_name());
+    let cases: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/raster/png-narrow-pq-chromatic-reference.json"
+    ))
+    .unwrap();
+    let fixtures = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/raster");
+    for case in cases.as_array().unwrap() {
+        let name = case["name"].as_str().unwrap();
+        let root = rrrah_core::MemoryBudget::new(512 * 1024);
+        let mut request = rrrah_decode::DecodeRequest::new(fixtures.join(name));
+        request.memory_budget = Some(root.clone());
+        request.pq_reference_white_nits = Some(100.);
+        let source = rrrah_decode::decode_raster(&request).unwrap();
+        let expected: Vec<f32> = (0..64 * 48)
+            .flat_map(|index| {
+                let cell = (index / 64 / 12) * 4 + (index % 64 / 16);
+                case["cells"][cell]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .map(|v| v.as_f64().unwrap() as f32)
+            })
+            .collect();
+        let RasterPixels::Rgba32Float(actual) = source.pixels() else {
+            panic!()
+        };
+        for (a, b) in actual.iter().zip(&expected) {
+            assert!((a - b).abs() <= b.abs().max(1.) * 0.000001, "{name}: {a} != {b}");
+        }
+        let bits: Vec<_> = actual.iter().map(|v| v.to_bits()).collect();
+        let golden = DecodedRaster::new(
+            64,
+            48,
+            RasterPixels::Rgba32Float(Arc::new(expected).into()),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        let parameters = ViewParameters {
+            viewport: [64., 48.],
+            zoom: 3.,
+            ..ViewParameters::default()
+        };
+        let sdr = gpu.render_raster(&source, parameters, [64, 48]);
+        let hdr = gpu.render_raster_half(&source, parameters, [64, 48]);
+        assert_eq!(
+            sdr.pixels,
+            gpu.render_raster(&golden, parameters, [64, 48]).pixels
+        );
+        assert_eq!(hdr, gpu.render_raster_half(&golden, parameters, [64, 48]));
+        let half = |v: u16| {
+            let sign = if v & 0x8000 == 0 { 1. } else { -1. };
+            let exponent = (v >> 10) & 31;
+            assert_ne!(exponent, 31);
+            sign * if exponent == 0 {
+                f64::from(v & 1023) * 2f64.powi(-24)
+            } else {
+                f64::from(1024 + (v & 1023)) * 2f64.powi(i32::from(exponent) - 25)
+            }
+        };
+        // Interior samples avoid band-edge texture filtering. Composition is
+        // independently checked, including fully transparent colored storage.
+        for row in 0..4 {
+            for column in 0..4 {
+                let at = ((row * 12 + 6) * 64 + column * 16 + 8) * 4;
+                let cell = &case["cells"][row * 4 + column];
+                let alpha = cell[3].as_f64().unwrap();
+                for channel in 0..3 {
+                    let wanted = cell[channel].as_f64().unwrap() * alpha + 0.018 * (1. - alpha);
+                    assert!(
+                        (half(hdr[at + channel]) - wanted).abs() <= wanted.abs().max(0.02) * 0.002,
+                        "{name}: row={row} column={column} channel={channel}"
+                    );
+                }
+                assert_eq!(hdr[at + 3], 0x3c00);
+            }
+        }
+        let weight = source.capacity_bytes();
+        let directory = tempfile::tempdir().unwrap();
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(1024 * 1024),
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            rrrah_core::MemoryBudget::new(weight),
+            root.clone(),
+        )
+        .unwrap();
+        let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(weight));
+        ram.enable_swap(swap);
+        assert!(ram.insert_visible(1, source));
+        let lease = ram.get_lease(&1).unwrap();
+        assert!(!ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        drop(lease);
+        ram.mark_visible(2);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        let swap = ram.swap().unwrap();
+        swap.wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        let pressure = root.try_reserve(root.limit()).unwrap();
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(pressure);
+        assert!(swap.try_get(&1, || root.used() > 0).unwrap().is_none());
+        assert_eq!(root.used(), 0);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        let RasterPixels::Rgba32Float(actual) = restored.pixels() else {
+            panic!()
+        };
+        assert_eq!(actual.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), bits);
+        assert_eq!(
+            gpu.render_raster(&restored, parameters, [64, 48]).pixels,
+            sdr.pixels
+        );
+        assert_eq!(gpu.render_raster_half(&restored, parameters, [64, 48]), hdr);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+        assert_eq!(
+            (swap.stats().reads, swap.stats().writes, swap.stats().errors),
+            (1, 1, 0)
+        );
+        eprintln!(
+            "{name}: 3072 independent colored/alpha pixels; 16 analytical HDR composition interiors; RAM/swap/pressure/cancel; SDR/HDR Metal exact; root=0"
+        );
+    }
 }

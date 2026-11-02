@@ -1,0 +1,34 @@
+{
+  "repository": "hunhee98/pluck",
+  "commit": "06e19ad0bc5a17d2b405add257063c4d84732954",
+  "whole_files_read": [
+    {
+      "path": "crates/pluck-mcp/src/session.rs",
+      "local": "deep-session.rs",
+      "git_blob": "6adb17f608ad0a2b7ae4d5032594cebc41d52149",
+      "sha256": "797ac6452e9d3b8000ef8fc32d27979f0d50585729d150626b0c1bd4cedb2e67",
+      "whole_text_read": true
+    },
+    {
+      "path": "crates/pluck-mcp/benches/session_dedup.rs",
+      "local": "02-session_dedup.rs",
+      "git_blob": "9f0ada97a7584c21ffb19dc269a6d8a2bf4d718f",
+      "sha256": "e5067726f785ac2743a154aa263a2e716cb3ab07303e4fbf0926f72dd5b1e42a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 2,
+  "tracked_blobs": 203,
+  "whole_repo_complete": false,
+  "original_tests_passed": 3,
+  "authored_controls": 0,
+  "execution": "Unchanged original session.rs compiled using rustc --edition=2024 --test;no server/dependency graph execution",
+  "server_review": "Selected search and symbol lookup blocks only;1973-line server not whole-read",
+  "findings": [
+    "SessionState stores u64 chunk IDs and reset only;does not compare file bytes or image features.",
+    "Benchmark counts tokens on deterministic generated fixture;lossless claim not independently qualified for real context eviction,compact-to-full requests or delivery failure.",
+    "Search source marks fresh IDs before response rendering;end-to-end consequences untested."
+  ],
+  "decision": "reject-domain",
+  "production_adoption": false
+}

@@ -1,0 +1,40 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-gpu v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-gpu)
+    Finished `test` profile [optimized + debuginfo] target(s) in 4.55s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-72191398ce43797e)
+
+running 1 test
+test edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline ... FAILED
+
+failures:
+
+---- edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline stdout ----
+
+thread 'edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline' (43488471) panicked at crates/rrrah-gpu/src/edit_panel.rs:210:9:
+assertion `left == right` failed
+  left: 56.0
+ right: 184.0
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-gpu --lib`

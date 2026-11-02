@@ -1,0 +1,180 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package metadata
+
+import (
+	"strings"
+
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+
+	"github.com/autobrr/rls"
+	"github.com/autobrr/rls/taginfo"
+
+	"github.com/autobrr/upbrr/internal/metadata/metautil"
+	"github.com/autobrr/upbrr/internal/metadata/seasonep"
+	pathutil "github.com/autobrr/upbrr/internal/pathing"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+var releaseMarkerParser = rls.NewTagParser(taginfo.All(map[string][]*taginfo.Taginfo{
+	"other": {
+		taginfo.Must("FANRES", "FANRES", "fanres", "", "", ""),
+		taginfo.Must("Regraded", "Regraded", "regraded", "", "", ""),
+		taginfo.Must("Incomplete", "Incomplete", "incomplete", "", "", ""),
+		taginfo.Must("UPSCL", "UPSCL", "upscl", "", "", ""),
+		taginfo.Must("UPSUHD", "UPSUHD", "upsuhd", "", "", ""),
+		taginfo.Must("MIC", "MIC", "mic", "", "", ""),
+		taginfo.Must("AI Remaster", "AI Remaster", "ai[\\-\\._ ]remaster(?:ed)?", "", "", ""),
+	},
+}), rls.DefaultLexers()...)
+
+var releaseMarkerOther = map[string]struct{}{
+	"FANRES":      {},
+	"Regraded":    {},
+	"Incomplete":  {},
+	"UPSCL":       {},
+	"UPSUHD":      {},
+	"MIC":         {},
+	"AI Remaster": {},
+}
+
+// ParseReleaseInfo parses the host-path basename into detached release fields.
+// It derives the release format separately from the movie/TV category and fills
+// missing season or episode values from the basename fallback parser. Season
+// tokens require two or four digits; x-separated pairs are not episodic evidence.
+func ParseReleaseInfo(path string) api.ReleaseInfo {
+	trimmed := strings.TrimSpace(path)
+	if trimmed == "" {
+		return api.ReleaseInfo{}
+	}
+
+	base := pathutil.Base(trimmed)
+	if base == "." || base == "/" || base == "" {
+		return api.ReleaseInfo{}
+	}
+
+	release := metautil.ParseReleaseTokens(base)
+	other := append([]string{}, release.Other...)
+	other = append(other, parsedReleaseMarkers(base)...)
+	typeValue := parsedReleaseType(base, release.Source, release.Other, release.Codec)
+	sourceValue := parsedReleaseSource(base, release.Source, typeValue)
+	groupValue := parsedReleaseGroup(base, release.Group, release.Site)
+	season := release.Series
+	episode := release.Episode
+	if season == 0 || episode == 0 {
+		extracted := seasonep.Extract(base, preparationstate.State{})
+		if season == 0 {
+			season = extracted.Season
+		}
+		if episode == 0 {
+			episode = extracted.Episode
+		}
+	}
+
+	// Category and Type intentionally come from different sources: Category uses
+	// source context with an RLS fallback, while Type is the derived
+	// release format (for example WEBDL, REMUX, or ENCODE) used elsewhere.
+	return api.ReleaseInfo{
+		Category:   detectedSourceCategory(trimmed, metautil.ReleaseCategoryFromRLS(release.Type.String())),
+		Type:       typeValue,
+		Artist:     release.Artist,
+		Title:      release.Title,
+		Subtitle:   release.Subtitle,
+		Alt:        release.Alt,
+		Year:       release.Year,
+		Month:      release.Month,
+		Day:        release.Day,
+		Version:    release.Version,
+		Source:     sourceValue,
+		Resolution: release.Resolution,
+		Codec:      append([]string{}, release.Codec...),
+		Audio:      append([]string{}, release.Audio...),
+		HDR:        append([]string{}, release.HDR...),
+		Ext:        release.Ext,
+		Language:   append([]string{}, release.Language...),
+		Site:       release.Site,
+		Genre:      release.Genre,
+		Channels:   release.Channels,
+		Collection: release.Collection,
+		Region:     release.Region,
+		Size:       release.Size,
+		Group:      groupValue,
+		Disc:       release.Disc,
+		Season:     season,
+		Episode:    episode,
+		Cut:        append([]string{}, release.Cut...),
+		Edition:    append([]string{}, release.Edition...),
+		Other:      other,
+	}
+}
+
+func parsedReleaseMarkers(base string) []string {
+	parsed := releaseMarkerParser.ParseRelease([]byte(base))
+	markers := make([]string, 0)
+	technicalPosition := false
+	for _, tag := range parsed.Tags() {
+		if tag.Is(rls.TagTypeSource, rls.TagTypeResolution) {
+			technicalPosition = true
+			continue
+		}
+		if !tag.Is(rls.TagTypeOther) {
+			continue
+		}
+		marker := tag.Other()
+		if _, ok := releaseMarkerOther[marker]; ok && technicalPosition {
+			markers = append(markers, marker)
+		}
+	}
+	return markers
+}
+
+func parsedReleaseType(base string, source string, other []string, codec []string) string {
+	if inferred := webReleaseTypeFromSignals("", source, base); inferred != "" {
+		return inferred
+	}
+	for _, value := range other {
+		if strings.EqualFold(strings.TrimSpace(value), "REMUX") {
+			return "REMUX"
+		}
+	}
+	for _, value := range codec {
+		switch strings.ToUpper(strings.TrimSpace(value)) {
+		case "X264", "X265", "XVID", "DIVX":
+			return "ENCODE"
+		}
+	}
+	return inferReleaseTypeFromName(base)
+}
+
+func parsedReleaseSource(base string, source string, typeValue string) string {
+	trimmed := strings.TrimSpace(source)
+	if trimmed == "" {
+		trimmed = inferReleaseSourceFromName(base, typeValue)
+	}
+	switch normalizeReleaseType(typeValue) {
+	case "WEBDL", "WEBRIP":
+		return "Web"
+	}
+	if strings.EqualFold(trimmed, "Ultra HDTV") {
+		return "UHDTV"
+	}
+	return trimmed
+}
+
+// parsedReleaseGroup preserves explicit parser groups and treats a leading
+// bracket site token as the group when no explicit suffix group was parsed.
+func parsedReleaseGroup(base string, group string, site string) string {
+	trimmedGroup := strings.TrimSpace(group)
+	if trimmedGroup != "" {
+		return trimmedGroup
+	}
+	trimmedSite := strings.TrimSpace(site)
+	if trimmedSite == "" {
+		return ""
+	}
+	if !strings.HasPrefix(strings.TrimSpace(base), "["+trimmedSite+"]") {
+		return ""
+	}
+	return trimmedSite
+}

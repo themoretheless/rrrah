@@ -1,0 +1,43 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v9-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "f1ea927d4178bd8213bd53094220de6b65068a63",
+      "sha256": "308c8be80b87217cc426fa5469c5e3ab263d504c2f285d9e8fda0cdc917271aa",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/benchmark/compare.ts",
+      "local": "06-compare.ts",
+      "git_blob": "aa50504e889e40a2f5d054f0f7faf6c8d1ae200c",
+      "sha256": "d6aa7759fde6a5ccfafd8e37affb7bb8080b453fff1c0ddb56b17d35b188fd6c",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/benchmark/format-compare.ts",
+      "local": "07-format-compare.ts",
+      "git_blob": "3065ea8d2086c38767e216b1d8f46f97e99f389d",
+      "sha256": "1ea67d862803b72408076e33e58196641a211cd341af6da9ae2da7cae388e0fc",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 24,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 116,
+  "authored_upstream_controls_total_distinct": 23,
+  "new_original_tests_run": 0,
+  "local_library_qualification": "docs/research/dedup-500/local-exact-sipcode120-path-qualification-20261024.json",
+  "findings": [
+    "Local rrrah exactpathidentity regression passes forliteralPOSIXbackslash vsseparator;no productionalgorithmfixneededforobservedcase.",
+    "Benchmark comparison takes suppliedsummarymedian androundsdelta before2pp threshold;doesnot itself validateidenticaltasksets orruntime evidence. Source-only.",
+    "Root MIT license whole-read;no upstreamsourceadoption."
+  ],
+  "production_implementation_changes": false,
+  "local_regression_added": true,
+  "native_phash_asan": "deferred"
+}

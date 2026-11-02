@@ -1,0 +1,183 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package api
+
+import (
+	"errors"
+	"reflect"
+	"slices"
+	"testing"
+)
+
+func TestMapPreparationRequestPreservesSingleSourceIntent(t *testing.T) {
+	t.Parallel()
+
+	tmdbID := 123456
+	category := "TV"
+	releaseType := "episode"
+	tag := "GRP"
+	distributor := "Example Distributor"
+	personalRelease := false
+	omitEpisodeTitle := true
+	omitDistributor := true
+	client := "qbit"
+	forceRecheck := false
+	request := Request{
+		SourcePath: "  Example.Release.2026.mkv  ",
+		Options: UploadOptions{
+			KeepFolder:      true,
+			KeepImages:      true,
+			OnlyID:          true,
+			SkipAutoTorrent: true,
+			InteractionMode: InteractionModeInteractive,
+		},
+		ExternalIDOverrides: ExternalIDOverrides{TMDBID: &tmdbID},
+		ReleaseNameOverrides: ReleaseNameOverrides{
+			Category:       &category,
+			Type:           &releaseType,
+			Tag:            &tag,
+			Repack:         new("PROPER"),
+			NoEpisodeTitle: &omitEpisodeTitle,
+			NoDistributor:  &omitDistributor,
+		},
+		MetadataOverrides: MetadataOverrides{
+			Distributor:     &distributor,
+			PersonalRelease: &personalRelease,
+		},
+		SourceLookupURL:    "  https://example.invalid/source  ",
+		TrackerIDOverrides: map[string]string{"btn": "123"},
+		PlaylistInstruction: PlaylistInstruction{
+			Set:      true,
+			Selected: []string{},
+			UseAll:   false,
+		},
+		ClientOverrides: ClientOverrides{
+			Client:       &client,
+			ForceRecheck: &forceRecheck,
+		},
+		ConfirmBDMVRescan: true,
+	}
+
+	input, err := MapPreparationRequest(request, PreparationIntentUpload)
+	if err != nil {
+		t.Fatalf("map preparation request: %v", err)
+	}
+	canonicalCategory := CanonicalCategoryTV
+	expected := PrepareInput{
+		SourcePath: "Example.Release.2026.mkv",
+		Intent:     PreparationIntentUpload,
+		Instructions: ReleaseFactInstructions{
+			Identity: ExternalIDOverrides{TMDBID: new(123456)},
+			Category: &canonicalCategory,
+			ReleaseName: ReleaseNameOverrides{
+				Category:       new("TV"),
+				Type:           new("episode"),
+				Tag:            new("GRP"),
+				Repack:         new("PROPER"),
+				NoEpisodeTitle: new(true),
+				NoDistributor:  new(true),
+			},
+			Metadata:     MetadataOverrides{Distributor: new("Example Distributor"), PersonalRelease: new(false)},
+			SourceLookup: "https://example.invalid/source",
+			Playlist: PlaylistInstruction{
+				Set:      true,
+				Selected: nil,
+				UseAll:   false,
+			},
+			TrackerIDs: map[string]string{"btn": "123"},
+		},
+		Policy: PreparationPolicy{
+			KeepFolder: true,
+			KeepImages: true,
+			OnlyID:     true,
+		},
+		Search: ClientSearchPolicy{Skip: true, Client: new("qbit")},
+		Controls: PreparationControls{
+			Interaction:       InteractionModeInteractive,
+			ConfirmBDMVRescan: true,
+			ForceRecheck:      new(false),
+		},
+	}
+	if !reflect.DeepEqual(input, expected) {
+		t.Fatalf("mapped input = %#v, want %#v", input, expected)
+	}
+
+	*request.ExternalIDOverrides.TMDBID = 999999
+	*request.ReleaseNameOverrides.Tag = "CHANGED"
+	*request.ReleaseNameOverrides.Repack = "REPACK"
+	*request.ReleaseNameOverrides.NoEpisodeTitle = false
+	*request.ReleaseNameOverrides.NoDistributor = false
+	*request.MetadataOverrides.Distributor = "CHANGED"
+	*request.ClientOverrides.Client = "changed"
+	request.TrackerIDOverrides["btn"] = "changed"
+	request.PlaylistInstruction.Selected = append(request.PlaylistInstruction.Selected, "00001.mpls")
+	if !reflect.DeepEqual(input, expected) {
+		t.Fatalf("mapped input aliases request state: %#v", input)
+	}
+}
+
+func TestPrepareInputMappingFieldDispositionIsExplicit(t *testing.T) {
+	t.Parallel()
+
+	assertFieldNames(t, reflect.TypeFor[PrepareInput](), []string{
+		"SourcePath", "VerifiedSource", "Intent", "ExternalFreshness", "Instructions", "Policy", "Search", "Controls", "MetadataRequirements", "Force", "RequirePrepared",
+	})
+	assertFieldNames(t, reflect.TypeFor[ReleaseFactInstructions](), []string{
+		"Identity", "Category", "ReleaseName", "Metadata", "SourceLookup", "BlurayReleaseID", "Playlist", "TrackerIDs",
+	})
+	assertFieldNames(t, reflect.TypeFor[PreparationPolicy](), []string{"KeepFolder", "KeepImages", "OnlyID"})
+	assertFieldNames(t, reflect.TypeFor[ClientSearchPolicy](), []string{"Skip", "Client"})
+	assertFieldNames(t, reflect.TypeFor[PreparationControls](), []string{"Interaction", "ConfirmBDMVRescan", "ForceRecheck"})
+}
+
+func TestMapPreparationRequestRejectsBlankSource(t *testing.T) {
+	t.Parallel()
+
+	_, err := MapPreparationRequest(Request{SourcePath: "  "}, PreparationIntentPreview)
+	if !errors.Is(err, ErrPreparationSourceRequired) {
+		t.Fatalf("error = %v, want ErrPreparationSourceRequired", err)
+	}
+}
+
+func TestMapPreparationRequestClonesCorrectionMetadata(t *testing.T) {
+	t.Parallel()
+
+	title := "Manual title"
+	languages := make([]string, 0, 1)
+	request := Request{
+		SourcePath: "Example.Release.2026.mkv",
+		MetadataOverrides: MetadataOverrides{
+			Title:          &title,
+			AudioLanguages: &languages,
+			TrackLanguages: []TrackLanguageCorrection{{
+				TrackID:             "audio:1",
+				Languages:           []string{"English"},
+				ManifestFingerprint: "scan-1",
+			}},
+		},
+	}
+	input, err := MapPreparationRequest(request, PreparationIntentPreview)
+	if err != nil {
+		t.Fatalf("map preparation request: %v", err)
+	}
+	title = "Changed"
+	languages = append(languages, "Spanish")
+	request.MetadataOverrides.TrackLanguages[0].Languages[0] = "Changed"
+	if input.Instructions.Metadata.Title == nil || *input.Instructions.Metadata.Title != "Manual title" ||
+		input.Instructions.Metadata.AudioLanguages == nil || len(*input.Instructions.Metadata.AudioLanguages) != 0 ||
+		input.Instructions.Metadata.TrackLanguages[0].Languages[0] != "English" {
+		t.Fatalf("mapped correction metadata aliases request: %#v", input.Instructions.Metadata)
+	}
+}
+
+func assertFieldNames(t *testing.T, value reflect.Type, want []string) {
+	t.Helper()
+	got := make([]string, 0, value.NumField())
+	for field := range value.Fields() {
+		got = append(got, field.Name)
+	}
+	if !slices.Equal(got, want) {
+		t.Fatalf("%s fields = %v, want %v", value.Name(), got, want)
+	}
+}

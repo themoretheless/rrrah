@@ -7,7 +7,8 @@ import json
 import os
 from pathlib import Path
 import re
-import subprocess
+import math
+from qualification_command import run_logged
 import tempfile
 
 SD14_SHA = 'c32f247eb372c3e66ad3b433518ec11f898fdc317c8432ebe025b46d4917bcf3'
@@ -49,7 +50,11 @@ def main():
                         help='Preserve generated oracle files in a new directory; refuses an existing directory')
     parser.add_argument('--metal-readback' , action='store_true',
                         help='Require actual Metal full-frame readback against generated linear PPMs')
+    parser.add_argument('--timeout', type=float, default=1800,
+                        help='Deadline in seconds for each complete command tree (default: 1800)')
     args = parser.parse_args()
+    if not math.isfinite(args.timeout) or args.timeout <= 0:
+        parser.error('--timeout must be finite and positive')
     if args.metal_readback and not args.dcraw_source:
         raise SystemExit('--metal-readback requires --dcraw-source')
     if args.sd14_source:
@@ -72,13 +77,7 @@ def main():
     logs = []
 
     def run(command, env=None):
-        result = subprocess.run([str(x) for x in command], cwd=ROOT, env=env,
-                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        logs.append({'command': [str(x) for x in command],
-                     'exit_code': result.returncode, 'output': result.stdout})
-        if result.returncode:
-            raise RuntimeError(result.stdout[-6000:])
-        return result.stdout
+        return run_logged(command, logs, args.timeout, env)
 
     report = {'source_sha256': SOURCE_SHA, 'status': 'running',
               'excluded_camera_checks': ['sigma_sd14_native_sensor_matches_full_independent_unpack'],
@@ -325,7 +324,7 @@ def main():
     except Exception as error:
         report.update(status='failed', error=str(error))
     report['commands'] = logs
-    report['helpers'] = {p.name: sha(p) for p in [Path(__file__),
+    report['helpers'] = {p.name: sha(p) for p in [Path(__file__), ROOT/'scripts'/'qualification_command.py', ROOT/'scripts'/'qualify-viewer-storage-gpu.py',
                          *(ROOT/'scripts'/f'{name}.cpp' for name in ['x3f-channel-oracle','x3f-camf-oracle',
                            'x3f-black-row-reference','x3f-black-smoothing-reference','x3f-sensor-reference','x3f-badpixel-reference','x3f-red-reference','x3f-highlights-reference','x3f-curves-reference','x3f-hue-reference','x3f-transform-reference', 'x3f-pixel-transform-reference', 'x3f-chroma-reference', 'x3f-neutral-reference'])]}
     if args.metal_readback:

@@ -1,0 +1,23 @@
+{
+  "index": 203,
+  "repository": "MIXUULS/yuedu-source-dedupe",
+  "commit": "fc24b76a44a293ec625134a5f9424bd0e4d2ee08",
+  "whole_file_reads": [
+    {
+      "path": "app/src/main/java/com/mina/yuedu/core/DedupeEngine.java",
+      "local": "docs/research/dedup-500/evidence/MIXUULS--yuedu-source-dedupe/02-DedupeEngine.java",
+      "sha256": "8f60143e7c21b0cd3b07dc2b36280f15e5a0c70c735cfe974a3657d6af1d4708"
+    }
+  ],
+  "whole_file_read_count": 1,
+  "tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "decision": "reject-domain",
+  "findings": [
+    "Whole DedupeEngine.java reviewed: URL normalization or name-similarity buckets of reading source records; representative selected by metadata score and original order. No byte/perceptual content observation in this file.",
+    "Representative score rewards preferred name keywords, enabled flag, filled fields, rule completeness, short names and recency. Such preference is product ranking, not evidence files are interchangeable.",
+    "NAME mode inserts groups into one map by normalized first name and ungrouped entries by URL. Potential namespace collision needs NameSimilarity/model contracts and runtime before calling data loss; not reproduced."
+  ],
+  "remaining": "URL normalizer/name grouping/models/tests and remaining tracked files/media not fully reviewed."
+}

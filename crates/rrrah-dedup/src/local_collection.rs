@@ -498,11 +498,18 @@ fn preverify(
         photometric_fit_range: match policy.comparison {
             crate::local_scan::LocalComparisonMode::RangePhotometric { range, .. }
             | crate::local_scan::LocalComparisonMode::DisplayProjection { range, .. } => Some(range),
+            crate::local_scan::LocalComparisonMode::WhiteAnchoredDisplay(_) => {
+                Some(crate::warp::FitSampleRange {
+                    minimum: 0.0,
+                    maximum: 1.0,
+                })
+            }
             _ => None,
         },
         display_projection: matches!(
             policy.comparison,
             crate::local_scan::LocalComparisonMode::DisplayProjection { .. }
+                | crate::local_scan::LocalComparisonMode::WhiteAnchoredDisplay(_)
         ),
         photometric_failure: None,
         filtered: None,

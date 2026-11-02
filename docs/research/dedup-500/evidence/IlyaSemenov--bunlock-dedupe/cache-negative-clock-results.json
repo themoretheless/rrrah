@@ -1,0 +1,10 @@
+{
+  "cases": 3,
+  "passed": 3,
+  "scope": "Original cache body,env-paths throwing adapter,explicit owned temp files/controlled clock,no network.",
+  "checks": [
+    "negative cache caps60s even positiveTTL1800s",
+    "negative respects shorter30sTTL",
+    "clock rollback makes entry stale"
+  ]
+}

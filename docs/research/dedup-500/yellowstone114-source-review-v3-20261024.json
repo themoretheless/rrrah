@@ -1,0 +1,54 @@
+{
+  "repository": "rpcpool/yellowstone-grpc-kafka",
+  "commit": "1daa7fd50461c31a2c6fe5d547bda2c3515620ac",
+  "previous_audit": "docs/research/dedup-500/yellowstone114-source-review-v2-20261024.json",
+  "tracked_blobs": 25,
+  "new_whole_files_read": [
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "git_blob": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 24,
+  "whole_repo_complete": false,
+  "structured_only": [
+    {
+      "path": "Cargo.lock",
+      "local": "24-Cargo.lock",
+      "sha256": "2da30d78ae03497f73a12791bcb634772bb7f9217955befe347d17b67af8cec8",
+      "git_blob": "7baf3df9eae14e62dfc74cc54849b6ba7307d74f",
+      "whole_text_read": false
+    }
+  ],
+  "lock_inspection": {
+    "packages": 474,
+    "registry_packages": 473,
+    "missing_registry_checksum_fields": [],
+    "selected_versions": {
+      "async-trait": "0.1.89",
+      "openssl": "0.10.75",
+      "prost": "0.14.3",
+      "rdkafka": "0.36.2",
+      "rdkafka-sys": "4.10.0+2.12.1",
+      "time": "0.3.44",
+      "tokio": "1.50.0",
+      "tonic": "0.14.5",
+      "yellowstone-grpc-proto": "10.1.1"
+    },
+    "scope": "Parsed complete TOML structure and selected versions; not individual manual review of every package/checksum/dependency edge; no dependency archive fetching or checksum payload verification."
+  },
+  "findings": [
+    "Root license full GNU AGPL version3 text, read all661lines across3 ranges. README selects version3only. No code adoption or compatibility determination.",
+    "Original locked Tokio1.50.0 and async-trait0.1.89 differ from isolated controls Tokio1.53.2/async-trait0.1.92. Both satisfy upstream manifest; controls are not exact-lock qualification."
+  ],
+  "new_tests_run": 0,
+  "remaining": [
+    "Cargo.lock not whole text reviewed",
+    "Upstream locked full crate/MSRV/Kafka/gRPC integration unqualified"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

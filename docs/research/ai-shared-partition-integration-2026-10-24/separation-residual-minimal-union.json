@@ -1,0 +1,73 @@
+{
+  "indices": [
+    139,
+    174,
+    39
+  ],
+  "native_area": 0.0033051410353142577,
+  "exact": {
+    "triangles": 3,
+    "processed": 3,
+    "uncovered_pieces": 5,
+    "peak_pieces": 5,
+    "union_area": 0.0035037910415761375,
+    "union_bits": 4570225614605276352,
+    "exact_numerator": "1448652285840362583761583508226526331895818827681",
+    "exact_denominator": "413452819717440716442425179194527452060393857351680"
+  },
+  "error": -0.00019865000626187977,
+  "attempts": 61,
+  "fixture": "tests/fixtures/geometry/coverage-cell-103.rs",
+  "fixture_sha256": "b2e9c82e93ef503e9bdc6d3526678faba0baaf0fd218755cb6f7de8c8ddd4cbd",
+  "scope": "1-minimal for absolute input-union error > 1e-10 under single-row deletion; not globally minimum",
+  "single_deletion_controls": [
+    {
+      "indices": [
+        174,
+        39
+      ],
+      "exact": {
+        "triangles": 2,
+        "processed": 2,
+        "uncovered_pieces": 5,
+        "peak_pieces": 5,
+        "union_area": 0.002519428857934417,
+        "union_bits": 4567955829945591764,
+        "exact_numerator": "8142530221668046742131430488630233859431017098965",
+        "exact_denominator": "3231895275004429226742264411944902224354733679706112"
+      }
+    },
+    {
+      "indices": [
+        139,
+        39
+      ],
+      "exact": {
+        "triangles": 2,
+        "processed": 2,
+        "uncovered_pieces": 4,
+        "peak_pieces": 4,
+        "union_area": 0.0035037910415761375,
+        "union_bits": 4570225614605276352,
+        "exact_numerator": "1448652285840362583761583508226526331895818827681",
+        "exact_denominator": "413452819717440716442425179194527452060393857351680"
+      }
+    },
+    {
+      "indices": [
+        139,
+        174
+      ],
+      "exact": {
+        "triangles": 2,
+        "processed": 2,
+        "uncovered_pieces": 4,
+        "peak_pieces": 4,
+        "union_area": 0.0011830121899035718,
+        "union_bits": 4563098503674749420,
+        "exact_numerator": "398282480906631862834899825529030192707716581689",
+        "exact_denominator": "336668112387832748464234881919902297179227810693120"
+      }
+    }
+  ]
+}

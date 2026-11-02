@@ -1,0 +1,71 @@
+{
+  "repository": "d3vyce/taskiq-deduplication",
+  "scope": "Original utility and middleware AST with dependency imports omitted, object base and SimpleNamespace message adapter. Original selected pure test class callbacks; no Redis/Taskiq runtime, broker, Lua, pytest or dependency installation.",
+  "authored_controls": [
+    {
+      "name": "default key separates task names",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "same explicit key merges different task names by design",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "tuple and list kwargs serialize to identical fingerprint",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "integer and string object keys serialize to identical fingerprint",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "circular data raises ValueError outside TypeError fallback",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "TTL zero accepted",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "TTL negative accepted",
+      "passed": true,
+      "observed": null
+    },
+    {
+      "name": "one second TTL uses one second default heartbeat interval",
+      "passed": true,
+      "observed": null
+    }
+  ],
+  "original_pure_callbacks": [
+    "test_arg_order_matters",
+    "test_different_args_different_key",
+    "test_different_kwargs_different_key",
+    "test_different_task_names_different_keys",
+    "test_empty_kwargs_produces_consistent_key",
+    "test_explicit_key_ignores_kwargs",
+    "test_explicit_key_label",
+    "test_explicit_key_takes_precedence_over_key_fields",
+    "test_key_fields_absent_from_kwargs_are_ignored",
+    "test_key_fields_different_included_fields",
+    "test_key_fields_empty_list_ignores_all_kwargs",
+    "test_key_fields_filters_kwargs",
+    "test_key_fields_ignores_args",
+    "test_key_prefix_in_output",
+    "test_kwarg_order_invariant",
+    "test_non_serializable_kwargs_returns_none",
+    "test_same_kwargs_same_key"
+  ],
+  "original_pure_passed": 17,
+  "lock_structural": {
+    "packages": 60,
+    "version": 1,
+    "revision": 3
+  }
+}

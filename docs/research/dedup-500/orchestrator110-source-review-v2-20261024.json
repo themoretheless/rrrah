@@ -1,0 +1,47 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v1-20261024.json",
+  "whole_repo_complete": false,
+  "whole_files_read_total": 2,
+  "new_whole_files_read": [],
+  "runtime": {
+    "original_tests_passed": 17,
+    "authored_controls_passed": 3,
+    "failed": 0,
+    "harness_dir": "docs/research/dedup-500/orchestrator110-native-controls-20261024",
+    "source_prefix_verified": true,
+    "source_sha256": "72c2ea5bc6aca457f998cfe9b574de106bba6b8bbf694eea9f4490bc380f3744",
+    "toolchain": "rustc1.98.1",
+    "dependencies": {
+      "block-buffer": "0.10.4",
+      "cfg-if": "1.0.5",
+      "cpufeatures": "0.2.17",
+      "crypto-common": "0.1.7",
+      "digest": "0.10.7",
+      "generic-array": "0.14.7",
+      "hex": "0.4.3",
+      "libc": "0.2.191",
+      "owned-orchestrator110-controls": "0.0.0",
+      "pin-project-lite": "0.2.17",
+      "proc-macro2": "1.0.107",
+      "quote": "1.0.47",
+      "sha2": "0.10.9",
+      "syn": "3.0.9",
+      "tokio": "1.53.2",
+      "tokio-macros": "2.7.2",
+      "typenum": "1.20.1",
+      "unicode-ident": "1.0.27",
+      "version_check": "0.9.5"
+    },
+    "scope": "Originalmoduleunchangedwithownedtestmoduleappended;isolatedCargoedition2021,realTokio/SHA2/hexsemvercompatibleresolutionoffline;notupstreamfullCargo.lock/fullcrate"
+  },
+  "findings": [
+    "NativeRustconfirmsNULtuplepreimagealias,previousbyte-recipefinding.",
+    "Nativecontrolbackdatesprivatecreated_atby60s,submitsneworiginalandwaiter,theninvokescontent-onlycompletewitholdresult;newwaiterreceivesoldresultandnewentryremoved. No30ssleep/fullpipelineexecution.",
+    "Nativecontrolconfirmcompletecountsregisteredwaiterevenwhenreceiverdropped.",
+    "All17originalmoduleunittestspassed;nonecoversgenerationfencing/NULtuplecases."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

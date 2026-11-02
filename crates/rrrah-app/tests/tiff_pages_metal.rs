@@ -465,3 +465,323 @@ fn distinct_tiff_page_profiles_keep_selected_color_through_swap() {
         "TIFF page ICC: sRGB->linear->sRGB; identical source codes; LittleCMS RGB8 within1; fallback override refused; reverse swap SDR/HDR exact; final=0"
     );
 }
+
+#[test]
+#[ignore = "actual Metal palette TIFF native16/managed RAM/swap transport"]
+fn palette_tiff_native16_survives_pressure_cancel_swap_and_metal() {
+    use rrrah_core::{MemoryBudget, RasterPixels};
+    let gpu = common::qualification_gpu().expect("required Metal adapter");
+    eprintln!("Palette TIFF adapter: {}", gpu.adapter_name());
+    for name in [
+        "go-video-001-paletted.tiff",
+        "palette16-le.tiff",
+        "palette16-be.tiff",
+        "palette16-big-le.tiff",
+        "palette16-big-be.tiff",
+        "palette-packed1-le.tiff",
+        "palette-packed1-be.tiff",
+        "palette-packed2-le.tiff",
+        "palette-packed2-be.tiff",
+        "palette-packed4-le.tiff",
+        "palette-packed4-be.tiff",
+        "palette-packed1-big-le.tiff",
+        "palette-packed1-big-be.tiff",
+        "palette-packed2-big-le.tiff",
+        "palette-packed2-big-be.tiff",
+        "palette-packed4-big-le.tiff",
+        "palette-packed4-big-be.tiff",
+        "palette-wide16-le.tiff",
+        "palette-wide16-be.tiff",
+        "palette-wide16-big-le.tiff",
+        "palette-wide16-big-be.tiff",
+    ] {
+        let root = MemoryBudget::new(4 * 1024 * 1024);
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster")
+            .join(name);
+        let mut request = rrrah_decode::DecodeRequest::new(path);
+        request.memory_budget = Some(root.clone());
+        let unqualified = rrrah_decode::decode_raster(&request).unwrap();
+        assert!(rrrah_decode::prepare_raster_for_display(&unqualified).is_err());
+        drop(unqualified);
+        assert_eq!(root.used(), 0);
+        request.assume_untagged_srgb = true;
+        let native = rrrah_decode::decode_raster(&request).unwrap();
+        let RasterPixels::Rgba16(values) = native.pixels() else {
+            panic!()
+        };
+        assert_eq!(
+            values.len(),
+            native.width() as usize * native.height() as usize * 4
+        );
+        let frame = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&root)).unwrap();
+        drop(native);
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [63., 65.],
+            ..Default::default()
+        };
+        let sdr = gpu.render_raster(&frame, view, [63, 65]).pixels;
+        let hdr = gpu.render_raster_half(&frame, view, [63, 65]);
+        let RasterPixels::Rgba32Float(values) = frame.pixels() else {
+            panic!()
+        };
+        let bits = values.iter().map(|v| v.to_bits()).collect::<Vec<_>>();
+        let weight = frame.capacity_bytes();
+        let directory = tempfile::tempdir().unwrap();
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(weight + 65536),
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            MemoryBudget::new(weight),
+            root.clone(),
+        )
+        .unwrap();
+        let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(weight));
+        ram.enable_swap(swap);
+        assert!(ram.insert_visible(1, frame));
+        let lease = ram.get_lease(&1).unwrap();
+        assert!(!ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        drop(lease);
+        ram.mark_visible(2);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        let swap = ram.swap().unwrap();
+        swap.wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        let pressure = root.try_reserve(root.limit()).unwrap();
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(pressure);
+        assert!(swap.try_get(&1, || root.used() > 0).unwrap().is_none());
+        assert_eq!(root.used(), 0);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        let RasterPixels::Rgba32Float(values) = restored.pixels() else {
+            panic!()
+        };
+        assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), bits);
+        assert_eq!(gpu.render_raster(&restored, view, [63, 65]).pixels, sdr);
+        assert_eq!(gpu.render_raster_half(&restored, view, [63, 65]), hdr);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+        assert_eq!(swap.stats().errors, 0);
+        eprintln!(
+            "{name}: native16; strict untagged refusal; explicit sRGB; RAM lease/pressure/cancel/retry; exact SDR/HDR; final=0"
+        );
+    }
+}
+
+#[test]
+#[ignore = "actual Metal CCITT RLE/Fax3/Fax4 source/oracle/RAM/swap lifecycle"]
+fn fax3_sources_survive_ram_swap_pressure_cancel_and_metal() {
+    use rrrah_core::{DecodedRaster, MemoryBudget, RasterColorSpace, RasterPixels};
+    let gpu = common::qualification_gpu().expect("required Metal adapter");
+    eprintln!("Fax3 adapter: {}", gpu.adapter_name());
+    for name in [
+        "go-bw-gopher-fax3.tiff",
+        "fax3-wl-fill1-opt0-ori1.tiff",
+        "fax3-wl-fill2-opt4-ori6.tiff",
+        "fax3-wb-fill1-opt4-ori8.tiff",
+        "fax3-wb-fill2-opt0-ori1.tiff",
+        "fax3-w8l-fill1-opt0-ori6.tiff",
+        "fax3-w8l-fill2-opt4-ori8.tiff",
+        "fax3-w8b-fill1-opt4-ori1.tiff",
+        "fax3-w8b-fill2-opt0-ori6.tiff",
+        "fax3-wl-fill1-opt1-ori1.tiff",
+        "fax3-wl-fill2-opt5-ori6.tiff",
+        "fax3-wb-fill1-opt5-ori8.tiff",
+        "fax3-wb-fill2-opt1-ori1.tiff",
+        "fax3-w8l-fill1-opt1-ori6.tiff",
+        "fax3-w8l-fill2-opt5-ori8.tiff",
+        "fax3-w8b-fill1-opt5-ori1.tiff",
+        "fax3-w8b-fill2-opt1-ori6.tiff",
+        "fax3-wl-fill1-opt0-ori2.tiff",
+        "fax3-wl-fill2-opt1-ori2.tiff",
+        "fax3-wb-fill1-opt4-ori3.tiff",
+        "fax3-wb-fill2-opt5-ori3.tiff",
+        "fax3-w8l-fill1-opt0-ori4.tiff",
+        "fax3-w8l-fill2-opt1-ori4.tiff",
+        "fax3-w8b-fill1-opt4-ori5.tiff",
+        "fax3-w8b-fill2-opt5-ori5.tiff",
+        "fax3-wl-fill2-opt4-ori7.tiff",
+        "fax3-wb-fill1-opt5-ori7.tiff",
+        "fax3-long-wl-fill1-opt0-ori1.tiff",
+        "fax3-long-wl-fill2-opt1-ori1.tiff",
+        "fax3-long-wb-fill1-opt4-ori1.tiff",
+        "fax3-long-wb-fill2-opt5-ori1.tiff",
+        "fax3-long-w8l-fill1-opt0-ori1.tiff",
+        "fax3-long-w8l-fill2-opt1-ori1.tiff",
+        "fax3-long-w8b-fill1-opt4-ori1.tiff",
+        "fax3-long-w8b-fill2-opt5-ori1.tiff",
+        "go-bw-gopher-fax4.tiff",
+        "fax4-wl-fill1-opt0-ori1.tiff",
+        "fax4-wl-fill2-opt0-ori2.tiff",
+        "fax4-wb-fill1-opt0-ori3.tiff",
+        "fax4-wb-fill2-opt0-ori4.tiff",
+        "fax4-w8l-fill1-opt0-ori5.tiff",
+        "fax4-w8l-fill2-opt0-ori6.tiff",
+        "fax4-w8b-fill1-opt0-ori7.tiff",
+        "fax4-w8b-fill2-opt0-ori8.tiff",
+        "fax4-long-wl-fill1-opt0-ori1.tiff",
+        "fax4-long-wl-fill2-opt0-ori1.tiff",
+        "fax4-long-wb-fill1-opt0-ori1.tiff",
+        "fax4-long-wb-fill2-opt0-ori1.tiff",
+        "fax4-long-w8l-fill1-opt0-ori1.tiff",
+        "fax4-long-w8l-fill2-opt0-ori1.tiff",
+        "fax4-long-w8b-fill1-opt0-ori1.tiff",
+        "fax4-long-w8b-fill2-opt0-ori1.tiff",
+        "fax4-dense-wl-fill1-opt0-ori1.tiff",
+        "fax2-wl-fill1-opt0-ori1.tiff",
+        "fax2-wl-fill2-opt0-ori2.tiff",
+        "fax2-wb-fill1-opt0-ori3.tiff",
+        "fax2-wb-fill2-opt0-ori4.tiff",
+        "fax2-w8l-fill1-opt0-ori5.tiff",
+        "fax2-w8l-fill2-opt0-ori6.tiff",
+        "fax2-w8b-fill1-opt0-ori7.tiff",
+        "fax2-w8b-fill2-opt0-ori8.tiff",
+        "fax2-long-wl-fill1-opt0-ori1.tiff",
+        "fax2-long-wl-fill2-opt0-ori1.tiff",
+        "fax2-long-wb-fill1-opt0-ori1.tiff",
+        "fax2-long-wb-fill2-opt0-ori1.tiff",
+        "fax2-long-w8l-fill1-opt0-ori1.tiff",
+        "fax2-long-w8l-fill2-opt0-ori1.tiff",
+        "fax2-long-w8b-fill1-opt0-ori1.tiff",
+        "fax2-long-w8b-fill2-opt0-ori1.tiff",
+        "fax2w-wl-fill1-opt0-ori1.tiff",
+        "fax2w-wl-fill2-opt0-ori2.tiff",
+        "fax2w-wb-fill1-opt0-ori3.tiff",
+        "fax2w-wb-fill2-opt0-ori4.tiff",
+        "fax2w-w8l-fill1-opt0-ori5.tiff",
+        "fax2w-w8l-fill2-opt0-ori6.tiff",
+        "fax2w-w8b-fill1-opt0-ori7.tiff",
+        "fax2w-w8b-fill2-opt0-ori8.tiff",
+        "fax2w-long-wl-fill1-opt0-ori1.tiff",
+        "fax2w-long-wl-fill2-opt0-ori1.tiff",
+        "fax2w-long-wb-fill1-opt0-ori1.tiff",
+        "fax2w-long-wb-fill2-opt0-ori1.tiff",
+        "fax2w-long-w8l-fill1-opt0-ori1.tiff",
+        "fax2w-long-w8l-fill2-opt0-ori1.tiff",
+        "fax2w-long-w8b-fill1-opt0-ori1.tiff",
+        "fax2w-long-w8b-fill2-opt0-ori1.tiff",
+        "fax2w-single-wl-fill1-opt0-ori1.tiff",
+        "fax2w-single-wl-fill2-opt0-ori1.tiff",
+        "fax2w-single-wb-fill1-opt0-ori1.tiff",
+        "fax2w-single-wb-fill2-opt0-ori1.tiff",
+        "fax2w-single-w8l-fill1-opt0-ori1.tiff",
+        "fax2w-single-w8l-fill2-opt0-ori1.tiff",
+        "fax2w-single-w8b-fill1-opt0-ori1.tiff",
+        "fax2w-single-w8b-fill2-opt0-ori1.tiff",
+    ] {
+        let root = MemoryBudget::new(4 * 1024 * 1024);
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tests/fixtures/raster")
+            .join(name);
+        let oracle_path = if name.starts_with("fax4-dense-") {
+            path.parent().unwrap().join("fax-dense.rgba8")
+        } else if name == "go-bw-gopher-fax4.tiff" {
+            path.parent().unwrap().join("go-bw-gopher-fax3.rgba8")
+        } else if name.starts_with("fax3-long-")
+            || name.starts_with("fax4-long-")
+            || name.starts_with("fax2-long-")
+            || name.starts_with("fax2w-long-")
+        {
+            path.parent().unwrap().join("fax3-long-runs.rgba8")
+        } else if name.starts_with("fax4-") || name.starts_with("fax2-") || name.starts_with("fax2w-") {
+            let orientation = name.rsplit_once("-ori").unwrap().1.strip_suffix(".tiff").unwrap();
+            path.parent()
+                .unwrap()
+                .join(format!("fax3-wl-fill1-opt0-ori{orientation}.rgba8"))
+        } else {
+            path.with_extension("rgba8")
+        };
+        let oracle = std::fs::read(oracle_path).unwrap();
+        let mut request = rrrah_decode::DecodeRequest::new(path);
+        request.memory_budget = Some(root.clone());
+        let unqualified = rrrah_decode::decode_raster(&request).unwrap();
+        assert!(rrrah_decode::prepare_raster_for_display(&unqualified).is_err());
+        drop(unqualified);
+        assert_eq!(root.used(), 0);
+        request.assume_untagged_srgb = true;
+        let native = rrrah_decode::decode_raster(&request).unwrap();
+        let RasterPixels::Rgba8(values) = native.pixels() else {
+            panic!()
+        };
+        assert_eq!(&values[..], &oracle);
+        let golden = DecodedRaster::new(
+            native.width(),
+            native.height(),
+            RasterPixels::Rgba32Float(
+                std::sync::Arc::new(
+                    oracle
+                        .iter()
+                        .map(|v| {
+                            assert!(matches!(v, 0 | 255));
+                            f32::from(*v) / 255.
+                        })
+                        .collect::<Vec<_>>(),
+                )
+                .into(),
+            ),
+            RasterColorSpace::LinearSrgb,
+        )
+        .unwrap();
+        let frame = rrrah_decode::prepare_raster_for_display_with_budget(&native, Some(&root)).unwrap();
+        drop(native);
+        let view = rrrah_gpu::ViewParameters {
+            viewport: [63., 65.],
+            ..Default::default()
+        };
+        let sdr = gpu.render_raster(&frame, view, [63, 65]).pixels;
+        let hdr = gpu.render_raster_half(&frame, view, [63, 65]);
+        assert_eq!(sdr, gpu.render_raster(&golden, view, [63, 65]).pixels);
+        assert_eq!(hdr, gpu.render_raster_half(&golden, view, [63, 65]));
+        let RasterPixels::Rgba32Float(values) = frame.pixels() else {
+            panic!()
+        };
+        let bits = values.iter().map(|v| v.to_bits()).collect::<Vec<_>>();
+        let weight = frame.capacity_bytes();
+        let directory = tempfile::tempdir().unwrap();
+        let swap = rrrah_cache::RasterSwapCache::<u8>::new_with_budgets(
+            directory.path(),
+            rrrah_cache::ImageSwapConfig {
+                limits: rrrah_cache::CacheLimits::bytes(weight + 65536),
+                queue_bytes: weight,
+                queue_count: 1,
+                restore_bytes: weight,
+            },
+            MemoryBudget::new(weight),
+            root.clone(),
+        )
+        .unwrap();
+        let mut ram = rrrah_cache::RasterRamCache::new(rrrah_cache::CacheLimits::bytes(weight));
+        ram.enable_swap(swap);
+        assert!(ram.insert_visible(1, frame));
+        let lease = ram.get_lease(&1).unwrap();
+        assert!(!ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        drop(lease);
+        ram.mark_visible(2);
+        assert!(ram.set_limits_and_spill(rrrah_cache::CacheLimits::bytes(0)));
+        let swap = ram.swap().unwrap();
+        swap.wait_idle().unwrap();
+        assert_eq!(root.used(), 0);
+        let pressure = root.try_reserve(root.limit()).unwrap();
+        assert!(swap.try_get(&1, || false).is_err());
+        drop(pressure);
+        assert!(swap.try_get(&1, || root.used() > 0).unwrap().is_none());
+        assert_eq!(root.used(), 0);
+        let restored = swap.try_get(&1, || false).unwrap().unwrap();
+        let RasterPixels::Rgba32Float(values) = restored.pixels() else {
+            panic!()
+        };
+        assert_eq!(values.iter().map(|v| v.to_bits()).collect::<Vec<_>>(), bits);
+        assert_eq!(gpu.render_raster(&restored, view, [63, 65]).pixels, sdr);
+        assert_eq!(gpu.render_raster_half(&restored, view, [63, 65]), hdr);
+        drop(restored);
+        assert_eq!(root.used(), 0);
+        assert_eq!(swap.stats().errors, 0);
+        eprintln!(
+            "{name}: source-row or full-image reference as declared by fixture manifest; linear endpoint oracle; strict color refusal/explicit sRGB; RAM/pressure/cancel/retry; exact SDR/HDR; final=0"
+        );
+    }
+}

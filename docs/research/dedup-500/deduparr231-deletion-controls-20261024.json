@@ -1,0 +1,45 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original pipeline class bodies in isolated namespace; every filesystem observation/mutation uses explicit in-memory VFS. No real removal, SQL/DB, service clients or network executed. Virtual mutations are call records only.",
+  "authored_controls": [
+    {
+      "name": "direct main-path removal ignores protected_files",
+      "passed": true,
+      "observed": [
+        "/media/Movie.mkv"
+      ]
+    },
+    {
+      "name": "associated prefix cleanup ignores protected kept file",
+      "passed": true,
+      "observed": [
+        "/media/Movie.mkv",
+        "/media/Movie-copy.mkv"
+      ]
+    },
+    {
+      "name": "permission failure marked as deleted despite no service deletion",
+      "passed": true,
+      "observed": {
+        "deleted": true,
+        "file_still_present": true,
+        "arr": false,
+        "qbit": false
+      }
+    },
+    {
+      "name": "missing source without service confirmation records error and returns",
+      "passed": true,
+      "observed": {
+        "deleted": false,
+        "error": "File not found for deletion (checked exact path and /media): /media/Missing.mkv"
+      }
+    },
+    {
+      "name": "existing cached path takes precedence over exact source path",
+      "passed": true,
+      "observed": "/media/old.mkv"
+    }
+  ]
+}

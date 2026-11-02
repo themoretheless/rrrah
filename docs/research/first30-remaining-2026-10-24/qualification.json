@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-24",
+  "environment": "macOS arm64 Apple M4 Max Metal",
+  "verified_this_pass": [
+    "RR-0012",
+    "RR-0027"
+  ],
+  "all_first30_complete": false,
+  "execution_summary": {
+    "verified": 8,
+    "blocked": 3,
+    "partial": 5,
+    "reviewed": 5,
+    "rejected": 6,
+    "measured_no_change": 3
+  },
+  "native_app_tests": {
+    "passed": 325,
+    "failed": 0,
+    "ignored": 47,
+    "filtered_out": 68,
+    "scope": "--skip hdr --skip metal --skip gpu; ignored GPU cases separately executed with logs"
+  },
+  "hardware_or_permission_gates": {
+    "NVIDIA": "not available",
+    "physical_HDR_meter": "not available",
+    "Windows_taskkill": "not executed",
+    "VoiceOver": "permission question pending; system setting unchanged"
+  },
+  "source_sha256": {
+    ".github/workflows/cuda-hardware.yml": "3fa823bc03c3330e07f321fc94d20cea230d017c859fc91fa04411dcbff50bd5",
+    "scripts/verify-nvidia-hardware-evidence.py": "93488adbcaeddc9ba339c33485c17af511749acef5c2da9a8a37b973bf4745f4",
+    "scripts/test-nvidia-hardware-evidence.py": "51ba8ba9a78b845ccb3e0a934984203db5ef1907fa1f8708b393a4b7f364950e",
+    "crates/rrrah-cuda/src/lib.rs": "9e6bb467045b75a6c11bbfa07af2f16944e24d546e13763aaaca27dfde25103e",
+    "crates/rrrah-app/src/accessibility.rs": "09588125a324f64b82d61b830d969994543ba1c02d29b323ad4b1871e9047618",
+    "crates/rrrah-app/src/curve_ui.rs": "8127c5da674993ec3f93ed4abdb544a68a5b193b541b2b54e864fba402b255cf",
+    "crates/rrrah-app/src/first30_remaining.rs": "f791a508c6da26a2e028533c1ae0fa86fcab2b5e776af2e8cd1d76c5a4c5e547",
+    "crates/rrrah-app/src/edit_qualification.rs": "1837e78284f5cd342260b54313fd137f6c6a3a9d52a42aef432a6b7608e06118",
+    "crates/rrrah-app/src/main.rs": "0426d804275ee6e35e06735542f539c2535e0f37779613582fefe09f8672a214",
+    "crates/rrrah-app/src/model_upload_worker.rs": "068ec67bddb968ce1ce20b11a13c0a3a9dc798384cbdb1e4ba6afa99c99cf66f",
+    "crates/rrrah-gpu/src/raster.rs": "84d408b3501ee4cb06c3c68fadb467d1f285a3a9162165f93ddd08d1345be75d",
+    "crates/rrrah-gpu/tests/raw_linear_readback.rs": "1c4433ea9278a4ab5d03a0ffc853832de5b7c695207e54806790fed81620f42e",
+    "crates/rrrah-gpu/Cargo.toml": "20649684fd8ca0657b12a196f7701c19f928f484aa63e4f5d1400f30ee86da21"
+  },
+  "limits": [
+    "Source manifest is current snapshot, not frozen build attestation",
+    "GUI binary SHA in gui-final-manifest.json",
+    "Metal allocations are not physical dedicated VRAM residency",
+    "One producer benchmark does not cover 2/4 callers",
+    "Nonterminal tasks remain open; no acceptance rewritten"
+  ]
+}

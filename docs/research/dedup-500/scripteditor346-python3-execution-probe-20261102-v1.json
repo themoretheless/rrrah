@@ -1,0 +1,15 @@
+{
+  "scope": "Unmodified library/test source execution under Python3; source module registered in sys.modules only. No compatibility aliases or source changes. No successful unittest suite run.",
+  "results": [
+    {
+      "probe": "original_diff_main",
+      "error_type": "NameError",
+      "error": "name 'xrange' is not defined"
+    },
+    {
+      "probe": "original_test_harness",
+      "error_type": "NameError",
+      "error": "name 'reload' is not defined"
+    }
+  ]
+}

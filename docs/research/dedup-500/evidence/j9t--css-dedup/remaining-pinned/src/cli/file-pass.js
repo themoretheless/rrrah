@@ -1,0 +1,207 @@
+// One file’s consolidation work: pure computation over a CSS string, returning
+// a structured-cloneable payload for `css-dedup.js` to render. Split out so the
+// same pass runs on the main thread or on a worker (see `pool.js`).
+
+import { chmod, mkdtemp, realpath, rename, rm, stat, writeFile } from 'node:fs/promises';
+import { basename, dirname, join } from 'node:path';
+import { analyze, dedup } from '../index.js';
+import { declarationKey } from '../lib/normalization.js';
+
+// The opposite-mode consolidation of the same source—a second, discarded pass
+// serving as the aggressive preview on default runs, and as the default-mode
+// baseline that measures what rode on the flag on aggressive runs
+function oppositePass(css, targetOptions) {
+  return dedup(css, { ...targetOptions, aggressive: !targetOptions.aggressive });
+}
+
+// A skipped group’s key as the aggressive pass would spell it: aggressive
+// normalization can rewrite it (`word-wrap` onto `overflow-wrap`), so matching
+// the default spelling alone would hint at groups aggressive also skips.
+// Selector-list keys carry no `prop: value` shape and pass through.
+export function aggressiveKeySpelling(key) {
+  const important = key.endsWith(' !important');
+  const base = important ? key.slice(0, -' !important'.length) : key;
+  const separator = base.indexOf(': ');
+  if (separator === -1) return key;
+  return declarationKey(base.slice(0, separator), base.slice(separator + 2), important, true);
+}
+
+// The scope + key identities of the groups the aggressive pass still skipped,
+// so the “may merge” hint check is a lookup rather than a scan per printed line
+function skippedWithAggressive(potential) {
+  return potential ? new Set(potential.skipped.map(item => `${item.scope}\0${item.key}`)) : null;
+}
+
+// What `--aggressive` would add on top of this run’s real outcome, measured
+// against a discarded opposite-mode pass (`potential`) run under the same
+// settings—report mode has its own four passes instead
+function computeAggressivePreview(potential, resultCss, applied, bytes, savingsOnly) {
+  const none = { aggExtra: 0, aggExtraSaved: 0, aggDiffers: false };
+  if (!potential || potential.css === resultCss) return none;
+
+  const aggExtraSaved = potential.bytes.saved - bytes.saved;
+  // Both passes went through the same gate, so an aggressive re-run that saves
+  // less is strictly worse—not a trade to offer a `savingsOnly` run
+  if (savingsOnly && aggExtraSaved < 0) return none;
+
+  return {
+    aggExtra: potential.applied.length - applied.length,
+    aggExtraSaved,
+    aggDiffers: true,
+  };
+}
+
+// Keeps only what the report table needs from a `dedup()` result—not the
+// rewritten CSS, which a worker would otherwise copy back for nothing.
+// `unavailable` answers every `n/a` cell’s one question—would `--fix` touch
+// this file?—since nothing found, nothing safe, and a `savingsOnly` refusal all
+// leave `applied` empty by construction.
+function slimPass(pass) {
+  return { bytes: pass.bytes, unavailable: pass.applied.length === 0 };
+}
+
+// The report table’s four savings columns, in the order they’re rendered.
+// Named once here, where they’re produced, so the consumers in `report.js`
+// can’t drift out of sync with them.
+export const PASS_KEYS = ['passDefault', 'passDefaultS', 'passAgg', 'passAggS'];
+
+// All four run `dedup()`. The `-s` variants can’t be derived from the ungated
+// ones: The gate decides per merge, so a file mixing merges that save with
+// merges that cost lands somewhere neither ungated figure predicts.
+function computeReportPasses(css, targetOptions) {
+  return {
+    passDefault: dedup(css, { ...targetOptions, aggressive: false, savingsOnly: false }),
+    passDefaultS: dedup(css, { ...targetOptions, aggressive: false, savingsOnly: true }),
+    passAgg: dedup(css, { ...targetOptions, aggressive: true, savingsOnly: false }),
+    passAggS: dedup(css, { ...targetOptions, aggressive: true, savingsOnly: true }),
+  };
+}
+
+// Replace a file only after the complete new content is safely staged beside
+// it. `realpath()` intentionally follows a final symlink: `writeFile()` used
+// to write through one, and replacing the link itself would be surprising.
+// `rename()` is atomic when both paths share a directory/filesystem, so an
+// interruption can leave either version, never a target truncated to zero.
+async function replaceFileAtomically(label, output) {
+  const target = await realpath(label);
+  const source = await stat(target);
+  const stageDir = await mkdtemp(join(dirname(target), `.${basename(target)}.css-dedup-`));
+  const staged = join(stageDir, 'replacement.css');
+
+  try {
+    await writeFile(staged, output);
+    // `writeFile()` creates a fresh file using the process umask. Give the
+    // replacement the target’s mode before it becomes visible in its place.
+    await chmod(staged, source.mode);
+    await rename(staged, target);
+  } finally {
+    // Covers write/chmod/rename failures. A forced process termination cannot
+    // run cleanup, but it can at most leave this private, clearly named stage
+    // directory behind; the original target remains intact until `rename()`.
+    await rm(stageDir, { recursive: true, force: true });
+  }
+}
+
+// `--fix`: consolidate, and write where there’s a file to write. The write
+// happens here, not at render time, so a parallel run does its I/O on the
+// worker. STDIN has no file, so its output rides back on the payload.
+async function computeFixPass(css, targetOptions, { isStdin, label }) {
+  const potential = targetOptions.aggressive ? null : oppositePass(css, targetOptions);
+
+  // `savingsOnly` is the engine’s gate (see `dedupRoot()`): A withheld
+  // result arrives as the untouched style sheet, with `applied` empty and
+  // the declined outcome under `withheld`
+  const { css: output, applied, skipped, bytes, withheld, sourceMapStale } = dedup(css, targetOptions);
+
+  // Whether anything actually rode on the flag—measured by comparing output,
+  // never by entry counts: one aggressive fold can absorb what the default
+  // pass would have done in several separate merges, so a count delta can be
+  // zero or negative on an entirely aggressive-only run
+  let aggressiveDiffers = false;
+  let aggressiveOnly = 0;
+  if (targetOptions.aggressive && applied.length) {
+    const baseline = oppositePass(css, targetOptions);
+    aggressiveDiffers = output !== baseline.css;
+    aggressiveOnly = Math.max(applied.length - baseline.applied.length, 0);
+  }
+
+  const wrote = !isStdin && applied.length > 0;
+  if (wrote) await replaceFileAtomically(label, output);
+
+  return {
+    mode: 'fix',
+    // Always the complete style sheet, even with nothing consolidated—a
+    // pipeline would otherwise receive nothing and lose the CSS entirely
+    stdout: isStdin ? output : null,
+    applied: applied.length,
+    skipped,
+    skippedAggressive: skippedWithAggressive(potential),
+    bytes,
+    withheld,
+    sourceMapStale: Boolean(sourceMapStale),
+    aggressiveDiffers,
+    aggressiveOnly,
+    wrote,
+    ...computeAggressivePreview(potential, output, applied, bytes, targetOptions.savingsOnly),
+  };
+}
+
+// The four `dedup()` combinations are deferred past the all-clean shortcut
+// below: scanning a directory of already-clean files is the common case, and
+// there’s nothing for them to find in a style sheet already known to have no
+// duplicates.
+function computeReportPass(css, targetOptions, { quiet }) {
+  const findingsDefault = analyze(css, { ...targetOptions, aggressive: false }).findings;
+  const findingsAgg = analyze(css, { ...targetOptions, aggressive: true }).findings;
+
+  if (!findingsDefault.length && !findingsAgg.length) {
+    const before = Buffer.byteLength(css, 'utf8');
+    const zeroPass = { bytes: { before, after: before, saved: 0 }, unavailable: true };
+    return {
+      mode: 'report',
+      clean: true,
+      findingsDefault: 0,
+      findingsAgg: 0,
+      findings: null,
+      skipped: [],
+      skippedAggressive: null,
+      passes: { passDefault: zeroPass, passDefaultS: zeroPass, passAgg: zeroPass, passAggS: zeroPass },
+    };
+  }
+
+  const { passDefault, passDefaultS, passAgg, passAggS } = computeReportPasses(css, targetOptions);
+
+  return {
+    mode: 'report',
+    clean: false,
+    findingsDefault: findingsDefault.length,
+    findingsAgg: findingsAgg.length,
+    // Falling back to the aggressive findings keeps a `0 (1)` row from quoting
+    // byte figures for a finding the reader can’t see listed anywhere.
+    // `--quiet` prints neither block, so neither is computed—these are the one
+    // part of the payload that grows with the style sheet.
+    findings: quiet ? null : (findingsDefault.length ? findingsDefault : findingsAgg),
+    skipped: quiet ? [] : passDefault.skipped,
+    skippedAggressive: quiet ? null : skippedWithAggressive(passAgg),
+    passes: {
+      passDefault: slimPass(passDefault),
+      passDefaultS: slimPass(passDefaultS),
+      passAgg: slimPass(passAgg),
+      passAggS: slimPass(passAggS),
+    },
+  };
+}
+
+// `label` doubles as PostCSS’s `from` and as the path `--fix` writes back to
+export function computeFilePass(css, options, { fix, quiet, isStdin, label }) {
+  const targetOptions = { ...options, from: isStdin ? undefined : label };
+  if (fix) return computeFixPass(css, targetOptions, { isStdin, label });
+  return computeReportPass(css, targetOptions, { quiet });
+}
+
+// A failure reduced to the strings the CLI prints—an `Error` and PostCSS’s
+// on-demand `showSourceCode()` wouldn’t survive the clone off a worker
+export function describePassError(err) {
+  if (err.name === 'CssSyntaxError') return { syntax: true, message: err.message, sourceCode: err.showSourceCode() };
+  return { syntax: false, message: err.message };
+}

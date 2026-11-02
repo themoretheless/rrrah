@@ -1,0 +1,380 @@
+{
+  "scope": "Diagnostic unconstrained fits on sparse opaque aligned grid. Checkerboard holdout is within-image, not independent-camera qualification. All out-of-range holdout points retained; no acceptance/policy change.",
+  "numpy_version": "2.3.5",
+  "pairs": [
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-pair-samples-20261026.csv",
+      "sha256": "6aa1da1e96a9c1edd71c80de0320eb9316789a12e443d3705ec931d79d2f917d",
+      "points": 23500,
+      "results": [
+        {
+          "direction": 0,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              1.0553395931329483,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.050122025721226,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0108587638853663
+            ],
+            [
+              -0.013253878987566881,
+              -0.012815718932439012,
+              -0.008517050467178358
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 11567,
+              "agreement": 0.9886746779631711
+            },
+            "heldout_in_range": {
+              "points": 11585,
+              "agreement": 0.9874838152783773
+            },
+            "heldout_out_of_range": {
+              "points": 165,
+              "agreement": 0.296969696969697
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.9777872340425532
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              1.0353796891764155,
+              0.023217030329746535,
+              0.06346598589473826
+            ],
+            [
+              0.010862420199998446,
+              1.0182519137935817,
+              -0.008400304070293166
+            ],
+            [
+              0.008753630726573538,
+              0.0077340786429446464,
+              0.974554906365467
+            ],
+            [
+              -0.013188450589698204,
+              -0.012691341344167273,
+              -0.011173939607495704
+            ]
+          ],
+          "design_condition": 65.09435742569828,
+          "groups": {
+            "training_in_range": {
+              "points": 11567,
+              "agreement": 0.9891069421630501
+            },
+            "heldout_in_range": {
+              "points": 11585,
+              "agreement": 0.9873111782477342
+            },
+            "heldout_out_of_range": {
+              "points": 165,
+              "agreement": 0.3151515151515151
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.977872340425532
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              0.9465976055078856,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9505604365164487,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9829808725159008
+            ],
+            [
+              0.012687153486911927,
+              0.012430097858613627,
+              0.009241937941558916
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 11567,
+              "agreement": 0.9887611308031469
+            },
+            "heldout_in_range": {
+              "points": 11585,
+              "agreement": 0.9878290893396634
+            },
+            "heldout_out_of_range": {
+              "points": 165,
+              "agreement": 0.18181818181818182
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.9765106382978723
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.9527069963454431,
+              0.007150277214345838,
+              -0.052745225992437
+            ],
+            [
+              -0.002354044532992678,
+              0.9342388194925638,
+              0.0636229009267584
+            ],
+            [
+              -0.0035968287424053076,
+              0.0078302277662141,
+              0.9721098839118422
+            ],
+            [
+              0.01265380546602461,
+              0.012618892169871953,
+              0.009257559936146202
+            ]
+          ],
+          "design_condition": 61.57923125719141,
+          "groups": {
+            "training_in_range": {
+              "points": 11567,
+              "agreement": 0.9889340364830985
+            },
+            "heldout_in_range": {
+              "points": 11585,
+              "agreement": 0.9875701337936987
+            },
+            "heldout_out_of_range": {
+              "points": 165,
+              "agreement": 0.20606060606060606
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.9765957446808511
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-pair-samples-20261026.csv",
+      "sha256": "a5b6906ec82b9a5aae8d01adcf23a020133bc9eda4793b134166ad6d04beae68",
+      "points": 23500,
+      "results": [
+        {
+          "direction": 0,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              1.0547690468420483,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0727528327379705,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9008649250099928
+            ],
+            [
+              -0.013007105170396513,
+              -0.01465431599926032,
+              -0.0032534516277065396
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10821,
+              "agreement": 0.9379909435357175
+            },
+            "heldout_in_range": {
+              "points": 10821,
+              "agreement": 0.9361426855188985
+            },
+            "heldout_out_of_range": {
+              "points": 929,
+              "agreement": 0.7308934337997847
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.9199148936170213
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.9882598846457681,
+              0.07877378675150602,
+              0.07145299094084565
+            ],
+            [
+              -0.005337815252194844,
+              0.848615998647551,
+              0.3090685298573995
+            ],
+            [
+              0.06442749384257489,
+              0.12109559374413469,
+              0.6253093600038829
+            ],
+            [
+              -0.012141054361346784,
+              -0.011918107490968414,
+              -0.01388449102031423
+            ]
+          ],
+          "design_condition": 58.33935266785673,
+          "groups": {
+            "training_in_range": {
+              "points": 10821,
+              "agreement": 0.9418722853710378
+            },
+            "heldout_in_range": {
+              "points": 10821,
+              "agreement": 0.9363275113205803
+            },
+            "heldout_out_of_range": {
+              "points": 929,
+              "agreement": 0.7642626480086114
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.9227234042553192
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              0.9425672060999117,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9186668879818947,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0606067120424514
+            ],
+            [
+              0.012792301030974331,
+              0.014801672913210818,
+              0.007404972365892039
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10821,
+              "agreement": 0.9500046206450421
+            },
+            "heldout_in_range": {
+              "points": 10821,
+              "agreement": 0.9476942981240181
+            },
+            "heldout_out_of_range": {
+              "points": 929,
+              "agreement": 0.017222820236813777
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.874127659574468
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.9260646552818582,
+              0.12104115981454845,
+              -0.011363724208065425
+            ],
+            [
+              0.024412648175035467,
+              0.7809995592118532,
+              0.154602941997385
+            ],
+            [
+              -0.006628499233712391,
+              0.021110007029392877,
+              0.9346387793817081
+            ],
+            [
+              0.01261950625152828,
+              0.014684554416578248,
+              0.004965965025895768
+            ]
+          ],
+          "design_condition": 60.083230264273105,
+          "groups": {
+            "training_in_range": {
+              "points": 10821,
+              "agreement": 0.9536087237778393
+            },
+            "heldout_in_range": {
+              "points": 10821,
+              "agreement": 0.9529618334719527
+            },
+            "heldout_out_of_range": {
+              "points": 929,
+              "agreement": 0.017222820236813777
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.8789787234042553
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "repository": "Mattbusel/tokio-prompt-orchestrator",
+  "commit": "af07270f1a0eefd03c2794d53de00cef7cb6461f",
+  "previous_audit": "docs/research/dedup-500/orchestrator110-source-review-v8-20261024.json",
+  "tracked_blobs": 350,
+  "new_whole_files_read": [
+    {
+      "path": "src/lib.rs",
+      "local": "14-lib.rs",
+      "sha256": "83f2e3f2fad0ec4d2595a926e2450ab9404286236d32076467c3754bdb5b6e18",
+      "git_blob": "c69de4fc4cb398ccf30dd0a2e39de93653b7b1dd",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 13,
+  "whole_repo_complete": false,
+  "new_runtime_tests": 0,
+  "findings": [
+    "Actualspawnpipelinefunctionsreexportedfromstagesmodule;libdefinespublictypes/helpersnotrequestdedupwiring. Reachabilitycontinuesatstages.",
+    "SessionIdpublicStringtuple/newandPromptRequestmetadataHashMapStringscontainnoNUL/equalseparatorrestrictionshere;HTTP/otheringressvalidationstillunreviewed.",
+    "fnv1a_hashname/commentbutrecurrenceismultiplythenXOR(FNV1),notstandardFNV1aXORthenmultiply;sessiondistributionstilldeterministicbutcrossimplementationcontractdiffers. Notnativeknownanswertested.",
+    "DeadLetterQueuecapacity0pushstillstoresoneentrybecausepopemptythenpush;sourceonly,bounded1notunbounded.",
+    "with_deadlineusesInstant+Durationwhilepromisingnopanic;overflowdurationcaseunexecuted. Validatedhelperlimits1..3600seconds.",
+    "send_with_sheditselflogsandreturnsShed,dropsitem;DLQrecordingmustbeincallerdespitetopdocsummary. Callerreviewpending."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

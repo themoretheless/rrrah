@@ -1,0 +1,17 @@
+{
+  "scope": "Original3 callbacks from auto-link-typing tests; original helpers without environment/client initialization; Node VM TypeScript transpilation and assert adapter; fake DB client. No Deno typechecking/full suite/network/DB.",
+  "outcomes": [
+    {
+      "name": "storeConnections uses 'related' for connections below 0.80",
+      "passed": true
+    },
+    {
+      "name": "storeConnections calls LLM to classify connections at 0.80+",
+      "passed": true
+    },
+    {
+      "name": "storeConnections falls back to 'related' if LLM typing fails",
+      "passed": true
+    }
+  ]
+}

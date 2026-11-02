@@ -1,0 +1,101 @@
+{
+  "seed": 267989,
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "files": 80,
+  "expected_groups": 11,
+  "runs": [
+    {
+      "case": "single",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "overlap",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "reversed-overlap",
+      "exit_code": 0,
+      "groups": 11,
+      "stderr": "Scan complete: 80 files observed, 11 duplicate groups, 21740703 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "literal-option-folder:--help",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 448 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "literal-option-folder:-h",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 384 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "literal-option-folder:--",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Scan complete: 2 files observed, 1 duplicate groups, 384 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "empty-folder",
+      "exit_code": 0,
+      "groups": 0,
+      "stderr": "Scan complete: 0 files observed, 0 duplicate groups, 0 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "missing-folder",
+      "exit_code": 1,
+      "groups": 0,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 0 files observed, 0 duplicate groups, 0 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "no-arguments",
+      "exit_code": 2,
+      "groups": 0,
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "case": "separator-without-folder",
+      "exit_code": 2,
+      "groups": 0,
+      "stderr": "Usage: scan_folder [--] FOLDER [FOLDER ...]\n"
+    },
+    {
+      "case": "missing-first",
+      "exit_code": 1,
+      "groups": 5,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 19 files observed, 5 duplicate groups, 8397691 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "missing-last",
+      "exit_code": 1,
+      "groups": 5,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/missing\": Io(\"No such file or directory (os error 2)\")\nScan incomplete: 19 files observed, 5 duplicate groups, 8397691 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "physical-aliases-and-symlink-cycle",
+      "exit_code": 0,
+      "groups": 1,
+      "alias_groups": 1,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/physical-aliases/cycle\": SymlinkSkipped\nDiagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/physical-aliases/symbolic.bin\": SymlinkSkipped\nScan complete: 2 files observed, 1 duplicate groups, 720 bytes read, 2 diagnostics\n"
+    },
+    {
+      "case": "fifo-with-healthy-files",
+      "exit_code": 0,
+      "groups": 1,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/special-files/unconnected.fifo\": NotRegular\nScan complete: 2 files observed, 1 duplicate groups, 592 bytes read, 1 diagnostics\n"
+    },
+    {
+      "case": "fifo-as-root",
+      "exit_code": 0,
+      "groups": 0,
+      "stderr": "Diagnostic: \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-folder-oracle-knatd4kx/special-files/unconnected.fifo\": NotRegular\nScan complete: 0 files observed, 0 duplicate groups, 0 bytes read, 1 diagnostics\n"
+    }
+  ],
+  "literal_option_folder_files": 6,
+  "scope": "Generated local byte oracle; not concurrent mutation, visual, or all-platform coverage"
+}

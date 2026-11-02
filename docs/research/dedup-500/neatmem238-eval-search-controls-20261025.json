@@ -1,0 +1,10 @@
+{
+  "scope": "Original AST functions, stub BLEU only; original search method fake client and no-op sleep; no network/module imports",
+  "authored_controls_passed": 3,
+  "observations": [
+    "Token-set F1 ignores repeated-token multiplicity: a a a b versus a b gives1 while exact_match0",
+    "aggregate_metrics silently truncates mismatched metric/category arrays via zip: two metrics and one category count1 mean1",
+    "search_memory exhausts three synthetic failures then returns empty memories/graph and latency0 without failure marker"
+  ],
+  "original_suite_run": false
+}

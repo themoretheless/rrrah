@@ -1,0 +1,11 @@
+{
+  "scope": "Original AST core helpers only; synthetic paths/remote/identities, no real git/env/credential files or network accessed",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Child directory name beginning two dots treated as outside repo:..notes maps empty; normal child preserved",
+    "Wildcard-only identity rejected positive control",
+    "Remote normalization strips synthetic userinfo positive control",
+    "Repo search lane agent-only; mine adds user filter positive control"
+  ],
+  "full_plugin_runtime_run": false
+}

@@ -1,0 +1,36 @@
+[package]
+name = "deduplicate"
+version = "0.4.1"
+description = "caching, asynchronous, request deduplication"
+authors = [
+  "garypen <garypen@gmail.com>",
+]
+license = "Apache-2.0"
+repository = "https://github.com/garypen/deduplicate"
+homepage = "https://github.com/garypen/deduplicate"
+documentation = "https://github.com/garypen/deduplicate#readme"
+readme = "README.md"
+keywords = ["deduplicate", "coalesce", "delegate", "caching", "request"]
+categories = ["asynchronous", "caching", "concurrency"]
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = "0.1.86"
+lru = "0.18.0"
+parking_lot = "0.12.3"
+thiserror = "2.0.11"
+tokio = { version = "1.43.0", features = ["macros", "rt-multi-thread", "sync"] }
+tracing = "0.1.41"
+
+[dev-dependencies]
+criterion = { version = "0.8", features = ["async_tokio"] }
+futures = "0.3.31"
+moka = { version = "0.12.10", features = [ "future"] }
+rand = "0.10.0"
+tokio-test = "0.4.4"
+
+[[bench]]
+name = "deduplicate"
+harness = false

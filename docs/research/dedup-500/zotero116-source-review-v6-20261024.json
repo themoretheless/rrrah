@@ -1,0 +1,65 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v5-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/fileScanner.mjs",
+      "local": "16-fileScanner.mjs",
+      "sha256": "86df6f849b37d9f1dee6d66debbcd027216683d083859cd3a1385645bfcdfc59",
+      "git_blob": "6bdf5575937b6e7afc661e08c3492bd4a5838a94",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/storageStrategy.mjs",
+      "local": "17-storageStrategy.mjs",
+      "sha256": "889e367fff4ba2730c7e533f5ee53f757edd401cf61232f74613fd9d7bc595f0",
+      "git_blob": "ae263bff96240335442d73d6d27922b4965c5b8c",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 13,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 4,
+    "total_authored_controls_distinct": 21,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-scanner-controls-20261024",
+    "scope": "Original complete scanner and utils unchanged; owned Node filesystem/IOUtils/PathUtils/Zotero adapters. Scanner test seam symlink detector setfalse; no symlink correctness claim. Original one-second stability timer retained."
+  },
+  "findings": [
+    {
+      "finding": "Depth0 returns root files only; depth1 returns nested files with root-relative paths and excludes imported/plugin-trash dirs.",
+      "evidence": "two positive native controls"
+    },
+    {
+      "finding": "Directory getChildren failure returns empty array, indistinguishable by return value from empty directory. Caller must use availability/diagnostic context before interpreting missing files. No deletion consequence tested.",
+      "evidence": "native control"
+    },
+    {
+      "finding": "Real AAA->BBB overwrite between two stat samples passes isFileStable because only positive equal sizes checked. Equal size/mtime hasFileChanged also false. Stability admission is not byte identity.",
+      "evidence": "native control"
+    },
+    {
+      "finding": "isFileStableWithRetry delayMs controls delay between retries; each isFileStable still waits hardcoded1000ms. Source-only no retry timing benchmark.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Storage conversion hashes full source and destination before linking, preserves old attachment as trash; child annotations/notes classifier rejects unknown shapes. No conversion/network/trash routines executed.",
+      "evidence": "whole storage source read"
+    },
+    {
+      "finding": "previewReclaim treats stat failure as size0 but may keep entry convertible; later conversion full hash can reject unreadable source. Not a proved unsafe conversion.",
+      "evidence": "source-only"
+    }
+  ],
+  "remaining": [
+    "87blobs not whole-read",
+    "Remaining watchFolder orchestration and scan-failure policy",
+    "Original suite/real Zotero/filesystem-specific behavior and license coverage incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

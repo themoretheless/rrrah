@@ -1,0 +1,28 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 20.91s
+     Running unittests src/main.rs (target/debug/deps/rrrah-7624cd91891a6f1f)
+
+running 2 tests
+test raw_swap_admission_tests::real_raw_restore_pressure_bypasses_busy_decode_gate ... original CR3: samples=25494560; full/one-byte-free pressure bypasses busy foreground gate; retry bypasses busy gate; sensor digest/metadata exact; final=0
+ok
+test raw_swap_admission_tests::real_raw_restore_pressure_bypasses_busy_decode_gate_metal ... original CR3: samples=25494560; full/one-byte-free pressure bypasses busy foreground gate; retry bypasses busy gate; sensor digest/metadata and SDR/HDR exact; final=0
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 417 filtered out; finished in 5.46s
+

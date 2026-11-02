@@ -1,0 +1,1 @@
+import {readFile} from 'node:fs/promises';import {createHash} from 'node:crypto';export async function getFileHash(path){globalThis.ownedHashCalls++;return createHash('sha256').update(await readFile(path)).digest('hex');}

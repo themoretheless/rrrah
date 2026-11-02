@@ -1,0 +1,2427 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package releaseworkflow
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"path/filepath"
+	"reflect"
+	"slices"
+	"strings"
+	"testing"
+	"time"
+
+	"github.com/autobrr/upbrr/internal/logging"
+	"github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func TestCompositeUploadStrictUnattendedStopsForTrackerApproval(t *testing.T) {
+	t.Parallel()
+
+	module, repository, uploads := newCompositeUploadTestModule(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-upload")
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	current := waitCompositeUploadTestOperation(t, module, started)
+	if current.Operation == nil || current.Operation.Status != api.StageStatusBlocked ||
+		current.UploadResult != nil || current.DryRun != nil || current.Media != nil || uploads.execution != nil {
+		t.Fatalf("strict unattended composite result = %#v; execution=%#v", current, uploads.execution)
+	}
+	action := pendingCompositeTrackerApproval(t, current)
+	if !slices.Equal(
+		[]string{action.Options[0].Value, action.Options[1].Value},
+		[]string{"ALPHA", "BETA"},
+	) {
+		t.Fatalf("strict unattended tracker approval options = %#v", action.Options)
+	}
+	state, err := repository.Load(context.Background(), testOwnerID, current.Workflow.ID)
+	if err != nil {
+		t.Fatalf("load composite upload state: %v", err)
+	}
+	if count := compositeUploadTestOperationCount(repository, current.Workflow.ID); count != 1 {
+		t.Fatalf("composite upload created %d operations, want one", count)
+	}
+	if state.Composite == nil || state.Composite.ActiveOperationID != "" ||
+		state.Composite.TerminalReason != "feedback_required" || state.Workflow.TrackerApproval != nil {
+		t.Fatalf("composite terminal session = %#v", state.Composite)
+	}
+}
+
+func TestCompositeUploadInitialOpenRequestsExternalProviderLoad(t *testing.T) {
+	t.Parallel()
+	module, _, _ := newCompositeUploadTestModule(t)
+	activeInputs, err := db.Open(filepath.Join(t.TempDir(), "input.sqlite"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Cleanup(func() { _ = activeInputs.Close() })
+	if err := activeInputs.Migrate(); err != nil {
+		t.Fatal(err)
+	}
+	var verified []api.PrepareInput
+	module.activeInputs = activeInputs
+	module.inputVerifier = func(_ context.Context, input api.PrepareInput) (api.InputRecord, error) {
+		verified = append(verified, input)
+		return api.InputRecord{
+			CanonicalPath: input.SourcePath,
+			SourceVersion: "verified",
+			Manifest:      []byte(`{"identity":{"digest":"verified"}}`),
+		}, nil
+	}
+	t.Cleanup(func() {
+		module.activeMu.Lock()
+		cancel, done := module.activeCancel, module.activeDone
+		module.activeMu.Unlock()
+		if cancel != nil {
+			cancel()
+			<-done
+		}
+	})
+	_, err = module.StartUpload(t.Context(), testOwnerID, compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "composite-open-refresh"))
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	if len(verified) != 1 || verified[0].ExternalFreshness != api.ExternalFreshnessLoad {
+		t.Fatalf("verified preparation inputs = %#v", verified)
+	}
+}
+
+func TestCompositeUploadStrictUnattendedInheritsDefaultTrackers(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadTestModule(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-default-trackers")
+	request.Trackers.Include = nil
+
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	current := approveCompositeUploadTrackers(
+		t,
+		module,
+		blocked,
+		[]api.TrackerID{"ALPHA", "BETA"},
+		"approve-default-trackers",
+	)
+	if current.Operation == nil || current.Operation.Status != api.StageStatusExecuted || uploads.execution == nil {
+		t.Fatalf("default tracker upload operation/execution = %#v/%#v", current.Operation, uploads.execution)
+	}
+	if current.TrackerApproval == nil ||
+		!slices.Equal(current.TrackerApproval.ApprovedTrackerIDs, []api.TrackerID{"ALPHA", "BETA"}) {
+		t.Fatalf("default tracker authority = %#v", current.TrackerApproval)
+	}
+}
+
+func TestCompositeUploadStrictDebugContinuesWithEligibleTrackers(t *testing.T) {
+	t.Parallel()
+
+	module, repository, uploads := newCompositeUploadTestModule(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "composite-debug")
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite debug upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	current := approveCompositeUploadTrackers(
+		t,
+		module,
+		blocked,
+		[]api.TrackerID{"ALPHA", "BETA"},
+		"approve-debug-trackers",
+	)
+	if current.DryRun == nil || current.Media == nil || current.UploadResult != nil || current.Operation == nil ||
+		current.Operation.Status != api.StageStatusCompleted {
+		t.Fatalf(
+			"composite debug result: revision=%d status=%s dryRun=%t upload=%t failures=%#v",
+			current.Workflow.Revision,
+			current.Operation.Status,
+			current.DryRun != nil,
+			current.UploadResult != nil,
+			current.Operation.Failures,
+		)
+	}
+	if uploads.execution == nil || uploads.execution.executions != 0 {
+		t.Fatalf("debug upload execution plan = %#v", uploads.execution)
+	}
+	if count := compositeUploadTestOperationCount(repository, current.Workflow.ID); count != 2 {
+		t.Fatalf("composite debug created %d operations, want start plus approval resume", count)
+	}
+}
+
+func TestCompositeUploadDryRunGoalStopsOnThisAttemptsTerminalResult(t *testing.T) {
+	t.Parallel()
+
+	session := &compositeUploadSession{
+		Goal: api.WorkflowGoalDryRun,
+		Intent: api.WorkflowIntent{
+			NoSeed:           true,
+			UploadTrackerIDs: []api.TrackerID{"ALPHA"},
+		},
+	}
+	current := CommandResult{DryRun: &api.UploadDryRunResult{
+		NoSeed:     true,
+		TrackerIDs: []api.TrackerID{"ALPHA"},
+		Status:     api.StageStatusFailed,
+		Revision:   10,
+	}}
+	for _, status := range []api.StageStatus{api.StageStatusFailed, api.StageStatusPartial, api.StageStatusSkipped, api.StageStatusCompleted} {
+		current.DryRun.Status = status
+		if compositeUploadGoalReached(current, session, 10) {
+			t.Fatalf("%s prior dry run incorrectly completed the new composite attempt", status)
+		}
+		if !compositeUploadGoalReached(current, session, 9) {
+			t.Fatalf("%s new dry run did not complete the composite attempt", status)
+		}
+	}
+}
+
+func TestCompositeUploadRechecksPriorCompletedDryRunOnNewAttempt(t *testing.T) {
+	t.Parallel()
+
+	module, repository, uploads := newCompositeUploadTestModule(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "composite-prior-review")
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	prior := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-prior-review")
+	if prior.DryRun == nil || prior.DryRun.Status != api.StageStatusCompleted || uploads.builds != 1 {
+		t.Fatalf("prior review: dryRun=%#v builds=%d", prior.DryRun, uploads.builds)
+	}
+	state, err := repository.Load(t.Context(), testOwnerID, prior.Workflow.ID)
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation, err := module.Start(t.Context(), testOwnerID, CompositeUploadCommand{
+		WorkflowID:         prior.Workflow.ID,
+		ExpectedRevision:   prior.Workflow.Revision,
+		SessionFingerprint: state.Composite.RequestFingerprint,
+		Goal:               api.WorkflowGoalDryRun,
+		IdempotencyKey:     "repeat-prior-review",
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	current := waitCompositeUploadTestOperation(t, module, CommandResult{Operation: &operation})
+	if current.Operation.Status != api.StageStatusCompleted || current.DryRun == nil ||
+		current.DryRun.Revision <= prior.DryRun.Revision || uploads.builds != 2 {
+		t.Fatalf("repeated review: operation=%#v dryRun=%#v builds=%d", current.Operation, current.DryRun, uploads.builds)
+	}
+}
+
+func TestCompositeUploadPartialDryRunStopsAfterOneReview(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadTestModule(t)
+	uploads.preparationFailed = map[api.TrackerID]bool{"BETA": true}
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "composite-partial-review")
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	current := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-partial-review")
+	if current.Operation == nil || current.Operation.Status != api.StageStatusCompleted ||
+		current.DryRun == nil || current.DryRun.Status != api.StageStatusPartial || uploads.builds != 1 {
+		t.Fatalf("partial composite review: operation=%#v dryRun=%#v builds=%d", current.Operation, current.DryRun, uploads.builds)
+	}
+}
+
+func TestCompositeUploadFailedDryRunStopsAfterOneReview(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadTestModule(t)
+	uploads.preparationFailed = map[api.TrackerID]bool{"ALPHA": true, "BETA": true}
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-failed-review")
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	current := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-failed-review")
+	if current.Operation == nil || current.Operation.Status != api.StageStatusFailed ||
+		current.DryRun == nil || current.DryRun.Status != api.StageStatusFailed || uploads.builds != 1 {
+		t.Fatalf("failed composite review: operation=%#v dryRun=%#v builds=%d", current.Operation, current.DryRun, uploads.builds)
+	}
+	if len(current.Operation.Failures) == 0 ||
+		current.Operation.Failures[0].Failure.Code != api.OperationFailureMissingPreparedTracker {
+		t.Fatalf("failed composite operation failures = %#v", current.Operation.Failures)
+	}
+}
+
+func TestCompositeUploadFeedbackHydratesPersistedMetadataDemand(t *testing.T) {
+	t.Parallel()
+
+	requirements := api.MetadataRequirementSet{
+		Version: "composite-hydration-v1",
+		Requirements: []api.MetadataRequirement{{
+			Scope:       api.MetadataRequirementScopeAny,
+			AnyOf:       []api.MetadataRequirementField{"original_title"},
+			Disposition: api.RuleDispositionStrict,
+		}},
+	}
+	basePreparer := testPreparer()
+	hydrationInputs := make(chan api.PrepareInput, 1)
+	preparer := basePreparer
+	preparer.PrepareFunc = func(ctx context.Context, input api.PrepareInput) (api.PrepareResult, error) {
+		if input.RequirePrepared {
+			hydrationInputs <- input
+			if !reflect.DeepEqual(input.MetadataRequirements, requirements) {
+				return api.PrepareResult{}, errors.New("compatible prepared generation is required")
+			}
+		}
+		return basePreparer.Prepare(ctx, input)
+	}
+	module, repository, _ := newCompositeUploadTestModule(t)
+	module.preparer = preparer
+	module.inputReadiness = compositeUploadDemandEvaluator{requirements: requirements}
+
+	started, err := module.StartUpload(t.Context(), testOwnerID, compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "composite-hydration"))
+	if err != nil {
+		t.Fatalf("start composite debug upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	state, err := repository.Load(t.Context(), testOwnerID, blocked.Workflow.ID)
+	if err != nil {
+		t.Fatalf("load blocked composite state: %v", err)
+	}
+	if state.Composite == nil || state.Composite.Intent.Preparation == nil ||
+		!reflect.DeepEqual(state.PreparationDemand, requirements) || !reflect.DeepEqual(state.Composite.Intent.Preparation.MetadataRequirements, api.MetadataRequirementSet{}) {
+		t.Fatalf("persisted composite preparation state = %#v", state)
+	}
+
+	completed := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-composite-hydration")
+	if completed.Operation == nil || completed.Operation.Status != api.StageStatusCompleted || completed.DryRun == nil {
+		t.Fatalf("resumed composite operation = %#v", completed)
+	}
+	select {
+	case input := <-hydrationInputs:
+		if input.SourcePath != blocked.Release.Release.Source.SourcePath || input.Force || !input.RequirePrepared ||
+			input.ExternalFreshness != api.ExternalFreshnessReuse || input.Controls.ConfirmBDMVRescan || input.Controls.ForceRecheck != nil ||
+			!reflect.DeepEqual(input.MetadataRequirements, requirements) {
+			t.Fatalf("composite hydration input = %#v", input)
+		}
+	default:
+		t.Fatal("composite resume did not hydrate the prepared release")
+	}
+}
+
+func TestCompositeUploadConfirmFeedbackResumesWithServerApproval(t *testing.T) {
+	t.Parallel()
+
+	module, repository, uploads := newCompositeUploadTestModule(t)
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeUpload, "composite-confirm")
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start confirm composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	if blocked.Operation == nil || blocked.Operation.Status != api.StageStatusBlocked || blocked.DryRun != nil || blocked.Media != nil {
+		t.Fatalf("confirm composite did not stop at review = %#v", blocked)
+	}
+	actionIndex := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionApproveTrackers && action.Status == api.RequiredActionStatusPending
+	})
+	if actionIndex < 0 {
+		t.Fatalf("confirm composite actions = %#v", blocked.Continuation.RequiredActions)
+	}
+	action := blocked.Continuation.RequiredActions[actionIndex]
+	feedback := api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               action.ID,
+			WorkflowRevision: blocked.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackTrackerApproval,
+			TrackerApproval: &api.ReleaseWorkflowUploadTrackerApproval{
+				Confirmed:  true,
+				TrackerIDs: []api.TrackerID{"ALPHA"},
+			},
+		},
+		IdempotencyKey: "confirm-upload",
+	}
+	resumed, err := module.SubmitUploadFeedback(context.Background(), testOwnerID, blocked.Workflow.ID, feedback)
+	if err != nil {
+		t.Fatalf("submit composite approval: %v", err)
+	}
+	completed := waitCompositeUploadTestOperation(t, module, resumed)
+	if completed.UploadResult == nil || completed.Operation == nil || completed.Operation.Status != api.StageStatusExecuted {
+		t.Fatalf("confirmed composite result = %#v", completed)
+	}
+	if uploads.execution == nil || uploads.execution.executions != 1 ||
+		!slices.Equal(uploads.execution.selected, []api.TrackerID{"ALPHA"}) {
+		t.Fatalf("confirmed composite executions = %#v", uploads.execution)
+	}
+	if len(completed.UploadResult.Results) != 1 ||
+		completed.UploadResult.Results[0].TrackerID != "ALPHA" ||
+		completed.UploadResult.Results[0].Status != api.StageStatusCompleted {
+		t.Fatalf("confirmed composite tracker results = %#v", completed.UploadResult.Results)
+	}
+	replayed, err := module.SubmitUploadFeedback(context.Background(), testOwnerID, blocked.Workflow.ID, feedback)
+	if err != nil {
+		t.Fatalf("replay composite approval: %v", err)
+	}
+	if replayed.UploadResult == nil || uploads.execution.executions != 1 {
+		t.Fatalf("feedback replay repeated work: result=%#v execution=%#v", replayed, uploads.execution)
+	}
+	if count := compositeUploadTestOperationCount(repository, completed.Workflow.ID); count != 2 {
+		t.Fatalf("confirm composite created %d operations, want start plus resume", count)
+	}
+}
+
+func TestCompositeUploadApprovalRestoresMediaWithoutRecapture(t *testing.T) {
+	t.Parallel()
+	module, _, _ := newCompositeUploadTestModule(t)
+	restorer := &compositeReusableMediaBuilder{testing: t}
+	module.mediaBuilder = restorer
+	started, err := module.StartUpload(t.Context(), testOwnerID,
+		compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeUpload, "composite-reuse"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	if blocked.Media != nil || restorer.calls != 0 {
+		t.Fatal("reused media before tracker approval")
+	}
+	index := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionApproveTrackers && action.Status == api.RequiredActionStatusPending
+	})
+	if index < 0 {
+		t.Fatalf("missing tracker approval: %#v", blocked)
+	}
+	feedback := api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID: blocked.Continuation.RequiredActions[index].ID, WorkflowRevision: blocked.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind:            api.ReleaseWorkflowUploadFeedbackTrackerApproval,
+			TrackerApproval: &api.ReleaseWorkflowUploadTrackerApproval{Confirmed: true, TrackerIDs: []api.TrackerID{"ALPHA"}},
+		},
+		IdempotencyKey: "approve-reusable-media",
+	}
+	resumed, err := module.SubmitUploadFeedback(t.Context(), testOwnerID, blocked.Workflow.ID, feedback)
+	if err != nil {
+		t.Fatal(err)
+	}
+	completed := waitCompositeUploadTestOperation(t, module, resumed)
+	if completed.Operation == nil || completed.Operation.Status != api.StageStatusExecuted || completed.UploadResult == nil {
+		t.Fatalf("restored composite did not complete: %#v", completed)
+	}
+	if restorer.calls != 1 || !slices.Equal(restorer.trackers, []api.TrackerID{"ALPHA"}) || completed.Media == nil ||
+		!reflect.DeepEqual(completed.Media.Artifacts, restorer.artifacts) {
+		t.Fatalf("composite lost restored selection/order/URLs or tracker scope: media=%#v restorer=%#v", completed.Media, restorer)
+	}
+	if _, err := module.SubmitUploadFeedback(t.Context(), testOwnerID, blocked.Workflow.ID, feedback); err != nil {
+		t.Fatalf("replay approval: %v", err)
+	}
+	if restorer.calls != 1 {
+		t.Fatal("approval replay repeated restoration")
+	}
+}
+
+type compositeReusableMediaBuilder struct {
+	compatibleMediaRestorerFake
+	artifacts []api.MediaArtifact
+}
+
+func (*compositeReusableMediaBuilder) BuildIncremental(context.Context, api.ReleaseRef, api.TrackerReleaseProjectionSet,
+	api.MediaCaptureInstructions, *api.MediaArtifactSet, any, time.Time,
+) (api.MediaArtifactSet, RetainedMediaResource, error) {
+	return api.MediaArtifactSet{}, nil, errors.New("restored composite must not recapture media")
+}
+
+func (f *compositeReusableMediaBuilder) RestoreCompatible(ctx context.Context, release api.ReleaseRef,
+	projections api.TrackerReleaseProjectionSet, existing *api.MediaArtifactSet, privateExisting any, now time.Time,
+) (api.MediaArtifactSet, RetainedMediaResource, error) {
+	snapshot, retained, err := f.compatibleMediaRestorerFake.RestoreCompatible(ctx, release, projections, existing, privateExisting, now)
+	if err != nil {
+		return api.MediaArtifactSet{}, nil, err
+	}
+	if existing != nil {
+		return snapshot, retained, nil
+	}
+	snapshot.Artifacts[0].Selected = true
+	snapshot.Artifacts = append(snapshot.Artifacts,
+		api.MediaArtifact{
+			ID:      "deselected-screen",
+			Kind:    api.MediaArtifactScreenshot,
+			Purpose: api.ScreenshotPurposeFinal,
+			Order:   2,
+		},
+		api.MediaArtifact{
+			ID:       "retained-hosted",
+			Kind:     api.MediaArtifactHostedImage,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+			Order:    7,
+			Source:   "restored-screen",
+			Host:     "images.example",
+			URL:      "https://images.example/retained.png",
+		},
+	)
+	snapshot.ImageRequirementsPrepared = true
+	snapshot.HostAttempts[0].TrackerIDs = slices.Clone(f.trackers)
+	snapshot.HostAttempts[0].ArtifactIDs = []api.PublicResourceID{"restored-screen"}
+	snapshot.HostAttempts[0].Results = []api.MediaArtifact{snapshot.Artifacts[2]}
+	f.artifacts = slices.Clone(snapshot.Artifacts)
+	return snapshot, retained, nil
+}
+
+func TestCompositeUploadReleaseNameFeedbackPreservesSiblingProjection(t *testing.T) {
+	t.Parallel()
+
+	module, _, _ := newCompositeUploadNameReviewTestModule(t)
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeDebug, "composite-name-review")
+	request.Trackers.Include = []api.TrackerID{"ALPHA", "BETA", "GAMMA"}
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start name-review composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	actionIndex := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionProvideTrackerInput && action.TrackerID == "ALPHA" &&
+			action.Status == api.RequiredActionStatusPending
+	})
+	if actionIndex < 0 || blocked.Projections == nil || blocked.Dupes == nil {
+		t.Fatalf("initial name-review stop = %#v", blocked)
+	}
+	action := blocked.Continuation.RequiredActions[actionIndex]
+	const reviewedName = "Example.Release.2026.REVIEWED-GRP"
+	resumed, err := module.SubmitUploadFeedback(context.Background(), testOwnerID, blocked.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               action.ID,
+			WorkflowRevision: blocked.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackTrackerInput,
+			TrackerInput: &api.ReleaseWorkflowUploadTrackerInput{
+				TrackerID: "ALPHA",
+				Projection: api.ReleaseWorkflowUploadTrackerProjection{
+					UploadReleaseName: api.WorkflowPatch[string]{Present: true, Value: reviewedName},
+				},
+			},
+		},
+		IdempotencyKey: "confirm-alpha-name",
+	})
+	if err != nil {
+		t.Fatalf("submit composite name review: %v", err)
+	}
+	next := waitCompositeUploadTestOperation(t, module, resumed)
+	if next.Projections == nil || next.Dupes == nil {
+		t.Fatalf("name review discarded projections: %#v", next)
+	}
+	if !slices.ContainsFunc(next.Projections.Projections, func(projection api.TrackerReleaseProjection) bool {
+		return projection.TrackerID == "ALPHA" && projection.UploadReleaseName == reviewedName
+	}) {
+		t.Fatalf("reviewed ALPHA projection = %#v", next.Projections.Projections)
+	}
+	if !slices.ContainsFunc(next.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionProvideTrackerInput && action.TrackerID == "BETA" &&
+			action.Status == api.RequiredActionStatusPending
+	}) {
+		t.Fatalf("sibling name-review action = %#v", next.Continuation.RequiredActions)
+	}
+}
+
+func TestCompositeUploadDefersSingleTrackerNameReviewUntilDuplicateCheck(t *testing.T) {
+	t.Parallel()
+
+	module, _, _ := newCompositeUploadNameReviewTestModule(t)
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeDebug, "composite-single-name-review")
+	request.Trackers.Include = []api.TrackerID{"ALPHA"}
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start single-tracker name review: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	if blocked.Dupes == nil {
+		t.Fatalf("single-tracker name review blocked before duplicate check: %#v", blocked)
+	}
+	if !slices.ContainsFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionProvideTrackerInput && action.TrackerID == "ALPHA" &&
+			action.Status == api.RequiredActionStatusPending
+	}) {
+		t.Fatalf("single-tracker name review action = %#v", blocked.Continuation.RequiredActions)
+	}
+}
+
+func TestCompositeUploadStrictDuplicateSupersedesSingleTrackerNameReview(t *testing.T) {
+	t.Parallel()
+
+	module, _, _ := newCompositeUploadNameReviewTestModule(t)
+	module.dupeBuilder = compositeUploadDuplicateBlockedBuilder(module.dupeBuilder, "ALPHA", "in_client")
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeDebug, "composite-strict-dupe-name-review")
+	request.Trackers.Include = []api.TrackerID{"ALPHA"}
+	request.Duplicates.OnEvidence = api.ReleaseWorkflowDuplicateBlock
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start strict-duplicate name review: %v", err)
+	}
+	completed := waitCompositeUploadTestOperation(t, module, started)
+	if completed.Operation.Status == api.StageStatusBlocked || completed.Operation.Result == nil ||
+		completed.Operation.Result.Kind != api.WorkflowOperationResultDupes || completed.Dupes == nil {
+		t.Fatalf("strict-duplicate name review result = %#v", completed)
+	}
+	if completed.Projections == nil || len(completed.Workflow.RequiredActions) != 0 || len(completed.Continuation.RequiredActions) != 0 ||
+		slices.ContainsFunc(completed.Continuation.TrackerOutcomes, func(outcome api.TrackerLaneOutcome) bool {
+			return outcome.TrackerID == "ALPHA" && hasPendingRequiredAction(outcome.RequiredActions)
+		}) {
+		t.Fatalf("strict-duplicate name review: projections=%#v workflowActions=%#v continuationActions=%#v lanes=%#v",
+			completed.Projections, completed.Workflow.RequiredActions, completed.Continuation.RequiredActions, completed.Continuation.TrackerOutcomes)
+	}
+	staleActionIndex := slices.IndexFunc(completed.Projections.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionProvideTrackerInput && action.TrackerID == "ALPHA"
+	})
+	if staleActionIndex < 0 {
+		t.Fatalf("strict-duplicate fixture has no retained name action: %#v", completed.Projections.RequiredActions)
+	}
+	confirmed := true
+	name := "Example.Release.2026.ALPHA-GRP"
+	staleAnswer := api.RequiredActionAnswer{
+		ActionID:         completed.Projections.RequiredActions[staleActionIndex].ID,
+		WorkflowRevision: completed.Workflow.Revision,
+		TextValue:        &name,
+		Confirmed:        &confirmed,
+	}
+	_, err = module.Execute(t.Context(), testOwnerID, ResolveActionCommand{
+		WorkflowID:       completed.Workflow.ID,
+		ExpectedRevision: completed.Workflow.Revision,
+		Answer:           staleAnswer,
+		IdempotencyKey:   "resolve-stale-name-after-strict-duplicate",
+	})
+	if !errors.Is(err, ErrInvalidTransition) {
+		t.Fatalf("direct stale name resolution error = %v, want invalid transition", err)
+	}
+	_, err = module.Continue(t.Context(), testOwnerID, api.ContinueReleaseWorkflowRequest{
+		Authority: &api.WorkflowAuthority{
+			WorkflowID:       completed.Workflow.ID,
+			ExpectedRevision: completed.Workflow.Revision,
+		},
+		IdempotencyKey: "continue-stale-name-after-strict-duplicate",
+		Goal:           api.WorkflowGoalDuplicatesDecided,
+		Answers:        []api.RequiredActionAnswer{staleAnswer},
+	})
+	if !errors.Is(err, ErrInvalidTransition) {
+		t.Fatalf("continuation stale name resolution error = %v, want invalid transition", err)
+	}
+	_, err = module.SubmitUploadFeedback(t.Context(), testOwnerID, completed.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               completed.Projections.RequiredActions[staleActionIndex].ID,
+			WorkflowRevision: completed.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackTrackerInput,
+			TrackerInput: &api.ReleaseWorkflowUploadTrackerInput{
+				TrackerID: "ALPHA",
+				Projection: api.ReleaseWorkflowUploadTrackerProjection{
+					UploadReleaseName: api.WorkflowPatch[string]{Present: true, Value: "Example.Release.2026.ALPHA-GRP"},
+				},
+			},
+		},
+		IdempotencyKey: "stale-name-after-strict-duplicate",
+	})
+	if !errors.Is(err, ErrRevisionConflict) {
+		t.Fatalf("stale name feedback error = %v, want revision conflict", err)
+	}
+}
+
+func TestCompositeUploadStrictDuplicatePreservesSiblingNameReview(t *testing.T) {
+	t.Parallel()
+
+	module, _, _ := newCompositeUploadNameReviewTestModule(t)
+	module.dupeBuilder = compositeUploadDuplicateBlockedBuilder(module.dupeBuilder, "ALPHA", "in_client")
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeDebug, "composite-strict-dupe-sibling-name-review")
+	request.Trackers.Include = []api.TrackerID{"ALPHA", "BETA"}
+	request.Duplicates.OnEvidence = api.ReleaseWorkflowDuplicateBlock
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start strict-duplicate sibling name review: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	if blocked.Dupes == nil || blocked.Operation.Status != api.StageStatusBlocked {
+		t.Fatalf("sibling name review result = %#v", blocked)
+	}
+	if slices.ContainsFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.TrackerID == "ALPHA" && action.Status == api.RequiredActionStatusPending
+	}) || !slices.ContainsFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionProvideTrackerInput && action.TrackerID == "BETA" &&
+			action.Status == api.RequiredActionStatusPending
+	}) {
+		t.Fatalf("strict-duplicate sibling actions = %#v", blocked.Continuation.RequiredActions)
+	}
+}
+
+func TestCompositeUploadRuleAuthorizationPrecedesNameReview(t *testing.T) {
+	for _, test := range []struct {
+		name                  string
+		reviewedName          string
+		generatedConfirmation bool
+	}{
+		{
+			name:                  "generated name",
+			reviewedName:          "Example.Release.2026.ALPHA-GRP",
+			generatedConfirmation: true,
+		},
+		{
+			name:         "edited name",
+			reviewedName: "Example.Release.2026.REVIEWED-GRP",
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			module, _, _ := newCompositeUploadTestModuleConfigured(t, true, true)
+			request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeDebug, "composite-rule-then-name-"+test.name)
+			request.Trackers.Include = []api.TrackerID{"ALPHA"}
+			started, err := module.StartUpload(t.Context(), testOwnerID, request)
+			if err != nil {
+				t.Fatalf("start rule-and-name composite upload: %v", err)
+			}
+			blocked := waitCompositeUploadTestOperation(t, module, started)
+			actionIndex := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+				return action.Kind == api.RequiredActionAuthorizeRules && action.Status == api.RequiredActionStatusPending
+			})
+			if actionIndex < 0 {
+				t.Fatalf("rule authorization action = %#v", blocked.Operation)
+			}
+			resumed, err := module.SubmitUploadFeedback(t.Context(), testOwnerID, blocked.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+				Action: api.ReleaseWorkflowUploadActionIdentity{
+					ID:               blocked.Continuation.RequiredActions[actionIndex].ID,
+					WorkflowRevision: blocked.Workflow.Revision,
+				},
+				Response: api.ReleaseWorkflowUploadFeedbackResponse{
+					Kind: api.ReleaseWorkflowUploadFeedbackRuleAuthorization,
+					RuleAuthorization: &api.ReleaseWorkflowUploadConfirmation{
+						Confirmed: true,
+					},
+				},
+				IdempotencyKey: "authorize-rule-before-name",
+			})
+			if err != nil {
+				t.Fatalf("authorize rule before name review: %v", err)
+			}
+			review := waitCompositeUploadTestOperation(t, module, resumed)
+			actionIndex = slices.IndexFunc(review.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+				return action.Kind == api.RequiredActionProvideTrackerInput && action.Status == api.RequiredActionStatusPending
+			})
+			if review.Dupes == nil || actionIndex < 0 {
+				t.Fatalf("post-authorization name review = %#v", review)
+			}
+			resumed, err = module.SubmitUploadFeedback(t.Context(), testOwnerID, review.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+				Action: api.ReleaseWorkflowUploadActionIdentity{
+					ID:               review.Continuation.RequiredActions[actionIndex].ID,
+					WorkflowRevision: review.Workflow.Revision,
+				},
+				Response: api.ReleaseWorkflowUploadFeedbackResponse{
+					Kind: api.ReleaseWorkflowUploadFeedbackTrackerInput,
+					TrackerInput: &api.ReleaseWorkflowUploadTrackerInput{
+						TrackerID: "ALPHA",
+						Projection: api.ReleaseWorkflowUploadTrackerProjection{
+							UploadReleaseName: api.WorkflowPatch[string]{Present: true, Value: test.reviewedName},
+						},
+					},
+				},
+				IdempotencyKey: "confirm-name-after-rule",
+			})
+			if err != nil {
+				t.Fatalf("confirm name after rule authorization: %v", err)
+			}
+			completed := waitCompositeUploadTestOperation(t, module, resumed)
+			if completed.Projections == nil || len(completed.Projections.Projections) == 0 || completed.ProjectionInstructions == nil {
+				t.Fatalf("authorized reviewed result = %#v", completed)
+			}
+			projection := completed.Projections.Projections[0]
+			confirmedFingerprint := completed.ProjectionInstructions.Instructions["ALPHA"].ConfirmedNameFingerprint
+			if projection.UploadReleaseName != test.reviewedName || projection.RuleAuthorizationFingerprint == "" ||
+				(confirmedFingerprint != "") != test.generatedConfirmation {
+				t.Fatalf("authorized reviewed projection = %#v instructions=%#v", projection, completed.ProjectionInstructions)
+			}
+		})
+	}
+}
+
+func TestCompositeUploadTrackerInputRejectsMismatchedTrackerWithoutMutation(t *testing.T) {
+	t.Parallel()
+
+	module, repository, _ := newCompositeUploadNameReviewTestModule(t)
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeDebug, "composite-name-mismatch")
+	request.Trackers.Include = []api.TrackerID{"ALPHA", "BETA", "GAMMA"}
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start name-review composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	actionIndex := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionProvideTrackerInput && action.TrackerID == "ALPHA" &&
+			action.Status == api.RequiredActionStatusPending
+	})
+	if actionIndex < 0 {
+		t.Fatalf("initial name-review stop = %#v", blocked)
+	}
+	action := blocked.Continuation.RequiredActions[actionIndex]
+	before, err := repository.Load(context.Background(), testOwnerID, blocked.Workflow.ID)
+	if err != nil {
+		t.Fatalf("load state before mismatched feedback: %v", err)
+	}
+
+	_, err = module.SubmitUploadFeedback(context.Background(), testOwnerID, blocked.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               action.ID,
+			WorkflowRevision: blocked.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackTrackerInput,
+			TrackerInput: &api.ReleaseWorkflowUploadTrackerInput{
+				TrackerID: " beta ",
+				Projection: api.ReleaseWorkflowUploadTrackerProjection{
+					UploadReleaseName: api.WorkflowPatch[string]{Present: true, Value: "Example.Release.2026.WRONG-GRP"},
+				},
+			},
+		},
+		IdempotencyKey: "mismatched-tracker-input",
+	})
+	if !errors.Is(err, ErrInvalidTransition) || !strings.Contains(err.Error(), "feedback tracker does not match action") {
+		t.Fatalf("mismatched tracker feedback error = %v", err)
+	}
+	after, err := repository.Load(context.Background(), testOwnerID, blocked.Workflow.ID)
+	if err != nil {
+		t.Fatalf("load state after mismatched feedback: %v", err)
+	}
+	if !reflect.DeepEqual(after, before) {
+		t.Fatalf("mismatched tracker feedback mutated state: before=%#v after=%#v", before, after)
+	}
+}
+
+func TestCompositeUploadRuleAuthorizationResumesLiveUpload(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadWaiverTestModule(t)
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeUpload, "composite-rule-authorization")
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	actionIndex := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionAuthorizeRules && action.TrackerID == "ALPHA" &&
+			action.Status == api.RequiredActionStatusPending
+	})
+	if actionIndex < 0 || blocked.UploadResult != nil || uploads.execution != nil {
+		t.Fatalf("waivable-rule stop = %#v execution=%#v", blocked, uploads.execution)
+	}
+	action := blocked.Continuation.RequiredActions[actionIndex]
+	resumed, err := module.SubmitUploadFeedback(context.Background(), testOwnerID, blocked.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               action.ID,
+			WorkflowRevision: blocked.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackRuleAuthorization,
+			RuleAuthorization: &api.ReleaseWorkflowUploadConfirmation{
+				Confirmed: true,
+			},
+		},
+		IdempotencyKey: "authorize-composite-rules",
+	})
+	if err != nil {
+		t.Fatalf("submit composite rule authorization: %v", err)
+	}
+	review := waitCompositeUploadTestOperation(t, module, resumed)
+	projectionIndex := slices.IndexFunc(review.Projections.Projections, func(projection api.TrackerReleaseProjection) bool {
+		return projection.TrackerID == "ALPHA"
+	})
+	if projectionIndex < 0 || review.Projections.Projections[projectionIndex].RuleAuthorizationFingerprint == "" ||
+		!review.Projections.Projections[projectionIndex].UploadReady {
+		t.Fatalf("authorized composite projection = %#v", review.Projections)
+	}
+	completed := approveCompositeUploadTrackers(
+		t,
+		module,
+		review,
+		[]api.TrackerID{"ALPHA", "BETA"},
+		"approve-authorized-trackers",
+	)
+	if completed.UploadResult == nil || completed.Operation == nil ||
+		completed.Operation.Status != api.StageStatusExecuted || uploads.execution == nil || uploads.execution.executions != 1 {
+		t.Fatalf("authorized composite upload = %#v execution=%#v", completed, uploads.execution)
+	}
+}
+
+func TestCompositeUploadRuleRejectionSkipsOnlyThatTracker(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadWaiverTestModule(t)
+	request := compositeUploadTestRequest(true, api.ReleaseWorkflowUploadModeUpload, "composite-rule-rejection")
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	actionIndex := slices.IndexFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionAuthorizeRules && action.TrackerID == "ALPHA" &&
+			action.Status == api.RequiredActionStatusPending
+	})
+	if actionIndex < 0 {
+		t.Fatalf("tracker rule action = %#v", blocked.Continuation.RequiredActions)
+	}
+	action := blocked.Continuation.RequiredActions[actionIndex]
+	resumed, err := module.SubmitUploadFeedback(context.Background(), testOwnerID, blocked.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               action.ID,
+			WorkflowRevision: blocked.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackRuleAuthorization,
+			RuleAuthorization: &api.ReleaseWorkflowUploadConfirmation{
+				Confirmed: false,
+			},
+		},
+		IdempotencyKey: "reject-composite-rules",
+	})
+	if err != nil {
+		t.Fatalf("reject composite tracker rules: %v", err)
+	}
+	review := waitCompositeUploadTestOperation(t, module, resumed)
+	approval := pendingCompositeTrackerApproval(t, review)
+	if len(review.Selection.TrackerIDs) != 1 || review.Selection.TrackerIDs[0] != "BETA" ||
+		review.Projections == nil || len(review.Projections.Projections) != 1 || review.Projections.Projections[0].TrackerID != "BETA" ||
+		len(approval.Options) != 1 || approval.Options[0].Value != "BETA" || uploads.execution != nil {
+		t.Fatalf(
+			"tracker rule rejection = selection=%#v projections=%#v approval=%#v execution=%#v",
+			review.Selection,
+			review.Projections,
+			approval,
+			uploads.execution,
+		)
+	}
+}
+
+func TestCompositeUploadStrictUnattendedSkipsWaivableTracker(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadWaiverTestModule(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-skip-waivable")
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	action := pendingCompositeTrackerApproval(t, blocked)
+	if len(action.Options) != 1 || action.Options[0].Value != "BETA" || uploads.execution != nil ||
+		slices.ContainsFunc(blocked.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+			return action.Kind == api.RequiredActionAuthorizeRules
+		}) {
+		t.Fatalf("strict unattended waiver handling = %#v execution=%#v", blocked, uploads.execution)
+	}
+}
+
+func TestMergeCompositeProjectionDefaultsPreservesTrackerSpecificValues(t *testing.T) {
+	t.Parallel()
+
+	current := api.TrackerProjectionInstructions{
+		AdditionalNames: map[string]*string{
+			"shared": new("specific"),
+		},
+		TrackerConfig: api.TrackerConfigOverrides{
+			Anon: new(false),
+		},
+	}
+	defaults := api.ReleaseWorkflowUploadTrackerProjection{
+		AdditionalNames: map[string]*string{
+			"defaultOnly": new("default"),
+			"shared":      new("overwritten"),
+		},
+		Config: api.ReleaseWorkflowUploadTrackerConfig{
+			Anon:  new(true),
+			Draft: new(false),
+		},
+	}
+	merged := mergeCompositeProjectionDefaults(current, defaults)
+	if merged.AdditionalNames["shared"] == nil || *merged.AdditionalNames["shared"] != "specific" ||
+		merged.AdditionalNames["defaultOnly"] == nil || *merged.AdditionalNames["defaultOnly"] != "default" ||
+		merged.TrackerConfig.Anon == nil || *merged.TrackerConfig.Anon ||
+		merged.TrackerConfig.Draft == nil || *merged.TrackerConfig.Draft {
+		t.Fatalf("merged projection defaults = %#v", merged)
+	}
+}
+
+func TestSubmitUploadFeedbackRejectsDeprecatedAuthenticationKinds(t *testing.T) {
+	t.Parallel()
+
+	tests := map[string]api.ReleaseWorkflowUploadFeedbackResponse{
+		"authentication": {
+			Kind: legacyTrackerAuthFeedbackKind,
+		},
+		"two factor": {
+			Kind: legacyTrackerTwoFactorFeedbackKind,
+		},
+	}
+	for name, response := range tests {
+		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
+			module := &Module{}
+			_, err := module.SubmitUploadFeedback(
+				context.Background(),
+				testOwnerID,
+				"workflow-legacy-auth",
+				api.ReleaseWorkflowUploadFeedback{
+					Action: api.ReleaseWorkflowUploadActionIdentity{
+						ID:               "action-legacy-auth",
+						WorkflowRevision: 2,
+					},
+					Response:       response,
+					IdempotencyKey: "legacy-auth-feedback",
+				},
+			)
+			if !errors.Is(err, ErrInvalidTransition) ||
+				!strings.Contains(err.Error(), "outside the upload workflow") ||
+				!strings.Contains(err.Error(), "fresh attempt") {
+				t.Fatalf("deprecated authentication feedback error = %v", err)
+			}
+		})
+	}
+}
+
+func TestCompositeUploadAllTrackersRemoved(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name       string
+		selection  []api.TrackerID
+		removed    []api.TrackerID
+		wantResult bool
+	}{
+		{
+			name:       "all removed",
+			selection:  []api.TrackerID{"ALPHA", "BRAVO"},
+			removed:    []api.TrackerID{"BRAVO", "ALPHA"},
+			wantResult: true,
+		},
+		{
+			name:      "one remains",
+			selection: []api.TrackerID{"ALPHA", "BRAVO"},
+			removed:   []api.TrackerID{"ALPHA"},
+		},
+		{name: "no selection", removed: []api.TrackerID{"ALPHA"}},
+		{name: "no removals", selection: []api.TrackerID{"ALPHA"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			current := CommandResult{}
+			if tt.selection != nil {
+				current.Selection = &api.TrackerSelection{TrackerIDs: tt.selection}
+			}
+			session := &compositeUploadSession{RemoveTrackers: tt.removed}
+			if got := compositeUploadAllTrackersRemoved(current, session); got != tt.wantResult {
+				t.Fatalf("compositeUploadAllTrackersRemoved() = %t, want %t", got, tt.wantResult)
+			}
+		})
+	}
+}
+
+func TestCompositeUploadAllAuthBlockedTerminatesNoEligible(t *testing.T) {
+	t.Parallel()
+
+	module, repository, uploads := newCompositeUploadTestModule(t)
+	module.trackerPreflight = compositeUploadAuthBlockedPreflightBuilder(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-auth-blocked")
+	request.Trackers.Include = []api.TrackerID{"ALPHA"}
+
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start auth-blocked composite upload: %v", err)
+	}
+	current := waitCompositeUploadTestOperation(t, module, started)
+	if current.Operation == nil || current.Operation.Status != api.StageStatusFailed ||
+		len(current.Operation.Failures) != 1 ||
+		current.Operation.Failures[0].Failure.Code != api.OperationFailureNoEligibleTrackers ||
+		current.Operation.Failures[0].Failure.Recovery != api.OperationRecoveryAuthenticateTrackers {
+		t.Fatalf("auth-blocked composite operation = %#v", current.Operation)
+	}
+	if current.Workflow.Status != api.WorkflowStatusFailed ||
+		len(current.Workflow.RequiredActions) != 0 ||
+		len(current.Workflow.Failures) != 1 ||
+		current.Workflow.Failures[0].Failure.Code != api.OperationFailureNoEligibleTrackers {
+		t.Fatalf("auth-blocked composite workflow = %#v", current.Workflow)
+	}
+	if current.Dupes != nil || current.Media != nil || current.Descriptions != nil || current.UploadResult != nil || uploads.execution != nil {
+		t.Fatalf("auth-blocked composite reached downstream work = %#v", current)
+	}
+	if current.Selection == nil || !slices.Equal(current.Selection.TrackerIDs, []api.TrackerID{"ALPHA"}) {
+		t.Fatalf("auth-blocked composite selection = %#v", current.Selection)
+	}
+	state, err := repository.Load(context.Background(), testOwnerID, current.Workflow.ID)
+	if err != nil {
+		t.Fatalf("load auth-blocked composite state: %v", err)
+	}
+	if state.Composite == nil || state.Composite.ActiveOperationID != "" ||
+		state.Composite.TerminalReason != "no_eligible_trackers" {
+		t.Fatalf("auth-blocked composite terminal session = %#v", state.Composite)
+	}
+}
+
+func TestCompositeUploadStrictExcludesAuthBlockedSibling(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadTestModule(t)
+	module.trackerPreflight = compositeUploadAuthBlockedPreflightBuilderFor(t, []api.TrackerID{"BETA"})
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-auth-sibling")
+
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start partially auth-blocked composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	current := approveCompositeUploadTrackers(
+		t,
+		module,
+		blocked,
+		[]api.TrackerID{"ALPHA"},
+		"approve-auth-filtered-trackers",
+	)
+	if current.Operation == nil || current.Operation.Status != api.StageStatusExecuted ||
+		current.UploadResult == nil || uploads.execution == nil ||
+		!slices.Equal(uploads.execution.selected, []api.TrackerID{"ALPHA"}) {
+		t.Fatalf(
+			"partially auth-blocked composite result: status=%v upload=%t selected=%v",
+			current.Operation,
+			current.UploadResult != nil,
+			uploads.execution,
+		)
+	}
+	if current.TrackerApproval == nil ||
+		!slices.Equal(current.TrackerApproval.ApprovedTrackerIDs, []api.TrackerID{"ALPHA"}) {
+		t.Fatalf("partially auth-blocked tracker authority = %#v", current.TrackerApproval)
+	}
+}
+
+func TestCompositeUploadStrictExcludesDuplicateBlockedSibling(t *testing.T) {
+	t.Parallel()
+
+	module, _, uploads := newCompositeUploadTestModule(t)
+	module.dupeBuilder = compositeUploadDuplicateBlockedBuilder(module.dupeBuilder, "BETA", "same release")
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "composite-dupe-sibling")
+
+	started, err := module.StartUpload(context.Background(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start duplicate-blocked composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	current := approveCompositeUploadTrackers(
+		t,
+		module,
+		blocked,
+		[]api.TrackerID{"ALPHA"},
+		"approve-dupe-filtered-trackers",
+	)
+	if current.Operation == nil || current.Operation.Status != api.StageStatusExecuted ||
+		current.UploadResult == nil || uploads.execution == nil ||
+		!slices.Equal(uploads.execution.selected, []api.TrackerID{"ALPHA"}) {
+		t.Fatalf(
+			"duplicate-blocked composite result: status=%v upload=%t execution=%#v",
+			current.Operation,
+			current.UploadResult != nil,
+			uploads.execution,
+		)
+	}
+	if current.TrackerApproval == nil ||
+		!slices.Equal(current.TrackerApproval.ApprovedTrackerIDs, []api.TrackerID{"ALPHA"}) {
+		t.Fatalf("duplicate-blocked tracker authority = %#v", current.TrackerApproval)
+	}
+}
+
+func TestCompositeUploadTrackerRemovalUpdateIsIdempotent(t *testing.T) {
+	t.Parallel()
+
+	current := CommandResult{
+		Workflow: api.ReleaseWorkflow{ID: "workflow-tracker-removal", Revision: 4},
+		Release:  &api.ReleaseSnapshot{ID: "release-tracker-removal", Revision: 2},
+		Selection: &api.TrackerSelection{
+			TrackerIDs: []api.TrackerID{"ALPHA", "BRAVO"},
+		},
+		ProjectionInstructions: &api.TrackerProjectionInstructionSnapshot{
+			Instructions: map[api.TrackerID]api.TrackerProjectionInstructions{},
+		},
+		Projections: &api.TrackerReleaseProjectionSet{
+			ID:       "projections-tracker-removal",
+			Revision: 3,
+		},
+	}
+	session := &compositeUploadSession{
+		Intent: api.WorkflowIntent{
+			TrackerIDs: []api.TrackerID{"ALPHA", "BRAVO"},
+		},
+		RemoveTrackers: []api.TrackerID{"ALPHA"},
+	}
+
+	trackerIDs, changed := compositeUploadTrackerRemovalUpdate(current, session)
+	if !changed || !slices.Equal(trackerIDs, []api.TrackerID{"BRAVO"}) {
+		t.Fatalf("first tracker removal update = %#v/%t", trackerIDs, changed)
+	}
+	session.Intent.TrackerIDs = trackerIDs
+	trackerIDs, changed = compositeUploadTrackerRemovalUpdate(current, session)
+	if changed || trackerIDs != nil {
+		t.Fatalf("repeated tracker removal update = %#v/%t", trackerIDs, changed)
+	}
+
+	command, stage := planContinuationCommand(api.ContinueReleaseWorkflowRequest{
+		IdempotencyKey: "continue-tracker-removal",
+		Goal:           api.WorkflowGoalTrackersAssessed,
+		Intent:         session.Intent,
+	}, current, time.Now())
+	projection, ok := command.(ProjectTrackersCommand)
+	if !ok || stage != "project-trackers" || !slices.Equal(projection.TrackerIDs, []api.TrackerID{"BRAVO"}) {
+		t.Fatalf("tracker removal re-projection: stage=%q command=%#v", stage, command)
+	}
+}
+
+func TestCompositeUploadRefreshesOnlyRecoverablePersistedMediaBlock(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name             string
+		failures         []api.WorkflowFailure
+		additionalAction *api.RequiredAction
+		wantDescriptions bool
+	}{
+		{
+			name:             "surviving tracker continues to descriptions",
+			failures:         []api.WorkflowFailure{compositeImageHostFailure("BETA")},
+			wantDescriptions: true,
+		},
+		{
+			name:     "genuine tracker action remains blocked",
+			failures: []api.WorkflowFailure{compositeImageHostFailure("BETA")},
+			additionalAction: &api.RequiredAction{
+				ID:             "action-tracker-input",
+				Kind:           api.RequiredActionProvideTrackerInput,
+				Status:         api.RequiredActionStatusPending,
+				TrackerID:      "ALPHA",
+				Prompt:         "Provide the required tracker value.",
+				AllowsFreeText: true,
+			},
+		},
+		{
+			name: "all tracker hosts failed",
+			failures: []api.WorkflowFailure{
+				compositeImageHostFailure("ALPHA"),
+				compositeImageHostFailure("BETA"),
+			},
+		},
+		{
+			name:     "unscoped host failure remains blocked",
+			failures: []api.WorkflowFailure{compositeImageHostFailure("")},
+		},
+	}
+	fixture := prepareCompletedCompositeUploadFixture(t)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			module, repository, workflowID := newPersistedCompositeMediaFixture(t, fixture)
+			command, operationID, initialRevision, initialMediaCount := seedPersistedCompositeMediaBlock(
+				t,
+				repository,
+				workflowID,
+				test.failures,
+				test.additionalAction,
+			)
+			ctx := context.WithValue(t.Context(), operationExecutionContextKey{}, operationID)
+			result, err := module.runCompositeUpload(ctx, testOwnerID, command)
+			if err != nil {
+				t.Fatalf("resume persisted media block: %v", err)
+			}
+			state, err := repository.Load(t.Context(), testOwnerID, workflowID)
+			if err != nil {
+				t.Fatalf("load resumed composite state: %v", err)
+			}
+			if test.wantDescriptions {
+				if result.Descriptions == nil || result.Media == nil || result.Media.Status != api.StageStatusCompleted {
+					t.Fatalf("recovered composite result = %#v", result)
+				}
+				if _, failed := TrackerImageHostFailure(*result.Media, "BETA"); !failed {
+					t.Fatalf("recovered media lost tracker-scoped failure: %#v", result.Media.Failures)
+				}
+				if len(state.Media) != initialMediaCount+1 {
+					t.Fatalf("recovered media revisions = %d, want %d", len(state.Media), initialMediaCount+1)
+				}
+				return
+			}
+			if result.Descriptions != nil || result.Media == nil || result.Media.Status != api.StageStatusBlocked {
+				t.Fatalf("blocked composite result = %#v", result)
+			}
+			if state.Workflow.Revision != initialRevision+1 {
+				t.Fatalf("blocked composite revision = %d, want %d (single terminal checkpoint)", state.Workflow.Revision, initialRevision+1)
+			}
+			if len(state.Media) != initialMediaCount {
+				t.Fatalf("blocked composite refreshed media %d times, want none", len(state.Media)-initialMediaCount)
+			}
+		})
+	}
+}
+
+func TestNormalizeCompositeUploadRequestPreservesManualFramesIntent(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name       string
+		frames     []int
+		wantFrames []int
+	}{
+		{name: "no_manual_frames", frames: []int{}},
+		{
+			name:       "manual_frames",
+			frames:     []int{120, 240},
+			wantFrames: []int{120, 240},
+		},
+	}
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			t.Parallel()
+
+			count := 4
+			request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "media-intent-"+testCase.name)
+			request.Media.Screenshots.Count = &count
+			request.Media.Screenshots.Frames = testCase.frames
+			session, _, err := normalizeCompositeUploadRequest(request)
+			if err != nil {
+				t.Fatalf("normalize composite upload request: %v", err)
+			}
+			if session.Intent.Media == nil || session.Intent.Media.ScreenshotCount != 0 {
+				t.Fatalf("normalized media intent = %#v", session.Intent.Media)
+			}
+			if !reflect.DeepEqual(session.Intent.Media.ManualFrames, testCase.wantFrames) {
+				t.Fatalf("normalized manual frames = %#v, want %#v", session.Intent.Media.ManualFrames, testCase.wantFrames)
+			}
+		})
+	}
+}
+
+func TestNormalizeCompositeUploadRequestRetainsOptionalScreenshotCount(t *testing.T) {
+	t.Parallel()
+
+	zero, lower := 0, 1
+	for _, test := range []struct {
+		name    string
+		count   *int
+		present bool
+		want    int
+	}{
+		{name: "omitted"},
+		{
+			name:    "zero",
+			count:   &zero,
+			present: true,
+		},
+		{
+			name:    "lower",
+			count:   &lower,
+			present: true,
+			want:    lower,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeUpload, "screenshot-count-"+test.name)
+			request.Media.Screenshots.Count = test.count
+			session, _, err := normalizeCompositeUploadRequest(request)
+			if err != nil {
+				t.Fatalf("normalize composite upload request: %v", err)
+			}
+			if (session.RequestedScreenshotCount != nil) != test.present {
+				t.Fatalf("retained screenshot count = %#v, want present=%t", session.RequestedScreenshotCount, test.present)
+			}
+			for _, trackerID := range request.Trackers.Include {
+				instruction, ok := session.Intent.ProjectionInstructions[trackerID]
+				if ok != test.present || (ok && (instruction.ScreenshotCount == nil || *instruction.ScreenshotCount != test.want)) {
+					t.Fatalf("projection instruction for %s = %#v, want screenshot count present=%t value=%d", trackerID, instruction, test.present, test.want)
+				}
+			}
+		})
+	}
+}
+
+func TestCompositeUploadDynamicSelectionSeedsRequestedScreenshotCount(t *testing.T) {
+	t.Parallel()
+
+	zero, lower := 0, 1
+	for _, test := range []struct {
+		name    string
+		count   *int
+		present bool
+		want    int
+	}{
+		{name: "omitted"},
+		{
+			name:    "zero",
+			count:   &zero,
+			present: true,
+		},
+		{
+			name:    "lower",
+			count:   &lower,
+			present: true,
+			want:    lower,
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			module, _, _ := newCompositeUploadTestModule(t)
+			module.mediaBuilder = mediaArtifactBuilderFunc(func(
+				_ context.Context,
+				_ api.ReleaseRef,
+				projections api.TrackerReleaseProjectionSet,
+				instructions api.MediaCaptureInstructions,
+				_ time.Time,
+			) (api.MediaArtifactSet, any, error) {
+				requirements, err := mediaRequirementsFingerprint(projections.Projections)
+				if err != nil {
+					return api.MediaArtifactSet{}, nil, err
+				}
+				if instructions.ScreenshotCount != 0 {
+					t.Fatalf("composite capture screenshot count = %d, want tracker projection requirements only", instructions.ScreenshotCount)
+				}
+				count := 0
+				for _, projection := range projections.Projections {
+					count = max(count, projection.Artifacts.ScreenshotCount)
+				}
+				artifacts := make([]api.MediaArtifact, 0, count+1)
+				for index := range count {
+					artifacts = append(artifacts, api.MediaArtifact{
+						ID:       api.PublicResourceID(fmt.Sprintf("screenshot-%d", index)),
+						Kind:     api.MediaArtifactScreenshot,
+						Purpose:  api.ScreenshotPurposeFinal,
+						Selected: true,
+						Index:    index,
+						Order:    index,
+					})
+				}
+				var attempts []api.HostedImageAttempt
+				if count > 0 {
+					hosted := api.MediaArtifact{
+						ID:       "hosted-screenshot-0",
+						Kind:     api.MediaArtifactHostedImage,
+						Purpose:  api.ScreenshotPurposeFinal,
+						Selected: true,
+						Source:   "screenshot-0",
+					}
+					artifacts = append(artifacts, hosted)
+					trackerIDs := make([]api.TrackerID, 0, len(projections.Projections))
+					for _, projection := range projections.Projections {
+						trackerIDs = append(trackerIDs, projection.TrackerID)
+					}
+					attempts = []api.HostedImageAttempt{{
+						ID:         "host-screenshot-0",
+						UsageScope: "global",
+						TrackerIDs: trackerIDs,
+						Results:    []api.MediaArtifact{hosted},
+					}}
+				}
+				return api.MediaArtifactSet{
+					CaptureFingerprint:        testFingerprint(t, "dynamic-screenshot-count-"+test.name),
+					RequirementsFingerprint:   requirements,
+					Artifacts:                 artifacts,
+					HostAttempts:              attempts,
+					ImageRequirementsPrepared: true,
+				}, struct{}{}, nil
+			})
+			base := module.trackerProjector
+			var builds []map[api.TrackerID]*int
+			module.trackerProjector = trackerProjectionBuilderFunc(func(
+				ctx context.Context,
+				release api.ReleaseSnapshot,
+				subject api.UploadSubject,
+				trackerIDs []api.TrackerID,
+				instructions map[api.TrackerID]api.TrackerProjectionInstructions,
+				ruleAuthorizations map[api.TrackerID]api.WorkflowFingerprint,
+				executionMode api.WorkflowExecutionMode,
+			) (api.TrackerCatalogSnapshot, api.TrackerRuntimeSnapshot, api.TrackerSelection, api.TrackerReleaseProjectionSet, error) {
+				captured := make(map[api.TrackerID]*int, len(instructions))
+				for trackerID, instruction := range instructions {
+					captured[trackerID] = cloneIntPointer(instruction.ScreenshotCount)
+				}
+				builds = append(builds, captured)
+				catalog, runtime, selection, projections, err := base.Build(ctx, release, subject, trackerIDs, instructions, ruleAuthorizations, executionMode)
+				if err != nil {
+					return catalog, runtime, selection, projections, fmt.Errorf("build test tracker projections: %w", err)
+				}
+				for index := range projections.Projections {
+					if count := instructions[projections.Projections[index].TrackerID].ScreenshotCount; count != nil {
+						projections.Projections[index].Artifacts.ScreenshotCount = max(projections.Projections[index].Artifacts.ScreenshotCount, *count)
+					}
+				}
+				return catalog, runtime, selection, projections, nil
+			})
+
+			request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "dynamic-screenshot-count-"+test.name)
+			request.Trackers.Include = nil
+			request.Media.Screenshots.Count = test.count
+			started, err := module.StartUpload(t.Context(), testOwnerID, request)
+			if err != nil {
+				t.Fatalf("start composite upload: %v", err)
+			}
+			blocked := waitCompositeUploadTestOperation(t, module, started)
+			completed := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-dynamic-screenshot-count-"+test.name)
+			if completed.Operation == nil || completed.Operation.Status != api.StageStatusCompleted || completed.DryRun == nil || completed.Media == nil {
+				t.Fatalf("completed dynamic screenshot count upload = %#v", completed)
+			}
+			selectedScreenshots := 0
+			for _, artifact := range completed.Media.Artifacts {
+				if artifact.Selected && artifact.Kind == api.MediaArtifactScreenshot && artifact.Purpose == api.ScreenshotPurposeFinal {
+					selectedScreenshots++
+				}
+			}
+			if selectedScreenshots != test.want {
+				t.Fatalf("selected dynamic screenshots = %d, want %d", selectedScreenshots, test.want)
+			}
+			if len(builds) == 0 {
+				t.Fatal("composite upload did not project dynamically selected trackers")
+			}
+			latest := builds[len(builds)-1]
+			for _, trackerID := range []api.TrackerID{"ALPHA", "BETA"} {
+				count := latest[trackerID]
+				if (count != nil) != test.present || (count != nil && *count != test.want) {
+					t.Fatalf("latest projection screenshot count for %s = %#v, want present=%t value=%d builds=%#v", trackerID, count, test.present, test.want, builds)
+				}
+			}
+		})
+	}
+}
+
+func TestCompositeUploadRequestedScreenshotCountDoesNotCaptureWithoutProjectionRequirement(t *testing.T) {
+	t.Parallel()
+
+	module, _, _ := newCompositeUploadTestModule(t)
+	var captureInstructions []api.MediaCaptureInstructions
+	module.mediaBuilder = mediaArtifactBuilderFunc(func(
+		_ context.Context,
+		_ api.ReleaseRef,
+		projections api.TrackerReleaseProjectionSet,
+		instructions api.MediaCaptureInstructions,
+		_ time.Time,
+	) (api.MediaArtifactSet, any, error) {
+		captureInstructions = append(captureInstructions, instructions)
+		requirements, err := mediaRequirementsFingerprint(projections.Projections)
+		if err != nil {
+			return api.MediaArtifactSet{}, nil, err
+		}
+		return api.MediaArtifactSet{
+			CaptureFingerprint:        testFingerprint(t, "no-image-requested-screenshot-count"),
+			RequirementsFingerprint:   requirements,
+			ImageRequirementsPrepared: true,
+			Status:                    api.StageStatusCompleted,
+		}, struct{}{}, nil
+	})
+	count := 7
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "no-image-requested-screenshot-count")
+	request.Media.Screenshots.Count = &count
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	completed := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-no-image-requested-screenshot-count")
+	if completed.Operation == nil || completed.Operation.Status != api.StageStatusCompleted || completed.DryRun == nil || completed.Media == nil {
+		t.Fatalf("completed no-image screenshot count upload = %#v", completed)
+	}
+	if len(captureInstructions) == 0 {
+		t.Fatal("no-image composite upload did not prepare media")
+	}
+	for _, instructions := range captureInstructions {
+		if instructions.ScreenshotCount != 0 {
+			t.Fatalf("no-image composite capture screenshot count = %d, want 0", instructions.ScreenshotCount)
+		}
+	}
+	if len(completed.Media.Artifacts) != 0 {
+		t.Fatalf("no-image composite artifacts = %#v, want none", completed.Media.Artifacts)
+	}
+}
+
+func TestCompositeUploadSelectedScreenshotExcessRespectsTrackerMinimumAndOrder(t *testing.T) {
+	t.Parallel()
+
+	artifacts := []api.MediaArtifact{
+		{
+			ID:       "comparison",
+			Kind:     api.MediaArtifactScreenshot,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+			Source:   "comparison",
+		},
+		{
+			ID:       "third",
+			Kind:     api.MediaArtifactScreenshot,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+			Order:    3,
+		},
+		{
+			ID:       "first",
+			Kind:     api.MediaArtifactScreenshot,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+			Order:    1,
+		},
+		{
+			ID:       "second",
+			Kind:     api.MediaArtifactScreenshot,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+			Order:    2,
+		},
+		{
+			ID:       "menu",
+			Kind:     api.MediaArtifactDVDMenu,
+			Purpose:  api.ScreenshotPurposeMenu,
+			Selected: true,
+			Order:    0,
+		},
+	}
+	if actual, expected := compositeUploadSelectedScreenshotExcess(artifacts, 2), []api.PublicResourceID{"third"}; !slices.Equal(actual, expected) {
+		t.Fatalf("minimum-preserving screenshot excess = %#v, want %#v", actual, expected)
+	}
+	if actual, expected := compositeUploadSelectedScreenshotExcess(artifacts, 0), []api.PublicResourceID{"first", "second", "third"}; !slices.Equal(actual, expected) {
+		t.Fatalf("zero-count screenshot excess = %#v, want %#v", actual, expected)
+	}
+}
+
+func TestCompositeUploadAutomaticPolicyDeselectsExcessAutomaticScreenshots(t *testing.T) {
+	t.Parallel()
+
+	for _, test := range []struct {
+		name  string
+		count int
+		want  []api.PublicResourceID
+	}{
+		{
+			name:  "lower",
+			count: 1,
+			want:  []api.PublicResourceID{"comparison", "first"},
+		},
+		{
+			name:  "zero",
+			count: 0,
+			want:  []api.PublicResourceID{"comparison"},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			module, repository, _ := newCompositeUploadTestModule(t)
+			request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "trim-automatic-screenshots-"+test.name)
+			started, err := module.StartUpload(t.Context(), testOwnerID, request)
+			if err != nil {
+				t.Fatalf("start composite upload: %v", err)
+			}
+			blocked := waitCompositeUploadTestOperation(t, module, started)
+			completed := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-trim-automatic-screenshots-"+test.name)
+
+			const operationID api.WorkflowOperationID = "trim-automatic-screenshots"
+			if err := module.private.Put(
+				testOwnerID,
+				completed.Workflow.ID,
+				mediaPrivateResourceID(completed.Media.ID),
+				&retainedMediaResourceFake{stats: &retainedMediaResourceStats{}},
+				module.clock.Now().UTC().Add(time.Hour),
+			); err != nil {
+				t.Fatalf("replace retained test media: %v", err)
+			}
+			repository.mu.Lock()
+			state := repository.states[completed.Workflow.ID]
+			media := state.Media[state.Workflow.Media.ID]
+			media.Artifacts = []api.MediaArtifact{
+				{
+					ID:       "comparison",
+					Kind:     api.MediaArtifactScreenshot,
+					Purpose:  api.ScreenshotPurposeFinal,
+					Selected: true,
+					Source:   "comparison",
+				},
+				{
+					ID:       "third",
+					Kind:     api.MediaArtifactScreenshot,
+					Purpose:  api.ScreenshotPurposeFinal,
+					Selected: true,
+					Order:    3,
+				},
+				{
+					ID:       "first",
+					Kind:     api.MediaArtifactScreenshot,
+					Purpose:  api.ScreenshotPurposeFinal,
+					Selected: true,
+					Order:    1,
+				},
+				{
+					ID:       "second",
+					Kind:     api.MediaArtifactScreenshot,
+					Purpose:  api.ScreenshotPurposeFinal,
+					Selected: true,
+					Order:    2,
+				},
+				{
+					ID:       "menu",
+					Kind:     api.MediaArtifactDVDMenu,
+					Purpose:  api.ScreenshotPurposeMenu,
+					Selected: true,
+				},
+			}
+			state.Media[media.ID] = media
+			state.Composite.ActiveOperationID = operationID
+			state.Composite.RequestedScreenshotCount = &test.count
+			instructions := map[api.TrackerID]api.TrackerProjectionInstructions{}
+			for _, trackerID := range state.Selections[state.Workflow.Selection.ID].TrackerIDs {
+				instructions[trackerID] = api.TrackerProjectionInstructions{ScreenshotCount: cloneIntPointer(&test.count)}
+			}
+			state.Composite.Intent.ProjectionInstructions = instructions
+			instructionSnapshot := state.ProjectionInstructions[state.Workflow.ProjectionInstructions.ID]
+			instructionSnapshot.Instructions = instructions
+			state.ProjectionInstructions[instructionSnapshot.ID] = instructionSnapshot
+			projectionSnapshot := state.Projections[state.Workflow.TrackerProjections.ID]
+			for index := range projectionSnapshot.Projections {
+				projectionSnapshot.Projections[index].Artifacts.ScreenshotCount = test.count
+			}
+			state.Projections[projectionSnapshot.ID] = projectionSnapshot
+			repository.states[completed.Workflow.ID] = state
+			repository.mu.Unlock()
+
+			current, err := module.Current(t.Context(), testOwnerID, completed.Workflow.ID)
+			if err != nil {
+				t.Fatalf("load composite upload: %v", err)
+			}
+			updated, err := repository.Load(t.Context(), testOwnerID, completed.Workflow.ID)
+			if err != nil {
+				t.Fatalf("load composite state: %v", err)
+			}
+			changed, err := module.applyCompositeAutomaticPolicy(t.Context(), testOwnerID, current, updated.Composite, operationID)
+			if err != nil || !changed {
+				t.Fatalf("trim automatic screenshots changed=%t err=%v", changed, err)
+			}
+			after, err := module.Current(t.Context(), testOwnerID, completed.Workflow.ID)
+			if err != nil {
+				t.Fatalf("load trimmed media: %v", err)
+			}
+			if after.Media == nil {
+				t.Fatal("trimmed composite media is unavailable")
+			}
+			selectedScreenshots := make([]api.PublicResourceID, 0)
+			menuSelected := false
+			for _, artifact := range after.Media.Artifacts {
+				if artifact.Selected && artifact.Kind == api.MediaArtifactScreenshot && artifact.Purpose == api.ScreenshotPurposeFinal {
+					selectedScreenshots = append(selectedScreenshots, artifact.ID)
+				}
+				if artifact.Selected && artifact.Kind == api.MediaArtifactDVDMenu {
+					menuSelected = true
+				}
+			}
+			if !slices.Equal(selectedScreenshots, test.want) || !menuSelected {
+				t.Fatalf("trimmed media screenshots=%#v menuSelected=%t", selectedScreenshots, menuSelected)
+			}
+		})
+	}
+}
+
+func seedPersistedCompositeMediaBlock(
+	t *testing.T,
+	repository *MemoryRepository,
+	workflowID api.WorkflowID,
+	failures []api.WorkflowFailure,
+	additionalAction *api.RequiredAction,
+) (CompositeUploadCommand, api.WorkflowOperationID, api.WorkflowRevision, int) {
+	t.Helper()
+	repository.mu.Lock()
+	defer repository.mu.Unlock()
+	state := repository.states[workflowID]
+	if state.Composite == nil || state.Workflow.Media == nil {
+		t.Fatalf("completed composite state is missing session or media: %#v", state.Workflow)
+	}
+	media := state.Media[state.Workflow.Media.ID]
+	action := api.RequiredAction{
+		ID:               "action-media-input",
+		Kind:             api.RequiredActionProvideTrackerInput,
+		Status:           api.RequiredActionStatusPending,
+		WorkflowRevision: state.Workflow.Revision,
+		Prompt:           "Capture, select, or host the required release images before continuing.",
+		CreatedAt:        state.Workflow.UpdatedAt,
+	}
+	media.Artifacts = []api.MediaArtifact{
+		{
+			ID:       "screen-0",
+			Kind:     api.MediaArtifactScreenshot,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+		},
+		{
+			ID:       "hosted-0",
+			Kind:     api.MediaArtifactHostedImage,
+			Purpose:  api.ScreenshotPurposeFinal,
+			Selected: true,
+			Source:   "screen-0",
+		},
+	}
+	media.HostAttempts = []api.HostedImageAttempt{{
+		UsageScope: "global",
+		TrackerIDs: []api.TrackerID{"ALPHA"},
+		Results:    []api.MediaArtifact{media.Artifacts[1]},
+	}}
+	if intent := state.Composite.Intent.Media; intent != nil {
+		fingerprint, fingerprintErr := api.CanonicalWorkflowFingerprint(struct {
+			Release      api.ReleaseRef
+			ProjectionID api.TrackerReleaseProjectionSetID
+			Revision     api.WorkflowRevision
+			Instructions api.MediaCaptureInstructions
+			Requirements api.WorkflowFingerprint
+		}{
+			Release:      state.Projections[state.Workflow.TrackerProjections.ID].ReleaseRef,
+			ProjectionID: state.Workflow.TrackerProjections.ID,
+			Revision:     state.Workflow.TrackerProjections.Revision,
+			Instructions: *intent,
+			Requirements: media.RequirementsFingerprint,
+		})
+		if fingerprintErr != nil {
+			t.Fatalf("fingerprint persisted media fixture: %v", fingerprintErr)
+		}
+		media.CaptureFingerprint = fingerprint
+	}
+	media.ImageRequirementsPrepared = true
+	media.Status = api.StageStatusBlocked
+	media.Failures = append([]api.WorkflowFailure(nil), failures...)
+	media.RequiredActions = []api.RequiredAction{action}
+	if additionalAction != nil {
+		genuine := *additionalAction
+		genuine.WorkflowRevision = state.Workflow.Revision
+		genuine.CreatedAt = state.Workflow.UpdatedAt
+		media.RequiredActions = append(media.RequiredActions, genuine)
+	}
+	state.Media[media.ID] = media
+	state.Workflow.Descriptions = nil
+	state.Workflow.DryRun = nil
+	state.Workflow.UploadResult = nil
+	state.Workflow.Status = api.WorkflowStatusBlocked
+	state.Workflow.RequiredActions = append([]api.RequiredAction(nil), media.RequiredActions...)
+	state.Workflow.Failures = append([]api.WorkflowFailure(nil), failures...)
+	operationID := api.WorkflowOperationID("operation-persisted-media")
+	state.Composite.ActiveOperationID = operationID
+	state.Composite.TerminalReason = ""
+	state.Composite.Goal = api.WorkflowGoalDescriptionsReady
+	repository.states[workflowID] = state
+	return CompositeUploadCommand{
+		WorkflowID:         workflowID,
+		ExpectedRevision:   state.Workflow.Revision,
+		SessionFingerprint: state.Composite.RequestFingerprint,
+		IdempotencyKey:     "resume-persisted-media",
+	}, operationID, state.Workflow.Revision, len(state.Media)
+}
+
+type completedCompositeUploadFixture struct {
+	state      State
+	idSequence int
+}
+
+// prepareCompletedCompositeUploadFixture exercises the full upload setup once
+// before each recovery test group. Callers install detached copies so each
+// recovery case has its own repository and private resource store.
+func prepareCompletedCompositeUploadFixture(t *testing.T) completedCompositeUploadFixture {
+	t.Helper()
+	module, repository, _ := newCompositeUploadTestModule(t)
+	request := compositeUploadTestRequest(false, api.ReleaseWorkflowUploadModeDebug, "persisted-media-fixture")
+	started, err := module.StartUpload(t.Context(), testOwnerID, request)
+	if err != nil {
+		t.Fatalf("start composite upload fixture: %v", err)
+	}
+	blocked := waitCompositeUploadTestOperation(t, module, started)
+	completed := approveCompositeUploadTrackers(t, module, blocked, []api.TrackerID{"ALPHA", "BETA"}, "approve-persisted-media-fixture")
+	fixture, err := repository.Load(t.Context(), testOwnerID, completed.Workflow.ID)
+	if err != nil {
+		t.Fatalf("load completed composite upload fixture: %v", err)
+	}
+	ids, ok := module.ids.(*sequenceIDGenerator)
+	if !ok {
+		t.Fatal("completed composite upload fixture uses an unexpected ID generator")
+	}
+	return completedCompositeUploadFixture{state: fixture, idSequence: ids.next}
+}
+
+func newPersistedCompositeMediaFixture(
+	t *testing.T,
+	fixture completedCompositeUploadFixture,
+) (*Module, *MemoryRepository, api.WorkflowID) {
+	t.Helper()
+	module, repository, _ := newCompositeUploadTestModule(t)
+	ids, ok := module.ids.(*sequenceIDGenerator)
+	if !ok {
+		t.Fatal("persisted composite upload fixture uses an unexpected ID generator")
+	}
+	ids.next = fixture.idSequence
+	state := fixture.state
+	state.ProcessEpoch = module.processEpoch
+	if _, _, err := repository.Create(t.Context(), testOwnerID, "", testFingerprint(t, "persisted-composite-media-fixture"), state); err != nil {
+		t.Fatalf("create persisted composite upload fixture: %v", err)
+	}
+	if state.Workflow.Media == nil {
+		t.Fatal("persisted composite upload fixture has no media")
+	}
+	if err := module.private.Put(
+		testOwnerID,
+		state.Workflow.ID,
+		mediaPrivateResourceID(state.Workflow.Media.ID),
+		struct{}{},
+		module.clock.Now().UTC().Add(24*time.Hour),
+	); err != nil {
+		t.Fatalf("seed persisted composite media resource: %v", err)
+	}
+	return module, repository, state.Workflow.ID
+}
+
+func compositeImageHostFailure(trackerID api.TrackerID) api.WorkflowFailure {
+	return api.WorkflowFailure{
+		Failure: api.OperationFailure{
+			Code:      api.OperationFailureImageHostUnavailable,
+			Operation: api.OperationKindImageHosting,
+			Message:   "Required image host failed.",
+			Recovery:  api.OperationRecoveryRetry,
+		},
+		TrackerID: trackerID,
+		Resource:  "synthetic-host",
+	}
+}
+
+func compositeUploadTestOperationCount(repository *MemoryRepository, workflowID api.WorkflowID) int {
+	repository.mu.RLock()
+	defer repository.mu.RUnlock()
+	count := 0
+	for _, operation := range repository.operations {
+		if operation.WorkflowID == workflowID {
+			count++
+		}
+	}
+	return count
+}
+
+func pendingCompositeTrackerApproval(t *testing.T, current CommandResult) api.RequiredAction {
+	t.Helper()
+	actionIndex := slices.IndexFunc(current.Continuation.RequiredActions, func(action api.RequiredAction) bool {
+		return action.Kind == api.RequiredActionApproveTrackers && action.Status == api.RequiredActionStatusPending
+	})
+	if actionIndex < 0 {
+		t.Fatalf("composite tracker approval action = %#v", current.Continuation.RequiredActions)
+	}
+	return current.Continuation.RequiredActions[actionIndex]
+}
+
+func approveCompositeUploadTrackers(
+	t *testing.T,
+	module *Module,
+	current CommandResult,
+	trackerIDs []api.TrackerID,
+	idempotencyKey string,
+) CommandResult {
+	t.Helper()
+	action := pendingCompositeTrackerApproval(t, current)
+	resumed, err := module.SubmitUploadFeedback(context.Background(), testOwnerID, current.Workflow.ID, api.ReleaseWorkflowUploadFeedback{
+		Action: api.ReleaseWorkflowUploadActionIdentity{
+			ID:               action.ID,
+			WorkflowRevision: current.Workflow.Revision,
+		},
+		Response: api.ReleaseWorkflowUploadFeedbackResponse{
+			Kind: api.ReleaseWorkflowUploadFeedbackTrackerApproval,
+			TrackerApproval: &api.ReleaseWorkflowUploadTrackerApproval{
+				Confirmed:  true,
+				TrackerIDs: trackerIDs,
+			},
+		},
+		IdempotencyKey: idempotencyKey,
+	})
+	if err != nil {
+		t.Fatalf("submit composite tracker approval: %v", err)
+	}
+	return waitCompositeUploadTestOperation(t, module, resumed)
+}
+
+func compositeUploadTestRequest(
+	confirm bool,
+	mode api.ReleaseWorkflowUploadMode,
+	idempotencyKey string,
+) api.CreateReleaseWorkflowUploadRequest {
+	return api.CreateReleaseWorkflowUploadRequest{
+		Source:     api.ReleaseWorkflowUploadSource{Path: `C:\releases\Example.Release.2026.1080p-GRP`},
+		Unattended: &api.ReleaseWorkflowUploadUnattended{Confirm: confirm},
+		Execution:  api.ReleaseWorkflowUploadExecution{Mode: mode},
+		Trackers: api.ReleaseWorkflowUploadTrackers{
+			Include: []api.TrackerID{"ALPHA", "BETA"},
+		},
+		IdempotencyKey: idempotencyKey,
+	}
+}
+
+type compositeUploadDemandEvaluator struct {
+	readyInputReadinessEvaluator
+	requirements api.MetadataRequirementSet
+}
+
+func (e compositeUploadDemandEvaluator) Requirements(context.Context, []api.TrackerID) (api.MetadataRequirementSet, error) {
+	return e.requirements, nil
+}
+
+func newCompositeUploadTestModule(
+	t *testing.T,
+) (*Module, *MemoryRepository, *uploadPlanBuilderFake) {
+	return newCompositeUploadTestModuleConfigured(t, false, false)
+}
+
+func newCompositeUploadWaiverTestModule(
+	t *testing.T,
+) (*Module, *MemoryRepository, *uploadPlanBuilderFake) {
+	return newCompositeUploadTestModuleConfigured(t, true, false)
+}
+
+func newCompositeUploadNameReviewTestModule(
+	t *testing.T,
+) (*Module, *MemoryRepository, *uploadPlanBuilderFake) {
+	return newCompositeUploadTestModuleConfigured(t, false, true)
+}
+
+func newCompositeUploadTestModuleConfigured(
+	t *testing.T,
+	waivableRules bool,
+	releaseNameReview bool,
+) (*Module, *MemoryRepository, *uploadPlanBuilderFake) {
+	t.Helper()
+	projections := trackerProjectionBuilderFunc(func(
+		ctx context.Context,
+		_ api.ReleaseSnapshot,
+		_ api.UploadSubject,
+		trackerIDs []api.TrackerID,
+		instructions map[api.TrackerID]api.TrackerProjectionInstructions,
+		ruleAuthorizations map[api.TrackerID]api.WorkflowFingerprint,
+		executionMode api.WorkflowExecutionMode,
+	) (
+		api.TrackerCatalogSnapshot,
+		api.TrackerRuntimeSnapshot,
+		api.TrackerSelection,
+		api.TrackerReleaseProjectionSet,
+		error,
+	) {
+		if releaseNameReview {
+			for _, instruction := range instructions {
+				if instruction.UploadReleaseName.Present {
+					if _, ok := logging.FromContext(ctx, nil).(api.NopLogger); !ok {
+						return api.TrackerCatalogSnapshot{}, api.TrackerRuntimeSnapshot{}, api.TrackerSelection{}, api.TrackerReleaseProjectionSet{},
+							errors.New("release-name projection rebuild did not suppress duplicate diagnostics")
+					}
+					break
+				}
+			}
+		}
+		if len(trackerIDs) == 0 {
+			trackerIDs = []api.TrackerID{"ALPHA", "BETA"}
+		}
+		catalog := testCatalog(t)
+		if releaseNameReview {
+			catalog.Trackers = append(catalog.Trackers, api.TrackerCatalogDescriptor{
+				TrackerID:         "GAMMA",
+				DisplayName:       "Gamma",
+				ProjectorVersion:  "v1",
+				PolicyFingerprint: testFingerprint(t, "gamma-policy"),
+			})
+		}
+		catalog.Trackers = slices.DeleteFunc(catalog.Trackers, func(descriptor api.TrackerCatalogDescriptor) bool {
+			return !slices.Contains(trackerIDs, descriptor.TrackerID)
+		})
+		catalog, err := catalog.WithFingerprint()
+		if err != nil {
+			return api.TrackerCatalogSnapshot{}, api.TrackerRuntimeSnapshot{}, api.TrackerSelection{}, api.TrackerReleaseProjectionSet{},
+				fmt.Errorf("fingerprint composite test catalog: %w", err)
+		}
+		runtime := testRuntime(t)
+		if releaseNameReview {
+			runtime.Trackers = append(runtime.Trackers, api.TrackerRuntimeEntry{
+				TrackerID:         "GAMMA",
+				Configured:        true,
+				ConfigFingerprint: testFingerprint(t, "gamma-config"),
+			})
+		}
+		runtime.Trackers = slices.DeleteFunc(runtime.Trackers, func(entry api.TrackerRuntimeEntry) bool {
+			return !slices.Contains(trackerIDs, entry.TrackerID)
+		})
+		projected := make([]api.TrackerReleaseProjection, 0, len(trackerIDs))
+		actions := make([]api.RequiredAction, 0, len(trackerIDs))
+		projectionInput := "composite-projection-input"
+		for _, trackerID := range trackerIDs {
+			automaticName := "Example.Release.2026." + string(trackerID) + "-GRP"
+			automaticNamingFingerprint := testFingerprint(t, string(trackerID)+"-naming")
+			projection := testProjection(t, trackerID, automaticName)
+			projection.DescriptionGroup = "alpha"
+			if releaseNameReview {
+				projection.NamingPolicyID = "test/name-review/v1"
+				projection.NamingFingerprint = automaticNamingFingerprint
+				projection.DuplicatePolicyID = "test/dupe-review/v1"
+				projection.DuplicatePolicyFingerprint = testFingerprint(t, string(trackerID)+"-duplicate-policy")
+				projection.DuplicateTargetFingerprint = testFingerprint(t, string(trackerID)+"-duplicate-target")
+				projection.DuplicateSearchFingerprint = testFingerprint(t, string(trackerID)+"-duplicate-search")
+			}
+			waivableFingerprint := testFingerprint(t, "composite-waivable-rules")
+			ruleAuthorized := !waivableRules || trackerID != "ALPHA" || ruleAuthorizations[trackerID] == waivableFingerprint
+			if releaseNameReview && trackerID != "GAMMA" && ruleAuthorized {
+				projection.PolicyDecisions = []api.TrackerPolicyDecision{{
+					Code:     releaseNameConfirmationDecisionCode,
+					Decision: "confirmation_required",
+				}}
+				instruction := instructions[trackerID]
+				switch {
+				case instruction.UploadReleaseName.Present:
+					projection.UploadReleaseName = instruction.UploadReleaseName.Value
+					projection.AdditionalNames = []api.TrackerReleaseName{{
+						Role:  api.TrackerReleaseNameRoleSearch,
+						Value: automaticName,
+					}}
+					projection.ProjectorFingerprint = testFingerprint(t, string(trackerID)+"-projector-reviewed")
+					projection.InputFingerprint = testFingerprint(t, string(trackerID)+"-input-reviewed")
+					projection.PolicyDecisions[0].Decision = "confirmed"
+					projectionInput = fmt.Sprintf("%s-%s-reviewed", projectionInput, strings.ToLower(string(trackerID)))
+				case instruction.ConfirmedNameFingerprint == automaticNamingFingerprint:
+					projection.PolicyDecisions[0].Decision = "confirmed"
+					projectionInput = fmt.Sprintf("%s-%s-confirmed", projectionInput, strings.ToLower(string(trackerID)))
+				default:
+					projection.UploadReady = false
+					projection.RequiredActions = []api.RequiredAction{{
+						Kind:           api.RequiredActionProvideTrackerInput,
+						TrackerID:      trackerID,
+						Prompt:         "Confirm the tracker release name.",
+						AllowsFreeText: true,
+						Options: []api.RequiredActionOption{{
+							Value: automaticName,
+							Label: automaticName,
+						}},
+					}}
+					projectionInput = fmt.Sprintf("%s-%s-pending", projectionInput, strings.ToLower(string(trackerID)))
+				}
+			}
+			if waivableRules && trackerID == "ALPHA" {
+				decisionIndex := len(projection.PolicyDecisions)
+				projection.WaivableRuleFingerprint = waivableFingerprint
+				projection.PolicyDecisions = append(projection.PolicyDecisions, api.TrackerPolicyDecision{
+					Code:        "language_rule",
+					Message:     "language waiver required",
+					Disposition: api.RuleDispositionWaivable,
+				})
+				if ruleAuthorizations[trackerID] == waivableFingerprint {
+					projection.RuleAuthorizationFingerprint = waivableFingerprint
+					projection.PolicyDecisions[decisionIndex].Decision = "authorized"
+					projectionInput += "-authorized"
+				} else {
+					projection.Readiness = api.ReadinessStatusBlocked
+					projection.DupeReady = false
+					projection.UploadReady = false
+					projection.PolicyDecisions[decisionIndex].Decision = "authorization_required"
+					projection.PolicyDecisions[decisionIndex].Blocking = true
+					projection.RequiredActions = []api.RequiredAction{{
+						Kind:   api.RequiredActionAuthorizeRules,
+						Prompt: "Alpha rule warning: language rule. Upload to this tracker anyway?",
+					}}
+					projectionInput += "-waiver-pending"
+				}
+			}
+			actions = append(actions, projection.RequiredActions...)
+			projected = append(projected, projection)
+		}
+		status := api.StageStatusReady
+		if !slices.ContainsFunc(projected, func(projection api.TrackerReleaseProjection) bool { return projection.DupeReady }) {
+			status = api.StageStatusBlocked
+		}
+		return catalog, runtime, api.TrackerSelection{TrackerIDs: trackerIDs}, api.TrackerReleaseProjectionSet{
+			InputFingerprint:  testFingerprint(t, projectionInput),
+			PolicyFingerprint: testFingerprint(t, "composite-projection-policy"),
+			ExecutionMode:     executionMode,
+			Projections:       projected,
+			Status:            status,
+			RequiredActions:   actions,
+		}, nil
+	})
+	dupes := dupeAssessmentBuilderFunc(func(
+		_ context.Context,
+		_ api.DuplicateSubject,
+		projectionSet api.TrackerReleaseProjectionSet,
+		_ api.TrackerPreflightAssessment,
+		now time.Time,
+		_ bool,
+	) (api.DupeAssessment, any, error) {
+		results := make([]api.TrackerDupeAssessment, 0, len(projectionSet.Projections))
+		for _, projection := range projectionSet.Projections {
+			fingerprint, err := api.CanonicalWorkflowFingerprint(projection)
+			if err != nil {
+				return api.DupeAssessment{}, nil, fmt.Errorf("fingerprint composite dupe projection: %w", err)
+			}
+			var evidenceFingerprint api.WorkflowFingerprint
+			var search api.DupeSearchEvidence
+			if projection.DuplicatePolicyID != "" {
+				evidenceFingerprint = testFingerprint(t, string(projection.TrackerID)+"-duplicate-evidence")
+				search.Complete = true
+			}
+			results = append(results, api.TrackerDupeAssessment{
+				TrackerID:             projection.TrackerID,
+				UploadReleaseName:     projection.UploadReleaseName,
+				ProjectionFingerprint: fingerprint,
+				CriteriaFingerprint:   projection.CriteriaFingerprint,
+				TargetFingerprint:     projection.DuplicateTargetFingerprint,
+				SearchFingerprint:     projection.DuplicateSearchFingerprint,
+				PolicyID:              projection.DuplicatePolicyID,
+				PolicyFingerprint:     projection.DuplicatePolicyFingerprint,
+				EvidenceFingerprint:   evidenceFingerprint,
+				Criteria:              projection.DuplicateCriteria,
+				Search:                search,
+				Decision:              api.DupeDecisionNoMatch,
+				Status:                api.StageStatusCompleted,
+				CheckedAt:             now,
+				FreshUntil:            now.Add(time.Hour),
+			})
+		}
+		return api.DupeAssessment{
+			InputFingerprint: testFingerprint(t, "composite-dupes"),
+			Results:          results,
+			Status:           api.StageStatusCompleted,
+			ExpiresAt:        now.Add(time.Hour),
+		}, struct{}{}, nil
+	})
+	media := mediaArtifactBuilderFunc(func(
+		_ context.Context,
+		_ api.ReleaseRef,
+		projectionSet api.TrackerReleaseProjectionSet,
+		_ api.MediaCaptureInstructions,
+		_ time.Time,
+	) (api.MediaArtifactSet, any, error) {
+		requirements, err := mediaRequirementsFingerprint(projectionSet.Projections)
+		if err != nil {
+			return api.MediaArtifactSet{}, nil, err
+		}
+		return api.MediaArtifactSet{
+			CaptureFingerprint:        testFingerprint(t, "composite-media"),
+			RequirementsFingerprint:   requirements,
+			ImageRequirementsPrepared: true,
+			Status:                    api.StageStatusCompleted,
+		}, struct{}{}, nil
+	})
+	uploadPlans := &uploadPlanBuilderFake{testing: t}
+	preflight := compositeUploadReadyPreflightBuilder(t)
+	if releaseNameReview {
+		preflight = compositeUploadNameReviewPreflightBuilder(t)
+	}
+	module, repository := newTestModule(
+		t,
+		testPreparer(),
+		WithTrackerProjectionBuilder(projections),
+		WithTrackerPreflightBuilder(preflight),
+		WithDupeAssessmentBuilder(dupes),
+		WithMediaArtifactBuilder(media),
+		WithDescriptionBuilder(&descriptionBuilderFake{testing: t}),
+		WithUploadPlanBuilder(uploadPlans),
+	)
+	return module, repository, uploadPlans
+}
+
+func compositeUploadReadyPreflightBuilder(t *testing.T) TrackerPreflightBuilder {
+	t.Helper()
+	base := readyPreflightBuilder(t)
+	return trackerPreflightBuilderFunc(func(
+		ctx context.Context,
+		subject api.UploadSubject,
+		catalog api.TrackerCatalogSnapshot,
+		runtime api.TrackerRuntimeSnapshot,
+		initial api.TrackerReleaseProjectionSet,
+		now time.Time,
+	) (api.TrackerPreflightAssessment, []api.TrackerReleaseProjection, error) {
+		assessment, finalized, err := base.Build(ctx, subject, catalog, runtime, initial, now)
+		if err != nil {
+			return api.TrackerPreflightAssessment{}, nil, fmt.Errorf("build composite upload test preflight: %w", err)
+		}
+		assessment.ExecutionMode = initial.ExecutionMode
+		return assessment, finalized, nil
+	})
+}
+
+func compositeUploadNameReviewPreflightBuilder(t *testing.T) TrackerPreflightBuilder {
+	t.Helper()
+	base := compositeUploadReadyPreflightBuilder(t)
+	return trackerPreflightBuilderFunc(func(
+		ctx context.Context,
+		subject api.UploadSubject,
+		catalog api.TrackerCatalogSnapshot,
+		runtime api.TrackerRuntimeSnapshot,
+		initial api.TrackerReleaseProjectionSet,
+		now time.Time,
+	) (api.TrackerPreflightAssessment, []api.TrackerReleaseProjection, error) {
+		assessment, finalized, err := base.Build(ctx, subject, catalog, runtime, initial, now)
+		if err != nil {
+			return api.TrackerPreflightAssessment{}, nil, fmt.Errorf("build name-review composite preflight: %w", err)
+		}
+		for index := range assessment.Results {
+			projectionIndex := slices.IndexFunc(initial.Projections, func(projection api.TrackerReleaseProjection) bool {
+				return projection.TrackerID == assessment.Results[index].TrackerID
+			})
+			if projectionIndex >= 0 {
+				assessment.Results[index].RequiredActions = append(
+					[]api.RequiredAction(nil),
+					initial.Projections[projectionIndex].RequiredActions...,
+				)
+			}
+		}
+		return assessment, finalized, nil
+	})
+}
+
+func compositeUploadAuthBlockedPreflightBuilder(t *testing.T) TrackerPreflightBuilder {
+	t.Helper()
+	return compositeUploadAuthBlockedPreflightBuilderFor(t, []api.TrackerID{"ALPHA", "BETA"})
+}
+
+func compositeUploadAuthBlockedPreflightBuilderFor(
+	t *testing.T,
+	blockedTrackerIDs []api.TrackerID,
+) TrackerPreflightBuilder {
+	t.Helper()
+	base := compositeUploadReadyPreflightBuilder(t)
+	return trackerPreflightBuilderFunc(func(
+		ctx context.Context,
+		subject api.UploadSubject,
+		catalog api.TrackerCatalogSnapshot,
+		runtime api.TrackerRuntimeSnapshot,
+		initial api.TrackerReleaseProjectionSet,
+		now time.Time,
+	) (api.TrackerPreflightAssessment, []api.TrackerReleaseProjection, error) {
+		assessment, finalized, err := base.Build(ctx, subject, catalog, runtime, initial, now)
+		if err != nil {
+			return api.TrackerPreflightAssessment{}, nil, fmt.Errorf("build auth-blocked composite preflight: %w", err)
+		}
+		for index := range assessment.Results {
+			trackerID := assessment.Results[index].TrackerID
+			if !slices.Contains(blockedTrackerIDs, trackerID) {
+				continue
+			}
+			failure := api.WorkflowFailure{
+				Failure: api.OperationFailure{
+					Code:      api.OperationFailureTrackerAuthRequired,
+					Operation: api.OperationKindDuplicateCheck,
+					Message:   "Tracker authentication is not ready for this attempt.",
+					Recovery:  api.OperationRecoveryAuthenticateTrackers,
+				},
+				TrackerID: trackerID,
+			}
+			assessment.Results[index].State = api.TrackerPreflightStateRetryable
+			assessment.Results[index].AuthReady = false
+			assessment.Results[index].RequiredActions = nil
+			assessment.Results[index].Failures = []api.WorkflowFailure{failure}
+			finalized[index].Readiness = api.ReadinessStatusBlocked
+			finalized[index].DupeReady = false
+			finalized[index].UploadReady = false
+			finalized[index].RequiredActions = nil
+			finalized[index].Failures = []api.WorkflowFailure{failure}
+		}
+		return assessment, finalized, nil
+	})
+}
+
+func compositeUploadDuplicateBlockedBuilder(
+	base DupeAssessmentBuilder,
+	blockedTrackerID api.TrackerID,
+	matchReason string,
+) DupeAssessmentBuilder {
+	return dupeAssessmentBuilderFunc(func(
+		ctx context.Context,
+		subject api.DuplicateSubject,
+		projections api.TrackerReleaseProjectionSet,
+		preflight api.TrackerPreflightAssessment,
+		now time.Time,
+		skipRemote bool,
+	) (api.DupeAssessment, any, error) {
+		assessment, privateEvidence, err := base.Build(ctx, subject, projections, preflight, now, skipRemote)
+		if err != nil {
+			return api.DupeAssessment{}, nil, fmt.Errorf("build duplicate-blocked composite assessment: %w", err)
+		}
+		for index := range assessment.Results {
+			if assessment.Results[index].TrackerID != blockedTrackerID {
+				continue
+			}
+			assessment.Results[index].Decision = api.DupeDecisionAccepted
+			assessment.Results[index].Matches = []api.DupeMatchProjection{{
+				Name:   "Example.Release.2026.1080p-GRP",
+				Reason: matchReason,
+			}}
+		}
+		return assessment, privateEvidence, nil
+	})
+}
+
+func waitCompositeUploadTestOperation(
+	t *testing.T,
+	module *Module,
+	started CommandResult,
+) CommandResult {
+	t.Helper()
+	if started.Operation == nil {
+		t.Fatalf("composite upload has no operation: %#v", started)
+	}
+	deadline := time.Now().Add(10 * time.Second)
+	operation := *started.Operation
+	for !isTerminalProgressStatus(operation.Status) {
+		if time.Now().After(deadline) {
+			t.Fatalf("composite upload operation timed out: %#v", operation)
+		}
+		time.Sleep(5 * time.Millisecond)
+		var err error
+		operation, err = module.Operation(context.Background(), testOwnerID, operation.WorkflowID, operation.ID)
+		if err != nil {
+			t.Fatalf("poll composite upload operation: %v", err)
+		}
+	}
+	current, err := module.Current(context.Background(), testOwnerID, operation.WorkflowID)
+	if err != nil {
+		t.Fatalf("load composite upload current: %v", err)
+	}
+	current.Operation = &operation
+	return current
+}
+
+func TestCompositeUploadResultFallsBackToDuplicateAssessment(t *testing.T) {
+	result := CommandResult{
+		Workflow: api.ReleaseWorkflow{ID: "workflow-duplicates", Revision: 7},
+		Dupes:    &api.DupeAssessment{ID: "dupes-duplicates", Revision: 6},
+	}
+
+	got := compositeUploadResult(result)
+	if got == nil || got.Kind != api.WorkflowOperationResultDupes || got.RefID != "dupes-duplicates" ||
+		got.RefRevision != 6 || got.WorkflowRevision != 7 {
+		t.Fatalf("duplicate composite result = %#v", got)
+	}
+
+	result.Continuation.RequiredActions = []api.RequiredAction{{Status: api.RequiredActionStatusPending}}
+	if got := compositeUploadResult(result); got != nil {
+		t.Fatalf("blocked duplicate composite result = %#v, want nil", got)
+	}
+}
+
+func TestCompositeUploadFactInstructionsReleaseVersion(t *testing.T) {
+	t.Parallel()
+	for _, value := range []string{"PROPER", "REPACK2", ""} {
+		facts := api.ReleaseWorkflowUploadFacts{ReleaseName: api.ReleaseWorkflowUploadReleaseName{Edition: new("Uncut"), Repack: new(value)}}
+		got, err := compositeUploadFactInstructions(facts, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got.ReleaseName.Repack == nil || *got.ReleaseName.Repack != value || *got.ReleaseName.Edition != "Uncut" {
+			t.Fatalf("instructions=%#v", got.ReleaseName)
+		}
+		*facts.ReleaseName.Repack = "REPACK3"
+		if *got.ReleaseName.Repack != value {
+			t.Fatal("mapped version aliases request")
+		}
+	}
+	got, err := compositeUploadFactInstructions(api.ReleaseWorkflowUploadFacts{}, nil)
+	if err != nil || got.ReleaseName.Repack != nil {
+		t.Fatalf("automatic=%#v error=%v", got.ReleaseName, err)
+	}
+}

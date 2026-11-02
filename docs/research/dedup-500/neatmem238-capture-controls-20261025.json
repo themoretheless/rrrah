@@ -1,0 +1,18 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original CaptureQueue transpiled using local TypeScript 5.9.3; in-memory fake client, no DSH/network/server. No dispose spin/timing benchmark.",
+  "authored_controls": [
+    {
+      "name": "completed capture remains in pending map",
+      "passed": true
+    },
+    {
+      "name": "completed flush also remains in pending map",
+      "passed": true
+    },
+    {
+      "name": "flush omits configured agentId despite capture scope using it",
+      "passed": true
+    }
+  ]
+}

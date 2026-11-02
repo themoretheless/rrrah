@@ -1,0 +1,11 @@
+{
+  "source": "docs/research/dedup-500/evidence/eiler2005--maxgram/remaining-pinned/src/db/repos/messages.py",
+  "sha256": "e3165f7d2e9c48b5c7ecc73f8a5dd8b7c36f943678d086189c1df8541593d028",
+  "cases": 2,
+  "passed": 2,
+  "scope": "Original SQL AST-extracted; real in-memory SQLite minimal schema. No async repository, routing or network execution.",
+  "findings": [
+    "Duplicate key includes both message ID and chat ID; another chat does not match.",
+    "Upsert fills delivery IDs and retains them on later null update; direction changes while original created_at remains."
+  ]
+}

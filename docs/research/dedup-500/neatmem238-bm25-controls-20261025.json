@@ -1,0 +1,17 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original sparse-index class with object base, synthetic metadata client; no encoder/download/Qdrant/network. Constructor owns no external resource.",
+  "authored_controls": [
+    {
+      "name": "transient slot lookup failure cached false without retry",
+      "passed": true,
+      "observed": {
+        "calls_before_manual_reset": 1
+      }
+    },
+    {
+      "name": "fresh lookup after explicit cache reset sees valid slot",
+      "passed": true
+    }
+  ]
+}

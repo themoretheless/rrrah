@@ -1,0 +1,84 @@
+{
+  "repository": "Arkalogy/best-photo-picker",
+  "commit": "b59ce09aa78c7fda1931ebbb8cf087539d9d1b71",
+  "reviewed_whole_files": [
+    {
+      "path": "bpp/db/dedupe.py",
+      "git_blob_sha1": "90b6cdfbce120b7c3418b291ed55aa0c0b37c830",
+      "sha256": "d38c1b34d206ce3149fa26e3cf8807d339139596cecca50ec6507279d023026d",
+      "whole_file_read": true
+    },
+    {
+      "path": "bpp/dedupe/phash.py",
+      "git_blob_sha1": "55b5a6f8648d1613e13b44993cb50271dce27590",
+      "sha256": "5f95f24206a937578c96dcb881e72af143d7564937118c06a9066fa0d74ac738",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_dedupe_phash.py",
+      "git_blob_sha1": "2b9012be5b7e19c09f792e926e2f6e9cc30f3a43",
+      "sha256": "6fb6dc5240cbc4f641a58e350e0205a3c9d5ae46e915af94f067416e63241524",
+      "whole_file_read": true
+    },
+    {
+      "path": "bpp/io_scan.py",
+      "sha256": "f07a6bd8c6bba0d755d730503c1d45125a549dfe76eb1aab458199c3be8fd2f8",
+      "git_blob_sha1": "1f93e3800ac49915d93bdec7851388c6b6bd7d6c",
+      "whole_file_read": true
+    },
+    {
+      "path": "bpp/dedupe/cluster.py",
+      "sha256": "f8834cc99944b87a5175a417d1fcdd35da945690bf25854261ee8427eabd0e39",
+      "git_blob_sha1": "35d1ad78065fabd14fa8818c93f9564ceafbb8e8",
+      "whole_file_read": true
+    },
+    {
+      "path": "bpp/dedupe/common.py",
+      "git_blob_sha1": "4f222447963a4fd5c409427e65c6e1730f25873c",
+      "sha256": "69a959b7629f502919ca6b8afe79691725083ff4e4e13a8c589b91fbe878962a",
+      "whole_file_read": true
+    }
+  ],
+  "tracked_blobs": 918,
+  "full_repository_read": false,
+  "visual_artifacts_viewed": 24,
+  "visual_inventory": "docs/research/dedup-500/bpp182-controls-20261024/visual-inventory.json",
+  "visual_scope": "All24 tracked image artifacts decoded and visually inspected on six contact sheets. ICO default frame viewed; other icon resolutions inventoried only. Static screenshots do not prove live UI or duplicate correctness.",
+  "visual_observations": [
+    "Fourteen icon assets: dark purple camera/lens application icons plus Leaflet layers/markers/shadow; splash and ICO have flatter icon style.",
+    "Screenshots01-04: library grid with scores, lightbox/quality metadata, face groups and curated picks.",
+    "Screenshots05-08: map clusters, calendar density, two pet groups and photo adjustment panel.",
+    "Screenshots09-10: weighted selection settings and side-by-side duplicate review with current pick/similar100percent labels, quality breakdown and switch/delete controls. Screenshot100percent label is not byte equality proof."
+  ],
+  "authored_controls_run": 13,
+  "authored_results": "docs/research/dedup-500/bpp182-controls-20261024/results.json",
+  "findings": [
+    "Both original signed Hamming implementations return1 for(-1,0),fixed-width64reference64;actual original SQLite cluster function then groups this pair at default threshold8.",
+    "Original SQLite union-find groups same-hash times0,50,100 seconds under60secondwindow: pairwise edge window does not bound group endpoints.",
+    "Original SQLite early return for empty candidate set leaves seeded old cluster fields unchanged.",
+    "Original global selection omits one of two fixed-width64opposite hashes at threshold8 due signed distance error;synthetic metadata only,no actual photos decoded.",
+    "Recursive scan skips files directly under data but still discovers data/nested/escaped.jpg: os.walk directory list not pruned.",
+    "max_images caps returned list after full scan,not IO budget;callback exceptions contained and symlink options honored on finite owned fixture.",
+    "Complete original greedy selection on synthetic precomputed hashes can pick a best-score representative distance2 from removed member at configured threshold1,after assignment around another representative. Not pairwise-clique guarantee.",
+    "Month protection in global helper cannot recover month already removed by first time-window pass;helper contract applies to its input only."
+  ],
+  "runtime_scope": "Original AST functions, actual owned in-memory SQLite; logger-only adapter. No cv2 decoding/full original test suite/real user DB.",
+  "decision": "reference-only-no-adoption",
+  "remaining": "888/918blobs not wholly assessed by these audits;6textfiles wholly read+24imageartifacts viewed. Full runtime/CLI/cv2 tests pending.143image baseline unreconciled.",
+  "deferred": "pHash.org/ASAN",
+  "previous_audit": "docs/research/dedup-500/bpp182-source-visual-review-v2-20261024.json",
+  "original_test_bodies_passed": 6,
+  "original_test_scope": "Six unchanged AST original test bodies with original hash/global-cluster functions,module namespace shim and logger adapter;3image-dependent tests not run;not whole original application graph.",
+  "original_test_results": "docs/research/dedup-500/bpp182-controls-20261024/cluster-test-results.json",
+  "scan_results": "docs/research/dedup-500/bpp182-controls-20261024/scan-results.json",
+  "selection_results": "docs/research/dedup-500/bpp182-controls-20261024/selection-results.json",
+  "local_library_check": {
+    "command": "CARGO_TARGET_DIR=.dedup-work/bpp182-rust-target cargo +1.98.1 test -p rrrah-dedup --no-default-features --offline --jobs 2 --lib tests::indexed_search_matches_independent_exhaustive_scan",
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0,
+    "log": "docs/research/dedup-500/bpp182-controls-20261024/local-hamming-test.log",
+    "source_sha256": "3b7cc56d50784ebf7b52b2ebbba68aacbbc1428eabd1fa1cd913e9703dfe99c1",
+    "qualification": "Existing deterministic finite index/fullscan oracle includes0,u64MAX and radii0,1,4,8,16,32,63,64,u32MAX. No production changes or full library/image normalization claim."
+  }
+}

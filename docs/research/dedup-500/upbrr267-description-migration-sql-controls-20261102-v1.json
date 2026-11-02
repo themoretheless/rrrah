@@ -1,0 +1,21 @@
+{
+  "repository": "autobrr/upbrr",
+  "source": "docs/research/dedup-500/evidence/autobrr--upbrr/remaining-pinned/internal/services/db/migrations.go",
+  "source_sha256": "35d4592f05f9425103f352f1e3f714a2f7f25680bf10d8a83cc875a1045adc9d",
+  "sqlite_version": "3.54.1",
+  "method": "Executed five exact SQL literals from migrateNormalizeDescriptionOverrides on in-memory authored legacy fixtures, plus rollback after rename and create. Not Go migration execution, full registry validation, process crash or driver cancellation qualification.",
+  "checks": {
+    "trim_collision_last_rowid_wins_even_with_older_timestamp": true,
+    "blank_source_removed": true,
+    "missing_timestamp_backfilled": true,
+    "rollback_restores_original_rows_and_schema": true
+  },
+  "statement_sha256": [
+    "87e245fad4f394d8988c9274326d65d338df4d2fd495b26241cf87ab6bdb8c73",
+    "75ae70048ea7cdee5a968f3c494512f6779de7079c59f7dea66d3546014bc14e",
+    "e3f11a14ed36ad7d1f76e2189e82088c6f988d55e39a4e966e1b1d571db06b71",
+    "9eb7861e7a1bb984375361e1aac3f9d344d58ca5c75c8f79ff0282914403b84c",
+    "c118230cf37ef50e5f207a953850dd42d267c2d48e291a86c6a78adf8040d33d"
+  ],
+  "checker_correction": "Initial extraction guard incorrectly expected six statements and stopped before SQL execution. Corrected count is five; only this completed run is evidence."
+}

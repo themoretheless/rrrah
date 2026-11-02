@@ -1,0 +1,28 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v18-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [],
+  "whole_files_read_total": 76,
+  "remaining_without_whole_review": 1,
+  "whole_repo_complete": false,
+  "structured_review": {
+    "path": "uv.lock",
+    "local": "76-uv.lock",
+    "sha256": "d8093616c61e50a25c45796bd732eec55edf531b7e6174e83be83c14a7b7a41f",
+    "whole_text_read": false,
+    "report": "docs/research/dedup-500/hydrus107-lock-structure-20261024.json",
+    "packages": 25,
+    "artifact_entries": 414,
+    "all_artifact_hashes_and_sizes_present": true
+  },
+  "findings": [
+    "Parsed all TOML structure and read extracted package/dependency metadata; not all414artifactURL/hash entries individually read, so whole-file count unchanged.",
+    "Locked PyAV16.0.1,hvdaccelerators0.4.0,NumPy2.2.6forPython<3.11or2.3.3otherwise,Typer0.19.2. Artifacts not downloaded/hash-verified, existence of hash fields is not payload verification.",
+    "Editable local root package has no version field; first metadata script assumed uniform version and failed, corrected using optional lookup. Not upstream defect.",
+    "Next existing text108 review inspected: authored sources already whole-read in historicalv2; unresolved bundledxxhash header and pinned Abseil submodule remain. Do not repeat prior authored-source work as new."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

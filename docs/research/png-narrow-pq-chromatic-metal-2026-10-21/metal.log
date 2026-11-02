@@ -1,0 +1,37 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3.04s
+     Running tests/hdr_raster_swap.rs (target/debug/deps/hdr_raster_swap-bb2972abc174984f)
+
+running 2 tests
+test png_narrow_pq_chromatic_alpha_matches_independent_matrix_and_metal ... Narrow PQ chromatic alpha: Metal Apple M4 Max
+png-narrow-pq-chromatic-alpha-8.png: 3072 independent colored/alpha pixels; 16 analytical HDR composition interiors; RAM/swap/pressure/cancel; SDR/HDR Metal exact; root=0
+png-narrow-pq-chromatic-alpha-16.png: 3072 independent colored/alpha pixels; 16 analytical HDR composition interiors; RAM/swap/pressure/cancel; SDR/HDR Metal exact; root=0
+ok
+test png_narrow_pq_integer_codes_survive_pressure_swap_and_metal ... HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+png-narrow-pq-color-8.png: all 2880 neutral pixels match Decimal; managed RAM/pressure/cancel/swap; Metal SDR/HDR exact
+HDR still adapter: Metal Apple M4 Max
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+HDR float adapter: AdapterInfo { name: "Apple M4 Max", vendor: 0, device: 0, device_type: IntegratedGpu, device_pci_bus_id: "", driver: "", driver_info: "", backend: Metal, subgroup_min_size: 4, subgroup_max_size: 64, transient_saves_memory: Some(true), limit_bucket: None }
+png-narrow-pq-color-16.png: all 2880 neutral pixels match Decimal; managed RAM/pressure/cancel/swap; Metal SDR/HDR exact
+ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 27 filtered out; finished in 2.06s
+

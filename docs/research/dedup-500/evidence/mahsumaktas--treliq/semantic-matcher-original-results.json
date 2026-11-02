@@ -1,0 +1,33 @@
+{
+  "tests": [
+    {
+      "name": "returns full match with bidirectional score impact",
+      "passed": true
+    },
+    {
+      "name": "returns partial match",
+      "passed": true
+    },
+    {
+      "name": "penalizes unrelated match",
+      "passed": true
+    },
+    {
+      "name": "skips pairs with no issue reference",
+      "passed": true
+    },
+    {
+      "name": "returns empty when no provider",
+      "passed": true
+    },
+    {
+      "name": "handles LLM failure gracefully",
+      "passed": true
+    },
+    {
+      "name": "includes diff summary in prompt when available",
+      "passed": true
+    }
+  ],
+  "scope": "Original7callback bodies/factories/mock provider;Node assertions,logger adapter,original controller;no actual model/Jest."
+}

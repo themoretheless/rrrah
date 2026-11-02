@@ -1,0 +1,125 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original standalone scoring module, original test callbacks with fresh scoring fixture adapter, extracted orchestrator class merge methods. No pytest/conftest, DB, Plex or network calls.",
+  "original_callbacks": 18,
+  "original_passed": 18,
+  "original_failed": 0,
+  "results": [
+    {
+      "name": "test_score_resolution_4k",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_resolution_1080p",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_resolution_from_height",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_video_codec_hevc",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_video_codec_h264",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_audio_codec_truehd",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_audio_codec_aac",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_file_size",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_filename_pattern_remux",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_filename_pattern_bluray",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_filename_pattern_negative",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_calculate_score_high_quality",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_calculate_score_low_quality",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_apply_custom_rules",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_rank_duplicates",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_rank_duplicates_with_custom_rules",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_invalid_regex_pattern",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "test_score_no_metadata",
+      "passed": true,
+      "error": null
+    }
+  ],
+  "authored_controls": [
+    {
+      "name": "equal score size keep choice depends on input order",
+      "passed": true,
+      "observed": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "name": "lowercasing custom regex changes non-digit escape into digit",
+      "passed": true,
+      "observed": 100
+    },
+    {
+      "name": "_merge_movie_results discards disk-only group",
+      "passed": true,
+      "observed": {}
+    },
+    {
+      "name": "_merge_episode_results discards disk-only group",
+      "passed": true,
+      "observed": {}
+    }
+  ]
+}

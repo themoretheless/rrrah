@@ -210,9 +210,18 @@ fn decode_native_frame(
                 return Err(AdapterError::Pixels(PixelError::Budget).into());
             }
             let lists = rrrah_decode::raw_development_opcodes(&bounded)?;
+            let development = match request.raw_development_recipe {
+                rrrah_decode::RawDevelopmentRecipe::NativeDefault => {
+                    rrrah_core::develop::DevelopOptions::default()
+                }
+                rrrah_decode::RawDevelopmentRecipe::Bilinear => rrrah_core::develop::DevelopOptions {
+                    demosaic: rrrah_core::develop::DemosaicAlgorithm::Bilinear,
+                    ..Default::default()
+                },
+            };
             let raster = rrrah_core::develop::develop_raw(
                 &sensor.mosaic,
-                &rrrah_core::develop::DevelopOptions::default(),
+                &development,
                 &lists,
                 Some(budget),
                 &cancelled,
@@ -224,6 +233,8 @@ fn decode_native_frame(
 
 #[derive(Debug, thiserror::Error)]
 pub enum CachedError {
+    #[error("selected container has {observed} images, frame limit is {limit}")]
+    FrameLimit { observed: usize, limit: usize },
     #[error(transparent)]
     Container(#[from] crate::animated::AnimationError),
     #[error(transparent)]
@@ -244,7 +255,8 @@ pub struct FingerprintPolicy {
     pub recipe: [u8; 32],
     pub max_file_bytes: u64,
     pub max_pixels: u64,
-    /// Maximum TIFF directory count, including non-selected pages.
+    /// Maximum reported container image count, including non-selected images.
+    /// TIFF also bounds directory traversal before selected-page decoding.
     pub max_frames: usize,
     pub max_cache_entries: usize,
 }
@@ -311,7 +323,7 @@ pub(crate) fn fingerprint_file_observed(
         Ok(())
     };
     let mut recipe = blake3::Hasher::new();
-    recipe.update(b"rrrah-file-linear-fingerprint-v6");
+    recipe.update(b"rrrah-file-linear-fingerprint-v8");
     recipe.update(env!("RRRAH_BUILT_RECIPE_ID").as_bytes());
     recipe.update(&policy.recipe);
     recipe.update(b"external-file-dependencies-v1");
@@ -393,15 +405,29 @@ pub(crate) fn decode_snapshot_frame(
     budget: &MemoryBudget,
     cancel: impl Fn() -> bool,
 ) -> Result<NormalizedRaster, CachedError> {
-    let magic = source.read_prefix(4, &cancel)?;
+    // DICOM preambles are arbitrary and may begin with another container magic.
+    let header = source.read_prefix(source.byte_count().min(132) as usize, &cancel)?;
+    let dicom = header.get(128..132) == Some(&b"DICM"[..]);
     let mut classified = request.clone();
     classified.memory_budget = Some(budget.clone());
     let sensor = rrrah_decode::image_source_kind(&classified).map_err(FileError::from)?
         == rrrah_decode::ImageSourceKind::Sensor;
+    if !sensor && !dicom && matches!(header.get(..4), Some([0, 0, 1 | 2, 0])) {
+        if let Some(count) = header.get(4..6) {
+            let observed = usize::from(u16::from_le_bytes([count[0], count[1]]));
+            if observed > policy.max_frames {
+                return Err(CachedError::FrameLimit {
+                    observed,
+                    limit: policy.max_frames,
+                });
+            }
+        }
+    }
     let raster = if !sensor
+        && !dicom
         && matches!(
-            magic.as_slice(),
-            [b'I', b'I', 42 | 43, 0] | [b'M', b'M', 0, 42 | 43]
+            header.get(..4),
+            Some([b'I', b'I', 42 | 43, 0] | [b'M', b'M', 0, 42 | 43])
         ) {
         crate::pages::decode_tiff_selected(
             request,
@@ -416,6 +442,12 @@ pub(crate) fn decode_snapshot_frame(
     } else {
         decode_native_frame(request, policy.max_pixels, budget, &cancel)?
     };
+    if raster.image_count() > policy.max_frames {
+        return Err(CachedError::FrameLimit {
+            observed: raster.image_count(),
+            limit: policy.max_frames,
+        });
+    }
     source.verify(&cancel)?;
     Ok(raster)
 }

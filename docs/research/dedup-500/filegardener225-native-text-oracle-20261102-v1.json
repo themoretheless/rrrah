@@ -1,0 +1,71 @@
+{
+  "status": "completed",
+  "started_at_utc": "2026-11-02T00:59:06.728833+00:00",
+  "source_sha256_before": {
+    "crates/rrrah-dedup/src/exact.rs": "6aa6ca528c0a255b37ae2dc0729a22e9597c85ba26371e8e27641c52ba3236ca",
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0"
+  },
+  "input_sha256": {
+    "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/3dupsof6/firstdir/ipsum_reallong.txt": "80ed76299da0b3c82c69ac6d8bac2b41890548175fa5b18240c517cac63bf554",
+    "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/3dupsof6/firstdir/two/ipsum_small.txt": "fd1d4cb2244b1788fdea1f1713df3c082f88fc511c2ea958a23505688d169a74",
+    "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/3dupsof6/seconddir/ipsum_reallong.txt": "482289d7a1d1367f07b0ab1388c5d9a7022b0f3cb9bd8cfe5e254a2a74aa6f60",
+    "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/3dupsof6/seconddir/two/ipsum_small.txt": "1428688eccf30cfad36b8cc9fa08d504e8f7194a4d25963aae3b32348a5c993a"
+  },
+  "scope": "Pinned upstream text fixtures plus owned exact copies; readonly native exact CLI with independent full-byte partition oracle, not visual/format/platform/all-case qualification.",
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "run",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--example",
+    "scan_folder",
+    "--",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh"
+  ],
+  "exit_code": 0,
+  "output": "   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)\n    Finished `dev` profile [optimized + debuginfo] target(s) in 7.45s\n     Running `target/debug/examples/scan_folder /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh`\nGroup 1: 2 files, 18390 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/0-copy.txt\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/0-original.txt\"\nGroup 2: 2 files, 3590 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/1-copy.txt\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/1-original.txt\"\nGroup 3: 2 files, 18390 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/2-copy.txt\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/2-original.txt\"\nGroup 4: 2 files, 3590 bytes each\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/3-copy.txt\"\n  \"/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/3-original.txt\"\nScan complete: 8 files observed, 4 duplicate groups, 439600 bytes read, 0 diagnostics\n",
+  "expected_groups": [
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/0-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/0-original.txt"
+    ],
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/1-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/1-original.txt"
+    ],
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/2-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/2-original.txt"
+    ],
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/3-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/3-original.txt"
+    ]
+  ],
+  "actual_groups": [
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/0-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/0-original.txt"
+    ],
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/1-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/1-original.txt"
+    ],
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/2-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/2-original.txt"
+    ],
+    [
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/3-copy.txt",
+      "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-text-oracle-b6u6t1wh/3-original.txt"
+    ]
+  ],
+  "oracle_matches": true,
+  "source_sha256_after": {
+    "crates/rrrah-dedup/src/exact.rs": "6aa6ca528c0a255b37ae2dc0729a22e9597c85ba26371e8e27641c52ba3236ca",
+    "crates/rrrah-dedup/examples/scan_folder.rs": "a0a3df0ced4bb52c9d63d04a5d8db658a7356c8d5e60261cfebc60654ca5b3c0"
+  },
+  "source_hashes_unchanged": true
+}

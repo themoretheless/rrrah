@@ -1,0 +1,16 @@
+
+running 1 test
+test webp_animation::tests::frame_limit_preallocation_spends_heap_before_invalid_header_rejection ... ok
+
+successes:
+
+---- webp_animation::tests::frame_limit_preallocation_spends_heap_before_invalid_header_rejection stdout ----
+RR51_EARLY_INVALID candidate=true collection_allocations=1 capacity=4096 requested_bytes=163840 managed_peak=0 final=0
+
+
+successes:
+    webp_animation::tests::frame_limit_preallocation_spends_heap_before_invalid_header_rejection
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 36 filtered out; finished in 0.00s
+
+ALLOCATION_CALLS malloc=283 calloc=169 realloc=31 aligned=7

@@ -1,0 +1,1146 @@
+/**
+ * Tests for CLI subcommand registration and action handlers in cli/commands.ts.
+ *
+ * Since the helper functions (getSystemUsername, resolveUserId, apiPost, etc.)
+ * are module-private, we test them indirectly through registerCliCommands by
+ * building a mock Commander-like program that captures each subcommand's action
+ * callback, then invoking those callbacks with controlled arguments.
+ */
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+
+// ---------------------------------------------------------------------------
+// Module mocks — must be declared before importing the module under test
+// ---------------------------------------------------------------------------
+
+vi.mock("../cli/config-file.ts", () => ({
+  readPluginAuth: vi.fn().mockReturnValue({}),
+  writePluginAuth: vi.fn(),
+  getBaseUrl: vi.fn().mockReturnValue("http://localhost:8790"),
+  OPENCLAW_CONFIG_FILE: "/mock/.openclaw/openclaw.json",
+}));
+
+vi.mock("../fs-safe.ts", () => ({
+  readText: vi.fn().mockReturnValue("{}"),
+  exists: vi.fn().mockReturnValue(true),
+  writeText: vi.fn(),
+  mkdirp: vi.fn(),
+  unlink: vi.fn(),
+}));
+
+// ---------------------------------------------------------------------------
+// Imports (after mocks)
+// ---------------------------------------------------------------------------
+
+import { registerCliCommands } from "../cli/commands.ts";
+import {
+  readPluginAuth,
+  writePluginAuth,
+  getBaseUrl,
+} from "../cli/config-file.ts";
+
+// ---------------------------------------------------------------------------
+// Mock Commander program builder
+// ---------------------------------------------------------------------------
+
+interface MockCommand {
+  _name: string;
+  _description: string;
+  _subcommands: MockCommand[];
+  _options: Array<{ flags: string; desc: string; defaultVal?: string }>;
+  _action: ((...args: any[]) => any) | null;
+  _args: Array<{ name: string; desc: string }>;
+  command(name: string): MockCommand;
+  description(desc: string): MockCommand;
+  configureHelp(opts: any): MockCommand;
+  hook(event: string, fn: (...args: any[]) => any): MockCommand;
+  option(flags: string, desc: string, defaultVal?: string): MockCommand;
+  argument(name: string, desc: string): MockCommand;
+  action(fn: (...args: any[]) => any): MockCommand;
+}
+
+function createMockCommand(name: string): MockCommand {
+  const cmd: MockCommand = {
+    _name: name,
+    _description: "",
+    _subcommands: [],
+    _options: [],
+    _action: null,
+    _args: [],
+    command(n: string) {
+      const sub = createMockCommand(n);
+      cmd._subcommands.push(sub);
+      return sub;
+    },
+    description(desc: string) {
+      cmd._description = desc;
+      return cmd;
+    },
+    configureHelp(_opts: any) {
+      return cmd;
+    },
+    hook(_event: string, _fn: (...args: any[]) => any) {
+      return cmd;
+    },
+    option(flags: string, desc: string, defaultVal?: string) {
+      cmd._options.push({ flags, desc, defaultVal });
+      return cmd;
+    },
+    argument(n: string, desc: string) {
+      cmd._args.push({ name: n, desc });
+      return cmd;
+    },
+    action(fn: (...args: any[]) => any) {
+      cmd._action = fn;
+      return cmd;
+    },
+  };
+  return cmd;
+}
+
+/** Recursively find a subcommand by name. */
+function findCommand(root: MockCommand, name: string): MockCommand | undefined {
+  for (const sub of root._subcommands) {
+    if (sub._name === name) return sub;
+    const deep = findCommand(sub, name);
+    if (deep) return deep;
+  }
+  return undefined;
+}
+
+// ---------------------------------------------------------------------------
+// Shared helpers
+// ---------------------------------------------------------------------------
+
+function createMockProvider() {
+  return {
+    add: vi.fn().mockResolvedValue({
+      results: [{ id: "new-1", event: "ADD", memory: "stored fact" }],
+    }),
+    search: vi.fn().mockResolvedValue([
+      { id: "m1", memory: "test memory", score: 0.9, categories: ["preference"], created_at: "2026-01-01" },
+    ]),
+    get: vi.fn().mockResolvedValue({
+      id: "m1",
+      memory: "test memory",
+      user_id: "testuser",
+      categories: ["preference"],
+      metadata: {},
+      created_at: "2026-01-01",
+      updated_at: "2026-01-02",
+    }),
+    getAll: vi.fn().mockResolvedValue([
+      { id: "m1", memory: "test memory", categories: ["preference"], created_at: "2026-01-01", updated_at: "2026-01-02" },
+    ]),
+    update: vi.fn().mockResolvedValue(undefined),
+    delete: vi.fn().mockResolvedValue(undefined),
+    deleteAll: vi.fn().mockResolvedValue(undefined),
+    history: vi.fn().mockResolvedValue([
+      { id: "h1", old_memory: "old", new_memory: "new", event: "UPDATE", created_at: "2026-01-01" },
+    ]),
+  };
+}
+
+function createMockBackend() {
+  return {
+    status: vi.fn().mockResolvedValue({
+      connected: true,
+      url: "http://localhost:8790",
+    }),
+    add: vi.fn().mockResolvedValue({ id: "new-1" }),
+    listEvents: vi.fn().mockResolvedValue([
+      { id: "evt-1111-2222-3333-4444", event_type: "ADD", status: "SUCCEEDED", latency: 1500, created_at: "2026-04-01T12:00:00Z" },
+    ]),
+    getEvent: vi.fn().mockResolvedValue({
+      id: "evt-1111-2222-3333-4444",
+      event_type: "ADD",
+      status: "SUCCEEDED",
+      latency: 1500,
+      created_at: "2026-04-01T12:00:00Z",
+      updated_at: "2026-04-01T12:00:01Z",
+    }),
+  };
+}
+
+function createMockCfg() {
+  return {
+    userId: "testuser",
+    apiKey: "m0-test-key-1234",
+    baseUrl: "http://localhost:8790",
+    topK: 5,
+    autoCapture: true,
+    autoRecall: true,
+    searchThreshold: 0.5,
+    customInstructions: "",
+    customCategories: {},
+  };
+}
+
+/**
+ * Register CLI commands using mocked deps, and return the captured
+ * neatmem command tree plus all mock objects for assertions.
+ */
+function setup() {
+  const provider = createMockProvider();
+  const backend = createMockBackend();
+  const cfg = createMockCfg();
+  const effectiveUserId = vi.fn().mockReturnValue("testuser");
+  const agentUserId = vi.fn((id: string) => `testuser:agent:${id}`);
+  const buildSearchOptions = vi.fn().mockReturnValue({
+    user_id: "testuser",
+    top_k: 5,
+    source: "OPENCLAW",
+  });
+  const getCurrentSessionId = vi.fn().mockReturnValue(undefined);
+
+  let registeredCallback: any;
+  const mockApi = {
+    registerCli: vi.fn((cb: any) => {
+      registeredCallback = cb;
+    }),
+    logger: { info: vi.fn(), warn: vi.fn() },
+  } as any;
+
+  registerCliCommands(
+    mockApi,
+    backend as any,
+    provider as any,
+    cfg as any,
+    effectiveUserId,
+    agentUserId,
+    buildSearchOptions,
+    getCurrentSessionId,
+  );
+
+  // Build a mock program and invoke the captured callback
+  const rootProgram = createMockCommand("root");
+  registeredCallback({ program: rootProgram });
+
+  // The callback creates a "neatmem" subcommand on the root program
+  const neatmem = findCommand(rootProgram, "neatmem")!;
+
+  return {
+    neatmem,
+    mockApi,
+    provider,
+    backend,
+    cfg,
+    effectiveUserId,
+    agentUserId,
+    buildSearchOptions,
+    getCurrentSessionId,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Test suites
+// ---------------------------------------------------------------------------
+
+describe("registerCliCommands", () => {
+  let consoleSpy: {
+    log: ReturnType<typeof vi.spyOn>;
+    error: ReturnType<typeof vi.spyOn>;
+    warn: ReturnType<typeof vi.spyOn>;
+  };
+  let stderrSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.resetAllMocks();
+
+    // Re-set default mock return values after resetAllMocks
+    (readPluginAuth as ReturnType<typeof vi.fn>).mockReturnValue({});
+    (writePluginAuth as ReturnType<typeof vi.fn>).mockImplementation(() => {});
+    (getBaseUrl as ReturnType<typeof vi.fn>).mockReturnValue("http://localhost:8790");
+
+    consoleSpy = {
+      log: vi.spyOn(console, "log").mockImplementation(() => {}),
+      error: vi.spyOn(console, "error").mockImplementation(() => {}),
+      warn: vi.spyOn(console, "warn").mockImplementation(() => {}),
+    };
+    stderrSpy = vi.spyOn(process.stderr, "write").mockImplementation(() => true);
+  });
+
+  afterEach(() => {
+    consoleSpy.log.mockRestore();
+    consoleSpy.error.mockRestore();
+    consoleSpy.warn.mockRestore();
+    stderrSpy.mockRestore();
+    vi.restoreAllMocks();
+  });
+
+  // ========================================================================
+  // Registration
+  // ========================================================================
+
+  describe("command registration", () => {
+    it("calls api.registerCli exactly once", () => {
+      const { mockApi } = setup();
+      expect(mockApi.registerCli).toHaveBeenCalledTimes(1);
+    });
+
+    it("registers a neatmem parent command", () => {
+      const { neatmem } = setup();
+      expect(neatmem).toBeDefined();
+      expect(neatmem._name).toBe("neatmem");
+    });
+
+    it("registers all expected subcommands under neatmem", () => {
+      const { neatmem } = setup();
+      const names = neatmem._subcommands.map((c) => c._name);
+      expect(names).toContain("init");
+      expect(names).toContain("add");
+      expect(names).toContain("search");
+      expect(names).toContain("get");
+      expect(names).toContain("list");
+      expect(names).toContain("update");
+      expect(names).toContain("delete");
+      expect(names).toContain("status");
+      expect(names).toContain("config");
+    });
+
+    it("registers config subcommands: show, get, set", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const configSubs = configCmd._subcommands.map((c) => c._name);
+      expect(configSubs).toContain("show");
+      expect(configSubs).toContain("get");
+      expect(configSubs).toContain("set");
+    });
+  });
+
+  // ========================================================================
+  // init subcommand
+  // ========================================================================
+
+  describe("init subcommand", () => {
+    it("writes default config with zero flags", async () => {
+      const { neatmem } = setup();
+      const initCmd = findCommand(neatmem, "init")!;
+
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+      }));
+
+      await initCmd._action!({});
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: "neatmem-local",
+          baseUrl: "http://localhost:8790",
+        }),
+      );
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("API key validated"),
+      );
+
+      vi.unstubAllGlobals();
+    });
+
+    it("saves config and validates API key with --api-key flag", async () => {
+      const { neatmem } = setup();
+      const initCmd = findCommand(neatmem, "init")!;
+
+      // Stub fetch for validateApiKey
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+      }));
+
+      await initCmd._action!({ apiKey: "m0-my-key-1234" });
+
+      // saveLoginConfig calls writePluginAuth with the API key
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({
+          apiKey: "m0-my-key-1234",
+        }),
+      );
+
+      // validateApiKey calls fetch with /v1/ping/
+      expect(fetch).toHaveBeenCalledWith(
+        "http://localhost:8790/v1/ping/",
+        expect.objectContaining({
+          headers: {
+            Authorization: "Token m0-my-key-1234",
+            "X-NeatMem-Source": "OPENCLAW",
+            "X-NeatMem-Client-Language": "node",
+          },
+        }),
+      );
+
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("API key validated"),
+      );
+
+      vi.unstubAllGlobals();
+    });
+
+    it("honors --base-url for validation and saves it", async () => {
+      const { neatmem } = setup();
+      const initCmd = findCommand(neatmem, "init")!;
+
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+      }));
+
+      await initCmd._action!({ baseUrl: "http://192.168.1.10:8790" });
+
+      expect(fetch).toHaveBeenCalledWith(
+        "http://192.168.1.10:8790/v1/ping/",
+        expect.anything(),
+      );
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({
+          baseUrl: "http://192.168.1.10:8790",
+        }),
+      );
+
+      vi.unstubAllGlobals();
+    });
+
+    it("warns when API key validation returns non-ok status", async () => {
+      const { neatmem } = setup();
+      const initCmd = findCommand(neatmem, "init")!;
+
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+        ok: false,
+        status: 401,
+        json: vi.fn().mockResolvedValue({}),
+      }));
+
+      await initCmd._action!({ apiKey: "bad-key" });
+
+      expect(consoleSpy.warn).toHaveBeenCalledWith(
+        expect.stringContaining("HTTP 401"),
+      );
+
+      vi.unstubAllGlobals();
+    });
+
+    it("warns when network error during API key validation", async () => {
+      const { neatmem } = setup();
+      const initCmd = findCommand(neatmem, "init")!;
+
+      vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("ECONNREFUSED")));
+
+      await initCmd._action!({ apiKey: "some-key" });
+
+      expect(consoleSpy.warn).toHaveBeenCalledWith(
+        expect.stringContaining("could not reach"),
+      );
+
+      vi.unstubAllGlobals();
+    });
+
+    it("preserves userId from --user-id flag during init", async () => {
+      const { neatmem } = setup();
+      const initCmd = findCommand(neatmem, "init")!;
+
+      vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+        ok: true,
+        json: vi.fn().mockResolvedValue({}),
+      }));
+
+      await initCmd._action!({ apiKey: "m0-key", userId: "custom-user" });
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({
+          userId: "custom-user",
+        }),
+      );
+
+      vi.unstubAllGlobals();
+    });
+  });
+
+
+  // ========================================================================
+  // add subcommand
+  // ========================================================================
+
+  describe("add subcommand", () => {
+    it("calls provider.add with text and prints result", async () => {
+      const { neatmem, provider } = setup();
+      const addCmd = findCommand(neatmem, "add")!;
+
+      await addCmd._action!("User likes TypeScript", {});
+
+      expect(provider.add).toHaveBeenCalledWith(
+        [{ role: "user", content: "User likes TypeScript" }],
+        expect.objectContaining({ user_id: "testuser" }),
+      );
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("Added 1 memory"),
+      );
+    });
+
+    it("uses agentUserId when --agent-id is provided", async () => {
+      const { neatmem, provider, agentUserId } = setup();
+      const addCmd = findCommand(neatmem, "add")!;
+
+      await addCmd._action!("agent fact", { agentId: "researcher" });
+
+      expect(agentUserId).toHaveBeenCalledWith("researcher");
+      expect(provider.add).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ user_id: "testuser:agent:researcher" }),
+      );
+    });
+
+    it("uses --user-id override when provided", async () => {
+      const { neatmem, provider } = setup();
+      const addCmd = findCommand(neatmem, "add")!;
+
+      await addCmd._action!("some fact", { userId: "alice" });
+
+      expect(provider.add).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ user_id: "alice" }),
+      );
+    });
+
+    it("prints message when no new memories are extracted", async () => {
+      const { neatmem, provider } = setup();
+      provider.add.mockResolvedValueOnce({ results: [] });
+      const addCmd = findCommand(neatmem, "add")!;
+
+      await addCmd._action!("the", {});
+
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("No new memories extracted"),
+      );
+    });
+
+    it("handles add errors gracefully", async () => {
+      const { neatmem, provider } = setup();
+      provider.add.mockRejectedValueOnce(new Error("API timeout"));
+      const addCmd = findCommand(neatmem, "add")!;
+
+      await addCmd._action!("failing fact", {});
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Add failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // search subcommand
+  // ========================================================================
+
+  describe("search subcommand", () => {
+    it("calls provider.search and outputs results as JSON", async () => {
+      const { neatmem, provider } = setup();
+      const searchCmd = findCommand(neatmem, "search")!;
+
+      await searchCmd._action!("user preferences", {
+        topK: "5",
+        scope: "all",
+      });
+
+      expect(provider.search).toHaveBeenCalled();
+      // The output is JSON.stringify of results
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("test memory"),
+      );
+    });
+
+    it("prints 'No memories found' when search returns empty", async () => {
+      const { neatmem, provider } = setup();
+      provider.search.mockResolvedValue([]);
+      const searchCmd = findCommand(neatmem, "search")!;
+
+      await searchCmd._action!("nothing", { topK: "5", scope: "all" });
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("No memories found.");
+    });
+
+    it("uses --user-id override for search", async () => {
+      const { neatmem, provider } = setup();
+      const searchCmd = findCommand(neatmem, "search")!;
+
+      await searchCmd._action!("query", {
+        topK: "5",
+        scope: "all",
+        userId: "alice",
+      });
+
+      // The userId should flow through to the search options
+      expect(provider.search).toHaveBeenCalled();
+    });
+
+    it("uses agentUserId when --agent-id is provided", async () => {
+      const { neatmem, agentUserId } = setup();
+      const searchCmd = findCommand(neatmem, "search")!;
+
+      await searchCmd._action!("query", {
+        topK: "5",
+        scope: "all",
+        agentId: "researcher",
+      });
+
+      expect(agentUserId).toHaveBeenCalledWith("researcher");
+    });
+
+    it("handles search errors gracefully", async () => {
+      const { neatmem, provider } = setup();
+      provider.search.mockRejectedValue(new Error("search boom"));
+      const searchCmd = findCommand(neatmem, "search")!;
+
+      await searchCmd._action!("test", { topK: "5", scope: "all" });
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Search failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // get subcommand
+  // ========================================================================
+
+  describe("get subcommand", () => {
+    it("calls provider.get and outputs the memory as JSON", async () => {
+      const { neatmem, provider } = setup();
+      const getCmd = findCommand(neatmem, "get")!;
+
+      await getCmd._action!("m1");
+
+      expect(provider.get).toHaveBeenCalledWith("m1");
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("test memory"),
+      );
+    });
+
+    it("handles get errors gracefully", async () => {
+      const { neatmem, provider } = setup();
+      provider.get.mockRejectedValueOnce(new Error("not found"));
+      const getCmd = findCommand(neatmem, "get")!;
+
+      await getCmd._action!("bad-id");
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Get failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // list subcommand
+  // ========================================================================
+
+  describe("list subcommand", () => {
+    it("calls provider.getAll and prints memories as JSON", async () => {
+      const { neatmem, provider } = setup();
+      const listCmd = findCommand(neatmem, "list")!;
+
+      await listCmd._action!({ topK: "50" });
+
+      expect(provider.getAll).toHaveBeenCalledWith(
+        expect.objectContaining({
+          user_id: "testuser",
+          page_size: 50,
+          source: "OPENCLAW",
+        }),
+      );
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("test memory"),
+      );
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("Total: 1 memories"),
+      );
+    });
+
+    it("prints 'No memories found' when list returns empty", async () => {
+      const { neatmem, provider } = setup();
+      provider.getAll.mockResolvedValueOnce([]);
+      const listCmd = findCommand(neatmem, "list")!;
+
+      await listCmd._action!({ topK: "50" });
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("No memories found.");
+    });
+
+    it("uses agentUserId when --agent-id is provided", async () => {
+      const { neatmem, provider, agentUserId } = setup();
+      const listCmd = findCommand(neatmem, "list")!;
+
+      await listCmd._action!({ topK: "50", agentId: "builder" });
+
+      expect(agentUserId).toHaveBeenCalledWith("builder");
+      expect(provider.getAll).toHaveBeenCalledWith(
+        expect.objectContaining({
+          user_id: "testuser:agent:builder",
+          source: "OPENCLAW",
+        }),
+      );
+    });
+
+    it("handles list errors gracefully", async () => {
+      const { neatmem, provider } = setup();
+      provider.getAll.mockRejectedValueOnce(new Error("list boom"));
+      const listCmd = findCommand(neatmem, "list")!;
+
+      await listCmd._action!({ topK: "50" });
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("List failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // update subcommand
+  // ========================================================================
+
+  describe("update subcommand", () => {
+    it("calls provider.update and prints confirmation", async () => {
+      const { neatmem, provider } = setup();
+      const updateCmd = findCommand(neatmem, "update")!;
+
+      await updateCmd._action!("m1", "updated text");
+
+      expect(provider.update).toHaveBeenCalledWith("m1", "updated text");
+      expect(consoleSpy.log).toHaveBeenCalledWith("Memory m1 updated.");
+    });
+
+    it("handles update errors gracefully", async () => {
+      const { neatmem, provider } = setup();
+      provider.update.mockRejectedValueOnce(new Error("update boom"));
+      const updateCmd = findCommand(neatmem, "update")!;
+
+      await updateCmd._action!("m1", "text");
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Update failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // delete subcommand
+  // ========================================================================
+
+  describe("delete subcommand", () => {
+    it("deletes a single memory by ID", async () => {
+      const { neatmem, provider } = setup();
+      const deleteCmd = findCommand(neatmem, "delete")!;
+
+      await deleteCmd._action!("m1", {});
+
+      expect(provider.delete).toHaveBeenCalledWith("m1");
+      expect(consoleSpy.log).toHaveBeenCalledWith("Memory m1 deleted.");
+    });
+
+    it("bulk deletes with --all and --confirm", async () => {
+      const { neatmem, provider } = setup();
+      const deleteCmd = findCommand(neatmem, "delete")!;
+
+      await deleteCmd._action!(undefined, { all: true, confirm: true });
+
+      expect(provider.deleteAll).toHaveBeenCalledWith("testuser");
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("All memories deleted"),
+      );
+    });
+
+    it("requires --confirm for bulk delete in non-interactive mode", async () => {
+      const { neatmem, provider } = setup();
+      const deleteCmd = findCommand(neatmem, "delete")!;
+
+      const origIsTTY = process.stdin.isTTY;
+      Object.defineProperty(process.stdin, "isTTY", { value: false, configurable: true });
+
+      await deleteCmd._action!(undefined, { all: true });
+
+      expect(provider.deleteAll).not.toHaveBeenCalled();
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("--confirm flag"),
+      );
+
+      Object.defineProperty(process.stdin, "isTTY", { value: origIsTTY, configurable: true });
+    });
+
+    it("requires memory_id or --all flag", async () => {
+      const { neatmem } = setup();
+      const deleteCmd = findCommand(neatmem, "delete")!;
+
+      await deleteCmd._action!(undefined, {});
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Provide a memory_id or use --all"),
+      );
+    });
+
+    it("uses agentUserId for --all --agent-id", async () => {
+      const { neatmem, provider, agentUserId } = setup();
+      const deleteCmd = findCommand(neatmem, "delete")!;
+
+      await deleteCmd._action!(undefined, {
+        all: true,
+        confirm: true,
+        agentId: "researcher",
+      });
+
+      expect(agentUserId).toHaveBeenCalledWith("researcher");
+      expect(provider.deleteAll).toHaveBeenCalledWith("testuser:agent:researcher");
+    });
+
+    it("handles delete errors gracefully", async () => {
+      const { neatmem, provider } = setup();
+      provider.delete.mockRejectedValueOnce(new Error("delete failed"));
+      const deleteCmd = findCommand(neatmem, "delete")!;
+
+      await deleteCmd._action!("m1", {});
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Delete failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // status subcommand
+  // ========================================================================
+
+  describe("status subcommand", () => {
+    it("calls backend.status and prints connection info", async () => {
+      const { neatmem, backend } = setup();
+      const statusCmd = findCommand(neatmem, "status")!;
+
+      await statusCmd._action!();
+
+      expect(backend.status).toHaveBeenCalled();
+      expect(consoleSpy.log).toHaveBeenCalledWith("User ID: testuser");
+      expect(consoleSpy.log).toHaveBeenCalledWith("Connected to NeatMem");
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("http://localhost:8790"),
+      );
+    });
+
+    it("shows 'Not connected' when backend returns disconnected", async () => {
+      const { neatmem, backend } = setup();
+      backend.status.mockResolvedValueOnce({
+        connected: false,
+        error: "ECONNREFUSED",
+      });
+      const statusCmd = findCommand(neatmem, "status")!;
+
+      await statusCmd._action!();
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("Not connected to NeatMem");
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("ECONNREFUSED"),
+      );
+    });
+
+    it("handles status errors gracefully", async () => {
+      const { neatmem, backend } = setup();
+      backend.status.mockRejectedValueOnce(new Error("status boom"));
+      const statusCmd = findCommand(neatmem, "status")!;
+
+      await statusCmd._action!();
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Status check failed"),
+      );
+    });
+  });
+
+  // ========================================================================
+  // config show subcommand
+  // ========================================================================
+
+  describe("config show subcommand", () => {
+    it("displays all config keys with values", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const showCmd = findCommand(configCmd, "show")!;
+
+      showCmd._action!();
+
+      // Should print header, separator, and each key
+      const allOutput = consoleSpy.log.mock.calls.map((c) => c[0]).join("\n");
+      expect(allOutput).toContain("Key");
+      expect(allOutput).toContain("Value");
+      expect(allOutput).toContain("api_key");
+      expect(allOutput).toContain("email");
+      expect(allOutput).toContain("user_id");
+      expect(allOutput).toContain("Config file:");
+    });
+  });
+
+  // ========================================================================
+  // config get subcommand
+  // ========================================================================
+
+  describe("config get subcommand", () => {
+    it("prints value for a known config key", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const getCmd = findCommand(configCmd, "get")!;
+
+      getCmd._action!("top_k");
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("5");
+    });
+
+    it("prints '(not set)' for an unset config key", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const getCmd = findCommand(configCmd, "get")!;
+
+      getCmd._action!("email");
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("(not set)");
+    });
+
+    it("errors on unknown config key", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const getCmd = findCommand(configCmd, "get")!;
+
+      getCmd._action!("nonexistent_key");
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Unknown config key: nonexistent_key"),
+      );
+    });
+
+    it("redacts API key in display", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const getCmd = findCommand(configCmd, "get")!;
+
+      // readPluginAuth returns config with apiKey
+      (readPluginAuth as ReturnType<typeof vi.fn>).mockReturnValue({
+        apiKey: "m0-supersecretkey1234",
+      });
+
+      getCmd._action!("api_key");
+
+      // Should show redacted value (first 4 + ... + last 4)
+      const logged = consoleSpy.log.mock.calls[0][0] as string;
+      expect(logged).toContain("...");
+      expect(logged).not.toContain("supersecret");
+    });
+
+    it("supports short alias keys like email", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const getCmd = findCommand(configCmd, "get")!;
+
+      getCmd._action!("email");
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("(not set)");
+    });
+  });
+
+  // ========================================================================
+  // config set subcommand
+  // ========================================================================
+
+  describe("config set subcommand", () => {
+    it("sets a string config value via writePluginAuth", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("user_id", "alice");
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({ userId: "alice" }),
+      );
+      expect(consoleSpy.log).toHaveBeenCalledWith(
+        expect.stringContaining("user_id = alice"),
+      );
+    });
+
+    it("coerces 'false' to boolean false for boolean keys", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("auto_recall", "false");
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({ autoRecall: false }),
+      );
+    });
+
+    it("coerces '1' to boolean true for boolean keys", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("auto_capture", "1");
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({ autoCapture: true }),
+      );
+    });
+
+    it("coerces integer string for integer keys", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("top_k", "10");
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({ topK: 10 }),
+      );
+    });
+
+    it("errors on invalid integer value for integer keys", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("top_k", "abc");
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Invalid integer value: abc"),
+      );
+      expect(writePluginAuth).not.toHaveBeenCalled();
+    });
+
+    it("errors on unknown config key", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("unknown_key", "value");
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Unknown config key: unknown_key"),
+      );
+      expect(writePluginAuth).not.toHaveBeenCalled();
+    });
+
+    it("supports short alias keys for set", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("user_id", "bob");
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({ userId: "bob" }),
+      );
+    });
+
+    it("redacts API key value in set confirmation output", () => {
+      const { neatmem } = setup();
+      const configCmd = findCommand(neatmem, "config")!;
+      const setCmd = findCommand(configCmd, "set")!;
+
+      setCmd._action!("api_key", "m0-new-secret-key-abcd1234");
+
+      expect(writePluginAuth).toHaveBeenCalledWith(
+        expect.objectContaining({ apiKey: "m0-new-secret-key-abcd1234" }),
+      );
+      const logged = consoleSpy.log.mock.calls[0][0] as string;
+      expect(logged).toContain("...");
+      expect(logged).not.toContain("new-secret-key");
+    });
+  });
+
+  // ========================================================================
+  // import subcommand
+  // ========================================================================
+
+  describe("import subcommand", () => {
+    it("imports memories from a JSON array file", async () => {
+      const { neatmem, backend } = setup();
+      const { readText } = await import("../fs-safe.ts");
+      (readText as ReturnType<typeof vi.fn>).mockReturnValueOnce(
+        JSON.stringify([
+          { memory: "fact one" },
+          { memory: "fact two" },
+        ]),
+      );
+      const importCmd = findCommand(neatmem, "import")!;
+
+      await importCmd._action!("memories.json", {});
+
+      expect(backend.add).toHaveBeenCalledTimes(2);
+      expect(consoleSpy.log).toHaveBeenCalledWith("Imported 2 memories.");
+    });
+
+    it("imports a single JSON object", async () => {
+      const { neatmem, backend } = setup();
+      const { readText } = await import("../fs-safe.ts");
+      (readText as ReturnType<typeof vi.fn>).mockReturnValueOnce(
+        JSON.stringify({ memory: "single fact" }),
+      );
+      const importCmd = findCommand(neatmem, "import")!;
+
+      await importCmd._action!("single.json", {});
+
+      expect(backend.add).toHaveBeenCalledTimes(1);
+      expect(consoleSpy.log).toHaveBeenCalledWith("Imported 1 memories.");
+    });
+
+    it("skips items with no extractable content", async () => {
+      const { neatmem, backend } = setup();
+      const { readText } = await import("../fs-safe.ts");
+      (readText as ReturnType<typeof vi.fn>).mockReturnValueOnce(
+        JSON.stringify([{ memory: "valid" }, { nofield: true }]),
+      );
+      const importCmd = findCommand(neatmem, "import")!;
+
+      await importCmd._action!("mixed.json", {});
+
+      expect(backend.add).toHaveBeenCalledTimes(1);
+      expect(consoleSpy.error).toHaveBeenCalledWith("1 memories failed to import.");
+    });
+
+    it("uses --user-id and --agent-id overrides", async () => {
+      const { neatmem, backend } = setup();
+      const { readText } = await import("../fs-safe.ts");
+      (readText as ReturnType<typeof vi.fn>).mockReturnValueOnce(
+        JSON.stringify([{ memory: "fact" }]),
+      );
+      const importCmd = findCommand(neatmem, "import")!;
+
+      await importCmd._action!("f.json", { userId: "override-user", agentId: "agent-1" });
+
+      expect(backend.add).toHaveBeenCalledWith("fact", undefined, expect.objectContaining({
+        userId: "override-user",
+        agentId: "agent-1",
+      }));
+    });
+
+    it("handles file read errors gracefully", async () => {
+      const { neatmem } = setup();
+      const { readText } = await import("../fs-safe.ts");
+      (readText as ReturnType<typeof vi.fn>).mockImplementationOnce(() => {
+        throw new Error("ENOENT");
+      });
+      const importCmd = findCommand(neatmem, "import")!;
+
+      await importCmd._action!("missing.json", {});
+
+      expect(consoleSpy.error).toHaveBeenCalledWith(
+        expect.stringContaining("Failed to read file"),
+      );
+    });
+
+    it("handles backend.add failures gracefully", async () => {
+      const { neatmem, backend } = setup();
+      const { readText } = await import("../fs-safe.ts");
+      (readText as ReturnType<typeof vi.fn>).mockReturnValueOnce(
+        JSON.stringify([{ memory: "will fail" }]),
+      );
+      backend.add.mockRejectedValueOnce(new Error("API error"));
+      const importCmd = findCommand(neatmem, "import")!;
+
+      await importCmd._action!("fail.json", {});
+
+      expect(consoleSpy.log).toHaveBeenCalledWith("Imported 0 memories.");
+      expect(consoleSpy.error).toHaveBeenCalledWith("1 memories failed to import.");
+    });
+  });
+
+});

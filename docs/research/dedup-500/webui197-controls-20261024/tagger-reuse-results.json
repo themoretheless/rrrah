@@ -1,0 +1,13 @@
+{
+  "cases": 1,
+  "scope": "Original undecorated use_wd14 function AST-extracted; fake Tagger records construction/inference, gr.update adapter; no model/download/filesystem or real inference.",
+  "observed": "Second call changes model_type and keep_updating but cached Tagger remains original until explicit release_memory.",
+  "constructors": [
+    {
+      "model_dir": "/owned/model-placeholder",
+      "model_type": 0,
+      "keep_updating": false
+    }
+  ],
+  "inference_calls": 2
+}

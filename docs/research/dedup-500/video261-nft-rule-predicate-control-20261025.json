@@ -1,0 +1,21 @@
+{
+  "scope": "Only grep predicate on synthetic text; no firewall commands or script execution",
+  "cases": [
+    {
+      "synthetic_rule": "udp dport 51726 drop",
+      "existing_rule_predicate_matches": true
+    },
+    {
+      "synthetic_rule": "tcp dport 517260 accept",
+      "existing_rule_predicate_matches": true
+    },
+    {
+      "synthetic_rule": "tcp dport 51726 drop",
+      "existing_rule_predicate_matches": true
+    },
+    {
+      "synthetic_rule": "tcp dport 51726 accept",
+      "existing_rule_predicate_matches": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# Deny-by-default, then re-include exactly what the image build needs.
+#
+# The inverse (a list of things to skip) is one forgotten line away from
+# baking `.revio.local.toml`, `.env`, or an audit report into a published
+# layer, and image layers are not something you can quietly take back.
+*
+
+!pyproject.toml
+!README.md
+!LICENSE
+!NOTICE
+!src/
+
+# Re-excluded even inside src/ — build artefacts, never sources.
+**/__pycache__/
+**/*.py[cod]
+**/.DS_Store

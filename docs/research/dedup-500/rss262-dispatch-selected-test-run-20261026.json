@@ -1,0 +1,14 @@
+{
+  "scope": "Six unchanged original selected dispatch claim/retry tests with upstream fake send/storage and fake image hashes. Disposable source subset, socket connect/DNS forbidden. Not complete dispatcher suite or real image/plugin runtime.",
+  "tests": [
+    "test_duplicate_dispatch_is_blocked_before_send",
+    "test_duplicate_dispatch_uses_source_fields_when_translation_differs",
+    "test_failed_send_releases_dispatch_claim_for_retry",
+    "test_send_false_releases_dispatch_claim_for_retry",
+    "test_daily_digest_send_false_releases_dispatch_claim_for_retry",
+    "test_daily_digest_dispatch_uses_target_ids_and_blocks_duplicates"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "test_duplicate_dispatch_is_blocked_before_send (review_dispatch.DispatcherTests.test_duplicate_dispatch_is_blocked_before_send) ... ok\ntest_duplicate_dispatch_uses_source_fields_when_translation_differs (review_dispatch.DispatcherTests.test_duplicate_dispatch_uses_source_fields_when_translation_differs) ... ok\ntest_failed_send_releases_dispatch_claim_for_retry (review_dispatch.DispatcherTests.test_failed_send_releases_dispatch_claim_for_retry) ... ok\ntest_send_false_releases_dispatch_claim_for_retry (review_dispatch.DispatcherTests.test_send_false_releases_dispatch_claim_for_retry) ... ok\ntest_daily_digest_send_false_releases_dispatch_claim_for_retry (review_dispatch.DispatcherTests.test_daily_digest_send_false_releases_dispatch_claim_for_retry) ... ok\ntest_daily_digest_dispatch_uses_target_ids_and_blocks_duplicates (review_dispatch.DispatcherTests.test_daily_digest_dispatch_uses_target_ids_and_blocks_duplicates) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.011s\n\nOK\n"
+}

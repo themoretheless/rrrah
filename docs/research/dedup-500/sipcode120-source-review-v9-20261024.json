@@ -1,0 +1,66 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v8-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/manifest/parseFile.test.ts",
+      "local": "parse-tests_modules_manifest_parseFile.test.ts",
+      "git_blob": "1b347c4f890d4c42c52c3ea63487180befbc8f06",
+      "sha256": "0aa86d346662c071e6be50d1ed33e2da8ca0a1c80357022072a69a98f2cd9b84",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/signal-cache.test.ts",
+      "local": "parse-tests_modules_proxy_signal-cache.test.ts",
+      "git_blob": "b8a342a63b2a59194cc3a5f41a7ce8d2a98abd49",
+      "sha256": "fe9cc0b6504c173165d871dd16504748e462bb7896d30f02b6f836c3185fd2f9",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/result.ts",
+      "local": "parse-src_lib_result.ts",
+      "git_blob": "6d31af0cc9cd8b4a1f5323bfe997dcbca3589ade",
+      "sha256": "1b0bccebb2c2f9f780f0ffd8f576efe3f89ec3b78753bd288faa8c7d1823cc3c",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib/errors.ts",
+      "local": "parse-src_lib_errors.ts",
+      "git_blob": "13c168287396e5ef0defc615661f5e6cade961a8",
+      "sha256": "79f227cf69cfa5fd52145f69a8252e9b59985e10fe4587e1acbeaf88daf22ae1",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 21,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest_results": {
+    "numTotalTests": 116,
+    "numPassedTests": 116,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 25,
+  "authored_controls_total_distinct": 23,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-original-tests-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "findings": [
+      "TS import syntax inside string literal counted",
+      "Python import inside docstring counted",
+      "Go import inside blockcomment counted"
+    ],
+    "scope": "Original regex parser+originalresult/errors modules,onlyruntimeimportlocationschanged;ownedstrings;no compiler or wholemanifestexecution"
+  },
+  "findings": [
+    "Original parseFile regex counts TS import text insidequotedstring,Python import inside docstring,Go import insideblockcomment.",
+    "These affect heuristic manifest dependencies,not exactbyteidentity;no native parseradoption or productionchange.",
+    "Source error/result helpers provide explicitResult but runManifest read-failure continue path doesnot populateissues."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

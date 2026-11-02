@@ -1,0 +1,286 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package logging
+
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/autobrr/upbrr/internal/config"
+)
+
+func TestResolveEffectiveLevel(t *testing.T) {
+	t.Parallel()
+
+	if got := ResolveEffectiveLevel("info", "", false); got != "info" {
+		t.Fatalf("expected configured level info, got %q", got)
+	}
+	if got := ResolveEffectiveLevel("info", "", true); got != "debug" {
+		t.Fatalf("expected debug fallback for debug runs, got %q", got)
+	}
+	if got := ResolveEffectiveLevel("info", "trace", true); got != "trace" {
+		t.Fatalf("expected explicit override trace, got %q", got)
+	}
+}
+
+func TestConsoleLevelDoesNotChangeApplicationLogging(t *testing.T) {
+	t.Parallel()
+
+	dbPath := filepath.Join(t.TempDir(), "upbrr.db")
+	logger, err := NewWithConsoleLevel(config.LoggingConfig{
+		Level:          "error",
+		FileEnabled:    true,
+		MaxTotalSizeMB: 1,
+		MaxFiles:       1,
+	}, dbPath, "info")
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	logger.SetConsoleOutput(&stdout, &stderr)
+	subscriptionID, subscription := logger.Subscribe(2)
+	defer logger.Unsubscribe(subscriptionID)
+
+	logger.Infof("console-only detail")
+	logger.Errorf("application failure")
+	if err := logger.Close(); err != nil {
+		t.Fatalf("close logger: %v", err)
+	}
+
+	if !strings.Contains(stdout.String(), "console-only detail") || !strings.Contains(stderr.String(), "application failure") {
+		t.Fatalf("console output: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	entries := logger.Recent(10)
+	if len(entries) != 1 || entries[0].Level != "error" || entries[0].Message != "application failure" {
+		t.Fatalf("application entries = %#v", entries)
+	}
+	select {
+	case entry := <-subscription:
+		if entry.Level != "error" || entry.Message != "application failure" {
+			t.Fatalf("subscriber entry = %#v", entry)
+		}
+	default:
+		t.Fatal("application entry did not reach subscriber")
+	}
+	select {
+	case entry := <-subscription:
+		t.Fatalf("console-only entry reached subscriber: %#v", entry)
+	default:
+	}
+	logPath, err := LogPath(dbPath)
+	if err != nil {
+		t.Fatalf("resolve log path: %v", err)
+	}
+	contents, err := os.ReadFile(logPath)
+	if err != nil {
+		t.Fatalf("read log: %v", err)
+	}
+	if strings.Contains(string(contents), "console-only detail") || !strings.Contains(string(contents), "application failure") {
+		t.Fatalf("application log = %q", contents)
+	}
+}
+
+func TestConsoleLevelCanFilterRetainedApplicationEntries(t *testing.T) {
+	t.Parallel()
+
+	logger, err := NewWithConsoleLevel(config.LoggingConfig{Level: "debug"}, "", "warn")
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	logger.SetConsoleOutput(&stdout, &stderr)
+
+	logger.Debugf("application detail")
+	logger.Warnf("console warning")
+
+	if stdout.Len() != 0 || !strings.Contains(stderr.String(), "console warning") {
+		t.Fatalf("console output: stdout=%q stderr=%q", stdout.String(), stderr.String())
+	}
+	entries := logger.Recent(10)
+	if len(entries) != 2 || entries[0].Level != "debug" || entries[1].Level != "warn" {
+		t.Fatalf("application entries = %#v", entries)
+	}
+}
+
+func TestLoggerSanitizesLocalPaths(t *testing.T) {
+	t.Parallel()
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	logger, err := NewWithLevel(config.LoggingConfig{Level: "debug"}, "", "")
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	logger.SetConsoleOutput(&stdout, &stderr)
+
+	logger.Debugf("source=%s artifact=%s tracker=%s", `D:\media\Example.Release.2026-GRP`, `C:\Users\Tester\.upbrr\tmp\file.torrent`, "ABC")
+
+	console := stdout.String()
+	for _, leaked := range []string{`D:\media`, `C:\Users`, "Example.Release.2026-GRP"} {
+		if strings.Contains(console, leaked) {
+			t.Fatalf("expected console log to redact local path details")
+		}
+	}
+	for _, expected := range []string{"source=[local path]", "artifact=.upbrr/tmp/file.torrent", "tracker=ABC"} {
+		if !strings.Contains(console, expected) {
+			t.Fatalf("expected console log to contain %q, got %q", expected, console)
+		}
+	}
+
+	recent := logger.Recent(1)
+	if len(recent) != 1 {
+		t.Fatalf("expected one buffered log entry, got %d", len(recent))
+	}
+	if strings.Contains(recent[0].Message, `D:\media`) || strings.Contains(recent[0].Message, "Example.Release.2026-GRP") {
+		t.Fatalf("expected buffered log to redact local path details")
+	}
+	if !strings.Contains(recent[0].Message, "source=[local path] artifact=.upbrr/tmp/file.torrent tracker=ABC") {
+		t.Fatalf("unexpected buffered log message: %q", recent[0].Message)
+	}
+}
+
+func TestSanitizeMessagePreservesSavePathFieldOnly(t *testing.T) {
+	t.Parallel()
+
+	savePath := filepath.Join(t.TempDir(), "Example.Release.2026-GRP")
+	sourcePath := filepath.Join(t.TempDir(), "Example.Release.2026.Source-GRP")
+	got := SanitizeMessage(fmt.Sprintf("save_path=%s source=%s", savePath, sourcePath))
+
+	if !strings.Contains(got, "save_path="+savePath) {
+		t.Fatalf("expected save path field to remain visible, got %q", got)
+	}
+	if strings.Contains(got, sourcePath) || !strings.Contains(got, "source=[local path]") {
+		t.Fatalf("expected non-save path field to remain redacted, got %q", got)
+	}
+}
+
+func TestLoggerSanitizesRequestSecretsAndApostrophePaths(t *testing.T) {
+	t.Parallel()
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	logger, err := NewWithLevel(config.LoggingConfig{Level: "debug"}, "", "")
+	if err != nil {
+		t.Fatalf("new logger: %v", err)
+	}
+	logger.SetConsoleOutput(&stdout, &stderr)
+
+	logger.Warnf(
+		"dupechecking: DP search failed for %s: %s",
+		`D:\media\Example's.Release.2026-GRP`,
+		`unit3d: request: Get "https://tracker.example/api/torrents/filter?api_token=secret-api-token&name=Example.Release.2026.1080p-GRP": context deadline exceeded`,
+	)
+
+	console := stderr.String()
+	for _, leaked := range []string{"secret-api-token", `D:\media`, "Example's.Release.2026-GRP"} {
+		if strings.Contains(console, leaked) {
+			t.Fatal("expected console log to redact request secret and complete local path")
+		}
+	}
+	for _, expected := range []string{"for [local path]: unit3d: request", "api_token=[REDACTED]", "context deadline exceeded"} {
+		if !strings.Contains(console, expected) {
+			t.Fatal("expected console log to preserve sanitized request context")
+		}
+	}
+
+	recent := logger.Recent(1)
+	if len(recent) != 1 {
+		t.Fatalf("expected one buffered log entry, got %d", len(recent))
+	}
+	if strings.Contains(recent[0].Message, "secret-api-token") || strings.Contains(recent[0].Message, "Example's.Release.2026-GRP") {
+		t.Fatal("expected frontend log entry to redact request secret and complete local path")
+	}
+}
+
+func TestSanitizeMessageHandlesApostrophesInUnixLocalPaths(t *testing.T) {
+	t.Parallel()
+
+	got := SanitizeMessage("source=/media/releases/Example's.Release.2026-GRP: state=failed")
+	if strings.Contains(got, "/media/releases") || strings.Contains(got, "Example's.Release.2026-GRP") {
+		t.Fatal("expected complete Unix local path with apostrophe to be redacted")
+	}
+	if !strings.Contains(got, "source=[local path]: state=failed") {
+		t.Fatal("expected diagnostic context after Unix local path to remain")
+	}
+}
+
+func TestSanitizeLogMessageHandlesUnixLocalPaths(t *testing.T) {
+	t.Parallel()
+
+	got := SanitizeMessage("cache=/home/tester/.upbrr/cache/banned/file.json source=/media/releases/Example.Release.2026-GRP tracker=ABC")
+	for _, leaked := range []string{"/home/tester", "/media/releases", "Example.Release.2026-GRP"} {
+		if strings.Contains(got, leaked) {
+			t.Fatalf("expected sanitized message to redact %q from %q", leaked, got)
+		}
+	}
+	for _, expected := range []string{"cache=.upbrr/cache/banned/file.json", "source=[local path]", "tracker=ABC"} {
+		if !strings.Contains(got, expected) {
+			t.Fatalf("expected sanitized message to contain %q, got %q", expected, got)
+		}
+	}
+}
+
+func TestSanitizeLogMessagePreservesURLs(t *testing.T) {
+	t.Parallel()
+
+	cases := []string{
+		"web: serving web UI on 127.0.0.1:7480 (browser URL http://127.0.0.1:7480/app)",
+		"image=https://img.example.com/media/poster.jpg tracker=ABC",
+		"image=https://img.example.com/tmp/poster.jpg tracker=ABC",
+		"image=https://img.example.com/home/user/poster.jpg tracker=ABC",
+		"image=https://img.example.com/Users/tester/poster.jpg tracker=ABC",
+	}
+	for _, tc := range cases {
+		got := SanitizeMessage(tc)
+		if strings.Contains(got, "[local path]") {
+			t.Fatalf("expected URL to remain intact, got %q", got)
+		}
+		if got != tc {
+			t.Fatalf("expected URL to remain intact, got %q", got)
+		}
+	}
+
+	got := SanitizeMessage("image=https://img.example.com/media/poster.jpg source=/media/releases/Example.Release.2026-GRP")
+	if strings.Contains(got, "/media/releases") || strings.Contains(got, "Example.Release.2026-GRP") {
+		t.Fatalf("expected local path after URL to be redacted, got %q", got)
+	}
+	if !strings.Contains(got, "image=https://img.example.com/media/poster.jpg source=[local path]") {
+		t.Fatalf("expected URL preserved and local path redacted, got %q", got)
+	}
+}
+
+func TestSanitizeMessageRedactsURLUserinfo(t *testing.T) {
+	t.Parallel()
+
+	got := SanitizeMessage("client=https://policy-user:policy-password@host.example/path")
+	if strings.Contains(got, "policy-user") || strings.Contains(got, "policy-password") {
+		t.Fatal("expected URL userinfo credentials redacted")
+	}
+	if !strings.Contains(got, "https://[REDACTED]@host.example/path") {
+		t.Fatal("expected URL host and path preserved")
+	}
+}
+
+func TestSanitizeMessagePreservesFieldsAfterTerminalRedactedQuery(t *testing.T) {
+	t.Parallel()
+
+	input := "tracker=https://tracker.example/announce?passkey=secret state=ready count=4"
+	first := SanitizeMessage(input)
+	second := SanitizeMessage(first)
+	if strings.Contains(first, "secret") || strings.Contains(second, "secret") {
+		t.Fatal("expected tracker passkey redacted")
+	}
+	if first != second {
+		t.Fatalf("sanitization is not idempotent:\nfirst:  %q\nsecond: %q", first, second)
+	}
+	if !strings.Contains(second, "passkey=[REDACTED] state=ready count=4") {
+		t.Fatalf("structured suffix was not preserved: %q", second)
+	}
+}

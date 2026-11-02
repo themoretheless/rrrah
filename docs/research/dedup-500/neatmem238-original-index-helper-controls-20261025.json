@@ -1,0 +1,279 @@
+{
+  "scope": "Original index.test.ts callbacks transpiled unmodified; index re-export dependency replaced with actual original isolation.ts and filtering.ts exports; minimal Vitest describe/it/expect adapter; no plugin registration or gateway",
+  "original_callbacks_passed": 68,
+  "results": [
+    {
+      "name": "returns agentId from a named agent session key",
+      "passed": true
+    },
+    {
+      "name": "returns subagent namespace from subagent session key",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for the main agent session (agent:main:main)",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for the 'main' sentinel",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for undefined/null/empty input",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for non-agent session keys",
+      "passed": true
+    },
+    {
+      "name": "handles keys with extra colons after the UUID portion",
+      "passed": true
+    },
+    {
+      "name": "returns undefined when agentId segment is empty",
+      "passed": true
+    },
+    {
+      "name": "returns undefined when key is only 'agent:' with no trailing colon",
+      "passed": true
+    },
+    {
+      "name": "is case-sensitive (Agent != agent)",
+      "passed": true
+    },
+    {
+      "name": "handles whitespace-only agentId as truthy string",
+      "passed": true
+    },
+    {
+      "name": "returns base userId when sessionKey is undefined",
+      "passed": true
+    },
+    {
+      "name": "returns namespaced userId for agent session keys",
+      "passed": true
+    },
+    {
+      "name": "falls back to base for 'main' agent sessions",
+      "passed": true
+    },
+    {
+      "name": "falls back to base for non-agent session keys",
+      "passed": true
+    },
+    {
+      "name": "produces the correct namespaced format",
+      "passed": true
+    },
+    {
+      "name": "handles empty agentId (caller is responsible for validation)",
+      "passed": true
+    },
+    {
+      "name": "prefers explicit agentId over everything else",
+      "passed": true
+    },
+    {
+      "name": "uses explicit userId when agentId is absent",
+      "passed": true
+    },
+    {
+      "name": "derives from session key when both agentId and userId are absent",
+      "passed": true
+    },
+    {
+      "name": "falls back to base userId when nothing else is provided",
+      "passed": true
+    },
+    {
+      "name": "ignores empty-string agentId (falsy)",
+      "passed": true
+    },
+    {
+      "name": "ignores empty-string userId (falsy)",
+      "passed": true
+    },
+    {
+      "name": "different agents get different namespaces",
+      "passed": true
+    },
+    {
+      "name": "same agent across sessions yields the same namespace",
+      "passed": true
+    },
+    {
+      "name": "main session shares the base namespace (no isolation)",
+      "passed": true
+    },
+    {
+      "name": "returns true for cron trigger",
+      "passed": true
+    },
+    {
+      "name": "returns true for heartbeat trigger",
+      "passed": true
+    },
+    {
+      "name": "returns true for automation trigger",
+      "passed": true
+    },
+    {
+      "name": "returns true for schedule trigger",
+      "passed": true
+    },
+    {
+      "name": "is case-insensitive for trigger",
+      "passed": true
+    },
+    {
+      "name": "returns false for user-initiated triggers",
+      "passed": true
+    },
+    {
+      "name": "returns false when trigger is undefined and session key is normal",
+      "passed": true
+    },
+    {
+      "name": "detects cron from session key as fallback",
+      "passed": true
+    },
+    {
+      "name": "detects heartbeat from session key as fallback",
+      "passed": true
+    },
+    {
+      "name": "returns false when both trigger and sessionKey are undefined",
+      "passed": true
+    },
+    {
+      "name": "returns true for subagent session keys",
+      "passed": true
+    },
+    {
+      "name": "returns false for main agent session",
+      "passed": true
+    },
+    {
+      "name": "returns false for named agent session",
+      "passed": true
+    },
+    {
+      "name": "returns false for undefined",
+      "passed": true
+    },
+    {
+      "name": "detects HEARTBEAT_OK",
+      "passed": true
+    },
+    {
+      "name": "detects NO_REPLY",
+      "passed": true
+    },
+    {
+      "name": "detects current-time stamps",
+      "passed": true
+    },
+    {
+      "name": "detects single-word acknowledgments",
+      "passed": true
+    },
+    {
+      "name": "detects system routing messages",
+      "passed": true
+    },
+    {
+      "name": "detects compaction audit messages",
+      "passed": true
+    },
+    {
+      "name": "preserves real content",
+      "passed": true
+    },
+    {
+      "name": "treats empty/whitespace as noise",
+      "passed": true
+    },
+    {
+      "name": "detects 'I see you've shared' openers",
+      "passed": true
+    },
+    {
+      "name": "detects 'Thanks for sharing' openers",
+      "passed": true
+    },
+    {
+      "name": "detects 'How can I help' standalone",
+      "passed": true
+    },
+    {
+      "name": "detects 'Got it' + follow-up",
+      "passed": true
+    },
+    {
+      "name": "detects 'I'll help/review/look into'",
+      "passed": true
+    },
+    {
+      "name": "preserves substantive assistant content",
+      "passed": true
+    },
+    {
+      "name": "preserves long messages even with generic openers",
+      "passed": true
+    },
+    {
+      "name": "removes conversation metadata JSON blocks",
+      "passed": true
+    },
+    {
+      "name": "removes media attachment lines",
+      "passed": true
+    },
+    {
+      "name": "removes image sending boilerplate",
+      "passed": true
+    },
+    {
+      "name": "preserves content when no noise is present",
+      "passed": true
+    },
+    {
+      "name": "collapses excessive blank lines after stripping",
+      "passed": true
+    },
+    {
+      "name": "drops noise messages entirely",
+      "passed": true
+    },
+    {
+      "name": "strips noise fragments but keeps the rest",
+      "passed": true
+    },
+    {
+      "name": "keeps moderately long messages for memory extraction",
+      "passed": true
+    },
+    {
+      "name": "returns empty array when all messages are noise",
+      "passed": true
+    },
+    {
+      "name": "handles a realistic mixed payload",
+      "passed": true
+    },
+    {
+      "name": "drops generic assistant acknowledgments",
+      "passed": true
+    },
+    {
+      "name": "returns only assistant messages when all user messages are noise",
+      "passed": true
+    },
+    {
+      "name": "keeps substantive assistant messages even with generic opener",
+      "passed": true
+    }
+  ],
+  "full_vitest_suite_run": false
+}

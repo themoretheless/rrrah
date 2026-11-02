@@ -1,0 +1,32 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": ["main"],
+  "permissions": [
+    "core:window:allow-set-theme",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        {
+          "url": "https://github.com/Zephyr3311/czkawka-tauri"
+        }
+      ]
+    },
+    "dialog:allow-open",
+    "core:event:allow-listen",
+    "core:event:allow-unlisten",
+    "opener:allow-reveal-item-in-dir",
+    "opener:allow-open-path",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        { "path": "$HOME/Library/Caches/pl.Qarmin.Czkawka" },
+        { "path": "$HOME\\AppData\\Local\\Qarmin\\Czkawka\\cache" }
+      ]
+    },
+    "core:window:allow-start-dragging",
+    "core:window:allow-internal-toggle-maximize"
+  ],
+  "platforms": ["macOS", "windows"]
+}

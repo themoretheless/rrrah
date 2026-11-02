@@ -1,0 +1,207 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package dc
+
+import (
+	"bytes"
+	"context"
+	"net/http"
+	"net/http/httptest"
+	"os"
+	"path/filepath"
+	"strings"
+	"sync/atomic"
+	"testing"
+
+	"github.com/autobrr/go-torrent/bencode"
+	"github.com/autobrr/go-torrent/metainfo"
+
+	paths "github.com/autobrr/upbrr/internal/pathing/layout"
+	"github.com/autobrr/upbrr/internal/trackers"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func TestResolveIMDbIDPadsShortID(t *testing.T) {
+	t.Parallel()
+
+	if got := resolveIMDbID(api.UploadSubject{Identity: api.ExternalIdentity{IMDBID: 456}}); got != "tt0000456" {
+		t.Fatalf("expected padded IMDb ID, got %q", got)
+	}
+}
+
+func TestResolveMediaInfoUsesBDInfoForBDMV(t *testing.T) {
+	t.Parallel()
+
+	dbPath := filepath.Join(t.TempDir(), "db.sqlite")
+	meta := api.UploadSubject{
+		SourcePath: "Example.Release.2026",
+		DiscType:   "BDMV",
+		SelectedBDMVPlaylists: []api.PlaylistInfo{{
+			File: "00001.MPLS",
+		}},
+	}
+	summaryPath, err := paths.PrimaryBDMVSummaryPathFor(filepath.Join(filepath.Dir(dbPath), "tmp"), meta.SourcePath, meta.Release, meta.SelectedBDMVPlaylists)
+	if err != nil {
+		t.Fatalf("resolve BDInfo summary path: %v", err)
+	}
+	const summary = "DISC INFO:\nDisc Title: Example Release 2026\n"
+	if err := os.WriteFile(summaryPath, []byte(summary), 0o600); err != nil {
+		t.Fatalf("write BDInfo summary: %v", err)
+	}
+
+	got, err := resolveMediaInfo(trackers.PreparationInput{
+		Runtime: trackers.PreparationRuntime{DBPath: dbPath},
+	}, meta)
+	if err != nil {
+		t.Fatalf("resolve DC BDMV media info: %v", err)
+	}
+	if got != strings.TrimSpace(summary) {
+		t.Fatalf("BDInfo media info = %q, want %q", got, strings.TrimSpace(summary))
+	}
+}
+
+func TestResolveMediaInfoUsesEveryDVDDisc(t *testing.T) {
+	t.Parallel()
+
+	meta := api.UploadSubject{
+		DiscType: "DVD",
+		Discs: []api.DiscEvidenceResource{
+			{
+				Name:                "Disc 1",
+				Type:                "DVD",
+				DVDVOBMediaInfoText: "VOB INFO ONE",
+			},
+			{
+				Name:                "Disc 2",
+				Type:                "DVD",
+				DVDVOBMediaInfoText: "VOB INFO TWO",
+			},
+		},
+	}
+
+	got, err := resolveMediaInfo(trackers.PreparationInput{}, meta)
+	if err != nil {
+		t.Fatalf("resolve DC DVD media info: %v", err)
+	}
+	const want = "Disc 1\nVOB INFO ONE\n\nDisc 2\nVOB INFO TWO"
+	if got != want {
+		t.Fatalf("DVD media info = %q, want %q", got, want)
+	}
+}
+
+func TestSubmitPreparedUploadDownloadsRegisteredTorrentWithAPIKey(t *testing.T) {
+	t.Parallel()
+
+	registeredTorrent := dcRegisteredTorrentFixture(t)
+	var uploadAuthSeen atomic.Bool
+	var downloadAuthSeen atomic.Bool
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		switch {
+		case request.Method == http.MethodPost && request.URL.Path == "/api/v1/torrents/upload":
+			uploadAuthSeen.Store(request.Header.Get("X-Api-Key") == "synthetic-api-key")
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"id":42,"message":"ok"}`))
+		case request.Method == http.MethodGet && request.URL.Path == "/api/v1/torrents/download/42":
+			downloadAuthSeen.Store(request.Header.Get("X-Api-Key") == "synthetic-api-key")
+			w.Header().Set("Content-Type", "application/x-bittorrent")
+			_, _ = w.Write(registeredTorrent)
+		default:
+			http.NotFound(w, request)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	artifactPath := filepath.Join(t.TempDir(), "registered.torrent")
+	summary, err := submitPreparedUpload(
+		context.Background(),
+		trackers.PreparationInput{Logger: api.NopLogger{}},
+		[]byte("{}"),
+		"application/json",
+		server.Client(),
+		server.URL,
+		server.URL+"/api/v1/torrents",
+		"synthetic-api-key",
+		artifactPath,
+	)
+	if err != nil {
+		t.Fatalf("submit DC upload: %v", err)
+	}
+	if !uploadAuthSeen.Load() || !downloadAuthSeen.Load() {
+		t.Fatalf("DC API key missing: upload=%t download=%t", uploadAuthSeen.Load(), downloadAuthSeen.Load())
+	}
+	if summary.Uploaded != 1 || len(summary.UploadedTorrents) != 1 {
+		t.Fatalf("DC upload summary = %#v", summary)
+	}
+	artifact := summary.UploadedTorrents[0]
+	if artifact.Tracker != "DC" || artifact.TorrentID != "42" || artifact.TorrentPath != artifactPath {
+		t.Fatalf("DC registered artifact = %#v", artifact)
+	}
+	persisted, err := os.ReadFile(artifactPath)
+	if err != nil {
+		t.Fatalf("read DC registered torrent: %v", err)
+	}
+	if !bytes.Equal(persisted, registeredTorrent) {
+		t.Fatal("DC registered torrent bytes changed")
+	}
+}
+
+func TestSubmitPreparedUploadPreservesRemoteSuccessWhenRegisteredTorrentDownloadFails(t *testing.T) {
+	t.Parallel()
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
+		switch {
+		case request.Method == http.MethodPost && request.URL.Path == "/api/v1/torrents/upload":
+			w.Header().Set("Content-Type", "application/json")
+			_, _ = w.Write([]byte(`{"id":42,"message":"ok"}`))
+		case request.Method == http.MethodGet && request.URL.Path == "/api/v1/torrents/download/42":
+			http.Error(w, "unavailable", http.StatusServiceUnavailable)
+		default:
+			http.NotFound(w, request)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	summary, err := submitPreparedUpload(
+		context.Background(),
+		trackers.PreparationInput{Logger: api.NopLogger{}},
+		[]byte("{}"),
+		"application/json",
+		server.Client(),
+		server.URL,
+		server.URL+"/api/v1/torrents",
+		"synthetic-api-key",
+		filepath.Join(t.TempDir(), "registered.torrent"),
+	)
+	if err != nil {
+		t.Fatalf("submit DC upload: %v", err)
+	}
+	if summary.Uploaded != 1 || len(summary.UploadedTorrents) != 1 {
+		t.Fatalf("DC upload summary = %#v", summary)
+	}
+	if summary.UploadedTorrents[0].TorrentPath != "" {
+		t.Fatalf("failed DC download returned artifact path %q", summary.UploadedTorrents[0].TorrentPath)
+	}
+}
+
+func dcRegisteredTorrentFixture(t *testing.T) []byte {
+	t.Helper()
+
+	infoBytes, err := bencode.Marshal(metainfo.Info{
+		Name:        "Example.Release.2026.mkv",
+		PieceLength: 16 * 1024,
+		Pieces:      make([]byte, 20),
+		Length:      1,
+	})
+	if err != nil {
+		t.Fatalf("marshal DC torrent info: %v", err)
+	}
+	var payload bytes.Buffer
+	if err := (&metainfo.MetaInfo{
+		Announce:  "https://tracker.example/announce",
+		InfoBytes: infoBytes,
+	}).Write(&payload); err != nil {
+		t.Fatalf("write DC torrent: %v", err)
+	}
+	return payload.Bytes()
+}

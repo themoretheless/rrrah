@@ -1,0 +1,73 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v22-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/stats-store.ts",
+      "local": "stats-src_modules_proxy_stats-store.ts",
+      "git_blob": "c4d574c81278622f90a8575762b164fcec23cb55",
+      "sha256": "7812718c9c6b8b9432b50587facd8c8fc4913d2dda3cfe2a3d81ab3f0ab0357c",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/modules/proxy/format-terminal.ts",
+      "local": "stats-src_modules_proxy_format-terminal.ts",
+      "git_blob": "f3ab5e4f90450959b8b1b7be66450003e439a97b",
+      "sha256": "09ea9981a78d65347c6f8d56624ca66716c2a34816495d6b25d45e2aa38ad842",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 74,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 244,
+  "new_original_tests_run": 0,
+  "authored_upstream_controls_total_distinct": 50,
+  "new_authored_controls": 4,
+  "requalified_prior_controls": 1,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "generated_ast_result": {
+    "runtime": "v22.23.4",
+    "requalified_prior_controls": 1,
+    "new_distinct_controls": 1,
+    "first": {
+      "code": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":{\"file_path\":\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-82G8UJ/source.ts\",\"offset\":0,\"limit\":6}}}",
+      "stderr": ""
+    },
+    "second": {
+      "code": 0,
+      "stdout": "{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"updatedInput\":{\"file_path\":\"/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-82G8UJ/source.ts\",\"offset\":0,\"limit\":6}}}",
+      "stderr": ""
+    },
+    "malformed": {
+      "code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "statsFiles": 2,
+    "scope": "Originalgeneratedscript+nativeAST/signal/score+dedupchain;realownedsource,signals,stats;registryownedno-opfixture;child-onlyhomedirpatch;repeatedReadtrimmedagainbeforecache,notdenied;noactualClaudeReadtool",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/generated-owned-82G8UJ"
+  },
+  "stats_result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "findings": [
+      "Originalwrite/read aggregatesvalidentries30tokens andmeanintegrity0.8",
+      "ParseableJSONnull crashesreportaggregation",
+      "Stringtokenestimate accepted andconcatenates totalto010"
+    ],
+    "scope": "Originalstats-store renamedmts;ownedrealJSONL;notliveuserstats or realtokenbilling",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/stats-owned-uYrSlK"
+  },
+  "findings": [
+    "Realgeneratedchildscript usesoriginalnativeAST/signal/score modules;Grepthen2Reads producesallowoffset0limit6twice,ASTprioritybypassesdedupcache. Registryremainingno-opfixture,norealhostReadtool.",
+    "Validstatswrite/read aggregates2entrieswith30tokens,mean0.8.",
+    "ParseableJSONnull causesTypeErrorduringstatsaggregation.",
+    "StringsavedTokensEstimate10 coercesnumerictotal0 tostring010.",
+    "Reportedintegrity remainsheuristicunmeasured,asoriginalrendererexplicitlystates."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

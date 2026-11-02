@@ -1,0 +1,25 @@
+{
+  "scope": "AST-loaded unchanged config excluding platformdirs import; main body unchanged but annotations/defaults removed to avoid Typer dependency, explicit owned arguments and replacement client. No live connection or CLI parser qualification.",
+  "controls": [
+    {
+      "control": "config_preserves_numeric_strings",
+      "pass": true
+    },
+    {
+      "control": "query_array_allows_nonstring_elements",
+      "pass": true
+    },
+    {
+      "control": "gui_true_string_rejected_by_entrypoint_conversion",
+      "pass": true
+    },
+    {
+      "control": "nan_threshold_passes_validation_negative_threshold_rejected",
+      "pass": true
+    }
+  ],
+  "source_sha256": {
+    "17-config.py": "529950f393939bcc5b1c9d5e0c8f61111f565d0d1215e108b3bd8eb728e56010",
+    "18-entrypoint.py": "c999e7ad6315e2bdd100e2f86e40c4a77c561b191df0dbed3f84775c489481a5"
+  }
+}

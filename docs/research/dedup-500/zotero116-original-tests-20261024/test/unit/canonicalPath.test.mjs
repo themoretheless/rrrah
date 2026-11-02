@@ -1,0 +1,858 @@
+/**
+ * Unit tests for content/canonicalPath.mjs (new in v2).
+ *
+ * Covers:
+ *   UT-201 resolveSyncRoot (not configured / resolved / missing → throw)
+ *   UT-202 collectionKeyToRelativePath (root / nested / not-under)
+ *   UT-203 relativePathToCollection (resolve / create / sync root itself)
+ *   UT-204 isSpecialCollection (treeViewID virtual markers)
+ *   UT-205 chooseCanonicalCollection (5 priority rules)
+ */
+
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import {
+  resolveSyncRoot,
+  collectionKeyToRelativePath,
+  collectionKeyToRelativePathCached,
+  invalidateCanonicalPathCache,
+  relativePathToCollection,
+  isSpecialCollection,
+  isUnsafeCollectionNameSegment,
+  sanitizeCollectionNameSegment,
+  collectionKeyToDiskRelativePath,
+  chooseCanonicalCollection,
+  SyncRootMissingError,
+  LibraryUnavailableError,
+  UNFILED,
+  getScopeMode,
+} from '../../content/canonicalPath.mjs';
+
+/**
+ * Build a fake Zotero collection registry that satisfies the API surface
+ * canonicalPath.mjs depends on:
+ *   - Zotero.Collections.getByLibraryAndKeyAsync(libraryID, key)
+ *   - Zotero.Collections.get(id)
+ *   - Zotero.Collections.getByParent(parentID, libraryID)
+ *
+ * Each fake collection has: { id, key, name, libraryID, parentID }.
+ * The registry exposes mock implementations + a `set` helper that wires them.
+ */
+function makeCollectionRegistry(collections) {
+  const byID = new Map(collections.map(c => [c.id, c]));
+  const byKey = new Map(collections.map(c => [c.key, c]));
+  Zotero.Collections.getByLibraryAndKeyAsync = vi.fn(async (libraryID, key) => {
+    const c = byKey.get(key);
+    if (!c) return null;
+    if (c.libraryID !== libraryID) return null;
+    return c;
+  });
+  Zotero.Collections.get = vi.fn((id) => byID.get(id) ?? null);
+  Zotero.Collections.getByParent = vi.fn((parentID, libraryID) =>
+    collections.filter(c => c.parentID === parentID && c.libraryID === libraryID),
+  );
+  // Library-mode (scopeMode 'library') needs the full library listing.
+  Zotero.Collections.getByLibrary = vi.fn((libraryID) =>
+    collections.filter(c => c.libraryID === libraryID),
+  );
+  return { byID, byKey };
+}
+
+function resetPrefs(values) {
+  // utils.mjs.getPref calls Zotero.Prefs.get(PREF_PREFIX + key, true)
+  Zotero.Prefs.get = vi.fn((fullKey) => {
+    const prefix = 'extensions.zotero.watchFolder.';
+    if (fullKey.startsWith(prefix)) return values[fullKey.slice(prefix.length)];
+    return undefined;
+  });
+}
+
+beforeEach(() => {
+  vi.resetAllMocks();
+  // Restore safe Zotero defaults the mocks blow away.
+  Zotero.debug = vi.fn();
+  Zotero.logError = vi.fn();
+  Zotero.Libraries = { userLibraryID: 1, publicationsLibraryID: 4 };
+});
+
+// ─── UT-201 ────────────────────────────────────────────────────────────────
+
+describe('UT-201: resolveSyncRoot', () => {
+  it('returns null when syncRootCollectionKey is unset (empty string)', async () => {
+    resetPrefs({ syncRootCollectionKey: '', syncRootLibraryID: 1 });
+    const result = await resolveSyncRoot();
+    expect(result).toBe(null);
+  });
+
+  it('returns the resolved collection when configured', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 100, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+    ]);
+    const result = await resolveSyncRoot();
+    expect(result).not.toBe(null);
+    expect(result.collection.key).toBe('ROOT1');
+    expect(result.libraryID).toBe(1);
+  });
+
+  it('throws SyncRootMissingError when the key is configured but no longer resolves', async () => {
+    resetPrefs({ syncRootCollectionKey: 'GONE', syncRootLibraryID: 1 });
+    makeCollectionRegistry([]); // nothing in the registry
+    await expect(resolveSyncRoot()).rejects.toBeInstanceOf(SyncRootMissingError);
+  });
+
+  it('falls back to userLibraryID when syncRootLibraryID is unset', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: undefined });
+    makeCollectionRegistry([
+      { id: 100, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+    ]);
+    const result = await resolveSyncRoot();
+    expect(result.libraryID).toBe(1);
+  });
+
+  // Trashed-sync-root hardening (2026-05-27 live finding on Zotero 9 verification).
+  it('throws SyncRootMissingError when the resolved sync-root collection is in Zotero trash', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 100, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null, deleted: true },
+    ]);
+    await expect(resolveSyncRoot()).rejects.toBeInstanceOf(SyncRootMissingError);
+  });
+
+  it('error message for trashed sync-root mentions the Bin (so users know how to restore)', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 100, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null, deleted: true },
+    ]);
+    await expect(resolveSyncRoot()).rejects.toThrow(/trash|bin/i);
+  });
+
+  it('still resolves cleanly when the sync-root collection is NOT trashed', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 100, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null, deleted: false },
+    ]);
+    const result = await resolveSyncRoot();
+    expect(result.collection.key).toBe('ROOT1');
+  });
+});
+
+// ─── UT-202 ────────────────────────────────────────────────────────────────
+
+describe('UT-202: collectionKeyToRelativePath', () => {
+  beforeEach(() => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'METHODS', name: 'Methods', libraryID: 1, parentID: 1 },
+      { id: 3, key: 'SUB', name: 'Subtopic', libraryID: 1, parentID: 2 },
+      { id: 4, key: 'OTHER', name: 'Other', libraryID: 1, parentID: null },
+    ]);
+  });
+
+  it('returns "" when the collection IS the sync root itself', async () => {
+    expect(await collectionKeyToRelativePath('ROOT1')).toBe('');
+  });
+
+  it('returns the joined names for a nested collection', async () => {
+    expect(await collectionKeyToRelativePath('METHODS')).toBe('Methods');
+    expect(await collectionKeyToRelativePath('SUB')).toBe('Methods/Subtopic');
+  });
+
+  it('returns null when the collection isn\'t under the sync root', async () => {
+    expect(await collectionKeyToRelativePath('OTHER')).toBe(null);
+  });
+
+  it('returns null for unknown collection key', async () => {
+    expect(await collectionKeyToRelativePath('UNKNOWN')).toBe(null);
+  });
+
+  it('returns null when sync root is not configured', async () => {
+    resetPrefs({ syncRootCollectionKey: '' });
+    expect(await collectionKeyToRelativePath('METHODS')).toBe(null);
+  });
+});
+
+// ─── UT-203 ────────────────────────────────────────────────────────────────
+
+describe('UT-203: relativePathToCollection', () => {
+  let collections;
+  beforeEach(() => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    collections = [
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'METHODS', name: 'Methods', libraryID: 1, parentID: 1 },
+    ];
+    makeCollectionRegistry(collections);
+  });
+
+  it('returns the sync root itself for "" or null path', async () => {
+    expect(await relativePathToCollection('')).toMatchObject({ key: 'ROOT1' });
+    expect(await relativePathToCollection(null)).toMatchObject({ key: 'ROOT1' });
+  });
+
+  it('resolves an existing nested path without creating', async () => {
+    const c = await relativePathToCollection('Methods');
+    expect(c.key).toBe('METHODS');
+  });
+
+  it('returns null when path doesn\'t exist and createIfMissing is false', async () => {
+    const c = await relativePathToCollection('Methods/Subtopic');
+    expect(c).toBe(null);
+  });
+
+  it('creates missing intermediate collections when createIfMissing=true', async () => {
+    // Stub Zotero.Collection constructor + saveTx
+    let nextId = 100;
+    globalThis.Zotero.Collection = vi.fn(function () {
+      const self = {
+        name: '',
+        libraryID: 0,
+        parentID: null,
+        saveTx: vi.fn(async () => {
+          self.id = nextId++;
+          self.key = 'NEW' + self.id;
+          collections.push(self);
+          // Re-prime registry mocks so getByParent sees the new collection.
+          makeCollectionRegistry(collections);
+        }),
+      };
+      return self;
+    });
+
+    const leaf = await relativePathToCollection('Methods/Subtopic/Deep', { createIfMissing: true });
+    expect(leaf).not.toBe(null);
+    expect(leaf.name).toBe('Deep');
+    expect(leaf.parentID).toBeDefined();
+    // 2 new collections created: Subtopic + Deep.
+    expect(globalThis.Zotero.Collection).toHaveBeenCalledTimes(2);
+  });
+
+  it('returns null when sync root is unset', async () => {
+    resetPrefs({ syncRootCollectionKey: '' });
+    expect(await relativePathToCollection('Methods')).toBe(null);
+  });
+});
+
+// ─── UT-204 ────────────────────────────────────────────────────────────────
+
+describe('UT-204: isSpecialCollection', () => {
+  it('returns false for null / undefined', () => {
+    expect(isSpecialCollection(null)).toBe(false);
+    expect(isSpecialCollection(undefined)).toBe(false);
+  });
+
+  it('returns false for an ordinary collection (no treeViewID, no isVirtual)', () => {
+    expect(isSpecialCollection({ id: 1, key: 'ABC', name: 'Methods' })).toBe(false);
+  });
+
+  it('returns true for the Duplicates virtual root (treeViewID="D")', () => {
+    expect(isSpecialCollection({ treeViewID: 'D' })).toBe(true);
+  });
+
+  it('returns true for the Unfiled virtual root (treeViewID="U")', () => {
+    expect(isSpecialCollection({ treeViewID: 'U' })).toBe(true);
+  });
+
+  it('returns true for the Trash virtual root (treeViewID="T")', () => {
+    expect(isSpecialCollection({ treeViewID: 'T' })).toBe(true);
+  });
+
+  it('returns true for My Publications virtual root (treeViewID="P")', () => {
+    expect(isSpecialCollection({ treeViewID: 'P' })).toBe(true);
+  });
+
+  it('returns true for a saved search (treeViewID starting with "S")', () => {
+    expect(isSpecialCollection({ treeViewID: 'S42' })).toBe(true);
+  });
+
+  it('returns true when isVirtual flag is set', () => {
+    expect(isSpecialCollection({ isVirtual: true })).toBe(true);
+  });
+
+  it('returns true when collection lives in publicationsLibraryID', () => {
+    expect(isSpecialCollection({ libraryID: 4, name: 'PubChild' })).toBe(true);
+  });
+
+  // v2.7 sole-boundary hardening: Zotero forms virtual tree-view ids as
+  // LETTER + id (e.g. "T1" = Trash of library 1). The old exact-match check
+  // missed these — they must still be treated as special.
+  it('returns true for SUFFIXED virtual roots (D1 / U1 / T1 / P1 / S45)', () => {
+    expect(isSpecialCollection({ treeViewID: 'D1' })).toBe(true);
+    expect(isSpecialCollection({ treeViewID: 'U1' })).toBe(true);
+    expect(isSpecialCollection({ treeViewID: 'T1' })).toBe(true);
+    expect(isSpecialCollection({ treeViewID: 'P1' })).toBe(true);
+    expect(isSpecialCollection({ treeViewID: 'S45' })).toBe(true);
+  });
+
+  it('returns true for feed (F) and library-root (L) tree rows', () => {
+    expect(isSpecialCollection({ treeViewID: 'F2' })).toBe(true);
+    expect(isSpecialCollection({ treeViewID: 'L1' })).toBe(true);
+  });
+
+  it('returns FALSE for a real collection tree row (C<id>) — only "C" is real', () => {
+    expect(isSpecialCollection({ treeViewID: 'C123', key: 'ABC', name: 'Methods' })).toBe(false);
+  });
+});
+
+// ─── UT-205 ────────────────────────────────────────────────────────────────
+
+describe('UT-205: chooseCanonicalCollection', () => {
+  let collections;
+  beforeEach(() => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    collections = [
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'METHODS', name: 'Methods', libraryID: 1, parentID: 1 },
+      { id: 3, key: 'IMPORTANT', name: 'Important', libraryID: 1, parentID: 1 },
+      { id: 4, key: 'DEEP', name: 'Deep', libraryID: 1, parentID: 2 }, // under Methods
+      { id: 5, key: 'OUTSIDE', name: 'Outside', libraryID: 1, parentID: null },
+    ];
+    makeCollectionRegistry(collections);
+  });
+
+  function makeItem(collectionIDs) {
+    return { getCollections: () => collectionIDs };
+  }
+
+  const root = { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null };
+
+  it('returns null when item has no collections under sync root', async () => {
+    const item = makeItem([5]); // only OUTSIDE
+    const c = await chooseCanonicalCollection(item, root);
+    expect(c).toBe(null);
+  });
+
+  it('returns the single qualifying collection when only one is under sync root', async () => {
+    const item = makeItem([2, 5]); // METHODS + OUTSIDE
+    const c = await chooseCanonicalCollection(item, root);
+    expect(c.key).toBe('METHODS');
+  });
+
+  it('rule 1: existing tracked canonical wins when still valid', async () => {
+    const item = makeItem([2, 3]); // METHODS + IMPORTANT
+    const c = await chooseCanonicalCollection(item, root, {
+      existingTrackingRecord: { canonicalCollectionKey: 'IMPORTANT' },
+    });
+    expect(c.key).toBe('IMPORTANT');
+  });
+
+  it('rule 2: user-preferred wins when rule 1 doesn\'t match', async () => {
+    const item = makeItem([2, 3]);
+    const c = await chooseCanonicalCollection(item, root, {
+      existingTrackingRecord: { canonicalCollectionKey: 'NOT_IN_ITEM' },
+      userPreferredKey: 'IMPORTANT',
+    });
+    expect(c.key).toBe('IMPORTANT');
+  });
+
+  it('rule 4: shortest path wins when no tracked/preferred match', async () => {
+    // METHODS depth=1, DEEP depth=2 → METHODS wins.
+    const item = makeItem([2, 4]);
+    const c = await chooseCanonicalCollection(item, root);
+    expect(c.key).toBe('METHODS');
+  });
+
+  it('rule 5: alphabetic fallback when paths tie on length', async () => {
+    // METHODS and IMPORTANT both at depth 1. Alphabetic: Important < Methods.
+    const item = makeItem([2, 3]);
+    const c = await chooseCanonicalCollection(item, root);
+    expect(c.key).toBe('IMPORTANT');
+  });
+
+  it('skips special collections in candidate set', async () => {
+    // Add a virtual collection that the item also "belongs" to.
+    collections.push({ id: 99, key: 'VIRT', name: 'Trash', libraryID: 1, parentID: null, treeViewID: 'T' });
+    makeCollectionRegistry(collections);
+    const item = makeItem([2, 99]);
+    const c = await chooseCanonicalCollection(item, root);
+    expect(c.key).toBe('METHODS'); // virt is filtered out
+  });
+});
+
+// ─── UT-206 — path-traversal defense (security audit 2026-05-27) ──────────
+
+describe('UT-206: isUnsafeCollectionNameSegment', () => {
+  it('rejects empty / whitespace-only segments', () => {
+    expect(isUnsafeCollectionNameSegment('')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('   ')).toBe(true);
+  });
+
+  it('rejects `.` and `..`', () => {
+    expect(isUnsafeCollectionNameSegment('.')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('..')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('  .  ')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('  ..  ')).toBe(true);
+  });
+
+  it('rejects path-separator-bearing segments', () => {
+    expect(isUnsafeCollectionNameSegment('foo/bar')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('foo\\bar')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('/etc')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('..\\windows')).toBe(true);
+  });
+
+  it('rejects NUL bytes', () => {
+    expect(isUnsafeCollectionNameSegment('foo bar')).toBe(true);
+  });
+
+  it('rejects non-string values', () => {
+    expect(isUnsafeCollectionNameSegment(null)).toBe(true);
+    expect(isUnsafeCollectionNameSegment(undefined)).toBe(true);
+    expect(isUnsafeCollectionNameSegment(42)).toBe(true);
+    expect(isUnsafeCollectionNameSegment({})).toBe(true);
+  });
+
+  it('accepts ordinary names — spaces, dots, unicode, dashes', () => {
+    expect(isUnsafeCollectionNameSegment('Methods')).toBe(false);
+    expect(isUnsafeCollectionNameSegment('A.B')).toBe(false);
+    expect(isUnsafeCollectionNameSegment('A B C')).toBe(false);
+    expect(isUnsafeCollectionNameSegment('étude — papers')).toBe(false);
+    expect(isUnsafeCollectionNameSegment('2024-research')).toBe(false);
+    // Trailing dot/space — annoying on Windows but not a traversal vector
+    // per se; accepted here. (Filesystem layer normalizes these.)
+    expect(isUnsafeCollectionNameSegment('foo.')).toBe(false);
+  });
+});
+
+describe('UT-206: collectionKeyToRelativePath refuses unsafe segments in the chain', () => {
+  beforeEach(() => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+  });
+
+  it('returns null when an ancestor name is `..`', async () => {
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'EVIL',  name: '..',    libraryID: 1, parentID: 1 },
+      { id: 3, key: 'CHILD', name: 'paper', libraryID: 1, parentID: 2 },
+    ]);
+    expect(await collectionKeyToRelativePath('CHILD')).toBe(null);
+    expect(Zotero.logError).toHaveBeenCalled();
+  });
+
+  it('returns null when a name contains a path separator', async () => {
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'EVIL',  name: 'foo/bar', libraryID: 1, parentID: 1 },
+    ]);
+    expect(await collectionKeyToRelativePath('EVIL')).toBe(null);
+  });
+
+  it('returns null when a name contains a backslash', async () => {
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'EVIL',  name: '..\\windows', libraryID: 1, parentID: 1 },
+    ]);
+    expect(await collectionKeyToRelativePath('EVIL')).toBe(null);
+  });
+
+  it('accepts legitimate nested names without complaint', async () => {
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'A',     name: 'Methods', libraryID: 1, parentID: 1 },
+      { id: 3, key: 'B',     name: 'Subtopic', libraryID: 1, parentID: 2 },
+    ]);
+    expect(await collectionKeyToRelativePath('B')).toBe('Methods/Subtopic');
+    expect(Zotero.logError).not.toHaveBeenCalled();
+  });
+});
+
+describe('UT-206: relativePathToCollection refuses unsafe path segments', () => {
+  beforeEach(() => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+    ]);
+  });
+
+  it('returns null when the requested path contains `..`', async () => {
+    expect(await relativePathToCollection('Methods/../escape', { createIfMissing: true })).toBe(null);
+    expect(Zotero.logError).toHaveBeenCalled();
+  });
+
+  it('returns null when the requested path contains `.`', async () => {
+    expect(await relativePathToCollection('./escape', { createIfMissing: true })).toBe(null);
+  });
+
+  it('returns null when a segment contains backslash (Windows path injection)', async () => {
+    expect(await relativePathToCollection('Methods/..\\..\\etc', { createIfMissing: true })).toBe(null);
+  });
+
+  it('accepts ordinary nested paths', async () => {
+    const c = await relativePathToCollection('Methods/Subtopic', { createIfMissing: true });
+    expect(c).not.toBe(null);
+    expect(Zotero.logError).not.toHaveBeenCalled();
+  });
+});
+
+// ─── UT-207 (WP-B / B4) ─────────────────────────────────────────────────────
+
+describe('UT-207: collectionKeyToRelativePathCached + invalidateCanonicalPathCache', () => {
+  beforeEach(() => {
+    invalidateCanonicalPathCache();
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'METHODS', name: 'Methods', libraryID: 1, parentID: 1 },
+      { id: 3, key: 'SUB', name: 'Subtopic', libraryID: 1, parentID: 2 },
+      { id: 4, key: 'OTHER', name: 'Other', libraryID: 1, parentID: null },
+    ]);
+  });
+
+  it('returns the same value as the uncached function on first call', async () => {
+    const cached = await collectionKeyToRelativePathCached('SUB');
+    const uncached = await collectionKeyToRelativePath('SUB');
+    expect(cached).toBe(uncached);
+    expect(cached).toBe('Methods/Subtopic');
+  });
+
+  it('second call hits the cache (no upstream collection lookup)', async () => {
+    // Pass libraryID explicitly so the cached path bypasses
+    // resolveSyncRoot — that lets us assert pure cache behaviour by
+    // wiping the registry afterwards.
+    await collectionKeyToRelativePathCached('SUB', 1);
+    // Now break the registry — if the cache is doing its job the
+    // second call still returns the prior result.
+    Zotero.Collections.getByLibraryAndKeyAsync = vi.fn(async () => null);
+    Zotero.Collections.get = vi.fn(() => null);
+    const second = await collectionKeyToRelativePathCached('SUB', 1);
+    expect(second).toBe('Methods/Subtopic');
+  });
+
+  it('invalidateCanonicalPathCache() forces a fresh lookup', async () => {
+    await collectionKeyToRelativePathCached('SUB');
+    invalidateCanonicalPathCache();
+    // Re-prime the registry with a renamed segment.
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'METHODS', name: 'RenamedMethods', libraryID: 1, parentID: 1 },
+      { id: 3, key: 'SUB', name: 'Subtopic', libraryID: 1, parentID: 2 },
+    ]);
+    const result = await collectionKeyToRelativePathCached('SUB');
+    expect(result).toBe('RenamedMethods/Subtopic');
+  });
+
+  it('does NOT cache negative results (null)', async () => {
+    // UNKNOWN doesn't exist → null. Cache must not memoize this.
+    expect(await collectionKeyToRelativePathCached('UNKNOWN')).toBe(null);
+    // Now add the missing collection. The next call must see it.
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 5, key: 'UNKNOWN', name: 'New', libraryID: 1, parentID: 1 },
+    ]);
+    expect(await collectionKeyToRelativePathCached('UNKNOWN')).toBe('New');
+  });
+
+  it('caches "" (the sync root itself) — positive result', async () => {
+    await collectionKeyToRelativePathCached('ROOT1', 1);
+    // Break the registry; cached value should survive.
+    Zotero.Collections.getByLibraryAndKeyAsync = vi.fn(async () => null);
+    expect(await collectionKeyToRelativePathCached('ROOT1', 1)).toBe('');
+  });
+
+  it('SyncRootMissingError propagates without caching', async () => {
+    resetPrefs({ syncRootCollectionKey: 'GONE', syncRootLibraryID: 1 });
+    makeCollectionRegistry([]);
+    await expect(collectionKeyToRelativePathCached('GONE')).rejects.toBeInstanceOf(SyncRootMissingError);
+  });
+
+  it('cache keys include libraryID — same collection key in two libraries does NOT collide', async () => {
+    // Library 1 has ROOT1/METHODS with name "Methods".
+    await collectionKeyToRelativePathCached('METHODS');
+    // Wipe registry and seed library 2 with the same collection key but
+    // a different name — explicit libraryID lookup should miss the
+    // library-1 cache entry and compute fresh.
+    resetPrefs({ syncRootCollectionKey: 'ROOT2', syncRootLibraryID: 2 });
+    makeCollectionRegistry([
+      { id: 10, key: 'ROOT2', name: 'OtherInbox', libraryID: 2, parentID: null },
+      { id: 11, key: 'METHODS', name: 'DifferentMethods', libraryID: 2, parentID: 10 },
+    ]);
+    const lib2 = await collectionKeyToRelativePathCached('METHODS', 2);
+    expect(lib2).toBe('DifferentMethods');
+  });
+
+  it('accepts an explicit libraryID and skips the resolveSyncRoot fallback for the lookup', async () => {
+    // Pre-populate the registry; pass libraryID directly.
+    const result = await collectionKeyToRelativePathCached('METHODS', 1);
+    expect(result).toBe('Methods');
+  });
+});
+
+// ─── UT-206 (FS-1) ──────────────────────────────────────────────────────────
+
+describe('UT-206: sanitizeCollectionNameSegment', () => {
+  it('prefixes Windows reserved device names with _', () => {
+    expect(sanitizeCollectionNameSegment('CON')).toBe('_CON');
+    expect(sanitizeCollectionNameSegment('COM1')).toBe('_COM1');
+    expect(sanitizeCollectionNameSegment('LPT9')).toBe('_LPT9');
+    expect(sanitizeCollectionNameSegment('NUL')).toBe('_NUL');
+    expect(sanitizeCollectionNameSegment('aux')).toBe('_aux'); // case-insensitive
+  });
+
+  it('matches reserved names on the pre-dot base (CON.notes → _CON.notes)', () => {
+    expect(sanitizeCollectionNameSegment('CON.notes')).toBe('_CON.notes');
+    expect(sanitizeCollectionNameSegment('com1.txt')).toBe('_com1.txt');
+  });
+
+  it('does NOT treat a reserved name as reserved when it is only a substring', () => {
+    expect(sanitizeCollectionNameSegment('CONTROL')).toBe('CONTROL');
+    expect(sanitizeCollectionNameSegment('SCON')).toBe('SCON');
+    expect(sanitizeCollectionNameSegment('COM10')).toBe('COM10'); // COM1-9 only
+  });
+
+  it('replaces Windows-illegal characters with _', () => {
+    expect(sanitizeCollectionNameSegment('Re: view?')).toBe('Re_ view_');
+    expect(sanitizeCollectionNameSegment('a<b>c|d*e"f')).toBe('a_b_c_d_e_f');
+  });
+
+  it('strips trailing dots and spaces', () => {
+    expect(sanitizeCollectionNameSegment('Methods.')).toBe('Methods');
+    expect(sanitizeCollectionNameSegment('Topic   ')).toBe('Topic');
+    expect(sanitizeCollectionNameSegment('Name. . ')).toBe('Name');
+  });
+
+  it('returns _ when the name reduces to empty (all dots/spaces)', () => {
+    expect(sanitizeCollectionNameSegment('...')).toBe('_');
+    expect(sanitizeCollectionNameSegment('   ')).toBe('_');
+  });
+
+  it('leaves a typical safe name untouched', () => {
+    expect(sanitizeCollectionNameSegment('Machine Learning')).toBe('Machine Learning');
+    expect(sanitizeCollectionNameSegment('2024-papers')).toBe('2024-papers');
+  });
+
+  it('returns _ for a non-string input (defensive)', () => {
+    expect(sanitizeCollectionNameSegment(null)).toBe('_');
+    expect(sanitizeCollectionNameSegment(undefined)).toBe('_');
+  });
+});
+
+// ─── UT-207 (FS-1) ──────────────────────────────────────────────────────────
+
+describe('UT-207: collectionKeyToDiskRelativePath', () => {
+  it('passes through "" (sync root itself) and null (not under sync root)', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 4, key: 'OTHER', name: 'Other', libraryID: 1, parentID: null },
+    ]);
+    expect(await collectionKeyToDiskRelativePath('ROOT1')).toBe('');
+    expect(await collectionKeyToDiskRelativePath('OTHER')).toBe(null);
+  });
+
+  it('sanitizes every segment while the raw variant returns the unsanitized chain', async () => {
+    resetPrefs({ syncRootCollectionKey: 'ROOT1', syncRootLibraryID: 1 });
+    makeCollectionRegistry([
+      { id: 1, key: 'ROOT1', name: 'Inbox', libraryID: 1, parentID: null },
+      { id: 2, key: 'CON', name: 'CON', libraryID: 1, parentID: 1 },
+      { id: 3, key: 'REP', name: 'Re?ports', libraryID: 1, parentID: 2 },
+      { id: 4, key: 'FIN', name: 'Final.', libraryID: 1, parentID: 3 },
+    ]);
+    // Raw variant: unsanitized Zotero-name chain.
+    expect(await collectionKeyToRelativePath('FIN')).toBe('CON/Re?ports/Final.');
+    // Disk variant: each segment sanitized.
+    expect(await collectionKeyToDiskRelativePath('FIN')).toBe('_CON/Re_ports/Final');
+  });
+});
+
+// ─── UT-208 (FS-1) ──────────────────────────────────────────────────────────
+
+describe('UT-208: isUnsafeCollectionNameSegment regression (sanitize is a separate layer)', () => {
+  it('still treats traversal/separator/NUL/empty segments as UNSAFE', () => {
+    expect(isUnsafeCollectionNameSegment('..')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('.')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('a/b')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('a\\b')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('a\0b')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('')).toBe(true);
+    expect(isUnsafeCollectionNameSegment('   ')).toBe(true);
+    expect(isUnsafeCollectionNameSegment(null)).toBe(true);
+  });
+
+  it('still treats reserved-name / trailing-dot segments as SAFE by THIS gate (sanitize handles them)', () => {
+    expect(isUnsafeCollectionNameSegment('CON')).toBe(false);
+    expect(isUnsafeCollectionNameSegment('Methods.')).toBe(false);
+    expect(isUnsafeCollectionNameSegment('Re: port?')).toBe(false);
+  });
+});
+
+// ─── UT-209: whole-library scope mode (scopeMode 'library', 2.7.0) ──────────
+// The four path helpers must branch on scopeMode. With scopeMode 'library',
+// the sync root is the whole library: '' → UNFILED (loose at root), every
+// top-level collection is a top-level folder, nested mirrors nested, and the
+// canonical chooser returns UNFILED (not null) for an item in no real
+// collection. Collection-mode tests above prove the legacy path is untouched.
+
+describe('UT-209: getScopeMode', () => {
+  it('returns "library" only when the pref is exactly "library"', () => {
+    resetPrefs({ scopeMode: 'library' });
+    expect(getScopeMode()).toBe('library');
+  });
+  it('defaults to "collection" for unset / any other value', () => {
+    resetPrefs({});
+    expect(getScopeMode()).toBe('collection');
+    resetPrefs({ scopeMode: 'collection' });
+    expect(getScopeMode()).toBe('collection');
+    resetPrefs({ scopeMode: 'nonsense' });
+    expect(getScopeMode()).toBe('collection');
+  });
+});
+
+describe('UT-209: resolveSyncRoot (library mode)', () => {
+  it('returns a library-root descriptor (collection: null, isLibraryRoot: true)', async () => {
+    resetPrefs({ scopeMode: 'library', syncRootLibraryID: 1 });
+    Zotero.Libraries = { userLibraryID: 1, get: vi.fn(() => ({ libraryID: 1 })) };
+    const root = await resolveSyncRoot();
+    expect(root).toMatchObject({ collection: null, libraryID: 1, isLibraryRoot: true });
+  });
+
+  it('falls back to userLibraryID when syncRootLibraryID is unset', async () => {
+    resetPrefs({ scopeMode: 'library', syncRootLibraryID: undefined });
+    Zotero.Libraries = { userLibraryID: 7, get: vi.fn(() => ({ libraryID: 7 })) };
+    const root = await resolveSyncRoot();
+    expect(root.libraryID).toBe(7);
+  });
+
+  it('throws LibraryUnavailableError (a SyncRootMissingError) when the library is gone', async () => {
+    resetPrefs({ scopeMode: 'library', syncRootLibraryID: 9 });
+    Zotero.Libraries = { userLibraryID: 1, get: vi.fn(() => null) };
+    await expect(resolveSyncRoot()).rejects.toBeInstanceOf(LibraryUnavailableError);
+    Zotero.Libraries = { userLibraryID: 1, get: vi.fn(() => null) };
+    await expect(resolveSyncRoot()).rejects.toBeInstanceOf(SyncRootMissingError);
+  });
+});
+
+describe('UT-209: relativePathToCollection (library mode)', () => {
+  let collections;
+  beforeEach(() => {
+    resetPrefs({ scopeMode: 'library', syncRootLibraryID: 1 });
+    Zotero.Libraries = { userLibraryID: 1, get: vi.fn(() => ({ libraryID: 1 })) };
+    collections = [
+      { id: 10, key: 'PROJ', name: 'Projects', libraryID: 1, parentID: null },
+      { id: 11, key: 'SUB',  name: 'Alpha',    libraryID: 1, parentID: 10 },
+    ];
+    makeCollectionRegistry(collections);
+  });
+
+  it('maps "" and null to the UNFILED sentinel (loose at the watch-folder root)', async () => {
+    expect(await relativePathToCollection('')).toBe(UNFILED);
+    expect(await relativePathToCollection(null)).toBe(UNFILED);
+  });
+
+  it('resolves an existing top-level collection by its first segment', async () => {
+    const c = await relativePathToCollection('Projects');
+    expect(c.key).toBe('PROJ');
+  });
+
+  it('resolves a nested path under a top-level collection', async () => {
+    const c = await relativePathToCollection('Projects/Alpha');
+    expect(c.key).toBe('SUB');
+  });
+
+  it('returns null for a missing path when createIfMissing is false', async () => {
+    expect(await relativePathToCollection('Ghost')).toBe(null);
+    expect(await relativePathToCollection('Projects/Ghost')).toBe(null);
+  });
+
+  it('creates a TOP-LEVEL collection with NO parentID when createIfMissing=true', async () => {
+    let nextId = 200;
+    globalThis.Zotero.Collection = vi.fn(function () {
+      const self = {
+        name: '', libraryID: 0, parentID: null,
+        saveTx: vi.fn(async () => {
+          self.id = nextId++;
+          self.key = 'NEW' + self.id;
+          collections.push(self);
+          makeCollectionRegistry(collections);
+        }),
+      };
+      return self;
+    });
+    const c = await relativePathToCollection('Topics', { createIfMissing: true });
+    expect(c.name).toBe('Topics');
+    expect(c.parentID).toBe(null); // top-level → no parent
+    expect(globalThis.Zotero.Collection).toHaveBeenCalledTimes(1);
+  });
+
+  it('refuses an unsafe segment (path traversal) → null', async () => {
+    expect(await relativePathToCollection('../escape')).toBe(null);
+  });
+});
+
+describe('UT-209: collectionKeyToRelativePath (library mode)', () => {
+  beforeEach(() => {
+    resetPrefs({ scopeMode: 'library', syncRootLibraryID: 1 });
+    Zotero.Libraries = { userLibraryID: 1, get: vi.fn(() => ({ libraryID: 1 })) };
+  });
+
+  it('returns the bare name for a top-level collection (no-parent = success terminator)', async () => {
+    makeCollectionRegistry([
+      { id: 10, key: 'PROJ', name: 'Projects', libraryID: 1, parentID: null },
+    ]);
+    expect(await collectionKeyToRelativePath('PROJ')).toBe('Projects');
+  });
+
+  it('returns the full reversed chain for a nested collection', async () => {
+    makeCollectionRegistry([
+      { id: 10, key: 'PROJ', name: 'Projects', libraryID: 1, parentID: null },
+      { id: 11, key: 'SUB',  name: 'Alpha',    libraryID: 1, parentID: 10 },
+      { id: 12, key: 'DEEP', name: 'Beta',     libraryID: 1, parentID: 11 },
+    ]);
+    expect(await collectionKeyToRelativePath('DEEP')).toBe('Projects/Alpha/Beta');
+  });
+
+  it('returns null for a special/virtual collection (never becomes a folder)', async () => {
+    makeCollectionRegistry([
+      { id: 99, key: 'DUP', name: 'Duplicates', libraryID: 1, parentID: null, isVirtual: true },
+    ]);
+    expect(await collectionKeyToRelativePath('DUP')).toBe(null);
+  });
+
+  it('returns null when any ancestor in the chain is unsafe', async () => {
+    makeCollectionRegistry([
+      { id: 10, key: 'BAD',  name: '..',    libraryID: 1, parentID: null },
+      { id: 11, key: 'SUB',  name: 'Alpha', libraryID: 1, parentID: 10 },
+    ]);
+    expect(await collectionKeyToRelativePath('SUB')).toBe(null);
+  });
+});
+
+describe('UT-209: chooseCanonicalCollection (library mode)', () => {
+  beforeEach(() => {
+    resetPrefs({ scopeMode: 'library', syncRootLibraryID: 1 });
+    Zotero.Libraries = { userLibraryID: 1, get: vi.fn(() => ({ libraryID: 1 })) };
+  });
+
+  it('returns UNFILED for an item in NO collections (loose at root)', async () => {
+    makeCollectionRegistry([]);
+    const item = { getCollections: () => [] };
+    // syncRootCollection is null in library mode — callers pass syncRoot.collection.
+    expect(await chooseCanonicalCollection(item, null)).toBe(UNFILED);
+  });
+
+  it('returns UNFILED when the only membership is a special/virtual collection', async () => {
+    makeCollectionRegistry([
+      { id: 99, key: 'DUP', name: 'Duplicates', libraryID: 1, parentID: null, isVirtual: true },
+    ]);
+    const item = { getCollections: () => [99] };
+    expect(await chooseCanonicalCollection(item, null)).toBe(UNFILED);
+  });
+
+  it('returns the real collection for a single qualifying membership', async () => {
+    makeCollectionRegistry([
+      { id: 10, key: 'PROJ', name: 'Projects', libraryID: 1, parentID: null },
+    ]);
+    const item = { getCollections: () => [10] };
+    const c = await chooseCanonicalCollection(item, null);
+    expect(c.key).toBe('PROJ');
+  });
+
+  it('picks the shortest path among multiple top-level/nested memberships', async () => {
+    makeCollectionRegistry([
+      { id: 10, key: 'PROJ', name: 'Projects', libraryID: 1, parentID: null },
+      { id: 11, key: 'SUB',  name: 'Alpha',    libraryID: 1, parentID: 10 },
+    ]);
+    const item = { getCollections: () => [11, 10] }; // nested + top-level
+    const c = await chooseCanonicalCollection(item, null);
+    expect(c.key).toBe('PROJ'); // shorter path wins
+  });
+});

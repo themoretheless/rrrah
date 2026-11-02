@@ -1,0 +1,49 @@
+{
+  "scope": "Complete unchanged original background.js;realNodeVM,explicit browser/query/storage/notification/timer adapters. No real browser,extensions,tabs,network or deletion. Query adapter returns supplied records,not actual Firefox match-pattern execution.",
+  "authored_controls_passed": 8,
+  "results": [
+    {
+      "case": "same_url_cookie_keeps_lowest_id",
+      "recorded_removal": [
+        [
+          2
+        ]
+      ]
+    },
+    {
+      "case": "different_cookie_stores_remain",
+      "passed": true
+    },
+    {
+      "case": "different_fragment_not_equal_url",
+      "passed": true
+    },
+    {
+      "case": "explicit_opened_loading_tab_protected",
+      "passed": true
+    },
+    {
+      "case": "background_duplicate_does_not_focus",
+      "passed": true
+    },
+    {
+      "case": "multi_window_query_shape",
+      "currentWindow": null,
+      "qualification": "Recording adapter does not validate Firefox API schema or actual window visibility."
+    },
+    {
+      "case": "remove_called_while_move_promise_unresolved",
+      "recorded_removal": [
+        [
+          2
+        ]
+      ],
+      "qualification": "Ordering confirmed under pending adapter;no real browser move failure or tab removal."
+    },
+    {
+      "case": "blank_navigation_event_ignored",
+      "passed": true
+    }
+  ],
+  "node": "v22.23.4"
+}

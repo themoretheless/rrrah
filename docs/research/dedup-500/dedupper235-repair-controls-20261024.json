@@ -1,0 +1,30 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "scope": "Original log-map loader and property lookup bodies via Flow AST; in-memory delayed file read, virtual glob, row decode adapter. No log files, database, native hashing, services or full Jest executed.",
+  "authored_controls": [
+    {
+      "name": "repair log map returns before pending file read completes",
+      "passed": true,
+      "observed": {
+        "keysAtReturn": 0
+      }
+    },
+    {
+      "name": "returned repair map mutates after caller already receives it",
+      "passed": true,
+      "observed": {
+        "keysAfterRead": [
+          "h"
+        ]
+      }
+    },
+    {
+      "name": "first truthy invalid log value hides later valid entry",
+      "passed": true,
+      "observed": {
+        "invalidFirst": "undefined",
+        "validFirst": "123"
+      }
+    }
+  ]
+}

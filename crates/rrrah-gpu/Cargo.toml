@@ -23,3 +23,6 @@ naga = { version = "=30.0.0", features = ["wgsl-in"] }
 
 [lints]
 workspace = true
+
+[target.'cfg(target_os = "macos")'.dev-dependencies]
+objc2-metal = { version = "=0.3.2", default-features = false, features = ["std", "MTLDevice"] }

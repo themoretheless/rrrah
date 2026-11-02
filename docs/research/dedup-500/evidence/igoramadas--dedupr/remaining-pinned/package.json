@@ -1,0 +1,55 @@
+{
+    "name": "dedupr",
+    "version": "2.0.2",
+    "description": "Node.js tool to find (or remove) duplicates from the specified folders.",
+    "homepage": "http://github.com/igoramadas/dedupr",
+    "author": "Igor Ramadas <igor@devv.com>",
+    "license": "MIT",
+    "subdomain": "dedupr",
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "domains": [
+        "dedupr.devv.com"
+    ],
+    "bin": {
+        "dedupr": "./bin/dedupr"
+    },
+    "scripts": {
+        "prepublishOnly": "./node_modules/.bin/tsc --removeComments",
+        "docs": "make docs"
+    },
+    "engines": {
+        "node": ">=12.0"
+    },
+    "dependencies": {
+        "anyhow": "^3.0.4",
+        "chalk": "^4.1.2",
+        "yargs": "^17.5.1"
+    },
+    "devDependencies": {
+        "@types/node": "^17.0.34",
+        "@types/yargs": "^17.0.10",
+        "typedoc": "^0.22.15",
+        "typescript": "^4.6.4"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/igoramadas/dedupr.git"
+    },
+    "keywords": [
+        "dedup.js",
+        "dedupr",
+        "dedup",
+        "deduplicator",
+        "duplicates"
+    ],
+    "prettier": {
+        "trailingComma": "none",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": false,
+        "arrowParens": "always",
+        "bracketSpacing": false,
+        "printWidth": 250
+    }
+}

@@ -1,0 +1,37 @@
+ERROR:root:cluster_analyse函数出现了异常: expected a positive input
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/cluster_fn.py", line 970, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/cluster_fn.py", line 1062, in cluster_analyse
+    head_number = max( 1, min( 10, round( math.log2(final_clusters_number) ) ) )  # 展示log2(实际聚类数)个，最少要展示1个，最多展示10个
+                                          ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: expected a positive input
+ERROR:root:cluster_analyse函数出现了异常: expected a positive input
+Traceback (most recent call last):
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/cluster_fn.py", line 970, in wrapper
+    return func(*args, **kwargs)
+  File "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/cluster_fn.py", line 1062, in cluster_analyse
+    head_number = max( 1, min( 10, round( math.log2(final_clusters_number) ) ) )  # 展示log2(实际聚类数)个，最少要展示1个，最多展示10个
+                                          ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: expected a positive input
+n值分析特征维度 : (3, 2)
+最大样本数 3
+聚类分析开始
+分析算法 Model
+可视化开始
+n值分析特征维度 : (3, 2)
+最大样本数 3
+聚类分析开始
+分析算法 Model
+可视化开始
+n值分析特征维度 : (3, 2)
+最大样本数 3
+聚类分析开始
+分析算法 Model
+可视化开始
+n值分析特征维度 : (3, 2)
+最大样本数 3
+聚类分析开始
+分析算法 Model
+可视化开始
+2 analysis boundary controls reproduced log2(0) and wrapper fallback

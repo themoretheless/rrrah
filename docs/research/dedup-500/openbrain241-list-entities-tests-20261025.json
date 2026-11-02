@@ -1,0 +1,25 @@
+{
+  "scope": "Original five list-entities callbacks; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "returns entities as JSON",
+      "passed": true
+    },
+    {
+      "name": "passes entity_type filter to RPC",
+      "passed": true
+    },
+    {
+      "name": "passes min_thoughts and limit to RPC",
+      "passed": true
+    },
+    {
+      "name": "db error returns isError",
+      "passed": true
+    },
+    {
+      "name": "missing brain context returns error",
+      "passed": true
+    }
+  ]
+}

@@ -42,6 +42,35 @@ def validate(data, markdown, root=ROOT, strict_snapshot=False):
         )
         if dict(counts) != data.get("execution_summary"):
             errors.append("execution_summary inconsistent")
+    batches = data.get("execution_batches", [])
+    if not isinstance(batches, list):
+        errors.append("execution_batches must be a list")
+        batches = []
+    by_id = {t.get("id"): t for t in tasks}
+    for batch in batches:
+        if not isinstance(batch, dict):
+            errors.append("invalid execution batch")
+            continue
+        batch_ids = batch.get("ids")
+        if (not isinstance(batch_ids, list) or not batch_ids
+                or any(not isinstance(i, str) or i not in by_id for i in batch_ids)
+                or len(set(batch_ids)) != len(batch_ids)):
+            errors.append("execution batch IDs must be existing and unique")
+            continue
+        counts = collections.Counter(
+            by_id[i]["execution"].get("status") if isinstance(by_id[i].get("execution"), dict) else None
+            for i in batch_ids)
+        if None in counts:
+            errors.append("execution batch task missing execution")
+        if dict(counts) != batch.get("summary"):
+            errors.append("execution batch summary inconsistent")
+        report = batch.get("report", "")
+        if not isinstance(report, str):
+            errors.append("execution batch report invalid")
+        else:
+            path = (root / report).resolve()
+            if not path.is_relative_to(root.resolve()) or not path.is_file():
+                errors.append("execution batch report missing or unsafe")
     titles, outcomes = set(), set()
     graph = {}
     source_cache = {}
@@ -199,7 +228,7 @@ def main():
         print(f"ERROR: {message}", file=sys.stderr)
     if errors:
         return 1
-    print(f"OK: 1000 tasks, 30 initial tasks, source links, fields, dependencies, Markdown parity; {len(warnings)} snapshot warnings")
+    print(f"OK: 1000 tasks, 30 initial tasks, {sum('execution' in t for t in data['tasks'])} execution records, source links, fields, dependencies, Markdown parity; {len(warnings)} snapshot warnings")
     print(json.dumps(dict(collections.Counter(t["subsystem"] for t in data["tasks"])), ensure_ascii=False))
     return 0
 

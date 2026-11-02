@@ -1,0 +1,25 @@
+{
+  "decoder_sha256": "2dd55c24c3cede12169441d6a03d1d9b4cb847ff6953049662d69ba45d400754",
+  "test_sha256": "652ead0b037b2ee309afa10cfdc39781f81a3356aecd3d69fda5acbcb9978f62",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "88e4997896d7444fdceabd43bd7754506a224e0d260d37593e6071a379621321",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "9eac5628f7ca2523d665482b1a53bf27f1a150752fb12be3630b758681e893ce",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "artifacts": {
+    "containment-priority-kernel.log": "c7b35521e542bcffd791b62f2b1d5a5ecb6951b0558914984eb937760ab352a4",
+    "containment-priority-full-encode.log": "a0189449dca4181d4bc7cf78a5681056012e81791f3e50c0d872b2e173a4712f",
+    "containment-priority-feature-vector.log": "df2910b907c36f80f3dde1d48b515656740d73bbce790ca2ade2969395e8e1d9",
+    "containment-priority-feature-build.log": "f9f27cad9566b51349354577efdbf2d4c61925008580e0b900d4e30ddccf4490",
+    "containment-priority-poppler.json": "bcda1dbe71d10a539dc5faa183c2ecc9e5cefe240df1b38890bd3e3797037709",
+    "containment-priority-change.patch": "0e709fae28a9a96a63ba7d714597d290e7771ff1822db70908908b3f166598d5",
+    "containment-priority-cpu.json": "8b19249e3943394a876c15e3df643b74b60360c4b4aeb27896c37fc4b393c643",
+    "containment-priority-cpu.log": "7ee66c24f86d4952a819adc1335642ca35eca022cb008a30ffabd41f65b5a986"
+  },
+  "patch_reproduces_current_source": true,
+  "before_source_sha256": "be9b33f1c7d141cfcc24eb1d375d099d5a00c4c5159cb0da3bf818711552105a",
+  "before_cpu_test_sha256": "a73eaaa867b4ae85adebf6b17b147111df659642117991464c12107cca8fba86",
+  "cpu_result": "No qualified wall-time gain: AA95%1.45..15.40% excludes0, candidate95%-3.16..5.98% crosses0. Initial load average25.22; builds and correctness jobs completed before timing. Six interspersed AA controls, sixteen alternating AB/BA pairs, eight native repetitions."
+}

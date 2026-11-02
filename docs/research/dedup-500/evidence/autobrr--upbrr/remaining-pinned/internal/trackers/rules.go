@@ -1,0 +1,601 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package trackers
+
+import (
+	"context"
+	"fmt"
+	"strings"
+
+	"github.com/autobrr/upbrr/internal/languageutil"
+	pathutil "github.com/autobrr/upbrr/internal/pathing"
+	"github.com/autobrr/upbrr/internal/releasepolicy"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+var ruleResolutionOrder = map[string]int{
+	"480i":  1,
+	"480p":  2,
+	"576i":  3,
+	"576p":  4,
+	"720p":  5,
+	"1080i": 6,
+	"1080p": 7,
+	"1440p": 8,
+	"2160p": 9,
+	"4320p": 10,
+	"8640p": 11,
+}
+
+// EvaluateRules evaluates repository-wide release-modification policy without a
+// tracker registry. Use [EvaluateRulesWithRegistry] for tracker and metadata
+// policy.
+func EvaluateRules(ctx context.Context, tracker string, meta api.RuleSubject, logger api.Logger) ([]api.RuleFailure, error) {
+	return evaluateRules(ctx, nil, tracker, meta, logger)
+}
+
+// EvaluateRulesWithRegistry returns all applicable failures with their
+// tracker-owned dispositions. Scene renames and structural requirements are
+// strict; non-scene rename heuristics and explicitly waivable rules require
+// authorization, while metadata requirements retain their site-specific
+// disposition.
+func EvaluateRulesWithRegistry(ctx context.Context, registry *Registry, tracker string, meta api.RuleSubject, logger api.Logger) ([]api.RuleFailure, error) {
+	failures, err := evaluateRules(ctx, registry, tracker, meta, logger)
+	if err != nil {
+		return nil, err
+	}
+	custom, err := evaluateValidationPolicy(
+		ctx,
+		registry,
+		tracker,
+		api.NewTrackerValidationSubjectFromRuleSubject(meta, tracker),
+		logger,
+	)
+	if err != nil {
+		return nil, err
+	}
+	return append(failures, custom...), nil
+}
+
+// EvaluateTrackerValidationWithRegistry evaluates generic rules, metadata
+// requirements, and the tracker-native versioned validation policy against the
+// full detached validation subject.
+func EvaluateTrackerValidationWithRegistry(
+	ctx context.Context,
+	registry *Registry,
+	tracker string,
+	subject api.TrackerValidationSubject,
+	logger api.Logger,
+) ([]api.RuleFailure, error) {
+	failures, err := evaluateRules(ctx, registry, tracker, RuleSubjectFromValidation(subject), logger)
+	if err != nil {
+		return nil, err
+	}
+	custom, err := evaluateValidationPolicy(ctx, registry, tracker, subject, logger)
+	if err != nil {
+		return nil, err
+	}
+	return append(failures, custom...), nil
+}
+
+func evaluateRules(ctx context.Context, registry *Registry, tracker string, meta api.RuleSubject, _ api.Logger) ([]api.RuleFailure, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, fmt.Errorf("trackers: evaluate rules: %w", err)
+	}
+	name := strings.ToUpper(strings.TrimSpace(tracker))
+
+	failures := make([]api.RuleFailure, 0)
+	addFailure := func(rule, reason string, disposition api.RuleDisposition) {
+		trimmed := strings.TrimSpace(reason)
+		if trimmed == "" {
+			trimmed = "rule requirement not met"
+		}
+		failures = append(failures, api.RuleFailure{
+			Rule:        strings.TrimSpace(rule),
+			Reason:      trimmed,
+			Disposition: api.NormalizeRuleDisposition(disposition),
+		})
+	}
+	addStrict := func(rule, reason string) { addFailure(rule, reason, api.RuleDispositionStrict) }
+	addWaivable := func(rule, reason string) { addFailure(rule, reason, api.RuleDispositionWaivable) }
+
+	// Renamed/modified releases are rejected by every supported tracker. Scene
+	// renames are authoritative and remain strict; heuristic rename detections
+	// may be explicitly authorized as a non-resolution policy exception.
+	if renamed, reason := releasepolicy.DetectModifiedRelease(releasepolicy.ModifiedReleaseSubject{
+		SourcePath:         meta.SourcePath,
+		VideoPath:          meta.VideoPath,
+		DiscType:           meta.DiscType,
+		PersonalRelease:    meta.PersonalRelease,
+		SceneRenamed:       meta.SceneRenamed,
+		SceneRenamedReason: meta.SceneRenamedReason,
+		Release:            meta.Release,
+	}); renamed {
+		disposition := api.RuleDispositionWaivable
+		if meta.SceneRenamed {
+			disposition = api.RuleDispositionStrict
+		}
+		addFailure("modified_release", reason, disposition)
+	}
+	metadataFailures, metadataEvaluated := evaluateMetadataRequirementsWithRegistry(registry, name, meta)
+	failures = append(failures, metadataFailures...)
+
+	rules, ok := registry.LookupRules(name)
+	if !ok && !metadataEvaluated {
+		// Preserve the nil contract for trackers without their own rule set: the
+		// consumer (applyTrackerRules) treats a nil result as "not evaluated, keep
+		// pre-existing failures" but an empty slice as "evaluated, clear failures".
+		// Only return a slice when this rule actually produced a failure.
+		if len(failures) > 0 {
+			return failures, nil
+		}
+		return nil, nil
+	}
+
+	if rules.RequireUniqueID && !meta.Assessments.UniqueIDRequirementSatisfied() {
+		addStrict("require_unique_id", "missing MediaInfo Unique ID")
+	}
+	if rules.RequireValidMISetting && !meta.Assessments.EncodeSettingsRequirementSatisfied() {
+		addStrict("require_valid_mi_setting", "missing MediaInfo encode settings")
+	}
+
+	if rules.RequireDiscOnly && !isDiscType(meta.DiscType) {
+		addStrict("require_disc_only", "requires disc upload")
+	}
+	if rules.RequireMovieUnlessTVPack && !meta.TVPack {
+		category := resolveCategory(meta)
+		if category != "" && category != "movie" {
+			addStrict("require_movie_only", fmt.Sprintf("category %s is not movie", category))
+		}
+	}
+	if rules.RequireMovieOnly || rules.RequireTVOnly {
+		category := resolveCategory(meta)
+		if rules.RequireMovieOnly && category != "movie" {
+			reason := "movie category required"
+			if category != "" {
+				reason = fmt.Sprintf("category %s is not movie", category)
+			}
+			addStrict("require_movie_only", reason)
+		}
+		if rules.RequireTVOnly && category != "tv" {
+			reason := "TV category required"
+			if category != "" {
+				reason = fmt.Sprintf("category %s is not tv", category)
+			}
+			addStrict("require_tv_only", reason)
+		}
+	}
+
+	typeValue := resolveType(meta)
+	if len(rules.RequireHEVCForTypes) > 0 {
+		if hasTypeRequirement(typeValue, rules.RequireHEVCForTypes) && !isHEVC(meta) {
+			addStrict("require_hevc", fmt.Sprintf("%s requires HEVC for %s", name, typeValue))
+		}
+	}
+
+	if rules.MinResolution != "" {
+		minResolution := strings.ToLower(strings.TrimSpace(rules.MinResolution))
+		value := resolveResolution(meta)
+		if value == "" {
+			addFailure("min_resolution", "resolution required for "+name, api.RuleDispositionStrict)
+		} else if ruleResolutionOrder[value] < ruleResolutionOrder[minResolution] {
+			addFailure("min_resolution", fmt.Sprintf("resolution %s below %s", value, minResolution), api.RuleDispositionStrict)
+		}
+	}
+
+	if rules.BlockAdult && AdultContent(meta) {
+		message := strings.TrimSpace(rules.AdultMessage)
+		if message == "" {
+			message = "adult content not allowed at " + name
+		}
+		addWaivable("block_adult", message)
+	}
+
+	if rules.BlockDVDRip && strings.EqualFold(typeValue, "DVDRIP") {
+		addStrict("block_dvdrip", "DVDRip not allowed")
+	}
+	if rules.BlockExternalSubs && hasReleaseToken(meta, []string{"extsub", "ext-sub", "external subs", "external subtitles"}) {
+		addWaivable("block_external_subs", "external subtitles not allowed")
+	}
+	if rules.BlockHardcodedSubs && hasReleaseToken(meta, []string{"hardsub", "hard-sub", "hardcoded"}) {
+		addStrict("block_hardcoded_subs", "hardcoded subtitles not allowed")
+	}
+
+	if rules.BlockSingleFileFolder && hasSingleFileFolder(meta) {
+		addStrict("block_single_file_folder", "single-file folders are not allowed")
+	}
+
+	if len(rules.BlockGroups) > 0 {
+		group := strings.ToUpper(strings.TrimSpace(resolveGroup(meta)))
+		if group != "" && containsAny([]string{group}, rules.BlockGroups) {
+			addWaivable("block_group", fmt.Sprintf("group %s not allowed", group))
+		}
+	}
+
+	if len(rules.BlockGroupUnlessType) > 0 {
+		group := strings.ToUpper(strings.TrimSpace(resolveGroup(meta)))
+		if group != "" {
+			if allowedTypes, ok := rules.BlockGroupUnlessType[group]; ok {
+				if !hasTypeRequirement(typeValue, allowedTypes) {
+					addWaivable("block_group_unless_type", fmt.Sprintf("group %s only allowed for %s", group, strings.Join(allowedTypes, ", ")))
+				}
+			}
+		}
+	}
+
+	if rules.RequireSceneNFO && meta.Scene && strings.TrimSpace(meta.SceneNFOPath) == "" {
+		addStrict("require_scene_nfo", "scene release missing NFO")
+	}
+
+	if rules.RequireAudioLanguages && !isDiscType(meta.DiscType) && len(meta.AudioLanguages) == 0 {
+		addWaivable("require_audio_languages", "missing audio language data")
+	}
+
+	if rules.Language != nil {
+		if ok, reason := evaluateLanguageRule(meta, rules.Language); !ok {
+			addWaivable("language_rule", reason)
+		}
+	}
+
+	return failures, nil
+}
+
+func evaluateValidationPolicy(
+	ctx context.Context,
+	registry *Registry,
+	tracker string,
+	subject api.TrackerValidationSubject,
+	logger api.Logger,
+) ([]api.RuleFailure, error) {
+	if registry == nil {
+		return nil, nil
+	}
+	descriptor, ok := registry.LookupDescriptor(tracker)
+	if !ok || descriptor.Validation.Check == nil {
+		return nil, nil
+	}
+	failures, err := descriptor.Validation.Check(ctx, subject, logger)
+	if err != nil {
+		return nil, fmt.Errorf("trackers: %s validation policy %s: %w", strings.ToUpper(strings.TrimSpace(tracker)), descriptor.Validation.ID, err)
+	}
+	normalized := make([]api.RuleFailure, 0, len(failures))
+	for _, failure := range failures {
+		normalized = append(normalized, NormalizeRuleFailure(failure))
+	}
+	return normalized, nil
+}
+
+// RuleSubjectFromValidation projects a tracker-validation subject into the
+// shared eligibility-rule contract.
+func RuleSubjectFromValidation(subject api.TrackerValidationSubject) api.RuleSubject {
+	sceneNFOPath := ""
+	if subject.SceneNFOReady {
+		sceneNFOPath = "ready"
+	}
+	return api.RuleSubject{
+		EffectiveMetadata:          subject.EffectiveMetadata,
+		ManualLanguages:            subject.ManualLanguages,
+		HardcodedSubs:              subject.HardcodedSubs,
+		HardcodedSubtitleLanguages: append([]string(nil), subject.HardcodedSubtitleLanguages...),
+		HardcodedSubtitleCoverage:  append([]api.SubtitleLanguageCoverage(nil), subject.HardcodedSubtitleCoverage...),
+		SourcePath:                 subject.SourcePath,
+		VideoPath:                  subject.VideoPath,
+		FileList:                   append([]string(nil), subject.FileList...),
+		DiscType:                   subject.DiscType,
+		Scene:                      subject.Scene,
+		SceneNFOPath:               sceneNFOPath,
+		SceneRenamed:               subject.SceneRenamed,
+		SceneRenamedReason:         subject.SceneRenamedReason,
+		PersonalRelease:            subject.PersonalRelease,
+		Release:                    subject.Release,
+		ReleaseName:                subject.ReleaseName,
+		ReleaseNameNoTag:           subject.ReleaseNameNoTag,
+		Tag:                        subject.Tag,
+		Identity:                   subject.Identity,
+		ProviderMetadata:           subject.ProviderMetadata,
+		AudioLanguages:             append([]string(nil), subject.AudioLanguages...),
+		SubtitleLanguages:          append([]string(nil), subject.SubtitleLanguages...),
+		TVPack:                     subject.TVPack,
+		Type:                       subject.Type,
+		Source:                     subject.Source,
+		Container:                  subject.Container,
+		BitDepth:                   subject.BitDepth,
+		VideoCodec:                 subject.VideoCodec,
+		VideoEncode:                subject.VideoEncode,
+		HDR:                        subject.HDR,
+		Region:                     subject.Region,
+		WebDV:                      subject.WebDV,
+		Anime:                      subject.Anime,
+		Assessments:                subject.Assessments,
+	}
+}
+
+// ResolveRuleCategory returns the common category used by tracker rules.
+func ResolveRuleCategory(meta api.RuleSubject) string { return resolveCategory(meta) }
+
+// ResolveRuleType returns the common release type used by tracker rules.
+func ResolveRuleType(meta api.RuleSubject) string { return resolveType(meta) }
+
+// ResolveRuleResolution returns the common resolution used by tracker rules.
+func ResolveRuleResolution(meta api.RuleSubject) string { return resolveResolution(meta) }
+
+// IsDiscType reports whether value identifies a supported disc source.
+func IsDiscType(value string) bool { return isDiscType(value) }
+
+func resolveCategory(meta api.RuleSubject) string {
+	if sourceMatches(meta.Identity.SourcePath, meta.SourcePath) {
+		if value := strings.ToLower(strings.TrimSpace(string(meta.Identity.Category))); value != "" && value != string(api.CanonicalCategoryUnknown) {
+			return value
+		}
+	}
+	return ""
+}
+
+func resolveType(meta api.RuleSubject) string {
+	value := strings.ToUpper(strings.TrimSpace(meta.Type))
+	if value == "" {
+		value = strings.ToUpper(strings.TrimSpace(meta.Release.Type))
+	}
+	return value
+}
+
+func resolveGroup(meta api.RuleSubject) string {
+	if group := strings.TrimSpace(meta.Release.Group); group != "" {
+		return group
+	}
+	return strings.TrimPrefix(strings.TrimSpace(meta.Tag), "-")
+}
+
+func resolveResolution(meta api.RuleSubject) string {
+	return strings.ToLower(strings.TrimSpace(meta.Release.Resolution))
+}
+
+func isDiscType(value string) bool {
+	normalized := strings.NewReplacer(" ", "", "-", "", "_", "").Replace(strings.ToUpper(strings.TrimSpace(value)))
+	switch normalized {
+	case "BDMV", "BLURAY", "DVD", "HDDVD":
+		return true
+	default:
+		return false
+	}
+}
+
+func isHEVC(meta api.RuleSubject) bool {
+	codec := strings.ToUpper(strings.TrimSpace(meta.VideoCodec))
+	return codec == "HEVC" || codec == "H.265"
+}
+
+func hasTypeRequirement(value string, allowed []string) bool {
+	if value == "" || len(allowed) == 0 {
+		return false
+	}
+	for _, candidate := range allowed {
+		if strings.EqualFold(strings.TrimSpace(candidate), value) {
+			return true
+		}
+	}
+	return false
+}
+
+func hasSingleFileFolder(meta api.RuleSubject) bool {
+	if isDiscType(meta.DiscType) {
+		return false
+	}
+	if len(meta.FileList) != 1 {
+		return false
+	}
+	return !strings.EqualFold(strings.TrimSpace(meta.FileList[0]), strings.TrimSpace(meta.SourcePath))
+}
+
+func hasReleaseToken(meta api.RuleSubject, tokens []string) bool {
+	values := make([]string, 0, len(meta.Release.Other)+len(meta.Release.Edition)+2)
+	values = append(values, meta.Release.Other...)
+	values = append(values, meta.Release.EditionLabel())
+	if meta.ReleaseName != "" {
+		values = append(values, meta.ReleaseName)
+	}
+	if meta.ReleaseNameNoTag != "" {
+		values = append(values, meta.ReleaseNameNoTag)
+	}
+	value := strings.ToLower(strings.Join(values, " "))
+	for _, token := range tokens {
+		if token == "" {
+			continue
+		}
+		if strings.Contains(value, strings.ToLower(token)) {
+			return true
+		}
+	}
+	return false
+}
+
+// RuleGenres returns normalized, deduplicated genres from current TMDB, IMDb,
+// TVDB, and TVmaze metadata. Parsed release genres and provider keywords are
+// excluded.
+func RuleGenres(meta api.RuleSubject) []string {
+	if meta.EffectiveMetadata.GenresProvenance.IsManual() {
+		return normalizeStrings(meta.EffectiveMetadata.Genres)
+	}
+	if !ruleProviderMetadataCurrent(meta) {
+		return nil
+	}
+	values := make([]string, 0)
+	if metadata := meta.ProviderMetadata.TMDB; metadata != nil {
+		values = append(values, splitCSV(metadata.Genres)...)
+	}
+	if metadata := meta.ProviderMetadata.IMDB; metadata != nil {
+		values = append(values, splitCSV(metadata.Genres)...)
+	}
+	if metadata := meta.ProviderMetadata.TVDB; metadata != nil {
+		values = append(values, splitCSV(metadata.Genres)...)
+	}
+	if metadata := meta.ProviderMetadata.TVmaze; metadata != nil {
+		values = append(values, splitCSV(metadata.Genres)...)
+	}
+	return normalizeStrings(values)
+}
+
+// AdultContent reports whether a current provider genre is classified as adult.
+func AdultContent(meta api.RuleSubject) bool {
+	for _, genre := range RuleGenres(meta) {
+		switch genre {
+		case "adult", "porn", "pornography", "xxx", "erotic", "hentai", "adult animation", "softcore", "orgy":
+			return true
+		}
+	}
+	return false
+}
+
+func ruleProviderMetadataCurrent(meta api.RuleSubject) bool {
+	if !providerMetadataCurrent(meta) {
+		return false
+	}
+	currentSource := strings.TrimSpace(meta.SourcePath)
+	for _, scopedSource := range []string{meta.Identity.SourcePath, meta.ProviderMetadata.SourcePath} {
+		if scopedSource = strings.TrimSpace(scopedSource); scopedSource != "" && !pathutil.SamePath(scopedSource, currentSource) {
+			return false
+		}
+	}
+	return true
+}
+
+func splitCSV(value string) []string {
+	if strings.TrimSpace(value) == "" {
+		return nil
+	}
+	parts := strings.Split(value, ",")
+	out := make([]string, 0, len(parts))
+	for _, part := range parts {
+		trimmed := strings.TrimSpace(part)
+		if trimmed != "" {
+			out = append(out, trimmed)
+		}
+	}
+	return out
+}
+
+func normalizeStrings(values []string) []string {
+	out := make([]string, 0, len(values))
+	seen := make(map[string]bool, len(values))
+	for _, value := range values {
+		trimmed := strings.ToLower(strings.TrimSpace(value))
+		if trimmed == "" || seen[trimmed] {
+			continue
+		}
+		seen[trimmed] = true
+		out = append(out, trimmed)
+	}
+	return out
+}
+
+func containsAny(values []string, targets []string) bool {
+	if len(values) == 0 || len(targets) == 0 {
+		return false
+	}
+	set := make(map[string]bool, len(targets))
+	for _, target := range targets {
+		trimmed := strings.ToLower(strings.TrimSpace(target))
+		if trimmed != "" {
+			set[trimmed] = true
+		}
+	}
+	for _, value := range values {
+		if set[strings.ToLower(strings.TrimSpace(value))] {
+			return true
+		}
+	}
+	return false
+}
+
+func evaluateLanguageRule(meta api.RuleSubject, rule *LanguageRule) (bool, string) {
+	if rule == nil {
+		return true, ""
+	}
+	if rule.ApplyIfNonBDMV && strings.EqualFold(strings.TrimSpace(meta.DiscType), "BDMV") {
+		return true, ""
+	}
+	if rule.ApplyIfNonDisc && isDiscType(meta.DiscType) {
+		return true, ""
+	}
+	audioLanguages := normalizeStrings(meta.AudioLanguages)
+	subLanguages := normalizeStrings(meta.SubtitleLanguages)
+	required := normalizeStrings(rule.Languages)
+	if len(required) == 0 {
+		return true, ""
+	}
+	if isDiscType(meta.DiscType) {
+		if len(audioLanguages) == 0 && len(subLanguages) == 0 {
+			return false, "missing disc language data"
+		}
+		if containsAny(audioLanguages, required) || containsAny(subLanguages, required) {
+			return true, ""
+		}
+		return false, "disc requires audio or subtitles in " + strings.Join(required, ", ")
+	}
+	checkAudio := rule.RequireAudio || rule.RequireBoth
+	checkSubs := rule.RequireSubs || rule.RequireBoth
+	if (checkAudio || checkSubs) && len(audioLanguages) == 0 && len(subLanguages) == 0 {
+		return false, "missing language data"
+	}
+
+	audioOK := !checkAudio || containsAny(audioLanguages, required)
+	subOK := !checkSubs || containsAny(subLanguages, required)
+
+	originalOK := false
+	if rule.AllowOriginal {
+		original := resolveOriginalLanguage(meta)
+		if original != "" {
+			originalOK = containsAny(audioLanguages, []string{original})
+		}
+	}
+
+	if !audioOK && originalOK {
+		if subOK {
+			return true, ""
+		}
+		return false, fmt.Sprintf("requires subtitles in %s with original audio", strings.Join(required, ", "))
+	}
+
+	if rule.RequireBoth {
+		if audioOK && subOK {
+			return true, ""
+		}
+		return false, "requires audio and subtitles in " + strings.Join(required, ", ")
+	}
+	if checkAudio && !checkSubs {
+		if audioOK {
+			return true, ""
+		}
+		return false, "requires audio in " + strings.Join(required, ", ")
+	}
+	if checkSubs && !checkAudio {
+		if subOK {
+			return true, ""
+		}
+		return false, "requires subtitles in " + strings.Join(required, ", ")
+	}
+
+	if audioOK || subOK {
+		return true, ""
+	}
+	return false, "requires audio or subtitles in " + strings.Join(required, ", ")
+}
+
+func resolveOriginalLanguage(meta api.RuleSubject) string {
+	if meta.EffectiveMetadata.OriginalLanguageProvenance.IsManual() {
+		return strings.ToLower(strings.TrimSpace(meta.EffectiveMetadata.OriginalLanguage))
+	}
+	var raw string
+	if meta.ProviderMetadata.TMDB != nil {
+		raw = strings.TrimSpace(meta.ProviderMetadata.TMDB.OriginalLanguage)
+	}
+	if raw == "" && meta.ProviderMetadata.IMDB != nil {
+		raw = strings.TrimSpace(meta.ProviderMetadata.IMDB.OriginalLanguage)
+	}
+	normalized := languageutil.NormalizeLanguageDisplay(raw)
+	if normalized == "" {
+		return ""
+	}
+	return strings.ToLower(normalized)
+}

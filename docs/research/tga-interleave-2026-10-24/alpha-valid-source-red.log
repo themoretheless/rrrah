@@ -1,0 +1,37 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 17.57s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 1 test
+
+thread 'raster::tga_alpha::tests::authored_tga2_alpha_types_preserve_samples_and_apply_defined_semantics' (50178541) panicked at crates/rrrah-decode/src/tga_alpha.rs:13:13:
+assertion `left == right` failed: tga2-alpha-mode0-origin0-raw.tga
+  left: [32, 64, 96, 0, 32, 64, 96, 0, 63, 111, 155, 1, 63, 111, 155, 1, 94, 158, 214, 64, 94, 158, 214, 64, 125, 205, 17, 128, 94, 158, 214, 64, 94, 158, 214, 64, 125, 205, 17, 128, 125, 205, 17, 128, 156, 252, 76, 254, 156, 252, 76, 254, 187, 43, 135, 255, 156, 252, 76, 254, 156, 252, 76, 254, 187, 43, 135, 255, 187, 43, 135, 255, 32, 64, 96, 0, 32, 64, 96, 0, 63, 111, 155, 1]
+ right: [32, 64, 96, 255, 32, 64, 96, 255, 63, 111, 155, 255, 63, 111, 155, 255, 94, 158, 214, 255, 94, 158, 214, 255, 125, 205, 17, 255, 94, 158, 214, 255, 94, 158, 214, 255, 125, 205, 17, 255, 125, 205, 17, 255, 156, 252, 76, 255, 156, 252, 76, 255, 187, 43, 135, 255, 156, 252, 76, 255, 156, 252, 76, 255, 187, 43, 135, 255, 187, 43, 135, 255, 32, 64, 96, 255, 32, 64, 96, 255, 63, 111, 155, 255]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test raster::tga_alpha::tests::authored_tga2_alpha_types_preserve_samples_and_apply_defined_semantics ... FAILED
+
+failures:
+
+failures:
+    raster::tga_alpha::tests::authored_tga2_alpha_types_preserve_samples_and_apply_defined_semantics
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 262 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-decode --lib`

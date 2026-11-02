@@ -1,0 +1,31 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original extracted route bodies with in-memory query predicate/DB adapter and failed orchestrator stub. No SQLAlchemy/FastAPI server, real database writes, remote services or filesystem deletion executed. Cross-library assignment is fixture metadata; original query has no library predicate.",
+  "authored_controls": [
+    {
+      "name": "current library result removes other library pending set",
+      "passed": true,
+      "observed": [
+        "B"
+      ]
+    },
+    {
+      "name": "empty result removes all pending sets of type",
+      "passed": true,
+      "observed": [
+        "A",
+        "B"
+      ]
+    },
+    {
+      "name": "episode scan failure still reports success and commits",
+      "passed": true,
+      "observed": {
+        "success": true,
+        "message": "Scan completed for 1 libraries",
+        "commits": 1
+      }
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+package metrics
+
+import (
+	"strconv"
+	"sync"
+
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/collectors"
+)
+
+var (
+	registry     *prometheus.Registry
+	registerOnce sync.Once
+
+	NotificationsReceived *prometheus.CounterVec
+	NotificationsSent     *prometheus.CounterVec
+	TelegramAPIDuration   prometheus.Histogram
+	TelegramRetries       *prometheus.CounterVec
+	TelegramRateLimited   *prometheus.CounterVec
+	TemplateRenderErrors  *prometheus.CounterVec
+	MessageSplitTotal     prometheus.Counter
+	AuthFailures          prometheus.Counter
+	SourceParseDuration   *prometheus.HistogramVec
+	BuildInfo             *prometheus.GaugeVec
+	CallbacksReceived     *prometheus.CounterVec
+	CommandsReceived      *prometheus.CounterVec
+	SilencesCreated       *prometheus.CounterVec
+	SilencesDeleted       *prometheus.CounterVec
+	UpdatesPollErrors     *prometheus.CounterVec
+	DedupSkipped          *prometheus.CounterVec
+	LabelCacheLookups     *prometheus.CounterVec
+)
+
+func Init() *prometheus.Registry {
+	registerOnce.Do(func() {
+		registry = prometheus.NewRegistry()
+
+		NotificationsReceived = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_notifications_received_total",
+			Help: "Number of webhook notifications received per source and resulting status.",
+		}, []string{"source", "status_code"})
+
+		NotificationsSent = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_notifications_sent_total",
+			Help: "Number of telegram messages sent per chat and outcome.",
+		}, []string{"chat_id", "status"})
+
+		TelegramAPIDuration = prometheus.NewHistogram(prometheus.HistogramOpts{
+			Name:    "alertly_telegram_api_duration_seconds",
+			Help:    "Duration of Telegram Bot API requests.",
+			Buckets: prometheus.DefBuckets,
+		})
+
+		TelegramRetries = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_telegram_retries_total",
+			Help: "Number of retries against Telegram Bot API.",
+		}, []string{"reason"})
+
+		TelegramRateLimited = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_telegram_rate_limited_total",
+			Help: "Number of times a chat was rate limited locally.",
+		}, []string{"chat_id"})
+
+		TemplateRenderErrors = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_template_render_errors_total",
+			Help: "Number of template render failures.",
+		}, []string{"template"})
+
+		MessageSplitTotal = prometheus.NewCounter(prometheus.CounterOpts{
+			Name: "alertly_message_split_total",
+			Help: "Number of times a message had to be split due to length.",
+		})
+
+		AuthFailures = prometheus.NewCounter(prometheus.CounterOpts{
+			Name: "alertly_auth_failures_total",
+			Help: "Number of failed bearer auth attempts.",
+		})
+
+		SourceParseDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+			Name:    "alertly_source_parse_duration_seconds",
+			Help:    "Time spent parsing webhook payloads per source.",
+			Buckets: prometheus.DefBuckets,
+		}, []string{"source"})
+
+		BuildInfo = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+			Name: "alertly_build_info",
+			Help: "Build metadata. Always 1.",
+		}, []string{"version", "commit", "go_version"})
+
+		CallbacksReceived = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_callbacks_received_total",
+			Help: "Number of Telegram callback_query events handled per action and outcome.",
+		}, []string{"action", "status"})
+
+		CommandsReceived = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_commands_received_total",
+			Help: "Number of chat-ops commands handled per command and outcome. Unknown commands are labelled command=\"unknown\".",
+		}, []string{"command", "status"})
+
+		SilencesCreated = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_silences_created_total",
+			Help: "Number of Alertmanager silences created via callback, per outcome.",
+		}, []string{"status"})
+
+		SilencesDeleted = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_silences_deleted_total",
+			Help: "Number of Alertmanager silences deleted via the Undo button, per outcome.",
+		}, []string{"status"})
+
+		UpdatesPollErrors = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_updates_poll_errors_total",
+			Help: "Number of errors while long-polling Telegram getUpdates, per reason.",
+		}, []string{"reason"})
+
+		DedupSkipped = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_dedup_skipped_total",
+			Help: "Number of notification deliveries suppressed by the in-process dedup cache (caller retry of an already-delivered notification).",
+		}, []string{"source", "chat_id", "status"})
+
+		LabelCacheLookups = prometheus.NewCounterVec(prometheus.CounterOpts{
+			Name: "alertly_label_cache_lookups_total",
+			Help: "Number of label-cache fallback lookups during callback handling, per result (hit/miss).",
+		}, []string{"result"})
+
+		registry.MustRegister(
+			NotificationsReceived,
+			NotificationsSent,
+			TelegramAPIDuration,
+			TelegramRetries,
+			TelegramRateLimited,
+			TemplateRenderErrors,
+			MessageSplitTotal,
+			AuthFailures,
+			SourceParseDuration,
+			BuildInfo,
+			CallbacksReceived,
+			CommandsReceived,
+			SilencesCreated,
+			SilencesDeleted,
+			UpdatesPollErrors,
+			DedupSkipped,
+			LabelCacheLookups,
+			collectors.NewGoCollector(),
+			collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
+		)
+	})
+	return registry
+}
+
+func Registry() *prometheus.Registry { return registry }
+
+func ChatLabel(chatID int64) string { return strconv.FormatInt(chatID, 10) }
+
+// RegisterSizeGauge exposes fn() as a gauge evaluated on scrape. Meant for
+// cache/tracker sizes that otherwise grow invisibly. Call once per name after
+// Init(); duplicate names panic by design (programming error, not runtime state).
+func RegisterSizeGauge(name, help string, fn func() int) {
+	if registry == nil || fn == nil {
+		return
+	}
+	registry.MustRegister(prometheus.NewGaugeFunc(prometheus.GaugeOpts{
+		Name: name,
+		Help: help,
+	}, func() float64 { return float64(fn()) }))
+}

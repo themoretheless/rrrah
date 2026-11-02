@@ -2,9 +2,9 @@
   "index": 143,
   "repository": "portlygrid/slog-dedup",
   "commit": "b719c4fc85329fdda137f7081b8d7f45c2ada4b0",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "reject-domain",
-  "finding": "Structured-log key conflict resolution/sorting; fields rather than files.",
+  "review_scope": "4/22 whole pinned files;static-only;packagecontains shell-launching globalinitializers and was not executed",
+  "decision": "reject-domain-and-initialization",
+  "finding": "Log-field dedup utility;obfuscated shell commands launched during package initialization in pinned source;no execution/adoption.",
   "available_source_evidence": [
     {
       "path": "append_handler.go",
@@ -74,5 +74,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "slog143-source-review-v1-20261024.json"
 }

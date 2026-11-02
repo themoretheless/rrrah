@@ -1,0 +1,85 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v6-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/fileMissing.mjs",
+      "local": "18-fileMissing.mjs",
+      "sha256": "36237d61c9ee964cd97c21e2c65f1db0a077b3082c348c165d9a4c7c9027a2aa",
+      "git_blob": "769942154a94a5cd1f6b87c48d3a590b0a9763d8",
+      "whole_text_read": true
+    }
+  ],
+  "partial_files_read": [
+    {
+      "path": "content/watchFolder.mjs",
+      "local": "14-watchFolder.mjs",
+      "new_read_ranges": [
+        [
+          101,
+          549
+        ],
+        [
+          2262,
+          2420
+        ]
+      ],
+      "cumulative_read_ranges": [
+        [
+          1,
+          810
+        ],
+        [
+          2262,
+          2420
+        ]
+      ],
+      "whole_text_read": false
+    }
+  ],
+  "whole_files_read_total": 14,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 4,
+    "total_authored_controls_distinct": 25,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-missing-controls-20261024",
+    "scope": "Original fileMissing module plus unchanged imported store/utils; owned filesystem/IOUtils/PathUtils; cwd set to owned empty folder. Relative Node semantics are explicit adapter assumption, not actual Gecko proof. No trash/delete/network execution."
+  },
+  "findings": [
+    {
+      "finding": "isWatchRootAvailable requires directory stat and successful enumeration; root read failure returnsfalse. Main _handleExternalDeletions pauses records thenreturns on root unavailable. Therefore earlier scanner empty-array result alone does not prove mass deletion.",
+      "evidence": "native classifier/root helper control plus source-only caller"
+    },
+    {
+      "finding": "Caller resolves absPath and uses it for exists doublecheck, but later calls classifyMissingFile(record.localPath,watchPath), which expects absolute file path and uses IOUtils.exists,PathUtils.parent directly. Baseline relative records reach mismatched interface.",
+      "evidence": "source-only caller contract"
+    },
+    {
+      "finding": "With Node IOUtils resolving relative names against owned empty cwd, absolute existing owned file classifiedstill-exists while same basename relative classifieduser-deleted; real root file still exists. Actual Gecko might reject relative paths instead, so live symptom remains unqualified.",
+      "evidence": "two native adapter controls"
+    },
+    {
+      "finding": "macOS-style .cloud.pdf.icloud placeholder classifiescloud-placeholder ratherthanuser-deleted.",
+      "evidence": "native positive control"
+    },
+    {
+      "finding": "_scan skips tracked paths before _processNewFile, and move detection uses cached digests. Need read external edits/notification paths to assess changed tracked content beyond new import.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Folder-rename and empty-folder hooks run before root-availability gate; independent read/guard logic of those methods not yet reviewed. No failure consequence claimed.",
+      "evidence": "source-only"
+    }
+  ],
+  "remaining": [
+    "86blobs not whole-read including most watchFolder remainder",
+    "Actual Gecko relative path semantics and full orchestration test suite unqualified",
+    "Root/dependency licenses and full release/runtime incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

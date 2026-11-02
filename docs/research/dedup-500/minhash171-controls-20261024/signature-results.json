@@ -1,0 +1,23 @@
+{
+  "scope": "Pinned original signature arithmetic methods with real NumPy, config DTO only.\n\nNo tokenization/NLTK, stage IO, corpus, scheduler or signature-analysis kernel.\n",
+  "numpy": "2.5.4",
+  "source_sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+  "authored_controls_run": 4,
+  "observations": [
+    "fixed seed and shuffled shingle order preserve signature",
+    "duplicate shingles preserve signature",
+    "32-bit precision fits band shape and unsigned32 range",
+    "direct empty primitive raises ValueError; reviewed run() explicitly skips empty shingles, so not a demonstrated pipeline failure"
+  ],
+  "signature": [
+    [
+      420989538530678405,
+      61096799678139743
+    ],
+    [
+      1132161400145895889,
+      47194688355554704
+    ]
+  ],
+  "original_tests_run": 0
+}

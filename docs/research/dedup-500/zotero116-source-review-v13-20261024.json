@@ -1,0 +1,83 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v12-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/fileScanner.test.mjs",
+      "local": "23-fileScanner.test.mjs",
+      "sha256": "7bfbb602f76f3ca462eaf05a3ac8e6202e10339d943735831bceefd5594c28b8",
+      "git_blob": "83bd19b702dde75fc0e444db6dda76ca555fb365",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/utils.test.mjs",
+      "local": "24-utils.test.mjs",
+      "sha256": "2702404c733a20f44fb15a650b7db4912287afd7d32520bc004cb21cb3d22ec1",
+      "git_blob": "92ce2727f09f93101af9e2a130e9fede46225810",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/fileMissing.test.mjs",
+      "local": "25-fileMissing.test.mjs",
+      "sha256": "75ae933c07a683ca4a625f3451eeeb0925ed2ecdb4d2bb4d072bff9dd79f3ed8",
+      "git_blob": "d1b6720a6a3b98dca7fcc6b8d362d261217a3f80",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/unit/fileRenamer.test.mjs",
+      "local": "26-fileRenamer.test.mjs",
+      "sha256": "cd9d09d886fe57b1d4043a214862c6bdafbdb39de97d2d69056d266a48139d8c",
+      "git_blob": "da7c3d9b24585268cf24e7186b48e40fa256c7d6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 24,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 90,
+    "new_test_counts": {
+      "fileMissing.test.mjs": 16,
+      "fileRenamer.test.mjs": 27,
+      "utils.test.mjs": 47
+    },
+    "original_tests_total_distinct": 234,
+    "new_authored_controls_passed": 0,
+    "total_authored_controls_distinct": 37,
+    "retained_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "result_file": "docs/research/dedup-500/zotero116-original-tests-20261024/helpers-results.json",
+    "scope": "Original complete unchanged utils/fileMissing/fileRenamer test files and source, upstream mockedGecko setup/config, isolated retained npm dependency lock. Scanner test source read but not executed; actual Zotero filesystem/rename not qualified."
+  },
+  "findings": [
+    {
+      "finding": "All47 utils,16 missing-classifier and27 renamer utility tests pass. These are original cases, not new own controls.",
+      "evidence": "native Vitest report"
+    },
+    {
+      "finding": "Renamer suite imports buildFilename/validatePattern/getTemplateVariables/formatPartialDate only; no renameAttachment execution, collision behavior or actual rename API return convention tested.",
+      "evidence": "whole test read"
+    },
+    {
+      "finding": "fileMissing suite passes absolute file paths and uses injected directory listings. Does not cover main caller passing relative record.localPath.",
+      "evidence": "whole test read"
+    },
+    {
+      "finding": "Scanner tests include fileImporter extension helpers, so running complete original file requires canonicalPath/storageStrategy/baseline transitive graph not yet prepared in isolated harness. Original tests not rewritten or imports stubbed to inflate qualification.",
+      "evidence": "whole test import inventory"
+    },
+    {
+      "finding": "Scanner symlink cases mostly replace detector via test seam; default detector exception case asserts normal processing. No real symlink/filesystem behavior proven by these fixtures.",
+      "evidence": "whole test read"
+    }
+  ],
+  "remaining": [
+    "76blobs not whole-read",
+    "Scanner original suite pending complete import graph",
+    "Full original suite/actual Zotero/runtime and root/dependency licenses incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

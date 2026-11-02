@@ -1,0 +1,22 @@
+{
+  "method": "Compiled unchanged pinned original C++ source files with synthetic harness, no prebuilt binary/biological corpus/upstream suite",
+  "build_command": [
+    "/usr/bin/clang++",
+    "-std=c++11",
+    "-O0",
+    "controls.cpp",
+    "ACGTNMap.cpp",
+    "ACGTNTrieNode.cpp",
+    "Deduper.cpp",
+    "SeqIdAndSeq.cpp",
+    "Timer.cpp",
+    "-o",
+    "controls"
+  ],
+  "build_exit": 0,
+  "build_stderr": "",
+  "upstream_tests_run": false,
+  "run_exit": 0,
+  "stdout": "{\"exact_match_AT_after_AN\":1,\"contains_AT_after_AN\":0,\"filtered_unique_count\":0,\"filtered_traceback\":0,\"truncated_fastq_records\":1}\n",
+  "stderr": "[NOTE] Number of reads (raw) = 1\n[STEP] uniqueing and filtering out sequences with too many Ns ...\n \t0.0000351s\n[NOTE] Number of reads (filtered out too many Ns) = 0\n[STEP] sorting ...\n[STEP] opening fastq file 'truncated.fastq' ...\n"
+}

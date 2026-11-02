@@ -1,0 +1,68 @@
+{
+  "decoder_sha256": "c77da2f768fef667db476adc34d3754ac020f8f7390b925645a97565ec2635bb",
+  "before_test_sha256": "1a7502316bc5e59a4311a2cb66128d3256e61534faecb3b9a250074973488bd5",
+  "after_test_sha256": "ff56adc3d04fb8564adf6f977a4a995b86d3c7c186ea33d6876cad6bbf47fa60",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "3319ca6d81afb27e26e1fecaaf59a065b2c02b6b06c1e0d68fc26157967512d1",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "b705663a31c661f7f66550102e62616a5e7edce346a6ece8afc8f63c56f8ab04",
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "68a4b16b85db5766d457587748f4cb35496b6264b54fbb780cffc70da948fa50"
+  },
+  "default_decoder_sha256": "b42862c7b90e918a8e1d16944b1670d2f984d0911b369f703f05abcfe28f457e",
+  "default_graph_sha256": "4e8c87d38d3fa4106d36bcb536ec5ecfa161b67c60869f2983734faeb10b6d80",
+  "before_snapshot": {
+    "scope": "Before snapshot contains accepted finite-cut repairs, before oriented summaries; only identical ignored timing function added to both snapshots.",
+    "before_sources": {
+      "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "47a2b21d24f732d7002afc016d1c682d66b379e93d0216f283f518ee4898fcf0",
+      "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "5a55d1178243771bff95fdd637d20e5581a4ad5659c7184fc0521d3ff58c8964"
+    },
+    "benchmark_sha256": "63454e517a113ca2188d97bfd37a57b5d02e4b6cf6292b0783640a4db0b1ee75"
+  },
+  "local_timing_gate": true,
+  "cpu": "Apple M4 Max",
+  "tests": {
+    "oriented-chunks-ordered.log": {
+      "passed": 59,
+      "failed": 0,
+      "ignored": 4
+    },
+    "oriented-chunks-full-encode.log": {
+      "passed": 96,
+      "failed": 0,
+      "ignored": 5
+    },
+    "oriented-chunks-feature-vector.log": {
+      "passed": 256,
+      "failed": 0,
+      "ignored": 11
+    },
+    "oriented-chunks-default-vector.log": {
+      "passed": 256,
+      "failed": 0,
+      "ignored": 11
+    }
+  },
+  "additional_sources": {
+    "scripts/analyze-split-cpu.py": "23cae4a1281fb0ce30b64471b3130f927538ab3221227094cce859e158665624",
+    "scripts/benchmark-ordered-cell-cpu.py": "a2a7dcc7def9fd12b19ae3eaa15f84c918027d9aebb812b6900eb9adb0737cc8",
+    "tests/fixtures/geometry/dense-cell-176.rs": "5d386d4f9397d03831302b8f8a100f07096751d03d1f82ab3b9ddcc3e6b08722",
+    "tests/fixtures/geometry/dense-lineage-138.rs": "8689a9b9c6d3e322fa7633423fb7b4ca1e8c40a2863bafd113ecf241c79631e9"
+  },
+  "scope": "Oriented bounds enabled only in experimental chunk backend; ordinary backend and candidate ordering unchanged. Native IDs preserved by requiring known supports. Finite local speed evidence; real AI still fails four 100M invocations.",
+  "artifacts": {
+    "oriented-chunks-ordered.log": "ecdc51bdd88e81afb24ddb699916781d2b1c8833887ffc3ee03b3ed30c422dc4",
+    "oriented-bound-selectivity.json": "40460bf707c6c66dcf1ee49767db53c3f14dd666930bc7728d012830b178f84e",
+    "oriented-chunks-lineage-rejected.log": "ea33c71ed012bb82620fa49f28fbbbf68b44092bb62b6ddd9bf61c44cb5d1a9d",
+    "oriented-chunks-full-encode.log": "223f3e3b0e16bb9e3ddc274c6bfc83bd94f847ad39b0d039fdc017a96da2ab6b",
+    "oriented-chunks-cpu.log": "9313189e0b99390515271ce1c621e54096c702729ba55aadba3c9b0348098fe2",
+    "oriented-chunks-cpu.json": "55effc52ba871e3f28b7a69bf1540efacc865db4e4974e4a6382d79809c7b2fc",
+    "oriented-chunks-default-vector.log": "dad2f34a5086ec707897f7cb21ee004134432a2a5b66c5150cfedb9930e461f8",
+    "oriented-chunks-cpu-guard.json": "ee3f4a2276a50165d212d701dc928f5443fa2dc0699e3f2b50ce024eb27ea322",
+    "oriented-chunks-change.patch": "63cb090c0f73fbe6d116e5b0542e394f1743192e9a192d11fb47700b641a7784",
+    "oriented-chunks-feature-build.log": "51485823749055725348e5ead15394804e35a67481af43662744b83a56ade457",
+    "oriented-chunks-patch-check.json": "c529871ec1fa09618e78da3fc33d240cbd0703ebad936c491efe0d847ee16c69",
+    "oriented-chunks-poppler.json": "1c72d9e4e18a3e883ab005e3abaae977a5b429f7e9a84145b0edcf7fe824c05a",
+    "oriented-chunks-default-build.log": "903db09a3b55a224108e26b60490954851a7e6143edba1a8b1eb007942561395",
+    "oriented-chunks-rejected-ungated.patch": "eeb609f8e9fa1e2d046bbbf5635860b2a81ae5aad69613e79bd80b57629e03b8",
+    "oriented-chunks-feature-vector.log": "9715e21aaf928cfeb2f988b0da4f9120413812f2b52e61676aa0802685aea150"
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v8-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "Dockerfile",
+      "local": "29-Dockerfile",
+      "git_blob": "693ac5b388c4b05e7864dece396d092a81a38cd3",
+      "sha256": "a6319a1073b26e1fa9706675540b1c5f2087c2b675b2ebee069f37d813bc10ce",
+      "whole_text_read": true
+    },
+    {
+      "path": "docker-compose.yml",
+      "local": "30-docker-compose.yml",
+      "git_blob": "183fd0f10bac6ce299e776b35c27848b0097b42a",
+      "sha256": "5fe24c913a3b4606b5c9720ba7fd7d45990775e9b571bb629a03863b1e2ee424",
+      "whole_text_read": true
+    },
+    {
+      "path": "docker-entrypoint.sh",
+      "local": "31-docker-entrypoint.sh",
+      "git_blob": "acb39cc353327fd5d054012903860fcac07f4c8b",
+      "sha256": "cb2caa81c6724474924decebe450c8552a4ebe26db5e949cd239bba2768f2c3a",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/check_testdb.py",
+      "local": "32-check_testdb.py",
+      "git_blob": "684109711a26170e0b5a1608ad731d83f0cb104d",
+      "sha256": "8aec73bacd74352717fe1f42b078b9a8d91167b8c5bfe82d1e65fff8229e7899",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/benchmarks/test_benchmark_vpdqpy.py",
+      "local": "33-test_benchmark_vpdqpy.py",
+      "git_blob": "6003afa72b22a5a9b0766021a0f578e36ea34558",
+      "sha256": "16e3328fcb327c848ccf71a3c3fa1ccc1028ed044d82926e4badb0ba7234de19",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/benchmarks/profile_vpdq.py",
+      "local": "34-profile_vpdq.py",
+      "git_blob": "7c81e4489d85f977f1d052c2a897495465f44808",
+      "sha256": "2b0e5378d44f112f9b95ccf7549c32d0d81718e63428091551db2bef1d98c5cb",
+      "whole_text_read": true
+    },
+    {
+      "path": ".gitmodules",
+      "local": "35-gitmodules",
+      "git_blob": "1894724c3aba576e8a08d1f6f50224339f06bf45",
+      "sha256": "830e2f2ee1f9d17b6d2ab849eb97797c152a860a850d6845b2e1ae4a4559cba7",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 34,
+  "remaining_without_whole_review": 43,
+  "whole_repo_complete": false,
+  "new_authored_controls": 2,
+  "authored_controls_total": 19,
+  "runtime_report": "docs/research/dedup-500/hydrus107-docker-controls-20261024.json",
+  "findings": [
+    "Original Docker entry shell script splits spaces in FAILED_PAGE_NAME and DEDUP_DATABASE_DIR into separate arguments; confirmed with dummy recording executable and benign owned values. Simple values positive control passed.",
+    "Dockerfile installs unpinned package from package index, not pinned checkout source. Docker build not executed.",
+    "Benchmark hashing asserts nonempty videos unlike unit suite. Similarity benchmark includes self-pairs and upper triangle; no correctness assertions beyond nonempty pair list. Not run.",
+    "Fixture availability helper checks os.listdir nonempty, not required fixture inventory/hashes; missing directory raises FileNotFoundError rather than its intended RuntimeError. Source only.",
+    "Profiling functions rely on cProfile/pstats imports in main guard; module-import usage unqualified. Historical7.5s comment not reproduced benchmark.",
+    "Test media submodule URL read; submodule content not fetched or counted as whole-reviewed."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

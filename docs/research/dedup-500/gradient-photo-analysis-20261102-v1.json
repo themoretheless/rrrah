@@ -1,0 +1,128 @@
+{
+  "receipt": "docs/research/dedup-500/gradient-photo-current-20261102-v1.json",
+  "passed": 2,
+  "comparisons": [
+    {
+      "variant": "batched",
+      "pair": "0:0",
+      "radius": "None",
+      "features": "1142:1142",
+      "matches": 1142,
+      "reference_median_seconds": 0.079361479,
+      "candidate_median_seconds": 0.0371580625,
+      "speedup": 2.13578086855309
+    },
+    {
+      "variant": "batched",
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "features": "1142:1142",
+      "matches": 1142,
+      "reference_median_seconds": 0.1607898125,
+      "candidate_median_seconds": 0.0767781665,
+      "speedup": 2.09421271475661
+    },
+    {
+      "variant": "batched",
+      "pair": "0:1",
+      "radius": "None",
+      "features": "1142:1421",
+      "matches": 9,
+      "reference_median_seconds": 0.10112062499999999,
+      "candidate_median_seconds": 0.046054770499999995,
+      "speedup": 2.1956601651071086
+    },
+    {
+      "variant": "batched",
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "features": "1142:1421",
+      "matches": 10,
+      "reference_median_seconds": 0.1969702085,
+      "candidate_median_seconds": 0.095232292,
+      "speedup": 2.068313219847738
+    },
+    {
+      "variant": "batched",
+      "pair": "0:2",
+      "radius": "None",
+      "features": "1142:1476",
+      "matches": 5,
+      "reference_median_seconds": 0.106265937,
+      "candidate_median_seconds": 0.047272166500000004,
+      "speedup": 2.247959949117204
+    },
+    {
+      "variant": "batched",
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "features": "1142:1476",
+      "matches": 5,
+      "reference_median_seconds": 0.20667481199999999,
+      "candidate_median_seconds": 0.09493077050000001,
+      "speedup": 2.1771108662812333
+    },
+    {
+      "variant": "bounded",
+      "pair": "0:0",
+      "radius": "None",
+      "features": "1142:1142",
+      "matches": 1142,
+      "reference_median_seconds": 0.080819875,
+      "candidate_median_seconds": 0.077965875,
+      "speedup": 1.036605758609135
+    },
+    {
+      "variant": "bounded",
+      "pair": "0:0",
+      "radius": "Some(64.0)",
+      "features": "1142:1142",
+      "matches": 1142,
+      "reference_median_seconds": 0.16157564549999998,
+      "candidate_median_seconds": 0.1455877915,
+      "speedup": 1.1098158975781975
+    },
+    {
+      "variant": "bounded",
+      "pair": "0:1",
+      "radius": "None",
+      "features": "1142:1421",
+      "matches": 9,
+      "reference_median_seconds": 0.0995139165,
+      "candidate_median_seconds": 0.129457229,
+      "speedup": 0.7687011167217243
+    },
+    {
+      "variant": "bounded",
+      "pair": "0:1",
+      "radius": "Some(64.0)",
+      "features": "1142:1421",
+      "matches": 10,
+      "reference_median_seconds": 0.3865820625,
+      "candidate_median_seconds": 0.9022566670000001,
+      "speedup": 0.4284612978093959
+    },
+    {
+      "variant": "bounded",
+      "pair": "0:2",
+      "radius": "None",
+      "features": "1142:1476",
+      "matches": 5,
+      "reference_median_seconds": 0.23936675000000002,
+      "candidate_median_seconds": 0.360962729,
+      "speedup": 0.6631342539522966
+    },
+    {
+      "variant": "bounded",
+      "pair": "0:2",
+      "radius": "Some(64.0)",
+      "features": "1142:1476",
+      "matches": 5,
+      "reference_median_seconds": 0.20332466700000001,
+      "candidate_median_seconds": 0.24979804149999998,
+      "speedup": 0.8139562095005458
+    }
+  ],
+  "production_scope": "Batched production matcher passed exact correspondence parity on all six photo controls. Bounded-distance candidate is confined to cfg(test) matching_tests and was already rejected; its slowdown is not a production regression.",
+  "limits": "Three pinned images only. Alternating pairs under concurrent host load; not isolated release timing, general corpus recall, or proof of every transformation."
+}

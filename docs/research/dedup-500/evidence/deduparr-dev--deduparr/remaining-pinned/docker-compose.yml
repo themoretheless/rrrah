@@ -1,0 +1,61 @@
+services:
+  deduparr:
+    image: ghcr.io/deduparr-dev/deduparr:latest
+    container_name: deduparr
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - UMASK=${UMASK:-002}
+      - TZ=${TZ:-Etc/UTC}
+      - DATABASE_TYPE=${DATABASE_TYPE:-sqlite}
+      - DATABASE_URL=${DATABASE_URL:-sqlite:////config/deduparr.db}
+      - LOG_LEVEL=${LOG_LEVEL:-DEBUG}
+      # Optional: Scheduled Scans
+      - ENABLE_SCHEDULED_SCANS=${ENABLE_SCHEDULED_SCANS:-false}
+      - SCAN_INTERVAL_HOURS=${SCAN_INTERVAL_HOURS:-24}
+      # Optional: Override media directory if auto-detection doesn't work
+      # - MEDIA_DIR=/same-path-as-plex-uses
+    volumes:
+      - ${CONFIG_PATH:-./config}:/config
+      - ${DATA_PATH:-./data}:/app/data:rw
+      # IMPORTANT: Mount media at SAME path Plex uses for hardlink detection!
+      # If Plex has: /mnt/media:/plexdownloads
+      # Then use:    /mnt/media:/plexdownloads (not /media!)
+      # :rw = full cleanup (recommended), :ro = API-only deletion
+      - ${MEDIA_PATH:-/path/to/media}:/media:rw
+    ports:
+      - "${UI_PORT:-8655}:8655"
+    restart: unless-stopped
+    networks:
+      - deduparr
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '--fail'
+        - '--silent'
+        - '--show-error'
+        - 'http://localhost:8655/health'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+
+  # Optional PostgreSQL database
+  # Uncomment if you want to use PostgreSQL instead of SQLite
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: deduparr-postgres
+  #   environment:
+  #     - POSTGRES_USER=deduparr
+  #     - POSTGRES_PASSWORD=deduparr
+  #     - POSTGRES_DB=deduparr
+  #   volumes:
+  #     - ./postgres-data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   networks:
+  #     - deduparr
+
+networks:
+  deduparr:
+    driver: bridge

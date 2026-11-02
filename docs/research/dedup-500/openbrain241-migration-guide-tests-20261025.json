@@ -1,0 +1,25 @@
+{
+  "scope": "Original four migration-guide callbacks plus inherited-key control; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "known platform returns platform-specific guide",
+      "passed": true
+    },
+    {
+      "name": "unknown platform falls back to generic with custom name",
+      "passed": true
+    },
+    {
+      "name": "platform name is normalized (case + whitespace)",
+      "passed": true
+    },
+    {
+      "name": "all known platforms return valid guides",
+      "passed": true
+    },
+    {
+      "name": "authored: inherited constructor key returns undefined text",
+      "passed": true
+    }
+  ]
+}

@@ -2,9 +2,9 @@
   "index": 119,
   "repository": "d4ncboz/threads-affiliate",
   "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "35/35 pinned blobs whole-read;6 isolated original test functions;5 authored controls;browser/platform runtime unqualified",
   "decision": "reject-domain",
-  "finding": "Threads posting history/link reuse deduplication; not file content.",
+  "finding": "Link/text history, not file identity. Retention mismatch, asymmetric overlap and deterministic lost history update confirmed. Post-submit ambiguity source-only.",
   "available_source_evidence": [
     {
       "path": "threads_poster/dedup.py",
@@ -114,5 +114,31 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/threads119-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/threads119-source-review-v2-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/threads119-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/threads119-source-review-v4-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/threads119-source-review-v5-20261024.json",
+      "whole_repo_complete": true,
+      "scope": "source tree only"
+    }
+  ],
+  "full_repository_read": true,
+  "upstream_test_scope": "Original6 test/fixture AST bodies and3 original standalone modules;not package imports or pytest discovery,not browser/posting.",
+  "runtime_qualified": false
 }

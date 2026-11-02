@@ -1,0 +1,353 @@
+--- a/vendor/hayro-interpret/src/encode/ordered_pixel.rs
++++ b/vendor/hayro-interpret/src/encode/ordered_pixel.rs
+@@ -1439,7 +1439,43 @@
+         #[cfg(feature = "experimental-shared-partitions")] if merged { None } else { cached_bounds }))?;
+     Ok(!merged)
+ }
+-// Emit convex pieces of `polygon \ cut`, returning the remaining intersection.
++#[cfg(feature = "experimental-shared-partitions")]
++struct CutProof<'a> {
++    cut: &'a Polygon,
++    bounds: [f64; 4],
++    mean: Option<(Point, Point)>,
++    edges: [Option<(bool, bool)>; VERTICES], // repeated support, reverse evaluator
++    pool: *const (),
++    baseline: u32,
++}
++#[cfg(feature = "experimental-shared-partitions")]
++impl<'a> CutProof<'a> {
++    // Stack-only, private to one paint/line transaction. Failed paints drop
++    // every prepared witness before their temporary line identities roll back.
++    fn new(cut: &'a Polygon, bounds: [f64; 4], lines: &LineTransaction<'_, '_>) -> Self {
++        Self { cut, bounds, mean: None, edges: [None; VERTICES],
++            pool: std::ptr::from_ref(&*lines.pool).cast(), baseline: lines.baseline }
++    }
++}
++fn cut_mean(cut: &Polygon) -> (Point, Point) {
++    let mut mean = Point::ZERO;
++    let mut absolute_mean = Point::ZERO;
++    for point in &cut.points[..cut.len] {
++        mean.x += point.x;
++        mean.y += point.y;
++        absolute_mean.x += point.x.abs();
++        absolute_mean.y += point.y.abs();
++    }
++    if cut.len > 0 {
++        mean.x /= cut.len as f64;
++        mean.y /= cut.len as f64;
++        absolute_mean.x /= cut.len as f64;
++        absolute_mean.y /= cut.len as f64;
++    }
++    (mean, absolute_mean)
++}
++// Reference entry point for direct subtraction tests.
++#[cfg(test)]
+ fn subtract(
+     polygon: Polygon,
+     cut: &Polygon,
+@@ -1449,8 +1485,30 @@
+     work: &mut usize,
+     cancelled: &dyn Fn() -> bool,
+ ) -> Result<Polygon> {
++    subtract_prepared(polygon,cut,owner,out,lines,work,cancelled,
++        #[cfg(feature = "experimental-shared-partitions")] None)
++}
++// Emit convex pieces of `polygon \ cut`, returning the remaining intersection.
++fn subtract_prepared(
++    polygon: Polygon,
++    cut: &Polygon,
++    owner: PixelSourceOwner,
++    out: &mut impl FragmentSink,
++    lines: &mut LineTransaction<'_, '_>,
++    work: &mut usize,
++    cancelled: &dyn Fn() -> bool,
++    #[cfg(feature = "experimental-shared-partitions")] mut proof: Option<&mut CutProof<'_>>,
++) -> Result<Polygon> {
+     tick(work, cancelled)?;
+     let a_bounds = polygon.bounds();
++    #[cfg(feature = "experimental-shared-partitions")]
++    if let Some(p) = proof.as_ref() {
++        if !std::ptr::eq(p.cut, cut) || p.pool != std::ptr::from_ref(&*lines.pool).cast()
++            || p.baseline != lines.baseline { return Err(PixelPartitionError::Invalid); }
++    }
++    #[cfg(feature = "experimental-shared-partitions")]
++    let cut_bounds = proof.as_ref().map_or_else(|| cut.bounds(), |p| p.bounds);
++    #[cfg(not(feature = "experimental-shared-partitions"))]
+     let cut_bounds = cut.bounds();
+     if !(a_bounds[0] < cut_bounds[2]
+         && cut_bounds[0] < a_bounds[2]
+@@ -1460,22 +1518,12 @@
+         keep(out, polygon, owner, work, cancelled)?;
+         return Ok(Polygon::empty());
+     }
+-    // A bounded convex combination gives an interior orientation probe even
+-    // when a rounded corner has only one occurrence of its original support.
+-    let mut mean = Point::ZERO;
+-    let mut absolute_mean = Point::ZERO;
+-    for point in &cut.points[..cut.len] {
+-        mean.x += point.x;
+-        mean.y += point.y;
+-        absolute_mean.x += point.x.abs();
+-        absolute_mean.y += point.y.abs();
+-    }
+-    if cut.len > 0 {
+-        mean.x /= cut.len as f64;
+-        mean.y /= cut.len as f64;
+-        absolute_mean.x /= cut.len as f64;
+-        absolute_mean.y /= cut.len as f64;
+-    }
++    #[cfg(feature = "experimental-shared-partitions")]
++    let (mean, absolute_mean) = if let Some(p) = proof.as_deref_mut() {
++        *p.mean.get_or_insert_with(|| cut_mean(cut))
++    } else { cut_mean(cut) };
++    #[cfg(not(feature = "experimental-shared-partitions"))]
++    let (mean, absolute_mean) = cut_mean(cut);
+     let mut inside = polygon;
+     let mut checked_separation = false;
+     // A convex cut has at most VERTICES edges. Delay publishing outside
+@@ -1501,46 +1549,56 @@
+             continue;
+         }
+         let (edge, snap) = key.evaluator(a, b)?;
+-        // A rounded corner can reverse a local segment of its original
+-        // support. The mean detects a clear interior contradiction even when
+-        // that ID occurs only once. Confirm it with nonincident witnesses;
+-        // ambiguous tiny fragments retain the established clipping path.
+-        let repeated = known != 0
+-            && cut.incoming[..cut.len]
+-                .iter()
+-                .filter(|line| **line == known)
+-                .count()
+-                > 1;
+-        let mut direction = 0i8;
+-        let mut conflicting = false;
+-        let probe = edge(mean);
+-        let probe_error = key.mean_roundoff(mean, absolute_mean);
+-        let reversed_probe =
+-            known != 0 && probe.is_finite() && probe_error.is_finite() && probe < -probe_error;
+-        if repeated || reversed_probe {
+-            for vertex in 0..cut.len {
+-                tick(work, cancelled)?;
+-                if cut.on_line(vertex, id) {
+-                    continue;
+-                }
+-                let point = cut.points[vertex];
+-                let v = edge(point);
+-                let error = key.evaluation_roundoff(point);
+-                if !v.is_finite() || !error.is_finite() {
+-                    conflicting = true;
+-                    break;
+-                }
+-                if v.abs() <= error {
+-                    continue;
+-                }
+-                let sign = if v > 0. { 1 } else { -1 };
+-                if direction != 0 && direction != sign {
+-                    conflicting = true;
+-                    break;
+-                }
+-                direction = sign;
+-            }
+-        }
++        #[cfg(feature = "experimental-shared-partitions")]
++        let cached = proof.as_ref().and_then(|p| p.edges[index]);
++        #[cfg(not(feature = "experimental-shared-partitions"))]
++        let cached: Option<(bool, bool)> = None;
++        let (repeated, reverse) = if let Some(value) = cached { value } else {
++            // A rounded corner can reverse a local segment of its original
++            // support. The mean detects a clear interior contradiction even when
++            // that ID occurs only once. Confirm it with nonincident witnesses;
++            // ambiguous tiny fragments retain the established clipping path.
++            let repeated = known != 0
++                && cut.incoming[..cut.len]
++                    .iter()
++                    .filter(|line| **line == known)
++                    .count()
++                    > 1;
++            let mut direction = 0i8;
++            let mut conflicting = false;
++            let probe = edge(mean);
++            let probe_error = key.mean_roundoff(mean, absolute_mean);
++            let reversed_probe =
++                known != 0 && probe.is_finite() && probe_error.is_finite() && probe < -probe_error;
++            if repeated || reversed_probe {
++                for vertex in 0..cut.len {
++                    tick(work, cancelled)?;
++                    if cut.on_line(vertex, id) {
++                        continue;
++                    }
++                    let point = cut.points[vertex];
++                    let v = edge(point);
++                    let error = key.evaluation_roundoff(point);
++                    if !v.is_finite() || !error.is_finite() {
++                        conflicting = true;
++                        break;
++                    }
++                    if v.abs() <= error {
++                        continue;
++                    }
++                    let sign = if v > 0. { 1 } else { -1 };
++                    if direction != 0 && direction != sign {
++                        conflicting = true;
++                        break;
++                    }
++                    direction = sign;
++                }
++            }
++            let value = (repeated, direction < 0 && !conflicting);
++            #[cfg(feature = "experimental-shared-partitions")]
++            if let Some(p) = proof.as_deref_mut() { p.edges[index] = Some(value); }
++            value
++        };
+         // A very thin rounded cut can carry the same support in opposite
+         // directions without a reliable interior witness. Its symbolic
+         // half-planes must not erase a geometrically separate subject.
+@@ -1551,7 +1609,6 @@
+                 return Ok(Polygon::empty());
+             }
+         }
+-        let reverse = direction < 0 && !conflicting;
+         let (removed, retained) = inside.subtraction_split(
+             |p| if reverse { -edge(p) } else { edge(p) },
+             snap,
+@@ -1851,6 +1908,8 @@
+         // The incoming triangle is immutable throughout this transaction.
+         // Reuse its exact bounds for both the carry scan and individual tests.
+         let triangle_bounds = triangle.bounds();
++        #[cfg(feature = "experimental-shared-partitions")]
++        let mut cut_proof = CutProof::new(&triangle, triangle_bounds, &lines);
+         let mut next = fresh_regions(&self.regions);
+         let mut incoming = AdmittedVec::new(admit, maximum);
+         incoming.push(Fragment::new(triangle, owner, true, true))?;
+@@ -1910,8 +1969,11 @@
+             if dominates(&old.owner, &owner, &triangle, work, cancelled)? {
+                 tail_matches_old = keep_existing(&mut next, old, work, cancelled)?;
+                 let mut remaining = AdmittedVec::new(admit, maximum);
++                #[cfg(feature = "experimental-shared-partitions")]
++                let mut old_proof = (BATCH && incoming.values.len() > 1)
++                    .then(|| CutProof::new(&old.polygon, old.polygon.bounds(), &lines));
+                 for part in &incoming.values {
+-                    subtract(
++                    subtract_prepared(
+                         part.polygon,
+                         &old.polygon,
+                         owner,
+@@ -1919,6 +1981,7 @@
+                         &mut lines,
+                         work,
+                         cancelled,
++                        #[cfg(feature = "experimental-shared-partitions")] old_proof.as_mut(),
+                     )?;
+                 }
+                 incoming = remaining;
+@@ -1929,7 +1992,7 @@
+             // The tentative subtraction may mutate only the saved last
+             // prefix item; preserve earlier items for whole-old restoration.
+             next.merge_floor = prefix.saturating_sub(1);
+-            let overlap = subtract(
++            let overlap = subtract_prepared(
+                 old.polygon,
+                 &triangle,
+                 old.owner,
+@@ -1937,6 +2000,8 @@
+                 &mut lines,
+                 work,
+                 cancelled,
++                #[cfg(feature = "experimental-shared-partitions")]
++                if BATCH { Some(&mut cut_proof) } else { None },
+             );
+             next.merge_floor = 0;
+             let overlap = overlap?;
+@@ -1974,9 +2039,12 @@
+                 keep(&mut next, old_wins, old.owner, work, cancelled)?;
+             }
+             let mut remaining = AdmittedVec::new(admit, maximum);
++            let cut = if whole_old_wins { &old.polygon } else { &old_wins };
++            #[cfg(feature = "experimental-shared-partitions")]
++            let mut old_proof = (BATCH && incoming.values.len() > 1)
++                .then(|| CutProof::new(cut, cut.bounds(), &lines));
+             for part in &incoming.values {
+-                let cut = if whole_old_wins { &old.polygon } else { &old_wins };
+-                subtract(
++                subtract_prepared(
+                     part.polygon,
+                     cut,
+                     owner,
+@@ -1984,6 +2052,7 @@
+                     &mut lines,
+                     work,
+                     cancelled,
++                    #[cfg(feature = "experimental-shared-partitions")] old_proof.as_mut(),
+                 )?;
+             }
+             incoming = remaining;
+@@ -2001,6 +2070,69 @@
+ #[cfg(test)]
+ mod exact_orientation_tests {
+     use super::*;
++    #[cfg(feature = "experimental-shared-partitions")]
++    #[test]
++    fn cut_proof_reuses_witnesses_without_changing_fragments_or_line_context() {
++        use std::cell::Cell;
++        let admissions=Cell::new(0usize);
++        let admit=|_:usize| {admissions.set(admissions.get()+1);Some(Box::new(()) as Credit)};
++        let mut pool=LinePool::new(&admit);let mut lines=pool.transaction();
++        let mut ids=[0;4];
++        for (slot,(axis,value)) in ids.iter_mut().zip([(0,0.25f64),(1,0.25),(0,0.75),(1,0.75)]) {
++            *slot=lines.intern(LineKey::Axis(axis,value.to_bits()),&mut 1000,&||false).unwrap();
++        }
++        let mut cut=Polygon::empty();
++        for (point,id) in [([0.25,0.25],ids[0]),([0.5,0.25],ids[1]),([0.75,0.25],ids[1]),([0.75,0.75],ids[2]),([0.25,0.75],ids[3])] {
++            cut.push_tagged(Point::new(point[0],point[1]),id).unwrap();
++        }
++        let mut subject=Polygon::empty();
++        for [x,y] in [[0.,0.],[1.,0.],[1.,1.],[0.,1.]] {subject.push(Point::new(x,y)).unwrap();}
++        let owner=PixelSourceOwner {patch_index:0,sample_index:0,component_count:1,u:[0.;3],v:[0.;3],components:[[0.5,0.,0.],[0.;3],[0.;3],[0.;3]]};
++        let run=|lines:&mut LineTransaction<'_, '_>, proof:Option<&mut CutProof<'_>>,work:&mut usize,cancelled:&dyn Fn()->bool| -> Result<(Polygon,Vec<Fragment>)> {
++            let mut out=AdmittedVec::new(&admit,64);
++            let inside=subtract_prepared(subject,&cut,owner,&mut out,lines,work,cancelled,proof)?;
++            Ok((inside,out.values.clone()))
++        };
++        let geometry=|p:&Polygon| (p.points[..p.len].iter().map(|p|[p.x.to_bits(),p.y.to_bits()]).collect::<Vec<_>>(),p.incoming[..p.len].to_vec());
++        let same=|a:&(Polygon,Vec<Fragment>),b:&(Polygon,Vec<Fragment>)| {
++            assert_eq!(geometry(&a.0),geometry(&b.0));assert_eq!(a.1.len(),b.1.len());
++            for (a,b) in a.1.iter().zip(&b.1) {assert_eq!(geometry(&a.polygon),geometry(&b.polygon));assert_eq!(a.owner,b.owner);}
++        };
++        let mut work=10000;let expected=run(&mut lines,None,&mut work,&||false).unwrap();let raw=10000-work;
++        assert_eq!(expected.0.moments().unwrap().0,0.25);
++        let outside:f64=expected.1.iter().map(|f|f.polygon.moments().unwrap().0).sum();assert_eq!(outside,0.75);
++        let count=admissions.get();let mut proof=CutProof::new(&cut,cut.bounds(),&lines);assert_eq!(admissions.get(),count);
++        let mut work=10000;let cold=run(&mut lines,Some(&mut proof),&mut work,&||false).unwrap();same(&expected,&cold);assert_eq!(10000-work,raw);
++        assert!(proof.edges.iter().flatten().any(|p|p.0));
++        let keys=lines.pool.keys.clone();let map=lines.pool.map.clone();let next=lines.pool.next;
++        let checks=Cell::new(0usize);let mut work=10000;
++        let warm=run(&mut lines,Some(&mut proof),&mut work,&||{checks.set(checks.get()+1);false}).unwrap();let cost=10000-work;same(&expected,&warm);assert!(cost<raw);
++        for stop in 0..checks.get() {
++            let at=Cell::new(0usize);
++            assert!(matches!(run(&mut lines,Some(&mut proof),&mut 10000,&||{let now=at.get();at.set(now+1);now==stop}),Err(PixelPartitionError::Cancelled)));
++            assert!(lines.pool.keys==keys && lines.pool.map==map && lines.pool.next==next);
++        }
++        for mut quota in 0..cost {assert!(matches!(run(&mut lines,Some(&mut proof),&mut quota,&||false),Err(PixelPartitionError::Limit)));}
++        same(&expected,&run(&mut lines,Some(&mut proof),&mut cost.clone(),&||false).unwrap());
++        // Separation depends on each subject, not on the cached cut alone.
++        let mut apart=Polygon::empty();
++        for [x,y] in [[0.,0.],[0.4,0.],[0.,0.4]] {apart.push(Point::new(x,y)).unwrap();}
++        assert!(apart.bounds_overlap(&cut));
++        let mut separate_out=AdmittedVec::new(&admit,64);
++        let intersection=subtract_prepared(apart,&cut,owner,&mut separate_out,&mut lines,&mut 10000,&||false,Some(&mut proof)).unwrap();
++        assert!(intersection.moments().is_none());assert_eq!(separate_out.values.len(),1);
++        assert_eq!(geometry(&separate_out.values[0].polygon),geometry(&apart));
++        let copied=Box::new(cut);let mut out=AdmittedVec::new(&admit,64);
++        assert!(matches!(subtract_prepared(subject,&copied,owner,&mut out,&mut lines,&mut 1000,&||false,Some(&mut proof)),Err(PixelPartitionError::Invalid)));
++        let mut other=LinePool::new(&admit);let mut foreign=other.transaction();
++        assert!(matches!(run(&mut foreign,Some(&mut proof),&mut 1000,&||false),Err(PixelPartitionError::Invalid)));
++        assert!(lines.pool.keys==keys && lines.pool.map==map && lines.pool.next==next);
++        lines.commit();
++        let mut later=pool.transaction();
++        assert!(matches!(run(&mut later,Some(&mut proof),&mut 1000,&||false),Err(PixelPartitionError::Invalid)));
++        eprintln!("CUT_PROOF raw={raw} cold={raw} warm={cost}; cancellations={} short_quotas={cost}; exact geometry/tags/line identities; foreign cut/pool/new transaction refused; subject-dependent separation retained; no plan admissions; stack bytes={}",checks.get(),size_of::<CutProof<'_>>());
++    }
++
+     #[cfg(feature = "experimental-shared-partitions")]
+     #[test]
+     fn containment_bounds_only_reject_impossible_enclosures() {

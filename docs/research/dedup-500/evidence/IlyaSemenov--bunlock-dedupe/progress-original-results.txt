@@ -1,0 +1,65 @@
+TAP version 13
+# Subtest: createProgressRenderer
+    # Subtest: is a no-op when the stream is not a TTY
+    ok 1 - is a no-op when the stream is not a TTY
+      ---
+      duration_ms: 0.939042
+      type: 'test'
+      ...
+    # Subtest: clears and writes the line on each update
+    ok 2 - clears and writes the line on each update
+      ---
+      duration_ms: 0.121791
+      type: 'test'
+      ...
+    # Subtest: does not pad shorter lines — clear-and-rewrite handles any length
+    ok 3 - does not pad shorter lines — clear-and-rewrite handles any length
+      ---
+      duration_ms: 0.104875
+      type: 'test'
+      ...
+    # Subtest: end() clears the live line so the report can replace it
+    ok 4 - end() clears the live line so the report can replace it
+      ---
+      duration_ms: 0.05875
+      type: 'test'
+      ...
+    # Subtest: end() is silent when no update has been emitted
+    ok 5 - end() is silent when no update has been emitted
+      ---
+      duration_ms: 0.044375
+      type: 'test'
+      ...
+    # Subtest: end() after end() does not emit a second clear
+    ok 6 - end() after end() does not emit a second clear
+      ---
+      duration_ms: 0.088125
+      type: 'test'
+      ...
+    # Subtest: end() after multiple updates still clears the live line once
+    ok 7 - end() after multiple updates still clears the live line once
+      ---
+      duration_ms: 0.044292
+      type: 'test'
+      ...
+    # Subtest: total of 0 renders without division or empty brackets
+    ok 8 - total of 0 renders without division or empty brackets
+      ---
+      duration_ms: 0.173542
+      type: 'test'
+      ...
+    1..8
+ok 1 - createProgressRenderer
+  ---
+  duration_ms: 2.370833
+  type: 'suite'
+  ...
+1..1
+# tests 8
+# suites 1
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 119.05725

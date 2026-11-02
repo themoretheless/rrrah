@@ -1,0 +1,24 @@
+{
+  "scope": "Complete original runPipeline and imported strategy/messages/config/state/token modules; lifetime-stat persistence replaced by explicit in-memory bumpLifetime adapter and logger observer. Owned message fixtures, no config loading, user storage, host Pi or provider execution.",
+  "authored_controls_run": 3,
+  "observations": [
+    {
+      "case": "default recency protects recent duplicate/error pair",
+      "dedupPruned": 0
+    },
+    {
+      "case": "default pipeline removes aged successful result when latest repeat is an error",
+      "dedupPruned": 1,
+      "originalsUnchanged": true
+    },
+    {
+      "case": "fresh-original second pass restores errored arguments because tracking suppresses rewrite",
+      "firstPurged": 1,
+      "secondPurged": 0,
+      "secondArgs": {
+        "path": "/owned/a"
+      },
+      "originalsUnchanged": true
+    }
+  ]
+}

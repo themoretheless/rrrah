@@ -1,0 +1,72 @@
+{
+  "repository": "spyweb-app/spyweb",
+  "commit": "1502dfbec0b68d0238bb967d47e07856fb3686f6",
+  "whole_files_read": [
+    {
+      "path": "src/color.rs",
+      "local": "03-color.rs",
+      "git_blob": "881b0851904498f0296aae53ae3551cc72fa894a",
+      "sha256": "4933f13064f60dcf0407fc20a868a7a5a58c4ee8691d7ca23f7957af5352ef0b",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/entry.rs",
+      "local": "04-entry.rs",
+      "git_blob": "1d2e149f84f94167b6d5940a2142a499207c2236",
+      "sha256": "b64938085250380b0541a96f7b695d13fb53abbfc391ce42bb805a339347eba1",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/lib.rs",
+      "local": "05-lib.rs",
+      "git_blob": "93ceff64a21f74291140845c3b25c1a06e3bd011",
+      "sha256": "5cf2ef46f5436823224084411d053715b1668abf989dda4316ad91746830bcdd",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/cdp/tests.rs",
+      "local": "06-tests.rs",
+      "git_blob": "4e40c7342fdace097a6ca51161f0a5823c3d77c3",
+      "sha256": "71a367793772b4fd1424d696b0e41f28a8b4bca68a0e34f5c6e4055640c9f46f",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/scraper/pipeline.rs",
+      "local": "deep-src_scraper_pipeline.rs",
+      "git_blob": "58e6db8974c9a83800864861f78460d1c18016ce",
+      "sha256": "36ebd67ec207fcca7102490797c9579b838561d6c3f7aa31c83ee786ff029fe7",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/services/db/redb.rs",
+      "local": "deep-src_services_db_redb.rs",
+      "git_blob": "5cba6d4ca2b9c5b6ede40e01fbe88cf951cd8f0b",
+      "sha256": "974b2117fe40f82ce3cdf8ab8522f776861163addfa1bc7849f69113985fa191",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/services/db/helpers.rs",
+      "local": "deep-src_services_db_helpers.rs",
+      "git_blob": "c1d7d9517df5406857a6f09c3149fbd8ae3897d9",
+      "sha256": "b9b9a2709e6ae2b03eaa287e6e5086545073dd9b4b32f9ada4cd5822f74182f6",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 7,
+  "tracked_blobs": 154,
+  "whole_repo_complete": false,
+  "original_upstream_tests_run": false,
+  "authored_controls_passed": 3,
+  "runtime_scope": "Original hash_pairs body unchanged;real xxhash-rust0.8.7 xxh3;synthetic pairs;no database/browser/pipeline execution",
+  "findings": [
+    "Embedded NUL bytes erase pair boundaries before hash;one pair a=b\\0c\\0d hashes identically to two pairs a=b,c=d.",
+    "Canonical ordering positive and ordinary distinct-value negative passed.",
+    "Redb seen table suppresses on hash without field equality confirmation:source-only downstream consequence.",
+    "Store commits before notification/webhook;delivery retry behavior not qualified.",
+    "Pagination limit0 may return one valid record:source-only,not executed."
+  ],
+  "decision": "reject-domain",
+  "production_adoption": false,
+  "native_phash_asan": "deferred",
+  "controls": "spyweb124-controls-20261024/results.txt"
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "Pinned original preProcess method only; no dedupe, SQL or network execution.",
+  "source_sha256": "d029d32eaf01761278f80538e5531bb58289b20a120fde45e6f9f0c928bef033",
+  "original_tests_run": 0,
+  "authored_controls": [
+    {
+      "name": "newline normalization is not idempotent",
+      "once": "alpha  beta",
+      "twice": "alpha beta",
+      "passed": true
+    },
+    {
+      "name": "case and outer whitespace intentionally collapsed",
+      "passed": true
+    },
+    {
+      "name": "tabs differ from ordinary spaces",
+      "passed": true
+    }
+  ]
+}

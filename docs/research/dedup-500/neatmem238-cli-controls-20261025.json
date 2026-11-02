@@ -1,0 +1,11 @@
+{
+  "scope": "Original CLI registration/actions transpiled VM with fake command builder, read/config writers/provider/backend; no filesystem/network/user config actions",
+  "authored_controls_passed": 4,
+  "observations": [
+    "All-scope search topK2 emits four unique IDs (two per scope), no final global cap",
+    "Unknown scope silently yields No memories found without search request",
+    "Config set top_k12junk stores integer12 via parseInt",
+    "Import accepts truthy numeric memory content123 and forwards it to fake backend without type validation"
+  ],
+  "full_cli_runtime_run": false
+}

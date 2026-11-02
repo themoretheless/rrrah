@@ -1,0 +1,5 @@
+#define XXH_INLINE_ALL
+#include "xxhash.h"
+#include <assert.h>
+#include <stdio.h>
+int main(void){unsigned char b[4097],secret[XXH3_SECRET_DEFAULT_SIZE];for(size_t i=0;i<sizeof b;i++)b[i]=(unsigned char)(i*37+11);size_t sizes[]={0,1,3,16,17,128,129,239,240,241,4097};XXH3_generateSecret_fromSeed(secret,123);for(size_t i=0;i<11;i++){size_t n=sizes[i];assert(XXH3_64bits_withSeed(b,n,123)==XXH3_64bits_withSecretandSeed(b,n,secret,sizeof secret,123));assert(XXH128_isEqual(XXH3_128bits_withSeed(b,n,123),XXH3_128bits_withSecretandSeed(b,n,secret,sizeof secret,123)));}assert(XXH3_generateSecret(secret,sizeof secret,"owned",5)==XXH_OK);for(size_t i=0;i<11;i++){size_t n=sizes[i];XXH3_state_t *s=XXH3_createState();assert(s);assert(XXH3_128bits_reset_withSecretandSeed(s,secret,sizeof secret,0)==XXH_OK);assert(XXH3_128bits_update(s,b,n)==XXH_OK);assert(XXH128_isEqual(XXH3_128bits_digest(s),XXH3_128bits_withSecretandSeed(b,n,secret,sizeof secret,0)));XXH3_freeState(s);}puts("11 lengths: precomputed-seed64/128 parity and custom-secret seed0 stream parity passed");}

@@ -1,0 +1,20 @@
+{
+  "repository": "EhsanShahbazii/Pinterest-Scraper",
+  "commit": "f4f81ea605a8d8d4cf999837bcbe51b066839f36",
+  "scope": "original Job._run and storage/dedupe bodies, search/session replaced with in-memory stubs. Temporary files only. No FastAPI, server, thread, scraper or network executed.",
+  "authored_controls": [
+    {
+      "name": "Job final list restores persisted duplicate rejected during batch callback",
+      "observed": [
+        "old",
+        "new"
+      ],
+      "passed": true
+    },
+    {
+      "name": "empty collection fallback references missing re import",
+      "observed": "NameError: name 're' is not defined",
+      "passed": true
+    }
+  ]
+}

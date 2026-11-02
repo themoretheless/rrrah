@@ -1,0 +1,301 @@
+syntax = "proto3";
+
+option csharp_namespace = "VideoDedupGrpc";
+
+package video_dedup_grpc;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+
+service VideoDedupGrpcService {
+  rpc GetConfiguration (google.protobuf.Empty) returns (ConfigurationSettings);
+  rpc SetConfiguration (ConfigurationSettings) returns (google.protobuf.Empty);
+  rpc GetCurrentStatus (google.protobuf.Empty) returns (StatusData);
+  rpc ResolveDuplicate (ResolveDuplicateRequest) returns (ResolveDuplicateResponse);
+  rpc GetDuplicate (google.protobuf.Empty) returns (DuplicateData);
+  rpc DiscardDuplicates(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc GetLogEntries (GetLogEntriesRequest) returns (GetLogEntriesResponse);
+  rpc StartVideoComparison (VideoComparisonConfiguration) returns (VideoComparisonStatus);
+  rpc GetVideoComparisonStatus (VideoComparisonStatusRequest) returns (VideoComparisonStatus);
+  rpc CancelVideoComparison (CancelVideoComparisonRequest) returns (google.protobuf.Empty);
+  rpc GetFolderContent (GetFolderContentRequest) returns (GetFolderContentResponse);
+  rpc GetProgressInfo (GetProgressInfoRequest) returns (GetProgressInfoResponse);
+  rpc GetSystemInfo (google.protobuf.Empty) returns (GetSystemInfoResponse);
+}
+
+enum ComparisonResult {
+    NO_RESULT = 0;
+    DUPLICATE = 1;
+    DIFFERENT = 2;
+    CANCELLED = 3;
+    ABORTED = 4;
+}
+
+enum ResolveOperation {
+    DELETE_FILE = 0;
+    SKIP = 1;
+    DISCARD = 2;
+    CANCEL = 3;
+}
+
+enum FileType {
+    ANY = 0;
+    FILE = 1;
+    FOLDER = 2;
+}
+
+message GetFolderContentResponse {
+    message FileAttributes {
+        string name = 1;
+        FileType type = 2;
+        int64 size = 3;
+        google.protobuf.Timestamp date_modified = 4;
+        string mime_type = 5;
+        google.protobuf.BytesValue icon = 6;
+    }
+
+    repeated FileAttributes files = 1;
+    bool request_failed = 2;
+}
+
+message GetFolderContentRequest {
+    
+    string path = 1;
+    FileType type_restriction = 2;
+}
+
+message CancelVideoComparisonRequest {
+    string comparison_token = 1;
+}
+
+message VideoComparisonStatusRequest {
+    string comparison_token = 1;
+    int32 frame_comparison_index = 2;
+}
+
+message VideoComparisonResult {
+    int32 last_compared_index = 1;
+    ComparisonResult comparison_result = 2;
+    string reason = 3;
+}
+
+message FrameIndex {
+    int32 numerator = 1;
+    int32 denominator = 2;
+}
+
+message FrameSet {
+    FrameIndex index = 1;
+    google.protobuf.BytesValue original = 2;
+    google.protobuf.BytesValue cropped = 3;
+    google.protobuf.BytesValue resized = 4;
+    google.protobuf.BytesValue greyscaled = 5;
+    google.protobuf.BytesValue bytes = 6;
+}
+
+message FrameComparisonResult {
+    int32 index = 1;
+    FrameSet left_frames = 2;
+    FrameSet right_frames = 3;
+    double difference = 4;
+    int32 load_level = 5;
+    ComparisonResult comparison_result = 6;
+}
+
+message VideoComparisonStatus {
+    string comparison_token = 1;
+    VideoFile left_file = 2;
+    VideoFile right_file = 3;
+    repeated FrameComparisonResult frame_comparisons = 4;
+    VideoComparisonResult video_comparison_result = 5;
+}
+
+message VideoComparisonConfiguration {
+    VideoComparisonSettings video_comparison_settings = 1;
+    string left_file_path = 2;
+    string right_file_path = 3;
+    bool force_loading_all_frames = 4;
+}
+
+message GetLogEntriesRequest {
+    string log_token = 1;
+    int32 start = 2;
+    int32 count = 3;
+}
+
+message GetLogEntriesResponse {
+    repeated string log_entries = 1;
+}
+
+message Size {
+    int32 width = 1;
+    int32 height = 2;
+}
+
+message CodecInfo {
+    Size size = 1;
+    float frame_rate = 2;
+    google.protobuf.StringValue name = 3; 
+}
+
+message VideoFile {
+    string file_path = 1;
+    int64 file_size = 2;
+    google.protobuf.Duration duration = 3;
+    CodecInfo codec_info = 4;
+    google.protobuf.Timestamp last_write_time = 5;
+    repeated google.protobuf.BytesValue frames = 6;
+    google.protobuf.Timestamp creation_time = 7;
+    google.protobuf.Timestamp last_access_time = 8;
+}
+
+message DuplicateData {
+    string duplicate_id = 1;
+    VideoFile file1 = 2;
+    VideoFile file2 = 3;
+    string base_path = 4;
+}
+
+message ResolveDuplicateRequest {
+    string duplicate_id = 1;
+    ResolveOperation resolve_operation = 2;
+    VideoFile file = 3;
+}
+
+message ResolveDuplicateResponse {
+    bool successful = 1;
+    string error_message = 2;
+    ResolveOperation resolve_operation = 3;
+}
+
+message ProgressInfo {
+    int32 file_count = 1;
+    double file_count_speed = 2;
+    int32 duplicates_found = 3;
+    double duplicates_found_speed = 4;
+}
+
+message GetProgressInfoRequest {
+    string progress_token = 1;
+    int32 start = 2;
+    int32 count = 3;
+}
+
+message GetProgressInfoResponse {
+    repeated ProgressInfo progress_infos = 1;
+}
+
+message OperationInfo {
+    enum OperationType {
+        COMPARING = 0;
+        LOADING_MEDIA = 1;
+        SEARCHING = 2;
+        MONITORING = 3;
+        COMPLETED = 4;
+        INITIALIZING = 5;
+        ERROR = 6;
+        CONNECTING = 7;
+        PREPARING = 8;
+    }
+    enum ProgressStyle {
+        MARQUEE = 0;
+        NO_PROGRESS = 1;
+        CONTINUOUS = 2;
+    }
+
+    OperationType operation_type = 1;
+    int32 maximum_files = 2;
+    ProgressStyle progress_style = 3;
+    google.protobuf.Timestamp start_time = 4;
+    int32 progress_count = 5;
+    string progress_token = 6;
+}
+
+message StatusData {
+    OperationInfo operation_info = 1;
+    int32 total_duplicates_count = 2;
+    int32 log_count = 3;
+    string log_token = 4;
+    int32 unprepared_duplicates_count = 5;
+    int32 prepared_duplicates_count = 6;
+}
+
+message DedupSettings {
+    string base_path = 1;
+    repeated string excluded_directories = 2;
+    repeated string file_extensions = 3;
+    bool recursive = 4;
+    bool monitor_changes = 5;
+    int32 concurrency_level = 6;
+}
+
+message DurationComparisonSettings {
+    enum DurationDifferenceType {
+        DURATION_DIFFERENCE_TYPE_SECONDS = 0;
+        DURATION_DIFFERENCE_TYPE_PERCENT = 1;
+    }
+
+    DurationDifferenceType difference_type = 1;
+    int32 max_difference = 2;
+}
+
+message VideoComparisonSettings {
+    int32 compare_count = 1;
+    int32 max_different_frames = 2;
+    int32 max_difference = 3;
+}
+
+message LogSettings {
+    enum LogLevel {
+        VERBOSE = 0;
+        DEBUG = 1;
+        INFORMATION = 2;
+        WARNING = 3;
+        ERROR = 4;
+        FATAL = 5;
+    }
+
+    LogLevel video_dedup_service_log_level = 1;
+    LogLevel comparison_manager_log_level = 2;
+    LogLevel dedup_engine_log_level = 3;
+}
+
+message ResolutionSettings {
+    int32 thumbnail_count = 1;
+    bool move_to_trash = 2;
+    string trash_path = 3;
+}
+
+message ConfigurationSettings {
+  DedupSettings dedup_settings = 1;
+  DurationComparisonSettings duration_comparison_settings = 2;
+  VideoComparisonSettings video_comparison_settings = 3;
+  LogSettings log_settings = 5;
+  ResolutionSettings resolution_settings = 6;
+}
+
+message GetSystemInfoResponse {
+    message NetworkAdapterInfo {
+        string name = 1;
+        string status = 2;
+        string type = 3;
+        string mac = 4;
+        repeated string ip_addresses = 5;
+    }
+
+    int32 processor_count = 1;
+    string machine_name = 2;
+    string os_version = 3;
+    string os_description = 4;
+    int32 process_id = 5;
+    string process_path = 6;
+    string uptime = 7;
+    string username = 8;
+    string framework_description = 9;
+    string os_architecture = 10;
+    string process_architecture = 11;
+    string runtime_identifier = 12;
+    repeated NetworkAdapterInfo network_adapters = 13;
+}

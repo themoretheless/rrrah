@@ -1,0 +1,27 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 7.97s
+     Running tests/white_anchored.rs (target/debug/deps/white_anchored-1c048c3373b330a6)
+
+running 6 tests
+test feasible_gain_boundary_is_explicit_and_retains_residual_failures ... ok
+test analytic_white_anchor_retains_strict_difference_and_visible_edits ... ok
+test flat_work_limits_and_infeasible_anchor_bounds_refuse ... ok
+test highlight_projection_keeps_strict_hdr_and_alpha_evidence ... ok
+test reflected_white_anchor_fits_both_directions_retains_edits_and_cancels ... FAILED
+test cancellation_at_every_checkpoint_discards_result_and_retry_is_stable ... ok
+
+failures:
+
+---- reflected_white_anchor_fits_both_directions_retains_edits_and_cancels stdout ----
+
+thread 'reflected_white_anchor_fits_both_directions_retains_edits_and_cancels' (73872243) panicked at crates/rrrah-dedup/tests/white_anchored.rs:212:87:
+called `Result::unwrap()` on an `Err` value: Fit(InsufficientSamples { observed: 4, required: 8 })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    reflected_white_anchor_fits_both_directions_retains_edits_and_cancels
+
+test result: FAILED. 5 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rrrah-dedup --test white_anchored`

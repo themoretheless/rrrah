@@ -1,0 +1,37 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v5-20261024.json",
+  "whole_repo_complete": false,
+  "new_read_lines": {
+    "path": "dedup_cpp/xxhash.h",
+    "start": 1251,
+    "end": 1800
+  },
+  "cumulative_header_read_lines": [
+    1,
+    1800
+  ],
+  "header_total_lines": 7487,
+  "whole_header_read": false,
+  "runtime": {
+    "harness": "docs/research/dedup-500/text108-state-controls-20261024.c",
+    "passed_lengths": 11,
+    "seed": 123,
+    "scope": "Original retained0.8.3header ClangO2 nativeARM64;128bitprefixdigest thenresume,copy-statebranch,one-shotparity,canonicalroundtrip. No serialized raw state or cross-version qualification."
+  },
+  "findings": [
+    "11seeded128cases pass digest-resume/copy/canonical contracts.",
+    "XXH3 state requires64byte alignment, create/free API or proper aligned stack allocation; raw allocation/state persistence inappropriate without contract. Source no adoption.",
+    "External custom secret referenced notcopied and mustoutlive session. No invalid-lifetime test.",
+    "Static-linking-only declarations explicitly unstable acrossversions and not for dynamic linking. No raw-state ABI promise.",
+    "128bitwithSeed doc note mentions64bitfunction forseed0 despite128bitreturn; documentation typo only, no implementation defect claimed."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "xxhash.h1801..7487",
+    "Abseilsubmodule",
+    "fullnativepipeline"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

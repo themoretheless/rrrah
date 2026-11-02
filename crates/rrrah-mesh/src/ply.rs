@@ -3,6 +3,8 @@ use crate::{DecodeError, DecodeRequest, bounded_io::read_bounded};
 use thiserror::Error;
 const BUDGET: usize = 512 * 1024 * 1024;
 
+#[cfg(test)]
+thread_local! { static PREALLOCATE_LIST_OFFSETS: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PlyType {
     I8,
@@ -466,7 +468,15 @@ fn decode_bytes_budgeted(
                             .ok_or(PlyDecodeError::Invalid("missing list type"))?,
                     )?;
                     let mut offsets = Vec::new();
-                    reserve_storage(&mut offsets, 1, &mut budget)?;
+                    #[cfg(test)]
+                    let initial = if PREALLOCATE_LIST_OFFSETS.with(std::cell::Cell::get) {
+                        element.count.saturating_add(1)
+                    } else {
+                        1
+                    };
+                    #[cfg(not(test))]
+                    let initial = 1;
+                    reserve_storage(&mut offsets, initial, &mut budget)?;
                     offsets.push(0);
                     PlyValues::List {
                         count_type: count,
@@ -665,6 +675,24 @@ fn decode_bytes_budgeted(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn eager_declared_list_offsets_spend_budget_before_invalid_header_rejection() {
+        let bytes=b"ply\nformat ascii 1.0\nelement vertex 0\nproperty float x\nproperty float y\nproperty float z\nelement face 1000000\nproperty list uchar int vertex_indices\ninvalid\n";
+        let mut peaks = [0; 2];
+        for (i, eager) in [false, true].into_iter().enumerate() {
+            let budget = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+            PREALLOCATE_LIST_OFFSETS.with(|mode| mode.set(eager));
+            assert!(decode_bytes_budgeted(bytes, Some(&budget), || Ok(())).is_err());
+            peaks[i] = budget.peak();
+            assert_eq!(budget.used(), 0);
+        }
+        PREALLOCATE_LIST_OFFSETS.with(|mode| mode.set(false));
+        assert!(peaks[1] >= peaks[0] + 3_999_996);
+        eprintln!(
+            "PLY_EAGER_OFFSETS_NEGATIVE incremental_peak={} eager_peak={} invalid_body=true final=0",
+            peaks[0], peaks[1]
+        );
+    }
     #[test]
     fn native_integer_indices_preserve_signed_and_unsigned_boundaries() {
         assert_eq!(

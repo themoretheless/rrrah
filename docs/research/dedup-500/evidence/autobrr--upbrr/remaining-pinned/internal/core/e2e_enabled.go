@@ -1,0 +1,1949 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+//go:build e2e
+
+package core
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"mime/multipart"
+	"net/http"
+	"os"
+	"path/filepath"
+	"slices"
+	"strings"
+	"sync"
+	"time"
+
+	"github.com/autobrr/go-torrent/bencode"
+	"github.com/autobrr/go-torrent/metainfo"
+
+	"github.com/autobrr/upbrr/internal/clientdiscovery"
+	"github.com/autobrr/upbrr/internal/description"
+	"github.com/autobrr/upbrr/internal/filesystem"
+	"github.com/autobrr/upbrr/internal/metadata/discparse"
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+
+	"github.com/autobrr/upbrr/internal/config"
+	pathutil "github.com/autobrr/upbrr/internal/pathing"
+	"github.com/autobrr/upbrr/internal/redaction"
+	"github.com/autobrr/upbrr/internal/releaseworkflow"
+	"github.com/autobrr/upbrr/internal/services/db"
+	"github.com/autobrr/upbrr/internal/trackers"
+	trackerauth "github.com/autobrr/upbrr/internal/trackers/auth"
+	dupechecking "github.com/autobrr/upbrr/internal/trackers/dupe"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+const (
+	e2eEnabledEnv       = "UPBRR_E2E_FAKE_SERVICES"
+	e2eTrackerURLEnv    = "UPBRR_E2E_TRACKER_URL"
+	e2eImageURLEnv      = "UPBRR_E2E_IMAGE_URL"
+	e2eClientURLEnv     = "UPBRR_E2E_CLIENT_URL"
+	e2eShotPathEnv      = "UPBRR_E2E_SCREENSHOT_PATH"
+	e2eMediaInfoEnv     = "UPBRR_E2E_MEDIAINFO_PATH"
+	e2eResolutionEnv    = "UPBRR_E2E_RESOLUTION"
+	e2eDuplicateEnv     = "UPBRR_E2E_DUPLICATE_TRACKERS"
+	e2eDupeScenarioEnv  = "UPBRR_E2E_DUPE_SCENARIOS"
+	e2eBlurayEnv        = "UPBRR_E2E_BLURAY_CANDIDATES"
+	e2eAuthNeededEnv    = "UPBRR_E2E_AUTH_REQUIRED_TRACKERS"
+	e2eAuthScenarioEnv  = "UPBRR_E2E_AUTH_SCENARIOS"
+	e2eAuthCounterEnv   = "UPBRR_E2E_AUTH_COUNTER_PATH"
+	e2eClockOffsetEnv   = "UPBRR_E2E_CLOCK_OFFSET"
+	e2eMediaKindEnv     = "UPBRR_E2E_MEDIA_KIND"
+	e2eNamingModeEnv    = "UPBRR_E2E_NAMING_MODE"
+	e2eAudioAnalysisEnv = "UPBRR_E2E_AUDIO_ANALYSIS"
+)
+
+// maybeApplyE2EServices replaces only missing runtime capabilities when both
+// the e2e build tag and fake-services environment gate are active.
+func maybeApplyE2EServices(
+	_ context.Context,
+	services *api.ServiceSet,
+	cfg config.Config,
+	repositories api.RepositoryCapabilities,
+	registry *trackers.Registry,
+	logger api.Logger,
+) error {
+	if !isE2EEnabled() {
+		return nil
+	}
+	if services == nil {
+		return errors.New("core: e2e services target is nil")
+	}
+	tmpRoot, err := db.Subdir(cfg.MainSettings.DBPath, "tmp")
+	if err != nil {
+		return fmt.Errorf("core: e2e tmp root: %w", err)
+	}
+	logger.Infof("core: using e2e fake services")
+	if services.Clients == nil {
+		services.Clients = e2eClientService{endpoint: os.Getenv(e2eClientURLEnv)}
+	}
+	if services.Metadata == nil {
+		services.Metadata = e2eMetadataService{
+			repo:    repositories.ReleaseState(),
+			clients: clientdiscovery.New(services.Clients, logger),
+		}
+	}
+	if services.Torrents == nil {
+		services.Torrents = e2eTorrentService{dbPath: cfg.MainSettings.DBPath}
+	}
+	if services.Trackers == nil {
+		services.Trackers = e2eTrackerService{
+			registry: registry,
+			endpoint: os.Getenv(e2eTrackerURLEnv),
+			dbPath:   cfg.MainSettings.DBPath,
+			repo:     repositories.Uploads(),
+		}
+	}
+	if services.Images == nil {
+		services.Images = e2eImageService{
+			endpoint: os.Getenv(e2eImageURLEnv),
+			shotPath: os.Getenv(e2eShotPathEnv),
+			tmpRoot:  tmpRoot,
+			repo:     repositories.Media(),
+		}
+	}
+	if services.Screenshots == nil {
+		services.Screenshots = e2eScreenshotService{
+			shotPath: os.Getenv(e2eShotPathEnv),
+			tmpRoot:  tmpRoot,
+			repo:     repositories.Media(),
+		}
+	}
+	if services.DVDMenus == nil {
+		services.DVDMenus = e2eDVDMenuService{shotPath: os.Getenv(e2eShotPathEnv), tmpRoot: tmpRoot}
+	}
+	if services.Dupes == nil {
+		services.Dupes = e2eDupeService{cfg: cfg}
+	}
+	if services.TrackerAuth == nil {
+		services.TrackerAuth = e2eTrackerAuthService{}
+	}
+	return nil
+}
+
+func isE2EEnabled() bool {
+	value := strings.TrimSpace(os.Getenv(e2eEnabledEnv))
+	return value == "1" || strings.EqualFold(value, "true")
+}
+
+func e2eNamingMode() (trackers.OpaqueNameMode, bool, error) {
+	if !isE2EEnabled() {
+		return trackers.OpaqueNameReject, false, nil
+	}
+	switch strings.ToLower(strings.TrimSpace(os.Getenv(e2eNamingModeEnv))) {
+	case "":
+		return trackers.OpaqueNameReject, false, nil
+	case "reject":
+		return trackers.OpaqueNameReject, true, nil
+	case "rebuild":
+		return trackers.OpaqueNameRebuild, true, nil
+	default:
+		return trackers.OpaqueNameReject, false, fmt.Errorf("unsupported %s value", e2eNamingModeEnv)
+	}
+}
+
+func maybeApplyE2ENamingRegistry(registry *trackers.Registry) (*trackers.Registry, error) {
+	mode, enabled, err := e2eNamingMode()
+	if err != nil {
+		return nil, err
+	}
+	if !enabled {
+		return registry, nil
+	}
+	if registry == nil {
+		return nil, errors.New("core: e2e naming registry is nil")
+	}
+	fixture := trackers.NewRegistry()
+	for _, name := range registry.Names() {
+		descriptor, ok := registry.LookupDescriptor(name)
+		if !ok {
+			return nil, fmt.Errorf("core: e2e naming registry missing %s", name)
+		}
+		if name == "BTN" {
+			descriptor.ReleaseNamePolicy = trackers.WithNonSceneReleaseNameConfirmation(
+				trackers.StructuredReleaseNamePolicy("e2e/btn/mandatory-edition/v1", trackers.StructuredNamePolicy{
+					Mandatory: func(editor *trackers.NameEditor, _ api.UploadSubject, _ config.TrackerConfig) error {
+						return editor.Omit(api.NameRoleEdition)
+					},
+					Authority: []trackers.NameAuthority{{Role: api.NameRoleEdition, Aspect: trackers.NamePresence}},
+					Opaque:    mode,
+				}),
+			)
+		}
+		if err := fixture.RegisterDescriptor(descriptor); err != nil {
+			return nil, fmt.Errorf("core: clone e2e naming descriptor %s: %w", name, err)
+		}
+	}
+	fixture.SetPriorityOrder(registry.Priority())
+	return fixture, nil
+}
+
+type e2eWorkflowClock struct {
+	offset time.Duration
+}
+
+func (c e2eWorkflowClock) Now() time.Time {
+	return time.Now().UTC().Add(c.offset)
+}
+
+func e2eReleaseWorkflowOptions() []releaseworkflow.Option {
+	offset, err := time.ParseDuration(strings.TrimSpace(os.Getenv(e2eClockOffsetEnv)))
+	if err != nil || offset == 0 {
+		return nil
+	}
+	return []releaseworkflow.Option{releaseworkflow.WithClock(e2eWorkflowClock{offset: offset})}
+}
+
+// e2eMetadataService supplies deterministic preparation evidence under the
+// e2e-only fake-services gate.
+type e2eMetadataService struct {
+	repo interface {
+		Save(context.Context, api.FileMetadata) error
+	}
+	clients *clientdiscovery.Module
+}
+
+// CollectPreparationEvidence emits deterministic progress and metadata while
+// exercising the same client-discovery boundary as production preparation.
+func (s e2eMetadataService) CollectPreparationEvidence(ctx context.Context, request preparationstate.Request) (preparationstate.State, error) {
+	input := request.Input
+	if strings.TrimSpace(input.SourcePath) == "" {
+		return preparationstate.State{}, errors.New("e2e metadata: path is required")
+	}
+	sourcePath := strings.TrimSpace(input.SourcePath)
+	api.EmitPreparationProgress(
+		ctx,
+		api.NewPreparationProgressUpdate(api.PreparationPhaseSourceEvidence, api.PreparationProgressRunning, "Collecting synthetic source evidence."),
+	)
+	if request.Layout.DiscType == "BDMV" {
+		api.EmitPreparationProgress(
+			ctx,
+			api.NewPreparationProgressUpdate(api.PreparationPhaseBDInfo, api.PreparationProgressRunning, "Scanning selected Blu-ray playlist."),
+		)
+	}
+	resolution := strings.TrimSpace(os.Getenv(e2eResolutionEnv))
+	if resolution == "" {
+		resolution = "1080p"
+	}
+	releaseName := "E2E.Movie.2026.1080p.WEB-DL.DD5.1.H264-UPBRR"
+	releaseNameNoTag := "E2E.Movie.2026.1080p.WEB-DL.DD5.1.H264"
+	releaseNameClean := "E2E Movie 2026 1080p WEB-DL DD5.1 H264"
+	title := "E2E Movie"
+	category := api.CategoryMovie
+	canonicalCategory := api.CanonicalCategoryMovie
+	tvdbID := 0
+	season := 0
+	episode := 0
+	episodeTitle := ""
+	if strings.EqualFold(strings.TrimSpace(os.Getenv(e2eMediaKindEnv)), "tv") {
+		releaseName = "E2E.Show.2026.S01E01.1080p.WEB-DL.DD5.1.H264-UPBRR"
+		releaseNameNoTag = "E2E.Show.2026.S01E01.1080p.WEB-DL.DD5.1.H264"
+		releaseNameClean = "E2E Show 2026 S01E01 1080p WEB-DL DD5.1 H264"
+		title = "E2E Show"
+		category = api.CategoryTV
+		canonicalCategory = api.CanonicalCategoryTV
+		tvdbID = 2001
+		season = 1
+		episode = 1
+		episodeTitle = "Example Episode"
+	}
+	generatedName, namingFixture, err := e2eFixtureGeneratedName(category, title, resolution, season, episode, episodeTitle)
+	if err != nil {
+		return preparationstate.State{}, err
+	}
+	if namingFixture {
+		releaseName = generatedName.Name
+		releaseNameNoTag = generatedName.NameNoTag
+		releaseNameClean = generatedName.CleanName
+	}
+	meta := preparationstate.State{
+		SourcePath: sourcePath,
+		Paths:      []string{sourcePath},
+		FileList:   []string{sourcePath},
+		Policy: preparationstate.CollectionPolicy{
+			OnlyID:          input.Policy.OnlyID,
+			KeepFolder:      input.Policy.KeepFolder,
+			KeepImages:      input.Policy.KeepImages,
+			InteractionMode: input.Controls.Interaction,
+		},
+		ReleaseName:              releaseName,
+		ReleaseNameNoTag:         releaseNameNoTag,
+		ReleaseNameClean:         releaseNameClean,
+		Filename:                 filepath.Base(sourcePath),
+		Tag:                      "-UPBRR",
+		Type:                     "WEBDL",
+		Source:                   "WEB-DL",
+		Container:                "MKV",
+		VideoCodec:               "AVC",
+		VideoEncode:              "H264",
+		Audio:                    "DD 5.1",
+		Channels:                 "5.1",
+		AudioLanguages:           []string{"English"},
+		SubtitleLanguages:        []string{"English"},
+		MediaInfoUniqueID:        "e2e-unique-id",
+		MediaInfoUniqueIDPresent: true,
+		MediaInfoTextPath:        strings.TrimSpace(os.Getenv(e2eMediaInfoEnv)),
+		Release: api.ReleaseInfo{
+			Category:   string(category),
+			Type:       "WEBDL",
+			Title:      title,
+			Year:       2026,
+			Source:     "WEB-DL",
+			Resolution: resolution,
+			Ext:        ".mkv",
+			Group:      "UPBRR",
+			Season:     season,
+			Episode:    episode,
+		},
+		ResolvedNaming: preparationstate.ResolvedNaming{
+			Type:         "WEBDL",
+			Title:        title,
+			Year:         2026,
+			Source:       "WEB-DL",
+			Resolution:   resolution,
+			EpisodeTitle: episodeTitle,
+		},
+		DescriptionTemplate: "E2E description fixture.",
+	}
+	if value := strings.TrimSpace(os.Getenv(e2eAudioAnalysisEnv)); value == "1" || strings.EqualFold(value, "true") {
+		const (
+			audioResourceID = "e2e-audio-resource"
+			audioTrackID    = "e2e-audio-track-primary"
+		)
+		meta.VideoPath = sourcePath
+		meta.MediaTracks = []api.MediaTrackFacts{{
+			ID:                  audioTrackID,
+			Kind:                api.MediaTrackAudio,
+			ResourceID:          audioResourceID,
+			ManifestFingerprint: "e2e-audio-manifest-v1",
+			Ordinal:             1,
+			Codec:               "PCM",
+			ChannelLayout:       "stereo",
+			Channels:            2,
+			SampleRate:          48_000,
+			DetectedLanguages:   []string{"English"},
+			Languages:           []string{"English"},
+			LanguageProvenance:  api.FactProvenanceAutomatic,
+			Default:             true,
+		}}
+		meta.PrimaryAudioTrackID = audioTrackID
+		meta.TrackCoverageComplete = true
+	}
+	if namingFixture {
+		meta.Edition = "Uncut"
+		meta.GeneratedName = generatedName.GeneratedName.Clone()
+		meta.AvailableGeneratedName = generatedName.GeneratedName.Clone()
+	}
+	if s.clients != nil || request.RetainedClientEvidence != nil {
+		api.EmitPreparationProgress(
+			ctx,
+			api.NewPreparationProgressUpdate(api.PreparationPhaseClientDiscovery, api.PreparationProgressRunning, "Searching the synthetic torrent client."),
+		)
+		if request.RetainedClientEvidence != nil {
+			meta.ClientEvidence = preparationstate.CloneClientEvidenceSnapshot(*request.RetainedClientEvidence)
+		} else {
+			evidence, err := s.clients.Discover(ctx, clientdiscovery.SearchInput{
+				SourcePath:   sourcePath,
+				FileList:     meta.FileList,
+				DiscType:     request.Layout.DiscType,
+				Policy:       input.Search,
+				ForceRecheck: input.Controls.ForceRecheck,
+			})
+			if err != nil {
+				return preparationstate.State{}, fmt.Errorf("e2e metadata: discover client evidence: %w", err)
+			}
+			meta.ClientEvidence = e2eClientEvidenceSnapshot(input, evidence)
+		}
+		evidence := meta.ClientEvidence.Result
+		meta.InfoHash = evidence.InfoHash
+		meta.DiscoveredTorrentPath = evidence.TorrentPath
+		meta.TrackerIDs = evidence.TrackerIDs
+		meta.FoundTrackerMatch = evidence.FoundTrackerMatch
+		meta.EvidenceTrackers = append([]string(nil), evidence.MatchedTrackers...)
+		meta.MatchedEvidenceTrackers = append([]string(nil), evidence.MatchedTrackers...)
+		api.EmitPreparationProgress(
+			ctx,
+			api.NewPreparationProgressUpdate(
+				api.PreparationPhaseClientDiscovery,
+				api.PreparationProgressCompleted,
+				"Synthetic torrent client search complete.",
+			),
+		)
+	}
+	meta.Identity = api.ExternalIdentity{
+		SourcePath: sourcePath,
+		TMDBID:     1001,
+		IMDBID:     1234567,
+		TVDBID:     tvdbID,
+		Category:   canonicalCategory,
+	}
+	meta.ProviderMetadata = api.SourceScopedMetadata{
+		SourcePath: sourcePath,
+		TMDB: &api.TMDBMetadata{
+			TMDBID:           1001,
+			IMDBID:           1234567,
+			TVDBID:           tvdbID,
+			Category:         string(category),
+			Title:            title,
+			OriginalTitle:    title,
+			Year:             2026,
+			ReleaseDate:      "2026-01-02",
+			OriginalLanguage: "en",
+			Overview:         "Deterministic E2E metadata fixture.",
+		},
+	}
+	if tvdbID > 0 {
+		meta.ProviderMetadata.TVDB = &api.TVDBMetadata{
+			TVDBID:                 tvdbID,
+			Name:                   title,
+			NameEnglish:            title,
+			Overview:               "Deterministic E2E metadata fixture.",
+			OverviewEnglish:        "Deterministic E2E metadata fixture.",
+			FirstAired:             "2026-01-02",
+			Year:                   2026,
+			OriginalLanguage:       "eng",
+			HasEnglish:             true,
+			EpisodeSeason:          season,
+			EpisodeNumber:          episode,
+			EpisodeName:            "Example Episode",
+			EpisodeNameEnglish:     "Example Episode",
+			EpisodeOverview:        "Deterministic E2E episode fixture.",
+			EpisodeOverviewEnglish: "Deterministic E2E episode fixture.",
+			EpisodeAired:           "2026-01-02",
+		}
+	}
+	if err := collectE2EDiscEvidence(ctx, request, &meta); err != nil {
+		return preparationstate.State{}, err
+	}
+	if value := strings.TrimSpace(os.Getenv(e2eBlurayEnv)); value == "1" || strings.EqualFold(value, "true") {
+		meta.ProviderMetadata.Bluray = e2eBlurayMetadata(sourcePath)
+	}
+	if s.repo != nil {
+		if info, err := os.Stat(sourcePath); err == nil {
+			meta.SourceSize = info.Size()
+		}
+		if err := s.repo.Save(ctx, db.FileMetadata{
+			Path:       sourcePath,
+			UpdatedAt:  time.Now().UTC(),
+			SourceSize: meta.SourceSize,
+			Category:   api.NormalizeCategory(meta.Release.Category),
+			Type:       meta.Release.Type,
+			Title:      meta.Release.Title,
+			Year:       meta.Release.Year,
+			Source:     meta.Release.Source,
+			Resolution: meta.Release.Resolution,
+			Ext:        meta.Release.Ext,
+			Group:      meta.Release.Group,
+		}); err != nil {
+			return preparationstate.State{}, fmt.Errorf("e2e metadata: save: %w", err)
+		}
+	}
+	if request.Layout.DiscType == "BDMV" {
+		api.EmitPreparationProgress(
+			ctx,
+			api.NewPreparationProgressUpdate(api.PreparationPhaseBDInfo, api.PreparationProgressCompleted, "Blu-ray analysis complete."),
+		)
+	}
+	api.EmitPreparationProgress(
+		ctx,
+		api.NewPreparationProgressUpdate(api.PreparationPhaseSourceEvidence, api.PreparationProgressCompleted, "Synthetic source evidence complete."),
+	)
+	return meta, nil
+}
+
+func collectE2EDiscEvidence(ctx context.Context, request preparationstate.Request, meta *preparationstate.State) error {
+	if meta == nil || len(request.Layout.Discs) == 0 {
+		return nil
+	}
+	meta.DiscType = request.Layout.DiscType
+	selectedByDisc := make(map[string][]api.PlaylistInfo, len(request.Layout.Discs))
+	if request.Layout.DiscType == "BDMV" {
+		candidates, err := e2eBDMVCandidates(ctx, request)
+		if err != nil {
+			return err
+		}
+		selected, err := e2eSelectedPlaylists(request, candidates)
+		if err != nil {
+			return err
+		}
+		meta.SelectedBDMVPlaylists = append([]api.PlaylistInfo(nil), selected...)
+		for _, playlist := range selected {
+			selectedByDisc[playlist.DiscID] = append(selectedByDisc[playlist.DiscID], playlist)
+		}
+	}
+
+	meta.Discs = make([]preparationstate.DiscResource, 0, len(request.Layout.Discs))
+	meta.FileList = nil
+	for _, disc := range request.Layout.Discs {
+		resource := preparationstate.DiscResource{
+			ID:   disc.ID,
+			Name: disc.Name,
+			Type: disc.Type,
+			Root: disc.Root,
+		}
+		switch disc.Type {
+		case "BDMV":
+			resource.SelectedPlaylists = append([]api.PlaylistInfo(nil), selectedByDisc[disc.ID]...)
+			for _, playlist := range resource.SelectedPlaylists {
+				summary := fmt.Sprintf("Disc: %s\nPlaylist: %s\nLength: 00:02:00.000", disc.Name, playlist.File)
+				resource.Reports = append(resource.Reports, preparationstate.DiscReportResource{
+					Playlist:    playlist,
+					Summary:     summary,
+					ExtSummary:  summary,
+					FullSummary: summary,
+				})
+				for _, item := range playlist.Items {
+					streamPath := filepath.Join(disc.Root, "STREAM", item.File)
+					resource.FileList = append(resource.FileList, streamPath)
+					if resource.VideoPath == "" {
+						resource.VideoPath = streamPath
+					}
+				}
+			}
+		case "DVD":
+			resource.DVDIFOPath = filepath.Join(disc.Root, "VIDEO_TS.IFO")
+			resource.DVDVOBPath = filepath.Join(disc.Root, "VTS_01_1.VOB")
+			resource.DVDVOBSet = "VTS_01"
+			resource.DurationSeconds = 120
+			resource.DVDVOBMediaInfoText = fmt.Sprintf("General\nDisc: %s\nDuration: 2 min", disc.Name)
+			resource.FileList = []string{resource.DVDIFOPath, resource.DVDVOBPath}
+		}
+		meta.FileList = append(meta.FileList, resource.FileList...)
+		meta.Discs = append(meta.Discs, resource)
+	}
+	if len(meta.Discs) > 0 {
+		primary := meta.Discs[0]
+		meta.VideoPath = primary.VideoPath
+		meta.DVDIFOPath = primary.DVDIFOPath
+		meta.DVDVOBPath = primary.DVDVOBPath
+		meta.DVDVOBSet = primary.DVDVOBSet
+		meta.DVDVOBMediaInfoText = primary.DVDVOBMediaInfoText
+	}
+	return nil
+}
+
+func e2eBDMVCandidates(ctx context.Context, request preparationstate.Request) ([]api.PlaylistInfo, error) {
+	candidates := make([]api.PlaylistInfo, 0, len(request.Layout.Discs))
+	for _, disc := range request.Layout.Discs {
+		discovered, err := filesystem.DiscoverPlaylists(ctx, disc.Root)
+		if err != nil {
+			return nil, fmt.Errorf("e2e metadata: discover BDMV playlists: %w", err)
+		}
+		for _, playlist := range discovered {
+			file := discparse.NormalizePlaylistName(playlist.File)
+			id := file
+			if len(request.Layout.Discs) > 1 {
+				id = disc.ID + ":" + file
+			}
+			items := make([]api.PlaylistItem, len(playlist.Items))
+			for index, item := range playlist.Items {
+				items[index] = api.PlaylistItem{File: item.File, Size: item.Size}
+			}
+			candidates = append(candidates, api.PlaylistInfo{
+				ID:       id,
+				DiscID:   disc.ID,
+				DiscName: disc.Name,
+				File:     file,
+				Duration: playlist.Duration,
+				Items:    items,
+				Score:    playlist.Score,
+				Edition:  playlist.Edition,
+			})
+		}
+	}
+	return candidates, nil
+}
+
+func e2eSelectedPlaylists(request preparationstate.Request, candidates []api.PlaylistInfo) ([]api.PlaylistInfo, error) {
+	instruction := request.Input.Instructions.Playlist
+	if !instruction.Set {
+		return nil, &api.PlaylistSelectionRequiredError{SourcePath: request.Layout.SourcePath, Candidates: candidates}
+	}
+	selectedIDs := make(map[string]struct{}, len(instruction.Selected))
+	if instruction.UseAll {
+		for _, candidate := range candidates {
+			selectedIDs[candidate.ID] = struct{}{}
+		}
+	} else {
+		for _, raw := range instruction.Selected {
+			id := strings.TrimSpace(raw)
+			if len(request.Layout.Discs) == 1 {
+				id = discparse.NormalizePlaylistName(id)
+			}
+			selectedIDs[id] = struct{}{}
+		}
+	}
+	selected := make([]api.PlaylistInfo, 0, len(selectedIDs))
+	selectedDiscs := make(map[string]struct{}, len(request.Layout.Discs))
+	for _, candidate := range candidates {
+		if _, ok := selectedIDs[candidate.ID]; !ok {
+			continue
+		}
+		selected = append(selected, candidate)
+		selectedDiscs[candidate.DiscID] = struct{}{}
+		delete(selectedIDs, candidate.ID)
+	}
+	if len(selectedIDs) > 0 || len(selectedDiscs) != len(request.Layout.Discs) {
+		return nil, &api.InvalidPlaylistSelectionError{
+			SourcePath: request.Layout.SourcePath,
+			Reason:     "at least one current playlist must be selected for every disc",
+		}
+	}
+	return selected, nil
+}
+
+// HydrateClientEvidence rebuilds restart-only private client evidence without
+// rerunning the complete synthetic metadata pipeline.
+func (s e2eMetadataService) HydrateClientEvidence(
+	ctx context.Context,
+	request preparationstate.Request,
+) (preparationstate.ClientEvidenceSnapshot, error) {
+	files := make([]string, 0, len(request.Manifest.Entries))
+	for _, entry := range request.Manifest.Entries {
+		if entry.Type == api.SourceEntryTypeFile || entry.Type == api.SourceEntryTypePlaylist {
+			files = append(files, entry.Path)
+		}
+	}
+	if s.clients == nil {
+		return e2eClientEvidenceSnapshot(
+			request.Input,
+			clientdiscovery.Evidence{Disposition: clientdiscovery.DispositionUnavailable},
+		), nil
+	}
+	discType := strings.TrimSpace(request.Layout.DiscType)
+	if discType == "" {
+		discType = request.Manifest.Classification.DiscType
+	}
+	evidence, err := s.clients.Discover(ctx, clientdiscovery.SearchInput{
+		SourcePath:   request.Manifest.SourcePath,
+		FileList:     files,
+		DiscType:     discType,
+		Policy:       request.Input.Search,
+		ForceRecheck: request.Input.Controls.ForceRecheck,
+	})
+	if err != nil {
+		return preparationstate.ClientEvidenceSnapshot{}, fmt.Errorf("e2e metadata: hydrate client evidence: %w", err)
+	}
+	return e2eClientEvidenceSnapshot(request.Input, evidence), nil
+}
+
+func (s e2eMetadataService) HydratePrivateResources(
+	ctx context.Context,
+	request preparationstate.Request,
+) (preparationstate.State, error) {
+	return s.CollectPreparationEvidence(ctx, request)
+}
+
+func e2eClientEvidenceSnapshot(
+	input api.PrepareInput,
+	evidence clientdiscovery.Evidence,
+) preparationstate.ClientEvidenceSnapshot {
+	disposition := preparationstate.ClientEvidenceDispositionUnknown
+	switch evidence.Disposition {
+	case clientdiscovery.DispositionSearched:
+		disposition = preparationstate.ClientEvidenceDispositionSearched
+	case clientdiscovery.DispositionSkipped:
+		disposition = preparationstate.ClientEvidenceDispositionSkipped
+	case clientdiscovery.DispositionUnavailable:
+		disposition = preparationstate.ClientEvidenceDispositionUnavailable
+	}
+	forced := input.Controls.ForceRecheck != nil && *input.Controls.ForceRecheck &&
+		disposition == preparationstate.ClientEvidenceDispositionSearched
+	return preparationstate.CloneClientEvidenceSnapshot(preparationstate.ClientEvidenceSnapshot{
+		Disposition:   disposition,
+		Policy:        input.Search,
+		ForcedRecheck: forced,
+		Result: api.ClientSearchResult{
+			InfoHash:            evidence.InfoHash,
+			TorrentPath:         evidence.TorrentPath,
+			TorrentDataVerified: evidence.TorrentDataVerified,
+			TrackerIDs:          evidence.TrackerIDs,
+			FoundTrackerMatch:   evidence.FoundTrackerMatch,
+			TorrentComments:     evidence.TorrentComments,
+			PieceSizeConstraint: evidence.PieceSizeConstraint,
+			FoundPreferredPiece: evidence.FoundPreferredPiece,
+			MatchedTrackers:     evidence.MatchedTrackers,
+		},
+	})
+}
+
+func e2eBlurayMetadata(sourcePath string) *api.BlurayMetadata {
+	return &api.BlurayMetadata{
+		SourcePath:        sourcePath,
+		IMDBID:            1234567,
+		SearchURL:         "https://example.com/search/example-release-2026",
+		SelectedReleaseID: "example-bluray-primary",
+		SelectedURL:       "https://example.com/releases/example-bluray-primary",
+		AutoSelected:      true,
+		SelectionReason:   "synthetic e2e selection",
+		BestScore:         98,
+		Threshold:         80,
+		Candidates: []api.BlurayReleaseCandidate{
+			{
+				ReleaseID:  "example-bluray-primary",
+				MovieTitle: "Example Release",
+				MovieYear:  "2026",
+				Title:      "Example Release 2026 Collector Edition",
+				URL:        "https://example.com/releases/example-bluray-primary",
+				Publisher:  "Example Publisher",
+				Country:    "Exampleland",
+				Region:     "A",
+				Score:      98,
+				Accepted:   true,
+				Specs: api.BluraySpecs{
+					Video: api.BlurayVideoSpec{Codec: "AVC", Resolution: "1080p"},
+					Audio: []string{"English DD 5.1"},
+					Discs: api.BlurayDiscSpec{
+						Type:   "Blu-ray",
+						Count:  1,
+						Format: "BD-50",
+					},
+				},
+				CoverImages: []api.BlurayImage{{Kind: "Front", URL: "https://example.com/images/example-bluray-primary.jpg"}},
+			},
+			{
+				ReleaseID:  "example-bluray-alternate",
+				MovieTitle: "Example Release",
+				MovieYear:  "2026",
+				Title:      "Example Release 2026 Standard Edition",
+				URL:        "https://example.com/releases/example-bluray-alternate",
+				Publisher:  "Example Publisher",
+				Country:    "Exampleland",
+				Region:     "B",
+				Score:      92,
+				Specs: api.BluraySpecs{
+					Video: api.BlurayVideoSpec{Codec: "AVC", Resolution: "1080p"},
+					Audio: []string{"English DD 5.1"},
+					Discs: api.BlurayDiscSpec{
+						Type:   "Blu-ray",
+						Count:  1,
+						Format: "BD-50",
+					},
+				},
+			},
+		},
+		UpdatedAt: time.Now().UTC(),
+	}
+}
+
+type e2eTorrentService struct {
+	dbPath string
+}
+
+func (s e2eTorrentService) Create(_ context.Context, meta api.TorrentSubject) (api.TorrentResult, error) {
+	root := filepath.Dir(strings.TrimSpace(s.dbPath))
+	if root == "." || root == "" {
+		root = os.TempDir()
+	}
+	dir := filepath.Join(root, "e2e-artifacts")
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		return api.TorrentResult{}, fmt.Errorf("e2e torrent: mkdir: %w", err)
+	}
+	info, err := e2eTorrentInfo(meta.SourcePath)
+	if err != nil {
+		return api.TorrentResult{}, err
+	}
+	infoBytes, err := bencode.Marshal(info)
+	if err != nil {
+		return api.TorrentResult{}, fmt.Errorf("e2e torrent: encode info: %w", err)
+	}
+	torrent := metainfo.MetaInfo{Announce: "http://e2e.invalid/announce", InfoBytes: bencode.Bytes(infoBytes)}
+	path := filepath.Join(dir, "input.torrent")
+	file, err := os.OpenFile(path, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o600)
+	if err != nil {
+		return api.TorrentResult{}, fmt.Errorf("e2e torrent: create: %w", err)
+	}
+	writeErr := torrent.Write(file)
+	closeErr := file.Close()
+	if writeErr != nil {
+		return api.TorrentResult{}, fmt.Errorf("e2e torrent: write: %w", writeErr)
+	}
+	if closeErr != nil {
+		return api.TorrentResult{}, fmt.Errorf("e2e torrent: close: %w", closeErr)
+	}
+	return api.TorrentResult{Path: path, InfoHash: "0123456789abcdef0123456789abcdef01234567"}, nil
+}
+
+func e2eTorrentInfo(sourcePath string) (metainfo.Info, error) {
+	sourcePath = strings.TrimSpace(sourcePath)
+	stat, err := os.Stat(sourcePath)
+	if err != nil {
+		return metainfo.Info{}, fmt.Errorf("e2e torrent: stat source: %w", err)
+	}
+	info := metainfo.Info{
+		Name:        filepath.Base(sourcePath),
+		PieceLength: 16 << 10,
+		Pieces:      make([]byte, metainfo.HashSize),
+	}
+	if !stat.IsDir() {
+		info.Length = stat.Size()
+		return info, nil
+	}
+	if err := filepath.WalkDir(sourcePath, func(path string, entry os.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() {
+			return nil
+		}
+		entryInfo, err := entry.Info()
+		if err != nil {
+			return err
+		}
+		relative, err := filepath.Rel(sourcePath, path)
+		if err != nil {
+			return err
+		}
+		info.Files = append(info.Files, metainfo.FileInfo{
+			Length: entryInfo.Size(),
+			Path:   strings.Split(filepath.ToSlash(relative), "/"),
+		})
+		return nil
+	}); err != nil {
+		return metainfo.Info{}, fmt.Errorf("e2e torrent: walk source: %w", err)
+	}
+	slices.SortFunc(info.Files, func(left, right metainfo.FileInfo) int {
+		return strings.Compare(strings.Join(left.Path, "/"), strings.Join(right.Path, "/"))
+	})
+	if len(info.Files) == 0 {
+		return metainfo.Info{}, errors.New("e2e torrent: source contains no files")
+	}
+	return info, nil
+}
+
+// e2eClientService obtains deterministic pathed-torrent evidence from the fake E2E server.
+type e2eClientService struct {
+	endpoint string
+}
+
+func (s e2eClientService) Inject(ctx context.Context, _ api.ClientSubject, _ api.TorrentResult) error {
+	endpoint := strings.TrimRight(strings.TrimSpace(s.endpoint), "/")
+	if endpoint == "" {
+		return errors.New("e2e client: endpoint is required")
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint+"/client-inject", http.NoBody)
+	if err != nil {
+		return fmt.Errorf("e2e client: injection request: %w", err)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("e2e client: inject: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return fmt.Errorf("e2e client: injection status %d", resp.StatusCode)
+	}
+	return nil
+}
+
+// SearchPathedTorrents verifies the fake client endpoint and returns stable evidence.
+func (s e2eClientService) SearchPathedTorrents(ctx context.Context, _ api.ClientSubject) (api.ClientSearchResult, error) {
+	endpoint := strings.TrimRight(strings.TrimSpace(s.endpoint), "/")
+	if endpoint == "" {
+		return api.ClientSearchResult{}, errors.New("e2e client: endpoint is required")
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint+"/client-search", http.NoBody)
+	if err != nil {
+		return api.ClientSearchResult{}, fmt.Errorf("e2e client: request: %w", err)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return api.ClientSearchResult{}, fmt.Errorf("e2e client: search: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return api.ClientSearchResult{}, fmt.Errorf("e2e client: status %d", resp.StatusCode)
+	}
+	return api.ClientSearchResult{
+		InfoHash:   "0123456789abcdef0123456789abcdef01234567",
+		TrackerIDs: map[string]string{"btn": "e2e-pathed-id"},
+	}, nil
+}
+
+type e2eDupeService struct {
+	cfg config.Config
+}
+
+func (e2eDupeService) Check(_ context.Context, meta api.DuplicateSubject, trackers []string) (api.DupeCheckSummary, error) {
+	duplicateTrackers := e2eTrackerSet(e2eDuplicateEnv)
+	scenarios := e2eDupeScenarios()
+	results := make([]api.DupeCheckResult, 0, len(trackers))
+	for _, tracker := range trackers {
+		name := strings.ToUpper(strings.TrimSpace(tracker))
+		result := api.DupeCheckResult{
+			Tracker: name,
+			Status:  "completed",
+			Search: api.DupeSearchEvidence{
+				Complete: true,
+				Pages:    1,
+				Scope:    "synthetic_work_identity",
+			},
+		}
+		scenario := scenarios[name]
+		if scenario == "" {
+			if _, ok := duplicateTrackers[name]; ok {
+				scenario = "exact"
+			}
+		}
+		applyE2EDupeScenario(&result, scenario)
+		results = append(results, result)
+	}
+	return api.DupeCheckSummary{SourcePath: meta.SourcePath, Results: results}, nil
+}
+
+func e2eDupeScenarios() map[string]string {
+	scenarios := make(map[string]string)
+	for value := range strings.SplitSeq(os.Getenv(e2eDupeScenarioEnv), ",") {
+		trackerID, scenario, ok := strings.Cut(value, "=")
+		trackerID = strings.ToUpper(strings.TrimSpace(trackerID))
+		scenario = strings.ToLower(strings.TrimSpace(scenario))
+		if ok && trackerID != "" && scenario != "" {
+			scenarios[trackerID] = scenario
+		}
+	}
+	return scenarios
+}
+
+func applyE2EDupeScenario(result *api.DupeCheckResult, scenario string) {
+	if result == nil {
+		return
+	}
+	switch strings.ToLower(strings.TrimSpace(scenario)) {
+	case "exact":
+		result.Evaluations = []api.DupeCandidateEvaluation{
+			e2eDupeCandidate("e2e-dupe-1", "Example.Release.2026.1080p-GRP", api.DupeRelationExactDuplicate, "exact_identity",
+				api.HDRFacts{
+					Formats: []api.HDRFormat{api.HDRFormatSDR},
+					Origin:  api.HDREvidenceTrackerAPI,
+					Status:  api.HDREvidenceComplete,
+				}),
+		}
+		result.HasDupes = true
+	case "coexists":
+		result.Evaluations = []api.DupeCandidateEvaluation{
+			e2eDupeCandidate("e2e-coexists-1", "Example.Release.2026.1080p.SDR-GRP", api.DupeRelationCoexists, "distinct_hdr_slot",
+				api.HDRFacts{
+					Formats: []api.HDRFormat{api.HDRFormatSDR},
+					Origin:  api.HDREvidenceTrackerAPI,
+					Status:  api.HDREvidenceComplete,
+				}),
+		}
+	case "proposed_trump":
+		result.Evaluations = []api.DupeCandidateEvaluation{
+			e2eDupeCandidate("e2e-trump-1", "Example.Release.2026.1080p.HDR10-GRP", api.DupeRelationProposedTrumps, "broader_hdr_compatibility",
+				api.HDRFacts{
+					Formats: []api.HDRFormat{api.HDRFormatHDR10},
+					Origin:  api.HDREvidenceTrackerAPI,
+					Status:  api.HDREvidenceComplete,
+				}),
+		}
+		result.HasDupes = true
+	case "missing_hdr":
+		result.Evaluations = []api.DupeCandidateEvaluation{
+			e2eDupeCandidate("e2e-missing-1", "Example.Release.2026.1080p.Unknown-GRP", api.DupeRelationInsufficientEvidence, "candidate_hdr_missing",
+				api.HDRFacts{Origin: api.HDREvidenceUnknown, Status: api.HDREvidenceMissing}),
+		}
+		result.HasDupes = true
+	case "manual":
+		result.Evaluations = []api.DupeCandidateEvaluation{
+			e2eDupeCandidate("e2e-manual-1", "Example.Show.S01E01.1080p.WEB-DL.DV-GRP", api.DupeRelationManualReview, "tracker_title_hdr_partial",
+				api.HDRFacts{
+					Formats: []api.HDRFormat{api.HDRFormatDolbyVision},
+					Origin:  api.HDREvidenceTrackerTitle,
+					Status:  api.HDREvidencePartial,
+				}),
+		}
+		result.HasDupes = true
+	case "mixed", "mixed_incomplete":
+		result.Evaluations = []api.DupeCandidateEvaluation{
+			e2eDupeCandidate("e2e-coexists-1", "Example.Release.2026.1080p.SDR-GRP", api.DupeRelationCoexists, "distinct_hdr_slot",
+				api.HDRFacts{
+					Formats: []api.HDRFormat{api.HDRFormatSDR},
+					Origin:  api.HDREvidenceTrackerAPI,
+					Status:  api.HDREvidenceComplete,
+				}),
+			e2eDupeCandidate("e2e-trump-1", "Example.Release.2026.1080p.HDR10-GRP", api.DupeRelationProposedTrumps, "broader_hdr_compatibility",
+				api.HDRFacts{
+					Formats: []api.HDRFormat{api.HDRFormatHDR10},
+					Origin:  api.HDREvidenceTrackerAPI,
+					Status:  api.HDREvidenceComplete,
+				}),
+			e2eDupeCandidate("e2e-missing-1", "Example.Release.2026.1080p.Unknown-GRP", api.DupeRelationInsufficientEvidence, "candidate_hdr_missing",
+				api.HDRFacts{Origin: api.HDREvidenceUnknown, Status: api.HDREvidenceMissing}),
+		}
+		result.HasDupes = true
+	case "incomplete":
+		result.Search.Complete = false
+		result.Search.Pages = 2
+		result.Search.Warnings = []string{"Synthetic search stopped at the configured page bound."}
+		result.HasDupes = true
+	}
+	if scenario == "mixed_incomplete" {
+		result.Search.Complete = false
+		result.Search.Pages = 2
+		result.Search.Warnings = []string{"Synthetic search stopped at the configured page bound."}
+	}
+	result.Search.CandidateCount = len(result.Evaluations)
+}
+
+func e2eDupeCandidate(
+	id string,
+	name string,
+	relation api.DupeRelation,
+	reason string,
+	hdr api.HDRFacts,
+) api.DupeCandidateEvaluation {
+	return api.DupeCandidateEvaluation{
+		ID:       id,
+		Name:     name,
+		Link:     "https://tracker.invalid/torrents.php?id=" + id,
+		Relation: relation,
+		Reasons: []api.DupeReason{{
+			Code:    reason,
+			Message: "Synthetic tracker policy evidence.",
+		}},
+		HDR:            hdr,
+		EvidenceStatus: hdr.Status,
+	}
+}
+
+func (s e2eDupeService) CheckProjectionSet(
+	ctx context.Context,
+	meta api.DuplicateSubject,
+	projections api.TrackerReleaseProjectionSet,
+	_ api.ProjectionDupeCheckOptions,
+) (api.DupeCheckSummary, api.DupeAssessmentEvidence, error) {
+	if err := projections.Validate(); err != nil {
+		return api.DupeCheckSummary{}, dupechecking.EmptyAssessment(), fmt.Errorf("e2e duplicate projections: %w", err)
+	}
+	trackers := make([]string, 0, len(projections.Projections))
+	for _, projection := range projections.Projections {
+		if projection.Readiness != api.ReadinessStatusReady || !projection.DupeReady {
+			continue
+		}
+		trackers = append(trackers, string(projection.TrackerID))
+	}
+	summary, err := s.Check(ctx, meta, trackers)
+	evidence := make([]dupechecking.AssessmentEvidence, 0, len(summary.Results))
+	for _, result := range summary.Results {
+		match := api.DupeMatch{}
+		privateRaw := make([]api.DupeEntry, 0, len(result.Evaluations))
+		for _, candidate := range result.Evaluations {
+			if candidate.Relation == api.DupeRelationCoexists {
+				continue
+			}
+			reason := ""
+			if len(candidate.Reasons) > 0 {
+				reason = candidate.Reasons[0].Code
+			}
+			match = api.DupeMatch{
+				MatchedID:     candidate.ID,
+				MatchedName:   candidate.Name,
+				MatchedLink:   candidate.Link,
+				MatchedReason: reason,
+			}
+			privateRaw = append(privateRaw, api.DupeEntry{
+				ID:   candidate.ID,
+				Name: candidate.Name,
+				Link: candidate.Link,
+			})
+			break
+		}
+		evidence = append(evidence, dupechecking.AssessmentEvidence{
+			Tracker:     result.Tracker,
+			Disposition: dupechecking.DispositionResolved,
+			HasDupes:    result.HasDupes,
+			Match:       match,
+			Raw:         privateRaw,
+		})
+	}
+	return summary, dupechecking.NewAssessment(meta, s.cfg, evidence), err
+}
+
+// e2eTrackerAuthService keeps fake-services runs isolated from tracker auth IO.
+type e2eTrackerAuthService struct{}
+
+const (
+	e2eAuthScenarioReady                   = "ready"
+	e2eAuthScenarioAutoLoginSucceeds       = "auto_login_succeeds"
+	e2eAuthScenarioAutoLoginRequired       = "auto_login_required"
+	e2eAuthScenarioManual2FA               = "manual_2fa"
+	e2eAuthScenarioParseFailure            = "parse_failure"
+	e2eAuthScenarioValidationOnlyNoCookies = "validation_only_missing_cookies"
+)
+
+// Capabilities enables deterministic managed-auth preflight only for trackers
+// selected by the e2e environment.
+func (e2eTrackerAuthService) Capabilities(context.Context) ([]api.TrackerAuthCapability, error) {
+	scenarios := e2eAuthScenarios()
+	trackerIDs := make([]string, 0, len(scenarios))
+	for trackerID := range scenarios {
+		trackerIDs = append(trackerIDs, trackerID)
+	}
+	slices.Sort(trackerIDs)
+	capabilities := make([]api.TrackerAuthCapability, 0, len(trackerIDs))
+	for _, trackerID := range trackerIDs {
+		scenario := scenarios[trackerID]
+		capability := api.TrackerAuthCapability{
+			TrackerID:   trackerID,
+			DisplayName: trackerID,
+			AuthKind:    "cookies",
+		}
+		switch scenario {
+		case e2eAuthScenarioReady, e2eAuthScenarioManual2FA, e2eAuthScenarioParseFailure:
+			capability.SupportsCookieFile = true
+		case e2eAuthScenarioAutoLoginSucceeds, e2eAuthScenarioAutoLoginRequired:
+			capability.AuthKind = "cookies_login"
+			capability.SupportsCookieFile = true
+			capability.SupportsLogin = true
+			capability.SupportsAutoLogin = true
+		case e2eAuthScenarioValidationOnlyNoCookies:
+			capability.SupportsCookieFile = true
+		default:
+			capability.SupportsCookieFile = true
+		}
+		if scenario == e2eAuthScenarioManual2FA {
+			capability.SupportsLogin = true
+			capability.SupportsAutoLogin = true
+			capability.SupportsManual2FA = true
+		}
+		capabilities = append(capabilities, capability)
+	}
+	recordE2EAuthCounters(true, nil, 0)
+	return capabilities, nil
+}
+
+// ValidateMany returns configured statuses without contacting trackers.
+func (e2eTrackerAuthService) ValidateMany(_ context.Context, trackerIDs []string) ([]api.TrackerAuthStatus, error) {
+	scenarios := e2eAuthScenarios()
+	statuses := make([]api.TrackerAuthStatus, 0, len(trackerIDs))
+	loginAttempts := 0
+	for _, trackerID := range trackerIDs {
+		normalized := strings.ToUpper(strings.TrimSpace(trackerID))
+		status := api.TrackerAuthStatus{
+			TrackerID: normalized,
+			State:     trackerauth.StateConfigured,
+		}
+		switch scenarios[normalized] {
+		case e2eAuthScenarioAutoLoginSucceeds:
+			loginAttempts++
+		case e2eAuthScenarioAutoLoginRequired:
+			loginAttempts++
+			status.State = trackerauth.StateLoginRequired
+		case e2eAuthScenarioManual2FA:
+			loginAttempts++
+			status.State = trackerauth.StateLoginRequired
+			status.Needs2FA = true
+			status.ChallengeID = "synthetic-e2e-challenge"
+		case e2eAuthScenarioParseFailure:
+			status.LastError = "synthetic remote response parse failure"
+		case e2eAuthScenarioValidationOnlyNoCookies:
+			status.State = trackerauth.StateLoginRequired
+		}
+		statuses = append(statuses, status)
+	}
+	recordE2EAuthCounters(false, trackerIDs, loginAttempts)
+	return statuses, nil
+}
+
+func e2eAuthScenarios() map[string]string {
+	scenarios := make(map[string]string)
+	for trackerID := range e2eTrackerSet(e2eAuthNeededEnv) {
+		scenarios[trackerID] = e2eAuthScenarioValidationOnlyNoCookies
+	}
+	for value := range strings.SplitSeq(os.Getenv(e2eAuthScenarioEnv), ",") {
+		trackerID, scenario, ok := strings.Cut(value, "=")
+		trackerID = strings.ToUpper(strings.TrimSpace(trackerID))
+		scenario = strings.ToLower(strings.TrimSpace(scenario))
+		if ok && trackerID != "" && scenario != "" {
+			scenarios[trackerID] = scenario
+		}
+	}
+	return scenarios
+}
+
+type e2eAuthCounterSnapshot struct {
+	CapabilityCalls int            `json:"capabilityCalls"`
+	ValidationCalls int            `json:"validationCalls"`
+	LoginAttempts   int            `json:"loginAttempts"`
+	Validations     map[string]int `json:"validations"`
+}
+
+var e2eAuthCounterMu sync.Mutex
+
+func recordE2EAuthCounters(capabilityCall bool, trackerIDs []string, loginAttempts int) {
+	path := strings.TrimSpace(os.Getenv(e2eAuthCounterEnv))
+	if path == "" {
+		return
+	}
+	e2eAuthCounterMu.Lock()
+	defer e2eAuthCounterMu.Unlock()
+	snapshot := e2eAuthCounterSnapshot{Validations: make(map[string]int)}
+	if data, err := os.ReadFile(path); err == nil {
+		_ = json.Unmarshal(data, &snapshot)
+	}
+	if snapshot.Validations == nil {
+		snapshot.Validations = make(map[string]int)
+	}
+	if capabilityCall {
+		snapshot.CapabilityCalls++
+	} else {
+		snapshot.ValidationCalls++
+		for _, trackerID := range trackerIDs {
+			trackerID = strings.ToUpper(strings.TrimSpace(trackerID))
+			if trackerID != "" {
+				snapshot.Validations[trackerID]++
+			}
+		}
+	}
+	snapshot.LoginAttempts += loginAttempts
+	data, err := json.Marshal(snapshot)
+	if err == nil {
+		_ = os.WriteFile(path, data, 0o600)
+	}
+}
+
+func e2eTrackerSet(environment string) map[string]struct{} {
+	result := make(map[string]struct{})
+	for tracker := range strings.SplitSeq(os.Getenv(environment), ",") {
+		if tracker = strings.ToUpper(strings.TrimSpace(tracker)); tracker != "" {
+			result[tracker] = struct{}{}
+		}
+	}
+	return result
+}
+
+type e2eTrackerService struct {
+	registry *trackers.Registry
+	endpoint string
+	dbPath   string
+	repo     api.UploadLedgerRepository
+}
+
+type e2eDVDMenuService struct {
+	shotPath string
+	tmpRoot  string
+}
+
+func (s e2eDVDMenuService) Capture(
+	_ context.Context,
+	subject api.DVDMenuSubject,
+	maxItems int,
+) (api.DVDMenuCaptureResult, error) {
+	discs := subject.Discs
+	if len(discs) == 0 {
+		discs = []api.DVDMenuDiscSubject{{Name: filepath.Base(subject.SourcePath)}}
+	}
+	limit := len(discs)
+	if maxItems > 0 {
+		limit = min(limit, maxItems)
+	}
+	images := make([]api.DVDMenuCaptureImage, 0, limit)
+	for index, disc := range discs[:limit] {
+		image, err := e2eManagedScreenshot(s.shotPath, s.tmpRoot, filepath.Base(subject.SourcePath), "menu-"+disc.ID, index+1)
+		if err != nil {
+			return api.DVDMenuCaptureResult{}, err
+		}
+		image.DiscID = disc.ID
+		image.DiscName = disc.Name
+		image.Purpose = api.ScreenshotPurposeMenu
+		images = append(images, api.DVDMenuCaptureImage{ScreenshotImage: image, Discovery: api.DVDMenuDiscoveryReachable})
+	}
+	return api.DVDMenuCaptureResult{
+		SourcePath:      subject.SourcePath,
+		Images:          images,
+		DiscoveredMenus: len(discs),
+		VisitedStates:   len(images),
+		VisitedButtons:  len(images),
+		MaxItems:        maxItems,
+		Complete:        len(images) == len(discs),
+		Truncated:       len(images) < len(discs),
+		Engine: api.DVDMenuEngineInfo{
+			EngineVersion:  "e2e",
+			SchemaVersion:  1,
+			FFmpegDVDVideo: true,
+		},
+	}, nil
+}
+
+func (s e2eDVDMenuService) List(ctx context.Context, subject api.DVDMenuSubject) ([]api.ScreenshotImage, error) {
+	result, err := s.Capture(ctx, subject, len(subject.Discs))
+	if err != nil {
+		return nil, err
+	}
+	images := make([]api.ScreenshotImage, 0, len(result.Images))
+	for _, image := range result.Images {
+		images = append(images, image.ScreenshotImage)
+	}
+	return images, nil
+}
+
+func (e2eDVDMenuService) Delete(context.Context, api.DVDMenuSubject, string) error { return nil }
+
+func (e2eDVDMenuService) Capability(context.Context) (api.DVDMenuEngineInfo, error) {
+	return api.DVDMenuEngineInfo{
+		EngineVersion:  "e2e",
+		SchemaVersion:  1,
+		FFmpegDVDVideo: true,
+	}, nil
+}
+
+type e2eRetainedUploadPlan struct {
+	mu           sync.Mutex
+	service      e2eTrackerService
+	subject      api.UploadSubject
+	preparations []trackers.RetainedTrackerPreparation
+	executed     bool
+	released     bool
+}
+
+func (s e2eTrackerService) PrepareRetainedUploadPlan(
+	ctx context.Context,
+	subject api.UploadSubject,
+	projections []api.TrackerReleaseProjection,
+) (workflowRetainedUploadPlan, error) {
+	if err := ctx.Err(); err != nil {
+		return nil, fmt.Errorf("e2e tracker: prepare retained plan: %w", err)
+	}
+	trackerNames := make([]string, 0, len(projections))
+	for _, projection := range projections {
+		if projection.UploadReady && projection.Readiness == api.ReadinessStatusReady {
+			trackerNames = append(trackerNames, string(projection.TrackerID))
+		}
+	}
+	if len(trackerNames) == 0 {
+		return nil, errors.New("e2e tracker: retained plan has no eligible trackers")
+	}
+	previews, err := s.BuildUploadDryRun(ctx, subject, trackerNames)
+	if err != nil {
+		return nil, fmt.Errorf("e2e tracker: prepare retained previews: %w", err)
+	}
+	preparations := make([]trackers.RetainedTrackerPreparation, 0, len(previews))
+	for _, preview := range previews {
+		preparations = append(preparations, trackers.RetainedTrackerPreparation{
+			Tracker:     preview.Tracker,
+			TorrentPath: subject.TorrentPath,
+			Preview:     preview,
+		})
+	}
+	subject.Trackers = append([]string(nil), trackerNames...)
+	return &e2eRetainedUploadPlan{
+		service:      s,
+		subject:      subject,
+		preparations: preparations,
+	}, nil
+}
+
+func (p *e2eRetainedUploadPlan) Preparations() []trackers.RetainedTrackerPreparation {
+	if p == nil {
+		return nil
+	}
+	return append([]trackers.RetainedTrackerPreparation(nil), p.preparations...)
+}
+
+func (p *e2eRetainedUploadPlan) ResolveAction(
+	context.Context,
+	string,
+	api.RequiredActionKind,
+	bool,
+) (trackers.RetainedTrackerPreparation, error) {
+	return trackers.RetainedTrackerPreparation{}, trackers.ErrPlanActionUnavailable
+}
+
+func (p *e2eRetainedUploadPlan) Execute(ctx context.Context) ([]trackers.RetainedTrackerResult, error) {
+	if p == nil {
+		return nil, errors.New("e2e tracker: retained plan is unavailable")
+	}
+	trackerIDs := make([]string, 0, len(p.preparations))
+	for _, preparation := range p.preparations {
+		trackerIDs = append(trackerIDs, preparation.Tracker)
+	}
+	return p.ExecuteSelected(ctx, trackerIDs)
+}
+
+func (p *e2eRetainedUploadPlan) ExecuteSelected(
+	ctx context.Context,
+	trackerIDs []string,
+) ([]trackers.RetainedTrackerResult, error) {
+	if p == nil {
+		return nil, errors.New("e2e tracker: retained plan is unavailable")
+	}
+	preparationByTracker := make(map[string]trackers.RetainedTrackerPreparation, len(p.preparations))
+	for _, preparation := range p.preparations {
+		preparationByTracker[strings.ToUpper(strings.TrimSpace(preparation.Tracker))] = preparation
+	}
+	selected := make([]trackers.RetainedTrackerPreparation, 0, len(trackerIDs))
+	selectedNames := make([]string, 0, len(trackerIDs))
+	seen := make(map[string]struct{}, len(trackerIDs))
+	for _, trackerID := range trackerIDs {
+		name := strings.ToUpper(strings.TrimSpace(trackerID))
+		preparation, exists := preparationByTracker[name]
+		if name == "" || !exists {
+			return nil, fmt.Errorf("e2e tracker: retained plan does not contain tracker %q", trackerID)
+		}
+		if _, duplicate := seen[name]; duplicate {
+			return nil, fmt.Errorf("e2e tracker: retained plan tracker %s is duplicated", name)
+		}
+		seen[name] = struct{}{}
+		selected = append(selected, preparation)
+		selectedNames = append(selectedNames, name)
+	}
+	if len(selected) == 0 {
+		return nil, errors.New("e2e tracker: retained plan selection is empty")
+	}
+	p.mu.Lock()
+	if p.released || p.executed {
+		p.mu.Unlock()
+		return nil, errors.New("e2e tracker: retained plan is no longer executable")
+	}
+	p.executed = true
+	p.mu.Unlock()
+	subject := p.subject
+	subject.Trackers = selectedNames
+	summary, err := p.service.Upload(ctx, subject)
+	p.mu.Lock()
+	p.released = true
+	p.mu.Unlock()
+	if err != nil {
+		return nil, err
+	}
+	results := make([]trackers.RetainedTrackerResult, 0, len(selected))
+	for _, preparation := range selected {
+		results = append(results, trackers.RetainedTrackerResult{Tracker: preparation.Tracker, Summary: summary})
+	}
+	return results, nil
+}
+
+func (p *e2eRetainedUploadPlan) Release() error {
+	if p == nil {
+		return nil
+	}
+	p.mu.Lock()
+	p.released = true
+	p.mu.Unlock()
+	return nil
+}
+
+func (s e2eTrackerService) Upload(ctx context.Context, meta api.UploadSubject) (api.UploadSummary, error) {
+	trackerNames := meta.Trackers
+	if len(trackerNames) == 0 {
+		trackerNames = []string{"BTN"}
+	}
+	summary := api.UploadSummary{}
+	for _, tracker := range trackerNames {
+		name := strings.ToUpper(strings.TrimSpace(tracker))
+		if name == "" {
+			continue
+		}
+		if s.repo != nil {
+			if err := s.repo.CreateUploadRecord(ctx, db.UploadRecord{
+				Tracker:    name,
+				Status:     "pending",
+				SourcePath: meta.SourcePath,
+				CreatedAt:  time.Now().UTC(),
+			}); err != nil {
+				return api.UploadSummary{}, fmt.Errorf("e2e tracker: create record: %w", err)
+			}
+		}
+		var submission *api.SubmissionFenceAuthority
+		if active, ok := api.ActiveInputAuthorityFromContext(ctx); ok {
+			if s.registry == nil {
+				return api.UploadSummary{}, errors.New("e2e tracker: submission registry is unavailable")
+			}
+			descriptor, found := s.registry.LookupDescriptor(name)
+			if !found {
+				return api.UploadSummary{}, fmt.Errorf("e2e tracker: registered tracker %s is unavailable", name)
+			}
+			site, err := trackers.CanonicalSubmissionTrackerSite(descriptor.Name, descriptor.BaseURL)
+			if err != nil {
+				return api.UploadSummary{}, fmt.Errorf("e2e tracker: submission site: %w", err)
+			}
+			submission = &api.SubmissionFenceAuthority{
+				ContentIdentity: meta.SubmissionContentIdentity,
+				TrackerSite:     site,
+				CoordinatorID:   active.CoordinatorID,
+				Fence:           active.Fence,
+			}
+		}
+		fingerprint, err := api.CanonicalWorkflowFingerprint(struct {
+			Tracker string
+			Content api.SubmissionContentIdentity
+		}{Tracker: name, Content: meta.SubmissionContentIdentity})
+		if err != nil {
+			return api.UploadSummary{}, fmt.Errorf("e2e tracker: fingerprint submission: %w", err)
+		}
+		receipt, err := api.BeginWorkflowExternalEffect(ctx, api.WorkflowExternalEffect{
+			Kind:                api.WorkflowExternalEffectTrackerSubmission,
+			ScopeID:             name,
+			SemanticFingerprint: fingerprint,
+			Submission:          submission,
+		})
+		if err != nil {
+			return api.UploadSummary{}, fmt.Errorf("e2e tracker: begin submission: %w", err)
+		}
+		if !receipt.AlreadySucceeded {
+			if err := postE2ETrackerUpload(ctx, s.endpoint, name, meta); err != nil {
+				if s.repo != nil {
+					_ = s.repo.UpdateLatestUploadRecordStatus(ctx, meta.SourcePath, name, "failed")
+				}
+				return api.UploadSummary{}, err
+			}
+			if err := api.CompleteWorkflowExternalEffect(ctx, receipt, true); err != nil {
+				return api.UploadSummary{}, fmt.Errorf("e2e tracker: complete submission: %w", err)
+			}
+		}
+		artifactPath := ""
+		registeredPath, resolveErr := trackers.ResolveTrackerTorrentArtifactPath(meta, s.dbPath, name)
+		if resolveErr == nil {
+			downloadURL := strings.TrimRight(s.endpoint, "/") + "/download/e2e-123"
+			downloadRequest, requestErr := http.NewRequestWithContext(ctx, http.MethodGet, downloadURL, nil)
+			if requestErr == nil {
+				if downloadErr := trackers.DownloadRegisteredTorrent(
+					ctx,
+					&http.Client{Timeout: 30 * time.Second},
+					downloadRequest,
+					registeredPath,
+				); downloadErr == nil {
+					artifactPath = registeredPath
+				}
+			}
+		}
+		if s.repo != nil {
+			if err := s.repo.UpdateLatestUploadRecordStatus(ctx, meta.SourcePath, name, "uploaded"); err != nil {
+				return api.UploadSummary{}, fmt.Errorf("e2e tracker: update record: %w", err)
+			}
+		}
+		summary.Uploaded++
+		summary.UploadedTorrents = append(summary.UploadedTorrents, api.UploadedTorrent{
+			Tracker:     name,
+			TorrentID:   "e2e-123",
+			DownloadURL: strings.TrimRight(s.endpoint, "/") + "/download/e2e-123",
+			TorrentURL:  strings.TrimRight(s.endpoint, "/") + "/torrent/e2e-123",
+			TorrentPath: artifactPath,
+		})
+	}
+	return summary, nil
+}
+
+func (s e2eTrackerService) BuildPreparation(_ context.Context, meta api.DescriptionSubject, trackers []string) (api.PreparationPreview, error) {
+	if len(trackers) == 0 {
+		trackers = meta.Trackers
+	}
+	descriptions := make([]api.PreparationDescription, 0, len(trackers))
+	for _, tracker := range trackers {
+		name := strings.ToUpper(strings.TrimSpace(tracker))
+		if name == "" {
+			continue
+		}
+		source := "E2E description fixture."
+		for _, group := range meta.DescriptionGroups {
+			if group.HasOverride && (strings.EqualFold(group.GroupKey, name) || slices.Contains(group.Trackers, name)) {
+				source = group.RawDescription
+				break
+			}
+		}
+		descriptions = append(descriptions, api.PreparationDescription{
+			GroupKey:           strings.ToLower(name),
+			Trackers:           []string{name},
+			RawDescription:     source,
+			RawDescriptionHTML: description.Render(source),
+			Description:        source,
+			DescriptionHTML:    description.Render(source),
+		})
+	}
+	return api.PreparationPreview{SourcePath: meta.SourcePath, Descriptions: descriptions}, nil
+}
+
+func (s e2eTrackerService) BuildUploadDryRun(_ context.Context, meta api.UploadSubject, trackers []string) ([]api.TrackerDryRunEntry, error) {
+	if len(trackers) == 0 {
+		trackers = meta.Trackers
+	}
+	entries := make([]api.TrackerDryRunEntry, 0, len(trackers))
+	for _, tracker := range trackers {
+		name := strings.ToUpper(strings.TrimSpace(tracker))
+		if name == "" {
+			continue
+		}
+		entries = append(entries, api.TrackerDryRunEntry{
+			Tracker:             name,
+			Status:              "ready",
+			ReleaseName:         meta.ReleaseName,
+			OriginalReleaseName: meta.ReleaseName,
+			UploadReleaseName:   meta.ReleaseName,
+			DescriptionGroup:    "unit3d",
+			Description:         "E2E description fixture.",
+			Endpoint:            strings.TrimRight(s.endpoint, "/") + "/upload",
+			Payload: map[string]string{
+				"name":     meta.ReleaseName,
+				"category": string(api.CategoryMovie),
+			},
+			Files: []api.TrackerDryRunFile{{
+				Field:   "torrent",
+				Path:    meta.TorrentPath,
+				Present: strings.TrimSpace(meta.TorrentPath) != "",
+			}},
+			ImageHost: api.ImageHostFeedback{
+				Status:       "ready",
+				SelectedHost: "imgbb",
+				AllowedHosts: []string{"imgbb"},
+			},
+		})
+	}
+	return entries, nil
+}
+
+func postE2ETrackerUpload(ctx context.Context, endpoint string, tracker string, meta api.UploadSubject) error {
+	if strings.TrimSpace(endpoint) == "" {
+		return errors.New("e2e tracker: endpoint is required")
+	}
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
+	_ = writer.WriteField("tracker", tracker)
+	_ = writer.WriteField("name", meta.ReleaseName)
+	if strings.TrimSpace(meta.TorrentPath) != "" {
+		part, err := writer.CreateFormFile("torrent", filepath.Base(meta.TorrentPath))
+		if err != nil {
+			return fmt.Errorf("e2e tracker: create multipart file: %w", err)
+		}
+		file, err := os.Open(meta.TorrentPath)
+		if err != nil {
+			return fmt.Errorf("e2e tracker: open torrent: %w", err)
+		}
+		_, copyErr := io.Copy(part, file)
+		closeErr := file.Close()
+		if copyErr != nil {
+			return fmt.Errorf("e2e tracker: copy torrent: %w", copyErr)
+		}
+		if closeErr != nil {
+			return fmt.Errorf("e2e tracker: close torrent: %w", closeErr)
+		}
+	}
+	if err := writer.Close(); err != nil {
+		return fmt.Errorf("e2e tracker: close multipart: %w", err)
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, strings.TrimRight(endpoint, "/")+"/upload", &body)
+	if err != nil {
+		return fmt.Errorf("e2e tracker: request: %w", err)
+	}
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("e2e tracker: post: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		payload, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+		return fmt.Errorf("e2e tracker: status %d: %s", resp.StatusCode, strings.TrimSpace(redaction.RedactValue(string(payload), nil)))
+	}
+	return nil
+}
+
+type e2eImageService struct {
+	endpoint string
+	shotPath string
+	tmpRoot  string
+	repo     interface {
+		SaveUploadedImages(context.Context, api.PreparedMediaBinding, string, []api.UploadedImageLink) error
+	}
+}
+
+func (s e2eImageService) ListCandidates(_ context.Context, meta api.ImageHostingSubject) ([]api.ScreenshotImage, error) {
+	shot, err := e2eManagedScreenshot(s.shotPath, s.tmpRoot, filepath.Base(meta.SourcePath), "", 1)
+	if err != nil {
+		return nil, err
+	}
+	return []api.ScreenshotImage{shot}, nil
+}
+
+func (s e2eImageService) Upload(
+	ctx context.Context,
+	meta api.ImageHostingSubject,
+	host string,
+	usageScope string,
+	images []api.ScreenshotImage,
+) ([]api.UploadedImageLink, error) {
+	if strings.TrimSpace(s.endpoint) == "" {
+		return nil, errors.New("e2e image: endpoint is required")
+	}
+	links := make([]api.UploadedImageLink, 0, len(images))
+	for idx, image := range images {
+		if err := postE2EImageUpload(ctx, s.endpoint, host, image.Path); err != nil {
+			return nil, err
+		}
+		base := fmt.Sprintf("%s/image/%d", strings.TrimRight(s.endpoint, "/"), idx+1)
+		links = append(links, api.UploadedImageLink{
+			DiscID:     image.DiscID,
+			ImagePath:  image.Path,
+			Purpose:    image.Purpose,
+			Host:       strings.ToLower(strings.TrimSpace(host)),
+			ImgURL:     base + ".jpg",
+			RawURL:     base + ".jpg",
+			WebURL:     base,
+			UsageScope: usageScope,
+			UploadedAt: time.Now().UTC(),
+		})
+	}
+	if s.repo != nil && len(links) > 0 {
+		if err := s.repo.SaveUploadedImages(ctx, meta.MediaBinding, strings.ToLower(strings.TrimSpace(host)), links); err != nil {
+			return nil, fmt.Errorf("e2e image: save uploads: %w", err)
+		}
+	}
+	return links, nil
+}
+
+func postE2EImageUpload(ctx context.Context, endpoint string, host string, imagePath string) error {
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
+	_ = writer.WriteField("host", host)
+	part, err := writer.CreateFormFile("image", filepath.Base(imagePath))
+	if err != nil {
+		return fmt.Errorf("e2e image: create multipart file: %w", err)
+	}
+	file, err := os.Open(imagePath)
+	if err != nil {
+		return fmt.Errorf("e2e image: open image: %w", err)
+	}
+	_, copyErr := io.Copy(part, file)
+	closeErr := file.Close()
+	if copyErr != nil {
+		return fmt.Errorf("e2e image: copy image: %w", copyErr)
+	}
+	if closeErr != nil {
+		return fmt.Errorf("e2e image: close image: %w", closeErr)
+	}
+	if err := writer.Close(); err != nil {
+		return fmt.Errorf("e2e image: close multipart: %w", err)
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, strings.TrimRight(endpoint, "/")+"/upload", &body)
+	if err != nil {
+		return fmt.Errorf("e2e image: request: %w", err)
+	}
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("e2e image: post: %w", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		payload, _ := io.ReadAll(io.LimitReader(resp.Body, 4096))
+		return fmt.Errorf("e2e image: status %d: %s", resp.StatusCode, strings.TrimSpace(redaction.RedactValue(string(payload), nil)))
+	}
+	return nil
+}
+
+type e2eScreenshotService struct {
+	shotPath string
+	tmpRoot  string
+	repo     api.ScreenshotLifecycleRepository
+}
+
+func (s e2eScreenshotService) Plan(_ context.Context, meta api.ScreenshotSubject, count int) (api.ScreenshotPlan, error) {
+	discs := meta.Discs
+	if len(discs) == 0 {
+		discs = []api.ScreenshotDiscSubject{{
+			ID:   meta.DiscID,
+			Name: meta.DiscName,
+			Type: meta.DiscType,
+		}}
+	}
+	if count <= 0 {
+		count = max(meta.DefaultCount, 1)
+	}
+	total := max(count, len(discs))
+	baseCount := total / len(discs)
+	remainder := total % len(discs)
+	plan := api.ScreenshotPlan{
+		MediaBinding:    meta.MediaBinding,
+		SourcePath:      meta.SourcePath,
+		DiscType:        meta.DiscType,
+		DurationSeconds: 120,
+		FrameRate:       24,
+		Discs:           make([]api.ScreenshotDiscPlan, 0, len(discs)),
+	}
+	for discIndex, disc := range discs {
+		discCount := baseCount
+		if discIndex < remainder {
+			discCount++
+		}
+		selections := make([]api.ScreenshotSelection, 0, discCount)
+		for index := range discCount {
+			selections = append(selections, api.ScreenshotSelection{
+				DiscID:           disc.ID,
+				Index:            index + 1,
+				TimestampSeconds: float64((index + 1) * 10),
+				Frame:            (index + 1) * 240,
+				Source:           "auto",
+			})
+		}
+		plan.SuggestedSelections = append(plan.SuggestedSelections, selections...)
+		plan.Discs = append(plan.Discs, api.ScreenshotDiscPlan{
+			DiscID:              disc.ID,
+			DiscName:            disc.Name,
+			DurationSeconds:     120,
+			FrameRate:           24,
+			SuggestedSelections: selections,
+		})
+	}
+	return plan, nil
+}
+
+func (s e2eScreenshotService) Capture(
+	_ context.Context,
+	meta api.ScreenshotSubject,
+	selections []api.ScreenshotSelection,
+	purpose api.ScreenshotPurpose,
+) (api.ScreenshotResult, error) {
+	images := make([]api.ScreenshotImage, 0, len(selections))
+	for _, selection := range selections {
+		shot, err := s.imageAt(meta, selection.DiscID, selection.Index)
+		if err != nil {
+			return api.ScreenshotResult{}, err
+		}
+		shot.Index = selection.Index
+		shot.DiscID = selection.DiscID
+		shot.DiscName = e2eScreenshotDiscName(meta, selection.DiscID)
+		shot.TimestampSeconds = selection.TimestampSeconds
+		shot.Purpose = purpose
+		images = append(images, shot)
+	}
+	return api.ScreenshotResult{
+		SourcePath: meta.SourcePath,
+		Purpose:    purpose,
+		Images:     images,
+	}, nil
+}
+
+func (s e2eScreenshotService) PreviewFrame(
+	_ context.Context,
+	meta api.ScreenshotSubject,
+	discID string,
+	timestampSeconds float64,
+) (api.ScreenshotPreview, error) {
+	shot, err := s.imageAt(meta, discID, 1)
+	if err != nil {
+		return api.ScreenshotPreview{}, err
+	}
+	payload, err := os.ReadFile(shot.Path)
+	if err != nil {
+		return api.ScreenshotPreview{}, fmt.Errorf("e2e screenshots: read preview: %w", err)
+	}
+	return api.ScreenshotPreview{
+		DiscID:           discID,
+		DiscName:         e2eScreenshotDiscName(meta, discID),
+		TimestampSeconds: timestampSeconds,
+		ImageBytes:       payload,
+		Width:            shot.Width,
+		Height:           shot.Height,
+		SizeBytes:        shot.SizeBytes,
+	}, nil
+}
+
+func (s e2eScreenshotService) Delete(ctx context.Context, _ api.ScreenshotSubject, imagePath string) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	root, err := filepath.Abs(filepath.Join(s.tmpRoot, "e2e"))
+	if err != nil {
+		return fmt.Errorf("e2e screenshots: resolve managed root: %w", err)
+	}
+	target, err := filepath.Abs(strings.TrimSpace(imagePath))
+	if err != nil {
+		return fmt.Errorf("e2e screenshots: resolve delete target: %w", err)
+	}
+	if pathutil.SamePath(target, root) || !pathutil.IsWithinRoot(root, target) {
+		return errors.New("e2e screenshots: delete target is outside managed root")
+	}
+	if err := os.Remove(target); err != nil && !errors.Is(err, os.ErrNotExist) {
+		return fmt.Errorf("e2e screenshots: delete managed image: %w", err)
+	}
+	return nil
+}
+
+func (s e2eScreenshotService) SaveFinalSelections(ctx context.Context, meta api.ScreenshotSubject, images []api.ScreenshotImage) error {
+	if s.repo == nil {
+		return nil
+	}
+	selections := make([]api.ScreenshotFinalSelection, 0, len(images))
+	for idx, image := range images {
+		selections = append(selections, api.ScreenshotFinalSelection{
+			DiscID:     image.DiscID,
+			ImagePath:  image.Path,
+			Order:      idx,
+			Source:     string(api.ScreenshotPurposeFinal),
+			SelectedAt: time.Now().UTC(),
+		})
+	}
+	return s.repo.ReplaceNormalFinalSelections(ctx, meta.MediaBinding, selections)
+}
+
+func (s e2eScreenshotService) imageAt(meta api.ScreenshotSubject, discID string, index int) (api.ScreenshotImage, error) {
+	return e2eManagedScreenshot(s.shotPath, s.tmpRoot, filepath.Base(meta.SourcePath), discID, index)
+}
+
+func e2eScreenshotDiscName(meta api.ScreenshotSubject, discID string) string {
+	for _, disc := range meta.Discs {
+		if disc.ID == discID {
+			return disc.Name
+		}
+	}
+	return meta.DiscName
+}
+
+func e2eManagedScreenshot(shotPath string, tmpRoot string, releaseName string, scope string, index int) (api.ScreenshotImage, error) {
+	path := strings.TrimSpace(shotPath)
+	if path == "" {
+		return api.ScreenshotImage{}, errors.New("e2e screenshots: screenshot path is required")
+	}
+	root := strings.TrimSpace(tmpRoot)
+	if root == "" {
+		return api.ScreenshotImage{}, errors.New("e2e screenshots: tmp root is required")
+	}
+	payload, err := os.ReadFile(path)
+	if err != nil {
+		return api.ScreenshotImage{}, fmt.Errorf("e2e screenshots: read fixture: %w", err)
+	}
+	release := strings.TrimSpace(releaseName)
+	if release == "" {
+		release = "e2e-release"
+	}
+	if strings.TrimSpace(scope) != "" {
+		release += "-" + strings.TrimSpace(scope)
+	}
+	release = strings.Map(func(r rune) rune {
+		switch r {
+		case '\\', '/', ':', '*', '?', '"', '<', '>', '|':
+			return '-'
+		default:
+			return r
+		}
+	}, release)
+	managedDir := filepath.Join(root, "e2e", release)
+	if err := os.MkdirAll(managedDir, 0o755); err != nil {
+		return api.ScreenshotImage{}, fmt.Errorf("e2e screenshots: create managed dir: %w", err)
+	}
+	managedPath := filepath.Join(managedDir, fmt.Sprintf("screenshot-%d.png", index))
+	if err := os.WriteFile(managedPath, payload, 0o600); err != nil {
+		return api.ScreenshotImage{}, fmt.Errorf("e2e screenshots: write managed screenshot: %w", err)
+	}
+	info, err := os.Stat(managedPath)
+	if err != nil {
+		return api.ScreenshotImage{}, fmt.Errorf("e2e screenshots: stat managed screenshot: %w", err)
+	}
+	return api.ScreenshotImage{
+		Index:            index,
+		TimestampSeconds: float64(index * 10),
+		Path:             managedPath,
+		Purpose:          api.ScreenshotPurposeFinal,
+		Width:            320,
+		Height:           180,
+		SizeBytes:        info.Size(),
+	}, nil
+}

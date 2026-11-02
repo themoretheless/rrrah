@@ -1,0 +1,17 @@
+minhash-dedup
+
+This project began with MinHash and supporting code extracted from DataTrove
+(https://github.com/huggingface/datatrove), developed by Hugging Face and its
+contributors under the Apache License, Version 2.0.
+
+The MinHash implementation has been modified for complete duplicate buckets,
+cross-band pruning, weighted representative selection, covering and puncture
+bounds, and document-ID-aligned signature diagnostics. Project modifications
+also include dedicated stage scripts and a consolidated MinHash-only support
+layer. Retained and adapted DataTrove code remains covered by Apache-2.0.
+
+The hash helpers retain the hash definitions used by the extracted code, which
+references https://github.com/ekzhu/datasketch/blob/master/datasketch/hashfunc.py.
+
+This notice records provenance; renaming or restructuring modules does not
+assert that retained or adapted code was independently originated.

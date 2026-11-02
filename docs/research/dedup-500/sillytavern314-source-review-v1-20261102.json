@@ -1,0 +1,86 @@
+{
+  "index": 314,
+  "repository": "SillyTavern/Extension-DupeFinder",
+  "commit": "f77fa2e4067b95656da9e62dd687108ec590f2fb",
+  "tracked_blob_count": 16,
+  "whole_file_reads": [
+    {
+      "path": "src/PanelHeader.js",
+      "local": "docs/research/dedup-500/evidence/SillyTavern--Extension-DupeFinder/03-PanelHeader.js",
+      "sha256": "51cb02aa533f8d51f96f701eb06ff33780a8595f8f1d1b1d7f8698dbe5442b68",
+      "git_blob_sha1": "a6888f45ae4eace8ac7343b69fb47229e3657be9"
+    },
+    {
+      "path": "src/SettingsManager.js",
+      "local": "docs/research/dedup-500/evidence/SillyTavern--Extension-DupeFinder/04-SettingsManager.js",
+      "sha256": "a1748281abb9af840430803c67b2a7875e59a8795dbaf59850728b9a57e709b9",
+      "git_blob_sha1": "e8012f866fcc47f95bd975fe8da0065d4b6eb939"
+    },
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/SillyTavern--Extension-DupeFinder/00-README.md",
+      "sha256": "e166e8442ebac2b547db718845566b2b7eb84125db727d1762d373be0ce3a977",
+      "git_blob_sha1": "7b6e0e9e41621c3543e868766e0f94789f1415c1"
+    }
+  ],
+  "structured_assessments": [],
+  "remaining": [
+    {
+      "path": ".gitignore",
+      "bytes": 310
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 34523
+    },
+    {
+      "path": "dist/984.index.js",
+      "bytes": 6324
+    },
+    {
+      "path": "dist/index.js",
+      "bytes": 160872
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 297
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 295443
+    },
+    {
+      "path": "package.json",
+      "bytes": 949
+    },
+    {
+      "path": "src/PanelBody.js",
+      "bytes": 13070
+    },
+    {
+      "path": "src/clustering.js",
+      "bytes": 3562
+    },
+    {
+      "path": "src/events.js",
+      "bytes": 181
+    },
+    {
+      "path": "src/index.js",
+      "bytes": 1928
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 125
+    },
+    {
+      "path": "webpack.config.js",
+      "bytes": 1036
+    }
+  ],
+  "upstream_tests_run": false,
+  "full_manual_review": false,
+  "findings": [
+    "README/settings/panel header fully read. Compares selected character-card text fields using sentence or Levenshtein methods; default sentence threshold0.95 across six V1fields. No original-image byte/pixel comparison indicated. Settings values are persisted without validation in this module; shallow frozen defaults include a shared field array. Core clustering still unread; no implementation adoption or external skill instructions executed."
+  ]
+}

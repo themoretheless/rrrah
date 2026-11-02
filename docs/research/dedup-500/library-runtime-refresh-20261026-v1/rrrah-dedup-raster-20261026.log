@@ -1,0 +1,52 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+warning: function `validate_unsmoothed_gradient_candidates` is never used
+   --> crates/rrrah-dedup/src/gradient_scale.rs:537:15
+    |
+537 | pub(crate) fn validate_unsmoothed_gradient_candidates(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rrrah-dedup` (lib) generated 1 warning
+    Finished `test` profile [optimized + debuginfo] target(s) in 16.79s
+     Running tests/gradient_index.rs (target/debug/deps/gradient_index-0176e4c8c3c6d272)
+
+running 13 tests
+test actual_work_counts_rejected_coordinate_candidates_and_never_returns_partial_pairs ... ok
+test admission_cancel_recipe_and_owned_reservation ... ok
+test actual_work_preserves_reflected_hits_and_transform_admission ... ok
+test invalid_vectors_exact_memory_and_build_cancellation ... ok
+test proposal_scratch_and_retained_report_admit_exact_peak ... ok
+test actual_work_every_cancel_checkpoint_discards_even_previous_pairs ... ok
+test actual_work_minimum_self_work_and_late_refusal ... ok
+test actual_work_admits_sparse_pairs_without_quadratic_prepayment ... ok
+test repeated_descriptor_hits_retain_one_pair_with_bounded_memory ... ok
+test file_proposal_cancellation_never_returns_partial_pairs ... ok
+test file_proposals_equal_exhaustive_without_ambiguity_loss ... ok
+test actual_work_pair_union_matches_independent_exhaustive_oracle ... ok
+test retrieval_equals_exhaustive_including_boundaries_and_collisions ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+     Running tests/pair_schedule.rs (target/debug/deps/pair_schedule-da361e077024200d)
+
+running 5 tests
+test full_pair_count_and_input_limits_preflight_before_allocation ... ok
+test constructor_and_enumeration_cancel_at_every_checkpoint_then_retry ... ok
+test invalid_ids_and_hints_refuse_without_retaining_memory ... ok
+test late_memory_refusal_releases_ids_and_owned_inputs_cannot_change_schedule ... ok
+test every_proposal_subset_keeps_all_pairs_including_descriptorless_files ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/raster.rs (target/debug/deps/raster-7dbdd72e57986f5d)
+
+running 5 tests
+test unqualified_color_and_insufficient_budget_fail ... ok
+test storage_precision_and_frame_metadata_are_preserved ... ok
+test selected_frame_key_tracks_equality_metadata_but_excludes_container_selection ... ok
+test normalized_keys_and_direct_equality_agree_with_independent_hdr_alpha_precision_labels ... ok
+test cancellation_interrupts_each_pixel_representation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

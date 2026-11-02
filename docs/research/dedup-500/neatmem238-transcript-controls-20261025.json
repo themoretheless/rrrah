@@ -1,0 +1,11 @@
+{
+  "scope": "Original AST transcript parsing functions; identity redaction stub; synthetic temporary JSONL only, no actual user transcript accessed",
+  "authored_controls_passed": 4,
+  "observations": [
+    "Incomplete final JSONL line is deferred without advancing offset; newline completion then parsed positive control",
+    "Human text content represented as block list ignored by human prompt extraction/output",
+    "Parent UUID traversal does not recheck sessionId after selecting session-scoped leaf; synthetic cross-session parent included",
+    "Already seen leaf UUID produces no repeated messages positive control"
+  ],
+  "full_plugin_runtime_run": false
+}

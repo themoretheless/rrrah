@@ -1,0 +1,60 @@
+{
+  "repository": "jianbingfang/vscode-dup-checker",
+  "commit": "47aa6da54060a388a8e9ccc053df9e3d0d0859a8",
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "2b54080567a418d0c10886633798386d2e84f2ca",
+      "sha256": "951f2e892e36283403649ceddbef3393a5cebd0686fefa3f79fc39c037fa6f54",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "e11a1cb3ead1eb9ea407b239b4875612fcd44147",
+      "sha256": "a960fdb47e3aefd0ccba66f11e0c8572999b357d529fb736789f65071ea497cd",
+      "whole_text_read": true
+    },
+    {
+      "path": "extension.js",
+      "local": "02-extension.js",
+      "git_blob": "fc987e724642130fbaa7e154e6fd694c3ea4f054",
+      "sha256": "be9296ef24aee9a58b363cf6557038e80c4f75234e9a76799f023e69b2fe2b9a",
+      "whole_text_read": true
+    },
+    {
+      "path": "test/extension.test.js",
+      "local": "03-extension.test.js",
+      "git_blob": "c2ae0138d8408d24b72d6632eec3cb8afe91ea84",
+      "sha256": "918dad7a330089a054a94d7b188ba6a933ccce1068266b83a9125d1fc1bf3a50",
+      "whole_text_read": true
+    },
+    {
+      "path": "package.json",
+      "local": "deep-package.json",
+      "git_blob": "b226158375713ed34a53018d99d2a6dc69c6677b",
+      "sha256": "a670e54c70c2dcf3396a0c698141ecdec42aebd74c23428ff6dccb9f759ec09a",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 5,
+  "tracked_blobs": 23,
+  "whole_repo_complete": false,
+  "lock_review": "Pinned Gitblob verified and selected4production dependency versions inspected;entire lock not whole-read",
+  "authored_controls_passed": 4,
+  "original_upstream_tests_run": false,
+  "original_test_limit": "Only test is sample Array.indexOf assertions;no duplicate-detection assertion.",
+  "controls": "vscode139-controls-20261024/results.json",
+  "findings": [
+    "Different two-line values collide in actual3-byte Cuckoo filter and original command reports duplicate without string confirmation.",
+    "Repeated equal line positive.",
+    "Ordinary distinct lines negative.",
+    "Original command error handler throws uri is not defined after document failure."
+  ],
+  "scope": "Original full extension module with VSCode UI/document seams;real pinned npm production dependencies;No removal confirmed,No user editor/files touched",
+  "decision": "reject-domain",
+  "production_adoption": false,
+  "native_phash_asan": "deferred",
+  "dependency_setup": "Initial npmci followed configured GitHub registry and failed404;explicit public registry npmci --omit=dev --ignore-scripts passed.Original lock preserved."
+}

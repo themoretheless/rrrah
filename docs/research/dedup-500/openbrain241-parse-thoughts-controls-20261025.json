@@ -1,0 +1,28 @@
+{
+  "scope": "Original parser on temporary JSON files, no services",
+  "controls": [
+    {
+      "case": "empty-list",
+      "exit": 1
+    },
+    {
+      "case": "search-wrapper",
+      "returned": {
+        "results": [
+          {
+            "content": "x"
+          }
+        ],
+        "low_confidence": false
+      }
+    },
+    {
+      "case": "two-blocks",
+      "returned": [
+        {
+          "content": "first"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 24.56s
+     Running tests/exact_files.rs (.dedup-work/local-exact198-target/debug/deps/exact_files-f8ac1290d9e1b399)
+
+running 4 tests
+test cancellation_during_full_hash_is_bounded ... ok
+test root_admission_cancels_before_io_at_each_preparation_checkpoint ... ok
+test atomic_cancel_exact_apis_preserve_groups_refuse_pre_cancel_and_allow_retry ... ok
+test verified_scan_discards_groups_for_one_shot_cancel_at_every_checkpoint ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 40 filtered out; finished in 0.05s
+

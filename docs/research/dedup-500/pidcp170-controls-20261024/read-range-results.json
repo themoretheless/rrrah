@@ -1,0 +1,93 @@
+{
+  "scope": "Original contiguous readRange and helper declarations, native Node type stripping and node:path; no strategy pipeline, message handling, shell, file reads requested by tool calls, or original upstream tests executed",
+  "source_sha256": "e8963df703c46260645ac7f18a4b83257376939928a69f6118ec5384e211303b",
+  "authored_controls_run": 6,
+  "observations": [
+    {
+      "name": "ordinary bounded read",
+      "input": {
+        "name": "read",
+        "arguments": {
+          "path": "/owned/file.txt",
+          "offset": 5,
+          "limit": 3
+        }
+      },
+      "actual": {
+        "path": "/owned/file.txt",
+        "start": "5",
+        "end": "7"
+      }
+    },
+    {
+      "name": "pipeline rejected",
+      "input": {
+        "name": "bash",
+        "arguments": {
+          "command": "cat /owned/file.txt | sort"
+        }
+      },
+      "actual": null
+    },
+    {
+      "name": "shell variable retained as literal path",
+      "input": {
+        "name": "bash",
+        "arguments": {
+          "command": "cat $HOME/owned.txt"
+        }
+      },
+      "actual": {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/$HOME/owned.txt",
+        "start": "1",
+        "end": "Infinity"
+      }
+    },
+    {
+      "name": "cat option misclassified as file",
+      "input": {
+        "name": "bash",
+        "arguments": {
+          "command": "cat --help"
+        }
+      },
+      "actual": {
+        "path": "/Users/themoretheless/Documents/Sources/rrrah/--help",
+        "start": "1",
+        "end": "Infinity"
+      }
+    },
+    {
+      "name": "nonpositive read limit accepted as reversed interval",
+      "input": {
+        "name": "read",
+        "arguments": {
+          "path": "/owned/file.txt",
+          "offset": 5,
+          "limit": 0
+        }
+      },
+      "actual": {
+        "path": "/owned/file.txt",
+        "start": "5",
+        "end": "4"
+      }
+    },
+    {
+      "name": "NaN offset accepted",
+      "input": {
+        "name": "read",
+        "arguments": {
+          "path": "/owned/file.txt",
+          "offset": null,
+          "limit": 3
+        }
+      },
+      "actual": {
+        "path": "/owned/file.txt",
+        "start": "NaN",
+        "end": "NaN"
+      }
+    }
+  ]
+}

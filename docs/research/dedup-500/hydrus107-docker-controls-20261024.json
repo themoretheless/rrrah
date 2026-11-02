@@ -1,0 +1,27 @@
+{
+  "scope": "Original unchanged shell script with owned dummy environment and recording python replacement; no Docker/image/package/live API execution.",
+  "controls": [
+    {
+      "control": "spaces_split_page_and_database_arguments",
+      "argv": [
+        "-m",
+        "hydrusvideodeduplicator",
+        "--api-key=owned-example",
+        "--failed-page-name=failed",
+        "videos",
+        "--dedup-database-dir=/owned/db",
+        "folder",
+        "--no-skip-hashing",
+        "--no-clear-search-tree",
+        "--no-clear-search-cache",
+        "--no-verbose",
+        "--no-debug"
+      ],
+      "pass": true
+    },
+    {
+      "control": "simple_values_retained",
+      "pass": true
+    }
+  ]
+}

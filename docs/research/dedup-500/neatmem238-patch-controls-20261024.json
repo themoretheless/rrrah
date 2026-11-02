@@ -1,0 +1,38 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original fuzzy_find/apply_patch functions isolated with stdlib JSON/difflib; synthetic strings only, no model or persistent storage.",
+  "authored_controls": [
+    {
+      "name": "exact replacement positive",
+      "passed": true,
+      "observed": [
+        "XYZ def",
+        "success"
+      ]
+    },
+    {
+      "name": "later missing anchor discards earlier changes",
+      "passed": true,
+      "observed": [
+        "abc def",
+        "fallback_after_not_found: long missing anchor"
+      ]
+    },
+    {
+      "name": "unknown operation reports success without change",
+      "passed": true,
+      "observed": [
+        "abc",
+        "success"
+      ]
+    },
+    {
+      "name": "similar but unequal quote accepted at 80 percent",
+      "passed": true,
+      "observed": [
+        "XYZ",
+        "success"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    target-branch: "develop"
+    rebase-strategy: "auto"
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    target-branch: "develop"
+    rebase-strategy: "auto"
+    open-pull-requests-limit: 10
+    versioning-strategy: increase
+    groups:
+      fastapi:
+        patterns:
+          - "fastapi*"
+          - "uvicorn*"
+          - "pydantic*"
+      sqlalchemy:
+        patterns:
+          - "sqlalchemy*"
+          - "alembic*"
+      testing:
+        patterns:
+          - "pytest*"
+        update-types:
+          - "minor"
+          - "patch"
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    target-branch: "develop"
+    rebase-strategy: "auto"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    target-branch: "develop"
+    rebase-strategy: "auto"
+    open-pull-requests-limit: 5

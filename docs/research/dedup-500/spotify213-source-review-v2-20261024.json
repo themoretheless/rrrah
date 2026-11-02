@@ -1,0 +1,151 @@
+{
+  "index": 213,
+  "repository": "JMPerez/spotify-dedup-mobile",
+  "commit": "07481c9b939aae24fe5d7e49625cd450aad7ba93",
+  "tracked_blob_count": 27,
+  "whole_file_reads": [
+    {
+      "path": "src/deduplicator.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/02-deduplicator.js",
+      "sha256": "9ad8d2e5724287f632173e0bc70a0dc50cd59712387f7c54aaec4654ecd575f8",
+      "git_blob_sha1": "d9e5d97b255866b7fbccb72a0e4be5214c34fdc5"
+    },
+    {
+      "path": "src/api/api.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/06-api.js",
+      "sha256": "7b66d2ab488d32ec0991fc3805f9e35719d0809982ed8d17a403f284fca53b3b",
+      "git_blob_sha1": "5391b55d9c88df4ea79475eff90a66a4faee9dab"
+    },
+    {
+      "path": "src/components/DuplicatedListItem.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/03-DuplicatedListItem.js",
+      "sha256": "f3f51e8117d087c0ce59afab4b3ab74ac23815946e06500aac1c1e7297649350",
+      "git_blob_sha1": "84d53d07bf07e981163ae4126f51fea05ba81253"
+    },
+    {
+      "path": "src/api/promiseForPages.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/remaining-pinned/src/api/promiseForPages.js",
+      "sha256": "6884632083e944dd4aa6de92d207b36bdc33ffe694c40ad1116745223ec0c91a",
+      "git_blob_sha1": "9b1a42ebe899aae377a7f72b9b9ca8f428628d4c"
+    },
+    {
+      "path": "src/api/index.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/remaining-pinned/src/api/index.js",
+      "sha256": "95575f5c1e1f1ee691123079d8de3166283568ec9df094bfb1eeea9813a5e819",
+      "git_blob_sha1": "0efe895fc1c1fca5b922ea6b407f6f3e7f713bc7"
+    },
+    {
+      "path": "src/components/LibraryScreen.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/remaining-pinned/src/components/LibraryScreen.js",
+      "sha256": "5dc355d5dbb998a8b8cb92e0983502b46abbb4f8650fd6d906addedf85863ded",
+      "git_blob_sha1": "945a22b8b72b5b94c140d7a148e73485006f7a48"
+    },
+    {
+      "path": "src/redux/apiMiddleware.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/remaining-pinned/src/redux/apiMiddleware.js",
+      "sha256": "bcbbc23a0c7b9c340261891c06206b193c47d06055a423cb46f08ec6afeb5c31",
+      "git_blob_sha1": "c906d3dc708cfddb1f490da447db80a25624df11"
+    },
+    {
+      "path": "src/redux/playlists.js",
+      "local": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/remaining-pinned/src/redux/playlists.js",
+      "sha256": "ab3dbf797463ae63008fdf3137d48dcf35ed8cdb11820201393c8951f07eb19c",
+      "git_blob_sha1": "4bb3190a66e4f52f698b95e79aa1d73e3a26087b"
+    }
+  ],
+  "whole_file_read_count": 8,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "authored_controls_run": 7,
+  "original_tests_run": 0,
+  "controls": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/identity-control-results.json",
+  "findings": [
+    "Four controls pass on original deduplicator/paginator with synthetic API/throttle: prototype ID singleton false duplicate, heuristic duplicate ID not added so later sameID with different metadata escapes, nulltrack rejects scan,1999ms duplicate versus2000ms retained. No Spotify or removal call.",
+    "Track identity exact ID or raw name:first artist plus duration tolerance; no file bytes/audio fingerprint, no Unicode/case normalization. IDnull skipped. Colon composite key can collide, secondary artists/album/version ignored. Paginator reconstructs href offset/limit dropping existing query and schedules allpages; no snapshot consistency metadata.",
+    "Removal source-only: starred reject lacks return and may continue queueing; recursive removal not awaited/returned, playlist.duplicates never refreshed, queue task errors not wired to outer reject; completion/hang behavior needs synthetic-only controls. No removal invoked. Functional duplicated list component references this.props instead of destructured callback. No ReactNative runtime qualification.",
+    "Three original-body synthetic controls pass: non-ok API returnsnull and paginator turnsnull into zero successful pages; middleware getUserPlaylists({limit:50}) passes options as userId so intended limit ignored; reducer matches missing uri values across distinct playlist IDs, updating both. No network/removal/account access.",
+    "Library Cancel only navigation.goBack, no AbortSignal/cancel action passed; middleware scan loop continues sequential playlists and has no explicit failure state. Removal success clears duplicate array without independently rerunning scan in reducer; underlying remove method promise behavior previously unqualified. Source-only ReactNative orchestration, no real UI run.",
+    "getGeneric option serialization joins with equals and always prefixes ampersand rather than choosing question mark; no request deadline/status/retry metadata or pagination snapshot. API removal response status failure null not rejected. These are source observations; real Spotify endpoint compatibility not checked."
+  ],
+  "remaining": [
+    {
+      "path": ".babelrc",
+      "bytes": 130
+    },
+    {
+      "path": ".flowconfig",
+      "bytes": 2194
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 248
+    },
+    {
+      "path": ".watchmanconfig",
+      "bytes": 3
+    },
+    {
+      "path": "App.js",
+      "bytes": 1167
+    },
+    {
+      "path": "App.test.js",
+      "bytes": 228
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1072
+    },
+    {
+      "path": "README-crna.md",
+      "bytes": 13496
+    },
+    {
+      "path": "README.md",
+      "bytes": 720
+    },
+    {
+      "path": "app.json",
+      "bytes": 194
+    },
+    {
+      "path": "package.json",
+      "bytes": 1110
+    },
+    {
+      "path": "src/components/AboutScreen.js",
+      "bytes": 2985
+    },
+    {
+      "path": "src/components/Auth.js",
+      "bytes": 369
+    },
+    {
+      "path": "src/components/EmmaScreen.js",
+      "bytes": 798
+    },
+    {
+      "path": "src/components/HomeScreen.js",
+      "bytes": 3587
+    },
+    {
+      "path": "src/components/Progress.js",
+      "bytes": 565
+    },
+    {
+      "path": "src/redux/login.js",
+      "bytes": 1993
+    },
+    {
+      "path": "src/redux/session.js",
+      "bytes": 1078
+    },
+    {
+      "path": "video.gif",
+      "bytes": 421647
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/spotify213-source-review-v1-20261024.json",
+  "api_state_controls": "docs/research/dedup-500/evidence/JMPerez--spotify-dedup-mobile/api-state-control-results.json"
+}

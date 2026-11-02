@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {writeFileSync} from 'node:fs';
+import {makeRequest,decodeResponse} from './runtime/lib/jev-client.ts';
+const valid=makeRequest('owned task',[{id:'c1',text:'owned source text'}]);
+assert.deepEqual(valid.state.candidates,[{id:'c1',text:'owned source text'}]);
+assert.throws(()=>makeRequest('owned task',[{id:'c1',text:'a'},{id:'c1',text:'b'}]));
+assert.throws(()=>makeRequest('owned task',[{id:'c1',text:'é'.repeat(3001)}]));
+const response={model:'jev-fixture',answers:{c1:{type:'noul',noul:0.25}},usage:{input_tokens:1,output_tokens:1}};
+assert.equal(decodeResponse(response,['c1']).probabilities.get('c1'),0.25);
+assert.throws(()=>decodeResponse({...response,extra:true},['c1']));
+assert.throws(()=>decodeResponse({...response,answers:{c1:{type:'noul',noul:NaN}}},['c1']));
+const payload={scope:'Original complete client module pure makeRequest/decodeResponse only; no readKey/literalKey/requestJev invocation, environment/config credential reads, transport, network or scoring',authored_controls_run:6,observations:['valid request candidate preserved','duplicate candidate IDs rejected','multibyte text uses byte limit','valid strict response decoded','extra response field rejected','NaN probability rejected']};
+writeFileSync(new URL('client-schema-results.json',import.meta.url),JSON.stringify(payload,null,2)+'\n');console.log(JSON.stringify(payload,null,2));

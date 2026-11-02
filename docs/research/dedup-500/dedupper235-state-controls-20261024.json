@@ -1,0 +1,34 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "scope": "Original selected DB-service method bodies; in-memory query/insert/serialize adapters. Pending dry-run promises own no external handles; observation is one event-loop boundary, source branch has no settlement. No actual SQL/filesystem/native code or Jest.",
+  "authored_controls": [
+    {
+      "name": "accepted existing file retains prior missing state on insertion",
+      "passed": true,
+      "observed": {
+        "hash": "h",
+        "missing": 2
+      }
+    },
+    {
+      "name": "healthy unchanged state skips write positive control",
+      "passed": true
+    },
+    {
+      "name": "ProcessStateDbService.js dryrun delete remains unsettled after callback completes",
+      "passed": true,
+      "observed": {
+        "settled": false,
+        "statements": 0
+      }
+    },
+    {
+      "name": "TagDbService.js dryrun delete remains unsettled after callback completes",
+      "passed": true,
+      "observed": {
+        "settled": false,
+        "statements": 0
+      }
+    }
+  ]
+}

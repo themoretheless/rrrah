@@ -1,0 +1,47 @@
+{
+  "repository": "0xuezhang985/wallet-convergence-alert",
+  "commit": "c331a88edc9871b93c0c9545ccbf53c75d6e3749",
+  "whole_files_read": [
+    {
+      "path": "README.md",
+      "git_blob": "045cb4efbcc4c648168bd0850e4551aa3d83696f",
+      "sha256": "85780c697840bc76cf4bc0e3427a2665e01693171a1f2b5e5f23b7f21f1827c8",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "git_blob": "14fac913ccf80234b1848540089a3bbcb6e5283d",
+      "sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+      "whole_text_read": true
+    },
+    {
+      "path": "release.sh",
+      "git_blob": "ecd1313d06ef0279cad6ef9c5b0d34b73efdaa0d",
+      "sha256": "c1fe5aacd2f7666873a083c28f0e7ae66647d0562cb4be9e1dbcda35c8fa8692",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "tracked_blobs": 14,
+  "whole_repo_complete": false,
+  "partial_source_review": {
+    "gmgn/content.js": [
+      "1-180",
+      "310-410"
+    ],
+    "xxyy/content.js": [
+      "560-660"
+    ]
+  },
+  "authored_controls_passed": 3,
+  "controls": "wallet122-controls-20261024/results.json",
+  "findings": [
+    "Pure mergeTrades fallback omits mint/chain and collapses distinct same-symbol records at same wallet/time.",
+    "Newest50 cap is bounded feed view,not complete duplicate inventory."
+  ],
+  "decision": "reject-domain",
+  "upstream_tests_run": false,
+  "browser_runtime_qualified": false,
+  "production_adoption": false,
+  "harness_correction": "Added newline after extracted trailing line comment so function factory return is executed."
+}

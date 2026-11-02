@@ -1,0 +1,116 @@
+package com.mina.yuedu.network;
+import com.mina.yuedu.core.MiniJson;
+import com.mina.yuedu.model.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.*;
+public final class SourceParser {
+  public static final class ParseResult {
+    private final List<SourceRecord> records; private final List<InvalidSource> invalid;
+    ParseResult(List<SourceRecord> r, List<InvalidSource> i){ records=r; invalid=i; }
+    public List<SourceRecord> getRecords(){ return records; } public List<InvalidSource> getInvalid(){ return invalid; }
+  }
+  private SourceParser(){}
+  /** 单次解析的字符上限（约 25M 字符 ≈ 50MB UTF-8 文本 / 数万条书源）；超过直接报错而非 OOM 崩溃。 */
+  private static final int MAX_PARSE_CHARS = 25_000_000;
+  public static ParseResult parseArray(String json, int start){
+    List<SourceRecord> out=new ArrayList<>(); List<InvalidSource> bad=new ArrayList<>();
+    String clean = unwrapJson(json);
+    if (clean != null && clean.length() > MAX_PARSE_CHARS) {
+      bad.add(new InvalidSource(InvalidSource.Kind.NOT_JSON_ARRAY,
+          "书源数据过大（超过约 2500 万字符），请拆分后分批导入"));
+      return new ParseResult(out,bad);
+    }
+    Object root;
+    try{ root=MiniJson.parse(clean); }catch(Exception e){ bad.add(new InvalidSource(InvalidSource.Kind.NOT_JSON_ARRAY, e.getMessage())); return new ParseResult(out,bad); }
+    List<?> list;
+    if(root instanceof List) list=(List<?>)root;
+    else if(root instanceof Map){
+      Map<?,?> m=(Map<?,?>)root;
+      Object data=m.get("data"); if(!(data instanceof List)) data=m.get("list");
+      if(!(data instanceof List)) data=m.get("sources");
+      if(data instanceof List) list=(List<?>)data;
+      else if(m.containsKey("bookSourceUrl") || m.containsKey("bookSourceName")) list=Collections.singletonList(m);
+      else { bad.add(new InvalidSource(InvalidSource.Kind.NOT_JSON_ARRAY, "root is not array")); return new ParseResult(out,bad); }
+    } else { bad.add(new InvalidSource(InvalidSource.Kind.NOT_JSON_ARRAY, "root is not array")); return new ParseResult(out,bad); }
+    int i=0;
+    for(Object x: list){
+      if(!(x instanceof Map)){ bad.add(new InvalidSource(InvalidSource.Kind.NOT_OBJECT, "index "+i)); i++; continue; }
+      @SuppressWarnings("unchecked") Map<String,Object> m=(Map<String,Object>)x;
+      Object n=m.get("bookSourceName"), u=m.get("bookSourceUrl");
+      out.add(new SourceRecord(start+i, n==null?"":String.valueOf(n), u==null?null:String.valueOf(u), m)); i++;
+    }
+    return new ParseResult(out,bad);
+  }
+  public static String extractIndirectUrl(String body){
+    if(body==null) return null;
+    String t=body.trim();
+    if(!(t.startsWith("{") || t.startsWith("["))) return null;
+    try{
+      Object root=MiniJson.parse(t);
+      if(root instanceof Map){
+        @SuppressWarnings("unchecked") Map<String,Object> m=(Map<String,Object>)root;
+        for(String k: new String[]{"msg","downloadUrl","url","link","path","data"}){
+          Object v=m.get(k);
+          if(v instanceof String && String.valueOf(v).matches("https?://.+")) return String.valueOf(v).trim();
+          if(v instanceof Map){
+            @SuppressWarnings("unchecked") Map<String,Object> mm=(Map<String,Object>)v;
+            for(String k2: new String[]{"url","downloadUrl","link","path"}){
+              Object vv=mm.get(k2);
+              if(vv instanceof String && String.valueOf(vv).matches("https?://.+")) return String.valueOf(vv).trim();
+            }
+          }
+        }
+      }
+    }catch(Exception ignored){}
+    return null;
+  }
+  public static List<String> discoverYckJsonUrls(String html, String base){
+    LinkedHashSet<String> set=new LinkedHashSet<>();
+    if(html==null) return new ArrayList<>();
+    String text=html.replace("&amp;","&");
+    Pattern p=Pattern.compile("(?:href|value|data-url)\\s*=\\s*['\"]([^'\"]+?\\.json(?:\\?[^'\"]*)?)['\"]", Pattern.CASE_INSENSITIVE);
+    Matcher m=p.matcher(text);
+    while(m.find()) add(set, m.group(1), base);
+    Pattern raw=Pattern.compile("https?://[^\\s'\"<>]+/yuedu/(?:shuyuan|shuyuans|rss|rsss)/json/[^\\s'\"<>]+", Pattern.CASE_INSENSITIVE);
+    m=raw.matcher(text); while(m.find()) add(set, m.group(), base);
+    Pattern d=Pattern.compile("(?:href|value|data-url)\\s*=\\s*['\"](https?://[^'\"]+/d/[^'\"]+)['\"]", Pattern.CASE_INSENSITIVE);
+    m=d.matcher(text); while(m.find()) addAny(set, m.group(1), base);
+    return new ArrayList<>(set);
+  }
+  private static void add(Set<String> s, String raw, String base){
+    try{ URL u=new URL(new URL(base), raw); String path=u.getPath();
+      if(path.matches("(?i).*/yuedu/(shuyuan|shuyuans|rss|rsss)/json/.*\\.json")) s.add(u.toString());
+      else if(path.toLowerCase(Locale.ROOT).endsWith(".json")) s.add(u.toString());
+    }catch(Exception ignored){}
+  }
+  private static void addAny(Set<String> s, String raw, String base){
+    try{ s.add(new URL(new URL(base), raw).toString()); }catch(Exception ignored){}
+  }
+
+  /** 清理 BOM、JSONP 包裹、][] 前缀，仅保留最外层的 JSON 对象或数组部分。 */
+  static String unwrapJson(String raw) {
+    if (raw == null) return "";
+    String s = raw;
+    // 移除 BOM
+    if (!s.isEmpty() && s.charAt(0) == '\uFEFF') s = s.substring(1);
+    // 去除 JSONP 前缀如 )]}'\n
+    int i = 0;
+    while (i < s.length() && Character.isWhitespace(s.charAt(i))) i++;
+    if (s.startsWith(")]}'", i)) {
+      int nl = s.indexOf('\n', i);
+      s = nl >= 0 ? s.substring(nl + 1) : s.substring(Math.min(s.length(), i + 4));
+    }
+    // 提取最外层 JSON 数组或对象
+    int arr = s.indexOf('[');
+    int obj = s.indexOf('{');
+    int start = -1;
+    char closer = 0;
+    if (arr >= 0 && (obj < 0 || arr < obj)) { start = arr; closer = ']'; }
+    else if (obj >= 0) { start = obj; closer = '}'; }
+    if (start < 0) return s.trim();
+    int end = s.lastIndexOf(closer);
+    if (end > start) return s.substring(start, end + 1);
+    return s.substring(start);
+  }
+}

@@ -1,0 +1,171 @@
+'''test sftpretty.Connection'''
+
+import pytest
+
+from paramiko import SFTPError
+from paramiko.ed25519key import Ed25519Key
+
+from common import conn, LOCAL, VFS, VFS_HOME
+from pathlib import Path
+from sftpretty import (CnOpts, Connection, ConnectionException,
+                       HostKeysException, SSHException)
+
+
+def test_channel_exception(sftpserver):
+    '''test except blocks in _sftp_channel don't raise secondary errors'''
+    with sftpserver.serve_content(VFS):
+        with Connection(**conn(sftpserver)) as sftp:
+            sftp.close()
+        with pytest.raises(AttributeError):
+            sftp.listdir()
+
+    with sftpserver.serve_content(VFS):
+        with Connection(**conn(sftpserver)) as sftp:
+            with pytest.raises(OSError):
+                sftp.chdir('/does/not/exist')
+
+    with sftpserver.serve_content(VFS):
+        with Connection(**conn(sftpserver)) as sftp:
+            with pytest.raises(SFTPError):
+                sftp.chdir(f'{VFS_HOME}/read.me')
+
+    with sftpserver.serve_content(VFS):
+        sftp = Connection(**conn(sftpserver))
+        sftp._transport.close()
+        with pytest.raises(SSHException):
+            sftp.listdir()
+
+    with sftpserver.serve_content(VFS):
+        with Connection(**conn(sftpserver)) as sftp:
+            sftp.timeout = 0.0001
+            with pytest.raises(TimeoutError,
+                               match='operation timed out after'):
+                sftp.listdir()
+
+
+def test_cnopts_bad_knownhosts():
+    '''test setting knownhosts to a not understood file'''
+    with pytest.raises(HostKeysException):
+        with pytest.raises(UserWarning):
+            knownhosts = Path('~/knownhosts').expanduser().as_posix()
+            Path(knownhosts).touch(mode=0o600)
+            CnOpts(knownhosts=knownhosts)
+            Path(knownhosts).unlink()
+
+
+def test_cnopts_no_knownhosts():
+    '''test setting knownhosts to a non-existant file'''
+    with pytest.raises(UserWarning):
+        CnOpts(knownhosts='i-m-not-there')
+
+
+def test_cnopts_none_knownhosts():
+    '''test setting knownhosts to None for those with no default known_hosts'''
+    knownhosts = Path('~/.ssh/known_hosts').expanduser().as_posix()
+    if Path(knownhosts).exists():
+        Path(knownhosts).unlink()
+    cnopts = CnOpts(knownhosts=None)
+    assert cnopts.hostkeys is None
+
+
+def test_connection_bad_credentials():
+    '''attempt connection to a non-existing server'''
+    copts = LOCAL.copy()
+    copts['password'] = 'badword'
+    del copts['private_key'], copts['private_key_pass']
+    with pytest.raises(SSHException):
+        with Connection(**copts) as sftp:
+            sftp.listdir()
+
+
+def test_connection_bad_host():
+    '''attempt connection to a non-existing server'''
+    knownhosts = Path('~/.ssh/known_hosts').expanduser()
+    knownhosts.parent.mkdir(exist_ok=True, mode=0o700)
+    knownhosts.touch(exist_ok=True, mode=0o644)
+    knownhosts.write_bytes((b'localhost ssh-ed25519 '
+                            b'AAAAC3NzaC1lZDI1NTE5AAAAIB0g3SG/bbyysJ7f0kqdoWMX'
+                            b'hHxxFR7aLJYNIHO/MtsD'))
+    with pytest.raises(ConnectionException):
+        cnopts = CnOpts()
+        cnopts.hostkeys = None
+        sftp = Connection('localhost.home.arpa', cnopts=CnOpts(),
+                          password='badpass', username='badhost')
+        sftp.listdir()
+
+
+@pytest.mark.parametrize('blob', (
+    b'\x30\x82\x04\xbe\x02\x01\x00',             # binary DER, undecodable
+    b'-----BEGIN DSA PRIVATE KEY-----\n',        # deprecated algorithm
+    b'-----BEGIN ENCRYPTED PRIVATE KEY-----\n',  # PKCS#8, encrypted
+    b'-----BEGIN PRIVATE KEY-----\n',            # PKCS#8
+    b''                                          # empty file
+))
+def test_connection_bad_private_key_format(blob, tmp_path):
+    '''deprecated or unsupported key formats must raise, not fail'''
+    key = tmp_path.joinpath('id_sftpretty_unsupported')
+    key.write_bytes(blob)
+
+    copts = LOCAL.copy()
+    copts['private_key'] = key.as_posix()
+    with pytest.raises(KeyError):
+        with Connection(**copts) as sftp:
+            sftp.listdir()
+
+
+@pytest.mark.parametrize('kind', ('missing', 'directory'))
+def test_connection_bad_private_key_path(kind, tmp_path):
+    '''private-key path pointing to missing or non-file type'''
+    key = tmp_path.joinpath(f'id_sftpretty_{kind}')
+
+    if kind == 'directory':
+        key.mkdir()
+
+    copts = LOCAL.copy()
+    copts['private_key'] = key.as_posix()
+
+    with pytest.raises(OSError, match=key.name):
+        with Connection(**copts) as sftp:
+            sftp.listdir()
+
+
+@pytest.mark.parametrize('kind', ('path', 'pkey'))
+def test_connection_good(kind, sftpserver):
+    '''connect to a public sftp server with key given as path or object'''
+    copts = conn(sftpserver)
+
+    if kind == 'pkey':
+        copts['private_key'] = Ed25519Key(
+            filename=copts['private_key'],
+            password=copts['private_key_pass'])
+        del copts['private_key_pass']
+
+    with sftpserver.serve_content(VFS):
+        sftp = Connection(**copts)
+        assert sftp.listdir() == ['pub', 'read.me']
+        sftp.close()
+
+
+def test_connection_with(sftpserver):
+    '''connect to a public sftp server'''
+    with sftpserver.serve_content(VFS):
+        with Connection(**conn(sftpserver)) as sftp:
+            assert sftp.listdir() == ['pub', 'read.me']
+
+
+def test_hostkey_not_found():
+    '''test that an exception is raised when no host key is found'''
+    cnopts = CnOpts(knownhosts='sftpserver.pub')
+    with pytest.raises(SSHException):
+        cnopts.get_hostkey(host='missing-server')
+
+
+def test_hostkey_returns_pkey(sftpserver):
+    '''test that finding a matching host key returns a PKey'''
+    if sftpserver.port != 22:
+        host = f'[{sftpserver.host}]:{sftpserver.port}'
+    else:
+        host = sftpserver.host
+
+    cnopts = CnOpts(knownhosts='sftpserver.pub')
+    assert isinstance(cnopts.get_hostkey(host), Ed25519Key)

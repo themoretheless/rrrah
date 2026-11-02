@@ -1,0 +1,18 @@
+{
+  "method": "Unchanged pinned hacks.js ESM import, synthetic options; no PostCSS/suite/dependency install",
+  "node_version": "v22.23.4",
+  "exit": 0,
+  "observed": {
+    "string_pattern_error": {
+      "name": "TypeError",
+      "message": "Cannot create property 'lastIndex' on string '.a'"
+    },
+    "global_regex_repeated": [
+      true,
+      true
+    ]
+  },
+  "stderr": "",
+  "harness_correction": "First harness used wrong Node stdin-script argv index and failed before source import; corrected argv[2]",
+  "upstream_tests_run": false
+}

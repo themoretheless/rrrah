@@ -1,0 +1,558 @@
+warning: patch `hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)` was not used in the crate graph
+  |
+  = help: perhaps you meant one of the following:
+          	/Users/themoretheless/.codex/tmp/rrrah-chunk-proof-harness-20261102
+warning: patch `hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)` was not used in the crate graph
+warning: patch `jxl-color v0.11.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/jxl-color)` was not used in the crate graph
+warning: patch `jxl-oxide v0.12.6 (/Users/themoretheless/Documents/Sources/rrrah/vendor/jxl-oxide)` was not used in the crate graph
+warning: patch `wgpu-hal v30.0.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/wgpu-hal)` was not used in the crate graph
+help: Check that the patched package version and available features are compatible
+      with the dependency requirements. If the patch has a different version from
+      what is locked in the Cargo.lock file, run `cargo update` to use the new
+      version. This may also occur with an optional dependency that is not enabled.
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+warning: constant `PNG_SIGNATURE` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/codecs/png.rs:29:18
+   |
+29 | pub(crate) const PNG_SIGNATURE: [u8; 8] = [137, 80, 78, 71, 13, 10, 26, 10];
+   |                  ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: trait `ReadExt` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/io.rs:29:18
+   |
+29 | pub(crate) trait ReadExt {
+   |                  ^^^^^^^
+
+warning: function `interleave_planes` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:67:15
+   |
+67 | pub(crate) fn interleave_planes(out: &mut [u8], color: crate::ColorType, planes: &[&[u8]]) {
+   |               ^^^^^^^^^^^^^^^^^
+
+warning: function `interleave_planes_inner` is never used
+  --> /Users/themoretheless/Documents/Sources/rrrah/vendor/image/src/utils/mod.rs:98:4
+   |
+98 | fn interleave_planes_inner<const PLANES: usize, const N: usize>(
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `image` (lib) generated 4 warnings
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/.codex/tmp/rrrah-chunk-proof-harness-20261102)
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2920:17
+     |
+2920 |                 kurbo::Affine::IDENTITY,
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+     = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+     |
+2920 -                 kurbo::Affine::IDENTITY,
+2920 +                 Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2921:17
+     |
+2921 |                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2921 -                 kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+2921 +                 Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:2922:17
+     |
+2922 |                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |                 ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+2922 -                 kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+2922 +                 Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3023:26
+     |
+3023 |         source.inverse = kurbo::Affine::IDENTITY;
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3023 -         source.inverse = kurbo::Affine::IDENTITY;
+3023 +         source.inverse = Affine::IDENTITY;
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3055:21
+     |
+3055 |         let polls = std::cell::Cell::new(0);
+     |                     ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3055 -         let polls = std::cell::Cell::new(0);
+3055 +         let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3068:25
+     |
+3068 |             let count = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3068 -             let count = std::cell::Cell::new(0);
+3068 +             let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3098:13
+     |
+3098 |             kurbo::Affine::IDENTITY,
+     |             ^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3098 -             kurbo::Affine::IDENTITY,
+3098 +             Affine::IDENTITY,
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3099:13
+     |
+3099 |             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3099 -             kurbo::Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+3099 +             Affine::new([1.25, -0.5, 0.75, 2., -3., 4.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3100:13
+     |
+3100 |             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |             ^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3100 -             kurbo::Affine::new([-1., 0., 0., 1., 8., 0.]),
+3100 +             Affine::new([-1., 0., 0., 1., 8., 0.]),
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3128:25
+     |
+3128 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3128 -             let polls = std::cell::Cell::new(0);
+3128 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3142:29
+     |
+3142 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3142 -                 let count = std::cell::Cell::new(0);
+3142 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3239:25
+     |
+3239 |             let polls = std::cell::Cell::new(0);
+     |                         ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3239 -             let polls = std::cell::Cell::new(0);
+3239 +             let polls = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3253:29
+     |
+3253 |                 let count = std::cell::Cell::new(0);
+     |                             ^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3253 -                 let count = std::cell::Cell::new(0);
+3253 +                 let count = Cell::new(0);
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3920:26
+     |
+3920 |                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3920 -                 Arc::new(crate::shading::ShadingType::TriangleMesh {
+3920 +                 Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:3991:22
+     |
+3991 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+3991 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+3991 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4128:22
+     |
+4128 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4128 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4128 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4177:22
+     |
+4177 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4177 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4177 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/native_source.rs:4267:22
+     |
+4267 |             Arc::new(crate::shading::ShadingType::TriangleMesh {
+     |                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+4267 -             Arc::new(crate::shading::ShadingType::TriangleMesh {
+4267 +             Arc::new(ShadingType::TriangleMesh {
+     |
+
+warning: unnecessary qualification
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/shared_fragment_store.rs:448:5
+    |
+448 |     std::ops::Range<usize>,
+    |     ^^^^^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+448 -     std::ops::Range<usize>,
+448 +     Range<usize>,
+    |
+
+warning: unnecessary qualification
+    --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/shared_fragment_store.rs:1028:25
+     |
+1028 |         let mut pixel = super::super::OrderedPixel::new(&admit, 512);
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+help: remove the unnecessary path segments
+     |
+1028 -         let mut pixel = super::super::OrderedPixel::new(&admit, 512);
+1028 +         let mut pixel = OrderedPixel::new(&admit, 512);
+     |
+
+warning: method `is_empty` is never used
+   --> /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/encode/shared_fragment_store.rs:373:19
+    |
+366 | impl<'a> RegionValues<'a> {
+    | ------------------------- method in this implementation
+...
+373 |     pub(super) fn is_empty(&self) -> bool {
+    |                   ^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `hayro-interpret` (lib test) generated 21 warnings (run `cargo fix --lib -p hayro-interpret --tests` to apply 20 suggestions)
+    Finished `release` profile [optimized] target(s) in 19.08s
+     Running unittests /Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret/src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-chunk-proof-harness-20261102/target/release/deps/hayro_interpret-f81c683142d8ce3f)
+
+running 101 tests
+test encode::native_source::tests::convex_unit_f32_cast_bound_covers_binades_ties_and_small_overshoot ... ok
+test encode::native_source::tests::batched_cmyk_interpolation_matches_scalar_bits_including_signed_zero ... ok
+MESH_RECT_QUERY cancellation_checkpoints=4
+test encode::native_source::tests::native_mesh_rectangle_query_affine_work_callback_and_every_cancel ... ok
+test encode::native_source::tests::affine_mesh_capability_refuses_functions_transforms_and_invalid_metadata ... ok
+test encode::native_source::point_evidence_tests::observed_point_certificate_covers_projected_exterior_samples_without_hull_assumptions ... ok
+test encode::native_source::tests::affine_component_error_bounds_cover_projection_rounding_and_refuse_short_work ... ok
+test encode::native_source::tests::affine_weight_domain_keeps_skinny_triangle_correlation_and_refuses_all_short_budgets ... ok
+test encode::native_source::tests::affine_gradient_bounds_enclose_known_device_derivatives_and_refuse_short_work ... ok
+test encode::native_source::tests::mesh_component_bounds_cover_rounded_samples_and_refuse_unsafe_sources ... ok
+test encode::native_source::point_evidence_tests::point_evidence_preparation_and_finish_refuse_all_short_budgets_and_cancel_checkpoints ... ok
+test encode::native_source::tests::mesh_weight_intervals_enclose_all_rectangle_samples_and_bound_projection ... ok
+test encode::native_source::tests::axial_boundary_lines_preserve_parameter_under_shear_and_reflection ... ok
+test encode::native_source::point_evidence_tests::shared_domain_preserves_evidence_bits_and_refuses_short_work_or_cancel ... ok
+test encode::native_source::tests::native_selected_mesh_interpolation_benchmark ... ignored, explicit native mesh interpolation timing
+test encode::native_source::point_evidence_tests::geometry_projection_matches_native_sampling_without_component_reads ... ok
+test encode::native_source::tests::native_source_samples_share_actual_work_and_preserve_legacy_values ... ok
+test encode::native_source::point_evidence_tests::opaque_owner_certificate_requires_exact_opacity_and_preserves_source_binding ... ok
+test encode::native_source::tests::original_cmyk_axial_transform_and_extension_have_exact_samples ... ok
+test encode::native_source::tests::original_triangle_mesh_transform_overlap_and_function_preserve_cmyk ... ok
+test encode::native_source::tests::radial_concentric_translated_and_linear_cone_keep_original_gray ... ok
+test encode::native_source::tests::rectangle_query_excludes_zero_area_but_keeps_thin_source_triangles ... ok
+test encode::native_source::tests::retained_source_admission_and_cancellation_release_all_credit ... ok
+test encode::native_source::tests::selected_mesh_owner_identity_does_not_certify_affine_integration_across_projection ... ok
+test encode::native_source::tests::selected_triangle_field_preserves_affine_components_and_constant_edge_values ... ok
+test encode::native_source::tests::triangle_capture_refuses_before_allocation_and_releases_cancelled_credit ... ok
+test encode::native_source::tests::triangle_rectangle_query_rejects_bbox_false_positives_and_keeps_edges ... ok
+BULK_OVERFLOW before_work=1267 after_work=1267
+test encode::ordered_grid::tests::admission_refusal_and_cancellation_produce_no_partial_result ... ok
+test encode::ordered_grid::tests::cancellation_after_storage_admission_releases_every_credit ... ok
+test encode::ordered_grid::tests::partial_overlap_preserves_visible_portion_of_earlier_patch ... ok
+test encode::ordered_grid::tests::later_geometry_replaces_overlap_without_averaging_hidden_color ... ok
+test encode::ordered_pixel::exact_orientation_tests::bulk_append_respects_count_limit_for_zero_sized_items ... ok
+test encode::ordered_grid::tests::folded_patch_keeps_the_larger_v_branch ... ok
+test encode::ordered_pixel::exact_orientation_tests::canonical_edge_distance_is_exactly_antisymmetric ... ok
+test encode::ordered_pixel::exact_orientation_tests::bulk_carry_overflow_does_not_scan_beyond_output_room ... ok
+test encode::ordered_pixel::exact_orientation_tests::adjacent_triangles_share_identical_clipped_boundary_vertices ... ok
+test encode::ordered_pixel::exact_orientation_tests::dense_subtraction_cpu_pairs ... ignored, manual paired dense CPU measurement; not a page/display benchmark
+CLIP_ORACLE cases=515 old_reversal_mismatches=219
+test encode::ordered_pixel::exact_orientation_tests::canonical_intersections_match_fraction_oracle_and_reversal_bits ... ok
+test encode::ordered_pixel::exact_orientation_tests::cascade_merge_respects_saved_partition_prefix ... ok
+test encode::ordered_pixel::exact_orientation_tests::common_vertex_support_is_degenerate_even_with_another_incident_edge ... ok
+test encode::ordered_pixel::exact_orientation_tests::hull_keeps_common_vertex_support_across_mixed_collinear_edge_labels ... ok
+test encode::ordered_pixel::exact_orientation_tests::known_cut_is_idempotent_and_distinct_thin_band_survives ... ok
+test encode::ordered_pixel::exact_orientation_tests::line_keys_preserve_exact_identity_without_merging_nearby_cuts ... ok
+test encode::ordered_pixel::exact_orientation_tests::shared_split_cpu_pairs ... ignored, manual paired CPU measurement; not a page or display benchmark
+test encode::ordered_pixel::exact_orientation_tests::filtered_orientation_matches_independent_fraction_oracle ... ok
+SHARED_SPLIT_WORK before=10 after=test encode::ordered_pixel::exact_orientation_tests::exact_separation_requires_a_supporting_line_and_observes_every_failure ... ok
+test encode::native_source::tests::native_tensor_capture_preserves_transformed_cmyk_and_releases_intermediate_credit ... ok
+test encode::ordered_pixel::exact_orientation_tests::mean_sign_filter_covers_subnormal_coordinate_underflow ... ok
+test encode::ordered_pixel::exact_orientation_tests::retained_zero_area_cache_uses_no_credit_or_work ... ok
+test encode::ordered_pixel::exact_orientation_tests::non_dyadic_repeated_cuts_keep_boundary_bits_and_zero_opposite_area ... ok
+test encode::ordered_pixel::exact_orientation_tests::line_pool_every_refusal_cancel_and_short_work_restore_allocation_and_ids ... ok
+5 evaluations_before=10 after=4
+BOUNDARY_CACHE_GENERATED checked=5196 refused=24
+UNIT_DOMAIN_WORK 27
+SHARED_SPLIT_EQUIVALENCE cases=12360
+test encode::ordered_pixel::exact_orientation_tests::shared_split_evaluates_once_and_keeps_both_boundary_sides ... ok
+test encode::ordered_pixel::exact_orientation_tests::retained_boundary_cache_is_sound_after_generated_paints_and_refusals ... ok
+test encode::ordered_pixel::exact_orientation_tests::unit_domain_shortcut_requires_original_support_and_inward_direction ... ok
+test encode::ordered_pixel::exact_orientation_tests::unit_square_subtraction_preserves_interior_polygon ... ok
+test encode::ordered_pixel::exact_orientation_tests::shared_split_matches_both_legacy_clips_bit_for_bit ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::captured_candidate_order_work_probe ... ignored, manual candidate-order experiment on exact captured inputs
+test encode::ordered_pixel::shared_fragment_store::tests::captured_dense_cell_fixed_work_cpu ... ignored, manual fixed-input CPU timing; no page/display inference
+RETAINED_AREA_CACHE checked=4762 fragment_bytes=504
+test encode::ordered_pixel::exact_orientation_tests::retained_area_cache_matches_direct_classification_after_dense_paints ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::context_detects_rolled_back_id_reuse_without_losing_original_line ... ok
+actual shared kernel rows=50 flat_work=98267 shared_work=100509 exact prefixes/line IDs
+bound context rollback admissions=5 cancellations=454 short_quotas=454 final=0
+test encode::ordered_pixel::shared_fragment_store::tests::bound_context_every_failure_preserves_previous_snapshot_and_retries ... ok
+bound context: foreign owner/prefix/tag refused; 387 line evaluations survive original pool drop; final=0
+shared storage rollback admissions=5 cancellations=12 short_quotas=12 final=0
+test encode::ordered_pixel::shared_fragment_store::tests::empty_compaction_shares_context_without_new_admission ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::captured_dense_lineage_matches_independent_rational_union ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::context_refuses_foreign_owner_and_wrong_prefix_and_resolves_after_pool_drop ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::every_admission_cancel_and_short_quota_preserves_source_and_retries ... ok
+native index: triangles=1085, queries=1024, max cancellation checkpoints/query=50
+coverage116 shared=false final_area=0.9999999999999993; every prefix bounded/disjoint and unit-contained
+test encode::native_source::tests::native_mesh_index_matches_source_order_with_bounded_sparse_query_work ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::oriented_projection_intervals_cover_subnormal_cancellation_and_overflow ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::oriented_chunk_bounds_prune_diagonal_gaps_and_keep_ambiguous_overlap ... ok
+mixed shared runs: head=42 suffix=85 changed_middle=3 changed_tail=1 exact geometry/fields/tags, final=0
+actual shared kernel rows=75 flat_work=63011 shared_work=62214 exact prefixes/line IDs
+test encode::ordered_pixel::shared_fragment_store::tests::mixed_snapshot_runs_share_both_sides_of_actual_middle_cut ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::actual_shared_kernel_matches_flat_dense_prefix_bits_and_line_ids ... ok
+shared real partition: prefixes=[128, 34, 0], exact geometry/fields/tags, final=0
+partial chunks: live=8 backing=128 before=72160 after=10544; rollback admissions=2 cancellations=11 short_quotas=11; exact values/context; final=0
+ROUNDED_SUPPORT shared=false indices=[39, 174] area=0.002519428857934359 exact=0.002519428857934417
+ROUNDED_SUPPORT shared=false indices=[174, 39] area=0.002519428857934359 exact=0.002519428857934417
+ROUNDED_SUPPORT shared=false indices=[39, 139] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[139, 39] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[174, 139] area=0.001183012189903582 exact=0.0011830121899035718
+ROUNDED_SUPPORT shared=false indices=[139, 174] area=0.0011830121899035582 exact=0.0011830121899035718
+ROUNDED_SUPPORT shared=false indices=[39, 174, 139] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[174, 39, 139] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[174, 139, 39] area=0.003503791041576089 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[39, 139, 174] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[139, 39, 174] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=false indices=[139, 174, 39] area=0.0035037910415760876 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=test encode::ordered_pixel::shared_fragment_store::tests::real_partition_snapshots_preserve_bits_across_disjoint_and_overlapping_paints ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::partial_chunk_compaction_releases_unused_payload_and_all_failures_rollback ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::repeated_tail_replacements_keep_charged_storage_constant ... ok
+false indices=[144, 131, 182] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 144, 182] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 182, 144] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 182, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 144, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 131, 166] area=0.0027273082196554747 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 144, 166] area=0.0027273082196554743 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 166, 144] area=0.002727308219655474 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 166, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 144, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 182, 166] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=false indices=[182, 144, 166] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=false indices=[182, 166, 144] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=false indices=[144, 166, 182] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=false indices=[166, 144, 182] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=false indices=[166, 182, 144] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=false indices=[131, 182, 166] area=0.0017168854884317267 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=false indices=[182, 131, 166] area=0.0017168854884317267 exact=0.0017168854884317152
+test encode::ordered_pixel::shared_fragment_store::tests::subranges_and_tail_share_unchanged_payload_and_release_last_owner ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::shared_chunk_guard_does_not_carry_unknown_merge_or_zero_area_records ... ok
+coverage116 shared=true final_area=0.9999999999999993; every prefix bounded/disjoint and unit-contained
+mixed runs rollback admissions=6 cancellations=624 short_quotas=624; invalid order/range/count/owner refused; final=0
+ROUNDED_SUPPORT shared=false indices=[182, 166, 131] area=0.001716885488431715 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=false indices=[131, 166, 182] area=0.0017168854884317267 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=false indices=[166, 131, 182] area=0.0017168854884317326 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=false indices=[166, 182, 131] area=0.0017168854884317484 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=false indices=[144, 131, 182, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 144, 182, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 182, 144, 166] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 182, 166, 144] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 182, 131, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 144, 131, 166] area=test encode::ordered_pixel::shared_fragment_store::tests::mixed_runs_reject_invalid_plans_and_all_failures_rollback ... ok
+0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 131, 144, 166] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 131, 166, 144] area=0.0027273082196554842 exact=0.0027273082196554543
+test encode::ordered_grid::tests::spatial_credit_is_bounded_independently_of_overlap_count_and_released ... ok
+initial quota cost=65; all short local quotas, global exhaustion, cancellation/admission conserve work and retain pixel
+shared chunk sparse256 flat_work=46322 shared_work=20743 exact area=0.001953125
+ROUNDED_SUPPORT_ROLLBACK indices=[139, 174, 39] shared=false admissions=4 cancellations=211 short_quotas=211; exact geometry/fields/tags/line IDs and charge restored, retry exact, final=0
+test encode::ordered_samples::tests::initial_paint_quota_conserves_global_work_and_preserves_failed_pixel ... ROUNDED_SUPPORT shared=ok
+test encode::ordered_samples::tests::interned_parameters_and_segment_growth_preserve_bits_and_release_credit ... ok
+test encode::native_source::tests::native_tensor_fold_selects_source_uv_not_adaptive_triangle_order ... ok
+false indices=[144, 182, 166, 131] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 144, 166, 131] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 166, 144, 131] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[182, 166, 131, 144] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 131, 166, 182] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 144, 166, 182] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 166, 144, 182] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[131, 166, 182, 144] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 166, 131, 182] area=0.0027273082196554903 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 144, 131, 182] area=0.0027273082196554903 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 131, 144, 182] area=0.00272730821965549 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 131, 182, 144] area=0.0027273082196554903 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[144, 166, 182, 131] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 144, 182, 131] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 182, 144, 131] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=false indices=[166, 182, 131, 144] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[39, 174] area=0.002519428857934359 exact=0.002519428857934417
+ROUNDED_SUPPORT shared=true indices=[174, 39] area=0.002519428857934359 exact=0.002519428857934417
+ROUNDED_SUPPORT shared=true indices=[39, 139] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[139, 39] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[174, 139] area=0.001183012189903582 exact=0.0011830121899035718
+ROUNDED_SUPPORT shared=true indices=[139, 174] area=0.0011830121899035582 exact=0.0011830121899035718
+ROUNDED_SUPPORT shared=true indices=[39, 174, 139] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[174, 39, 139] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[174, 139, 39] area=0.003503791041576089 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[39, 139, 174] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[139, 39, 174] area=0.003503791041576082 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[139, 174, 39] area=0.0035037910415760876 exact=0.0035037910415761375
+ROUNDED_SUPPORT shared=true indices=[144, 131, 182] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 144, 182] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 182, 144] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 182, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 144, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 131, 166] area=0.0027273082196554747 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 144, 166] area=0.0027273082196554743 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 166, 144] area=0.002727308219655474 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 166, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 144, 131] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 131, 144] area=0.002727308219655486 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 182, 166] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=true indices=[182, 144, 166] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=true indices=[182, 166, 144] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=true indices=[144, 166, 182] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=true indices=[166, 144, 182] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=true indices=[166, 182, 144] area=0.001419239855912846 exact=0.0014192398559128333
+ROUNDED_SUPPORT shared=true indices=[131, 182, 166] area=0.0017168854884317267 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=true indices=[182, 131, 166] area=0.0017168854884317267 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=true indices=[182, 166, 131] area=0.001716885488431715 exact=0.0017168854884317152
+test encode::ordered_samples::tests::ranked_candidates_match_total_order_preserve_ties_and_cancel_every_comparison ... ok
+test encode::ordered_samples::tests::ranked_cell_keeps_crossing_uv_selection_exact ... ok
+ROUNDED_SUPPORT shared=true indices=[131, 166, 182] area=0.0017168854884317267 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=true indices=[166, 131, 182] area=0.0017168854884317326 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=true indices=[166, 182, 131] area=0.0017168854884317484 exact=0.0017168854884317152
+ROUNDED_SUPPORT shared=true indices=[144, 131, 182, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 144, 182, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 182, 144, 166] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 182, 166, 144] area=0.0027273082196554842 exact=0.0027273082196554543
+test encode::projected_components::degeneracy_tests::zero_area_filter_preserves_subnormal_nonzero_triangles ... ok
+ROUNDED_SUPPORT shared=true indices=[144, 182, 131, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 144, 131, 166] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 131, 144, 166] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 131, 166, 144] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 182, 166, 131] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 144, 166, 131] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 166, 144, 131] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[182, 166, 131, 144] area=0.0027273082196554725 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 131, 166, 182] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 144, 166, 182] area=0.0027273082196554847 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 166, 144, 182] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[131, 166, 182, 144] area=0.0027273082196554842 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 166, 131, 182] area=0.0027273082196554903 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 144, 131, 182] area=0.0027273082196554903 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 131, 144, 182] area=0.00272730821965549 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 131, 182, 144] area=0.0027273082196554903 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[144, 166, 182, 131] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 144, 182, 131] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 182, 144, 131] area=0.002727308219655506 exact=0.0027273082196554543
+ROUNDED_SUPPORT shared=true indices=[166, 182, 131, 144] area=0.002727308219655506 exact=0.0027273082196554543
+test encode::sample_bounds_tests::fractional_texture_bounds_preserve_every_consumed_sample ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::rounded_support_overlays_match_exact_unions ... ok
+test encode::sample_bounds_tests::patch_stream_cancellation_is_explicit_and_stops_generation ... ok
+ROUNDED_SUPPORT_ROLLBACK indices=[139, 174, 39] shared=true admissions=5 cancellations=211 short_quotas=211; exact geometry/fields/tags/line IDs and charge restored, retry exact, final=0
+test encode::sample_bounds_tests::table_growth_and_multicomponent_spills_release_credit ... ok
+test encode::ordered_pixel::shared_fragment_store::tests::captured_reordered_coverage_matches_exact_union ... ok
+test encode::sample_bounds_tests::mesh_sampling_cancels_at_every_checkpoint_without_partial_result ... ok
+shared chunk mixed paints=128: exact geometry/affine/tag/line-ID prefixes and cached proofs
+test encode::ordered_pixel::shared_fragment_store::tests::shared_chunk_proofs_save_sparse_work_and_survive_mixed_overlap_prefixes ... ok
+test encode::ordered_samples::tests::dense_subcells_preserve_area_component_integrals_and_release_on_refusal ... ok
+ROUNDED_SUPPORT_ROLLBACK indices=[166, 182, 131, 144] shared=false admissions=10 cancellations=232 short_quotas=232; exact geometry/fields/tags/line IDs and charge restored, retry exact, final=0
+test encode::ordered_samples::tests::ordered_samples_admission_and_cancellation_are_atomic_and_retryable ... ok
+RANKED_DENSE_WORK source_ticks=612243 ranked_ticks=51020
+test encode::ordered_samples::tests::ranked_dense_occlusion_preserves_integrals_with_less_shared_work ... ok
+ROUNDED_SUPPORT_ROLLBACK indices=[166, 182, 131, 144] shared=true admissions=6 cancellations=108 short_quotas=108; exact geometry/fields/tags/line IDs and charge restored, retry exact, final=0
+test encode::ordered_pixel::shared_fragment_store::tests::rounded_support_repairs_roll_back_every_admission_cancel_and_short_quota ... ok
+test encode::native_source::tests::native_patch_priority_survives_reflection_and_later_patch_override ... ok
+actual shared kernel force_line_growth=false rollback admissions=7 cancellations=137 short_quotas=137; exact payload/line IDs/area; final=0
+test encode::ordered_pixel::shared_fragment_store::tests::actual_shared_kernel_every_mutation_failure_rolls_back_payload_and_lines ... ok
+test encode::sample_bounds_tests::patch_internal_cancellation_rolls_back_every_checkpoint ... ok
+captured dense1236 flat_work=2197161 shared_work=1430622 page_remaining=325715 first_page_quota_crossing=[Some(410), Some(454)]; exact prefixes/fields/tags/line IDs
+test encode::ordered_pixel::shared_fragment_store::tests::captured_dense_cell_matches_flat_every_prefix ... ok
+actual shared kernel force_line_growth=true rollback admissions=8 cancellations=585 short_quotas=585; exact payload/line IDs/area; final=0
+test encode::ordered_pixel::shared_fragment_store::tests::actual_shared_kernel_joint_line_growth_and_payload_failures_rollback ... ok
+coverage328 shared=false final_area=0.9999992421516017; every prefix bounded/disjoint and unit-contained
+coverage328 shared=true final_area=0.9999992421516017; every prefix bounded/disjoint and unit-contained
+test encode::ordered_pixel::shared_fragment_store::tests::captured_coverage_cell_stays_inside_unit_partition ... ok
+test encode::native_source::tests::native_coons_priority_owner_and_admission_cancel_retry has been running for over 60 seconds
+test encode::native_source::tests::native_patch_priority_owner_and_admission_cancel_retry has been running for over 60 seconds
+test encode::native_source::tests::native_patch_priority_owner_and_admission_cancel_retry ... ok
+test encode::native_source::tests::native_coons_priority_owner_and_admission_cancel_retry ... ok
+
+test result: ok. 96 passed; 0 failed; 5 ignored; 0 measured; 96 filtered out; finished in 148.19s
+

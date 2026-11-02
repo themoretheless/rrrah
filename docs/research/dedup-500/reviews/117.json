@@ -2,9 +2,9 @@
   "index": 117,
   "repository": "KevinStreetCoder/harvestr",
   "commit": "3ba21f673d6e52970c2a1f7d7b5c93d252753aa1",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "6/171 whole files;8 authored controls;webui selected ranges only",
   "decision": "reference",
-  "finding": "Head/tail truncated SHA1 fingerprint of downloaded files; important negative example: sampled digest cannot prove same content.",
+  "finding": "Sampled fingerprint false duplicate confirmed; mixed allowed/skipped deletion requests drop history for skipped paths too. Owned fixtures only.",
   "available_source_evidence": [
     {
       "path": "dedupe.py",
@@ -104,5 +104,20 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "incremental_reviews": [
+    {
+      "audit": "docs/research/dedup-500/harvestr117-source-review-v1-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/harvestr117-source-review-v2-20261024.json",
+      "whole_repo_complete": false
+    },
+    {
+      "audit": "docs/research/dedup-500/harvestr117-source-review-v3-20261024.json",
+      "whole_repo_complete": false
+    }
+  ],
+  "full_repository_read": false
 }

@@ -1,0 +1,219 @@
+{
+  "repository": "WSH032/image-deduplicate-cluster-webui",
+  "commit": "02963057d5ae9368f8f481f44e2d30b7c63ed946",
+  "source_sha256": "909a2d747512a4e37bcd73b2cfb6d55b193b5f86e27c2a46e5a1f09181b77e11",
+  "read_scope": {
+    "path": "img_dedup_clust/deduplicate_fn.py",
+    "lines_read": [
+      1,
+      739
+    ],
+    "total_lines": 739,
+    "whole_file_read": true
+  },
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "original_tests_run": 0,
+  "authored_control_scenarios": 17,
+  "authored_control_cases": 40,
+  "control_source": "docs/research/dedup-500/webui197-controls-20261024/cluster_control.py",
+  "control_results": "docs/research/dedup-500/webui197-controls-20261024/cluster-control-results.json",
+  "runtime_scope": "Unchanged AST-extracted complete cluster_duplicates function, MyHasher adapter supplies synthetic symmetric graph. No actual image hashing/model/Gradio runtime.",
+  "findings": [
+    "First-overlap-only set merging does not merge all previously accumulated intersecting sets. Symmetric A-B-C-D chain yields overlapping output clusters in4/24 key insertion orders, single connected component in20/24.",
+    "Connected components of approximate similarity are not pairwise equality; even corrected union-find cannot establish exact image duplicates.",
+    "Source delegates hashing/CNN to imagededup; equality semantics require downstream algorithm review.",
+    "Mutable module globals hold selection, clusters, confirmed directory and duplicate map; upstream TODO explicitly notes multi-user interference. Concurrency not runtime tested.",
+    "Original selection function accepts negative parent/child indexes; synthetic -1/-1 selects last image D. Repeated index0 plans same image A twice. Recording operation stub only, no real removals.",
+    "Select-all deliberately includes every member. confirm_cluster has no retained-member guard; this is explicit manual feature, not evidence auto_select deletes all.",
+    "Selection indexes are resolved against mutable current global cluster_list without scan generation identity. Multi-session/stale-selection consequences not runtime verified.",
+    "Real unchanged cache_images_file retains stale same-name red thumbnail after owned source is replaced by blue PNG; reports no cache error. Filename-only cache validity lacks source identity/mtime/content verification.",
+    "operate_images_file logs per-file failures and returns no structured success/failure report; caller confirm_cluster unconditionally builds success message and resets state after return. Source inspection only; failure injection not yet run.",
+    "Failure injection now reproduces earlier static finding: copy and move failures are logged but operation function returns None; original confirm_cluster reports successful move and clears scan state even when sole selected move failed. Owned source bytes preserved. Not a real Gradio end-to-end run.",
+    "Requirements do not pin imagededup, torch, Pillow, numpy or toml; Gradio only lower bounded3.31.0. No reproducible current complete-app dependency environment established.",
+    "UI hash distance slider0..64 defaults10; CNN cosine threshold defaults0.9. These are similarity controls, not exact-byte or canonical-pixel equality proof.",
+    "Default operation is move; all-select is explicitly exposed alongside heuristic auto-select and manual TOML edit. No scan generation token supplied to confirm_cluster.",
+    "Real directory scanner controls: extension-only nonrecursive listing, same-stem sidecar aliasing, and directory snapshot retained until explicit image_files refresh. These scopes need explicit contracts before reuse.",
+    "Standalone installer optionally pins old Torch2.0/CUDA11.8 but then installs otherwise unpinned requirements. A1111 installer checks import availability rather than versions and installs all packages after any missing import. Static review only; installers not executed.",
+    "update.ps1 performs git reset --hard then git pull without preserving local changes. Reviewed as upstream content only; no update command executed.",
+    "JavaScript ready-state wrapper reads readyState from selected DOM alias, including gradioApp(); actual host behavior not qualified. Event binding code does not remove prior handlers; repeated load consequences require browser/DOM controls.",
+    "Real NumPy NPZ control: missing whole feature file is represented by ones; a partial archive with requested inside layer but missing outside layer causes duplicate inside append and ragged array ValueError, rather than documented fallback.",
+    "Bipolarize allzero/tied categories always selects first category; this is argmax behavior, not image identity evidence.",
+    "Text vectorizer densifies sparse matrix with toarray and max_df0.99; scaling/degenerate-corpus behavior not yet runtime qualified.",
+    "Complete cluster module review: KMeans/Spectral/Agglomerative/OPTICS delegate to sklearn; semantic feature clustering has no byte/pixel equality verification. KMeans and SVD have no fixed random_state here.",
+    "OPTICS label-1 enters np.unique and is displayed/processed as one group alongside real clusters, although it denotes noise; source finding, runtime not yet tested.",
+    "Cluster analysis breaks before any score on one/all-singleton predicted labels, then evaluates math.log2(final_clusters_number=0), causing ValueError; outer wrapper catches and returns fourNone. Static finding pending runtime reproduction.",
+    "All clusters are retained in operation state even when UI only displays first100; warning logs mention display limit. Source finding;not evidence of deletion because this separate clustering operation supports rename/copy/move.",
+    "Analysis boundary reproduced: first fit returns one label or all singleton labels, no metrics computed; math.log2(0) raises ValueError and original wrapper returns fourNone. Python3.14 error wording differs from older math domain error; control checks exception type and records observed message.",
+    "AST use_wd14 control: changing model_type/keep_updating across calls does not replace existing Tagger instance; explicit release_memory resets it. UI documentation/automatic reset wiring still needs inspection before calling this a user-facing defect. No actual model inference.",
+    "UI qualification resolves cached-model concern: dropdown label explicitly says release model before switching; separate release button is wired to release_memory, TensorRT mode switch warning also explicit. No automatic change handler. Therefore previous reuse control demonstrates documented manual lifecycle, not an undisclosed switching bug.",
+    "Historical TensorRT report uses205 images/GTX2060 6GB, workers2; nan explicitly means untested, not runtime failure. No raw repetitions/variance or current-machine verification, so no transferable speed claim. Changelog tested host is2023 SD-WebUI1.3.1."
+  ],
+  "decision": "reject-cluster-merge-implementation; wrapper-reference-only",
+  "remaining": "24 whole text files/40 verified blobs;16 not whole-reviewed. Main tagger implementation,cluster UI,experimental sources/notebooks,license/readme and remaining utilities pending; no full runtime/model qualification.",
+  "deferred": "Native pHash.org/ASAN remains skipped; Python wrapper inspection does not run that item.",
+  "previous_audit": "docs/research/dedup-500/webui197-source-controls-v11-20261024.json",
+  "selection_control_source": "docs/research/dedup-500/webui197-controls-20261024/selection_control.py",
+  "selection_control_results": "docs/research/dedup-500/webui197-controls-20261024/selection-control-results.json",
+  "additional_whole_file_reads": [
+    {
+      "path": "deduplicate_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/02-deduplicate_images.py",
+      "sha256": "7e7fcecdcb9eb716bf7454958d61626636c0f28cfe33320fbb8e1bf75968c64c"
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_js.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/04-deduplicate_js.py",
+      "sha256": "b5232d14bbe392638a17ddbf73d15d37cb2c24c8ec55daf9516b14141773f137"
+    },
+    {
+      "path": "run_deduplicate_images.ps1",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/05-run_deduplicate_images.ps1",
+      "sha256": "6a1b787514247687bd614d7977d211262765d7b97a071aac13f1c09c11e17046"
+    },
+    {
+      "path": "img_dedup_clust/tools/operate_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/operate_images.py",
+      "sha256": "18e62a0643e4c54c80d9c927d96c717e157728acc05d494b4bcc93267aa2239d"
+    },
+    {
+      "path": "requirements.txt",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/requirements.txt",
+      "sha256": "e8e68c438281c689ac7756e68a0c80e3b35b18103a3672ea5569ee66a485796f"
+    },
+    {
+      "path": "img_dedup_clust/deduplicate_ui.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/deduplicate_ui.py",
+      "sha256": "4ca88fc23d01fae0886d1f9429b2cb8e2bac7a1403a959cfac8999d13ed4f2c6"
+    },
+    {
+      "path": "img_dedup_clust/tools/path_tools.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/path_tools.py",
+      "sha256": "06f608ac7d9dc2538b93994fc344956199670058c9119677988ac55ca2e2bab0"
+    },
+    {
+      "path": "img_dedup_clust/tools/partialmethod_tools.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/partialmethod_tools.py",
+      "sha256": "bd6355308365ac9294f443540ea3ef42724f89885538261268a399f816114913"
+    },
+    {
+      "path": "img_dedup_clust/tools/webui_error_wrapper.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/webui_error_wrapper.py",
+      "sha256": "c089e57fa91c745fdfe10e647ba6ec9229c749c74db732934d0a461fcc156b2b"
+    },
+    {
+      "path": "scripts/ui.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/scripts/ui.py",
+      "sha256": "88085887326916e275ee2b58f349be0cd38ec98d869fc03a1ff35528208857a4"
+    },
+    {
+      "path": "img_dedup_clust/tools/SearchImagesTags.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/SearchImagesTags.py",
+      "sha256": "f360ddd6a6c23a2c06346f95903ce6907414e6a3988a4060352418f4a527712a"
+    },
+    {
+      "path": "img_dedup_clust/tools/js.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/tools/js.py",
+      "sha256": "43e1070164aa65c05bf07a6c549c5b000576700aafce7f4733bf44f9a7aa44db"
+    },
+    {
+      "path": "install.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/install.py",
+      "sha256": "9a9d9610f73b34f9596c55520d15d9316c855e735b47da7942519353fdbdf2a2"
+    },
+    {
+      "path": "install.ps1",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/install.ps1",
+      "sha256": "fa43054f96a8e4849bba404188c44fcba7b29c07392a4f95e6143851edbb5bfc"
+    },
+    {
+      "path": "update.ps1",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/update.ps1",
+      "sha256": "6d7ae3300bdd8f1023ef12219893c2428afa4a102fe72751fe81143dd38c37d7"
+    },
+    {
+      "path": "style.css",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/style.css",
+      "sha256": "72adaa688372b1dd9fdbb25ecc94cf1243112e9e652644142168e8ed244c484e"
+    },
+    {
+      "path": "run_cluster_images.ps1",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/run_cluster_images.ps1",
+      "sha256": "76209170db478ce471a5f3c90c626ceb60e72ff3d6c0f0e4679b6927c9fa5970"
+    },
+    {
+      "path": "img_dedup_clust/cluster_fn.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/cluster_fn.py",
+      "sha256": "1780e550abf9e311f2637220bd994f68f7f131a1e85e6a59b8edb3434a43e766"
+    },
+    {
+      "path": "img_dedup_clust/wd14_fn.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/wd14_fn.py",
+      "sha256": "d6b72dc4de2f4e9f8d31d65aad9c2debccd20b311e2312775bb10963b2de8624"
+    },
+    {
+      "path": "cluster_images.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/cluster_images.py",
+      "sha256": "22c9c03647b5552ef95111c92fc1ae75841e7a84d2fcefce7c6f164d7c28fd1c"
+    },
+    {
+      "path": "img_dedup_clust/wd14_ui.py",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/img_dedup_clust/wd14_ui.py",
+      "sha256": "c35cc4d753401a8e5aaf0331b54b8a19fafb6ddf2956af1927ff973fd551055e"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/CHANGELOG.md",
+      "sha256": "a151b8454c6417463ad61b2fdb5185a1b18c98d8d6e68badc7fee77323dc92a3"
+    },
+    {
+      "path": "docs/tensorrt/tensorrt_speed_experiment.md",
+      "local": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-pinned/docs/tensorrt/tensorrt_speed_experiment.md",
+      "sha256": "3d1fbbcbbaa33ab7f3c2123eff939641d7327d94f964d0c51abf2e4909fc2a71"
+    }
+  ],
+  "tracked_blob_count": 40,
+  "whole_text_files_read": 24,
+  "cache_control_source": "docs/research/dedup-500/webui197-controls-20261024/cache_control.py",
+  "cache_control_results": "docs/research/dedup-500/webui197-controls-20261024/cache-control-results.json",
+  "failure_controls": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/failure_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/failure-control-results.json",
+    "caller_source": "docs/research/dedup-500/webui197-controls-20261024/caller_failure_control.py",
+    "caller_results": "docs/research/dedup-500/webui197-controls-20261024/caller-failure-results.json",
+    "cases": 3,
+    "qualification": "Original operations module and undecorated AST caller; owned temporary files, copy/move failures injected, serialization/UI adapters. No real file move/removal."
+  },
+  "acquisition": "docs/research/dedup-500/evidence/WSH032--image-deduplicate-cluster-webui/remaining-acquisition.json",
+  "all_tracked_blobs_acquired_verified": 40,
+  "scan_controls": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/scan_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/scan-control-results.json",
+    "cases": 3
+  },
+  "partial_cluster_read": {
+    "path": "img_dedup_clust/cluster_fn.py",
+    "lines_read": [
+      1,
+      1201
+    ],
+    "whole_file_read": true
+  },
+  "feature_controls": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/feature_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/feature-control-results.json",
+    "cases": 3
+  },
+  "analyse_controls": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/analyse_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/analyse-control-results.json",
+    "log": "docs/research/dedup-500/webui197-controls-20261024/analyse-control-log.txt",
+    "cases": 2,
+    "scope": "Original AST function/decorator, real NumPy/math; minimal DataFrame/visualization/progress adapters and deterministic model, not actual sklearn/pandas."
+  },
+  "tagger_reuse_control": {
+    "source": "docs/research/dedup-500/webui197-controls-20261024/tagger_reuse_control.py",
+    "results": "docs/research/dedup-500/webui197-controls-20261024/tagger-reuse-results.json",
+    "cases": 1
+  }
+}

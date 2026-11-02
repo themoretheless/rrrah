@@ -1,0 +1,57 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+warning: associated items `append_values`, `from_values`, `with_tail`, `range`, and `descriptor_bytes` are never used
+   --> vendor/hayro-interpret/src/encode/shared_fragment_store.rs:181:8
+    |
+149 | impl<'a> SharedFragments<'a> {
+    | ---------------------------- associated items in this implementation
+...
+181 |     fn append_values(
+    |        ^^^^^^^^^^^^^
+...
+311 |     fn from_values(
+    |        ^^^^^^^^^^^
+...
+323 |     fn with_tail(
+    |        ^^^^^^^^^
+...
+344 |     fn range(&self, range: Range<usize>, work: &mut usize, cancelled: &dyn Fn() -> bool) -> Result<Self> {
+    |        ^^^^^
+...
+361 |     fn descriptor_bytes(&self) -> usize {
+    |        ^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `is_empty` is never used
+   --> vendor/hayro-interpret/src/encode/shared_fragment_store.rs:383:19
+    |
+376 | impl<'a> RegionValues<'a> {
+    | ------------------------- method in this implementation
+...
+383 |     pub(super) fn is_empty(&self) -> bool {
+    |                   ^^^^^^^^
+
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+warning: `hayro-interpret` (lib) generated 2 warnings
+    Finished `dev` profile [optimized + debuginfo] target(s) in 21.61s

@@ -1,0 +1,68 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v12-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "90510b0fda6e85033c853c213d76588e9f6d5625",
+      "sha256": "5db3515fb954399477964210c25eb7522a60d1e4f924da6a439b6e1de86592c0",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 33,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_tests_total_distinct": 124,
+  "new_distinct_original_tests": 0,
+  "requalified_original_tests": 124,
+  "declared_major_runtime": {
+    "vitest": "2.1.9",
+    "node": "22.23.4",
+    "results": {
+      "numTotalTests": 124,
+      "numPassedTests": 124,
+      "numFailedTests": 0,
+      "numPendingTests": 0
+    },
+    "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+    "lock_sha256": "779c301386e4a022fce982c53f275a296fa0ecf304589b0cdf83251a2215f7df",
+    "command": ".dedup-work/sipcode120-vitest2-20261024/node_modules/.bin/vitest run --root .dedup-work/sipcode120-vitest2-20261024 --maxWorkers=2 --minWorkers=1 --reporter=json --outputFile=results.json"
+  },
+  "byte_identical_prior_tested_sources": [
+    "src/lib/errors.ts",
+    "src/lib/fs.ts",
+    "src/lib/result.ts",
+    "src/lib/git.ts",
+    "src/lib/path-normalize.ts",
+    "src/modules/proxy/read-cache.ts",
+    "src/modules/proxy/signal-cache.ts",
+    "src/modules/proxy/prewarmCache.ts",
+    "src/modules/proxy/hookReadDedup.ts",
+    "src/modules/manifest/hotFiles.ts",
+    "src/modules/manifest/importGraph.ts",
+    "src/modules/manifest/scanFiles.ts",
+    "src/modules/manifest/parseFile.ts",
+    "src/modules/proxy/rewriters/dedupRead.ts",
+    "tests/lib/path-normalize.test.ts",
+    "tests/modules/proxy/signal-cache.test.ts",
+    "tests/modules/proxy/prewarmCache.test.ts",
+    "tests/modules/proxy/read-cache.test.ts",
+    "tests/modules/proxy/hookReadDedup.test.ts",
+    "tests/modules/manifest/importGraph.test.ts",
+    "tests/modules/manifest/hotFiles.test.ts",
+    "tests/modules/manifest/parseFile.test.ts",
+    "tests/modules/manifest/scanFiles.test.ts",
+    "tests/modules/proxy/rewriters/dedupRead.test.ts"
+  ],
+  "authored_upstream_controls_total_distinct": 28,
+  "findings": [
+    "Same124unchangedoriginalcases pass ondeclaredVitestmajor2aswell as prior4;no duplicatecasecredit.",
+    "Still isolatedproject subset,notfulloriginalpackage lock/dependency/build/nativeAST qualification.",
+    "README saysNode>=18 butpackageengines>=20;Node18 compatibilitynotproven.",
+    "README1389tests badge and62.6%lockedcorpus claim notverifiedbyselected124tests."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

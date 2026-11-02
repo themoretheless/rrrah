@@ -1,0 +1,84 @@
+{
+  "repository": "benetech/VideoDeduplication",
+  "commit": "59222c64250886aefdc70e0541d830ca9200b5d7",
+  "whole_files_read": [
+    {
+      "path": "generate_matches.py",
+      "local": "02-generate_matches.py",
+      "git_blob": "8370bca891f408847d9c3eaa994f4ff95614d01e",
+      "sha256": "7c97a486dd41ada2436e52538a52540813a925a4ed39b4c59c028efdc3119f95",
+      "whole_text_read": true
+    },
+    {
+      "path": "winnow/pipeline/generate_local_matches.py",
+      "local": "deep-winnow_pipeline_generate_local_matches.py",
+      "git_blob": "054220ac67c7787306e63269d2ae6c69cfbc0a21",
+      "sha256": "51aed82baf38a75a2ca94ea1b334b5946c1468b77ea1d59afbbe58d91961122a",
+      "whole_text_read": true
+    },
+    {
+      "path": "winnow/utils/matches.py",
+      "local": "deep-winnow_utils_matches.py",
+      "git_blob": "a9f26385a9c14158b9f3f329eea83c2cdc0ecf72",
+      "sha256": "36f34d7176f094d029d954dc38d4d8998b9f3956d5536f64e70aa7b21b25ee3e",
+      "whole_text_read": true
+    },
+    {
+      "path": "winnow/feature_extraction/similarity_model.py",
+      "local": "deep-winnow_feature_extraction_similarity_model.py",
+      "git_blob": "84322e8517f5d8aa59f918e50e72d6d212586334",
+      "sha256": "41cbbe3ddc2b6a1fe6723afe88a8e197e86245991cf2f9643bc1bbc2cd9240e9",
+      "whole_text_read": true
+    },
+    {
+      "path": "winnow/duplicate_detection/neighbors.py",
+      "local": "deep-neighbors.py",
+      "git_blob": "dbbc05cdc4b8036b7c07961415764bdbcb1bb86e",
+      "sha256": "3f3df6024e406d5fb70a6bed1174f14e60b1314dc96e4b765b7248767f935724",
+      "whole_text_read": true
+    },
+    {
+      "path": "winnow/duplicate_detection/annoy_neighbors.py",
+      "local": "deep-annoy_neighbors.py",
+      "git_blob": "13287f3e49a4489952f01e2f905fcb5f43781471",
+      "sha256": "3b2cb2c22bff38a2fb67592e54d6b1ca61285ed0bdd4bf85310414125dc9db37",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 6,
+  "tracked_blobs": 859,
+  "whole_repo_complete": false,
+  "original_upstream_tests_run": false,
+  "authored_fixture_controls_passed": 4,
+  "authored_native_annoy_controls_passed": 5,
+  "control_count_scope": "Some fixture/native controls requalify same property;do not sum as9 distinct findings.",
+  "controls": "video130-controls-20261024",
+  "findings": [
+    "Positive close-pair detected and self/far excluded.",
+    "Threshold0 excludes exact distinct vectors.",
+    "Default cap/approximate index returned2 of21 zero-distance neighbors for separate query.",
+    "optimize_trees=True raises TypeError due extra argument to __optimize__.",
+    "Empty needles raises ValueError."
+  ],
+  "qualification": "Both original wrapper class bodies unchanged;actual Annoy1.17.3 native C++ index and NumPy2.5.4;500-dimensional synthetic vectors;no model or video execution",
+  "initial_control_failure": "Expected20 neighbors for21 identical vectors,but actual native output2;initial assumption rejected and recorded. Final control asserts incompleteness rather than20;not an index fix.",
+  "neural_model_qualified": false,
+  "full_video_pipeline_qualified": false,
+  "production_adoption": false,
+  "decision": "reference",
+  "native_phash_asan": "deferred",
+  "previous_audit": "video130-source-review-v1-20261024.json",
+  "annoy_followup": {
+    "reports": [
+      "video130-controls-20261024/annoy-density-py314-results.json",
+      "video130-controls-20261024/annoy-density-py39-results.json"
+    ],
+    "findings": [
+      "Direct Annoy1.17.3 native API returned2 identical-vector neighbors even when requesting full3/21/257 sets,for2D/500D,zeros/ones,seed1,single build worker.",
+      "Direct native index containing8 distinct points likewise returned at most2 for requests3/5/8.",
+      "Observed in separately installed Python3.14/NumPy2.5.4 andPython3.9/NumPy2.0.2 on same macOS host.",
+      "This excludes upstream Python wrapper as sole cause and is not specific to degenerate vectors. Root cause remains unproven;do not generalize to all Annoy installations or historical upstream runtime."
+    ]
+  },
+  "qualification_note": "Earlier cap/approximate wording was broader than evidence. Native output truncation occurs below requested cap,also on distinct vectors;host/build/dependency issue unresolved."
+}

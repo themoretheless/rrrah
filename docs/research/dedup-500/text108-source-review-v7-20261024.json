@@ -1,0 +1,36 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v6-20261024.json",
+  "whole_repo_complete": false,
+  "new_read_lines": {
+    "path": "dedup_cpp/xxhash.h",
+    "start": 1801,
+    "end": 2300
+  },
+  "cumulative_header_read_lines": [
+    1,
+    2300
+  ],
+  "header_total_lines": 7487,
+  "whole_header_read": false,
+  "runtime": {
+    "harness": "docs/research/dedup-500/text108-secret-controls-20261024.c",
+    "passed_lengths": 11,
+    "checks_per_length": 3,
+    "scope": "NativeARM64ClangO2;precomputedseedsecret64/128parity and arbitrarygeneratedsecretseed0stream128parity, includes239/240/241boundary;notperformanceorfullpipeline"
+  },
+  "findings": [
+    "Source documents older<=0.8.2experimental128secretandseedstreambug withseed0andshortinput; bundled0.8.3controls pass tested boundaries, no reproduced defect.",
+    "Secretandseed with matching precomputedsecret produces same64/128result as withSeed across11lengths. No measured speedup claim.",
+    "Lowlevel memory access tuning includes portable memcpy/byteshift and compiler-dependent packed/directcast modes; automatic code below uses GCC-compatible packed selection under conditions. No production tuning adopted.",
+    "Experimental APIs explicitlyversiontied; no crossversionstate/cachequalification."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "xxhash.h2301..7487",
+    "Abseilsubmodule",
+    "fullnativepipeline"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

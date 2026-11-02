@@ -1,0 +1,166 @@
+TAP version 13
+# Subtest: resolveContextLimit: percentage
+ok 1 - resolveContextLimit: percentage
+  ---
+  duration_ms: 0.664625
+  type: 'test'
+  ...
+# Subtest: resolveContextLimit: numeric string
+ok 2 - resolveContextLimit: numeric string
+  ---
+  duration_ms: 0.082334
+  type: 'test'
+  ...
+# Subtest: resolveContextLimit: bare number
+ok 3 - resolveContextLimit: bare number
+  ---
+  duration_ms: 0.040875
+  type: 'test'
+  ...
+# Subtest: resolveContextLimit: junk falls back to contextWindow
+ok 4 - resolveContextLimit: junk falls back to contextWindow
+  ---
+  duration_ms: 0.038333
+  type: 'test'
+  ...
+# Subtest: resolveContextLimit: zero context window falls back to safe default
+ok 5 - resolveContextLimit: zero context window falls back to safe default
+  ---
+  duration_ms: 0.039208
+  type: 'test'
+  ...
+# Subtest: parseStrictId rejects junk
+ok 6 - parseStrictId rejects junk
+  ---
+  duration_ms: 0.06775
+  type: 'test'
+  ...
+# Subtest: soft nudge fires only once every nudgeEveryTurns turns
+ok 7 - soft nudge fires only once every nudgeEveryTurns turns
+  ---
+  duration_ms: 1.4965
+  type: 'test'
+  ...
+# Subtest: hard nudge fires every turn when over maxContextLimit
+ok 8 - hard nudge fires every turn when over maxContextLimit
+  ---
+  duration_ms: 1.013125
+  type: 'test'
+  ...
+# Subtest: manual mode suppresses nudges
+ok 9 - manual mode suppresses nudges
+  ---
+  duration_ms: 0.9925
+  type: 'test'
+  ...
+# Subtest: protectedByRecency: turns=1 protects everything after the last user msg
+ok 10 - protectedByRecency: turns=1 protects everything after the last user msg
+  ---
+  duration_ms: 1.21875
+  type: 'test'
+  ...
+# Subtest: protectedByRecency: turns=2 spans back across one user boundary
+ok 11 - protectedByRecency: turns=2 spans back across one user boundary
+  ---
+  duration_ms: 0.099334
+  type: 'test'
+  ...
+# Subtest: protectedByRecency: turns=0 returns empty set
+ok 12 - protectedByRecency: turns=0 returns empty set
+  ---
+  duration_ms: 0.054125
+  type: 'test'
+  ...
+# Subtest: protectedByRecency: maxSteps caps protection inside one long turn
+ok 13 - protectedByRecency: maxSteps caps protection inside one long turn
+  ---
+  duration_ms: 0.155792
+  type: 'test'
+  ...
+# Subtest: protectedByRecency: no maxSteps cap protects the whole turn (legacy)
+ok 14 - protectedByRecency: no maxSteps cap protects the whole turn (legacy)
+  ---
+  duration_ms: 0.121959
+  type: 'test'
+  ...
+# Subtest: protectedByRecency: a user boundary still stops before the cap
+ok 15 - protectedByRecency: a user boundary still stops before the cap
+  ---
+  duration_ms: 0.059208
+  type: 'test'
+  ...
+# Subtest: turnProtection prevents dedup of recent turn results
+ok 16 - turnProtection prevents dedup of recent turn results
+  ---
+  duration_ms: 0.661167
+  type: 'test'
+  ...
+# Subtest: turnProtection prevents purgeErrors on recent failed call
+ok 17 - turnProtection prevents purgeErrors on recent failed call
+  ---
+  duration_ms: 0.235333
+  type: 'test'
+  ...
+# Subtest: turnProtection prevents compression of recent tool result
+ok 18 - turnProtection prevents compression of recent tool result
+  ---
+  duration_ms: 0.31975
+  type: 'test'
+  ...
+# Subtest: resolveModelLimit: falls back to global when no override
+ok 19 - resolveModelLimit: falls back to global when no override
+  ---
+  duration_ms: 0.263666
+  type: 'test'
+  ...
+# Subtest: resolveModelLimit: model override wins
+ok 20 - resolveModelLimit: model override wins
+  ---
+  duration_ms: 0.078167
+  type: 'test'
+  ...
+# Subtest: resolveModelLimit: % in override resolved against window
+ok 21 - resolveModelLimit: % in override resolved against window
+  ---
+  duration_ms: 0.049959
+  type: 'test'
+  ...
+# Subtest: nudge uses per-model max override
+ok 22 - nudge uses per-model max override
+  ---
+  duration_ms: 1.124291
+  type: 'test'
+  ...
+# Subtest: iterationNudgeThreshold fires after N messages since last user msg
+ok 23 - iterationNudgeThreshold fires after N messages since last user msg
+  ---
+  duration_ms: 0.725666
+  type: 'test'
+  ...
+# Subtest: iterationNudgeThreshold=0 disables the trigger
+ok 24 - iterationNudgeThreshold=0 disables the trigger
+  ---
+  duration_ms: 0.702875
+  type: 'test'
+  ...
+# Subtest: nudgeForce='strong' uses strong-nudge text
+ok 25 - nudgeForce='strong' uses strong-nudge text
+  ---
+  duration_ms: 0.665959
+  type: 'test'
+  ...
+# Subtest: nudgeForce='soft' uses soft-nudge text (default)
+ok 26 - nudgeForce='soft' uses soft-nudge text (default)
+  ---
+  duration_ms: 1.036958
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 128.183209

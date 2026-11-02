@@ -1,0 +1,35 @@
+{
+  "method": "AST-selected original functions/constants unchanged; regex stdlib only; no date/address dependency calls",
+  "source_sha256": "8d664d9ac025071122a46dc7766267520e758450313c155f07314663a066c604",
+  "controls": [
+    {
+      "case": "non_ascii_loss",
+      "left": "Иван",
+      "right": "Олег",
+      "normalized": "",
+      "collision_observed": true
+    },
+    {
+      "case": "accent_loss",
+      "left": "José",
+      "right": "Jos",
+      "normalized": "jos",
+      "collision_observed": true
+    },
+    {
+      "case": "punctuation_loss",
+      "left": "AB-CD",
+      "right": "ABCD",
+      "normalized": "abcd",
+      "collision_observed": true
+    },
+    {
+      "case": "abbreviation_boundary",
+      "start": "dr smith",
+      "interior": "x doctor smith",
+      "observed": true
+    }
+  ],
+  "passed": 4,
+  "original_tests_run": 0
+}

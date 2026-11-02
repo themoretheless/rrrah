@@ -1,0 +1,55 @@
+{
+  "scope": "Complete original PruneStage with local-folder, timing/log/progress adapters.\n\nActual owned binary files and original run/process/rewrite algorithms; no\nsignature generation, distributed execution or full corpus pipeline.\n",
+  "source_sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+  "authored_controls_run": 3,
+  "original_tests_run": 0,
+  "observations": [
+    {
+      "case": "strict subset dropped and superset preserves all members",
+      "output": {
+        "000_00.dups": [],
+        "001_00.dups": [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              0,
+              3
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "case": "equal cross-band buckets keep lower UID only",
+      "output": {
+        "000_00.dups": [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              0,
+              2
+            ]
+          ]
+        ],
+        "001_00.dups": []
+      }
+    },
+    {
+      "case": "same input/output directory truncates owned source file before reading it",
+      "output": {
+        "000_00.dups": []
+      },
+      "qualification": "boundary invocation only; normal scripts/config folder separation not yet qualified"
+    }
+  ]
+}

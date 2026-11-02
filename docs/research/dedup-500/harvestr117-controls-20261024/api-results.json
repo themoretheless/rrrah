@@ -1,0 +1,33 @@
+{
+  "source_sha256": "7b8d1b3846f88f6daeecca1ea11723545de90f2c975158f923dc0bcc923868bb",
+  "controls_passed": 2,
+  "nonzero_exit_result": {
+    "ok": true,
+    "message": "Dedup complete.",
+    "stdout": ""
+  },
+  "exception_result": [
+    {
+      "error": "fixture exception"
+    },
+    500
+  ],
+  "call": [
+    {
+      "args": [
+        [
+          "/opt/homebrew/opt/python@3.15/bin/python3.15",
+          "/owned/not-executed/dedupe.py",
+          "--apply"
+        ]
+      ],
+      "kwargs": {
+        "capture_output": true,
+        "text": true,
+        "cwd": "/owned/not-executed",
+        "timeout": 600
+      }
+    }
+  ],
+  "scope": "Exact original function AST with decorators removed; subprocess recorder and jsonify identity; no Flask server or child process execution"
+}

@@ -1,0 +1,28 @@
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.18s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_cache-a642c2ff8cc4bc0c)
+
+running 1 test
+test swap::expiry_scaling_qualification::real_file_multi_batch_pairs ... ok
+
+successes:
+
+---- swap::expiry_scaling_qualification::real_file_multi_batch_pairs stdout ----
+TTL_SCALING count=129 pair=0 candidate=false cleanup_ns=12252500 removed=129 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=129 pair=0 candidate=true cleanup_ns=11871708 removed=129 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=129 pair=1 candidate=true cleanup_ns=11607375 removed=129 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=129 pair=1 candidate=false cleanup_ns=10400167 removed=129 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=129 pair=2 candidate=false cleanup_ns=11154458 removed=129 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=129 pair=2 candidate=true cleanup_ns=10789625 removed=129 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=1025 pair=0 candidate=false cleanup_ns=95162792 removed=1025 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=1025 pair=0 candidate=true cleanup_ns=95519375 removed=1025 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=1025 pair=1 candidate=true cleanup_ns=94717542 removed=1025 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=1025 pair=1 candidate=false cleanup_ns=107998125 removed=1025 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=1025 pair=2 candidate=false cleanup_ns=101661333 removed=1025 additional_payload_heap=0 final_objects=0
+TTL_SCALING count=1025 pair=2 candidate=true cleanup_ns=97178625 removed=1025 additional_payload_heap=0 final_objects=0
+
+
+successes:
+    swap::expiry_scaling_qualification::real_file_multi_batch_pairs
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 161 filtered out; finished in 1.84s
+

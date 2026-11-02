@@ -1,0 +1,38 @@
+{
+  "scope": "Every JSONL row parsed and counted; not manual semantic review of every generated answer/reasoning",
+  "rows": 500,
+  "unique_question_ids": 500,
+  "duplicate_question_ids": {},
+  "correct": 186,
+  "categories": {
+    "single-session-user": {
+      "total": 70,
+      "correct": 39
+    },
+    "multi-session": {
+      "total": 133,
+      "correct": 25
+    },
+    "single-session-preference": {
+      "total": 30,
+      "correct": 1
+    },
+    "temporal-reasoning": {
+      "total": 133,
+      "correct": 41
+    },
+    "knowledge-update": {
+      "total": 78,
+      "correct": 41
+    },
+    "single-session-assistant": {
+      "total": 56,
+      "correct": 39
+    }
+  },
+  "all_correct_values_boolean": true,
+  "empty_answers": 0,
+  "empty_reasoning": 10,
+  "missing_ground_truth_question_context": true,
+  "models_executed": false
+}

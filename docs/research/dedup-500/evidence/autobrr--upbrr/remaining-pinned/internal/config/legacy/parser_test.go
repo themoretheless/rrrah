@@ -1,0 +1,406 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package legacy
+
+import (
+	"strings"
+	"testing"
+)
+
+func requireMap(t *testing.T, value any) map[string]any {
+	t.Helper()
+
+	m, ok := value.(map[string]any)
+	if !ok {
+		t.Fatalf("expected map[string]any, got %T", value)
+	}
+	return m
+}
+
+func requireList(t *testing.T, value any) []any {
+	t.Helper()
+
+	list, ok := value.([]any)
+	if !ok {
+		t.Fatalf("expected []any, got %T", value)
+	}
+	return list
+}
+
+func TestExtractConfigDict(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		wantErr bool
+	}{
+		{
+			name:  "simple assignment",
+			input: `config = {"DEFAULT": {}}`,
+		},
+		{
+			name:  "type annotated assignment",
+			input: `config: dict[str, Any] = {"DEFAULT": {}}`,
+		},
+		{
+			name:  "type annotation with equals literal",
+			input: `config: Literal["="] = {"DEFAULT": {}}`,
+		},
+		{
+			name:  "type annotation with nested equals",
+			input: `config: Annotated[dict, dict(kind="=")] = {"DEFAULT": {}}`,
+		},
+		{
+			name:    "unassigned type annotation",
+			input:   "config: dict[str, Any]\nother = {\"DEFAULT\": {}}",
+			wantErr: true,
+		},
+		{
+			name:  "multiline type annotation",
+			input: "config: Literal[\n\"=\" # legacy type\n] = {\"DEFAULT\": {}}",
+		},
+		{
+			name:  "with leading comments",
+			input: "# comment\nconfig = {\"DEFAULT\": {}}",
+		},
+		{
+			name:    "no config assignment",
+			input:   `data = {"DEFAULT": {}}`,
+			wantErr: true,
+		},
+		{
+			name:  "config not part of larger identifier",
+			input: "my_config = 1\nconfig = {\"DEFAULT\": {}}",
+		},
+		{
+			name:  "comment between config and equals",
+			input: "config # the legacy map\n = {\"DEFAULT\": {}}",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := extractConfigDict(tc.input)
+			if tc.wantErr && err == nil {
+				t.Fatalf("expected error but got none")
+			}
+			if !tc.wantErr && err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+		})
+	}
+}
+
+func TestParseDict(t *testing.T) {
+	input := `{"key1": "value1", "key2": 42}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["key1"] != "value1" {
+		t.Errorf("key1: got %v, want value1", m["key1"])
+	}
+	if m["key2"] != 42 {
+		t.Errorf("key2: got %v, want 42", m["key2"])
+	}
+}
+
+func TestParseBoolsAndNone(t *testing.T) {
+	input := `{"a": True, "b": False, "c": None}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["a"] != true {
+		t.Errorf("a: got %v, want true", m["a"])
+	}
+	if m["b"] != false {
+		t.Errorf("b: got %v, want false", m["b"])
+	}
+	if m["c"] != nil {
+		t.Errorf("c: got %v, want nil", m["c"])
+	}
+}
+
+func TestParseNestedDict(t *testing.T) {
+	input := `{"outer": {"inner": "deep"}}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	inner := requireMap(t, m["outer"])
+	if inner["inner"] != "deep" {
+		t.Errorf("inner: got %v, want deep", inner["inner"])
+	}
+}
+
+func TestParseList(t *testing.T) {
+	input := `["a", "b", 3]`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	list := requireList(t, val)
+	if len(list) != 3 {
+		t.Fatalf("expected 3 elements, got %d", len(list))
+	}
+	if list[0] != "a" {
+		t.Errorf("element 0: got %v, want a", list[0])
+	}
+	if list[2] != 3 {
+		t.Errorf("element 2: got %v, want 3", list[2])
+	}
+}
+
+func TestParseTrailingCommas(t *testing.T) {
+	input := `{"a": 1, "b": 2,}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["a"] != 1 || m["b"] != 2 {
+		t.Errorf("unexpected values: %v", m)
+	}
+}
+
+func TestParseComments(t *testing.T) {
+	input := `{
+		# This is a comment
+		"key": "value" # inline comment
+	}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["key"] != "value" {
+		t.Errorf("key: got %v, want value", m["key"])
+	}
+}
+
+func TestParseSingleQuotedStrings(t *testing.T) {
+	input := `{'key': 'value'}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["key"] != "value" {
+		t.Errorf("key: got %v, want value", m["key"])
+	}
+}
+
+func TestParseEscapes(t *testing.T) {
+	input := `{"key": "line1\nline2"}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["key"] != "line1\nline2" {
+		t.Errorf("key: got %q, want %q", m["key"], "line1\nline2")
+	}
+}
+
+func TestParseFloats(t *testing.T) {
+	input := `{"score": 3.14, "neg": -1}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if m["score"] != 3.14 {
+		t.Errorf("score: got %v, want 3.14", m["score"])
+	}
+	if m["neg"] != -1 {
+		t.Errorf("neg: got %v, want -1", m["neg"])
+	}
+}
+
+func TestParseTuple(t *testing.T) {
+	input := `{"t": (1, 2, 3)}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	list := requireList(t, m["t"])
+	if len(list) != 3 {
+		t.Fatalf("expected 3 elements, got %d", len(list))
+	}
+}
+
+func TestParseLegacyConfig(t *testing.T) {
+	input := []byte(`
+# Legacy config
+config = {
+    'DEFAULT': {
+        'tmdb_api': 'my-api-key',
+        'screens': 6,
+        'img_host_1': 'pixhost',
+        'tone_map': True,
+    },
+    'TRACKERS': {
+        'default_trackers': 'BHD, PTP',
+        'BHD': {
+            'api_key': 'bhd-secret-key',
+            'bhd_rss_key': 'bhd-rss',
+        },
+    },
+    'TORRENT_CLIENTS': {
+        'qbittorrent': {
+            'torrent_client': 'qbit',
+            'qbit_url': 'http://localhost:8080',
+            'qbit_user': 'admin',
+            'qbit_pass': 'secret',
+        },
+    },
+}
+`)
+	legacy, err := ParseLegacyConfig(input)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if legacy.Default["tmdb_api"] != "my-api-key" {
+		t.Errorf("tmdb_api: got %v", legacy.Default["tmdb_api"])
+	}
+	if legacy.Default["screens"] != 6 {
+		t.Errorf("screens: got %v", legacy.Default["screens"])
+	}
+	if legacy.Default["tone_map"] != true {
+		t.Errorf("tone_map: got %v", legacy.Default["tone_map"])
+	}
+
+	trackers := legacy.Trackers
+	if trackers["default_trackers"] != "BHD, PTP" {
+		t.Errorf("default_trackers: got %v", trackers["default_trackers"])
+	}
+	bhd := requireMap(t, trackers["BHD"])
+	if bhd["api_key"] != "bhd-secret-key" {
+		t.Errorf("BHD.api_key: got %v", bhd["api_key"])
+	}
+
+	clients := legacy.TorrentClients
+	qbit := requireMap(t, clients["qbittorrent"])
+	if qbit["qbit_url"] != "http://localhost:8080" {
+		t.Errorf("qbit_url: got %v", qbit["qbit_url"])
+	}
+}
+
+func TestParseLegacyConfigTypeAnnotationWithEquals(t *testing.T) {
+	legacy, err := ParseLegacyConfig([]byte(`config: Literal["="] = {"DEFAULT": {"screens": 6}}`))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if legacy.Default["screens"] != 6 {
+		t.Fatalf("screens: got %v", legacy.Default["screens"])
+	}
+}
+
+func TestParseLegacyConfigAnnotationComparisons(t *testing.T) {
+	for _, operator := range []string{"==", "!=", "<=", ">="} {
+		t.Run(operator, func(t *testing.T) {
+			input := `config: bool if True ` + operator + ` True else dict = {"DEFAULT": {"screens": 6}}`
+			legacy, err := ParseLegacyConfig([]byte(input))
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if legacy.Default["screens"] != 6 {
+				t.Fatalf("screens: got %v, want 6", legacy.Default["screens"])
+			}
+		})
+	}
+}
+
+func TestAnnotationAssignmentIndexConsumesMalformedAnnotation(t *testing.T) {
+	input := ":[\n" + strings.Repeat("config: [\n", 100)
+	if assignment, scanned := annotationAssignmentIndex(input); assignment != -1 || scanned != len(input) {
+		t.Fatalf("assignment, scanned = %d, %d; want -1, %d", assignment, scanned, len(input))
+	}
+}
+
+func TestExtractConfigDictDoesNotRescanRejectedAnnotation(t *testing.T) {
+	const nesting = 1000
+	input := strings.Repeat("config: {\n", nesting) + "x: int\n" + strings.Repeat("}", nesting) +
+		" = 0\nconfig = {}\n"
+
+	dict, scanned, err := extractConfigDictScanned(input)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if dict != "{}\n" {
+		t.Fatalf("dict = %q, want %q", dict, "{}\n")
+	}
+	if scanned > len(input) {
+		t.Fatalf("scanned %d bytes for %d-byte input", scanned, len(input))
+	}
+}
+
+func TestParseEmptyDict(t *testing.T) {
+	input := `{}`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	m := requireMap(t, val)
+	if len(m) != 0 {
+		t.Errorf("expected empty dict, got %v", m)
+	}
+}
+
+func TestParseEmptyList(t *testing.T) {
+	input := `[]`
+	p := newParser(input)
+	val, err := p.parseValue()
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	list := requireList(t, val)
+	if len(list) != 0 {
+		t.Errorf("expected empty list, got %v", list)
+	}
+}
+
+func TestParseDepthLimit(t *testing.T) {
+	// Build a deeply nested list that exceeds maxParseDepth.
+	var sb strings.Builder
+	for i := 0; i <= maxParseDepth; i++ {
+		sb.WriteByte('[')
+	}
+	sb.WriteString("1")
+	for i := 0; i <= maxParseDepth; i++ {
+		sb.WriteByte(']')
+	}
+	p := newParser(sb.String())
+	_, err := p.parseValue()
+	if err == nil {
+		t.Fatal("expected depth-limit error")
+	}
+	if !strings.Contains(err.Error(), "nesting depth") {
+		t.Fatalf("expected nesting depth error, got %v", err)
+	}
+}
+
+func TestExtractConfigDictIgnoresStringLiteral(t *testing.T) {
+	// `config = {` appears mid-line inside a string assignment — should be ignored.
+	input := "data = 'config = {\"DEFAULT\": {}}'\nconfig = {\"DEFAULT\": {}}"
+	_, err := extractConfigDict(input)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+}

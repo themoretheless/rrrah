@@ -1,0 +1,12 @@
+{
+  "repository": "kanhaoning/NeatMem",
+  "scope": "Original batch_event_at with synthetic historical ISO strings; no service or store execution. Store validator retains offset source-only.",
+  "authored_controls": [
+    {
+      "name": "lexical timestamp minimum differs from chronological minimum with mixed offsets",
+      "passed": true,
+      "selected": "2020-01-01T09:00:00+00:00",
+      "chronological_minimum": "2020-01-01T10:00:00+02:00"
+    }
+  ]
+}

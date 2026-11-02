@@ -1,0 +1,23 @@
+{
+  "method": "Original identifyFormat body executed unchanged in Node vm with stdlib path and constant FORMAT object",
+  "passed": 4,
+  "cases": [
+    {
+      "input": "data.csv",
+      "actual": "CSV"
+    },
+    {
+      "input": "data.json",
+      "actual": "TEST"
+    },
+    {
+      "input": "data.CSV",
+      "actual": "TEST"
+    },
+    {
+      "input": "data.xml",
+      "actual": "FHIR"
+    }
+  ],
+  "electron_launched": false
+}

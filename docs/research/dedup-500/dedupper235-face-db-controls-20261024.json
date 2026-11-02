@@ -1,0 +1,30 @@
+{
+  "repository": "wkdhkr/dedupper",
+  "scope": "Selected original method bodies; synthetic database row and serialize adapter; no cloud API, native modules, SQLite or original Jest executed.",
+  "authored_controls": [
+    {
+      "name": "row conversion replaces distinct no-glass values with normal-glass values on both sides",
+      "passed": true,
+      "observed": [
+        22,
+        44
+      ],
+      "stored": [
+        11,
+        33
+      ]
+    },
+    {
+      "name": "empty row conversion returns null",
+      "passed": true
+    },
+    {
+      "name": "dryrun delete has no settlement after serialize callback",
+      "passed": true,
+      "observed": {
+        "settled": false,
+        "statements": 0
+      }
+    }
+  ]
+}

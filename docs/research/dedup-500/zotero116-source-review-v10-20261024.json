@@ -1,0 +1,59 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v9-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/watchFolder.mjs",
+      "local": "14-watchFolder.mjs",
+      "sha256": "eb9f5b669fd29fd4a1f84994773448778020726974637e0cca29f5b2304d2def",
+      "git_blob": "4793e98e0b5118cf89dc329626d2478c995e9c56",
+      "whole_text_read": true,
+      "scope": "Prior ranges1-1555 and2262-2420 plus1556-2261 and2421-3125 now cover whole3125lines."
+    }
+  ],
+  "whole_files_read_total": 16,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "new_authored_controls_passed": 2,
+    "total_authored_controls_distinct": 36,
+    "original_tests_run": 0,
+    "retained_harness": "docs/research/dedup-500/zotero116-backfill-controls-20261024",
+    "scope": "Original extracted backfill method, original store/factory; owned sync-root/Zotero adapters. Missing conceptual local filenames, no source reads; no real plugin startup/notifications."
+  },
+  "findings": [
+    {
+      "finding": "Startup backfill appends multiple stored record hashes to same parent without removing prior stamps; repeated call idempotent when exactstamp alreadypresent. Corrects interpretation of per-storeContentHash replacement: first content can become searchable again after backfill, conditional on records and items surviving. No full startup timing guarantee.",
+      "evidence": "two native controls"
+    },
+    {
+      "finding": "Backfill trusts record.lastSyncedHash without rehashing attachment or local bytes; both supplied digests stamped with zero IOUtils.read calls. Thus earlier wrong association could propagate into parent stamps; actual chained corrupt-record startup not executed.",
+      "evidence": "native observation with controlled supplied digests"
+    },
+    {
+      "finding": "Non-mode1 trash handling consults local fresh-hash conflict gate, collapse canonical/shadow records, prompts/bulkguards; source-only. Root read failure guard observed previously remains relevant.",
+      "evidence": "whole source read"
+    },
+    {
+      "finding": "_moveToOSTrash falls back to IOUtils.remove if OS trash unavailable/fails, and swallows fallback failure. Caller sets movedToRecoverable/fileRemoved after awaited helper resolves even when helper logged failure. No file-removal behavior executed.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "Restore copies/moves bytes then recreates record with original tombstone hash without rehashing restored bytes; metadata/stat fields default. No restore runtime control.",
+      "evidence": "source-only"
+    },
+    {
+      "finding": "_handleFileMoves computes oldRel via relativePath(record.localPath,watchPath), although records may be relative, while newPath is absolute; may retain stale old collection membership if oldRel null. No native move scenario executed.",
+      "evidence": "source-only"
+    }
+  ],
+  "remaining": [
+    "84blobs not whole-read",
+    "Full original tests/real Zotero startup and notification integration unqualified",
+    "Nested/root licenses and release qualification incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

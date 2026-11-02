@@ -1,0 +1,45 @@
+# Threads Affiliate Poster ID
+
+> Open-source toolkit for automated Indonesian-language affiliate posting to Threads (Meta) with anti-spam rotation, dedup logic, and clean affiliate link insertion. Powered by Python + Playwright + cookie-based authentication.
+
+This project enables affiliate marketers (primarily Shopee Indonesia) to automate 2-3 post chains on Threads, with built-in anti-spam features: category rotation, hook similarity detection, link reuse prevention, and human-like typing patterns.
+
+## Key Concepts
+
+- **3-post chain format**: Native Threads feature that boosts engagement. Hook (post 1) → Review body (post 2) → CTA with affiliate link (post 3).
+- **Hook styles** (9): edukasi, validasi_mental, storytelling, problem_solving, hook_pancingan, transformasi, social_proof, urgency, controversy.
+- **Categories** (4): skincare, parfum, haircare, makeup.
+- **Cookie-based auth**: Uses session cookies from a logged-in Chrome browser (Instagram + Threads via Meta SSO). No password/2FA flow.
+- **Markdown database**: Affiliate links tracked in human-editable `.md` table.
+
+## Documentation
+
+- [Quickstart](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/04-quickstart.md): First post in 5 minutes
+- [Account Setup](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/01-account-setup.md): Threads + Shopee Affiliate signup
+- [Database Setup](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/02-database-setup.md): Affiliate link database structure
+- [Cookie Extraction](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/03-cookie-extraction.md): Auth setup
+- [Customization](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/05-customization.md): Hooks, voice, schedule
+- [Troubleshooting](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/06-troubleshooting.md): Common errors
+
+## AI Agent Reference
+
+- [AGENTS.md](https://github.com/d4ncboz/threads-affiliate/blob/main/AGENTS.md): Canonical operational guide for AI coding agents (Claude Code, Cursor, GitHub Copilot, Codex, Cody, Continue, Aider)
+
+## Examples
+
+- [Single Post](https://github.com/d4ncboz/threads-affiliate/blob/main/examples/single_post.py): One-shot post via Python API
+- [Batch Schedule](https://github.com/d4ncboz/threads-affiliate/blob/main/examples/batch_schedule.py): Cron-compatible 3x/day scheduler
+- [Cron Integration](https://github.com/d4ncboz/threads-affiliate/blob/main/examples/cron_integration.sh): Shell script for system cron
+
+## Core Library
+
+- [poster.py](https://github.com/d4ncboz/threads-affiliate/blob/main/threads_poster/poster.py): Playwright automation (login, compose, submit)
+- [content_generator.py](https://github.com/d4ncboz/threads-affiliate/blob/main/threads_poster/content_generator.py): Hook + chain builder
+- [dedup.py](https://github.com/d4ncboz/threads-affiliate/blob/main/threads_poster/dedup.py): Link/hook/category dedup
+- [database.py](https://github.com/d4ncboz/threads-affiliate/blob/main/threads_poster/database.py): Markdown affiliate DB
+- [cookie_manager.py](https://github.com/d4ncboz/threads-affiliate/blob/main/threads_poster/cookie_manager.py): Chrome cookies → Playwright
+- [cli.py](https://github.com/d4ncboz/threads-affiliate/blob/main/threads_poster/cli.py): Command-line interface
+
+## Ethics
+
+- [Ethics & ToS](https://github.com/d4ncboz/threads-affiliate/blob/main/docs/ethics-and-tos.md): Threads/Meta + Shopee + Indonesian law compliance

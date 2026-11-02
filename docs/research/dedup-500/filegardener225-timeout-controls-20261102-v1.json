@@ -1,0 +1,18 @@
+{
+  "source": "docs/research/dedup-500/evidence/smorin--filegardener/remaining-pinned/test_data/1dup/seconddir/requests/packages/urllib3/util/timeout.py",
+  "source_sha256": "8a8008629b45c811bb794febf3f6663b8e61a63d5d244e960afac647d74d163b",
+  "method": "Original pinned module AST executed with only relative exceptions import replaced by local exception type; stdlib imports and original class/functions retained. current_time replaced with deterministic clock, no sockets/network use.",
+  "controls": {
+    "connect_min": 10,
+    "read_after_3_seconds": 7,
+    "read_after_total_exhaustion": 0,
+    "read_after_clock_rollback_5_seconds": 15,
+    "nan_infinity_boolean_accepted": {
+      "nan": true,
+      "infinity": true,
+      "boolean": true
+    },
+    "negative_rejected": true
+  },
+  "scope": "Authored isolated control, not original upstream test suite or real I/O/deadline behavior. Demonstrates wall-clock arithmetic and missing finite validation; docs themselves distinguish socket inactivity from end-to-end timeout. No native source change."
+}

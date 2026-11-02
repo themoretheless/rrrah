@@ -1,0 +1,49 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v23-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/proxy/stats-store.test.ts",
+      "local": "statstest-tests_modules_proxy_stats-store.test.ts",
+      "git_blob": "81b9868b49d84b1aaf76c2845438103ce108055a",
+      "sha256": "b084191ef0988d66202ac16a17b1f95df892bfd944c201b2d0bfcfdeecbc3a36",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/format-terminal.test.ts",
+      "local": "statstest-tests_modules_proxy_format-terminal.test.ts",
+      "git_blob": "43d7b6985b273f03d0bae0553fe706ebdf573dbb",
+      "sha256": "49654ffa737c6a7a302880591cbbe69b29a2798f357751d09ead9bc8356253db",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/proxyHookScript.test.ts",
+      "local": "statstest-tests_modules_proxy_proxyHookScript.test.ts",
+      "git_blob": "0e4ecfd6f865b5891e81590025f1bf59d80c2e06",
+      "sha256": "4ccfaeff73b2be2ffc246eb1cd520ca3eb5e8f4fb25b9246fd4689b04d22481e",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 77,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 268,
+    "numPassedTests": 268,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 24,
+  "authored_upstream_controls_total_distinct": 50,
+  "new_authored_controls": 0,
+  "harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "findings": [
+    "Originalstatsstoretest malformedline isNOTJSON;parseablenullandwrongtypesnotcovered,priornativecounterexamplesremain.",
+    "Originalscriptgenerator10testsinspectstringcontentsandordering;not actualexecutionproof. Priorownedchildprocesscontrolsprovideseparateexecutionevidence.",
+    "Integrityformattertests assertdisplayofpreprovidedheuristicnumbers,notmeasuredinformationretention.",
+    "Statsstoreoriginaltests useownedtempdirsandvalidaggregation;noactualpersonalstatsread."
+  ],
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

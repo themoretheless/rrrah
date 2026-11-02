@@ -2,9 +2,9 @@
   "index": 246,
   "repository": "j9t/css-dedup",
   "commit": "8cc977d7e49c8f630b2a40bb44b48c7b79b9acd4",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All57pinned tracked files whole-read and hash-verified; typecheck and377upstream tests passed;6public API synthetic controls recorded; browser semantics unqualified",
   "decision": "reject-domain",
-  "finding": "CSS declaration consolidation; stylesheet semantics.",
+  "finding": "CSS declaration consolidation, not file/image duplicate detection; no implementation adopted. Useful general pattern: cluster dependent rewrites and roll back failed gates, with explicit normalization/equivalence limits.",
   "available_source_evidence": [
     {
       "path": "bin/css-dedup.js",
@@ -48,9 +48,9 @@
     }
   ],
   "license_metadata": "MIT",
-  "license_scope": "screening metadata; nested licenses require checking before copying",
+  "license_scope": "Root MIT text whole-read; dependency/nested provenance unqualified, no implementation adopted",
   "tests_detected": 15,
-  "upstream_tests_run": false,
+  "upstream_tests_run": true,
   "tests_inventory_scope": "path-name detection only; not a validated test-count or test run",
   "tree_truncated": false,
   "available_readme_license_evidence": [
@@ -74,5 +74,9 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/css246-source-review-v24-20261025.json",
+  "complete_source_review": "docs/research/dedup-500/css246-source-review-v24-20261025.json",
+  "complete_runtime_audit": "docs/research/dedup-500/css246-public-api-controls-20261025.json",
+  "evidence_integrity": "docs/research/dedup-500/css246-evidence-integrity-20261025.json"
 }

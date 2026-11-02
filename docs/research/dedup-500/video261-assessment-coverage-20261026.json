@@ -1,0 +1,55 @@
+{
+  "source_audit": "docs/research/dedup-500/video261-source-review-v107-20261026.json",
+  "commit": "32c17793ea3a996501306355bc28d7c7cfbccba4",
+  "counts": {
+    "whole_source_read": 268,
+    "resx_structural": 19,
+    "image_visual_or_decode": 13
+  },
+  "assessed_tracked_blobs": 300,
+  "tracked_blob_count": 307,
+  "all_assessed_hashes_verified": true,
+  "pending_binary_dependencies": [
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/avcodec-61.dll",
+      "bytes": 65795584
+    },
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/avdevice-61.dll",
+      "bytes": 5382656
+    },
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/avfilter-10.dll",
+      "bytes": 23701504
+    },
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/avformat-61.dll",
+      "bytes": 20990976
+    },
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/avutil-59.dll",
+      "bytes": 2835456
+    },
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/swresample-5.dll",
+      "bytes": 668672
+    },
+    {
+      "path": "FfmpegLib/Libs/ffmpeg/x64/swscale-8.dll",
+      "bytes": 700928
+    }
+  ],
+  "external_lfs_media_pending": [
+    {
+      "path": "packaging/tests/fixtures/grpc-smoke/left.mp4",
+      "reason": "Git LFS object not fetched; only pointer text read"
+    },
+    {
+      "path": "packaging/tests/fixtures/grpc-smoke/right.mp4",
+      "reason": "Git LFS object not fetched; only pointer text read"
+    }
+  ],
+  "full_repository_read": false,
+  "upstream_tests_run": false,
+  "qualification_boundary": "Structural resource assessment is distinct from whole text reading; source/asset inspection is not native library or upstream runtime qualification."
+}

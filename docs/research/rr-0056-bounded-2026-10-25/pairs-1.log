@@ -1,0 +1,137 @@
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+    Finished `test` profile [optimized + debuginfo] target(s) in 58.03s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_cache-a642c2ff8cc4bc0c)
+
+running 1 test
+test swap::rr56_qualification::ttl_release_outside_lock_pairs ... ok
+
+successes:
+
+---- swap::rr56_qualification::ttl_release_outside_lock_pairs stdout ----
+SWAP_TTL_PAIR consumers=1 control=true pair=0 mode=1 wait_p50_ns=16458 wait_p95_ns=23334 hold_p95_ns=11667 cleanup_p95_ns=722834 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=0 mode=0 wait_p50_ns=1573458 wait_p95_ns=24905417 hold_p95_ns=130250 cleanup_p95_ns=11260083 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=1 mode=0 wait_p50_ns=90500 wait_p95_ns=17194750 hold_p95_ns=186625 cleanup_p95_ns=32416250 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=1 mode=1 wait_p50_ns=49375 wait_p95_ns=7646333 hold_p95_ns=235083 cleanup_p95_ns=5595583 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=2 mode=1 wait_p50_ns=21542 wait_p95_ns=29625 hold_p95_ns=10125 cleanup_p95_ns=1391834 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=2 mode=0 wait_p50_ns=14792 wait_p95_ns=29708 hold_p95_ns=11750 cleanup_p95_ns=912916 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=3 mode=0 wait_p50_ns=12334 wait_p95_ns=21375 hold_p95_ns=8292 cleanup_p95_ns=910625 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=3 mode=1 wait_p50_ns=11375 wait_p95_ns=17041 hold_p95_ns=7792 cleanup_p95_ns=735125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=4 mode=1 wait_p50_ns=9333 wait_p95_ns=19458 hold_p95_ns=6500 cleanup_p95_ns=659042 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=4 mode=0 wait_p50_ns=9083 wait_p95_ns=11250 hold_p95_ns=5917 cleanup_p95_ns=604375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=5 mode=0 wait_p50_ns=12291 wait_p95_ns=18417 hold_p95_ns=7167 cleanup_p95_ns=689208 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=5 mode=1 wait_p50_ns=11958 wait_p95_ns=19875 hold_p95_ns=7708 cleanup_p95_ns=712209 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=6 mode=1 wait_p50_ns=27792 wait_p95_ns=348708 hold_p95_ns=12583 cleanup_p95_ns=1039750 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=6 mode=0 wait_p50_ns=20417 wait_p95_ns=52083 hold_p95_ns=10333 cleanup_p95_ns=2266125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=7 mode=0 wait_p50_ns=14458 wait_p95_ns=24458 hold_p95_ns=8541 cleanup_p95_ns=966375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=7 mode=1 wait_p50_ns=12166 wait_p95_ns=14791 hold_p95_ns=7500 cleanup_p95_ns=738667 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=8 mode=1 wait_p50_ns=11541 wait_p95_ns=16334 hold_p95_ns=9625 cleanup_p95_ns=863959 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=8 mode=0 wait_p50_ns=11333 wait_p95_ns=22458 hold_p95_ns=7000 cleanup_p95_ns=979875 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=9 mode=0 wait_p50_ns=10583 wait_p95_ns=20500 hold_p95_ns=8458 cleanup_p95_ns=866375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=true pair=9 mode=1 wait_p50_ns=11083 wait_p95_ns=30916 hold_p95_ns=6834 cleanup_p95_ns=617084 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=0 mode=1 wait_p50_ns=11167 wait_p95_ns=41917 hold_p95_ns=13167 cleanup_p95_ns=657875 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=0 mode=0 wait_p50_ns=633458 wait_p95_ns=2222959 hold_p95_ns=2214417 cleanup_p95_ns=2215875 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=1 mode=0 wait_p50_ns=574167 wait_p95_ns=709000 hold_p95_ns=703875 cleanup_p95_ns=704083 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=1 mode=1 wait_p50_ns=10083 wait_p95_ns=13375 hold_p95_ns=6459 cleanup_p95_ns=595292 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=2 mode=1 wait_p50_ns=10709 wait_p95_ns=12584 hold_p95_ns=6500 cleanup_p95_ns=1838833 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=2 mode=0 wait_p50_ns=532875 wait_p95_ns=1297375 hold_p95_ns=1290000 cleanup_p95_ns=1290041 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=3 mode=0 wait_p50_ns=591042 wait_p95_ns=930708 hold_p95_ns=918084 cleanup_p95_ns=918167 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=3 mode=1 wait_p50_ns=13542 wait_p95_ns=15958 hold_p95_ns=5542 cleanup_p95_ns=646334 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=4 mode=1 wait_p50_ns=13125 wait_p95_ns=15500 hold_p95_ns=5791 cleanup_p95_ns=584708 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=4 mode=0 wait_p50_ns=535500 wait_p95_ns=727750 hold_p95_ns=724125 cleanup_p95_ns=724166 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=5 mode=0 wait_p50_ns=513875 wait_p95_ns=568125 hold_p95_ns=560542 cleanup_p95_ns=560584 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=5 mode=1 wait_p50_ns=14750 wait_p95_ns=21750 hold_p95_ns=7584 cleanup_p95_ns=757084 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=6 mode=1 wait_p50_ns=28041 wait_p95_ns=374292 hold_p95_ns=18250 cleanup_p95_ns=7030458 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=6 mode=0 wait_p50_ns=1366000 wait_p95_ns=7262542 hold_p95_ns=7230125 cleanup_p95_ns=7230750 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=7 mode=0 wait_p50_ns=1470667 wait_p95_ns=7360250 hold_p95_ns=7345291 cleanup_p95_ns=7347416 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=7 mode=1 wait_p50_ns=26458 wait_p95_ns=2232625 hold_p95_ns=26583 cleanup_p95_ns=4616125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=8 mode=1 wait_p50_ns=22334 wait_p95_ns=66625 hold_p95_ns=21958 cleanup_p95_ns=6571625 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=8 mode=0 wait_p50_ns=858833 wait_p95_ns=1226875 hold_p95_ns=1216875 cleanup_p95_ns=1217000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=9 mode=0 wait_p50_ns=1183417 wait_p95_ns=2814583 hold_p95_ns=2795000 cleanup_p95_ns=2796917 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=1 control=false pair=9 mode=1 wait_p50_ns=25917 wait_p95_ns=3553917 hold_p95_ns=25917 cleanup_p95_ns=6203333 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=0 mode=1 wait_p50_ns=28500 wait_p95_ns=76375 hold_p95_ns=19166 cleanup_p95_ns=2953125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=0 mode=0 wait_p50_ns=30375 wait_p95_ns=204750 hold_p95_ns=27292 cleanup_p95_ns=4244333 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=1 mode=0 wait_p50_ns=51833 wait_p95_ns=623416 hold_p95_ns=25625 cleanup_p95_ns=4787542 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=1 mode=1 wait_p50_ns=20167 wait_p95_ns=53375 hold_p95_ns=13792 cleanup_p95_ns=1221709 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=2 mode=1 wait_p50_ns=23000 wait_p95_ns=70750 hold_p95_ns=19625 cleanup_p95_ns=2018709 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=2 mode=0 wait_p50_ns=20125 wait_p95_ns=33250 hold_p95_ns=11166 cleanup_p95_ns=1320375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=3 mode=0 wait_p50_ns=25250 wait_p95_ns=239167 hold_p95_ns=26208 cleanup_p95_ns=7334791 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=3 mode=1 wait_p50_ns=23875 wait_p95_ns=39583 hold_p95_ns=11792 cleanup_p95_ns=4948791 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=4 mode=1 wait_p50_ns=23208 wait_p95_ns=67083 hold_p95_ns=26542 cleanup_p95_ns=10070292 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=4 mode=0 wait_p50_ns=25750 wait_p95_ns=46083 hold_p95_ns=14292 cleanup_p95_ns=3566750 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=5 mode=0 wait_p50_ns=28250 wait_p95_ns=61250 hold_p95_ns=31583 cleanup_p95_ns=3556416 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=5 mode=1 wait_p50_ns=29375 wait_p95_ns=295250 hold_p95_ns=85000 cleanup_p95_ns=6525708 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=6 mode=1 wait_p50_ns=29500 wait_p95_ns=157625 hold_p95_ns=23417 cleanup_p95_ns=5635583 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=6 mode=0 wait_p50_ns=28250 wait_p95_ns=63667 hold_p95_ns=18750 cleanup_p95_ns=2567250 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=7 mode=0 wait_p50_ns=52042 wait_p95_ns=730375 hold_p95_ns=20625 cleanup_p95_ns=3660458 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=7 mode=1 wait_p50_ns=26042 wait_p95_ns=3862000 hold_p95_ns=236584 cleanup_p95_ns=6506875 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=8 mode=1 wait_p50_ns=27000 wait_p95_ns=291875 hold_p95_ns=26791 cleanup_p95_ns=4308125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=8 mode=0 wait_p50_ns=34792 wait_p95_ns=93458 hold_p95_ns=43208 cleanup_p95_ns=6345333 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=9 mode=0 wait_p50_ns=29625 wait_p95_ns=61625 hold_p95_ns=21209 cleanup_p95_ns=6806250 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=true pair=9 mode=1 wait_p50_ns=25708 wait_p95_ns=278875 hold_p95_ns=75500 cleanup_p95_ns=2994000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=0 mode=1 wait_p50_ns=20459 wait_p95_ns=76042 hold_p95_ns=12416 cleanup_p95_ns=2746042 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=0 mode=0 wait_p50_ns=972334 wait_p95_ns=1392166 hold_p95_ns=1379583 cleanup_p95_ns=1379791 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=1 mode=0 wait_p50_ns=994917 wait_p95_ns=4833583 hold_p95_ns=5098542 cleanup_p95_ns=5100500 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=1 mode=1 wait_p50_ns=26625 wait_p95_ns=46083 hold_p95_ns=15834 cleanup_p95_ns=2235000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=2 mode=1 wait_p50_ns=21375 wait_p95_ns=49958 hold_p95_ns=18291 cleanup_p95_ns=1351459 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=2 mode=0 wait_p50_ns=995500 wait_p95_ns=1683959 hold_p95_ns=1663709 cleanup_p95_ns=1663959 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=3 mode=0 wait_p50_ns=1319167 wait_p95_ns=1575792 hold_p95_ns=1556625 cleanup_p95_ns=1558792 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=3 mode=1 wait_p50_ns=27000 wait_p95_ns=71959 hold_p95_ns=15291 cleanup_p95_ns=1570666 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=4 mode=1 wait_p50_ns=19750 wait_p95_ns=75459 hold_p95_ns=16292 cleanup_p95_ns=2910292 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=4 mode=0 wait_p50_ns=1368792 wait_p95_ns=4404416 hold_p95_ns=4621541 cleanup_p95_ns=4621708 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=5 mode=0 wait_p50_ns=1150416 wait_p95_ns=1515750 hold_p95_ns=1494250 cleanup_p95_ns=1494375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=5 mode=1 wait_p50_ns=33959 wait_p95_ns=150625 hold_p95_ns=97375 cleanup_p95_ns=2254583 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=6 mode=1 wait_p50_ns=25958 wait_p95_ns=75042 hold_p95_ns=18583 cleanup_p95_ns=1558333 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=6 mode=0 wait_p50_ns=921666 wait_p95_ns=1673375 hold_p95_ns=1665041 cleanup_p95_ns=1667083 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=7 mode=0 wait_p50_ns=694834 wait_p95_ns=3474416 hold_p95_ns=3452459 cleanup_p95_ns=3452625 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=7 mode=1 wait_p50_ns=24375 wait_p95_ns=66459 hold_p95_ns=11584 cleanup_p95_ns=1624667 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=8 mode=1 wait_p50_ns=31042 wait_p95_ns=62750 hold_p95_ns=18584 cleanup_p95_ns=2335875 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=8 mode=0 wait_p50_ns=1126333 wait_p95_ns=2685875 hold_p95_ns=2815833 cleanup_p95_ns=2816042 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=9 mode=0 wait_p50_ns=1297333 wait_p95_ns=2021875 hold_p95_ns=1992792 cleanup_p95_ns=1993125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=2 control=false pair=9 mode=1 wait_p50_ns=43166 wait_p95_ns=60291 hold_p95_ns=16791 cleanup_p95_ns=1945708 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=0 mode=1 wait_p50_ns=52000 wait_p95_ns=105042 hold_p95_ns=17792 cleanup_p95_ns=1572042 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=0 mode=0 wait_p50_ns=41333 wait_p95_ns=189209 hold_p95_ns=14125 cleanup_p95_ns=1906000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=1 mode=0 wait_p50_ns=51167 wait_p95_ns=6228125 hold_p95_ns=30959 cleanup_p95_ns=7043000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=1 mode=1 wait_p50_ns=52125 wait_p95_ns=576792 hold_p95_ns=15792 cleanup_p95_ns=3838667 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=2 mode=1 wait_p50_ns=43500 wait_p95_ns=314667 hold_p95_ns=20875 cleanup_p95_ns=2978000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=2 mode=0 wait_p50_ns=35959 wait_p95_ns=76667 hold_p95_ns=12375 cleanup_p95_ns=4142208 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=3 mode=0 wait_p50_ns=41250 wait_p95_ns=72083 hold_p95_ns=10833 cleanup_p95_ns=1153208 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=3 mode=1 wait_p50_ns=37209 wait_p95_ns=94625 hold_p95_ns=15916 cleanup_p95_ns=2015292 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=4 mode=1 wait_p50_ns=40834 wait_p95_ns=176459 hold_p95_ns=25125 cleanup_p95_ns=3521125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=4 mode=0 wait_p50_ns=50000 wait_p95_ns=1758625 hold_p95_ns=14500 cleanup_p95_ns=4537000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=5 mode=0 wait_p50_ns=44375 wait_p95_ns=99375 hold_p95_ns=12750 cleanup_p95_ns=1512334 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=5 mode=1 wait_p50_ns=24916 wait_p95_ns=61792 hold_p95_ns=13166 cleanup_p95_ns=1504458 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=6 mode=1 wait_p50_ns=12666 wait_p95_ns=20208 hold_p95_ns=5625 cleanup_p95_ns=479458 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=6 mode=0 wait_p50_ns=16583 wait_p95_ns=51500 hold_p95_ns=5333 cleanup_p95_ns=524125 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=7 mode=0 wait_p50_ns=28208 wait_p95_ns=55625 hold_p95_ns=5583 cleanup_p95_ns=514375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=7 mode=1 wait_p50_ns=22834 wait_p95_ns=48334 hold_p95_ns=5667 cleanup_p95_ns=596042 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=8 mode=1 wait_p50_ns=23084 wait_p95_ns=41208 hold_p95_ns=10083 cleanup_p95_ns=676167 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=8 mode=0 wait_p50_ns=18042 wait_p95_ns=33583 hold_p95_ns=6500 cleanup_p95_ns=14223000 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=9 mode=0 wait_p50_ns=23083 wait_p95_ns=43000 hold_p95_ns=5875 cleanup_p95_ns=534250 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=true pair=9 mode=1 wait_p50_ns=13083 wait_p95_ns=27541 hold_p95_ns=5292 cleanup_p95_ns=518792 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=0 mode=1 wait_p50_ns=24791 wait_p95_ns=49958 hold_p95_ns=6000 cleanup_p95_ns=605917 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=0 mode=0 wait_p50_ns=519625 wait_p95_ns=610125 hold_p95_ns=599584 cleanup_p95_ns=599667 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=1 mode=0 wait_p50_ns=523250 wait_p95_ns=5892750 hold_p95_ns=5866167 cleanup_p95_ns=5867292 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=1 mode=1 wait_p50_ns=28917 wait_p95_ns=53209 hold_p95_ns=5542 cleanup_p95_ns=621500 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=2 mode=1 wait_p50_ns=25709 wait_p95_ns=39375 hold_p95_ns=6375 cleanup_p95_ns=624542 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=2 mode=0 wait_p50_ns=548584 wait_p95_ns=692125 hold_p95_ns=680292 cleanup_p95_ns=680333 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=3 mode=0 wait_p50_ns=553125 wait_p95_ns=627041 hold_p95_ns=607334 cleanup_p95_ns=607459 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=3 mode=1 wait_p50_ns=21625 wait_p95_ns=31625 hold_p95_ns=7041 cleanup_p95_ns=615375 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=4 mode=1 wait_p50_ns=23459 wait_p95_ns=33541 hold_p95_ns=5500 cleanup_p95_ns=598750 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=4 mode=0 wait_p50_ns=521959 wait_p95_ns=607042 hold_p95_ns=599500 cleanup_p95_ns=599542 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=5 mode=0 wait_p50_ns=522750 wait_p95_ns=585791 hold_p95_ns=560000 cleanup_p95_ns=560084 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=5 mode=1 wait_p50_ns=22125 wait_p95_ns=39250 hold_p95_ns=5834 cleanup_p95_ns=579917 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=6 mode=1 wait_p50_ns=23541 wait_p95_ns=31958 hold_p95_ns=5834 cleanup_p95_ns=587875 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=6 mode=0 wait_p50_ns=539416 wait_p95_ns=589584 hold_p95_ns=580292 cleanup_p95_ns=580500 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=7 mode=0 wait_p50_ns=516541 wait_p95_ns=636292 hold_p95_ns=618041 cleanup_p95_ns=618083 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=7 mode=1 wait_p50_ns=25625 wait_p95_ns=53250 hold_p95_ns=6333 cleanup_p95_ns=627625 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=8 mode=1 wait_p50_ns=20875 wait_p95_ns=32084 hold_p95_ns=6209 cleanup_p95_ns=603250 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=8 mode=0 wait_p50_ns=531708 wait_p95_ns=8987750 hold_p95_ns=8978583 cleanup_p95_ns=8978583 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=9 mode=0 wait_p50_ns=568625 wait_p95_ns=731125 hold_p95_ns=718375 cleanup_p95_ns=718791 temporary_capacity_bytes=0 final_objects=0
+SWAP_TTL_PAIR consumers=4 control=false pair=9 mode=1 wait_p50_ns=24417 wait_p95_ns=70041 hold_p95_ns=8250 cleanup_p95_ns=684125 temporary_capacity_bytes=0 final_objects=0
+
+
+successes:
+    swap::rr56_qualification::ttl_release_outside_lock_pairs
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 161 filtered out; finished in 54.18s
+

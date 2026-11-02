@@ -1,0 +1,153 @@
+name: CI
+
+on:
+  merge_group:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: # Allow manual trigger
+
+# Least privilege: jobs that need more request it explicitly.
+permissions:
+  contents: read
+
+concurrency:
+  # Fast Trunk: supersede obsolete runs for the same PR or branch tip.
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.merge_group.head_sha || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rust:
+    name: Rust CLI (ADR-168 S0)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Enforce owned CI runner profiles
+        run: python3 .github/scripts/check-owned-runner-profiles.py
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Run Rust tests
+        run: cargo test --workspace
+
+      - name: Run Rust clippy
+        run: cargo clippy --workspace -- -D warnings
+
+  changed-files:
+    name: Detect affected surface
+    runs-on: ubuntu-latest
+    outputs:
+      product_changed: ${{ steps.classify.outputs.product_changed }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Classify affected surface
+        id: classify
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          CURRENT_SHA: ${{ github.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          MERGE_GROUP_BASE_SHA: ${{ github.event.merge_group.base_sha }}
+          MERGE_GROUP_HEAD_SHA: ${{ github.event.merge_group.head_sha }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            echo "product_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ "$EVENT_NAME" == "pull_request" ]]; then
+            base="$PR_BASE_SHA"
+            head="$PR_HEAD_SHA"
+          elif [[ "$EVENT_NAME" == "merge_group" ]]; then
+            base="$MERGE_GROUP_BASE_SHA"
+            head="$MERGE_GROUP_HEAD_SHA"
+          elif [[ "$EVENT_NAME" == "push" ]]; then
+            base="$PUSH_BEFORE"
+            head="$CURRENT_SHA"
+          else
+            echo "product_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if [[ -z "$base" || -z "$head" || "$base" =~ ^0+$ ]]; then
+            echo "product_changed=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          changed_files="$(mktemp)"
+          git diff --name-only "$base" "$head" > "$changed_files"
+
+          if grep -Ev '^(AGENTS\.md|PROJECT\.md|\.github/workflows/ci\.yml|Cargo\.toml|Cargo\.lock|crates/|docs/adr/ADR-168-.*|rust-toolchain\.toml|\.gitignore)$' "$changed_files"; then
+            echo "product_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "product_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  validate:
+    name: Validate Code & Run Tests
+    needs: [changed-files, rust]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate control plane files
+        if: needs.changed-files.outputs.product_changed == 'false'
+        run: |
+          test -f AGENTS.md
+          test -f PROJECT.md
+
+      - name: Setup Bun
+        if: needs.changed-files.outputs.product_changed == 'true'
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+
+      - name: Assert Bun 1.4.0
+        if: needs.changed-files.outputs.product_changed == 'true'
+        run: test "$(bun --version)" = "1.4.0"
+
+      - name: Set up Rust
+        if: needs.changed-files.outputs.product_changed == 'true'
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Rust CLI for npm bridge tests
+        if: needs.changed-files.outputs.product_changed == 'true'
+        # Stage the fresh build over the committed bin/native binary, which the
+        # bridge prefers, so the tests exercise this revision's Rust code.
+        run: |
+          cargo build -p media-curator-cli
+          bun scripts/stage-rust-cli.ts
+
+      - name: Install dependencies
+        if: needs.changed-files.outputs.product_changed == 'true'
+        run: bun install --frozen-lockfile # Use frozen lockfile for reproducibility
+
+      - name: Check formatting
+        if: needs.changed-files.outputs.product_changed == 'true'
+        run: bun run check-format
+
+      - name: Lint code
+        if: needs.changed-files.outputs.product_changed == 'true'
+        run: bun run lint
+
+      - name: Run tests
+        if: needs.changed-files.outputs.product_changed == 'true'
+        # Vitest suites, then the `*.bun.test.ts` suites that need `bun:sqlite`.
+        run: bun run test

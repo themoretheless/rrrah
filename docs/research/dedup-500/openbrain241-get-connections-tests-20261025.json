@@ -1,0 +1,21 @@
+{
+  "scope": "Original four get-connections callbacks; original helper functions without environment/client initialization; Node VM TypeScript transpilation; assert adapter and inert zod schema proxy (no schema validation). No Deno full suite, actual Supabase client, network or DB.",
+  "outcomes": [
+    {
+      "name": "passes thought_id to RPC",
+      "passed": true
+    },
+    {
+      "name": "returns connection results as JSON",
+      "passed": true
+    },
+    {
+      "name": "RPC error returns isError",
+      "passed": true
+    },
+    {
+      "name": "missing brain context returns error",
+      "passed": true
+    }
+  ]
+}

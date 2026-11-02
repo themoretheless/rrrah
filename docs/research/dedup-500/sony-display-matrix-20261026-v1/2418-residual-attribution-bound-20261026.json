@@ -1,0 +1,24 @@
+{
+  "inputs": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-known-shift.log",
+      "sha256": "dc15a048ea47ed2a7317405a87154c030c037fe9b95ff3ed6dd29b7000dce283"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-ahd-known-display.json",
+      "sha256": "7ab425c0488d27ee15e3d06181c973d7ae1a84cfdeb8d8471972b6737e89dfda"
+    }
+  ],
+  "aligned_pixel_count": 24000000,
+  "linear_unfitted_in_range": {
+    "count": 22108891,
+    "rejected": 647195,
+    "rejection_fraction": 0.029273064849792783
+  },
+  "any_channel_outside_display_range_count": 1891109,
+  "display_reverse_fit_unmatched": 2702512,
+  "conditional_minimum_in_range_reverse_unmatched": 811403,
+  "condition": "Bound assumes the fixed integer-shift forward bins and reverse fit use the same aligned 24M pixel correspondence domain; equal counts alone do not establish per-pixel membership.",
+  "conclusion": "Existing evidence does not justify treating highlight/out-of-range values as the sole cause or relaxing thresholds. Even in-range unfitted samples include residual mismatches. Next diagnostic should attribute post-fit residuals per aligned pixel and range class in both directions.",
+  "limits": "Arithmetic analysis of retained logs only. No new decoding run, production change, independent camera qualification or accepted-match claim."
+}

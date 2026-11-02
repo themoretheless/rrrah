@@ -1,0 +1,16 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test raw_selected",
+  "passed": 4,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-sensor-first-budget-regression-20261026.log",
+  "log_sha256": "fa67a493123117046d54489c2196dbe824a543ec0dfadbbabd1e20dfdf921960",
+  "source_sha256": {
+    "crates/rrrah-dedup/tests/raw_selected.rs": "cedcdba22a23f0feab19b73d4a97637f37d9b001d34a6dc62111ba6b3647a6ff",
+    "crates/rrrah-dedup/src/local_scan.rs": "bb65ea35e6f1c4a5309b50a9ebc795bb73d6ecb65cb26ce6e59f75c1b7391c88"
+  },
+  "new_regression": "Authored 4x4 DNG and 32x32 BMP. Limit derives from isolated RAW managed peak. Holding decoded raster while decoding RAW fails specifically with Develop Buffer error at that limit, then releases memory. Local pair API succeeds with both caller orders under the same cap and releases all managed memory. Geometry absent and candidate false are required: this fixture qualifies scheduling/admission rather than similarity quality.",
+  "limitations": [
+    "Ordinary local pair API only for the new finite mixed-format regression.",
+    "Does not establish physical RSS, universal allocation optimality or broad visual precision."
+  ]
+}

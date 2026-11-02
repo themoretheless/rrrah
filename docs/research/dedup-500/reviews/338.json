@@ -3,8 +3,8 @@
   "repository": "muldon/dupeRep",
   "commit": "ac279e54568cbb2df42ec152bbf6db49fd0bc007",
   "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
-  "decision": "needs-deeper-source",
-  "finding": "Spring DupeApplication entrypoint only; purpose and underlying matcher need deeper source/README review before reuse.",
+  "decision": "reject-domain",
+  "finding": "README and application flow establish StackOverflow duplicate-question experiment domain, not original-file/image deduplication; deeper source review remains incomplete.",
   "available_source_evidence": [
     {
       "path": "dupe.sh",
@@ -74,5 +74,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/duperep338-source-review-v14-20261102.json"
 }

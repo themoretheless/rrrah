@@ -1,0 +1,599 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { ScreenshotsFacet } from "../../releaseSession/types";
+import type { ScreenshotPlan } from "../../types";
+import ScreenshotsPage from ".";
+
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
+
+const plan = (): ScreenshotPlan => ({
+  SourcePath: "C:\\media\\Example.Release.2026.1080p-GRP.mkv",
+  DiscType: "",
+  DurationSeconds: 120,
+  FrameRate: 24,
+  SuggestedSelections: [{ Index: 0, TimestampSeconds: 12, Frame: 288, Source: "auto" }],
+  ExistingScreenshots: [],
+  ExistingTrackerScreenshots: [],
+  FinalSelections: [],
+  TrackerImageLinks: [],
+  PreviewImages: [],
+  MetadataTimestamp: "2026-07-16T00:00:00Z",
+  RequiresManualFrames: false,
+});
+
+const facet = (): ScreenshotsFacet => {
+  const screenshotPlan = plan();
+  return {
+    view: {
+      revision: 1,
+      status: "ready",
+      plan: screenshotPlan,
+      workflowMode: true,
+      artifacts: {
+        id: "media-1",
+        workflowId: "workflow-1",
+        revision: 6,
+        release: { id: "release-1", revision: 2 },
+        releaseRef: {
+          SourcePath: "C:\\media\\Example.Release.2026.1080p-GRP.mkv",
+          Generation: 1,
+        },
+        projectionSet: { id: "projections-1", revision: 4 },
+        captureFingerprint: "1".repeat(64),
+        requirementsFingerprint: "2".repeat(64),
+        imageRequirementsPrepared: false,
+        artifacts: [
+          {
+            id: "artifact-1",
+            index: 3,
+            kind: "screenshot",
+            purpose: "final",
+            selected: true,
+            order: 0,
+            width: 1920,
+            height: 1080,
+            sizeBytes: 1024,
+            url: "/api/app/release-workflow-media?artifactId=artifact-1",
+          },
+        ],
+        status: "completed",
+        createdAt: "2026-07-21T00:00:00Z",
+      },
+      selections: screenshotPlan.SuggestedSelections,
+      finalSelectionArtifactIDs: ["artifact-1"],
+      previewImage: "data:image/png;base64,live",
+      staleReason: "",
+      mutationBlockedReason: "",
+      error: "",
+    },
+    load: vi.fn(async () => true),
+    changeSelection: vi.fn(),
+    generate: vi.fn(async () => true),
+    previewFrame: vi.fn(async () => true),
+    remove: vi.fn(async () => true),
+    removeMany: vi.fn(async () => true),
+    selectFinal: vi.fn(async () => true),
+    reorderFinal: vi.fn(async () => true),
+    saveFinal: vi.fn(async () => true),
+    selectArtifact: vi.fn(async () => true),
+    deleteArtifacts: vi.fn(async () => true),
+    readImage: vi.fn(async (path) => `data:image/png;base64,${encodeURIComponent(path)}`),
+  };
+};
+
+describe("ScreenshotsPage", () => {
+  it("requires a frame selection for Generate screenshots", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: { ...base.view, selections: [] },
+    };
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+    expect(screen.getByRole("button", { name: "Generate screenshots" })).toBeDisabled();
+  });
+
+  it("shows saved tracker images and prepares them without capturing suggested frames", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        plan: {
+          ...plan(),
+          SavedTrackerImages: [
+            {
+              TrackerID: "AITHER",
+              Host: "imgbb",
+              URL: "https://images.example.invalid/one.png",
+              PreviewURL: "https://images.example.invalid/one-preview.png",
+            },
+            { TrackerID: "AITHER", Host: "imgbb", URL: "https://images.example.invalid/two.png" },
+          ],
+        },
+        artifacts: null,
+      },
+    };
+    const lightbox = vi.fn();
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={lightbox} setLightboxAlt={vi.fn()} />,
+    );
+    expect(screen.getByAltText("Saved screenshot 1 from AITHER")).toHaveAttribute(
+      "src",
+      "https://images.example.invalid/one-preview.png",
+    );
+    expect(screen.getByAltText("Saved screenshot 2 from AITHER")).toBeInTheDocument();
+    fireEvent.click(screen.getByAltText("Saved screenshot 1 from AITHER"));
+    expect(lightbox).toHaveBeenCalledWith("https://images.example.invalid/one.png");
+    fireEvent.click(screen.getByRole("button", { name: "Use saved images" }));
+    expect(screenshots.generate).toHaveBeenCalledWith("final", []);
+  });
+
+  it("hides saved tracker images already retained as hosted artifacts", () => {
+    const base = facet();
+    const savedURL = "https://images.example.invalid/saved.png";
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        plan: {
+          ...plan(),
+          SavedTrackerImages: [{ TrackerID: "AITHER", Host: "imgbb", URL: savedURL }],
+        },
+        artifacts: {
+          ...base.view.artifacts!,
+          artifacts: [
+            ...base.view.artifacts!.artifacts,
+            {
+              id: "hosted-saved",
+              kind: "hosted_image",
+              purpose: "final",
+              selected: true,
+              source: "artifact-1",
+              url: savedURL,
+            },
+          ],
+        },
+      },
+    };
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+    expect(screen.queryByRole("button", { name: "Use saved images" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Saved tracker images" })).not.toBeInTheDocument();
+  });
+
+  it("lets a saved-image-only plan prepare screenshots without frame suggestions", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        plan: {
+          ...plan(),
+          SuggestedSelections: [],
+          RequiresManualFrames: true,
+          SavedTrackerImages: [
+            { TrackerID: "AITHER", Host: "imgbb", URL: "https://images.example.invalid/one.png" },
+          ],
+        },
+        selections: [],
+        artifacts: null,
+      },
+    };
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+    expect(screen.getByRole("button", { name: "Generate screenshots" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Use saved images" }));
+    expect(screenshots.generate).toHaveBeenCalledWith("final", []);
+  });
+
+  it("shows saved screenshots without a disc assignment beside planned discs", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        plan: {
+          ...plan(),
+          Discs: [
+            {
+              DiscID: "disc-one",
+              DiscName: "Disc 1",
+              DurationSeconds: 120,
+              FrameRate: 24,
+              SuggestedSelections: [],
+            },
+          ],
+        },
+        artifacts: {
+          ...base.view.artifacts!,
+          artifacts: [
+            {
+              ...base.view.artifacts!.artifacts[0],
+              id: "saved-image",
+              source: "tracker",
+            },
+          ],
+        },
+      },
+    };
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+    expect(screen.getByRole("heading", { name: "Saved images" })).toBeVisible();
+    expect(screen.getByAltText("Screenshot 1")).toBeVisible();
+  });
+
+  it("loads frame suggestions when an authoritative workflow first opens the page", async () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        status: "idle",
+        workflowMode: true,
+        plan: null,
+        selections: [],
+      },
+    };
+
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    await waitFor(() => expect(screenshots.load).toHaveBeenCalledOnce());
+  });
+
+  it("does not retry a failed automatic frame suggestion load", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        status: "error",
+        workflowMode: true,
+        plan: null,
+        selections: [],
+        error: "Unable to load frame suggestions.",
+      },
+    };
+
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    expect(screenshots.load).not.toHaveBeenCalled();
+  });
+
+  it("blocks screenshot mutations while another workflow operation is running", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        mutationBlockedReason:
+          "Another workflow operation (analyze audio) is running. Wait for it to finish before changing screenshots.",
+      },
+    };
+
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    for (const name of [
+      "Load suggestions",
+      "Generate screenshots",
+      "Delete all",
+      "Unselect Screenshot 1",
+      "Delete Screenshot 1",
+      "Run preview",
+      "Capture preview",
+    ]) {
+      expect(screen.getByRole("button", { name })).toBeDisabled();
+    }
+    expect(
+      screen.getByText(/Another workflow operation \(analyze audio\) is running/),
+    ).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Generate screenshots" }));
+    expect(screenshots.generate).not.toHaveBeenCalled();
+  });
+
+  it("restores the main gallery layout while routing actions through the session facet", async () => {
+    const screenshots = facet();
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    for (const heading of ["Live Preview", "Generated Screenshots"]) {
+      expect(screen.getByRole("heading", { name: heading })).toBeVisible();
+    }
+    const frameSummary = screen.getByText("Frame Selection · 1 frame");
+    const frameDetails = frameSummary.closest("details");
+    expect(frameDetails).not.toHaveAttribute("open");
+
+    fireEvent.click(screen.getByRole("button", { name: "Load suggestions" }));
+    expect(screenshots.load).toHaveBeenCalledOnce();
+
+    fireEvent.click(screen.getByRole("button", { name: "Generate screenshots" }));
+    expect(screenshots.generate).toHaveBeenCalledWith("final");
+
+    if (!frameDetails) throw new Error("frame selection details missing");
+    fireEvent.click(frameSummary);
+    expect(
+      within(frameDetails).getByRole("spinbutton", { name: "Source shot 1 seconds" }),
+    ).toBeVisible();
+    expect(
+      within(frameDetails).getByRole("spinbutton", { name: "Source shot 1 frame" }),
+    ).toBeVisible();
+    fireEvent.click(within(frameDetails).getByRole("button", { name: "Preview Source shot 1" }));
+    expect(screenshots.generate).toHaveBeenCalledWith("preview", [
+      { Index: 0, TimestampSeconds: 12, Frame: 288, Source: "auto" },
+    ]);
+    expect(screen.queryByText("Screenshot settings")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Reload settings" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Apply settings" })).not.toBeInTheDocument();
+  });
+
+  it("renders and mutates workflow-owned screenshots by opaque artifact ID", () => {
+    const base = facet();
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        workflowMode: true,
+        artifacts: {
+          id: "media-1",
+          workflowId: "workflow-1",
+          revision: 6,
+          release: { id: "release-1", revision: 2 },
+          releaseRef: {
+            SourcePath: "C:\\media\\Example.Release.2026.1080p-GRP.mkv",
+            Generation: 1,
+          },
+          projectionSet: { id: "projections-1", revision: 4 },
+          captureFingerprint: "1".repeat(64),
+          requirementsFingerprint: "2".repeat(64),
+          imageRequirementsPrepared: false,
+          artifacts: [
+            {
+              id: "artifact-1",
+              kind: "screenshot",
+              purpose: "final",
+              selected: true,
+              order: 0,
+              width: 1920,
+              height: 1080,
+              sizeBytes: 1024,
+              url: "/api/app/release-workflow-media?artifactId=artifact-1",
+            },
+            {
+              id: "artifact-2",
+              kind: "screenshot",
+              purpose: "final",
+              selected: false,
+              order: 1,
+              width: 1920,
+              height: 1080,
+              sizeBytes: 1024,
+              url: "/api/app/release-workflow-media?artifactId=artifact-2",
+            },
+          ],
+          status: "completed",
+          createdAt: "2026-07-21T00:00:00Z",
+        },
+      },
+    };
+    const confirm = vi.fn(() => true);
+    vi.stubGlobal("confirm", confirm);
+    const view = render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+    const page = within(view.container);
+
+    const gallery = page.getByRole("heading", { name: "Generated Screenshots" }).closest("section");
+    if (!gallery) throw new Error("generated screenshot gallery missing");
+    expect(within(gallery).getByAltText("Screenshot 1")).toHaveAttribute(
+      "src",
+      expect.stringContaining("artifactId=artifact-1"),
+    );
+    expect(within(gallery).getByRole("button", { name: "Select Screenshot 2" })).toBeVisible();
+    fireEvent.click(within(gallery).getByRole("button", { name: "Unselect Screenshot 1" }));
+    expect(screenshots.selectArtifact).toHaveBeenCalledWith("artifact-1", false);
+    fireEvent.click(within(gallery).getByRole("button", { name: "Select Screenshot 2" }));
+    expect(screenshots.selectArtifact).toHaveBeenCalledWith("artifact-2", true);
+    fireEvent.click(within(gallery).getByRole("button", { name: "Delete Screenshot 1" }));
+    expect(screenshots.deleteArtifacts).toHaveBeenCalledWith(["artifact-1"]);
+    fireEvent.click(within(gallery).getByRole("button", { name: "Delete Screenshot 2" }));
+    expect(screenshots.deleteArtifacts).toHaveBeenCalledWith(["artifact-2"]);
+    fireEvent.click(within(gallery).getByRole("button", { name: "Delete all" }));
+    expect(confirm).toHaveBeenCalledOnce();
+    expect(screenshots.deleteArtifacts).toHaveBeenLastCalledWith(["artifact-1", "artifact-2"]);
+
+    const captureActions = page
+      .getByRole("button", { name: "Generate screenshots" })
+      .closest("section");
+    const frameDetails = page.getByText("Frame Selection · 1 frame").closest("details");
+    expect(captureActions?.compareDocumentPosition(frameDetails as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(frameDetails).not.toHaveAttribute("open");
+    vi.unstubAllGlobals();
+  });
+
+  it("identifies each editable frame and preview action when several shots are suggested", () => {
+    const base = facet();
+    const selections = [
+      { Index: 0, TimestampSeconds: 12, Frame: 288, Source: "auto" },
+      { Index: 1, TimestampSeconds: 24, Frame: 576, Source: "auto" },
+    ];
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        plan: { ...plan(), SuggestedSelections: selections },
+        selections,
+      },
+    };
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    fireEvent.click(screen.getByText("Frame Selection · 2 frames"));
+    expect(screen.getByRole("spinbutton", { name: "Source shot 1 seconds" })).toBeVisible();
+    expect(screen.getByRole("spinbutton", { name: "Source shot 2 seconds" })).toBeVisible();
+    expect(screen.getByRole("spinbutton", { name: "Source shot 1 frame" })).toBeVisible();
+    expect(screen.getByRole("spinbutton", { name: "Source shot 2 frame" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Preview Source shot 2" }));
+    expect(screenshots.generate).toHaveBeenCalledWith("preview", [selections[1]]);
+  });
+
+  it("captures the live preview as a new retained screenshot", () => {
+    const screenshots = facet();
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    const preview = screen.getByRole("heading", { name: "Live Preview" }).closest("section");
+    if (!preview) throw new Error("live preview missing");
+    fireEvent.change(within(preview).getByLabelText("Seconds"), { target: { value: "37.5" } });
+    fireEvent.click(within(preview).getByRole("button", { name: "Capture preview" }));
+
+    expect(screenshots.generate).toHaveBeenCalledWith("final", [
+      { Index: 4, TimestampSeconds: 37.5, Frame: 900, Source: "manual" },
+    ]);
+  });
+
+  it("excludes DVD menus and hosted menu variants from normal screenshot counts", () => {
+    const base = facet();
+    const artifacts = [
+      ...Array.from({ length: 4 }, (_, index) => ({
+        id: `screen-${index + 1}`,
+        kind: "screenshot" as const,
+        purpose: "final" as const,
+        selected: true,
+        order: index,
+        url: `/media/screen-${index + 1}`,
+      })),
+      ...Array.from({ length: 2 }, (_, index) => ({
+        id: `menu-${index + 1}`,
+        kind: "dvd_menu" as const,
+        purpose: "menu" as const,
+        selected: true,
+        order: index + 4,
+        url: `/media/menu-${index + 1}`,
+      })),
+      {
+        id: "hosted-menu",
+        kind: "hosted_image" as const,
+        purpose: "menu" as const,
+        selected: true,
+        order: 6,
+        source: "menu-1",
+        url: "https://img.example.invalid/menu-1.png",
+      },
+    ];
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        artifacts: {
+          ...base.view.artifacts!,
+          artifacts,
+        },
+        finalSelectionArtifactIDs: ["screen-1", "screen-2", "screen-3", "screen-4"],
+      },
+    };
+
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    expect(screen.getByText("4 captured screenshot(s)")).toBeInTheDocument();
+    expect(screen.getAllByAltText(/^Screenshot \d$/)).toHaveLength(4);
+  });
+
+  it("groups planning, previews, and captures by prepared disc", () => {
+    const base = facet();
+    const selections = [
+      { DiscID: "disc-one", Index: 0, TimestampSeconds: 10, Frame: 240, Source: "auto" },
+      { DiscID: "disc-two", Index: 1, TimestampSeconds: 20, Frame: 600, Source: "auto" },
+    ];
+    const screenshots: ScreenshotsFacet = {
+      ...base,
+      view: {
+        ...base.view,
+        plan: {
+          ...plan(),
+          DiscType: "BDMV",
+          Discs: [
+            {
+              DiscID: "disc-one",
+              DiscName: "Disc 1",
+              DurationSeconds: 120,
+              FrameRate: 24,
+              SuggestedSelections: [selections[0]],
+            },
+            {
+              DiscID: "disc-two",
+              DiscName: "Disc 2",
+              DurationSeconds: 90,
+              FrameRate: 30,
+              SuggestedSelections: [selections[1]],
+            },
+          ],
+          SuggestedSelections: selections,
+        },
+        selections,
+        artifacts: {
+          ...base.view.artifacts!,
+          artifacts: [
+            {
+              id: "screen-one",
+              discId: "disc-one",
+              discName: "Disc 1",
+              kind: "screenshot",
+              purpose: "final",
+              selected: true,
+              url: "/media/screen-one",
+            },
+            {
+              id: "screen-two",
+              discId: "disc-two",
+              discName: "Disc 2",
+              kind: "screenshot",
+              purpose: "final",
+              selected: true,
+              url: "/media/screen-two",
+            },
+          ],
+        },
+      },
+    };
+    render(
+      <ScreenshotsPage facet={screenshots} setLightboxImage={vi.fn()} setLightboxAlt={vi.fn()} />,
+    );
+
+    expect(screen.getAllByRole("heading", { name: "Disc 1" })).toHaveLength(2);
+    expect(screen.getAllByRole("heading", { name: "Disc 2" })).toHaveLength(2);
+    expect(screen.getByAltText("Disc 1 screenshot 1")).toBeVisible();
+    expect(screen.getByAltText("Disc 2 screenshot 1")).toBeVisible();
+
+    const preview = screen.getByRole("heading", { name: "Live Preview" }).closest("section");
+    if (!preview) throw new Error("live preview missing");
+    fireEvent.change(within(preview).getByLabelText("Preview disc"), {
+      target: { value: "disc-two" },
+    });
+    fireEvent.change(within(preview).getByLabelText("Seconds"), { target: { value: "30" } });
+    fireEvent.click(within(preview).getByRole("button", { name: "Run preview" }));
+    expect(screenshots.previewFrame).toHaveBeenCalledWith("disc-two", 30);
+  });
+});

@@ -1,0 +1,59 @@
+{
+  "scope": "Original forward-mode.test.ts callbacks transpiled unmodified; fake in-memory fs/process HOME/provider/backend/import adapters and minimal Vitest assertions; actual promise chain, no user files or env mutated",
+  "original_callbacks_passed": 13,
+  "results": [
+    {
+      "name": "forwards only the new delta on each turn",
+      "passed": true
+    },
+    {
+      "name": "resets progress when the snapshot shrinks (compaction / new session)",
+      "passed": true
+    },
+    {
+      "name": "forwards user-side only on aborted turns",
+      "passed": true
+    },
+    {
+      "name": "skips the delta when the agent used memory-mutating tools this turn",
+      "passed": true
+    },
+    {
+      "name": "falls back to legacy infer-add permanently after one 404",
+      "passed": true
+    },
+    {
+      "name": "does not fall back on non-404 errors and retries next turn",
+      "passed": true
+    },
+    {
+      "name": "session_end flush is queued after pending adds",
+      "passed": true
+    },
+    {
+      "name": "flushes the previous scope when the sessionKey switches",
+      "passed": true
+    },
+    {
+      "name": "flushes persisted scopes from a previous plugin instance on first sighting",
+      "passed": true
+    },
+    {
+      "name": "logs but does not crash when flush 404s",
+      "passed": true
+    },
+    {
+      "name": "round-trips through the state file",
+      "passed": true
+    },
+    {
+      "name": "returns an empty map for a missing or corrupt file",
+      "passed": true
+    },
+    {
+      "name": "drops non-numeric values when loading",
+      "passed": true
+    }
+  ],
+  "full_vitest_suite_run": false
+}

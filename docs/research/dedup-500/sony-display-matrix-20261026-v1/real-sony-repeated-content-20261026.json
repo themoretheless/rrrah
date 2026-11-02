@@ -1,0 +1,41 @@
+{
+  "exit_code": 0,
+  "seconds": 37.272097582987044,
+  "binary_sha256": "c0e6218e9a11f5743ed7e1e3750b62e550f46e3ba3e01b8c6fc6a79a6671583f",
+  "inputs": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d",
+    "/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-repeated-content-jn02bb74/copy.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d"
+  },
+  "stable": true,
+  "candidates": [
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "issues_empty": true,
+  "managed_released": true,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/real-sony-repeated-content-20261026.log",
+  "log_sha256": "21e52619cfd9070881e2d91764b3f5622d30daceff42482316ca0d3b30dd5b5e",
+  "label_control": "TIFF copy independently byte-compared with filecmp(shallow=False); copy created in owned temporary directory, removed after this run.",
+  "tiff_copy_strict_full_grid_equal": true,
+  "raw_to_both_copies_evidence_identical": true,
+  "scope": "Three separate input paths: one real Sony RAW, its independently rendered TIFF and an independently byte-confirmed TIFF copy. All three pair candidates retained; duplicate TIFF pair has full strict-grid agreement in both directions. RAW-to-original and RAW-to-copy numeric evidence identical.",
+  "limitations": [
+    "Candidate evidence is not whole-file identity for RAW versus TIFF.",
+    "This finite clique does not permit general grouping by transitive visual edges."
+  ],
+  "driver": {
+    "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/repeated-content-driver-20261026.py",
+    "sha256": "9e9bf3097672b766110f5fc7ece29121a9bc3855ed9cc7df2bf04d35e7cd1e58"
+  }
+}

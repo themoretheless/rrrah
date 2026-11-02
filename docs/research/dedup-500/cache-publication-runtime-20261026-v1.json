@@ -1,0 +1,52 @@
+{
+  "runs": [
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--test",
+        "cache",
+        "concurrent_"
+      ],
+      "exit_code": 0,
+      "stdout": "\nrunning 2 tests\ntest concurrent_process_writers_publish_only_complete_single_writer_caches ... ok\ntest concurrent_threads_publish_only_complete_single_writer_caches ... ok\n\ntest result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 17 filtered out; finished in 4.25s\n\n",
+      "stderr": "    Finished `test` profile [optimized + debuginfo] target(s) in 0.09s\n     Running tests/cache.rs (target/debug/deps/cache-a7da2044742e95e0)\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--test",
+        "cache",
+        "process_exit_during_temp_write"
+      ],
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest process_exit_during_temp_write_preserves_previous_publication_and_retry ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.05s\n\n",
+      "stderr": "    Finished `test` profile [optimized + debuginfo] target(s) in 0.07s\n     Running tests/cache.rs (target/debug/deps/cache-a7da2044742e95e0)\n"
+    },
+    {
+      "command": [
+        "cargo",
+        "+1.98.1",
+        "test",
+        "-p",
+        "rrrah-dedup",
+        "--test",
+        "cache",
+        "file_size_limit_during_temp_write"
+      ],
+      "exit_code": 0,
+      "stdout": "\nrunning 1 test\ntest file_size_limit_during_temp_write_preserves_previous_cache_and_retry ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.03s\n\n",
+      "stderr": "    Finished `test` profile [optimized + debuginfo] target(s) in 0.08s\n     Running tests/cache.rs (target/debug/deps/cache-a7da2044742e95e0)\n"
+    }
+  ],
+  "source_sha256": "aa9e54f0dfe6a6f62ec7374f391f0d1c6516c5da430d257592ecffb222ecf601",
+  "test_sha256": "a54d4c31cc27ea6dac88ef953a2784f368fbb259ef04ad8a70370d9d0886c5a2",
+  "scope": "Local macOS process/thread publication and injected prepublication exits/file-size refusal. Not power-loss durability or all-filesystem qualification."
+}

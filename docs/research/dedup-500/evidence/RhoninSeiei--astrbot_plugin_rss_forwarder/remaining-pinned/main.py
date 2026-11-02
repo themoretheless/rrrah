@@ -1,0 +1,96 @@
+import importlib.util
+
+from astrbot.api import logger
+from astrbot.api.event import AstrMessageEvent, filter
+from astrbot.api.star import Context, Star, register
+
+from .commands import RSSCommands
+from .config import RSSConfig
+from .dispatcher import FeedDispatcher
+from .fetcher import FeedFetcher
+from .parser import FeedParser
+from .pipeline import FeedPipeline
+from .scheduler import RSSScheduler
+from .semantic_dedup import SemanticDedupService
+from .source_probe import SourceProbeService
+from .storage import FeedStorage
+
+
+@register(
+    "astrbot_plugin_rss_forwarder",
+    "AstrBot RSS Forwarder",
+    "面向 AstrBot 的 RSS/RSSHub/Twitter 推送编排插件",
+    "0.7.3",
+)
+class RSSPlugin(Star, RSSCommands):
+    def __init__(self, context: Context, config=None):
+        super().__init__(context, config)
+
+        runtime_source = config if config is not None else context
+        config = RSSConfig.from_context(runtime_source)
+        if hasattr(context, "get_config"):
+            try:
+                global_config = context.get_config() or {}
+                timezone_name = str(global_config.get("timezone", "") or "").strip()
+                if timezone_name:
+                    config.timezone = timezone_name
+            except Exception:
+                pass
+        parser = FeedParser()
+        storage = FeedStorage(
+            plugin_name="astrbot_plugin_rss_forwarder",
+            legacy_plugin_names=["astrbot_rss"],
+            get_kv_data=getattr(self, "get_kv_data", None),
+            put_kv_data=getattr(self, "put_kv_data", None),
+            delete_kv_data=getattr(self, "delete_kv_data", None),
+        )
+        fetcher = FeedFetcher(config=config, storage=storage)
+        dispatcher = FeedDispatcher(context=context, config=config, storage=storage, renderer=self)
+        pipeline = FeedPipeline(context=context, config=config)
+        semantic_deduper = SemanticDedupService(context=context, config=config, storage=storage)
+        source_probe_service = SourceProbeService()
+        RSSCommands.__init__(
+            self,
+            source_probe_service=source_probe_service,
+        )
+
+        self.scheduler = RSSScheduler(
+            config=config,
+            fetcher=fetcher,
+            parser=parser,
+            dispatcher=dispatcher,
+            storage=storage,
+            pipeline=pipeline,
+            semantic_deduper=semantic_deduper,
+        )
+        self._source_probe_api = None
+        if importlib.util.find_spec("astrbot.api.web") is not None:
+            from .source_probe_api import SourceProbeApi
+
+            self._source_probe_api = SourceProbeApi(
+                config,
+                source_probe_service,
+            )
+            self._source_probe_api.register(self.context)
+        else:
+            logger.warning(
+                "astrbot.api.web is unavailable; source probe Page API registration skipped"
+            )
+
+    async def initialize(self):
+        """插件初始化：仅做资源编排（启动调度器）。"""
+        await self.scheduler.start()
+
+    async def terminate(self):
+        """插件销毁：仅做资源编排（关闭任务）。"""
+        await self.scheduler.stop()
+        if self._source_probe_api is not None:
+            await self._source_probe_api.terminate()
+
+    # NOTE:
+    # 这些装饰器必须挂在主插件模块(main.py)中的类方法上，
+    # 否则插件面板不会把它们识别为当前插件行为项。
+    @filter.regex(r"^/?rss(?:\s+.*)?$")
+    async def _rss_router(self, event: AstrMessageEvent):
+        async for result in RSSCommands.rss_router(self, event):
+            yield result

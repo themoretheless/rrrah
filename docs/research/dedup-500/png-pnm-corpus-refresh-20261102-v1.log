@@ -1,0 +1,42 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1m 43s
+     Running tests/png_pinned_corpus.rs (target/debug/deps/png_pinned_corpus-313ed2d31f9b30eb)
+
+running 1 test
+valid corpus decoded: 161/161; failures: []
+test pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/png_primary_policy.rs (target/debug/deps/png_primary_policy-ac1c4e22ae63f627)
+
+running 3 tests
+test explicit_png_policy_preserves_16_bit_color_and_alpha_precision ... ok
+test explicit_png_primaries_preserve_gamma_alpha_and_cache_policy ... ok
+test explicit_png_policy_applies_to_each_apng_selected_frame ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pnm_precision.rs (target/debug/deps/pnm_precision-5a11a6c3b29f2d42)
+
+running 1 test
+test pgm16_sample_order_and_low_bits_survive_selected_frame_normalization ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

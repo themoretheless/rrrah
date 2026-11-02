@@ -1,0 +1,30 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 1.91s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_gpu-72191398ce43797e)
+
+running 6 tests
+test edit_panel::tests::histogram_bars_grow_upward_from_the_graph_baseline ... ok
+test histogram::tests::histogram_matches_analytic_cpu_oracle_and_refuses_budget_metal ... ok
+test histogram::tests::histogram_shader_validates_and_storage_is_bounded ... ok
+test histogram::tests::latest_generation_replaces_pending_and_obsolete_result_is_not_published_metal ... ok
+test histogram::tests::newer_frame_supersedes_result_even_within_one_decode_generation_metal ... ok
+test histogram::tests::odd_crops_extreme_values_and_repeated_navigation_metal ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 73 filtered out; finished in 19.34s
+

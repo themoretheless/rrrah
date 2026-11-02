@@ -1,0 +1,12 @@
+{
+  "scope": "Scheduler selected lines340..500 plus cron call-site search; not whole source read",
+  "path": "scheduler.py",
+  "sha256": "92e108622a2a61c9de3560f404471c2236128627ed49aef618ff945f62f9a79c",
+  "git_blob_sha1": "bce9382277f15156cc673e32a1aa4a2a0ef6bc9c",
+  "findings": [
+    "Pinned scheduler does implement five-field cron with wildcards, ranges, lists and positive steps; invalid syntax falls back to interval. Earlier roadmap claiming cron is only reserved is stale.",
+    "Datetime matcher combines day-of-month and weekday with AND. This is an implementation semantic requiring explicit contract rather than assuming compatibility with another cron implementation.",
+    "Search scans minute by minute up to366days synchronously. Valid but impossible dates or next occurrence beyond horizon fall back to ordinary poll interval, which can execute a job at a nonmatching date.",
+    "Candidate begins at next minute; selected run sleeps relative delay with no persisted fire identity in this excerpt. DST/catchup and cross-instance guarantees need remaining source/tests."
+  ]
+}

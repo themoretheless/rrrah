@@ -71,6 +71,7 @@ pub(crate) fn update_interpretation(
     let DecodeRequest {
         path: _,
         image_index: _,
+        raw_development_recipe,
         rpf_interpretation,
         rla_alpha_mode,
         rla_float_byte_order,
@@ -84,7 +85,11 @@ pub(crate) fn update_interpretation(
         cancellation: _,
         memory_budget: _,
     } = request;
-    hash.update(b"caller-pixel-interpretation-v2");
+    hash.update(b"caller-pixel-interpretation-v3");
+    hash.update(match raw_development_recipe {
+        rrrah_decode::RawDevelopmentRecipe::NativeDefault => b"raw-native-default-v1",
+        rrrah_decode::RawDevelopmentRecipe::Bilinear => b"raw-bilinear-v1",
+    });
     match png_assumed_rgb_primaries {
         None => {
             hash.update(&[0]);

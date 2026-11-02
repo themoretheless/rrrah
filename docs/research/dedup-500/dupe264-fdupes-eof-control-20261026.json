@@ -1,0 +1,20 @@
+{
+  "scope": "Verbatim original process_fdupes with stub add/dedupe/free counters. Synthetic stdin only, no real file opens/ioctls.",
+  "source": "docs/research/dedup-500/evidence/markfasheh--duperemove/04-duperemove.c",
+  "sha256": "66023cf409ca355936a82f4df416ef14507e97535ebf41769131dfeabb2f7093",
+  "harness": "#include <stdio.h>\n#include <stdlib.h>\n#include <string.h>\n#include <limits.h>\n#define _cleanup_(x)\n#define eprintf(...) fprintf(stderr,__VA_ARGS__)\nstatic int added,groups;\nstatic int fdupes_dedupe(void){groups++;return 0;}\nstatic void free_all_filerecs(void){}\nstatic void add_file_fdupes(char *p){added++;}\nstatic int process_fdupes(void)\n{\n\tint ret = 0;\n\t_cleanup_(freep) char *path = NULL;\n\tsize_t pathlen = 0;\n\tssize_t readlen;\n\n\twhile ((readlen = getline(&path, &pathlen, stdin)) != -1) {\n\t\tif (readlen == 0)\n\t\t\tcontinue;\n\n\t\tif (readlen == 1 && path[0] == '\\n') {\n\t\t\tret = fdupes_dedupe();\n\t\t\tif (ret)\n\t\t\t\treturn ret;\n\t\t\tfree_all_filerecs();\n\t\t\tcontinue;\n\t\t}\n\n\t\tif (readlen > 0 && path[readlen - 1] == '\\n') {\n\t\t\tpath[--readlen] = '\\0';\n\t\t}\n\n\t\tif (readlen > PATH_MAX - 1) {\n\t\t\teprintf(\"Path max exceeded: %s\\n\", path);\n\t\t\tcontinue;\n\t\t}\n\n\t\tadd_file_fdupes(path);\n\t}\n\n\treturn 0;\n}\nint main(void){int r=process_fdupes();printf(\"added=%d groups_processed=%d return=%d\\n\",added,groups,r);return r;}\n",
+  "build_returncode": 0,
+  "build_stderr": "",
+  "runs": [
+    {
+      "input": "synthetic-a\nsynthetic-b\n",
+      "returncode": 0,
+      "stdout": "added=2 groups_processed=0 return=0\n"
+    },
+    {
+      "input": "synthetic-a\nsynthetic-b\n\n",
+      "returncode": 0,
+      "stdout": "added=2 groups_processed=1 return=0\n"
+    }
+  ]
+}

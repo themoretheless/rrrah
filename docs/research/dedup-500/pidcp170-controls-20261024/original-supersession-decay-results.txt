@@ -1,0 +1,112 @@
+TAP version 13
+# Subtest: old large result is excerpted with head, tail, marker and token savings
+ok 1 - old large result is excerpted with head, tail, marker and token savings
+  ---
+  duration_ms: 1.0165
+  type: 'test'
+  ...
+# Subtest: same result at age 11 is untouched
+ok 2 - same result at age 11 is untouched
+  ---
+  duration_ms: 0.086375
+  type: 'test'
+  ...
+# Subtest: large-but-recent and old-but-small results are untouched
+ok 3 - large-but-recent and old-but-small results are untouched
+  ---
+  duration_ms: 0.118291
+  type: 'test'
+  ...
+# Subtest: protectedByTurn, protected tools and placeholders are untouched
+ok 4 - protectedByTurn, protected tools and placeholders are untouched
+  ---
+  duration_ms: 0.085625
+  type: 'test'
+  ...
+# Subtest: old large error outputs are excerpted too
+ok 5 - old large error outputs are excerpted too
+  ---
+  duration_ms: 0.134
+  type: 'test'
+  ...
+# Subtest: minified single-line content falls back to a char-based excerpt
+ok 6 - minified single-line content falls back to a char-based excerpt
+  ---
+  duration_ms: 0.41675
+  type: 'test'
+  ...
+# Subtest: idempotent: a second run adds nothing to counts or stats
+ok 7 - idempotent: a second run adds nothing to counts or stats
+  ---
+  duration_ms: 0.081791
+  type: 'test'
+  ...
+# Subtest: decay reaches old results inside one long turn when turnProtection is step-capped
+ok 8 - decay reaches old results inside one long turn when turnProtection is step-capped
+  ---
+  duration_ms: 1.488541
+  type: 'test'
+  ...
+# Subtest: runPipeline does not mutate the original result
+ok 9 - runPipeline does not mutate the original result
+  ---
+  duration_ms: 1.037291
+  type: 'test'
+  ...
+# Subtest: a read older than a successful edit is placeholdered; the edit stays
+ok 10 - a read older than a successful edit is placeholdered; the edit stays
+  ---
+  duration_ms: 0.964875
+  type: 'test'
+  ...
+# Subtest: a failed edit does not supersede an earlier read
+ok 11 - a failed edit does not supersede an earlier read
+  ---
+  duration_ms: 0.10475
+  type: 'test'
+  ...
+# Subtest: a read newer than the modification stays
+ok 12 - a read newer than the modification stays
+  ---
+  duration_ms: 0.166542
+  type: 'test'
+  ...
+# Subtest: a modification of a different path does not supersede
+ok 13 - a modification of a different path does not supersede
+  ---
+  duration_ms: 0.075416
+  type: 'test'
+  ...
+# Subtest: bash cat older than a write is superseded
+ok 14 - bash cat older than a write is superseded
+  ---
+  duration_ms: 0.144666
+  type: 'test'
+  ...
+# Subtest: protectedByTurn reads are untouched
+ok 15 - protectedByTurn reads are untouched
+  ---
+  duration_ms: 0.063291
+  type: 'test'
+  ...
+# Subtest: idempotent: a second run adds nothing to counts or stats
+ok 16 - idempotent: a second run adds nothing to counts or stats
+  ---
+  duration_ms: 0.106667
+  type: 'test'
+  ...
+# Subtest: runPipeline does not mutate the original read result
+ok 17 - runPipeline does not mutate the original read result
+  ---
+  duration_ms: 1.037167
+  type: 'test'
+  ...
+1..17
+# tests 17
+# suites 0
+# pass 17
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 116.458791

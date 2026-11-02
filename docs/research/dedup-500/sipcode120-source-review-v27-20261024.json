@@ -1,0 +1,73 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v26-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "tests/modules/proxy/rewriters/find.test.ts",
+      "local": "captest-tests_modules_proxy_rewriters_find.test.ts",
+      "git_blob": "468036ac5f166db4290a79ba7482c042dc381c5d",
+      "sha256": "8d016d5250c22452f23314c6da078fe3f845f7b16f050d1278de6d1edeb048aa",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/ls.test.ts",
+      "local": "captest-tests_modules_proxy_rewriters_ls.test.ts",
+      "git_blob": "5e56924641de5fae5376ac7a40788c6b36e91b48",
+      "sha256": "fb19ce042c29f948e19caff8372804be5be77df4a37318a30d1bc6b110693c49",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/tsc.test.ts",
+      "local": "captest-tests_modules_proxy_rewriters_tsc.test.ts",
+      "git_blob": "d49fcecdcbdc89a82487307162ba4f74a4e8b3ba",
+      "sha256": "a02558ca2ccdb3fb6ef322ce3c815369dc846d7e7b99b20ae584ec7dd6faa348",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/rewriters/cargo.test.ts",
+      "local": "captest-tests_modules_proxy_rewriters_cargo.test.ts",
+      "git_blob": "7847da7868776ca21725190c810a48e86c2e8014",
+      "sha256": "b3bb9b7183c663b7fe98e94c9af92e4f07b5ef8f3f9c72b93751fed8deb44ed9",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 96,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest2_results": {
+    "numTotalTests": 314,
+    "numPassedTests": 314,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 25,
+  "authored_upstream_controls_total_distinct": 57,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-vitest2-tests-20261024",
+  "result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "rawNulEntries": 250,
+    "rewrittenNulEntries": 1,
+    "rawNulBytes": 3640,
+    "rewrittenNulBytes": 15,
+    "findings": [
+      "Newlinefindoutputcuts250filesto100withouttruncationmarker",
+      "Missingpathnonzeroexit andstderrpreserved",
+      "NULdelimitedfindoutputiscorruptedbythehostawkpipe;original250entriesnotpreserved"
+    ],
+    "scope": "Originalfind/basecodewithimportlocationschanged;actual/bin/bash+find+awk;ownedfilesonly;no completeinventoryguaranteeorWindowsclaim",
+    "root": "/Users/themoretheless/Documents/Sources/rrrah/.dedup-work/sipcode120-20261024/cap-owned-Vunemf"
+  },
+  "findings": [
+    "Actualfindnewlineoutput250filescutto100withnomarker;notcompleteinventory.",
+    "Actualmissingpathnonzeroexit/stderrpreservedwithpipefail+awk.",
+    "Actualownedfind-print0 250NULentries3640bytes becomes1non-NULentry15bytes throughhostawk;host-specificnotportableuniversalclaim.",
+    "Originalfind/lstests assertcommandstrings;tsctestsassertpipefailstring butnotactualcompilerexecution;Cargoflagtestsnotrealbuild."
+  ],
+  "initial_control_note": "FirstharnessassertedNULpassthrough250,failedactual1;rawcontroladdedandactualdelimiterlossverified. Initialwrongassumptionretainedandnotcountedaspassedcase.",
+  "production_implementation_changes": false,
+  "native_phash_asan": "deferred"
+}

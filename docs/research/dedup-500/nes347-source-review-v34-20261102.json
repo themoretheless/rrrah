@@ -1,0 +1,2930 @@
+{
+  "index": 347,
+  "repository": "astoria-d/super-duper-nes",
+  "commit": "620c109e416ec700af026bbc82f780b0e55b308b",
+  "tracked_blob_count": 420,
+  "whole_file_reads": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/00-README.md",
+      "sha256": "1679dc1c68df824714668dc37211fe33f563b825ecbd0584e4505813f5469a26",
+      "git_blob_sha1": "91ec88e8765d89e35b69fcbc183e50e1f0c9f747"
+    },
+    {
+      "path": "duper_mapper/duper_mapper.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/03-duper_mapper.c",
+      "sha256": "0ba150d39ca392db78c01063a8497075e3647f4546ceec794bcf20bebcbfacf8",
+      "git_blob_sha1": "04d54faf48e20cbe71f76f1c1356a286525ffe43"
+    },
+    {
+      "path": "duper_cartridge/fifo.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/04-fifo.vhd",
+      "sha256": "68ebe11910ef4ba0fd3bbacae14097745fd74b0b6be8de890a8d44ed952834d1",
+      "git_blob_sha1": "f28a4f9d5c9fa3eecb230a1842795cb2a2845917"
+    },
+    {
+      "path": "doc/memo/app-build",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/memo/app-build",
+      "sha256": "620ff92c7399c15947e767c794a629d402fb822fd267cc481180b6b3986941ba",
+      "git_blob_sha1": "1c0db1f6f68e5ac17e5b57b903e38d8cf1547a67"
+    },
+    {
+      "path": "duper_linux/bbb_tty/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/Makefile",
+      "sha256": "a60b652f05cf1a835e1041d71b0b4c281ecafc1db14357687bfb35c2aaaa2330",
+      "git_blob_sha1": "56ab5007f928efb6bfb64d7200acb0ad45c87148"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bbb_tty.h",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bbb_tty.h",
+      "sha256": "3e246652e00fff91d3c4f321c015f1ea4fd89ee9ee4de98b40b7f8fcddf7eb73",
+      "git_blob_sha1": "c50e232d999178381dba1abd9458b04d6ded5022"
+    },
+    {
+      "path": "duper_linux/tools/hexout/hexout.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/hexout/hexout.c",
+      "sha256": "bd8157ec60fcb0db9ff18b7db97195b86b73daecf33957e9cc7f5cbb8ac69ad0",
+      "git_blob_sha1": "739b2c159f650777f716639ca5ac4f4e1966a932"
+    },
+    {
+      "path": "duper_mapper/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_mapper/Makefile",
+      "sha256": "e0176374335b38812c9e929c484e4c082786abaeefa9f4b92f59ee9a9fff206b",
+      "git_blob_sha1": "d276e12a6e14e1e064905f940b6f48cc6153bca7"
+    },
+    {
+      "path": "test/driver_test/test-drv.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/driver_test/test-drv.c",
+      "sha256": "536d1d18eab04c147aa56ce299eb8244d59d74345e6d33058cd7421b6c72cd59",
+      "git_blob_sha1": "013334bb1859489a21582761ea6d8179559ec7e0"
+    },
+    {
+      "path": "test/driver_test/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/driver_test/Makefile",
+      "sha256": "78a1af880638d7cbdf4906d73ff36cd8913dc1f78ccd005eb617641fa0edd88b",
+      "git_blob_sha1": "adc9f9d6c835669d6760e38c33495f8668632ade"
+    },
+    {
+      "path": "test/dts-test/duper-i2c.dts",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/dts-test/duper-i2c.dts",
+      "sha256": "4c8f9fc63971905ba00b324991c96eb1a892567782fb06de1382ecb6dd2b3996",
+      "git_blob_sha1": "c7fa8c7b639dfbbdff46b7a286aaf7cf16345efa"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bt_gpio.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bt_gpio.c",
+      "sha256": "93e2019d4aa6bb43f15672aa9c6646631bf271003ce1dafd12f68a4069a0bee4",
+      "git_blob_sha1": "5eb825868bbea335eefa06a0be670fefda2ad02c"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bt_i2c.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bt_i2c.c",
+      "sha256": "f139caecd5eed4d5032d94b3e955eb23b0fcd6dbaad2b5116692d42970f28d27",
+      "git_blob_sha1": "3d3daa0e78ab058dfe38d57e1b2d99d7eb37d3c4"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bt_module.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bt_module.c",
+      "sha256": "3f3b4fff056818281d94ba0b159dd503409f2124108948eadcaeef67db72da16",
+      "git_blob_sha1": "00e1cd9a92bd6962be4be5bae1b1ef8d04375949"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bt_proc.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bt_proc.c",
+      "sha256": "08504d75068636c2fb3094303df99e7ca141e68568580aac3be474011163c297",
+      "git_blob_sha1": "bfac7f0b588e478377efbafd28bdb3ada1f6d638"
+    },
+    {
+      "path": "duper_linux/nes_shell/nes_shell.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/nes_shell/nes_shell.c",
+      "sha256": "216dd0fd20cfab1ec07094e1212b05f8e27c54d1aeed99bb7df78bf84a155a93",
+      "git_blob_sha1": "46a36631f11684b94be1697984a56765ab912062"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bbb_tty.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bbb_tty.c",
+      "sha256": "0c83a0574401bf05e1accf7d57a8af39024c1bce3604836feee0e6eb30297b68",
+      "git_blob_sha1": "afcbfe2738bed74e6b6d21ff05af7e6de3a43e25"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/echo_shell.h",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/echo_shell.h",
+      "sha256": "c7e932a15aefd95642b32b53a880fb63a27bbb9e77170f8930637dd355cb8969",
+      "git_blob_sha1": "a8b50ec9747dff594c080574e451a39563292cde"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/echo_shell.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/echo_shell.c",
+      "sha256": "4b8c90190882c24e3f28f4aa8b755146e6d1bd26cbe2785612b2dece5e9cae80",
+      "git_blob_sha1": "d2e759a825172b1eedb289d57d13e6ca963fbab8"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/cmd_exec.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/cmd_exec.c",
+      "sha256": "4e909fa6f5aab7505efb4f03737aae4f5a6f82ec03ab9dad2583a059f241849d",
+      "git_blob_sha1": "16ae72995e1c980473aaeaae4efa64dbf8cb26ca"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/gpio_handler.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/gpio_handler.c",
+      "sha256": "73a143037c7327802fa190bab2f6a2319b455043a4534a2bff3656816d3bc66e",
+      "git_blob_sha1": "521a25fe2b8c005f353be78929b90315fcc21804"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/i2c_terminal.c",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/i2c_terminal.c",
+      "sha256": "ce31e0d271239f1c0de411a1109a6bbd7154d13f7bacc13f3a6dd927b8013ebb",
+      "git_blob_sha1": "16300d757f5fc80c9c1ccb3d1c94e230798f2bff"
+    },
+    {
+      "path": ".gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/.gitignore",
+      "sha256": "c0f2831411a47362246c5d4bb6114a2ed04b350228fd4bd97db9dca140aa4167",
+      "git_blob_sha1": "ce6a818d9ff40534e2dc16fd5d04d388df2d1717",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/.gitignore",
+      "sha256": "6c096144997e82208d4926f82e178c4318b06a4336d409092d71a8abba86567a",
+      "git_blob_sha1": "97dc1e65c885e0e2e8bb1755ad7c67aa2bdddde4",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/Makefile",
+      "sha256": "22c52e5e20ce9f6f38e341626ab631e290c34a22ddad2f9c366cc396b794182a",
+      "git_blob_sha1": "14d0e399cdf4c456eccfb50c8d6997e262f7a8cc",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/bread-board-5to33-test03.asc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/bread-board-5to33-test03.asc",
+      "sha256": "a071ea2ae1de8ce4303730d7a6e443652df7d9ca5d7d455431285add5e472890",
+      "git_blob_sha1": "6c68fb531e8ba21a425ddbd6477a0b1f15ccb830",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "doc/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/.gitignore",
+      "sha256": "f1b1357abb9c86a32ae0ad17f8913ea621841398c911de2d72ff3e6aaa7a4f3d",
+      "git_blob_sha1": "49d8ea76ac40c1a3e216b67ad07ce74a4e586274",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "doc/sakura-asm-rules.txt",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/sakura-asm-rules.txt",
+      "sha256": "155aac3d22e93ab04e08fd4a5ad4925dc11590b7c1895680002c78209d826368",
+      "git_blob_sha1": "704a73312ec2b4dd2f446f7c3b8813d720bd8635",
+      "view_encoding": "cp932"
+    },
+    {
+      "path": "duper_cartridge/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/.gitignore",
+      "sha256": "4528ae2ecf325c3471fd3a8c78bdc97d6872d310fd719ca52cfe290e89885af2",
+      "git_blob_sha1": "c4db868e2515ed82eac50d6d25b2562d6ff13dc9",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_cartridge/duper_cartridge.sdc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/duper_cartridge.sdc",
+      "sha256": "d20e82afcee4d010491e9c377d8f70a60254590681697f324fd62f302a3134d9",
+      "git_blob_sha1": "1c5e857e25c9b02f53ea82db832223fbd4be2596",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_cartridge/simulation/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/simulation/.gitignore",
+      "sha256": "7a2acc9928bc2f51d680e502560a2c98e4b97b976f68ddfe9f23963c3d186e97",
+      "git_blob_sha1": "32a2cf0ed668aa530ae2433d489dc745455df119",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/bbb_tty/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/.gitignore",
+      "sha256": "aa8cb7001320cbe535c6d3c39588262a359b07d80b9894bdca1c32782b466340",
+      "git_blob_sha1": "86a487e48f3b553c90e98b3451d8c51a420480d9",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/nes_shell/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/nes_shell/.gitignore",
+      "sha256": "57b91b22a599f83f0edc38a07847783378832559138fb2cc8c8f689997ab70bb",
+      "git_blob_sha1": "d61f34a743b8a594d757121bec35d92e7a75427b",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/.gitignore",
+      "sha256": "8b23e75ec6e2552ee135921a10726186c162b7ebeeb0de0996648cf5e7a4e05a",
+      "git_blob_sha1": "9196cb467f0ee9479734d00a77a7fb65e9b12bbe",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/tools/hexout/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/hexout/Makefile",
+      "sha256": "4345ed70b140c6dd4cf01ce16667c71df71518552c634c286306b3c444eece90",
+      "git_blob_sha1": "76424202320f6bdc50256b6642fa4e9af6c01faf",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/.gitignore",
+      "sha256": "410a4cba32c178a922c49ba7bce37a41b1ced1db760c8aaffa261eca2e43f22d",
+      "git_blob_sha1": "5355a6fcd86f0c29c562c5daac65f7f5fc0c7fd3",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/build-date.sh",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/build-date.sh",
+      "sha256": "18990aa29e7a9424226ba689d7aebc91265c9701e1283a00d3c22d71b39a17d7",
+      "git_blob_sha1": "9f2e943e24623adf47fd2c061550b85918980594",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/d-info-header",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/d-info-header",
+      "sha256": "2586b7dab4f775175390761f6d99a8c18b93684ac743d467905387a54fa24e9e",
+      "git_blob_sha1": "a477c38885ca6b3bc4bea8849778aac33d48566f",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/debug.txt",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/debug.txt",
+      "sha256": "61ba5f4e9c4d1c701cec5c5e203875d16987e0fd920d4bdeaef95c894c4899d8",
+      "git_blob_sha1": "bfc4ff2511ae82d172789420da7fe2bd34319e41",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/x-win.sh",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/x-win.sh",
+      "sha256": "8e63e19ec64ee73cadd5ab0dd9b15cdcad5cb07cb094e5be806e52c3b9b6685b",
+      "git_blob_sha1": "e4cbd64cf1969b7aa4e7724a0de22e2d668276d8",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/.gitignore",
+      "sha256": "622cbd7204930ac790174b60912e0a60c1404332318bcf1ded1c234117180eb8",
+      "git_blob_sha1": "5d9596c9a2b3e53e7ec23b9340561a3196e85fc2",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/driver_test/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/driver_test/.gitignore",
+      "sha256": "ee98e2140d55e21d0a72be852700ad69e8daa7bd3d43e38c0cd33f082d6ac485",
+      "git_blob_sha1": "507b32c652748548e9104ddaf4284eea9a9a375b",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/dts-test/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/dts-test/.gitignore",
+      "sha256": "c0df27a51a603d91f1b1cb0b1d68ffc3872fb5a099417b8565796840e6074793",
+      "git_blob_sha1": "e892c90cd4ad857b9de8d6369e1d01e829dd608a",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/dts-test/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/dts-test/Makefile",
+      "sha256": "b8af72a60af616dc289bc9fcdc4f8fa7b012b0c1686934612567063bea0e7201",
+      "git_blob_sha1": "dc741c72bc570ada718130ccda8eacead53fe4f0",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/i2c_test/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/.gitignore",
+      "sha256": "32758753abe6e10cae91ca7d0efad4aab840ea3785065cf5cfbc8d0c4edda717",
+      "git_blob_sha1": "de2b2b6e29e5c75b996cb8013949ebfb7ebbf454",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/i2c_test/i2c_test.sdc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/i2c_test.sdc",
+      "sha256": "928a385fbb5abc5eae4dfe061ee527ab1df3606db976d6301ba225fec2c3e01a",
+      "git_blob_sha1": "8896bbf1488eed26a8ede295ce2cbc65239a3c2b",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/i2c_test/simulation/modelsim/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/simulation/modelsim/.gitignore",
+      "sha256": "7a2acc9928bc2f51d680e502560a2c98e4b97b976f68ddfe9f23963c3d186e97",
+      "git_blob_sha1": "32a2cf0ed668aa530ae2433d489dc745455df119",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/level_shift_test01/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/level_shift_test01/.gitignore",
+      "sha256": "3d43d89fbcb22be3ceb1684790189c4431594f07c60f941bbac07a937c12ecf5",
+      "git_blob_sha1": "913ce3da12a554c62e65af289bea1d2304b97f59",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01.sdc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/level_shift_test01/level_shift_test01.sdc",
+      "sha256": "08b5c81d86c96796bbc76966699046d7fe8d1618ac77e3cb6159fe4b2443569f",
+      "git_blob_sha1": "c0ddea48331a66d04c842b4def4f07cb2511e7c5",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/rom_test01/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/.gitignore",
+      "sha256": "db96aa89dc7b36e5ebede1271a022cad6200d9c2429c8909ea248a5993001a67",
+      "git_blob_sha1": "2ac80b2cf243dad8f946020a8b22ac878b6d5016",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/rom_test01/rom_test01.sdc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/rom_test01.sdc",
+      "sha256": "258f81b3069da7070bb64667e8c9cb10f81bd5283cc57adc110f563f51c42606",
+      "git_blob_sha1": "53c2b3105aef7e1c37557feeb859ac1a5328f81e",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/rom_test01/rom_test01_de0_cv.cof",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/rom_test01_de0_cv.cof",
+      "sha256": "9f2f22b334be551c1d1a9a80439daf88c43e88102514ba3ea0add00f7397378e",
+      "git_blob_sha1": "2e8694cc0fe32b420bc9bc3a531f70da09bcf1fb",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/voltage_test01/.gitignore",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/voltage_test01/.gitignore",
+      "sha256": "3d43d89fbcb22be3ceb1684790189c4431594f07c60f941bbac07a937c12ecf5",
+      "git_blob_sha1": "913ce3da12a554c62e65af289bea1d2304b97f59",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/voltage_test01/voltage_test01.sdc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/voltage_test01/voltage_test01.sdc",
+      "sha256": "08b5c81d86c96796bbc76966699046d7fe8d1618ac77e3cb6159fe4b2443569f",
+      "git_blob_sha1": "c0ddea48331a66d04c842b4def4f07cb2511e7c5",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "x-win.sh",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/x-win.sh",
+      "sha256": "8e63e19ec64ee73cadd5ab0dd9b15cdcad5cb07cb094e5be806e52c3b9b6685b",
+      "git_blob_sha1": "e4cbd64cf1969b7aa4e7724a0de22e2d668276d8",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/bread-board-5to33-test01.asc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/bread-board-5to33-test01.asc",
+      "sha256": "6ccbe53fd9bb5ebc79a7cd14df6a81a25bb51ed718323feb07194b16db821070",
+      "git_blob_sha1": "dd646cd2d5e4f83b6fdf7fd5e13e147d2dfca36b",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/bread-board-5to33-test02.asc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/bread-board-5to33-test02.asc",
+      "sha256": "f01a4ab277982637d1e1ecc1baf73f7b0697970a24d94d8cab860dc622ff510a",
+      "git_blob_sha1": "1c9459c937481ad7b1f71511a2391dafa4b639b5",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/bread-board-5to33-test04.asc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/bread-board-5to33-test04.asc",
+      "sha256": "e682d2b347e909043d9bc3101d16f868b31561856d948d61a81d43d140b5a225",
+      "git_blob_sha1": "9aef28c1138fac188911f8c78996daed3dfd20e4",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/de0-cv-gpio-test.asc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/de0-cv-gpio-test.asc",
+      "sha256": "4d5d952de9e791c6c77891092ddc7e13306c6e5b1717cb3e9f0fcf48b8b1ad0c",
+      "git_blob_sha1": "c36b66c143fc3500364ae5a4c0d84ff9a8425d26",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/de0-cv-gpio-test2.asc",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/de0-cv-gpio-test2.asc",
+      "sha256": "76dcb254d40d80af72f16079b3acbf2048c8b7e81004dafaa3eacc943d3aaad8",
+      "git_blob_sha1": "2af967a787e396412d4e6403e0dbfbd6501f6bbc",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "doc/memo/dtb",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/memo/dtb",
+      "sha256": "2b762ad72bfd1971b662e48d5805b89f474e7dd02258800873d7eccfb4f5a461",
+      "git_blob_sha1": "d2b3ffa8162935e913438ade7d4cd0586db04e00",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "doc/memo/kernel-build",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/memo/kernel-build",
+      "sha256": "f61854a0b6ebf4de42a3707ba99032a3f26a77e02e66803490f4f35abf75d724",
+      "git_blob_sha1": "13e485dea69f0037bdeed8d359487cce9aae6706",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "doc/memo/target-wk",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/memo/target-wk",
+      "sha256": "e7cf0a7a7cf72def9f621e691a6b40f0eaf08a7f687f200f516f3aa6548a28d8",
+      "git_blob_sha1": "e024330c8d544e3719f784dd97c64098a657acbc",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "doc/memo/work1",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/memo/work1",
+      "sha256": "2a4e53239e5d193a5544ea6a23157c3de39619bfe6a9f0aeb97c2fc05c03d848",
+      "git_blob_sha1": "5510fd94b6be168f85eacbec5206b560dca8c1de",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/bbb_tty/bbb_tty.dts",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/bbb_tty/bbb_tty.dts",
+      "sha256": "0c40a122666d323c7030c9f39f14eafa94d4c61ed156542b3c84bccf43efcdf0",
+      "git_blob_sha1": "bbacc25a26dc9a8c88ae159f82802e0c6c523166",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_cartridge/duper_cartridge.qpf",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/duper_cartridge.qpf",
+      "sha256": "e47fe2cc3b758e171d1380bbad10d06d9aec99ba4ac863a8f308e4e6b0be4710",
+      "git_blob_sha1": "d488ebe4a50eee8d4a715dd0c60032fb30ec3dc0",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/nes_shell/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/nes_shell/Makefile",
+      "sha256": "a4a3777ee689af079f2b50cc2ba2f6a4dbd9c9298ac777d3a582ff419db726a7",
+      "git_blob_sha1": "fd825cebe890051da97f031dae1ddabbd1c7b206",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_linux/tools/echo_shell/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_linux/tools/echo_shell/Makefile",
+      "sha256": "e4b74d945517443da63fe890901493ba9b495906fde9147d1f9c73c81d5f3c8c",
+      "git_blob_sha1": "6a022aac2a019c96df4a01f53c9977581402192d",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/Makefile",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/Makefile",
+      "sha256": "78e8953ad1b3c3a3281c3829c5db35896a48457ea8147e720f8db4b0ac15c925",
+      "git_blob_sha1": "fae48f24f97bbf85d7cab9b9071473f815dbc6be",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/dd-img.sh",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/dd-img.sh",
+      "sha256": "b835b37a1a9805d7864a4755e68e0afb4d768120d68792cdb9e047e689129887",
+      "git_blob_sha1": "1a2b3386eb23f1ab67c2027ad2585d971b682710",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/disasm-rom.sh",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/disasm-rom.sh",
+      "sha256": "ffcd9ba640ca18904242f693a046fe735a2d76bb4186d6bbce56e28415ba5868",
+      "git_blob_sha1": "c4001402fa2448880b51a05ebf98815f0a096571",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_rom/linker.cfg",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/linker.cfg",
+      "sha256": "1f6156a2d4fae75dc8f0fb8f1606d1d15c3fe27860dfad471bdcdc3e4bdfb47a",
+      "git_blob_sha1": "90f9b5f10655dba8aa409dbf35d4a0da5d694c6d",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/i2c_test/i2c_test.qpf",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/i2c_test.qpf",
+      "sha256": "f120b92e0481d597ce5a38627b20c7edad117f64b2b1b5242a795b390f31241c",
+      "git_blob_sha1": "1a16ee7c6c1adb24820fc65737bc083d9afa35cd",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01.qpf",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/level_shift_test01/level_shift_test01.qpf",
+      "sha256": "73a60b9a8813fbbb0499e3f4bcab13cf58556eac7385335df54401cdb5c9034a",
+      "git_blob_sha1": "9e5781c344e0c69ed98eada9d7ac6d421bc294be",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/rom_test01/rom_test01.qpf",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/rom_test01.qpf",
+      "sha256": "3deb2077b8e621ce41cd69f9e8efdd322debd1cd54e8d32264a104574823654d",
+      "git_blob_sha1": "d42c812cb134c79a612a456cfaf99a81d949f592",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/rom_test01/rom_test01_de0_cv.qpf",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/rom_test01_de0_cv.qpf",
+      "sha256": "3ccfe17f8cca992c4cc991d953a4b62c13d9db81f4ad38fd514951c899adab5e",
+      "git_blob_sha1": "d581a65527376404f4a3eb98be94e2af5b9f60f0",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/voltage_test01/voltage_test01.qpf",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/voltage_test01/voltage_test01.qpf",
+      "sha256": "3fe72aa4296ccff9c31eb1fc92705cdcb6a45fa67eb17f52aaa5f417d59548be",
+      "git_blob_sha1": "4cbe2f66ac01b20fa9bec9861d35587b5cf16dae",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "test/voltage_test01/voltage_test01.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/voltage_test01/voltage_test01.vhd",
+      "sha256": "1672a6437eb318f8d163ea1e30c4a80868efeedfccd95874cf09101321cd9d60",
+      "git_blob_sha1": "f59b39c7c8baf46ecc3e1923fca6a8f47e847226",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_cartridge/synchronizer.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/synchronizer.vhd",
+      "sha256": "4a6c2f99f52fb0488c364573d7dfcf5c9d157afabe464fb8e9fa1727343d09d6",
+      "git_blob_sha1": "f10ecdefd623b7434543ef9e73b6df05b5a1f03e"
+    },
+    {
+      "path": "duper_rom/duper-rom.asm",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/duper-rom.asm",
+      "sha256": "67ba407e68bdda36f9d91208e84f2e3b2c96a1e697b6bc3e8cde304f5d96a2c5",
+      "git_blob_sha1": "7e46bb742b7e07d53ff56fe62771a089d32b189f"
+    },
+    {
+      "path": "duper_rom/nmi.asm",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/nmi.asm",
+      "sha256": "cc132a2c718e9422831ebd23f89d6aadbb37ce684d2a96627197c7be1f3cba2c",
+      "git_blob_sha1": "7dc522672c2189c46378c120c4bc2864b19eaa86"
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/level_shift_test01/level_shift_test01.vhd",
+      "sha256": "3df10cba849082ff7899905a3f8dd4840361c179fef09a634c851c8c3ae03efb",
+      "git_blob_sha1": "22623edd2a4bd28b1108797608497c9f1b0bdcfa"
+    },
+    {
+      "path": "duper_cartridge/prg_rom.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/prg_rom.vhd",
+      "sha256": "e36b541b4ce94abcd474a3a9f0a01872a385010f9ef03446a05b48006b98a36d",
+      "git_blob_sha1": "905d90e7dee37f6858ee2dfe46de8b931134fe63"
+    },
+    {
+      "path": "test/rom_test01/prg_rom.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/prg_rom.vhd",
+      "sha256": "cd44e5f815a08a6915c6699df86854b1daae2b6f3aa34a970924c49ecda35b8c",
+      "git_blob_sha1": "51cae5bcb09ee6e6e6704a468ae17f16988d6c56"
+    },
+    {
+      "path": "duper_cartridge/i2c_eeprom.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/i2c_eeprom.vhd",
+      "sha256": "c3e1e212f12fdc4add5c5d6e794fda611ca621367421f86653a1a2da49e88bd8",
+      "git_blob_sha1": "391ddd3a7598a30af94a2a03ca409c44a28fab74"
+    },
+    {
+      "path": "test/i2c_test/i2c_eeprom.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/i2c_eeprom.vhd",
+      "sha256": "c3e1e212f12fdc4add5c5d6e794fda611ca621367421f86653a1a2da49e88bd8",
+      "git_blob_sha1": "391ddd3a7598a30af94a2a03ca409c44a28fab74"
+    },
+    {
+      "path": "doc/memo/uboot-work",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/memo/uboot-work",
+      "sha256": "2e5c956eef85ec9cb4c86689c21fb9acffb6e7149fcae746b1f0927f5ef0c80e",
+      "git_blob_sha1": "7bd7f8b2deee1599f7401d26b79eaeb8fbbfd61f",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_cartridge/simulation/bbb2nes_run.do",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/simulation/bbb2nes_run.do",
+      "sha256": "c4495c78fd5bd6f8694a1e4ec7aa9ae7aad4f0abfb27c3bdb6784f0349adf192",
+      "git_blob_sha1": "ae84635b4f94e63b5a00a425ccf2083ce4e7aacc",
+      "view_encoding": "cp932"
+    },
+    {
+      "path": "test/i2c_test/i2c_test.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/i2c_test.vhd",
+      "sha256": "278e46d65b1d4073c26081f7d9dfbcff568c065216ec1310d3be2cbb770fd9b6",
+      "git_blob_sha1": "a0e25253b3d09791d6f254c2389ddfaa4c15020d"
+    },
+    {
+      "path": "test/rom_test01/rom_test01.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/rom_test01/rom_test01.vhd",
+      "sha256": "67144205ce966021f7b4a66550afba03b831dd13630b553b6dffe8cc9eea595c",
+      "git_blob_sha1": "b993fee5cc107037300b1e50620cc17ef6e50c26"
+    },
+    {
+      "path": "test/i2c_test/simulation/modelsim/testbench_i2c_test.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/simulation/modelsim/testbench_i2c_test.vhd",
+      "sha256": "ff71bfef932d78da05764c72b99b6563f858d169b046805afae92797e8ff1b10",
+      "git_blob_sha1": "1e3e435885b01ad44972beb041bc555ed4b47312"
+    },
+    {
+      "path": "duper_cartridge/simulation/duper_test_run_msim_rtl_vhdl.do",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/simulation/duper_test_run_msim_rtl_vhdl.do",
+      "sha256": "9e6ccd38e67c4ac969f61899d3d63269dff040e48e75d4d2880d96f5f0a5b47f",
+      "git_blob_sha1": "1fa3a27516e96a64e427c8dd37db730745df43f8",
+      "view_encoding": "cp932"
+    },
+    {
+      "path": "test/i2c_test/simulation/modelsim/i2c_test_run_msim_rtl_vhdl.do",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/test/i2c_test/simulation/modelsim/i2c_test_run_msim_rtl_vhdl.do",
+      "sha256": "e45772620c1f182bc834056d66d03b00c3c75fb86cf0f04b31abab0e3fa9f4ea",
+      "git_blob_sha1": "6ed31a0163ee7c05ec1697222688a8573612447b",
+      "view_encoding": "cp932"
+    },
+    {
+      "path": "duper_cartridge/simulation/nes2bbb_run.do",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/simulation/nes2bbb_run.do",
+      "sha256": "be10434da6a6044be1559bd28b65fc73b198ebc65bc8909d2268685f63945131",
+      "git_blob_sha1": "b0608ddc8ba6d28b17dc7bb051cdd670c4caadaa",
+      "view_encoding": "cp932"
+    },
+    {
+      "path": "duper_rom/work1.txt",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_rom/work1.txt",
+      "sha256": "e96ed0cfc524fc360fb92719289279177f954fd5e9c15db53ddae06079810272",
+      "git_blob_sha1": "37dc6a257b1de72ebc254881d5c9f7f7a2e58396",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "circuit-diagram/sym/74hclib/74hc245.asy",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/circuit-diagram/sym/74hclib/74hc245.asy",
+      "sha256": "a622f47d5c04b39202b0c97a1d53c173e0a4a1eb65dd9b3bada016bab25d807f",
+      "git_blob_sha1": "47d26e66687d50716d2a6f2fdb45a6fe9825e437",
+      "view_encoding": "utf-8"
+    },
+    {
+      "path": "duper_cartridge/simulation/bbb2nes_testbench.vhd",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/duper_cartridge/simulation/bbb2nes_testbench.vhd",
+      "sha256": "f19d50181b7c89f76d806e6bf9750196a148e73e1c8586ef91d5ca4b7a9f5c25",
+      "git_blob_sha1": "2928be40d319d14e6ab2ef1e8eb52b00143b7535"
+    }
+  ],
+  "remaining": [
+    {
+      "path": "LICENSE",
+      "bytes": 11357
+    },
+    {
+      "path": "circuit-diagram/nes-cirtridge-if.asc",
+      "bytes": 12882
+    },
+    {
+      "path": "circuit-diagram/nes-io.asc",
+      "bytes": 11010
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1398.MOV",
+      "bytes": 17396041
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1403.MOV",
+      "bytes": 41352953
+    },
+    {
+      "path": "doc/craft-work-diary/20170416/IMG_0028.MOV",
+      "bytes": 5630803
+    },
+    {
+      "path": "doc/craft-work-diary/20170423/IMG_0035.mp4",
+      "bytes": 3518103
+    },
+    {
+      "path": "doc/craft-work-diary/20170423/IMG_0036.JPG",
+      "bytes": 1900329
+    },
+    {
+      "path": "doc/craft-work-diary/20170430/IMG_0037.JPG",
+      "bytes": 1939121
+    },
+    {
+      "path": "doc/craft-work-diary/20170430/IMG_0038.JPG",
+      "bytes": 1813362
+    },
+    {
+      "path": "doc/craft-work-diary/20170430/IMG_0039.JPG",
+      "bytes": 1134437
+    },
+    {
+      "path": "doc/craft-work-diary/20170430/IMG_0041.JPG",
+      "bytes": 1232017
+    },
+    {
+      "path": "doc/craft-work-diary/20170430/IMG_0043.mp4",
+      "bytes": 5413184
+    },
+    {
+      "path": "doc/craft-work-diary/20170430/IMG_0044.mp4",
+      "bytes": 6891990
+    },
+    {
+      "path": "doc/craft-work-diary/20170501/IMG_0045.JPG",
+      "bytes": 2091116
+    },
+    {
+      "path": "doc/craft-work-diary/20170501/IMG_0046.JPG",
+      "bytes": 1610829
+    },
+    {
+      "path": "doc/craft-work-diary/20170501/IMG_0047.JPG",
+      "bytes": 1830313
+    },
+    {
+      "path": "doc/craft-work-diary/20170501/IMG_0048.JPG",
+      "bytes": 1844522
+    },
+    {
+      "path": "doc/craft-work-diary/20170501/IMG_0056.mp4",
+      "bytes": 52509878
+    },
+    {
+      "path": "doc/craft-work-diary/20170501/IMG_0057.mp4",
+      "bytes": 20735303
+    },
+    {
+      "path": "doc/craft-work-diary/20170514/IMG_0058.JPG",
+      "bytes": 2432375
+    },
+    {
+      "path": "doc/craft-work-diary/20170514/IMG_0059.JPG",
+      "bytes": 2395915
+    },
+    {
+      "path": "doc/craft-work-diary/20170514/IMG_0060.JPG",
+      "bytes": 2323595
+    },
+    {
+      "path": "doc/craft-work-diary/20170520/IMG_0061.JPG",
+      "bytes": 1609316
+    },
+    {
+      "path": "doc/craft-work-diary/20170528/IMG_0063.JPG",
+      "bytes": 1325753
+    },
+    {
+      "path": "doc/craft-work-diary/20170528/IMG_0064.JPG",
+      "bytes": 1465549
+    },
+    {
+      "path": "doc/craft-work-diary/20170528/IMG_0065.JPG",
+      "bytes": 1275937
+    },
+    {
+      "path": "doc/craft-work-diary/20170706/IMG_0066.JPG",
+      "bytes": 1614292
+    },
+    {
+      "path": "doc/craft-work-diary/20170708/IMG_0067.JPG",
+      "bytes": 1479864
+    },
+    {
+      "path": "doc/craft-work-diary/20170708/IMG_0068.JPG",
+      "bytes": 1565924
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0069.JPG",
+      "bytes": 1283838
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0070.JPG",
+      "bytes": 1618147
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0071.JPG",
+      "bytes": 1726901
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0072.JPG",
+      "bytes": 1769359
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0073.JPG",
+      "bytes": 1851965
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0074.JPG",
+      "bytes": 1353675
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0075.JPG",
+      "bytes": 1495157
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0076.JPG",
+      "bytes": 1414617
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0077.JPG",
+      "bytes": 2119240
+    },
+    {
+      "path": "doc/craft-work-diary/20170903/IMG_0078.JPG",
+      "bytes": 2187530
+    },
+    {
+      "path": "doc/craft-work-diary/20170910/IMG_0079.JPG",
+      "bytes": 1394642
+    },
+    {
+      "path": "doc/craft-work-diary/20170910/IMG_0080.JPG",
+      "bytes": 1500024
+    },
+    {
+      "path": "doc/craft-work-diary/20170910/IMG_0081.JPG",
+      "bytes": 1965952
+    },
+    {
+      "path": "doc/craft-work-diary/20170910/IMG_0082.JPG",
+      "bytes": 1763143
+    },
+    {
+      "path": "doc/craft-work-diary/20170910/IMG_0083.JPG",
+      "bytes": 1234777
+    },
+    {
+      "path": "doc/craft-work-diary/20171216/IMG_0084.JPG",
+      "bytes": 1083411
+    },
+    {
+      "path": "doc/craft-work-diary/20171216/IMG_0085.JPG",
+      "bytes": 1285458
+    },
+    {
+      "path": "doc/craft-work-diary/20171216/IMG_0086.JPG",
+      "bytes": 1301322
+    },
+    {
+      "path": "doc/craft-work-diary/20171216/IMG_0087.JPG",
+      "bytes": 1180336
+    },
+    {
+      "path": "doc/craft-work-diary/20171216/IMG_0088.JPG",
+      "bytes": 1216729
+    },
+    {
+      "path": "doc/craft-work-diary/20171224/IMG_0089.JPG",
+      "bytes": 1009306
+    },
+    {
+      "path": "doc/craft-work-diary/20171224/IMG_0090.JPG",
+      "bytes": 1051860
+    },
+    {
+      "path": "doc/craft-work-diary/20171224/IMG_0091.JPG",
+      "bytes": 868364
+    },
+    {
+      "path": "doc/craft-work-diary/20180107/IMG_0092.JPG",
+      "bytes": 561495
+    },
+    {
+      "path": "doc/craft-work-diary/20180107/IMG_0093.JPG",
+      "bytes": 532106
+    },
+    {
+      "path": "doc/craft-work-diary/20180107/IMG_0094.JPG",
+      "bytes": 1157636
+    },
+    {
+      "path": "doc/data-sheet/16bit-bus-buffer/AE05-48P.pdf",
+      "bytes": 108007
+    },
+    {
+      "path": "doc/data-sheet/16bit-bus-buffer/TC74LCXR163245FT.pdf",
+      "bytes": 329874
+    },
+    {
+      "path": "doc/data-sheet/4bit-level-shifter/txb0104.pdf",
+      "bytes": 1345710
+    },
+    {
+      "path": "doc/data-sheet/8bit-level-shifter/FX_FXMA108.pdf",
+      "bytes": 637107
+    },
+    {
+      "path": "doc/data-sheet/8bit-level-shifter/ae-llcnv8-doc.pdf",
+      "bytes": 272800
+    },
+    {
+      "path": "doc/data-sheet/8bit-level-shifter/ae-llcnv8-plot.pdf",
+      "bytes": 188343
+    },
+    {
+      "path": "doc/i2c-test-doc.xlsx",
+      "bytes": 5083404
+    },
+    {
+      "path": "doc/item-lists.xlsx",
+      "bytes": 15925
+    },
+    {
+      "path": "doc/linux-study.xlsx",
+      "bytes": 199919
+    },
+    {
+      "path": "doc/super-duper-display-image.xlsx",
+      "bytes": 320053
+    },
+    {
+      "path": "doc/super-duper-linux.xlsx",
+      "bytes": 50879
+    },
+    {
+      "path": "doc/super-duper-nes-architecture.xlsx",
+      "bytes": 1365927
+    },
+    {
+      "path": "doc/super-duper-nes-hardware-memo.xlsx",
+      "bytes": 1766219
+    },
+    {
+      "path": "doc/universal-board-test.xlsx",
+      "bytes": 1655566
+    },
+    {
+      "path": "duper_cartridge/duper-rom.nes",
+      "bytes": 40976
+    },
+    {
+      "path": "duper_cartridge/duper_cartridge.qsf",
+      "bytes": 30281
+    },
+    {
+      "path": "duper_cartridge/duper_cartridge.stp",
+      "bytes": 248758
+    },
+    {
+      "path": "duper_cartridge/duper_cartridge.vhd",
+      "bytes": 20566
+    },
+    {
+      "path": "duper_cartridge/i2c.vhd",
+      "bytes": 12955
+    },
+    {
+      "path": "duper_cartridge/simulation/duper_cartridge.mpf",
+      "bytes": 13328
+    },
+    {
+      "path": "duper_cartridge/simulation/nes2bbb_testbench.vhd",
+      "bytes": 10610
+    },
+    {
+      "path": "duper_cartridge/simulation/testbench_duper_cartridge.vhd",
+      "bytes": 17238
+    },
+    {
+      "path": "duper_rom/character.chr",
+      "bytes": 8192
+    },
+    {
+      "path": "duper_rom/ppu.asm",
+      "bytes": 39370
+    },
+    {
+      "path": "test/i2c_test/i2c.vhd",
+      "bytes": 12147
+    },
+    {
+      "path": "test/i2c_test/i2c_test.qsf",
+      "bytes": 36051
+    },
+    {
+      "path": "test/i2c_test/simulation/modelsim/i2c_test.mpf",
+      "bytes": 12903
+    },
+    {
+      "path": "test/i2c_test/simulation/modelsim/modelsim.ini",
+      "bytes": 11131
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01.qsf",
+      "bytes": 12363
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01.stp",
+      "bytes": 27721
+    },
+    {
+      "path": "test/level_shift_test01/level_shift_test01_auto_stripped.stp",
+      "bytes": 27778
+    },
+    {
+      "path": "test/rom_test01/rom_test01.qsf",
+      "bytes": 27853
+    },
+    {
+      "path": "test/rom_test01/rom_test01_de0_cv.qsf",
+      "bytes": 20649
+    },
+    {
+      "path": "test/voltage_test01/voltage_test01.qsf",
+      "bytes": 5652
+    }
+  ],
+  "full_manual_review": false,
+  "upstream_tests_run": false,
+  "findings": [
+    "README, emulator mapper and VHDL FIFO fully read and Git blob verified. Domain NES FPGA cartridge with Linux/I2C bridge; duper is project name, no file/image duplicate search in these sources. FPGA RAM queue is not hash candidate indexing or content matching. Remaining420blob inventory preserved, not claiming whole repository read.",
+    "Mapper emulates incoming data via local i2c_in and outgoing append file; no fingerprinting/equality grouping. read return not checked positive before fifo ready; zero/error can still allow first byte access of allocated buffer. open O_CREAT lacks explicit mode argument; init/debugger setters declared int without return. Source only, not compiled/loaded or file-I/O executed.",
+    "VHDL FIFO bounded by2**abus_size. Simultaneous push/pop uses if/elsif priority for push, flags based on prior-cycle size, output read independent of empty. These are hardware timing semantics, require simulation/target evidence; no synthesis/testbench run. No production code adopted.",
+    "All 13 tracked PNG images individually viewed. Hardware documentation and historical screenshots contain no duplicate-search algorithm or validated duplicate-image oracle. No live website, electrical pinout, synthesis or hardware qualification claimed. 265 JPG images and 139 other blobs remain unassessed.",
+    "Eight additional small files fully read and Git-blob verified: ARM build notes, mapper/kernel Makefiles, TTY interface header, stdin hex dumper, hello-world kernel module and I2C overlay. No duplicate-search functionality. hexout returns success after negative read (no error distinction); source observation only. Driver test is load/unload logging, not duplicate-search regression coverage. MODULE_LICENSE GPL in driver source requires separate license consideration from root metadata. No build, module loading, toolchain installation or device-tree application performed.",
+    "Five more Linux bridge source files fully read. I2C init logs driver-registration failure but always returns 0; getchr returns a byte without error status, and synthetic original-body control confirms failures indistinguishable from valid 0xff. GPIO init overwrites first IRQ-request result with second and does not unwind earlier acquisitions; module init returns on later failure without releasing prior components. proc creation result unchecked, and proc read performs actual I2C read/write rather than passive inspection. NES shell ignores dup2/exec/wait status. These are source observations and one stubbed function control, not driver/kernel/device execution; no code adopted.",
+    "Main TTY source fully read. Notify uses one shared GPIO identity plus counting semaphore, not an event queue; original-body sequential control demonstrates 2 tokens with last identity49 after notifications115 then49. Runtime interleaving/data loss not tested. Receiver inner FIFO-drain loop has no stop check and consumes bt_i2c_getchr byte without error status; stuck nonempty GPIO can prevent reaching outer stop check. write_room always256, write returns transmitted prefix on send failure, console write ignores send results. kthread creation checked only for NULL, worker started before driver allocation/registration, later init failures lack worker cleanup. No kernel build/load or hardware run.",
+    "Five echo-shell utility sources fully read and Git-blob verified. They implement a command terminal, not duplicate detection. Source-only reliability observations: multiple fd!=0 checks reject valid descriptor0 and accept -1; i2c receive increments buffer pointer without a CMD_LINE_MAX bound; console output ignores failed/short writes; inner GPIO-drain loop has no stop check. cmd_exec modifies input despite const signature, formats command into fixed buffer, reads whole1024-byte chunks passed as C strings without explicit trailing terminator when full, ignores system status and returns TRUE. No commands, shell payloads, devices or threads from this repository executed. No code adopted.",
+    "Eight JPG images individually viewed. First two share monitor/circuit scene but differ in framing/reflection; adjacent web-page photographs overlap in diagrams. These are visual scene observations, not established duplicate labels, pixel-equality checks, electrical verification or image-search test results. Historical page text/ads are not current factual authority. 257 JPG images remain.",
+    "Eight further JPG images individually viewed: historical level-shifter/GPIO documentation and electronics bench photographs. Similar board scenes differ in LED state, framing and visible components; no automated duplicate label or electrical validity inferred. 249 JPG images remain.",
+    "Twelve additional JPGs individually viewed: bench scenes and photographs of overlapping schematic/manual sections. Similar monitor photographs have framing differences; observation is not a byte-equality or perceptual-match oracle. No electrical correctness qualification. Remaining237 JPG images.",
+    "Twelve more JPGs individually viewed, including manual/spreadsheet photographs, board assemblies and adapter modules. Author annotations are historical image content, not instructions or validated electrical claims. No automated duplicate classification inferred. Remaining225 JPG images.",
+    "Twelve more JPGs individually viewed: adapter modules, wiring and partial historical datasheet photograph. Related scenes exhibit changes in framing, rotation and occlusion. No byte/pixel duplicate labels, hardware validation or complete datasheet review inferred. Remaining213 JPG images.",
+    "Twelve additional JPGs individually viewed: historical partial datasheet photographs and related powered assembly scenes with angle, blur and framing changes. No complete datasheet, electrical validation, or duplicate-classification oracle claimed. Remaining201 JPG images.",
+    "Sixteen further JPGs individually viewed and hashes rechecked after viewing: meter/board scenes, perfboard prototype and spreadsheet wiring layouts. Meter display differences and layout revisions are observed image differences, not calibrated hardware measurements or duplicate-search expected labels. Remaining185 JPG images.",
+    "Sixteen further JPGs individually viewed: layout screenshot, perfboard construction stages and workspace scenes. Similar views differ in framing, labels, wire placement and assembly state. No duplicate-label ground truth or hardware correctness inferred. Remaining169 JPG images.",
+    "Sixteen additional JPGs individually viewed: construction stages, storage/merchandise, notebook and powered test-bench scenes. Notebook writing partly faint; no complete transcription claimed. Related bench views differ in angle, probe placement and illumination. No electrical qualification or duplicate-label oracle inferred. Remaining153 JPG images.",
+    "Sixteen further JPGs individually viewed: circuit/connector spreadsheet photographs and console/prototype/FPGA scenes. Adjacent workstation photographs share composition with framing changes; no automated equality, matching threshold or hardware-operation proof inferred. Remaining137 JPG images.",
+    "Sixteen more JPGs individually viewed: bench scenes, connector fabrication/fit, perfboard assembly and historical partial datasheet photographs. Changes in slot contents and assembly state are visible; no matching labels, machining instructions, electrical qualification or full datasheet read inferred. Remaining121 JPG images.",
+    "Sixteen further JPGs individually viewed: evolving perfboard wiring, bench scenes, historical datasheet portions and a logic-analyzer screen photograph. Screen trace image is not an executed simulation or waveform correctness proof. Remaining105 JPG images.",
+    "Sixteen further JPGs individually viewed: prototype/cartridge PCB comparisons, assembly scenes and waveform photographs. Historical waveform annotations describe author observations, not a test executed here. No ROM extraction, electrical verification or duplicate-label oracle. Remaining89 JPG images.",
+    "Sixteen further JPGs individually viewed: evolving module/wire placement, powered benches, historical connector mapping photographs and opened cartridge. No electrical correctness or duplicate-search oracle inferred. Remaining73 JPG images.",
+    "Sixteen further JPGs individually viewed: commercial cartridge photographs, historical connector mappings/waveform annotations and perfboard wiring. Invalid JTAG banner is historical image content, not current environment failure. No ROM extraction, live tool execution, waveform validation or duplicate ground truth claimed. Remaining57 JPG images.",
+    "Eight further JPGs individually viewed: wiring-stage photographs and console/display/logic-analyzer scenes. Display artifacts are observed image content, not a reproduced hardware fault. No duplicate-label oracle inferred. Remaining49 JPG images.",
+    "33 small files fully read and Git-blob verified: ignore lists, clean/build Makefiles, one LTspice circuit, SDC constraints, COF programming configuration, editor regex rules, build-date script, disassembler map/debug commands and two identical XWin launch scripts. Sakura rules viewed as CP932 after strict UTF-8 decoding failed; original bytes preserved. SDC I2C comment says100KHz while configured period5000ns corresponds200KHz; source inconsistency only, no timing qualification. Build timestamp script embeds wall-clock time. No build, clean, launcher, device programming, synthesis or simulation commands executed. No duplicate-search algorithm in this batch.",
+    "Ten more text files fully read and Git-blob verified: five LTspice circuit variants, four historical development notes and BBB device-tree overlay. Notes record ARM kernel/device-tree builds, GPIO/I2C bring-up, NFS/network/boot and local console setup; treated only as historical source data, none of their commands executed. Overlay matches duper_nes I2C driver identifier at address0x44 and requests100000Hz. Circuit variants differ in resistor/diode placement; no simulation/electrical correctness claim. No duplicate-search implementation found.",
+    "Thirteen further files fully read: six Quartus project descriptors with vendor license headers, ARM/Cygwin user-space Makefiles, ROM Makefile, fixed-offset ROM slicing script, disassembler-map script, linker map and voltage-test VHDL. disasm script uses sort|uniq for duplicate generated LABEL lines, not file-content deduplication, and appends to tmp file without initial truncation. ROM slicing assumes fixed16-byte header and32KiB program size without header validation; command failures not explicitly propagated. VHDL reg_btn_flg bounded0..1000000 increments without rollover branch; range exceed is a source-level concern, not a simulation result. No ROM processing, build, vendor tools or HDL simulation executed. No code adopted.",
+    "Four further source files fully read: synchronizer/vector/edge detector VHDL, NES reset ROM assembly, NMI controller/FIFO routine and level-shifter hardware test. Synchronizer resets internal registers but output is assigned only on rising edge; independent per-bit vector synchronization does not itself establish coherent multi-bit handshake. NMI joypad code reloads A=1 for each button then ORs immediate mask and stores, rather than accumulating previous jp1_data; source-only observation, no CPU emulator run. Level-shifter divider has bounded integer counter increment without explicit rollover like voltage test. These are hardware/console modules, no file dedup algorithm. No simulation/synthesis/ROM execution or adoption.",
+    "Four additional VHDL files fully read: production/test PRG/CHR ROM wrappers and both I2C EEPROM implementations. EEPROM sources byte-identical; memory2**abus_size with16-bit address state, reset fills0xff despite initialization0, constant ACK0 and synchronous unguarded read output. Production PRG ROM clocked while test PRG ROM combinational; both mask address to8KiB, CHR4KiB. Source comparison only, no HDL synthesis/simulation or hardware validation. No file dedup algorithm.",
+    "Fully read pinned U-Boot work memo: historical TFTP/MMC boot commands, environment import, Linux boot transcript and device UUID notes. Commands treated only as source data; no network/device/boot operations performed. No file-duplicate engine.",
+    "Fully read bbb2nes_run.do: ModelSim VHDL compile list, nes2bbb_testbench launch, waveform setup and 5+25+270 microsecond run commands; no simulation executed. UTF-8 decoding fails; CP932 view retained alongside unmodified pinned bytes, without claiming intended semantics for the unusual voptargs literal. No dedup regression coverage.",
+    "Fully read i2c_test.vhd: slave address 0x44 and EEPROM generic address width4, status-bit bus wiring and switch-enabled half-rate debug counter. EEPROM ACK output is wired to a local signal, not a slave input in this interface. Hardware test top-level, no file-duplicate logic; not simulated.",
+    "Fully read rom_test01.vhd: PRG/CHR ROM wrappers, I2C slave0x44 and EEPROM width8. PRG output-enable is mapped to chip-enable rather than pi_prg_r_nw. Divide counter has no explicit reset assignment; debug process checks reg_reset_n while sensitivity lists pi_base_clk and pi_reset_n, omitting reg_reset_n. These are source observations only, without simulator/hardware qualification or dedup adoption.",
+    "Four additional pinned JPGs inspected individually. Historical hardware bench/magnifier/waveform scenes; visual resemblance to earlier bench photos does not supply duplicate identity labels or electrical test qualification.",
+    "Fully read testbench_i2c_test.vhd: 50MHz base and 100kHz I2C stimulus, two scripted writes to slave0x44, values0x64/0x75. ACK waits have no timeout, read-back stimulus is commented out, no assertions compare returned bytes to expectations, and stimulus finishes with wait while base clock continues. This is waveform stimulus rather than self-checking data-integrity qualification. No upstream simulation run and no file-dedup coverage.",
+    "Fully read two additional ModelSim scripts. Cartridge script compiles testbench_duper_cartridge.vhd but selects testbench_i2c_test; exact entity binding remains unverified until that source is fully read. I2C script compiles slave, EEPROM, top-level and stimulus and runs450+400us. Both configure interactive waveform views, with no script-level expected-value assertions. CP932 fallback display after strict UTF-8 failure retains unusual voptargs literal without guessing intent. No scripts executed, no simulation result or dedup coverage claimed.",
+    "Fully read nes2bbb_run.do: compiles nes2bbb_testbench, configures FIFO/I2C waveform views, runs30+100+500+500+500us. No script-level result assertions; no ModelSim execution. CP932 view after UTF-8 failure preserves original-byte provenance without interpreting unusual voptargs literal.",
+    "Fully read duper_rom/work1.txt: historical6502 instruction trace with FIFO read and repeated invalid-VRAM-write messages, not a reproducible current runtime test or file-duplicate fixture oracle.",
+    "Fully read74hc245.asy: LTspice symbol drawing and18 ordered OE/DIR/data pins for octal transceiver, nominal VCC5/SPEED/TRIPDT attributes; no electrical simulation or deduplication algorithm.",
+    "Fully read bbb2nes_testbench.vhd: entity is named nes2bbb_testbench, matching the earlier bbb2nes_run.do launch despite filename direction. NES bus polls status0xfff8 then reads FIFO0xfff9; I2C stimulus writes repeating generated data to address0x44. ack_wait only releases SDA and does not verify ACK. No assertions compare transmitted/received data; bounded integer step counters keep incrementing without terminal condition. Waveform stimulus only, not an executed regression or deduplication algorithm."
+  ],
+  "visual_assessments": [
+    {
+      "path": "architecture.png",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/architecture.png",
+      "sha256": "ee3e092aa38c54d282a606bda74c2e38d7457bcfa961f257c6847f315300a4a6",
+      "git_blob_sha1": "07ac3e8e22448e1c2c61795e3b6fbfe62deb524d",
+      "method": "complete individual PNG visual inspection",
+      "finding": "NES/FPGA/Linux I2C architecture, RAM/ROM and FIFO layout."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1422.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1422.PNG",
+      "sha256": "0b5e9bd05a079dcb29d2d798402ae98fc09391c49622a4438089a41e0e618441",
+      "git_blob_sha1": "83a4dca9d0f74b3e90553fd2fbffab71134d4f2d",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Historical Japanese cartridge pin assignment and mapper discussion."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1424.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1424.PNG",
+      "sha256": "04e7d8f754d0d4920cb9e8233d506b436e7b3be6d098c12ed02ce95335a53d5e",
+      "git_blob_sha1": "ccb539ea76da24ac0c8511f925952b83986140f0",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Historical Japanese cartridge pin assignment and mapper discussion."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1425.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1425.PNG",
+      "sha256": "a7334f21adc9a6e68058c0b71fe268633b2c1466dbb0cfdda7adaacd40ac22cb",
+      "git_blob_sha1": "c96e9cfd64608c07d0b0dbe49ad46850c94354b4",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Connector pinout and truth-table screenshot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1426.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1426.PNG",
+      "sha256": "7476f9d110a72b3ba669a78cbf7f9f08b377ec766462d2e48fdb1d664d11a2d6",
+      "git_blob_sha1": "8d7c68156bbe6a6bdf8fd7a1ce9004c084c97620",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Connector pinout and truth-table screenshot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1427.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1427.PNG",
+      "sha256": "931d16a2a85d7a829f8c06a19d706638b4369a3d3298e2302811847e132dae4a",
+      "git_blob_sha1": "4c9a13345e5366a7487ce12fafe246f1124d04cc",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Cartridge PCB front/back photographs in historical blog screenshot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1428.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1428.PNG",
+      "sha256": "758ed0b7b7cb424e813ebcce0f7e6da9fd0811528b16cce2be738841b28e3519",
+      "git_blob_sha1": "0b7e26173b5f693d6e42a91193ca19e9b4e5c827",
+      "method": "complete individual PNG visual inspection",
+      "finding": "EPROM and CHR/PRG ROM pin mapping."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1429.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1429.PNG",
+      "sha256": "98af805c93e528ace6acaff144e07bb570a51b1b90ff6e7ada13e0937f2639a4",
+      "git_blob_sha1": "168db675a9426ae9ed266a3cdee04104a88cc6f1",
+      "method": "complete individual PNG visual inspection",
+      "finding": "60-pin cartridge connector chart."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1430.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1430.PNG",
+      "sha256": "cfe2d8a95468f79438e4794f0acc0cfbe678e8b5b98caa83fefb36c2b8a8f646",
+      "git_blob_sha1": "cfab1ba92e572e9e02d0ce294e0ade7077ed9577",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Card-edge and Famicom/SFC connector diagram."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1431.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1431.PNG",
+      "sha256": "2e4ee9641f4d6a09c7432e63e6addb1dbe66a1e85dfc67ea4c85d3a660bda3ed",
+      "git_blob_sha1": "78a1187f9b734734ad92d1d0d05c37d6a8c7edad",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Historical NESdev 60/72-pin connector wiki screenshot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1432.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1432.PNG",
+      "sha256": "560f7b14b73ce89b8e795de5d48b0aaa327978314d72b75132f95c958a0af434",
+      "git_blob_sha1": "b3d7806ba0e7c4daa350b1c3bbd87d3231b18059",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Historical wire product-page screenshot; no current product validation."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1433.PNG",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1433.PNG",
+      "sha256": "552ee487acae9eabfce087f47d503d6ba7f2dbb12917673c0ae55499c26af016",
+      "git_blob_sha1": "290023eaf8b6943c2b5ae2e0e5219747a48ccaf2",
+      "method": "complete individual PNG visual inspection",
+      "finding": "Historical wire product-page screenshot; no current product validation."
+    },
+    {
+      "path": "doc/us-keyboard.png",
+      "local": "docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/us-keyboard.png",
+      "sha256": "0e14e5b37e4110b9303776304becc9f7a224d8dddd690d617b6e0fd922241a22",
+      "git_blob_sha1": "d528bc6cce97715367b5d5d2d07058f6d690825b",
+      "method": "complete individual PNG visual inspection",
+      "finding": "US keyboard layout."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1329.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1329.JPG",
+      "sha256": "33927c4093c20f3c8fdc376dd1515650ecf0698161010338fa8addbc8d56f57a",
+      "git_blob_sha1": "0e82055004ae655feb0fb111a23e03062943f424",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of monitor with SPICE level-shifter circuit and square-wave traces."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1330.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1330.JPG",
+      "sha256": "0fafd224a3d66a4a0c1ff4e7b0db54bd55a85298c60bd29460147ed3f0a0de30",
+      "git_blob_sha1": "453bdbf00243ea5b0fa10beddaeb8878f6551f08",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Second photograph of same circuit/trace monitor scene, shifted framing and reflection."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1331.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1331.JPG",
+      "sha256": "6094bbd43fb4089e22bfab1a695070e80e1acf4ec6f4d21edc43db625fd79997",
+      "git_blob_sha1": "b479719f3fbead7b76fe00e4f15fd3cfa3e5ddfb",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of Japanese historical web page showing simple 5V-to-3.3V input diagram."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1332.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1332.JPG",
+      "sha256": "727614e5ab72e9dfc893ac3864fbe8e056a09764bb25769ca86716fd96eaa21a",
+      "git_blob_sha1": "6078cf9ed037e0d8182c2d52f81d032fc8f63c2a",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Adjacent section of historical page showing diode-clamped level-shift diagram."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1333.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1333.JPG",
+      "sha256": "e1999e643d3c5ffd5f5da13ef37f00dd775e61a6779a77d39d4094c13ecb3caf",
+      "git_blob_sha1": "1f87ea8f7751d3be9a0442901b43dea4c6229786",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Further page section showing positive/negative voltage protection diagram."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1334.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1334.JPG",
+      "sha256": "c0d9f4a2c39d97c1d58b6d066b7df539805d7da35cad186c1527c9223ebddb4a",
+      "git_blob_sha1": "e3267dbbc0e712e1e2954a8f0faaf997ead94d68",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of historical page comparing resistor, diode, FET and transistor level shifting."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1335.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1335.JPG",
+      "sha256": "466c4959290bf3a872d163c7a9735c9d7923fad0ef2d734264c31d33ad1aa6e5",
+      "git_blob_sha1": "fbfcdb6ebdef36a0ac77b35f8fd325407552d436",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of historical page showing resistor/diode circuit and waveform plot."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1336.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1336.JPG",
+      "sha256": "795eb01d4fb7d7433607b0693901fb0118060e83575c324a46d72be821d399a7",
+      "git_blob_sha1": "66e9f9d9760d4b06884eb9664799ce60b4fd321c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of historical page showing diode voltage-drop explanation."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1337.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1337.JPG",
+      "sha256": "13a4e906b350d0501418ce2eacdb5fbfc98644e027ef8455953c765413eaebd3",
+      "git_blob_sha1": "94d4e2fd73f27b0a97f800cd557372c520a90a23",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical page photograph with diode level-shifter schematic and waveform sketches."
+    },
+    {
+      "path": "doc/craft-work-diary/20161218/IMG_1338.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161218/IMG_1338.JPG",
+      "sha256": "d2b107e5864ff55913464990081a6f1fdb06397fe522fa98e42b37012bf57c50",
+      "git_blob_sha1": "261af85502c50b23e7feff4d40b3c4d08f77d674",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical page photograph with 5V-to-3.3V diode-clamp schematic."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1342.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1342.JPG",
+      "sha256": "98b47ffa18d901a94679ee0084984b638122adc99cc3591de8a707542015b821",
+      "git_blob_sha1": "193162d304cfa95732da62c52a3cb162f802c8cf",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of PDF viewer showing GPIO expansion header pin diagram."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1343.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1343.JPG",
+      "sha256": "18100f245217c0ea5d4b3820bfdd8672d07f92cc2e6cd9b349459cb61e284023",
+      "git_blob_sha1": "039af8f2b1937edc751402a02a3017a640a3f825",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of lower PDF section showing resistor networks and second expansion header."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1344.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1344.JPG",
+      "sha256": "affea388d3d97baf668f728e5ada75f0e8bd102d0c3a7ecb6a2ef56fe2f232a6",
+      "git_blob_sha1": "e8f8f73c4fe731ad94a1cedd6b0a0ef240b8b691",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA development board wired to breadboard with illuminated LED."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1345.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1345.JPG",
+      "sha256": "ffc93a146884971f10fc18e50026a1217ef3ba938e85724fb872a764e98fc8ed",
+      "git_blob_sha1": "43b8ca4181505fd14b0c9e9ce7a2b0d2299cfcb8",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar FPGA/breadboard scene with LED unlit and changed framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1346.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1346.JPG",
+      "sha256": "dd4e097e02749c010e8705c004b40435ba23ecd51ad512798c8106d20249dab9",
+      "git_blob_sha1": "825212c1b3a28bfd32560cde58c8979abb452a91",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close photograph of digital multimeter beside breadboard."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1347.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1347.JPG",
+      "sha256": "e92ce3df4e64fe0e84dec8cbea1015066a5d9531c96a4158286a1252d3316e7d",
+      "git_blob_sha1": "3ff1f3ee8e7feda773f7e61ae90fb0180ea8c206",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA/breadboard assembly from another angle, LED illuminated, additional component visible."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1348.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1348.JPG",
+      "sha256": "7ae47df7b8b4c33af6b03939593b682bbbe63f0f4b54753435bf090792ebd435",
+      "git_blob_sha1": "a367cc7ebc229fcd5b38922bd64d7f19f0c1828b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA board and breadboard, illuminated LED, wide front view."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1349.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1349.JPG",
+      "sha256": "faa0bdbc04f91e69b5e7a999451063a46498a88eafa3b5f80d1dcfd866ffd4a2",
+      "git_blob_sha1": "94419468006eda59946bfbfa19c1573ed6af5339",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer angled FPGA board/ribbon-cable view."
+    },
+    {
+      "path": "doc/craft-work-diary/20161224/IMG_1350.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161224/IMG_1350.JPG",
+      "sha256": "fc762324d49d6fe60313fd08771c99d35631aa37182f0bca0b469b0a133ef3d3",
+      "git_blob_sha1": "7eaef46c374e9d28dad17d4d7da5fe8b7d9f0830",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider overhead board and breadboard view."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1354.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1354.JPG",
+      "sha256": "6cd76cec5fd7b4e30cca19d2d8a010b595bf5578e0a1d9cc45195b6d047c276d",
+      "git_blob_sha1": "234aabb2c23b639bee6c77375766b65111fd1048",
+      "method": "complete individual JPG visual inspection",
+      "finding": "PDF page photograph with GPIO protection diodes and resistor networks."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1355.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1355.JPG",
+      "sha256": "552663e6cd1425917d276c5d89c3f3480d1ef945805d608bf25f34f64f4139d2",
+      "git_blob_sha1": "5682d01192d967fa06f31a8597e525f881dd2465",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close photograph of GPIO0 protection-diode schematic."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1356.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1356.JPG",
+      "sha256": "3fc4c297862919c2ee7fbb9d0dbcc75a0d9c94d1abd59e8ea4220dbcafda2192",
+      "git_blob_sha1": "ca14ff35d5a435fdee3ad1beecb64319158a3823",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Another GPIO0 schematic photograph with changed framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1357.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1357.JPG",
+      "sha256": "8702196cf5099edda8472d9a1836d9f0f4475519ba2f77e02737cc156e5c79ee",
+      "git_blob_sha1": "70a5f0358ca004b5377b2603f14c632ebe125afc",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Further GPIO0 schematic photograph with changed framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1358.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1358.JPG",
+      "sha256": "69d898fed724e13006f116896176f1f09bbadb31226fa4679991b9b76751456d",
+      "git_blob_sha1": "3ff10b6c2ed7c9be44c3e13eda9aca86475d78b3",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close photograph of GPIO0 resistor networks."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1359.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1359.JPG",
+      "sha256": "eea2075280fab9ce4db4494b98d2f5112b5e71d79b92bcbe077c9597a873fa02",
+      "git_blob_sha1": "aa150e6a11c37009ff1f6347a27a6dc7e9e17c26",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close photograph of GPIO1 protection-diode schematic."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1360.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1360.JPG",
+      "sha256": "f7111a99877e135325385edc4bb74026fbb5c133754f4e26449328a0c0448c8d",
+      "git_blob_sha1": "2540c9809d99fb7dbff737c8354bedf1e2d6fd10",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close photograph of GPIO1 resistor networks."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1361.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1361.JPG",
+      "sha256": "845d63d3932cb139159d078dc6820f323c6a304c690201d192e68b2b9128d1d8",
+      "git_blob_sha1": "61047290e452db76100e2d86d8223ffab0ee122c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE1 user manual expansion-header explanatory text photographed on screen."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1362.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1362.JPG",
+      "sha256": "e5e17aa26e89d8bdc43727ada9af3c8a2d2e7dced481e4004647bbabda16c334",
+      "git_blob_sha1": "58281c28a1b93679cc72b1bd49b4cdad4ee1b782",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE1 user manual GPIO expansion-header schematics photographed on screen."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1363.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1363.JPG",
+      "sha256": "21d15530507e623c8179e8d1d758460fe1a06b390a06892ae87d7f51d85837e1",
+      "git_blob_sha1": "00832a650d66e6a6a3d8d157b056f80f8cbab721",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE0-CV manual photograph, clock input table and GPIO header explanation."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1364.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1364.JPG",
+      "sha256": "af55463077d16a6391a8c38709bd6c5ba611b472119df855ed5e9060a878718a",
+      "git_blob_sha1": "5bfa0b0e7e2da6cf55af47123d6b60982b098153",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE0-CV manual photograph, FPGA/header protection schematic."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1365.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1365.JPG",
+      "sha256": "efc9ac44ceddfcd911379d00a56806f0d68d2c0005f5e365264be3e8c24e976f",
+      "git_blob_sha1": "a1ea67928f84cb54df29e2859c9899a637ac541f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE0-CV manual photograph, two header pin diagrams and partial assignment table."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1366.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1366.JPG",
+      "sha256": "c9cfaf92533b70b8259799062fcf4bc12a795a7cf2812eb47b0e145e9093b839",
+      "git_blob_sha1": "2edb6a706a4b1d436eb2d0c01f2d506dd3bf0d1a",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet screen photograph with FPGA bank and GPIO schematic references."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1367.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1367.JPG",
+      "sha256": "4aa62c33f5c2c55bb194900160e1677e625ea2e507101717529231b27f2145a2",
+      "git_blob_sha1": "22d40423d314ac7d7562e6575d80cc1e19faaac7",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet screen photograph combining GPIO schematic and manual diagrams."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1368.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1368.JPG",
+      "sha256": "424cccc45f2dad2b36f9168349a02376a13b1367ffd7502c2887e57ce4999332",
+      "git_blob_sha1": "2b19d5eed6694e54dd0ef965c636f17f84c67926",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Annotated spreadsheet photograph with circuit/waveform images, author questions protection behavior."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1369.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1369.JPG",
+      "sha256": "d04affaa1c06e828d265129a612a94a260e608aad92d4a103f07c26d92096deb",
+      "git_blob_sha1": "7fdb56802a58d3c165d326381d5e9da5accd9217",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA board and breadboard scene with loose batteries."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1370.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1370.JPG",
+      "sha256": "5b0b66250183acaf8bc5081ceb189a5cbb1cac58438164263fb25b0ce2209bb6",
+      "git_blob_sha1": "c5c123a1a8ab1d1a8110711b46d6020654b83c83",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider FPGA/breadboard scene and batteries."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1371.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1371.JPG",
+      "sha256": "151308df5b3161f4f437ff3cda16a57c5e65182f765b4cc5af6d505ea8df168f",
+      "git_blob_sha1": "6e7918af4f658c34dd4236eec238de70e377ed0f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close FPGA board and batteries photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20161225/IMG_1372.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20161225/IMG_1372.JPG",
+      "sha256": "7247be9a5a29f2ebf00c22d670c2bb9300a005dc23e0551f149720b580f004f8",
+      "git_blob_sha1": "75bef4d730dd37e17770ae618c2bd99d03b31427",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Overhead FPGA/breadboard photograph with strong reflections."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1375.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1375.JPG",
+      "sha256": "39fe09dfa2a779fbb2456cfcb0851da51717f6599abb5e09ed2367d7bbc7cc29",
+      "git_blob_sha1": "6f09769aac949f29931aec02ad9fde512caaa0ac",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Breadboard with three adapter modules and soldering accessories."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1376.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1376.JPG",
+      "sha256": "ac49be7c661ed5f13f79e8a4862bda5fefcca6e67dd322586851c4352642ee5f",
+      "git_blob_sha1": "15aac98cbea476daed2c0cbd23658a4884295416",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer photograph of green adapter module on breadboard."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1377.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1377.JPG",
+      "sha256": "c325042d83e6f20a19b57aa522a9bff891d4b0cd5505beddb1794cca64b1585c",
+      "git_blob_sha1": "8beb04599f86600dd615ba3a8871c8b2ca8b0b3e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Breadboard close view with two small blue adapter modules and LED."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1378.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1378.JPG",
+      "sha256": "b469525f89e526f8e91adc2f301efc442456c564d258bd69dc7cdf1ce87bc629",
+      "git_blob_sha1": "eb395b27097517425dc01800f36f2fe741f7350e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Same breadboard right-hand region with shifted framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1379.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1379.JPG",
+      "sha256": "9e5ebdb092b1a52edc5814868b790c91ddba7a184e84d9309fd06d073581da52",
+      "git_blob_sha1": "b7584fc90742163481c0810197fbc1c7f9ed7cf0",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Small adapter module on wooden desk with cutters in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1380.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1380.JPG",
+      "sha256": "dcdd16b732153656e735219860435bfbfc058284383843fb5837f106812cbbbb",
+      "git_blob_sha1": "2ea2306d033dfa6a091c9b78b2cdc5e78db83b3d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Longer adapter module on desk, oblique view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1381.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1381.JPG",
+      "sha256": "7f89f44af740280ca385d03a3f9eaa7bf3d60319e04320aa7718401aadcf177f",
+      "git_blob_sha1": "b6032c15490f717bbb5d2cbbcaf3632c61161667",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Adapter module rotated vertically on desk."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1382.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1382.JPG",
+      "sha256": "acafb9073ff6c44a6f353774f7a570cffbb2b4d53fb66a820979da3d27417c8a",
+      "git_blob_sha1": "604dd0ebc523fa0588ac215227b6527516383329",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Large green adapter module on desk, oblique view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170103/IMG_1383.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170103/IMG_1383.JPG",
+      "sha256": "136f249d7867ff8d52739f9ace07d9f4b67e4943a3b5ded3bb242d081b3d76d6",
+      "git_blob_sha1": "e0dc5f3bb49a33bc913291119286289255847349",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Large green adapter module photographed from different side."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1384.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1384.JPG",
+      "sha256": "00e322d568aac003c093be2a6fbda6008a478f7468fd16aff5f4049b5a2ac0e8",
+      "git_blob_sha1": "e659d7157b35cf4e2aa3a325423a1dd63a5908dd",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE1 board wired to ribbon cable and jumper leads."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1385.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1385.JPG",
+      "sha256": "8e1627f0cdf03ebc4e2cc9edee2cd0238e9974435285d84250ceeb5c136ddc7f",
+      "git_blob_sha1": "39341ed4e6ea6700d4a06db33e12b235a9ececf7",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer DE1 GPIO/ribbon cable connection photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1386.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1386.JPG",
+      "sha256": "a5655e8a0cdaca2a987e30bfdb84892b594ef4ef63c2ab132b55f3fad35da2c4",
+      "git_blob_sha1": "c3291c6eafaebaefafd6256f69f98b8cdbf0b18d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "DE1 wiring photograph with hand partially occluding connector area."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1388.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1388.JPG",
+      "sha256": "c9c1e555e3090e8a7b579daa07ab2ff27b2aab5dce2e0e6b4378682931f823d5",
+      "git_blob_sha1": "f36bfe038a45f9bd2173fc46aec19a2d447bf7bf",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Four adapter modules laid on perfboard with loose red wires."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1389.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1389.JPG",
+      "sha256": "9ace714ac1a8c2ddbdfeecbd77608bf39dab606777d9a0b2e0fcdda9ddb51d9d",
+      "git_blob_sha1": "40c53a7e8ef6a405363619b7af92cf6d1b9e7bfc",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of partial FXMA108 signal-translator datasheet page."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1390.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1390.JPG",
+      "sha256": "07e94130c9979fac5d5d2d904441fe70d6147a09e2f035f90cdb054e131651f4",
+      "git_blob_sha1": "1545fa043676c7af862473760f667ac97747d953",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FXMA108 datasheet photograph with pin configuration and partial pin table."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1391.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1391.JPG",
+      "sha256": "0aeaf53cb247243de36515936b98e5f5ba9d6aacd449bdc23d0bafb2b4299689",
+      "git_blob_sha1": "ec86d667ae301a0f8acd3c0b9adacd8d1f670a65",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical Japanese module diagram with eight bidirectional channels."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1392.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1392.JPG",
+      "sha256": "8f70ba3507a8de7c8144f6945d9c84908df7b0a89a21cbd3d705e673ac42948e",
+      "git_blob_sha1": "3292c1bca3780d41300a6df926f8c764c5effd18",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Toshiba translator datasheet photograph, cropped top-view pin diagram."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1393.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1393.JPG",
+      "sha256": "749cee797d6f06e934aa569b0cfb2783954c9101febcd05f1055f2f12c98e00e",
+      "git_blob_sha1": "68566f9e93bb5a8d6259f40ade0e280e97f160ad",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider photograph of Toshiba translator pin and logic diagrams."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1394.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1394.JPG",
+      "sha256": "ed867887d4a54cc051d4164d4f70d2941f809b076acb3301a77675f0b5914f11",
+      "git_blob_sha1": "dd6242229d2e39c68bd238856cf57f864abe5889",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Translator truth-table photograph, two channel-bank tables."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1395.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1395.JPG",
+      "sha256": "2e4f6a0f09121a97aad0f816104a1ce16aa60807ea1bbaec229d31d35a8882a1",
+      "git_blob_sha1": "967f2a24de609921c808b027b3f59f5549e91749",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered DE1 and breadboard assembly, dense jumper wiring."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1396.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1396.JPG",
+      "sha256": "62fe288aacb94913cda3990a2a4f5943e625e728e1a0b3834f3b8975e5a44cf9",
+      "git_blob_sha1": "bd63a1d6c5b8b040ef54039e66451c0f954f1677",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Angled close view of adapter modules and breadboard wiring."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1397.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1397.JPG",
+      "sha256": "d906cca0ed5b16a41c36f451050b64e3ce05253cb5fb21e0d894d6e1881a52aa",
+      "git_blob_sha1": "bc722c319ae6939c42b88ae1e0c252bbc49b3064",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar powered assembly with framing and blur differences."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1399.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1399.JPG",
+      "sha256": "6200241adc22433a79cdc56c34d982f3070ebc3d83d7db2bb5377dfefebcc50d",
+      "git_blob_sha1": "64156f27e3fbe2e4f38f80e54cfe2b3a60972edb",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Overhead diagonal assembly view, LEDs visible."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1400.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1400.JPG",
+      "sha256": "4b6fbff9efac3911c2e7a2f28ad6a4a9d61282a46a306cfcb93de00b374dc711",
+      "git_blob_sha1": "36561a98cc547679222cb1499988f11200cff579",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opposite-side view of breadboard and jumper connections."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1401.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1401.JPG",
+      "sha256": "53926abd5cc41906c7d1d5101d5747b2a5eda6a3d738cf40da18934ba04970a2",
+      "git_blob_sha1": "e3d714ae40bb23924e71d4aeffe7454c0d432818",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close assembly view, right-hand module and LED bank."
+    },
+    {
+      "path": "doc/craft-work-diary/20170104/IMG_1402.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170104/IMG_1402.JPG",
+      "sha256": "4eee1d1e2156ad18e1fd417ac8e7fe8549f100ace38171b90507153ce83c3e39",
+      "git_blob_sha1": "1942b7c930701ca0b5a264bfcb1cb208e3f3fd15",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide powered assembly photograph with background packaging."
+    },
+    {
+      "path": "doc/craft-work-diary/20170107/IMG_1405.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170107/IMG_1405.JPG",
+      "sha256": "f141c5ce94ac496ba0e2a2a15b6f2bed549f3f1e1b3d7832862f8d40bb72a479",
+      "git_blob_sha1": "cc822dca67c9bff388d462cba42d9b0a2a003aef",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered FPGA/breadboard assembly and multimeter display."
+    },
+    {
+      "path": "doc/craft-work-diary/20170107/IMG_1406.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170107/IMG_1406.JPG",
+      "sha256": "4d03ca88c07fcb549a74de89206ad6c9f3d501ec1c031eb1a649ab2e49e5f3e7",
+      "git_blob_sha1": "f7d71e6554543ee4c938e690a714774135581f25",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar scene with different meter indication and framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170107/IMG_1407.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170107/IMG_1407.JPG",
+      "sha256": "c14e6ed63dcd65a80677cc1d6f41196700033fe2165c7db19e803b01fad48b51",
+      "git_blob_sha1": "54d3de0a74ff5cd5cd760331ae285e050e317971",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close breadboard module and loose components on desk."
+    },
+    {
+      "path": "doc/craft-work-diary/20170107/IMG_1408.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170107/IMG_1408.JPG",
+      "sha256": "0ef8f7a33eb065196669e0b7390799dff6b01dec8faaf882050d4a10c04fa624",
+      "git_blob_sha1": "0d910e6bf541836be43d6ee1ba0b16c9f606c926",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Oblique breadboard wiring photograph with probe clip."
+    },
+    {
+      "path": "doc/craft-work-diary/20170107/IMG_1409.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170107/IMG_1409.JPG",
+      "sha256": "13ccf72b5f372e2fcefc5db501a28c0dc32d379d60b2887d300e1e112871bff4",
+      "git_blob_sha1": "197d8f6db91e8a7f72ea85d9b4d8b2ccbd6651e3",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider view of breadboard, probe and meter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170107/IMG_1410.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170107/IMG_1410.JPG",
+      "sha256": "1e51dcda11977c4fb9c41a5907dd94c22b7c61385ba1aa93f9330e3cd8f414c4",
+      "git_blob_sha1": "0b366501dd398b71b5233a1257a7b04f1f2ea1ee",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Breadboard/probe arrangement from opposite side."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1412.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1412.JPG",
+      "sha256": "e681fde7afe50cfb35c2574ea97f5dadae69c6c0525094945e710ae2040decba",
+      "git_blob_sha1": "c13ac3cf63be2a9e019894aea0c869f1da4527ae",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA/breadboard assembly and meter, different board illumination."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1413.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1413.JPG",
+      "sha256": "9f42b310dfcb0c6348f56f042be686a3629a21f7af67d38d1ca150a03bad196f",
+      "git_blob_sha1": "7c658375723a1cd1455e6a5c0010f7f72a569279",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Rotated overhead wiring view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1414.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1414.JPG",
+      "sha256": "c06a5177873e3c84c58889694a9be13a9544adc02aee0ecb196ba408deb7d1bb",
+      "git_blob_sha1": "c90325100ee75c4b39a1bfb088b0d5b0673c400f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close breadboard resistors and jumper connections."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1415.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1415.JPG",
+      "sha256": "861c42ffbf5bab6078925ce41405a9e0728d66fc54e54c071cc6fa9f38c1c8dd",
+      "git_blob_sha1": "26763c645ff8bab71c41b2622f98c9e0061d611c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered board with breadboard and meter partly visible."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1416.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1416.JPG",
+      "sha256": "2ea986fdac972783dcfed9a33a69c2e1710f9108da6f89e80a577bd9dfaa749c",
+      "git_blob_sha1": "eb7289a835e281549a1adf2edd11bd98698f2019",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Rotated close view of resistors/module wiring."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1417.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1417.JPG",
+      "sha256": "d83f11ce4977a6799980a5c1eca8571151528acd68297a05876ed5d06fbe774b",
+      "git_blob_sha1": "5ca30a3b36a65033f11ecd679dc9cb9ad87b06c4",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard cartridge prototype with red wire bundles and green adapter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1418.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1418.JPG",
+      "sha256": "254e12d3659fabbfed4b6100765e0167ff4e34dadd5d1e4bdd0258ff795d6046",
+      "git_blob_sha1": "a67b4d02b00502c13e4fbe8bca59639345be07d8",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph of cartridge connector pin assignments."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1419.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1419.JPG",
+      "sha256": "a72a5f277ad037cc1173d72b3289360691fbb285260440ae032b766b49fb8f21",
+      "git_blob_sha1": "f9a916123a7ad06d581911cdcc8f972b5c2ade96",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph of front-side prototype wiring layout."
+    },
+    {
+      "path": "doc/craft-work-diary/20170108/IMG_1420.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170108/IMG_1420.JPG",
+      "sha256": "af84d644d9304c2431c1e5e1282a88eb2a9a7e2275dd80f0a793331e87ff5fda",
+      "git_blob_sha1": "c56ba2d8ac70916441cfab9422aa607897f71f03",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph of back-side prototype layout."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1434.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1434.JPG",
+      "sha256": "f1d4d6601eaeefa9b942a4cb693e4f7ec307be5a5e5e90d563b7f14e837dd7ef",
+      "git_blob_sha1": "ffb79e8849ecef2d5c5ef25fdd72102a98bd7a87",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph of revised front-side wiring layout."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1435.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1435.JPG",
+      "sha256": "cf49bf2476e34e3f81ce4bb845f928e95e3ad8d27ec0f2795266fd9949620f88",
+      "git_blob_sha1": "cfc0d6a73aa0aa35dae561bb76d9de63ad768560",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet back-side cartridge layout photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1436.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1436.JPG",
+      "sha256": "b0ec28419d8e55f614469f724fdab2006c0d481ce88b4e51c922ea313ee44edd",
+      "git_blob_sha1": "41e27bad385df93f747b13ade997e645607799e4",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard solder side and multimeter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1437.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1437.JPG",
+      "sha256": "c8189eeba6bd2957d4b065fe871daf6f980acb32e7432835d19d3b1da1ad3a6a",
+      "git_blob_sha1": "517b797d13e554b2706a33e3388267df6bb6b123",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer cartridge-edge solder joints photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1438.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1438.JPG",
+      "sha256": "e8ccf8bd5a22eade3855fee5e642394e82137a88bf9b6bfd5127471e72c15ea4",
+      "git_blob_sha1": "a855d375705dbba8057774a40435968c0481c175",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard front side with loose red wire harness."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1439.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1439.JPG",
+      "sha256": "dd9d3d94c068fd8861a1f0356323fd2928510c811e369b06ef233d0b095d6a48",
+      "git_blob_sha1": "c62fcb0480a6ca30d0ce927233992d55db782f73",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype front side with blue module and resistor row."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1440.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1440.JPG",
+      "sha256": "83f0982f903275f75afb14c5d0963132e8a629dc7d09a0c10f5bb870d65790be",
+      "git_blob_sha1": "4af52bab54439e53f9f6ace8c0b1e40733541eb2",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer front-side module/resistor view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1441.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1441.JPG",
+      "sha256": "4a5ba461496b08c38d30ccd500e17a01a30a33562dcb6d1b17d2db13ae4be37f",
+      "git_blob_sha1": "6b80b86f133b2f1bc38f012c3c699f4d9dc7f1bd",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype solder side with tape strips."
+    },
+    {
+      "path": "doc/craft-work-diary/20170109/IMG_1442.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170109/IMG_1442.JPG",
+      "sha256": "aa2d58ba8119f48a61abe166d2a1cfd2402bc74283215f47de4bdeb63e37bbcc",
+      "git_blob_sha1": "eb227d1df7d7f9439bde24440e3e3f005f4fc766",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar solder-side view with shifted framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170110/IMG_1443.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170110/IMG_1443.JPG",
+      "sha256": "809f48d4f8bea953da7956e6973470f781edc8f9c1fb7381dbcc88d799a41eb1",
+      "git_blob_sha1": "d38ca08c181d2d34023c1310693988a573e2066e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Front-side prototype with broad tape strip."
+    },
+    {
+      "path": "doc/craft-work-diary/20170110/IMG_1444.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170110/IMG_1444.JPG",
+      "sha256": "b03fd0de7a96aa5086edf698acc6ef68053a9bff9aeccab78c1809ab818b1353",
+      "git_blob_sha1": "803a1044e19f64e2fe54ba536de1c8c5d55bfcb2",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Back-side prototype solder joints and tape."
+    },
+    {
+      "path": "doc/craft-work-diary/20170114/IMG_1446.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170114/IMG_1446.JPG",
+      "sha256": "1b53cc793cbb912ebd470e3cfe12667f91ca6bbc58b9207dd6f15695afca033f",
+      "git_blob_sha1": "72f7dcc3eab9a64da02ce4831793299b13324a17",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide soldering workspace with prototype and tools."
+    },
+    {
+      "path": "doc/craft-work-diary/20170114/IMG_1447.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170114/IMG_1447.JPG",
+      "sha256": "16402909012694ab37d3c422655bc385c03287d039a21ca43ca762f0851fe43c",
+      "git_blob_sha1": "893085ca9abc37e399644bdddab571685223116b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider room/table view including soldering workspace."
+    },
+    {
+      "path": "doc/craft-work-diary/20170114/IMG_1448.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170114/IMG_1448.JPG",
+      "sha256": "5f7f4deccfa303f570223885ee599a1f2e0cabbed3954901a937270f235beffd",
+      "git_blob_sha1": "a1efd4ccde42a289aa1f27d369c6483959820d23",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar room/table view with changed camera position."
+    },
+    {
+      "path": "doc/craft-work-diary/20170115/IMG_1449.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170115/IMG_1449.JPG",
+      "sha256": "27129cb8538f64641baa354a9cdc2ce451be27d9821ebebea7fa2c06f2dfe55d",
+      "git_blob_sha1": "4b536dfb036682fad3a0c3d7c509e0998f4982da",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype front side with additional header section."
+    },
+    {
+      "path": "doc/craft-work-diary/20170115/IMG_1450.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170115/IMG_1450.JPG",
+      "sha256": "0743c84ee745a3d844889d3fd4da26cb95601e30030a44aae49d6eee90a640b3",
+      "git_blob_sha1": "1c9b49e6582faa99f7d88fed83f25aaaecfe8f6e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype back side with red/white/black wires."
+    },
+    {
+      "path": "doc/craft-work-diary/20170115/IMG_1451.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170115/IMG_1451.JPG",
+      "sha256": "14639d9a550e4b68ef1f00073f644b59105ee76d31f4c2ed706fc19226a20931",
+      "git_blob_sha1": "90efa3002d4cb0985cb2efb46e47eb62b025f9cc",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype front side with new labels and added lead."
+    },
+    {
+      "path": "doc/craft-work-diary/20170115/IMG_1452.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170115/IMG_1452.JPG",
+      "sha256": "1fa3157d88c5a90a9215e455e30f5398523c7dc8486340c71e07fa4390284910",
+      "git_blob_sha1": "63888e4be40cca7f32b010f83c7d5562035d08f6",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype wire/solder side with Front label."
+    },
+    {
+      "path": "doc/craft-work-diary/20170115/IMG_1455.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170115/IMG_1455.JPG",
+      "sha256": "53e3802c6f9d29bccdd2936b5269ad593997b43486c8510e26928a1c1bebd8a7",
+      "git_blob_sha1": "fd098c4fcb94189f64bcc3bf343b1a1967ee3a14",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Stacked red-lidded storage boxes on desk."
+    },
+    {
+      "path": "doc/craft-work-diary/20170115/IMG_1456.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170115/IMG_1456.JPG",
+      "sha256": "1bfb8326cd1fa8e89fa42bb9f49df9b924619a22ce6004b79764d3e3f72f0202",
+      "git_blob_sha1": "164c40ddb13cc2867efd277d53926cce56c5ec0d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype beside printed merchandise and three badges."
+    },
+    {
+      "path": "doc/craft-work-diary/20170116/IMG_1457.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170116/IMG_1457.JPG",
+      "sha256": "6ffd94c63e7441a8cbcc7b2b0d650480b9f15f1ba49cd23f80d7c7b42f111c14",
+      "git_blob_sha1": "637689bb873432f244cbf2849789356b4b792879",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype module side, headers and resistor row."
+    },
+    {
+      "path": "doc/craft-work-diary/20170116/IMG_1459.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170116/IMG_1459.JPG",
+      "sha256": "4a2d7d9da0f62c57a197f4ff4f5162667c1b88d129efbd6501171768f2f159b5",
+      "git_blob_sha1": "da8fc534266e984b3e85e7b173df1d499c817b5b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype wire side, additional loose red lead."
+    },
+    {
+      "path": "doc/craft-work-diary/20170119/IMG_1460.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170119/IMG_1460.JPG",
+      "sha256": "a4239e3c3e08d2ebce1d79b9f5dfd01317e9f036a794b0cd581688099d40fb33",
+      "git_blob_sha1": "eb80f2b17d11a1d5c7584cf77fe7d407b04f70cf",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA/breadboard with separate cartridge prototype in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170119/IMG_1461.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170119/IMG_1461.JPG",
+      "sha256": "f10c64e02f81a4cf33cd3983b62532721efa4bd6915bb535e82cd28ed4f97e95",
+      "git_blob_sha1": "1e7fbe0d988bf45b6e6f1df7d391ba5b9a0908fb",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer breadboard and cartridge corner view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170119/IMG_1462.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170119/IMG_1462.JPG",
+      "sha256": "82a5fda2395dd8a96b8ca28687136086290b2fb29e69d149cb6e8aff8a8fb581",
+      "git_blob_sha1": "6a78bb1a787c18d18ba6138cfa1829500a64ab28",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide powered FPGA/prototype and meter scene."
+    },
+    {
+      "path": "doc/craft-work-diary/20170119/IMG_1463.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170119/IMG_1463.JPG",
+      "sha256": "7faaf434ed76566efa5bc866ad1cddd14211e59db1159205986c6ab8caaaf4d3",
+      "git_blob_sha1": "92850837552c0e2aeecae592b055b40714019c78",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar scene with probe touching prototype and changed framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170119/IMG_1464.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170119/IMG_1464.JPG",
+      "sha256": "9c511e6200d5ba80345454726327ccea8cbc0530d38844d9a8a7c1ac69369a03",
+      "git_blob_sha1": "3d7d239a5ce5232792a55fabe78cad30bfd76a49",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider angle of powered bench and meter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1466.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1466.JPG",
+      "sha256": "b60cc64fb14fbb8a1dbdc0ff0de6147bece086d815ced93a96e446465b40e095",
+      "git_blob_sha1": "420a3df7a5131337cd810eb03641dcd62bdd792b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Bench assembly with upright perfboard and ribbon cable."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1467.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1467.JPG",
+      "sha256": "82803196c29fd6167d93a4403183d344e01cd64659552edc492e21d91f49923f",
+      "git_blob_sha1": "e4537507fa6acdb64de9f3d6f3c6fd8a8ddd2e1d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Different angle of upright perfboard and FPGA setup."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1468.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1468.JPG",
+      "sha256": "6ae01ee410b7ba31302a52b0b568f220d738a13da64d23059dbb089fdfd97227",
+      "git_blob_sha1": "3d09404cf2530ff9199fe455e8f2b536f6e6fb07",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close FPGA photograph with probe and handwritten labels."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1469.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1469.JPG",
+      "sha256": "4ef35e16efa1185a41d2dbfe4bf7a50a29d45f96125bc8b182a1b6ed950ab887",
+      "git_blob_sha1": "33f148fa86f15603132b18c2020d4cdf9d288dd9",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Notebook photograph with faint handwritten pin notes and pink pen."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1470.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1470.JPG",
+      "sha256": "b41776a73ea1e225985ef537f28078ac143f0946cae5c4ebc97476197356cba7",
+      "git_blob_sha1": "04bc7748cf74a10da67248151294ecc1fb8b2609",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide FPGA/breadboard/prototype/meter scene in sunlight."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1471.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1471.JPG",
+      "sha256": "4832b958ca4a07a7afcfc64ecf4227ee9ed5c0c24cdd58f8cc55773d7d59bc0b",
+      "git_blob_sha1": "0ee2a58bde3bf9c6256bc5f9cc62949882a6f904",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opposite-side wide assembly view with notebook in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1473.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1473.JPG",
+      "sha256": "bb1615e1b5678e55a7e71ef5e1aa318d4de25994b24ed66e66d61f59e69c5803",
+      "git_blob_sha1": "6b3eefbe45d9840b8f7a8415fd639cdf00bca5fa",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close powered FPGA board with probe leads and labels."
+    },
+    {
+      "path": "doc/craft-work-diary/20170121/IMG_1474.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170121/IMG_1474.JPG",
+      "sha256": "aa3bcc3710146d5669c77ac3d55ebbf54554d323254bbd86a6bc41cbd266710b",
+      "git_blob_sha1": "d3595f19d3765d8d15aae87d08381513dc5bf4ca",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide FPGA/breadboard/upright cartridge prototype scene."
+    },
+    {
+      "path": "doc/craft-work-diary/20170122/IMG_1478.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170122/IMG_1478.JPG",
+      "sha256": "90232656c59e0a5b080ef207fd9468eca4a8a63310197f78fc2a367a2b817b49",
+      "git_blob_sha1": "de680774104f17a0c187bec92647f14c48755ce9",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Bench assembly beside keyboard and multimeter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170122/IMG_1479.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170122/IMG_1479.JPG",
+      "sha256": "4e23051c07736ae394b5cc141567d0fd82d4644766e5229bee24c3466e14ed81",
+      "git_blob_sha1": "b8d29de7c90c4e36c9e7309b91162659526ff141",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA connected directly to cartridge prototype by wire harness."
+    },
+    {
+      "path": "doc/craft-work-diary/20170129/IMG_1486.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170129/IMG_1486.JPG",
+      "sha256": "da5925013ce45f58a4550fe11ab5096d385000537ca82da0f15d9ee6aaeda804",
+      "git_blob_sha1": "e89a3590d5257761314b53a69058b011c56f1c5e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph with prototype layout and header assignments."
+    },
+    {
+      "path": "doc/craft-work-diary/20170129/IMG_1487.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170129/IMG_1487.JPG",
+      "sha256": "9f6ac53894c2e2dd771a6f815d994f658641589da97b09d5557bcc9e9ce57c0b",
+      "git_blob_sha1": "23c2696639c13894ac5875f8393c563d34074e83",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph with connector layout and pin list."
+    },
+    {
+      "path": "doc/craft-work-diary/20170129/IMG_1488.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170129/IMG_1488.JPG",
+      "sha256": "4e82ba399cc61c50ff38e65fc71a029e7ac4eeb679eb229bccebaa816076b9fb",
+      "git_blob_sha1": "ba7884661d843785a41644b41baebe784ba7090b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype inserted into Famicom console, front view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170129/IMG_1489.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170129/IMG_1489.JPG",
+      "sha256": "9925cfe5c07b818a61ed4f50f204c12603285a7f753a950da54886e33a0b2110",
+      "git_blob_sha1": "01f663808b1c9f9574917324d305e05d6889b6dd",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Rear console/prototype photograph showing wire harness."
+    },
+    {
+      "path": "doc/craft-work-diary/20170129/IMG_1490.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170129/IMG_1490.JPG",
+      "sha256": "b1e79ca3682418d3d3dd905de13717eef6d3fe482690121231c8309acc3f9c1d",
+      "git_blob_sha1": "b6ce426e63f2379f0b3b80866a6423896964c1f3",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer FPGA board and console wiring view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170129/IMG_1491.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170129/IMG_1491.JPG",
+      "sha256": "a9b8907d73f6249a34404628a055269fa03a6e5ae28121c4524ba738cd324ee7",
+      "git_blob_sha1": "07c85336d5a8e7637b28ccb9a715507249d527e0",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide side view of console, cartridge prototype and FPGA."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1499.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1499.JPG",
+      "sha256": "839edfcb2368a28809e71b829a46774fd8c9b0f6ab380edeb86bdfa2b636f4dd",
+      "git_blob_sha1": "152ef72c249921b750282d96b55b5e85e720e8db",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close rear cartridge prototype and FPGA harness."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1500.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1500.JPG",
+      "sha256": "5292fb17ac0da663c224550519de20b44b1468558b828588eb2ea1c6d2500f0f",
+      "git_blob_sha1": "b01574d7817966e438041c0f58f377bcfea88e11",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Overhead console/prototype/FPGA photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1501.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1501.JPG",
+      "sha256": "23da9252675b4a6aedf0846c499f7fbf85b6ca290eec3bd260d17a9b8b11fa87",
+      "git_blob_sha1": "ec6f199c6fddf16ff8fd4eed66dd47989dc96c10",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide workstation scene with monitor, console, FPGA and meter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1502.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1502.JPG",
+      "sha256": "331e7379d5264de21e3f04af1675c2ab6afa0312920cae6fc13f9cc674a92158",
+      "git_blob_sha1": "d36bb1ae1950773d11c75f464c95c4ecf2df120c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar workstation scene with changed framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1503.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1503.JPG",
+      "sha256": "5a13b52d6e6c19b54eeea63e192e9daf84e9d5a6e1643b470b227d9b044e189a",
+      "git_blob_sha1": "30a69d995d72981ac73d4ca384eac13085d2bf3c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Another workstation photograph with changed camera framing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1504.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1504.JPG",
+      "sha256": "d6acb908a750fcac0e58cc8bd5db022109378977b9fe8f322c5c7c894cb3b375",
+      "git_blob_sha1": "6989c3bd35bbb8d9231ba9071d05e93ccc71eea8",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close console cartridge slot with temporary jumper leads."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1506.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1506.JPG",
+      "sha256": "0bd7e16d9bbaaba7fa8e5d1dfc63e7b673907d5b935ed3cbe1fc551d1a8eafbe",
+      "git_blob_sha1": "79b5789f1f952c0e74ff7807ef60e874fc855733",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA/breadboard bench scene with printer in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170212/IMG_1508.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170212/IMG_1508.JPG",
+      "sha256": "7a348e8bf1df6cbd7ff90f9f091417c7acb86529d3e5c89c97481cb5585481f8",
+      "git_blob_sha1": "04116b0406840d77770b11c4b1147c584335e94d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider console-slot, breadboard, FPGA and meter scene."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1509.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1509.JPG",
+      "sha256": "1f8b36a5b6f20357d22a7c8e7b562704702d12fc437f977a8d278547abde556e",
+      "git_blob_sha1": "6f76ba2149945fedcb3f5fcd716d819f2481e7c0",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Cut connector-board strips and yellow utility knife."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1510.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1510.JPG",
+      "sha256": "faa30ba49b0b83bc5bc05e3ea502c088a4ec9da01e3f4e9de6781afb9d5422cb",
+      "git_blob_sha1": "437c3220c3316448db77ae9041e1a2617a70f6f5",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider view of cut strips and knife on work surface."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1511.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1511.JPG",
+      "sha256": "dbf888b9cc0da828c8cb5314db34a09a6d4c441556dadcc0d60a342e3d1f8cb0",
+      "git_blob_sha1": "c8939d1d5429b1947f0a4167d1474e381882255d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Connector strips beside hand file."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1512.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1512.JPG",
+      "sha256": "80564167d0565dca5cea87ccc54099b0ea4645da19b5060b015fc36d249ecb3a",
+      "git_blob_sha1": "3ebdb055c7487334fefec07bb209109365b2458a",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Connector strip fitted into black card-edge socket."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1513.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1513.JPG",
+      "sha256": "4cf86f91c9427361a70c59e9101f388b6f45ba9bd505925c431010c6e9a24a25",
+      "git_blob_sha1": "9ef51571679e6a79687deca87ca3cf5c500898a3",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Card-edge socket protruding from console cartridge slot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1514.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1514.JPG",
+      "sha256": "ad75a84652b43cc43903f04db73d35ab98b02dacd22ab04672490eb318b1a499",
+      "git_blob_sha1": "9e20b6cd0f6747dec9f886583442facda7c40eeb",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close console slot with board strip inserted."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1515.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1515.JPG",
+      "sha256": "9a5dacc86bbc75ab98335e2cb7f24f6526622cdca7ef53635ac2da59e2b7d4c2",
+      "git_blob_sha1": "ebfa263360688d92ad5d48b052f2eb61022aad64",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Console front view with board strip in slot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1516.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1516.JPG",
+      "sha256": "968de269a286fdb418666219ac638020965441713a150ccb878633641909da8a",
+      "git_blob_sha1": "39a663923db9aa0c5a6ad1a0b3e39c8c3f64fbb4",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Console front view with black socket in slot."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1517.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1517.JPG",
+      "sha256": "89bc524a1136657723844aad3230bb28a358d0b9b488c6c9ec6d2ee389fede30",
+      "git_blob_sha1": "f65b10dda413dbadc7d0986b69c4298487642c6f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Green perfboard, ruler and marker, Top label."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1518.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1518.JPG",
+      "sha256": "d77bab78050b17086b7625048f9f828b448f67416218ed743285ebe4d83fb0ea",
+      "git_blob_sha1": "ac7604cc2937ec72f24df4e159efd0a4fc050709",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Green perfboard with connector temporarily taped in position."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1519.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1519.JPG",
+      "sha256": "744bc960c49c54222222dbcfec115c8a50294a5e8a609829f5ba2caa2e277fe1",
+      "git_blob_sha1": "fd7bd1497d3ff388c50320d4033248fe4d162f7f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Soldering workspace and green perfboard."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1521.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1521.JPG",
+      "sha256": "ee06b05851e200019b13f3428ff3a14f907405b002cbff0a5e80e85460d99a36",
+      "git_blob_sha1": "46ce3c6846c6de85a75fe58aa4906784c38dff9b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical Toshiba datasheet photograph, operating-range table."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1522.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1522.JPG",
+      "sha256": "c76f971738585700f3b036bdc938f377f37fd1a38767826713febca22b93cdc4",
+      "git_blob_sha1": "3f39517527f9d8dc4b343cd6702fb9a2fc90e8ef",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical Toshiba datasheet photograph, pin and logic diagrams."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1523.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1523.JPG",
+      "sha256": "b157486990b18a3661441e3431d1825fab67c0f39e8e2052e28d2b4b8212b39a",
+      "git_blob_sha1": "579fdb396b3a69c0b8b7faa87e1002665e6eea47",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Green perfboard with socket and adapter modules."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1524.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1524.JPG",
+      "sha256": "27787d5e35b9499cef1790a6c55010da9d9e6689534a8b749d298159903dbe2f",
+      "git_blob_sha1": "dfb62a0be494194a7ce28c2cf636001c480361aa",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Green perfboard solder side, early jumper connections."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1525.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1525.JPG",
+      "sha256": "c0f8fea74fe614b86e8496f04e0961e3b92581d592b22a8d6e89b1098afdca67",
+      "git_blob_sha1": "a5dc692096228dc069832f8a57acdde48ce4b83c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer early jumper connection view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1526.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1526.JPG",
+      "sha256": "3089cafa3549263892b1d7110eaca1f6f38911ed7b555d188c6bf3529b9a2047",
+      "git_blob_sha1": "ea5f8ee269badb66c30ff65ed57d7f405dce4537",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard component side, socket and three adapter modules."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1527.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1527.JPG",
+      "sha256": "7aa026882e56e11b66cb2bdc8aac2048511e203629e73563d0d500a3b5c80559",
+      "git_blob_sha1": "90fda42a7be6a58502b197aa6b179eb4be3a88e9",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close component/socket view with shallow focus."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1528.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1528.JPG",
+      "sha256": "0708cf6a2ad7c3ea56dfff2c0ad97e9739862a0d29cf584b619dcdc89135c346",
+      "git_blob_sha1": "a4ba93ce92e1d84ed3de788c9363d1c62e7634e9",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard solder side with additional white jumpers."
+    },
+    {
+      "path": "doc/craft-work-diary/20170218/IMG_1529.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170218/IMG_1529.JPG",
+      "sha256": "bf0ed1d126021482c54ee3780dc5f0e46c41bb6087024ea004a087a9a36fb589",
+      "git_blob_sha1": "43d73197eaa3c824be4e98c78c912af09f6aa975",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider work-surface view of wired perfboard."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1530.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1530.JPG",
+      "sha256": "a8d922f298e548b7b5f23edb7a7386785cbc6cdb71d06372c4e772147f80f1d5",
+      "git_blob_sha1": "d0793f00ed43ca047b09c9893b4dd468cbe52dae",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Component-side prototype, different orientation and lighting."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1531.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1531.JPG",
+      "sha256": "74655be140f36d6c62b03c4b88d985a61aa27985698754e188f2873c5a90a339",
+      "git_blob_sha1": "32df9e795a8ec3643009f8a3a15e6d66c919a5f4",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Solder-side prototype with white jumper wiring."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1532.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1532.JPG",
+      "sha256": "a05dcdae3f7f65eae6470aabbfd6151f9856497a94e31aa2f3755e47bb390eba",
+      "git_blob_sha1": "056baeb944a55573f9f263e1430c6018b9826bbe",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA/breadboard/perfboard bench with multimeter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1534.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1534.JPG",
+      "sha256": "95b23a266bb560c14b5dfe33de5a3f9496caa8983ac90647c6a3a8dfd0032ecb",
+      "git_blob_sha1": "240c376876163d878caeade37cf8e818b09e6e93",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical TXB0104 datasheet introductory page photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1536.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1536.JPG",
+      "sha256": "2083af8f3a6fbff878db9faf5a26bcbf5e22dc2e89b5c3a562050c9051272696",
+      "git_blob_sha1": "1d3cb3a7de3d688c6eb0f380a269b577e9c8403e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Historical TXB0104 pin-function table photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1537.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1537.JPG",
+      "sha256": "00c8e14789c66786efaf92383ab6bb415bb460fb68f512193b896416edbf96d8",
+      "git_blob_sha1": "94f6ea3b48355401d7438f284bfa9ed6c0b9d0c8",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard laid over console, wire side up."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1538.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1538.JPG",
+      "sha256": "7404bd4a241159b530550f0c4b11fbc0ca7a3bf352784842815fd01285281369",
+      "git_blob_sha1": "407de51d5d936b96d3b280f363d7cd3fe7d29178",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Low side view of console/perfboard and soldering workspace."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1539.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1539.JPG",
+      "sha256": "d474990b3b87b6cababf2cc9ccf643156e6c1bb486d3b12c72b947eba88f3c3a",
+      "git_blob_sha1": "26d2f0053dd8c671da7aec43f4919ef341373495",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered FPGA and console/perfboard scene with meter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170219/IMG_1540.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170219/IMG_1540.JPG",
+      "sha256": "2f24756e17fe50be1a78e2373e33c81ef67960907d8d8e049ef04e6ee5c5af49",
+      "git_blob_sha1": "54f5d6f0e919209676a1cc2d0198b1ef93599d00",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Monitor photograph of SignalTap logic-analyzer traces."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1543.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1543.JPG",
+      "sha256": "9a399ddd24ec8b126cc46dd33159a178de05b16541597adb9e1518126233a1e3",
+      "git_blob_sha1": "3a7dea132e169785ff935b905b3d260f8b6a4361",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Later perfboard solder-side wiring photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1544.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1544.JPG",
+      "sha256": "4702818b24d9c92003e5dd3ef15ca0f3c9ca4a38e9d780cf5fcb5a592226fee2",
+      "git_blob_sha1": "c296880cbefbbae5f7f5fb8407f6701fef86a5da",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Rotated green perfboard wiring-side view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1545.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1545.JPG",
+      "sha256": "f2b16ec4d04d7a4d55781161b7788a73f81365f9ca6a5979d2c629c430bdb185",
+      "git_blob_sha1": "517fd69c2dbac374087e479628fbf41a1973cb76",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Green perfboard component side with socket and adapter modules."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1546.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1546.JPG",
+      "sha256": "93400494efe8005eecfb28a7dcca8a504b3104b995c0653b3acef57bab527cdc",
+      "git_blob_sha1": "6accf9d3ae585588633464adef20d69d128e5089",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Commercial game cartridge exterior photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1547.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1547.JPG",
+      "sha256": "6c5abf37a128923e3cd95e450ec22c3a205481388cdc80d072a0b7b7ebf62eb1",
+      "git_blob_sha1": "4741fb67463377f73e7743cd69d2dec2498680a2",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opened cartridge with component-side PCB and case."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1548.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1548.JPG",
+      "sha256": "16ab0ae7874912393ac49130bbeaee80bef837cf949e1129aa948bbd4a45b302",
+      "git_blob_sha1": "e235386eeeacfd76c83dcc959e9a285182a44f59",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Cartridge PCB trace side placed in opened case."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1549.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1549.JPG",
+      "sha256": "b3aa21c26a3d439589faaadaec3cdeb00311ae50e6484522fd375fdda5b59415",
+      "git_blob_sha1": "f992c55398e9cc1f2f83b62d223758417c539911",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Prototype perfboard and commercial cartridge PCB side by side."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1550.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1550.JPG",
+      "sha256": "1db93d9e671d78040b4f9e24616fe27efb57c7a001ba543509d04d8195c325c6",
+      "git_blob_sha1": "8b3b0612016e8d6f92d78c5664a6048024ac7098",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Commercial cartridge rear label photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1551.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1551.JPG",
+      "sha256": "f237b463d273d06d24bdad8fa5258e2d4a71002199bad7430b50b2fde2ece4be",
+      "git_blob_sha1": "1e187c4c88a55e5a8b58fb61aed0b60a723d52a4",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Console/perfboard connected to FPGA, overhead view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1552.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1552.JPG",
+      "sha256": "f06e871b219b8aed243bd7c242a30ead66f099ffe1c2c5bfb4a77720a857d6d2",
+      "git_blob_sha1": "d4aca6e7259ab05729a5e642789630016f8bad1d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Angled console/perfboard/FPGA view near printer."
+    },
+    {
+      "path": "doc/craft-work-diary/20170226/IMG_1553.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170226/IMG_1553.JPG",
+      "sha256": "a521ccd45965579d214b74c684f3afa832cfd73ecfec370f3354e1deb37620fe",
+      "git_blob_sha1": "96c28bac76b66b2a33c435f44d46c14d9a3a7f67",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Monitor photograph comparing waveform captures with author annotation."
+    },
+    {
+      "path": "doc/craft-work-diary/20170304/IMG_1560.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170304/IMG_1560.JPG",
+      "sha256": "e8aedd26175d560f0f915cc658325a2612eb1327652689bbbe03c4647f1fe205",
+      "git_blob_sha1": "a266c105c98badb65bf99d51cec1419d6454daff",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered FPGA and console/perfboard assembly overhead."
+    },
+    {
+      "path": "doc/craft-work-diary/20170304/IMG_1561.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170304/IMG_1561.JPG",
+      "sha256": "b14c454ba9c96503c4041a79871e0e95705fb42463482d84e2b3f92ffdc8c560",
+      "git_blob_sha1": "8310861dabc04c21a90f6a3081ede0ac6871f4e5",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer console and perfboard wiring photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170304/IMG_1562.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170304/IMG_1562.JPG",
+      "sha256": "62c7b6b495b58bd2ebdf7a6647843674eeb6c03d434034808fa46c2af0e09af6",
+      "git_blob_sha1": "6f3e15bfc582c13288af473dbcd45c0326138700",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider powered console and FPGA scene."
+    },
+    {
+      "path": "doc/craft-work-diary/20170304/IMG_1563.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170304/IMG_1563.JPG",
+      "sha256": "18b2fc06b92865ad50cf94ccc44518c9974d6199ed409b0523547d4714ba436a",
+      "git_blob_sha1": "2b43fee187a067385eae571815cc460a829b8ebb",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Logic-analyzer waveform screen photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1565.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1565.JPG",
+      "sha256": "0315c90c8e5869c894611b261dd5e3b389e1acb4c3010531a929189cfdb01a98",
+      "git_blob_sha1": "2ded3e2c735320cfa556e947433241ff0ac1ab22",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard with three additional blue adapter modules."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1566.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1566.JPG",
+      "sha256": "93da4ab6d5fc288a35fb6651e9546cfc158bc38dd3fbab812095d79ad90950b2",
+      "git_blob_sha1": "1813bdb1b5f373e1408992ad28ec556fd2ea4c10",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard close view with one blue module and wire bundles."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1567.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1567.JPG",
+      "sha256": "f191c0f63ec237c1083aec9618b0e7fc3c05a80c8f59b26ceeabdce1e718b827",
+      "git_blob_sha1": "4814f21b1a1dfb7d27d00eb35ebdbdc1a3ea493d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard close view with headers and wire bundles."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1568.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1568.JPG",
+      "sha256": "6cf6c79744caea7a0bffccf5f1bb6ff3a439a62469d5af1173a19c99009407b2",
+      "git_blob_sha1": "e53940612228539e9503b1cae1632aac09f194fe",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered FPGA and densely wired breadboard."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1569.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1569.JPG",
+      "sha256": "4529522026f3535b9a024f2cb00d531b80e526239ff26645ec89dafca2f1b637",
+      "git_blob_sha1": "af9778474b3608a29aa4ad2be165a0eb622a16d0",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opposite-side breadboard/FPGA view with multimeter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1570.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1570.JPG",
+      "sha256": "41f583f023f3d3d1f913ff9249c62be6a669124c0d56a1c15f302e5bcfbe7c22",
+      "git_blob_sha1": "20f700f6e0dbc6da2794b371a4e601d97928ebfa",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Green perfboard wire side with added yellow jumper group."
+    },
+    {
+      "path": "doc/craft-work-diary/20170305/IMG_1571.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170305/IMG_1571.JPG",
+      "sha256": "5fa215914244d77bfe46fa069111368b7fe631aca4577cdf5a66042899a74976",
+      "git_blob_sha1": "595c0a09a798351ca93f7980e457a78f12fb86f9",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Component side with added blue adapter modules."
+    },
+    {
+      "path": "doc/craft-work-diary/20170311/IMG_1574.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170311/IMG_1574.JPG",
+      "sha256": "1b238cf9a21d29a1b10e4c62fe243a986206793bff295559f17217b1d1fe7302",
+      "git_blob_sha1": "da4218c6174579f916e5b601bdaaeb5cc6d1fa11",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Component side rotated on work surface, additional long wire."
+    },
+    {
+      "path": "doc/craft-work-diary/20170311/IMG_1575.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170311/IMG_1575.JPG",
+      "sha256": "0f0acfc8eedc8e7737198fa9c40493a425b78c2fbabcdeb0d293472b700dc39a",
+      "git_blob_sha1": "bcaf6ff49df0a434d1a2e25a8353a66fd560d120",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opposite component-side orientation."
+    },
+    {
+      "path": "doc/craft-work-diary/20170311/IMG_1576.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170311/IMG_1576.JPG",
+      "sha256": "509dc910c1fda49c46594b7071165e40e179200e3af0d0cbdb0140ebf4b6655a",
+      "git_blob_sha1": "139d0a6bf6234e9daa82edc900f39a1462ac7e81",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wire side with expanded white/yellow jumper routing."
+    },
+    {
+      "path": "doc/craft-work-diary/20170311/IMG_1577.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170311/IMG_1577.JPG",
+      "sha256": "46f8424738337fb2e9ac64a1a43c2cc54c9452e7af4e5e7ae89c6bb9e67c1e04",
+      "git_blob_sha1": "1ba71c7fb6839052329a4a9b17804b7f39529eaf",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Rotated wire-side view."
+    },
+    {
+      "path": "doc/craft-work-diary/20170311/IMG_1578.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170311/IMG_1578.JPG",
+      "sha256": "2a63c1cc83cb21e1eb86c93184dfb235e1e81a12ad794e537e0fdab70031109f",
+      "git_blob_sha1": "c021de73f73fde1a8a82274d36cd8046e61c6e82",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Powered FPGA/perfboard bench beside meter and tools."
+    },
+    {
+      "path": "doc/craft-work-diary/20170313/IMG_1588.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170313/IMG_1588.JPG",
+      "sha256": "c6e866c987691d9a3d0a0540d6d7f259698e1249c40b39e3d20fc031fc9690c9",
+      "git_blob_sha1": "77578cf880b990ddc53282107e4df48293a0744b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "FPGA connected to perfboard with red wire harness."
+    },
+    {
+      "path": "doc/craft-work-diary/20170313/IMG_1589.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170313/IMG_1589.JPG",
+      "sha256": "0719499d0fa5857743029768003fe29ab6b0565aa94d7c0ed4fdd144b65a096b",
+      "git_blob_sha1": "300c62759f100787b8cee7c30278148feace10bd",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Lower angled view of same harness/perfboard assembly."
+    },
+    {
+      "path": "doc/craft-work-diary/20170314/IMG_1590.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170314/IMG_1590.JPG",
+      "sha256": "e6b379d3880252176d128f354201088007110ff9aa28d28b81ef18468e2360be",
+      "git_blob_sha1": "b8d19082744cb2eaff90cb0dfbecab285db6d69e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph of connector mapping layout."
+    },
+    {
+      "path": "doc/craft-work-diary/20170314/IMG_1591.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170314/IMG_1591.JPG",
+      "sha256": "acbba81c76c44d44a9ae74a5b51667db4e2a7a93a4e909d301b8caa9a0d7fc44",
+      "git_blob_sha1": "4d675dd6240a248634650370219ffd9c9ee5608d",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer spreadsheet GPIO header mapping photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170314/IMG_1592.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170314/IMG_1592.JPG",
+      "sha256": "d37361d61437eeee29b18ebfe91ab71cbef011dc01b061dd1b0c1fea5a5e37de",
+      "git_blob_sha1": "90b956aea676abb189110b36206f97be181e047e",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Closer spreadsheet cartridge connector mapping photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170319/IMG_1593.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170319/IMG_1593.JPG",
+      "sha256": "1f47687566fcc847181a6f73ac828c9c1834cb70b3a77bd587f40ebd5952b815",
+      "git_blob_sha1": "5008019cc79a48269ee6c60fb6e902086ceea9f4",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opened cartridge case and PCB beneath keyboard."
+    },
+    {
+      "path": "doc/craft-work-diary/20170319/IMG_1594.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170319/IMG_1594.JPG",
+      "sha256": "58b0f1c8986febf9e4fc819109332114d0c0f8c7d181ef223719fdadc3731564",
+      "git_blob_sha1": "ac21fbd0ad46f8ddf539b8e09598e25ce96af315",
+      "method": "complete individual JPG visual inspection",
+      "finding": "BurgerTime cartridge front label."
+    },
+    {
+      "path": "doc/craft-work-diary/20170319/IMG_1595.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170319/IMG_1595.JPG",
+      "sha256": "71f0dfe55658a0804479f6ac0c5d0b3b3ffcbe723deee72ad62070709ef1f4b9",
+      "git_blob_sha1": "28abd05d4ae34e91094a11df425dc448e3f82e4a",
+      "method": "complete individual JPG visual inspection",
+      "finding": "BurgerTime cartridge rear label."
+    },
+    {
+      "path": "doc/craft-work-diary/20170319/IMG_1596.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170319/IMG_1596.JPG",
+      "sha256": "49689cba384efc063a85e9136ec04733d23b52b4c247591b2ca5fd9eb927bbcf",
+      "git_blob_sha1": "4c2aa29852e176713e05a5ac932680c7028022c8",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Opened cartridge trace-side PCB and case."
+    },
+    {
+      "path": "doc/craft-work-diary/20170319/IMG_1597.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170319/IMG_1597.JPG",
+      "sha256": "66acd485c0118f4e76bdbe5d75690365d95c4ae31ff950af57a9ebad5a0a8f46",
+      "git_blob_sha1": "6f0328441db782d64ac94bfc643ab1125f7db2f9",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Cartridge component-side PCB with two windowed chips."
+    },
+    {
+      "path": "doc/craft-work-diary/20170402/IMG_0006.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170402/IMG_0006.JPG",
+      "sha256": "2974242474f252437e485bf3c944939bdeec058cfe193821c86ea7b1c9fa7388",
+      "git_blob_sha1": "245a87282219e7131a1c5d5e2c2fc429467f7382",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Rotated spreadsheet photograph of GPIO header mapping."
+    },
+    {
+      "path": "doc/craft-work-diary/20170402/IMG_0007.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170402/IMG_0007.JPG",
+      "sha256": "851859849c266e2eb34ca9b6179c4afe4b8fec677d285e3915ba764007a174d7",
+      "git_blob_sha1": "5067aaf5b8305ce968052d4a0801517317dbf32a",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Spreadsheet photograph of cartridge/front-back connector mapping."
+    },
+    {
+      "path": "doc/craft-work-diary/20170402/IMG_0008.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170402/IMG_0008.JPG",
+      "sha256": "cf2f0f7760c56da5156a320d6a4ad4a5cee9e13130461456982064d2e7072e5c",
+      "git_blob_sha1": "626889b6538ebb44d73c97780cf9e70d4476e741",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider connector mapping spreadsheet photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170402/IMG_0009.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170402/IMG_0009.JPG",
+      "sha256": "c9fb24613e4e778c2d0638d18187d5c173fb95084df421c3f1b0449f4160fd44",
+      "git_blob_sha1": "d83a38e1c876754adcb07eee34bb0cea4ab2b84f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Annotated historical waveform spreadsheet photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170402/IMG_0010.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170402/IMG_0010.JPG",
+      "sha256": "533d78506b74f49f45a8fb7b035a538dee755b4bdd8c8e9527bfdec3e5ff8a36",
+      "git_blob_sha1": "ef8da4e4331bc64444a4d75c0a7463e11086cf44",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Further historical waveform comparison spreadsheet photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170402/IMG_0011.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170402/IMG_0011.JPG",
+      "sha256": "efbf02ea9fe778e8e107b713dce75d6674e77f7509da92432e8c029dfe6eaa94",
+      "git_blob_sha1": "f448ffa1c8535fdc0f42bba9526dde37bd920f83",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Annotated waveform and assembly-code excerpt spreadsheet photograph."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0013.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0013.JPG",
+      "sha256": "7c7ebe5cbd896f14d43cd603064939224e38819edf74790a66c55e435c3f68c2",
+      "git_blob_sha1": "e3141f21cabd5bb8fbaaca280e0a5c07baf9d811",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Close perfboard solder-side wire connections."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0014.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0014.JPG",
+      "sha256": "243cca710ce9d38fce33f89ebb5d31c0fd0b800923a2bbc51ec1002b4b64d344",
+      "git_blob_sha1": "9c3b548f5181bab2f1f330c231c5ed22edd24594",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Logic-analyzer waveform photograph with selected address trace."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0015.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0015.JPG",
+      "sha256": "c7495c37564349a1406620c2941f05b6b76154f3d841a49fe5b1b3a7f0fa2fd3",
+      "git_blob_sha1": "2e60d7e528e5518b163d071e28b2773ac257f221",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar waveform photograph showing Invalid JTAG configuration banner."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0016.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0016.JPG",
+      "sha256": "4e0ad27c8bba90b6896f236e879e9e1db6bb0a281c02d12b9c63e1cdf45a094c",
+      "git_blob_sha1": "0cf3d4201d1e160969f11bf6072447ed3a85bba1",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Waveform photograph with selected program address trace and same banner."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0017.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0017.JPG",
+      "sha256": "feb7581cfd2e6d9d9caa1ff76ba1ba12d6d857887ba91a3b87f34393c8895173",
+      "git_blob_sha1": "e08aff74aa47c5395c1e3efc6b4a31387b286e6b",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Perfboard solder-side photograph with cutters and added dark wire."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0018.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0018.JPG",
+      "sha256": "27e5713a45e1b384a07fd8368f8e0b1b5b66a504506c681b1d348a565a367732",
+      "git_blob_sha1": "649f34848e725eec29f0f2ffc66c67738c0e8ef7",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Logic-analyzer waveform photograph, wider time span."
+    },
+    {
+      "path": "doc/craft-work-diary/20170409/IMG_0019.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170409/IMG_0019.JPG",
+      "sha256": "72d1e359db2e7e955cc4686caa7aff59019c0b80b7336dddc481a2eb5ca37a69",
+      "git_blob_sha1": "7db8154751cd3e4b2f15fee558c151cfab6196af",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Solder-side perfboard photograph on striped cloth, added red lead."
+    },
+    {
+      "path": "doc/craft-work-diary/20170415/IMG_0020.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170415/IMG_0020.JPG",
+      "sha256": "1839fb39799ee6de069ac567b47140f7889433a6f882ab04949ad98efc086624",
+      "git_blob_sha1": "8e04fbe4a3e3b38a0ab51f78deb0353e47eaa520",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Solder-side perfboard on work surface, added green jumper group."
+    },
+    {
+      "path": "doc/craft-work-diary/20170416/IMG_0021.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170416/IMG_0021.JPG",
+      "sha256": "f699911c56f873cdba2148a3e85cb16a56253dbae386476778978243b314ba27",
+      "git_blob_sha1": "a96c632915e610baed4bea61c4f2613ffddb3c62",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Similar perfboard photograph with changed framing and background tool placement."
+    },
+    {
+      "path": "doc/craft-work-diary/20170416/IMG_0023.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170416/IMG_0023.JPG",
+      "sha256": "04e3ac6fc15518ac78d7b3e5f5cab360b9b4120f28e4252438876118f9c8eb40",
+      "git_blob_sha1": "8e72aefb1bd1e3b697d48eabec42d3ffacd38d0c",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider perfboard photograph on wooden desk."
+    },
+    {
+      "path": "doc/craft-work-diary/20170416/IMG_0024.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170416/IMG_0024.JPG",
+      "sha256": "99939c4293298a7c758e0f112809b7231e27b4392344d7c27d8f7562dc0b500c",
+      "git_blob_sha1": "7bc1cdc0db6be3c17fbe1945386973d5cde43f88",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Console/perfboard/FPGA setup with corrupted-looking display image in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170416/IMG_0027.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170416/IMG_0027.JPG",
+      "sha256": "9eb00f8c1c751e3dcc8c4ebdb39155f63a2e46d08531b4b6b874e8c3e333e074",
+      "git_blob_sha1": "09f3777023b36d29412816b83afe7590cedd2f10",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wide monitor photograph of logic-analyzer traces, controller and meter."
+    },
+    {
+      "path": "doc/craft-work-diary/20170416/IMG_0029.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170416/IMG_0029.JPG",
+      "sha256": "8d35d5d93d89be84d42337042904ff803b1ea6110d8f03a9caedada63e7097da",
+      "git_blob_sha1": "a333513825bcd11749d8268ec7139ef25b36aac8",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Wider console/perfboard/FPGA and display scene with meter/controller."
+    },
+    {
+      "path": "doc/craft-work-diary/20170422/IMG_0030.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170422/IMG_0030.JPG",
+      "sha256": "51de39a38fea5f8958f2cfbcd3661357986383e06be0bbc27e5b9adf851fb84d",
+      "git_blob_sha1": "f4d681382e1ea055da0b639a878f115708993f0f",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Solder-side perfboard close view with hand tools above."
+    },
+    {
+      "path": "doc/craft-work-diary/20170422/IMG_0031.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170422/IMG_0031.JPG",
+      "sha256": "069db877ef19a7bd309f73fb966171b0c28212db234ae6004ee4292019cb57a1",
+      "git_blob_sha1": "45bcf21e155c250016efba0d714b2016af00c527",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Solder-side perfboard photograph with handheld illuminated magnifier and wire stripper in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170423/IMG_0032.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170423/IMG_0032.JPG",
+      "sha256": "e17f5e7ee9902e5181fb15acb870facbd1c01f155a67478276bd6a46f2b3b60e",
+      "git_blob_sha1": "695476a972f36963d47c7fc5022e0484467b61cb",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Solder-side perfboard photograph on dark desk with NES controller and keyboard in background."
+    },
+    {
+      "path": "doc/craft-work-diary/20170423/IMG_0033.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170423/IMG_0033.JPG",
+      "sha256": "c9682a2005fed0b2da0e4702ee3963ed5bf2bb1fb4e6dce1e575851b630980a9",
+      "git_blob_sha1": "db91d1bcdb1a26d0f679382944c8608c68fec963",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Console/perfboard/FPGA bench photograph with red and blue jumper leads and lit board indicators."
+    },
+    {
+      "path": "doc/craft-work-diary/20170423/IMG_0034.JPG",
+      "local": "/Users/themoretheless/Documents/Sources/rrrah/docs/research/dedup-500/evidence/astoria-d--super-duper-nes/remaining-pinned/doc/craft-work-diary/20170423/IMG_0034.JPG",
+      "sha256": "32414dffcaa3cd9805d99eb73fdbe40ec59f88ee3838a57744a54504359711de",
+      "git_blob_sha1": "f7b2ee64d969b1110d36939d852e9304c86fa9c0",
+      "method": "complete individual JPG visual inspection",
+      "finding": "Photograph of SignalTap logic-analyzer screen with acquisition-in-progress banner and red address/data waveforms."
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/nes347-source-review-v33-20261102.json",
+  "controls": [
+    "docs/research/dedup-500/nes347-i2c-error-control-20261102-v1.json",
+    "docs/research/dedup-500/nes347-notify-slot-control-20261102-v1.json"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-p",
+    "rrrah-dedup",
+    "--no-default-features",
+    "--test",
+    "exact_files"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 1.4102845000015805,
+  "passed_tests": 51,
+  "failed": 0,
+  "source_pins": {
+    "crates/rrrah-dedup/tests/exact_files.rs": "d196fd060f16b98e8c9bd78130c44759656649b58b8da9750a0b39488b66d9c1",
+    "crates/rrrah-dedup/src/exact.rs": "e18ba5bbd33a0d04d0b3f19adadf5980b23f53b5752708114dd66f49068673f5"
+  },
+  "sources_unchanged": true,
+  "log": "docs/research/dedup-500/exact-mirrored-layout-controls-20261102-v1.log",
+  "log_sha256": "124cfab8be23cbcff54c13cfe973f649080460b0c5049defeb54e727a8a32b56",
+  "new_control": "Three directory layouts,9equal-size/equal-mtime same-basename files; independently authored full-byte partition exactly2duplicate groups across2APIs/3root orders, fixture contents preserved.",
+  "scope": "No production source change; source metadata/path layout insufficient for identity. Not concurrent snapshot, Windows runtime, total RSS or whole decoder qualification."
+}

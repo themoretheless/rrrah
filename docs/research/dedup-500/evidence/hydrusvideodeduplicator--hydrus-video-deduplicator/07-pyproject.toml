@@ -1,0 +1,170 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hydrusvideodeduplicator"
+dynamic = ["version"]
+description = "Video deduplicator utility for Hydrus Network"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "hydrusvideodeduplicator", email = "hydrusvideodeduplicator@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "platformdirs",
+    "rich",
+    "numpy",
+    "tqdm",
+    "python-dotenv",
+    "typer",
+    "requests",
+    # vpdqpy dependencies
+    "pillow",
+    "av",
+    "hvdaccelerators>=0.4.0",
+]
+
+[project.optional-dependencies]
+gui = [
+  "pyside6-essentials",
+]
+
+[project.urls]
+Documentation = "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator#readme"
+Issues = "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator/issues"
+Source = "https://github.com/hydrusvideodeduplicator/hydrus-video-deduplicator"
+
+[tool.hatch.build]
+exclude = [
+  "/.*",
+  "/docs",
+  "/tests",
+]
+
+[tool.hatch.version]
+path = "src/hydrusvideodeduplicator/__about__.py"
+
+# Use uv for better performance compared to pip and virtualenv
+[tool.hatch.envs.default]
+installer = "uv"
+
+# Benchmark environment
+
+[tool.hatch.envs.benchmark]
+dependencies = [
+    "pytest",
+    "pytest-benchmark", # a plugin for pytest that enables benchmarking
+]
+
+[tool.hatch.envs.benchmark.scripts]
+vpdq = "python -m pytest tests/benchmarks/test_benchmark_vpdqpy.py {args}"
+profile_vpdq = "python tests/benchmarks/profile_vpdq.py"
+
+# Docs environment
+
+[tool.hatch.envs.docs]
+skip-install = true # Don't install dedupe. We just need to generate docs.
+dependencies = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocs-git-revision-date-localized-plugin",
+]
+
+[tool.hatch.envs.docs.scripts]
+build = "mkdocs build --clean --strict"
+serve = "mkdocs serve"
+gh-deploy = "mkdocs gh-deploy --force --strict --config-file mkdocs-gh-pages.yml" # Deploys to Github pages. Only used by GH Actions.
+
+# Test environment
+
+[tool.hatch.envs.test]
+dependencies = [
+    "pytest",
+    "vcrpy", # for replaying saved api requests/responses
+]
+
+[tool.hatch.envs.test.scripts]
+all = "python -m pytest tests/unit_tests/test_db.py tests/unit_tests/test_vpdqpy.py tests/acceptance_tests/test_dedupe.py tests/acceptance_tests/test_main_vcr.py --verbose {args}"
+db = "python -m pytest tests/unit_tests/test_db.py --verbose {args}"
+vpdq = "python -m pytest tests/unit_tests/test_vpdqpy.py --verbose {args}"
+vcr = "python -m pytest tests/acceptance_tests/test_main_vcr.py --verbose {args}"
+
+# Format environment
+
+[tool.hatch.envs.format]
+skip-install = true # Don't install dedupe. We just need to format.
+dependencies = [
+  "ruff",
+]
+
+[tool.hatch.envs.format.scripts]
+format = "ruff format src tests {args}"
+
+# Lint environment
+
+[tool.hatch.envs.lint]
+dependencies = [
+  "ruff",
+]
+
+[tool.hatch.envs.lint.scripts]
+format = "ruff format --check src tests {args}"
+lint = "ruff check src tests {args}"
+
+[tool.ruff]
+# Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+lint.select = ["E", "F"]
+lint.ignore = []
+
+# Allow autofix for all enabled rules (when `--fix`) is provided.
+lint.fixable = ["ALL"]
+lint.unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "ThreatExchange",
+]
+lint.per-file-ignores = {"tests/**/*" = ["PLR2004", "S101", "TID252"]}
+
+# Same as Black.
+line-length = 120
+
+# Allow unused variables when underscore-prefixed.
+lint.dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Assume Python 3.12.
+target-version = "py312"

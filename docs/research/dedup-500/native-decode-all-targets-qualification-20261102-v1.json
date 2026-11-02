@@ -1,0 +1,24 @@
+{
+  "terminal_receipt": "docs/research/dedup-500/native-decode-all-targets-20261102-v1.json",
+  "log_sha256": "baec5434c458698c8c80a2c97e3305c2e769491688b54d031c40135d7e057745",
+  "exit_code": 0,
+  "completed_target_summaries": 170,
+  "passed": 1113,
+  "failed": 0,
+  "ignored": 8,
+  "filtered_out": 0,
+  "elapsed_seconds": 11530.232452042008,
+  "source_before_after_equal": true,
+  "current_source_hashes_match": true,
+  "ignored_tests": [
+    "test gradient::batch_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control",
+    "test gradient::batch_tests::real_photo_matcher_timing ... ignored, manual real-photo exact matcher timing and parity",
+    "test gradient::matching_tests::alternating_matcher_timing ... ignored, manual alternating exact matcher timing control",
+    "test gradient::matching_tests::real_photo_matcher_timing ... ignored, manual real-photo exact matcher timing and parity",
+    "test gradient_index::row_major_tests::row_major_index_build_latency_probe ... ignored, explicit alternating index construction measurement",
+    "test pinned_invalid_png_corpus_is_rejected_without_retaining_memory ... ignored, requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS",
+    "test pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels ... ignored, requires the SHA-verified pinned spng PNG corpus in RRR_PNG_CORPUS",
+    "test exact_collection_scaling_latency_probe ... ignored, bounded collection I/O scaling measurement; run explicitly"
+  ],
+  "scope": "Full requested decode-enabled library/integration run on this checkout and host. Eight ignored tests not executed in this run. Not proof of all formats, platforms, corpus recall/precision or memory/performance qualification."
+}

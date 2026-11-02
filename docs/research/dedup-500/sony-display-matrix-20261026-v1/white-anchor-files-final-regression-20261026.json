@@ -1,0 +1,15 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test white_anchored_files --test white_anchored --test photometric",
+  "exit_code": 0,
+  "passed": 14,
+  "failed": 0,
+  "ignored": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-files-final-20261026.log",
+  "log_sha256": "35eb97956d2261cf6d47c389027c93d5ebecda154b015a6e52be03a86a6f1a83",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/white_anchored_file.rs": "b527bfb412bbac0b793567c7beedd31aefd148eb44c3bf6b742510b08cb93eca",
+    "crates/rrrah-dedup/tests/white_anchored_files.rs": "148f0bf13214f59c4c2141d822dd3f3e650d9490e749c19c6e28019f71d9a562",
+    "crates/rrrah-dedup/src/warp.rs": "ed9bb6923914beb3f65eeb2cd10af8e8d0a9fc37f80fcf50bb1829bb789b7f9a"
+  },
+  "scope": "Current macOS fixture regression. Both input final-callback edits, cancellation/retry, zero memory and primitive HDR/alpha tested. Real RAW file adapter and collection integration not yet qualified."
+}

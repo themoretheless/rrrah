@@ -1,0 +1,38 @@
+{
+  "cases": 1,
+  "scope": "Complete unchanged original module body in Node VM;DB count/statement adapters and already-aborted signal. No filesystem mutation,real DB/hash/core.",
+  "observed": {
+    "result": {
+      "scanned": 3,
+      "hashed": 0,
+      "errored": 0,
+      "duplicateSets": []
+    },
+    "events": [
+      {
+        "stage": "hashing",
+        "processed": 0,
+        "total": 3,
+        "hashed": 0,
+        "errored": 0
+      },
+      {
+        "stage": "grouping",
+        "processed": 0,
+        "total": 0,
+        "hashed": 0,
+        "errored": 0
+      },
+      {
+        "stage": "done",
+        "processed": 3,
+        "total": 3,
+        "hashed": 0,
+        "errored": 0
+      }
+    ],
+    "hashCalls": 0,
+    "pageCalls": 0
+  },
+  "finding": "Already-aborted scan emits done processed3/total3 despite zero hash/page calls;scanned is planned row count. No explicit aborted status in return."
+}

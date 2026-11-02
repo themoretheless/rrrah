@@ -1,0 +1,161 @@
+{
+  "index": 208,
+  "repository": "bryant24hao/macos-calendar-assistant-skill",
+  "commit": "ecfeec26be02ce01ea64bffa4710d0de4e1f5a60",
+  "tracked_blob_count": 31,
+  "whole_file_reads": [
+    {
+      "path": "scripts/calendar_clean.py",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/03-calendar_clean.py",
+      "sha256": "34ded7e660a977b776a3098cb9d6e20931a26714a859f68bac228f2f703ad472",
+      "git_blob_sha1": "b178a9575ed8deac2924e99267093c79c8493952"
+    },
+    {
+      "path": "scripts/regression_test.py",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/05-regression_test.py",
+      "sha256": "b88de01f13195edbeea3285c5e627f6026dce00dd45847781a4a5ee7a8eea495",
+      "git_blob_sha1": "ed091bdd3900deb6d3ab5da4c71e5c84fb2d1b0f"
+    },
+    {
+      "path": "scripts/config_utils.py",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/remaining-pinned/scripts/config_utils.py",
+      "sha256": "e154c2337b24e45ece24fabd92365896b288d93190b651e915ed9a0c19d9c0ca",
+      "git_blob_sha1": "da0b0f47da8db3bbb4667b8a9ae708cb12332440"
+    },
+    {
+      "path": "scripts/list_events.swift",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/remaining-pinned/scripts/list_events.swift",
+      "sha256": "8a1962d983c07f10f99d435b7a0d63c17a7520e4ee1f3ab78f4b4a8e18b2ce53",
+      "git_blob_sha1": "5e53de2f83e6d0ec2faed645a69477e40d14f118"
+    },
+    {
+      "path": "scripts/upsert_event.py",
+      "local": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/remaining-pinned/scripts/upsert_event.py",
+      "sha256": "5d6cdea1404be4985e1cdb702be0ca169aeee1f6a29556dadf465e5715a9507a",
+      "git_blob_sha1": "3a39b9200bb400aea00dbe3c65f37e5f3c55a5f5"
+    }
+  ],
+  "whole_file_read_count": 5,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "authored_controls_run": 6,
+  "original_tests_run": 0,
+  "controls": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/pure-dedup-control-results.json",
+  "decision": "reject-domain",
+  "findings": [
+    "Calendar title/slot heuristic, not file content identity. Four pure controls reproduce duration-insensitive same-calendar grouping, subsecond truncation, all-day exclusion and contradictory survivors across phases. Cross-calendar stage does not require different calendars.",
+    "Deletion Swift code selects title/calendar/start rather than stable event identifier and removes every matching event, potentially including chosen survivor with identical raw title/start. Source-only deletion observation; never executed.",
+    "Original regression script creates/updates/deletes real EventKit entries, counts candidates0 after cleanup without asserting exactly one survivor; could pass after all copies removed. Read only, not executed.",
+    "EventKit listing exports calendarItemIdentifier uid but Python cleaner groups and deletes by title/calendar-name/start, ignoring uid. Calendar title is not unique calendar identity. Access denial prints events[]+error and exit0; two original list_events AST controls with stub subprocess confirm error payload silently becomes empty list. No actual subprocess invoked.",
+    "Upsert source-only: idempotency uses same calendar/start/raw trimmed title, not cleaner lowercase whitespace-normalized title. Explicit missing calendar falls back first writable, then calendar1. Alarm-only change not part needUpdate check, so can return SKIPPED without updating alarms. No AppleScript execution.",
+    "Config source-only: invalid/missing config silently defaults {}; invalid timezone falls back Asia/Shanghai, system timezone detection external command not invoked here. No skill/install script activated; these are reviewed third-party source documents."
+  ],
+  "remaining": [
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "bytes": 682
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 52
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1068
+    },
+    {
+      "path": "README.md",
+      "bytes": 10819
+    },
+    {
+      "path": "SKILL.md",
+      "bytes": 4543
+    },
+    {
+      "path": "assets/demo-add-edit-task.jpg",
+      "bytes": 126713
+    },
+    {
+      "path": "assets/demo-daily-review.jpg",
+      "bytes": 57883
+    },
+    {
+      "path": "assets/demo-weekly-view.jpg",
+      "bytes": 67604
+    },
+    {
+      "path": "config.example.json",
+      "bytes": 317
+    },
+    {
+      "path": "references/CLAWDHUB_SUBMISSION.md",
+      "bytes": 864
+    },
+    {
+      "path": "references/LOCAL_CONVERGENCE.md",
+      "bytes": 770
+    },
+    {
+      "path": "references/RE-AUDIT-RESULT.md",
+      "bytes": 2565
+    },
+    {
+      "path": "references/RELEASE_NOTES_v0.1.0-beta.md",
+      "bytes": 939
+    },
+    {
+      "path": "references/REVIEW_CHECKLIST.md",
+      "bytes": 971
+    },
+    {
+      "path": "references/TEST_PLAN.md",
+      "bytes": 1530
+    },
+    {
+      "path": "scripts/add_event.py",
+      "bytes": 3808
+    },
+    {
+      "path": "scripts/calendar_clean_notify.sh",
+      "bytes": 2916
+    },
+    {
+      "path": "scripts/env_check.py",
+      "bytes": 1703
+    },
+    {
+      "path": "scripts/install.sh",
+      "bytes": 1260
+    },
+    {
+      "path": "scripts/list_calendars.py",
+      "bytes": 493
+    },
+    {
+      "path": "scripts/list_calendars.swift",
+      "bytes": 2194
+    },
+    {
+      "path": "scripts/move_event.swift",
+      "bytes": 3333
+    },
+    {
+      "path": "scripts/set_alarm.py",
+      "bytes": 1476
+    },
+    {
+      "path": "scripts/smoke_test.sh",
+      "bytes": 2335
+    },
+    {
+      "path": "scripts/uninstall.sh",
+      "bytes": 260
+    },
+    {
+      "path": "scripts/within_2h.py",
+      "bytes": 1274
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/calendar208-source-review-v1-20261024.json",
+  "list_error_controls": "docs/research/dedup-500/evidence/bryant24hao--macos-calendar-assistant-skill/list-error-control-results.json"
+}

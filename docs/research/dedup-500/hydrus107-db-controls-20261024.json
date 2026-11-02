@@ -1,0 +1,28 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "scope": "Unchanged DB and original test source loaded with replacement rich logger, package version 0.10.0, and no-op VpTreeManager. Real SQLite/temp files; no live Hydrus/native tree.",
+  "original_tests": {
+    "run": 5,
+    "failures": 0,
+    "errors": 0,
+    "output": "test_create_db (owned_original_test_db.TestDedupeDB.test_create_db) ... ok\ntest_get_db_file_path (owned_original_test_db.TestDedupeDB.test_get_db_file_path) ... ok\ntest_get_version (owned_original_test_db.TestDedupeDB.test_get_version) ... ok\ntest_semantic_version (owned_original_test_db.TestDedupeDB.test_semantic_version) ... ok\ntest_set_get_db_dir (owned_original_test_db.TestDedupeDB.test_set_get_db_dir) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.007s\n\nOK\n"
+  },
+  "authored_controls": [
+    {
+      "name": "migration_converging_hashes_orphan_mapping",
+      "orphan_rows": [
+        [
+          1,
+          1
+        ]
+      ],
+      "remaining_hash_rows": 1,
+      "pass": true
+    },
+    {
+      "name": "queue_replacement_retains_latest_hash",
+      "pass": true
+    }
+  ],
+  "source_sha256": "1e8eecac28b0601bcd6856d075244334543d6d9d7ea928134baf3f4f9d8edf3a"
+}

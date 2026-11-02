@@ -1,0 +1,39 @@
+{
+  "repository": "conanhujinming/text_dedup",
+  "commit": "718b3b3aa5e750d8872fbd17e7d17a7815b849c0",
+  "previous_audit": "docs/research/dedup-500/text108-source-review-v9-20261024.json",
+  "whole_repo_complete": false,
+  "new_read_lines": {
+    "path": "dedup_cpp/xxhash.h",
+    "start": 3451,
+    "end": 4100
+  },
+  "cumulative_header_read_lines": [
+    1,
+    4100
+  ],
+  "header_total_lines": 7487,
+  "whole_header_read": false,
+  "runtime": {
+    "harness": "docs/research/dedup-500/text108-classic-controls-20261024.c",
+    "offset_length_cases": 528,
+    "algorithms": [
+      "XXH32",
+      "XXH64"
+    ],
+    "scope": "NativeARM64ClangO2;lengths0..65offsets0..7,seed123,onebyteupdatesversusoneshot. Notindependentknownanswerorlargefiletest."
+  },
+  "findings": [
+    "CompleteXXH64update/digest/canonicalimplementationread;32bytetailmanaged.",
+    "528length/offsetcombinationspassone-shot/streamingforbothclassicfamilies, covering16/32blockboundariesandunalignedinputs.",
+    "XXH3SIMDselectioncompiletimewithNEONlittleendianchecksandaccumulatoralignmentperISA;crossISAunqualified.",
+    "Compiler-specificAVX2performancecommentsnotmeasuredonthisARMhost;nooptimizationadopted."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "xxhash.h4101..7487",
+    "Abseilsubmodule",
+    "fullnativepipeline"
+  ],
+  "native_phash_asan": "Explicitly deferred"
+}

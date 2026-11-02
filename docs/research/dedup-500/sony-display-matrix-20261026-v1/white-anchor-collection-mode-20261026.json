@@ -1,0 +1,28 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test local_final_callback --test local_collection",
+  "passed": 27,
+  "failed": 0,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-collection-tests-20261026.log",
+  "log_sha256": "9a541c7300dec07f285b8df834340cf24e029af95c721508f0c7d6d71e1c97fb",
+  "scope": "Explicit WhiteAnchoredDisplay mode shared by pair/collection dispatch. Controlled indexed retrieval of small and large edited textured BMP pairs, exact pair-vs-indexed strict and fitted evidence parity, candidate thresholds and managed-memory release. Existing twenty local collection regressions retained.",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/local_scan.rs": "96cae9c092796e694a87569c6460b9384979fc03423cfee19c54d02afe78d971",
+    "crates/rrrah-dedup/src/local_collection.rs": "c021c3e965641812e05cb596dcf31d9cca67ade1800cc91a2d8b4f6e11640f25",
+    "crates/rrrah-dedup/tests/local_final_callback.rs": "0be3c3a73b23991b8b8d020027e32b4edf1c64ee975eb04928a13efc42f80981"
+  },
+  "limitations": [
+    "New reflected dispatch is implemented but no new reflected collection runtime fixture in this receipt.",
+    "Real-camera indexed collection recall and broad precision remain unqualified.",
+    "raw_raster_probe automatic anchor switch remains pair-only."
+  ],
+  "all_decode_test_targets_compile_check": {
+    "status": "passed",
+    "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-collection-check-final-20261026.log",
+    "sha256": "5604b73cf3c9bf2c2bbcfe537f5691d892dbd8f577079826687b9a779b8e1ca2"
+  },
+  "initial_compile_failure": {
+    "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-collection-check-20261026.log",
+    "reason": "Two legacy internal test tuples required the new white-anchor signal flag; corrected.",
+    "sha256": "c38db705c77ec713d3316ebada963cbdf56906fc7e57cea49431cd514bd3cf2e"
+  }
+}

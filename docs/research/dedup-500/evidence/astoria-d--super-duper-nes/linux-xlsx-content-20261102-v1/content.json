@@ -1,0 +1,104 @@
+{
+  "path": "doc/super-duper-linux.xlsx",
+  "sha256": "d3297119c2d46d47f6a1bb1fcbc0342657a749aef09c372415819a6d08d798de",
+  "cells": [
+    {
+      "cell": "A3",
+      "value": "http://gadget.ichmy.0t0.jp/intro/beaglebone/console/",
+      "formula": null
+    },
+    {
+      "cell": "A5",
+      "value": "(1) 用意する持ち物",
+      "formula": null
+    },
+    {
+      "cell": "A6",
+      "value": "① USB-TTLシリアルコンバータ(3.3V) ( 筆者例：FTDI社製)",
+      "formula": null
+    },
+    {
+      "cell": "A7",
+      "value": "　　一般のシリアルと違い組み込み系では電圧が3.3Vのものがよく使われます。 3.3V用のシリアル通信機材",
+      "formula": null
+    },
+    {
+      "cell": "A8",
+      "value": "　　を用意してください。 注）よく似た電圧５Ｖ用品と間違わないでください",
+      "formula": null
+    },
+    {
+      "cell": "A9",
+      "value": "(2) 通信接続",
+      "formula": null
+    },
+    {
+      "cell": "A10",
+      "value": "接続先は下の図７で赤枠と矢印で示している６本のピンです。ピン配列も示していますが、矢印の先が",
+      "formula": null
+    },
+    {
+      "cell": "A11",
+      "value": "１番ピンなので取り違えないよう注意ください",
+      "formula": null
+    },
+    {
+      "cell": "A12",
+      "value": "通信条件は、115200bps、データ長８ビット、ストップビット１、パリティ無し フロー制御無しです。",
+      "formula": null
+    },
+    {
+      "cell": "A13",
+      "value": "BeagleBone Black のシリアルポートのピン配列は、たまたま筆者の所有する FTDI社製のものがすぐ刺さる",
+      "formula": null
+    },
+    {
+      "cell": "F13",
+      "value": "図７.シリアルコンソール接続ピンの位置",
+      "formula": null
+    },
+    {
+      "cell": "D16",
+      "value": "　　よう設計されていますが",
+      "formula": null
+    },
+    {
+      "cell": "D17",
+      "value": "　　他製品でも",
+      "formula": null
+    },
+    {
+      "cell": "D19",
+      "value": "　　GND → (#1ピン)GND",
+      "formula": null
+    },
+    {
+      "cell": "D20",
+      "value": "　　TxD → (#4ピン)RxD",
+      "formula": null
+    },
+    {
+      "cell": "D21",
+      "value": "　　RxD → (#5ピン)TxD",
+      "formula": null
+    },
+    {
+      "cell": "D23",
+      "value": "　　と、クロスに繋げば",
+      "formula": null
+    },
+    {
+      "cell": "D24",
+      "value": "　　ＯＫです。",
+      "formula": null
+    }
+  ],
+  "formula_count": 0,
+  "embedded_media": {
+    "path": "xl/media/image1.gif",
+    "sha256": "e0bc6c4c2a145b4cf4b2f3e9ab72e2c711a9f1ada2acc9bc1ba529c5663fde7d",
+    "frames": 1,
+    "visual_assessment": "Single-frame annotated BeagleBone photograph showing serial header pin1/GND and six-pin mapping; board-side Rx/input and Tx/output labels with FTDI wire colors. Historical reference only, no wiring or voltage compatibility qualified."
+  },
+  "scope": "All18 nonempty cell values read and sole embedded single-frame GIF individually viewed. No cell formulas found. Workbook layout and printer settings remain outside manual review; no source instructions or links executed."
+}

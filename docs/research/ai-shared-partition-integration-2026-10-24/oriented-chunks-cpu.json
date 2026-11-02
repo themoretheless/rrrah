@@ -1,0 +1,375 @@
+{
+  "scope": "Fixed dense1236 CPU kernel in supplied release test binaries; no page/display/GPU inference",
+  "timing": "Native Instant interval, excluding process startup; six baseline AA controls interspersed with sixteen alternating AB pairs",
+  "platform": "macOS-26.7.2-arm64-arm-64bit-Mach-O",
+  "repetitions": 8,
+  "complete": true,
+  "executables": {
+    "before": {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-oriented-before-cpu-tests-20261102",
+      "sha256": "1a7502316bc5e59a4311a2cb66128d3256e61534faecb3b9a250074973488bd5"
+    },
+    "after": {
+      "source": "/Users/themoretheless/.codex/tmp/rrrah-oriented-after-cpu-tests-20261102",
+      "sha256": "ff56adc3d04fb8564adf6f977a4a995b86d3c7c186ea33d6876cad6bbf47fa60"
+    }
+  },
+  "calls": [
+    {
+      "variant": "before",
+      "phase": "warmup",
+      "pair": 0,
+      "elapsed_ns": 607884958,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "warmup",
+      "pair": 0,
+      "elapsed_ns": 310044792,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 0,
+      "elapsed_ns": 605231458,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 0,
+      "elapsed_ns": 626760583,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 0,
+      "elapsed_ns": 618311167,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 0,
+      "elapsed_ns": 330207458,
+      "total_work": 11454864
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 1,
+      "elapsed_ns": 324469750,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 1,
+      "elapsed_ns": 573388334,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 2,
+      "elapsed_ns": 588871375,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 2,
+      "elapsed_ns": 340981792,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 1,
+      "elapsed_ns": 617185625,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 1,
+      "elapsed_ns": 608370834,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 3,
+      "elapsed_ns": 329940125,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 3,
+      "elapsed_ns": 600972542,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 4,
+      "elapsed_ns": 612225083,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 4,
+      "elapsed_ns": 327687750,
+      "total_work": 11454864
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 5,
+      "elapsed_ns": 328766875,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 5,
+      "elapsed_ns": 580557292,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 2,
+      "elapsed_ns": 573334958,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 2,
+      "elapsed_ns": 562870750,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 6,
+      "elapsed_ns": 569029917,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 6,
+      "elapsed_ns": 323242583,
+      "total_work": 11454864
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 7,
+      "elapsed_ns": 323838833,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 7,
+      "elapsed_ns": 571310000,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 8,
+      "elapsed_ns": 559255417,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 8,
+      "elapsed_ns": 314444708,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 3,
+      "elapsed_ns": 586745333,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 3,
+      "elapsed_ns": 683523917,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 9,
+      "elapsed_ns": 394326166,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 9,
+      "elapsed_ns": 674035875,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 10,
+      "elapsed_ns": 723984958,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 10,
+      "elapsed_ns": 355491750,
+      "total_work": 11454864
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 11,
+      "elapsed_ns": 340567583,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 11,
+      "elapsed_ns": 629111083,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 4,
+      "elapsed_ns": 649279833,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 4,
+      "elapsed_ns": 641961167,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 12,
+      "elapsed_ns": 641725417,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 12,
+      "elapsed_ns": 362286708,
+      "total_work": 11454864
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 13,
+      "elapsed_ns": 357424625,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 13,
+      "elapsed_ns": 656006459,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 14,
+      "elapsed_ns": 672456792,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 14,
+      "elapsed_ns": 359967459,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 5,
+      "elapsed_ns": 639867833,
+      "total_work": 16028392
+    },
+    {
+      "variant": "before",
+      "phase": "control",
+      "pair": 5,
+      "elapsed_ns": 662950792,
+      "total_work": 16028392
+    },
+    {
+      "variant": "after",
+      "phase": "candidate",
+      "pair": 15,
+      "elapsed_ns": 370786083,
+      "total_work": 11454864
+    },
+    {
+      "variant": "before",
+      "phase": "candidate",
+      "pair": 15,
+      "elapsed_ns": 700801417,
+      "total_work": 16028392
+    }
+  ],
+  "analysis": {
+    "scope": "Local optimized-test-build elapsed CPU-kernel time; no page/display/GPU claim",
+    "estimator": "Mean paired percentage reduction; deterministic percentile bootstrap, 20000 resamples",
+    "workloads": {
+      "dense1236": {
+        "control": {
+          "pairs": 6,
+          "mean_percent_reduction": -3.2130331361117817,
+          "median_percent_reduction": -1.2149873394963535,
+          "bootstrap_mean_95_interval": [
+            -9.136982605266763,
+            0.7372343280921226
+          ],
+          "first_median_ns": 611208541.5,
+          "second_median_ns": 634360875.0
+        },
+        "candidate": {
+          "pairs": 16,
+          "mean_percent_reduction": 44.888437032901486,
+          "median_percent_reduction": 44.43668472911912,
+          "bootstrap_mean_95_interval": [
+            43.84664522253958,
+            46.046776115070024
+          ],
+          "first_median_ns": 615268125.0,
+          "second_median_ns": 335387520.5
+        }
+      }
+    }
+  },
+  "supports_local_speedup": true,
+  "gate": "Candidate interval strictly positive; AA interval contains zero and its absolute envelope is below candidate lower bound",
+  "log_sha256": "9313189e0b99390515271ce1c621e54096c702729ba55aadba3c9b0348098fe2",
+  "hardware_cpu": "Apple M4 Max"
+}

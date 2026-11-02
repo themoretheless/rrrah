@@ -1,0 +1,261 @@
+{
+  "repository": "botnick/telegram-media-downloader",
+  "commit": "5162cff1474ac2f3d0fb109bc1b6156d214cd33b",
+  "whole_file_reads": [
+    {
+      "path": "src/core/ai/dbscan.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/03-dbscan.js",
+      "sha256": "dcdfec7f6c995cdedae28c501cacb5a2884a93968f0b889af4ce833b739ff168"
+    },
+    {
+      "path": "src/core/gocore/hash.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/07-hash.js",
+      "sha256": "999ee048aab1e8a7515f50401aea6d45382f0495d698aaa541af6e9a42c7f2cf"
+    },
+    {
+      "path": "src/core/cluster/dedup.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/06-dedup.js",
+      "sha256": "987243b8c20a0495661816c8b0a9afbf0ef1f627dfff4cf8f821c9c9169954a9"
+    },
+    {
+      "path": "tests/contract/dedup.contract.test.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/08-dedup.contract.test.js",
+      "sha256": "62d640edf159823fd59a5196ced7055d4b82de27ced60009cd1ad2be03e0d125"
+    },
+    {
+      "path": "src/core/dedup.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/02-dedup.js",
+      "sha256": "3d9cc9c8a340e224a3c457e4f60d314bac9eee9bf51c3f3e7e750434f1c97ae9"
+    },
+    {
+      "path": "src/core/checksum.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/checksum.js",
+      "sha256": "52925e7a9cc19930faec6754273dde94be253c39e3204033a706fb5aa9c0dd24"
+    },
+    {
+      "path": "src/core/cluster/peers.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/cluster/peers.js",
+      "sha256": "d14135d0cd56fc536ac396c5f686a599e3657af20be572f0e24ac1eadc880686"
+    },
+    {
+      "path": "tests/ai/dbscan.test.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/tests/ai/dbscan.test.js",
+      "sha256": "cd51b5e676816b078b4707f53381cfec6123940f18eba3b43261d48d0cf04540"
+    },
+    {
+      "path": "core-service/go.mod",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/core-service/go.mod",
+      "sha256": "0b45704765c77d5c38ba5b3ff5e6c3be0d028f5728229eeece67f36f7da780e1"
+    },
+    {
+      "path": "core-service/internal/dbscan/dbscan.go",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/core-service/internal/dbscan/dbscan.go",
+      "sha256": "42e0049142922df57cd55e20235fe6dbc17a3e876bf77ede673151936aae579e"
+    },
+    {
+      "path": "core-service/internal/dbscan/dbscan_test.go",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/core-service/internal/dbscan/dbscan_test.go",
+      "sha256": "42c3286523a8c28a0a8a04073fb40cf0740cdaee4c9f02363a76528b9db6830d"
+    },
+    {
+      "path": "core-service/internal/dbscan/handler.go",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/core-service/internal/dbscan/handler.go",
+      "sha256": "576563ccc6fc1bdae24383d9189715cdb47551a82911e456f79373f53527a10a"
+    },
+    {
+      "path": "src/core/ai/faces.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/remaining-pinned/src/core/ai/faces.js",
+      "sha256": "8bf7172364f106bea36e78ed50b41b09a50ef0e680165d1811b57168a8b6a7e0"
+    },
+    {
+      "path": "LICENSE",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/01-LICENSE",
+      "sha256": "a65032105e213dfbf500240c968a1eb2fe1b84faa82465c962e7772dab334d1d"
+    },
+    {
+      "path": "src/core/ai/scan-runner.js",
+      "local": "docs/research/dedup-500/evidence/botnick--telegram-media-downloader/04-scan-runner.js",
+      "sha256": "cb641a8010cccc40852a77f6940d5f79243bf45ba23024e966df87a9fd8ff89a"
+    }
+  ],
+  "original_tests_run": 13,
+  "authored_controls": 25,
+  "control_source": "docs/research/dedup-500/telegram198-controls-20261024/dbscan-control.mjs",
+  "results": "docs/research/dedup-500/telegram198-controls-20261024/dbscan-control-results.json",
+  "scope": "Actual unchanged complete ESM module,Node numeric synthetic vectors only. No real faces,download,Telegram,DB/model.",
+  "findings": [
+    "Documented nonstandard noise-to-border behavior reproduces insertion-order membership difference.",
+    "Chain endpoints1.5 apart share cluster at eps0.8,minPts2;density connectivity is not pairwise duplicate equality.",
+    "Offline peer fixture passes lookup despite online-only docstring;actual peer-status domain/callers unqualified.",
+    "clusterRefPath coerces remoteId to Number;above2^53 rounds,actual id domain pending.",
+    "Hash wrapper streams whole file only for outside-core path error;unavailable core errors propagate. No actual core/hash runtime tested.",
+    "Complete contract test file read,9 it bodies identified;not executed and snapshot harness assertions not yet reviewed.",
+    "Actual owned hardlink and symlink aliases of same inode produce distinct fileKey values;implementation uses normalized path rather than inode/realpath identity. Downstream deletion/reclaim behavior not executed.",
+    "Catch-up scan selects only NULL hashes and stored positive sizes;no in-function source metadata revalidation before reuse/update. Other invalidation code still unreviewed,so no global stale-hash claim.",
+    "Already-aborted scan still emits final done progress with processed total;static finding not runtime tested.",
+    "Already-aborted original findDuplicates reproduced with DB adapters:zero page/hash calls yet final done processed3/total3 and scanned3. UI/caller interpretation still unreviewed.",
+    "Peer registry explicitly implements markOffline with status offline and passes status through toPublic;prior offline fixture uses real domain value. Lookup still only excludes revoked;DB lookup SQL/caller may add filtering and remains unreviewed.",
+    "Checksum helper has explicit algorithm/version/hex validator and dynamic GoCore import;no inode/mtime/source generation contract in helper itself.",
+    "DB findClusterByHash SQL applies only hash/optional size and LIMIT5,no peer status filter. Combined with lookup only rejecting revoked,offline hit is not excluded downstream by SQL.",
+    "Downloader callsite prefers first nonoffline hit but explicitly falls back hits[0];then attempts local unlink and records clusterref. Offline fallback is explicit implementation behavior despite online-only lookup docstring. No real download/unlink/network performed.",
+    "DB LIMIT5 before peer-status filtering can hide other eligible matches beyond first5;SQL/callsite static finding only,not runtime scenario.",
+    "Exact SQL template executed on actual in-memory SQLite six-row fixture:5 revoked-peer catalog rows occupy LIMIT5,existing online sixth row not returned. Combined original lookup then filters all5 out. No ORDER BY guarantees;fixture demonstrates possible missed eligible copy,not universal DB order.",
+    "Original hash wrapper with client outside-error adapter uses actual fs stream/crypto:empty and1048577-byte binary match reference SHA256;missing path ENOENT and unavailable-core error propagate. Actual GoCore service remains untested.",
+    "Original DBSCAN test file explicitly prioritizes exact parity with old nonstandard noise behavior.2 pure original tests pass:empty input and2000-point queue/time-bound case. Does not prove improvement or standard DBSCAN semantics.",
+    "Expanded original test execution to13/16 unique DBSCAN cases:5 labels+5 cluster/byte-centroid comparisons,dimension mismatch,queue bound,empty input pass using actual original wrappers.3 off-thread tests require real GoCore and remain unrun.",
+    "Pinned Go source explicitly preserves dimension-order float64 arithmetic and explicit product conversions to prevent FMA rounding drift;first190lines read. Potential useful numerical contract,not measured/adopted optimization.",
+    "Complete Go DBSCAN read:parallel query chunks concatenated in ascending row order,labels consumed sequentially;prefetch cache removes entries when consumed. Deterministic worker-independent result is design intent;actual Go execution remains unqualified.",
+    "Cancellation checked before uncached batches and every64 consumed queries;engine.compute and inner distance loops lack context checks. Cancellation latency depends on batch workload;not measured,not asserted hang.",
+    "Labels validates n/dim limits and short data length,normalizes invalid minPts;empty input returns before context check. Cluster centroid uses explicit float64 products/additions and float32 rounding per accumulation for JS parity.",
+    "Complete Go test review:12 synthetic label cases compared with sequential reference across1/2/8/16 workers;centroid bit parity,NaN/fractional minPts,dimension boundaries,progress,cancellation and HTTP queue/stream/client-disconnect tests present. All remain unexecuted;test presence is not runtime proof.",
+    "Complete HTTP handler read:dimensions/product/body-length checked before decoding;exact binary little-endian payload,streamed progress/result and bounded compute waiting queue. Real handler tests not executed.",
+    "Request body fully allocated/read before acquiring compute slot;maxWaiting4 bounds compute waiters,not simultaneously reading request bodies. Peak concurrent memory not measured;per-request cap1GiB input plus optional weights.",
+    "parseParams accepts ParseFloat eps special values while requiring finite minPts;matches numeric engine accepting NaN/Inf epsilon semantics. Not automatically an invalid-input defect.",
+    "Complete faces.js reviewed;default quality minsize60 differs from doc80,60 accepted/59rejected in original function.",
+    "Malformed Infinity dimensions/NaN score pass qualityFilter;actual sidecar contract not reviewed,so no claim real detector emits them.",
+    "Face recognition groups identities across photos,not file/image duplicate equality. Source license comments about external model do not independently establish model-license clearance.",
+    "Parser-to-quality control qualifies prior boundary:NaN/null/nonfinite score maps0 and is rejected at defaultthreshold,so direct-filter bypass not ordinary parsed path.",
+    "Valid synthetic JSON finite1e300 embedding overflows Float32 toInfinity,not rejected by parser+quality filter. Actual sidecar generation of such payload not established;numeric input-contract gap only.",
+    "Repository MIT license wholly read;external models/dependencies not cleared by repository license. No production code copied.",
+    "Original scan envelope single-flight passes gated control;cooperative aborted worker returning normally leaves error null and actual1/3 progress,with no cancelled property. Actual face worker cancellation handling remains to read;not conflated with dedup.findDuplicates forced-total finding.",
+    "Original _persistDetection controls:empty result stamps row without deleting existing faces;nonempty replaces faces. Requires preexisting faces on requeued row for stale-face effect;reset/schema lifecycle not yet reviewed. DB recording adapters only.",
+    "Complete scan-runner read:actual worker returns on abort after detection,beforePhaseB,duringload,and catches AbortError fromclustering without settingstate.error. This confirms abort can finish with nullerror,actual progress preserved. UI interpretation still unreviewed.",
+    "Replacement checks abort before starting _replacePeople;helper itself has no signal parameter and yields between committed chunks. Cancellation after start does not interrupt replacement,which may intentionally finish generation;not inherently incorrect without explicit cancellation contract.",
+    "Generation replacement consists insertion transaction,chunkedfaceupdates,final oldgeneration cleanup transaction. Midway DBfailure can leave mixedgeneration state;no failure injection/recovery qualification yet.",
+    "Embedding loader allocates from initialCOUNT and firstblobdimension,skips mismatches,and checks abort betweenpages. Malformedblob/nonfinitevalues not validatedhere;actualDBwritecontract stillunreviewed.",
+    "Generation replacement failure reproduced using real SQLite transactions:third transaction fails after newperson insert and first face assignment commit;old/newpeople remain,face assignments[2,1]. Healthy control ends onlynewperson/assignments[2,2]. Chunk reduced1 to expose boundary;no production DB altered. Recovery/retry unqualified."
+  ],
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "remaining": "Other tracked source/tests/media and runtime qualification remain.",
+  "decision": "numeric-reference-only-no-adoption",
+  "previous_audit": "docs/research/dedup-500/telegram198-source-controls-v19-20261024.json",
+  "cluster_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/cluster-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/cluster-control-results.json",
+    "cases": 3
+  },
+  "filekey_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/filekey-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/filekey-control-results.json",
+    "cases": 2
+  },
+  "abort_control": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/abort-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/abort-control-results.json",
+    "cases": 1
+  },
+  "partial_source_reads": [
+    {
+      "path": "src/core/db.js",
+      "lines_read": [
+        3880,
+        3960
+      ],
+      "sha256": "5af9027c08e2f5c3a353a18903e9015b15476610af5231649c871cc9fabdbdf1",
+      "whole_file_read": false
+    },
+    {
+      "path": "src/core/downloader.js",
+      "lines_read": [
+        1011,
+        1052
+      ],
+      "sha256": "0807ad502bf3603713a6cfe15a163c46e68c657bf7fb54f396506b71eecb7944",
+      "whole_file_read": false
+    },
+    {
+      "path": "src/core/ai/faces-client.js",
+      "lines_read": [
+        1000,
+        1080
+      ],
+      "whole_file_read": false,
+      "sha256": "aae52d5b8ace230aa715af7ee6a0010ebc25955f41816f9733290e2da496ad91"
+    }
+  ],
+  "catalog_limit_control": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/catalog-limit-control.py",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/catalog-limit-results.json",
+    "cases": 1
+  },
+  "hash_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/hash-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/hash-control-results.json",
+    "cases": 4
+  },
+  "original_tests_passed": 13,
+  "original_pure_tests": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/original-inprocess-tests.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/original-inprocess-test-results.json",
+    "scope": "13 unique original test callbacks,including prior2;unchanged actual dbscan module and extracted in-process faces wrappers. VM registration/expect adapters;3 GoCore-dependent cases remain unrun. No double count."
+  },
+  "go_test_acquisition": {
+    "path": "core-service/internal/dbscan/dbscan_test.go",
+    "sha256": "42c3286523a8c28a0a8a04073fb40cf0740cdaee4c9f02363a76528b9db6830d",
+    "whole_file_read": true,
+    "scope": "All857lines read in bounded portions;not executed."
+  },
+  "go_runtime_probe": {
+    "command": "command -v go",
+    "exit_code": 1,
+    "go_tests_run": 0,
+    "scope": "Go not found on current shell PATH;not proof no binary exists anywhere. No installation performed.",
+    "standard_paths": {
+      "/opt/homebrew/bin/go": false,
+      "/usr/local/go/bin/go": false,
+      "/usr/local/bin/go": false
+    }
+  },
+  "go_test_inventory": {
+    "top_level_test_functions": [
+      "TestRejectBound",
+      "TestPairKernelsMatchFullDistance",
+      "TestNaNRowsAreNeverNeighbours",
+      "TestLabelsMatchReference",
+      "TestClusterMatchesReference",
+      "TestClusterFirstAppearanceOrder",
+      "TestEdgeCases",
+      "TestProgress",
+      "TestCancel",
+      "TestHandlerRejectsBadRequests",
+      "TestHandlerStreamsResult",
+      "TestHandlerQueueFull",
+      "TestHandlerSerialises",
+      "TestHandlerOutlivesReadTimeout",
+      "TestHandlerStopsWhenClientLeaves"
+    ],
+    "count": 15,
+    "label_cases": 12,
+    "benchmark_functions": [
+      "BenchmarkLabels5k512"
+    ],
+    "tests_run": 0
+  },
+  "quality_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/quality-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/quality-control-results.json",
+    "cases": 3
+  },
+  "parser_quality_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/parse-quality-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/parse-quality-results.json",
+    "cases": 2
+  },
+  "scan_envelope_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/scan-envelope-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/scan-envelope-results.json",
+    "cases": 2
+  },
+  "persistence_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/persist-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/persist-control-results.json",
+    "cases": 2
+  },
+  "replacement_controls": {
+    "source": "docs/research/dedup-500/telegram198-controls-20261024/replace-failure-control.mjs",
+    "results": "docs/research/dedup-500/telegram198-controls-20261024/replace-failure-results.json",
+    "cases": 2,
+    "scope": "Actual in-memory SQLite/minimal schema,original helper,chunk1 and transaction failure adapters;not full app."
+  }
+}

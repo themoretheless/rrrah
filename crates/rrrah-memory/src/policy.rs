@@ -212,6 +212,32 @@ impl<K: Clone + Eq + Hash, V> WeightedLru<K, V> {
         }
         self.drain_expired_at(Instant::now())
     }
+    /// Plans expiry at a fixed cutoff without transferring values. The key plan
+    /// uses the same storage as `prune_expired`; callers may release values in
+    /// bounded batches outside their mutex. Plans may be abandoned or overlap.
+    /// Recheck each key with `remove_if_expired_at`: replacement and pinning may
+    /// have occurred since planning. Order is unspecified.
+    pub fn expired_keys_for_prune(&mut self, cutoff: Instant) -> Vec<K> {
+        if self.deadline_entries == 0 {
+            return Vec::new();
+        }
+        let keys = self.expired_keys(cutoff);
+        if !keys.is_empty() {
+            // Until every planned entry is removed, a cancelled/overlapping
+            // pruner must still be able to discover the remaining entries.
+            self.next_expiry = Some(self.next_expiry.map_or(cutoff, |next| next.min(cutoff)));
+        }
+        keys
+    }
+    /// Transfers one still-expired, unprotected value at the plan's cutoff.
+    /// Fresh replacements and entries pinned after planning are left untouched.
+    pub fn remove_if_expired_at(&mut self, key: &K, cutoff: Instant) -> Option<V> {
+        if !self.protected.contains(key) && self.entries.get(key).is_some_and(|entry| entry.expired(cutoff)) {
+            self.remove(key)
+        } else {
+            None
+        }
+    }
     /// Drops expired unprotected entries; existing consumer-owned buffers survive.
     pub fn prune_expired(&mut self) -> usize {
         if self.deadline_entries == 0 {
@@ -1207,5 +1233,41 @@ mod limit_tests {
         assert!(victims.is_empty());
         assert_eq!(cache.get(&"new"), Some(&3));
         assert_eq!(cache.resident_weight(), 4);
+    }
+}
+
+#[cfg(test)]
+mod expiry_plan_tests {
+    use super::*;
+    #[test]
+    fn interrupted_plans_recheck_replacement_pins_and_cutoff() {
+        let start = Instant::now();
+        let cutoff = start + Duration::from_secs(2);
+        let mut cache = WeightedLru::with_limits(CacheLimits {
+            max_bytes: 16,
+            max_entries: None,
+            ttl: Some(Duration::from_secs(1)),
+        });
+        for key in 0..4 {
+            assert!(cache.insert_at(key, key, 1, start, true));
+        }
+        let keys = cache.expired_keys_for_prune(cutoff);
+        assert_eq!(keys.len(), 4);
+        // Abandon the first plan. A second plan must find the same entries.
+        assert_eq!(cache.expired_keys_for_prune(cutoff).len(), 4);
+        assert!(cache.pin(&1));
+        assert!(cache.insert_at(2, 22, 1, cutoff, true));
+        assert_eq!(cache.remove_if_expired_at(&1, cutoff), None);
+        assert_eq!(cache.remove_if_expired_at(&2, cutoff), None);
+        assert_eq!(cache.remove_if_expired_at(&0, cutoff), Some(0));
+        assert_eq!(cache.remove_if_expired_at(&0, cutoff), None);
+        assert_eq!(cache.remove_if_expired_at(&3, cutoff), Some(3));
+        assert_eq!(cache.len(), 2);
+        cache.unpin(&1);
+        assert_eq!(cache.expired_keys_for_prune(cutoff), vec![1]);
+        assert_eq!(cache.remove_if_expired_at(&1, cutoff), Some(1));
+        assert_eq!(cache.get_at(&2, cutoff), Some(&22));
+        assert_eq!(cache.prune_expired_at(cutoff + Duration::from_secs(1)), 1);
+        assert_eq!(cache.resident_weight(), 0);
     }
 }

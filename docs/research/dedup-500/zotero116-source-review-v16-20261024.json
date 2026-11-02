@@ -1,0 +1,75 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v15-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/collectionWatcher.mjs",
+      "local": "29-collectionWatcher.mjs",
+      "sha256": "ee0ed746b2efe447dfadf34a83b76c872b3aa75d8a66de25e7b10d1b9a764a55",
+      "git_blob": "6d71c6a621d54a71bccf1f6a19fa6599ab227606",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/syncCoordinator.mjs",
+      "local": "30-syncCoordinator.mjs",
+      "sha256": "9878a4e0a4ea31b8a17184c0beff3e9eaacdc4eda66d92534f29966b385579d4",
+      "git_blob": "165a938c03ad0c078f7144ed791858165f54018c",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 30,
+  "whole_repo_complete": false,
+  "partial_files_read": [
+    {
+      "path": "content/preferences.js",
+      "local": "04-preferences.js",
+      "read_ranges": [
+        [
+          1250,
+          1345
+        ]
+      ],
+      "activity": "Additional scope/library/cache identifier search; not whole source read"
+    }
+  ],
+  "symbol_inventory": {
+    "artifact": "docs/research/dedup-500/zotero116-canonical-callers-inventory-20261024.json",
+    "content_mjs_modules": 27,
+    "scope": "All pinned content .mjs blobs fetched and Gitblob verified; exact exported API name symbol search only. Fetching alone not counted as whole read."
+  },
+  "new_tests_run": 0,
+  "original_tests_total_distinct": 356,
+  "authored_controls_total_distinct": 42,
+  "findings": [
+    {
+      "finding": "collectionWatcher _processBatch invalidates canonical path cache before collection modify/delete/trash dispatch, conditional on resolving collection key or delete/trash extraData key. This is an actual invalidation path in source, not a live event qualification.",
+      "evidence": "whole source read"
+    },
+    {
+      "finding": "Across all27 pinned content .mjs modules, collectionKeyToRelativePathCached symbol occurs only within its own canonicalPath module docs/definition, no external production caller references. Watcher references invalidateCanonicalPathCache, while mapping uses uncached disk variant. Prior isolated cache context results are API-level limitations, not established ordinary plugin workflow bugs.",
+      "evidence": "complete pinned module symbol inventory; not arbitrary dynamic-call proof"
+    },
+    {
+      "finding": "Coordinator observes mode preference only, starts watchers in mode2/3, and runs baseline before observer registration. Mode1 does not start collectionWatcher. Root/scope settings flow still incompletely read.",
+      "evidence": "whole source read"
+    },
+    {
+      "finding": "Preferences picker fragment sets sync-root key/library ID/setupCompleted without explicit cache reset in this local function. Since no production cached-path caller found, this fragment is not evidence of an end-user stale-path failure.",
+      "evidence": "partial source plus symbol inventory"
+    },
+    {
+      "finding": "Watcher coalesces events by(event,type) and deduplicates IDs per batch, so mixed repeated event ordering differs from raw event sequence; no lifecycle/order race test executed here.",
+      "evidence": "whole source read"
+    }
+  ],
+  "remaining": [
+    "70blobs not whole-read",
+    "Original watcher/coordinator suites and full plugin not qualified",
+    "Review baseline/main index/settings remainder and remaining source/tests",
+    "Root/dependency license/release checks incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

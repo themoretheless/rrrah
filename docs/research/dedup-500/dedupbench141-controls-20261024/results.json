@@ -1,0 +1,16 @@
+{
+  "controls_passed": 5,
+  "scope": "Original full module imported without CLI main;actual owned filesystem inputs;UTF8 macOS Python text IO;no C++ chunker or benchmark dataset execution",
+  "findings": [
+    "ASCII identical scores1.",
+    "Byte-identical UTF8 unicode files score0.5 because character numerator/byte denominator.",
+    "CRLF versus LF normalized in text IO;score2/3,not byte-position equality.",
+    "Two empty files raise ZeroDivisionError.",
+    "Identical nonUTF8 byte ff raises UnicodeDecodeError."
+  ],
+  "scores": {
+    "ascii": 1.0,
+    "unicode": 0.5,
+    "newline": 0.6666666666666666
+  }
+}

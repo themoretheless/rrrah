@@ -1,0 +1,44 @@
+{
+  "binary_sha256": "ad90f54bc746a6b541f492c521f1795ce25d657cc1a6fc5c54755eab9a2da569",
+  "platform": "current macOS filesystem",
+  "runs": [
+    {
+      "case": "literal_option_folder_hidden_empty_newline",
+      "args": [
+        "--",
+        "--help"
+      ],
+      "exit_code": 0,
+      "stdout": "Group 1: 2 files, 0 bytes each\n  \"--help/.hidden-empty\"\n  \"--help/empty\"\nGroup 2: 2 files, 13 bytes each\n  \"--help/line\\nbreak\"\n  \"--help/ordinary-copy\"\n",
+      "stderr": "Scan complete: 4 files observed, 2 duplicate groups, 208 bytes read, 0 diagnostics\n"
+    },
+    {
+      "case": "empty_directory",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "Scan complete: 0 files observed, 0 duplicate groups, 0 bytes read, 0 diagnostics\n"
+    }
+  ],
+  "unavailable": [
+    {
+      "case": "non_utf8_filename",
+      "stage": "fixture creation",
+      "errno": 92,
+      "error": "Illegal byte sequence",
+      "scope": "Filesystem rejected invalid byte name before scanner ran; no qualification."
+    }
+  ],
+  "input_hashes_before": {
+    "b'empty'": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "b'ordinary-copy'": "3a1af33951ee8d2c1ba8c7613149a79c6ce847636b67bc9b6e38cc60778a3aaa",
+    "b'line\\nbreak'": "3a1af33951ee8d2c1ba8c7613149a79c6ce847636b67bc9b6e38cc60778a3aaa",
+    "b'.hidden-empty'": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "input_hashes_after": {
+    "b'empty'": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "b'ordinary-copy'": "3a1af33951ee8d2c1ba8c7613149a79c6ce847636b67bc9b6e38cc60778a3aaa",
+    "b'line\\nbreak'": "3a1af33951ee8d2c1ba8c7613149a79c6ce847636b67bc9b6e38cc60778a3aaa",
+    "b'.hidden-empty'": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Real CLI option delimiter, hidden/empty files, newline name and empty directory. Non-UTF8 creation failure explicitly excluded; not full platform/race/RAW qualification."
+}

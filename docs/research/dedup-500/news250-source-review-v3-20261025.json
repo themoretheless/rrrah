@@ -1,0 +1,179 @@
+{
+  "index": 250,
+  "repository": "frankzch/ai-news-brief",
+  "commit": "f5fc9c95df20f15e956e6ce906e96da3eaca6c27",
+  "tracked_blob_count": 33,
+  "whole_file_reads": [
+    {
+      "path": "src/lsh_dedup.py",
+      "local": "docs/research/dedup-500/evidence/frankzch--ai-news-brief/02-lsh_dedup.py",
+      "sha256": "b94cf9a21c46a526ace4d6f3ff344315df5aace7939e4ccdfde1cb275b939dfc",
+      "git_blob_sha1": "9a849ff572182b4c9276889e2692324b096a4f57"
+    },
+    {
+      "path": "src/ai_engine.py",
+      "local": "docs/research/dedup-500/evidence/frankzch--ai-news-brief/03-ai_engine.py",
+      "sha256": "ab2c6043461fb73adc999cb1a616796702960354f7cba34eb10a4189cbdab3bd",
+      "git_blob_sha1": "4172913e8bafeaf1bfba8055f96ccfab54354bfb"
+    },
+    {
+      "path": "src/embedding_filter.py",
+      "local": "docs/research/dedup-500/evidence/frankzch--ai-news-brief/remaining-pinned/src/embedding_filter.py",
+      "sha256": "9c5188910fd58aeb5a1cc06de35ee0aa5c2c931a42d9bcfbd12d27f2e9b29ca4",
+      "git_blob_sha1": "32b4797d67a9f211031c119869b6edc24e7cc7f1"
+    },
+    {
+      "path": "src/content_processor.py",
+      "local": "docs/research/dedup-500/evidence/frankzch--ai-news-brief/remaining-pinned/src/content_processor.py",
+      "sha256": "7fc1dc35dbb0e14f0faaf88dfd5ca6df27f0407f9209925e21ca88ef90a2d683",
+      "git_blob_sha1": "d963cfea10a79fa5bfa8bcb88ace679b2988012b"
+    },
+    {
+      "path": "src/vector_store.py",
+      "local": "docs/research/dedup-500/evidence/frankzch--ai-news-brief/remaining-pinned/src/vector_store.py",
+      "sha256": "ca7ba54feaa123dc6ab37def85c60cbbcb4020042c425d30214b14fd8c0b3005",
+      "git_blob_sha1": "3886c8aba1c27ba9c9383b3facd161da63f3f543"
+    }
+  ],
+  "whole_file_read_count": 5,
+  "remaining": [
+    {
+      "path": ".env.example",
+      "bytes": 813
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 238
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1065
+    },
+    {
+      "path": "README.md",
+      "bytes": 11717
+    },
+    {
+      "path": "README.zh-CN.md",
+      "bytes": 11483
+    },
+    {
+      "path": "admin_rss.py",
+      "bytes": 3499
+    },
+    {
+      "path": "config.yaml",
+      "bytes": 2695
+    },
+    {
+      "path": "main.py",
+      "bytes": 4568
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 732
+    },
+    {
+      "path": "src/browser_utils.py",
+      "bytes": 19769
+    },
+    {
+      "path": "src/compliance_filter.py",
+      "bytes": 6131
+    },
+    {
+      "path": "src/config_loader.py",
+      "bytes": 3942
+    },
+    {
+      "path": "src/fetch_stats.py",
+      "bytes": 5317
+    },
+    {
+      "path": "src/github_fetcher.py",
+      "bytes": 15525
+    },
+    {
+      "path": "src/hackernews_fetcher.py",
+      "bytes": 5715
+    },
+    {
+      "path": "src/log_config.py",
+      "bytes": 2716
+    },
+    {
+      "path": "src/pipeline_runner.py",
+      "bytes": 43461
+    },
+    {
+      "path": "src/prompts/discussion.txt",
+      "bytes": 5786
+    },
+    {
+      "path": "src/prompts/kol.txt",
+      "bytes": 4247
+    },
+    {
+      "path": "src/prompts/news.txt",
+      "bytes": 3928
+    },
+    {
+      "path": "src/prompts/opensource.txt",
+      "bytes": 3525
+    },
+    {
+      "path": "src/reddit_fetcher.py",
+      "bytes": 20873
+    },
+    {
+      "path": "src/rss_fetcher.py",
+      "bytes": 22053
+    },
+    {
+      "path": "src/scheduler.py",
+      "bytes": 5107
+    },
+    {
+      "path": "src/twitter_fetcher.py",
+      "bytes": 42738
+    },
+    {
+      "path": "src/user_db.py",
+      "bytes": 59655
+    },
+    {
+      "path": "src/youtube_fetcher.py",
+      "bytes": 10724
+    },
+    {
+      "path": "tools/export_cookies.py",
+      "bytes": 3034
+    }
+  ],
+  "full_repository_read": false,
+  "original_tests_run": false,
+  "findings": [
+    {
+      "path": "src/lsh_dedup.py",
+      "confirmed": "Whole-source: compute_simhash converts64bitunsigned to PostgreSQL signed, hamming_distance bin(hash1^hash2).count1 does not mask negative Python integer. Actual original-function controls confirm opposite-sign hashes can reportdistance1where true64; similarity(-1,1)true threshold3 while expected63. Zero sentinel always excluded, including potentially legitimatezero hash; emptytext0. No LSH index here, only pair comparator.",
+      "controls": "docs/research/dedup-500/news250-signed-hamming-controls-20261025.json"
+    },
+    {
+      "path": "src/ai_engine.py",
+      "confirmed": "Whole-source AIwrapper, no client instantiated. Summarizer truncates chars,2attempts; JSON parse inside try but data/list/type-specific .get/.strip outside try can raise for valid wrong-shaped JSON. Retry exhausted with last_data still returns incomplete fields, no typed incomplete status. Tags slicing no list/type assurance, score/block types unchecked. Persona/RSS calls no explicit timeout here, JSON shape weak; existing_sources arg unused. Prompts are source data, no instructions followed/model calls. No file/image search/adoption."
+    },
+    {
+      "paths": [
+        "src/embedding_filter.py",
+        "src/content_processor.py"
+      ],
+      "confirmed": "Whole-source2files: EmbeddingFilter is interest relevance, not article-to-article dedup. Lazily downloads unpinned MiniLM snapshot(local_files_onlyFalse), global model init no lock; category cache keyed onlycache_key not category/model content and no sizebound/automatic invalidation, stale interest embeddings possible. Missingcategories returnsall, missingtags included by policy, errors propagate here; normalized allpairs matrix O(tags*categories), no finite/dimension/threshold guards. Content fetch returns text orNone for extraction-empty/network failures with no typed reason/coverage. Domain special-route matches substring anywhereURL, retries no total deadline/response-size budget. HTTPError response truthiness uses ife.response, Requests4xx/5xxfalse means status0 and expected403/429/5xxbranches may not execute (actual Requests control pending). All network/model/WAF/browser code read only, not invoked; no credentials/config loads/adoption."
+    },
+    {
+      "path": "src/vector_store.py",
+      "confirmed": "Whole493lines read. DB failure/embedding failure/empty index collapse[]; actual original methods fakeconnection control returns[] and duplicateNone, no incomplete/error result. Semantics cosine summary+tags not content identity, recent24h lower threshold, top1 candidate; embedding model/version not stored here. Existing article returnsTrue without updating changed document/model; ONCONFLICTno-op concurrency not compareinsert atomic dedup. Pool can reuse global UserDatabase pool regardless requested db_url, lazyinit no lock, no explicit pool lifecycle. Read query errors return conn without rollback; percategory loop catchesSQLerror without rollback/savepoint so subsequentqueries may remain aborted. Embedding generation often holdsDBconnection. Negative tag filter errors keepall while interest search errors empty, differing fail policies without typedcoverage. Sync deletes all absent inputIDs, authoritative completeness assumed. No real DB/model/network operations.",
+      "controls": "docs/research/dedup-500/news250-vector-error-controls-20261025.json"
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/news250-source-review-v2-20261025.json"
+}

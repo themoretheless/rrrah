@@ -1,0 +1,190 @@
+   Compiling hayro-interpret v0.7.0 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro-interpret)
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+   Compiling hayro v0.7.1 (/Users/themoretheless/Documents/Sources/rrrah/vendor/hayro)
+   Compiling rrrah-vector v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-vector)
+   Compiling rrrah-animation v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-animation)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10m 42s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_dedup-76b78716523b6197)
+
+running 1 test
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=0 elapsed_ns=318125 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=0 elapsed_ns=213875 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=0 elapsed_ns=159416 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=0 elapsed_ns=170542 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=1 elapsed_ns=158000 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=1 elapsed_ns=169417 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=1 elapsed_ns=180583 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=1 elapsed_ns=195333 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=2 elapsed_ns=172958 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=2 elapsed_ns=159292 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=2 elapsed_ns=157166 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=2 elapsed_ns=170500 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=3 elapsed_ns=157583 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=3 elapsed_ns=169917 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=3 elapsed_ns=169625 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=3 elapsed_ns=156667 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=4 elapsed_ns=169917 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=4 elapsed_ns=157042 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=4 elapsed_ns=156708 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=4 elapsed_ns=169708 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=5 elapsed_ns=157625 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=5 elapsed_ns=169958 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=5 elapsed_ns=169750 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=5 elapsed_ns=157667 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=6 elapsed_ns=169500 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=6 elapsed_ns=158375 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=6 elapsed_ns=167834 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=6 elapsed_ns=170458 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=7 elapsed_ns=158041 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=7 elapsed_ns=169750 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=true round=7 elapsed_ns=169792 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense512 baseline=false round=7 elapsed_ns=157792 peak=4096 axis=101
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=0 elapsed_ns=4043292 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=0 elapsed_ns=3244875 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=0 elapsed_ns=3093791 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=0 elapsed_ns=3733250 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=1 elapsed_ns=3195000 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=1 elapsed_ns=3517875 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=1 elapsed_ns=3568458 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=1 elapsed_ns=3169458 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=2 elapsed_ns=3671375 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=2 elapsed_ns=3402416 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=2 elapsed_ns=3089666 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=2 elapsed_ns=3536459 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=3 elapsed_ns=3267541 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=3 elapsed_ns=3739458 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=3 elapsed_ns=3415167 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=3 elapsed_ns=3322125 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=4 elapsed_ns=3429667 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=4 elapsed_ns=3074834 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=4 elapsed_ns=3253833 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=4 elapsed_ns=3297125 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=5 elapsed_ns=3142708 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=5 elapsed_ns=3549083 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=5 elapsed_ns=3457791 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=5 elapsed_ns=3183792 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=6 elapsed_ns=3728916 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=6 elapsed_ns=3046625 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=6 elapsed_ns=3024042 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=6 elapsed_ns=3688000 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=7 elapsed_ns=3129041 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=7 elapsed_ns=3559583 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=true round=7 elapsed_ns=3527417 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense8192 baseline=false round=7 elapsed_ns=3401542 peak=65536 axis=81
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=0 elapsed_ns=19934541 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=0 elapsed_ns=17863375 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=0 elapsed_ns=14453375 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=0 elapsed_ns=19887875 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=1 elapsed_ns=16332416 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=1 elapsed_ns=18510833 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=1 elapsed_ns=19768958 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=1 elapsed_ns=16752125 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=2 elapsed_ns=19547584 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=2 elapsed_ns=16570375 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=2 elapsed_ns=15996625 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=2 elapsed_ns=21604792 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=3 elapsed_ns=17537416 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=3 elapsed_ns=19078042 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=3 elapsed_ns=19755750 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=3 elapsed_ns=16068708 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=4 elapsed_ns=19777958 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=4 elapsed_ns=17525667 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=4 elapsed_ns=19677334 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=4 elapsed_ns=18981375 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=5 elapsed_ns=14875167 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=5 elapsed_ns=19924958 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=5 elapsed_ns=18577000 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=5 elapsed_ns=15303709 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=6 elapsed_ns=17834292 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=6 elapsed_ns=15351084 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=6 elapsed_ns=15178959 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=6 elapsed_ns=21480417 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=7 elapsed_ns=19278625 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=7 elapsed_ns=19240500 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=true round=7 elapsed_ns=21152042 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=dense32768 baseline=false round=7 elapsed_ns=17763709 peak=262144 axis=97
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=0 elapsed_ns=2750875 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=0 elapsed_ns=2423458 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=0 elapsed_ns=2294667 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=0 elapsed_ns=2441667 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=1 elapsed_ns=2157083 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=1 elapsed_ns=2708583 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=1 elapsed_ns=2571417 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=1 elapsed_ns=2199750 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=2 elapsed_ns=2372667 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=2 elapsed_ns=2152125 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=2 elapsed_ns=2178917 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=2 elapsed_ns=2559958 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=3 elapsed_ns=2067292 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=3 elapsed_ns=2487166 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=3 elapsed_ns=2757958 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=3 elapsed_ns=2250875 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=4 elapsed_ns=2486084 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=4 elapsed_ns=2071375 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=4 elapsed_ns=2073041 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=4 elapsed_ns=2423875 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=5 elapsed_ns=2106166 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=5 elapsed_ns=2834541 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=5 elapsed_ns=2591333 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=5 elapsed_ns=2434958 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=6 elapsed_ns=2608042 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=6 elapsed_ns=2213166 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=6 elapsed_ns=2097708 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=6 elapsed_ns=2530667 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=7 elapsed_ns=2071334 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=7 elapsed_ns=2541958 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=true round=7 elapsed_ns=2359916 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=flat8192 baseline=false round=7 elapsed_ns=2060083 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=0 elapsed_ns=3046583 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=0 elapsed_ns=2874209 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=0 elapsed_ns=2833916 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=0 elapsed_ns=3148291 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=1 elapsed_ns=2740875 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=1 elapsed_ns=3318500 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=1 elapsed_ns=3317333 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=1 elapsed_ns=2981917 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=2 elapsed_ns=3539167 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=2 elapsed_ns=3072000 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=2 elapsed_ns=2904583 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=2 elapsed_ns=3248333 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=3 elapsed_ns=2728000 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=3 elapsed_ns=3191792 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=3 elapsed_ns=3320792 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=3 elapsed_ns=3019500 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=4 elapsed_ns=3347083 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=4 elapsed_ns=2673792 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=4 elapsed_ns=2814917 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=4 elapsed_ns=3155125 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=5 elapsed_ns=2772958 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=5 elapsed_ns=3109500 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=5 elapsed_ns=3243625 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=5 elapsed_ns=2786250 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=6 elapsed_ns=2981500 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=6 elapsed_ns=2770416 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=6 elapsed_ns=2965166 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=6 elapsed_ns=3239750 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=7 elapsed_ns=2800000 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=7 elapsed_ns=3261875 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=true round=7 elapsed_ns=3109750 peak=65536 axis=0
+ROW_MAJOR_INDEX_BENCH control=sparse8192 baseline=false round=7 elapsed_ns=2738833 peak=65536 axis=0
+test gradient_index::row_major_tests::row_major_index_build_latency_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 135 filtered out; finished in 0.90s
+

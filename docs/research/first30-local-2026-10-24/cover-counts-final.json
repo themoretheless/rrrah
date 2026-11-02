@@ -1,0 +1,11 @@
+{
+  "scope": "local disposable APFS; remount-cold VFS, not physical disk cache or network FS",
+  "pairs": [],
+  "errors": [],
+  "create": "created: /var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-cover-volume-rkb_f47z/cover.dmg\n",
+  "attach": "/dev/disk6          \tGUID_partition_scheme          \t\n/dev/disk6s1        \tApple_APFS                     \t\n/dev/disk7          \tEF57347C-0000-11AA-AA11-0030654\t\n/dev/disk7s1        \t41504653-0000-11AA-AA11-0030654\t/private/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-cover-volume-rkb_f47z/mounted\n",
+  "instrumented_metadata_calls": {
+    "baseline": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=true elapsed_ns=80583041 explicit_metadata_calls=10002 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.08s\n\nCOVER_LIBC lstat=10002 stat=0 fstatat_all=0 fstat_all=2\n",
+    "candidate": "\nrunning 1 test\ntest gallery::tests::cover_directory_probe ... ok\n\nsuccesses:\n\n---- gallery::tests::cover_directory_probe stdout ----\nCOVER_PROBE baseline=false elapsed_ns=5634083 explicit_metadata_calls=0 selected_exact=true\n\n\nsuccesses:\n    gallery::tests::cover_directory_probe\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 444 filtered out; finished in 0.01s\n\nCOVER_LIBC lstat=0 stat=0 fstatat_all=0 fstat_all=2\n"
+  }
+}

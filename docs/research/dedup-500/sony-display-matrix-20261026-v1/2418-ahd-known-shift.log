@@ -1,0 +1,79 @@
+residual_bins counts=[22108891, 1887673, 3436] rejected=[647195, 1877872, 2913] squared_rgb=[[8821.033951998412, 5166.2996063888895, 12666.0907077765], [1338134.8021417991, 1181930.7362487765, 2215247.3224235117], [79.31946177805007, 48.93572157589936, 42.29370914884352]]
+diagnostic_bin_fit bucket=0 gain=[0.9972413381311885, 1.06498737356075, 0.9384124505440917] offset=[-0.008792725978240087, -0.013931277427079461, -0.0057948254896626195] samples=22108891
+diagnostic_bin_fit bucket=1 gain=[0.121386680089355, 0.09131425591799516, 0.0874928764841711] offset=[0.7574699358982495, 0.8242014488958486, 0.8036980666738318] samples=1887673
+diagnostic_bin_fit bucket=2 gain=[1.0096644110781146, 0.9488994347848211, 0.9674805371691719] offset=[-0.05244598290094871, 0.010780932276779898, 0.013842126097490803] samples=3436
+diagnostic_known_range_fit=RangePhotometricEvidence {
+    range: FitSampleRange {
+        minimum: 0.0,
+        maximum: 1.0,
+    },
+    evidence: BidirectionalPhotometricEvidence {
+        forward: PhotometricEvidence {
+            gain: [
+                0.9972413381311885,
+                1.06498737356075,
+                0.9384124505440917,
+            ],
+            offset: [
+                -0.008792725978240087,
+                -0.013931277427079461,
+                -0.0057948254896626195,
+            ],
+            constrained_channels: [
+                false,
+                false,
+                false,
+            ],
+            fitted_samples: 22108891,
+            pixels: WarpEvidence {
+                source_pixels: 24000000,
+                compared_pixels: 24000000,
+                matched_pixels: 21052230,
+                maximum_channel_error: 4.196626009983394,
+                squared_error: 4514043.317627659,
+            },
+        },
+        reverse: PhotometricEvidence {
+            gain: [
+                0.9729295582302241,
+                0.9275945527441691,
+                1.0348617577133716,
+            ],
+            offset: [
+                0.01128128604064152,
+                0.014036784926527768,
+                0.008526857282661351,
+            ],
+            constrained_channels: [
+                false,
+                false,
+                false,
+            ],
+            fitted_samples: 22108891,
+            pixels: WarpEvidence {
+                source_pixels: 24240576,
+                compared_pixels: 24000000,
+                matched_pixels: 21241074,
+                maximum_channel_error: 4.3972039015836755,
+                squared_error: 4770910.27710942,
+            },
+        },
+    },
+}
+diagnostic_known_shift=[12.0, 12.0] pixels=BidirectionalEvidence {
+    forward: WarpEvidence {
+        source_pixels: 24000000,
+        compared_pixels: 24000000,
+        matched_pixels: 21472020,
+        maximum_channel_error: 4.44059956073761,
+        squared_error: 4762136.833964945,
+    },
+    reverse: WarpEvidence {
+        source_pixels: 24240576,
+        compared_pixels: 24000000,
+        matched_pixels: 21472020,
+        maximum_channel_error: 4.44059956073761,
+        squared_error: 4762136.833964945,
+    },
+}
+managed_used=0 managed_peak=1016765952

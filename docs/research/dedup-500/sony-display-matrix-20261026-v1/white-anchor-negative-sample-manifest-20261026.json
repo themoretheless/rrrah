@@ -1,0 +1,36 @@
+{
+  "seed": 26026,
+  "inputs": {
+    "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-pair-samples-20261026.csv": "6aa1da1e96a9c1edd71c80de0320eb9316789a12e443d3705ec931d79d2f917d",
+    "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-pair-samples-20261026.csv": "a5b6906ec82b9a5aae8d01adcf23a020133bc9eda4793b134166ad6d04beae68"
+  },
+  "controls": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-cross-scene-0-1-20261026.csv",
+      "kind": "different_scene_same_coordinate",
+      "source": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-pair-samples-20261026.csv",
+      "target": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-pair-samples-20261026.csv",
+      "sha256": "26940e30c312b3c13140540a286541b1982c78ce880b867ebe2c89b43fccaafd"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-cross-scene-1-0-20261026.csv",
+      "kind": "different_scene_same_coordinate",
+      "source": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-pair-samples-20261026.csv",
+      "target": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-pair-samples-20261026.csv",
+      "sha256": "4b965d42b4888e1fc1a793c892ffcadeeedf7475a5c17f346b05f18ba8f2b6e8"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-shuffled-coordinates-0-20261026.csv",
+      "kind": "same_scene_wrong_spatial_correspondence",
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-display-pair-samples-20261026.csv",
+      "sha256": "d836bf66de4ddd44059ac2961f1d6980b203c97cff5bc0b6a96c5f2cd19d2c61"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-shuffled-coordinates-1-20261026.csv",
+      "kind": "same_scene_wrong_spatial_correspondence",
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-display-pair-samples-20261026.csv",
+      "sha256": "a1fb3429fead20ccc93cf09f529cfca7fdda7614b55fbb126546d945bf220e50"
+    }
+  ],
+  "scope": "Sparse coordinate controls only; not independent camera/burst/look-alike precision."
+}

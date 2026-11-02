@@ -1,0 +1,10 @@
+{
+  "controls_passed": 4,
+  "scope": "Original argparse function AST unchanged;standard library;synthetic filenames only;no model/PyTorch/GPU/video/CLI main execution",
+  "findings": [
+    "Scene detection and hardware acceleration default false despite README describing enabled defaults.",
+    "Negative n_pass accepted;source main range(n_pass) then tail loop has no infer calls:nontermination consequence source-only,not run.",
+    "NaN target_fps accepted;source <=src_fps check does not reject it.",
+    "Explicit positive parameters parse as intended."
+  ]
+}

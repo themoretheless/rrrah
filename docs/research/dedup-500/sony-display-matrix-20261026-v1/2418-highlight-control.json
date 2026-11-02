@@ -1,0 +1,37 @@
+{
+  "command": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff",
+    "--verify-known-shift"
+  ],
+  "binary_sha256": "808172ec30e259a96209d136a5fde98b55476f58304dd50c38ed77da35455d35",
+  "results": [
+    {
+      "label": "baseline",
+      "highlight_recovery": true,
+      "display_fraction": [
+        0.9319138333333333,
+        0.8873953333333333
+      ],
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-highlight-baseline.log",
+      "log_sha256": "d9db310ba5318b5ac73e6d6a8941e664ce4650cb4dcb362b71d3a2d7e146fc37",
+      "exit_code": 0,
+      "managed_memory_released": true
+    },
+    {
+      "label": "no_recovery",
+      "highlight_recovery": false,
+      "display_fraction": [
+        0.8800189166666667,
+        0.888178
+      ],
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2418-highlight-no_recovery.log",
+      "log_sha256": "9870ca79b2f0b035f04ed34b7f2542fe27f82c83c66baca9f22cda29b003d0a3",
+      "exit_code": 0,
+      "managed_memory_released": true
+    }
+  ],
+  "scope": "Fixed shift display-projection diagnostic, tolerance .03. Both directions must satisfy .9; does not evaluate geometry discovery or full candidate acceptance.",
+  "conclusion": "Disabling highlight recovery does not resolve the failing Sony comparison: forward agreement falls from 93.19% to 88.00%, reverse remains below 90% (88.82%). Baseline reproduces prior log exactly. Retain default recovery; this single option is not a sufficient remedy."
+}

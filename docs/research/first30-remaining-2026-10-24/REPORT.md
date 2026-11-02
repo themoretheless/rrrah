@@ -1,0 +1,45 @@
+# Первые 30: продолжение, 2026-10-24
+
+Среда: macOS arm64, Apple M4 Max, настоящий Metal. Dirty checkout сохранён; параллельные изменения других задач не приписываются этому проходу. Исходные acceptance не ослаблены ради закрытия. Отсутствие оборудования и разрешения не считается проходом.
+
+## Подтверждено
+
+**RR-0012 — verified в проверенной среде.** Новый Metal readback проверяет 128 сочетаний: 8 orientation × 2 viewport × 2 zoom × 2 pan × SDR/HDR. Каждая половина split побайтово совпадает с отдельным before/after; общий atlas/residency не увеличивается, managed credits после удаления равны нулю. Отдельно прошли растровый и RAW comparison, cancellation и отказ бюджета с сохранением старого atlas. См. `comparison-matrix.log`, `raw-comparison.log`, `raster-comparison.log`, `raw-cancel*.log`, `gpu-results.json`.
+
+Живое окно: навигация между двумя PFM, exposure, before, split, zoom, pan, resize и возврат фокуса. F6 переводит фокус в processing pipeline и обратно с сохранением выбранной команды; before сбрасывается при потере фокуса (`comparison-focus-return.txt`). Смена рецепта/viewport не запускает повторный sensor decode. Сравнение скриншотов даёт нулевую разницу внутри выбранных областей before/after (`comparison-pixels.json`). Файлы `comparison-*.png` первоначального GUI-прогона содержат JPEG от UI transport: это визуальный контроль, не доказательство lossless HDR. Точные HDR значения проверены readback отдельно.
+
+Финальный изолированный GUI trace: 3 warmup + 64 samples; CPU median 9.239 ms / p95 15.822 ms, host-observed queue completion median 19.025 ms / p95 29.338 ms. Это две различные метрики, не физический scanout/FPS и не сравнение ускорения. Logical CPU peak 6,291,456 B; logical GPU peaks RAW/raster/strip 0 / 3,145,728 / 196,608 B; sampled native Metal allocations peak 139,116,544 B. Kernel max RSS 180,846,592 B, lifetime peak footprint 656,229,504 B. RSS, footprint, logical budgets и per-device Metal allocatedSize не взаимозаменяемы; unified allocations не доказывают физическую dedicated VRAM residency. Исходные samples и time output сохранены. Трассировка включается только debug env `RRRAH_COMPARE_FRAME_TRACE`; обычный запуск не получает дополнительного сбора кадров.
+
+**RR-0027 — verified в проверенной среде.** Существующее пропускание неизменного uniform квалифицировано полным 1920×1080 Rgba16Float render/submit/completion, CPU submission и настоящими GPU timestamp queries, а не циклом setters. 3 warmup + 10 чередующихся A/A и A/B пар, 30 кадров в каждом варианте. A/A median ratio p95 wall 1.022, GPU 1.000; A/B p95 wall ratio 0.805 (9/10 пар), CPU 0.619 (10/10), GPU 0.863 (9/10). Медианы p95 по режимам: wall 237.354→194.146 μs; CPU 52.626→33.583 μs; GPU 57.000→48.250 μs. Распределение меняется во времени, поэтому сохранены все пары, включая проигранную; это локальный steady-view результат на этом адаптере, не обещание FPS приложения. Native sampled allocations одинаковы 18,677,760 B, logical source 65,536 B, final credits 0. Ранее два независимых прогона без timestamp instrumentation дали p95 ratios 0.841 и 0.872. `uniform-preliminary.log` мог пересекаться с другой GPU проверкой и не принят как performance evidence. Resize/orientation/readback квалифицированы отдельными тестами, не измерены как performance A/B.
+
+## Внедрено, но полный acceptance ещё открыт
+
+**RR-0010.** Доступны 30 именованных команд AccessKit, IDs 10–39; старые 10–20 сохранены. Добавлены curve/histogram/split, zoom/pan/fit, выбор/добавление/удаление/перемещение/сброс точки кривой, клавиатурный переход к таймингам и обратно. Нет новой внешней API несовместимости. Отдельно объявляются file position и container page position. Native AX показывает toggled state. Реальный полный Tab cycle прошёл; Enter добавил midpoint и передвинул y с 0.50 до 0.51, F6 вернул прежний фокус. Юнит-проверки покрывают цикл, границы кривой и максимум точек. Это не VoiceOver qualification: временное включение системного VoiceOver было запрошено отдельно, ответа нет; настройка не менялась. Контрастность и все режимы/форматы не квалифицированы.
+
+**RR-0005.** NVIDIA gate теперь требует ровно один конкретный выполненный CUDA test, completed-work marker на 42 случая, 0 ignored/failed, GPU UUID/name/driver и полный совпадающий SHA manifest CUDA sources. Старый substring `1 passed` больше не принимает `11 passed`. Отрицательные parser fixtures проверяют пропуск/подмену теста, marker/summary, metadata и stale source. Это проверки валидатора, не аппаратные CUDA результаты. `--show-output` сохраняет marker отдельно от harness строки; `--nocapture` для этого протокола не используется. Настоящего NVIDIA runner в этой среде нет; CUDA/graphics matching требует отдельной проверки.
+
+**RR-0013.** Сохранён воспроизводимый cfg(test) benchmark настоящего ForegroundLoader submit с конкурирующим consumer/source-stat и latest-generation проверкой. Первый A/B total ratio 0.722, второй 0.676; второй A/A 1.010, p95 1.038. Это подтверждает пользу удаления redundant neighbour-list clone для исследованной операции. Lock p95 около 42 ns при разрешении clock около 41 ns; измерение не доказывает значительную contention. Проверен один producer и consumer; 2/4 producers, отказ/отмена под такой нагрузкой и end-to-end opening latency ещё нужны. Поэтому статус остаётся partial.
+
+## Отрицательные проверки и незакрытые гипотезы
+
+- **RR-0016:** настоящий Metal submit удерживает 16 кредитов до callback; production poll освобождает их до 0. 100000 idle poll с pending=0 заняли 75625 ns. Документированный wgpu completion требует submit/poll обслуживания; простое удаление poll без замены некорректно. Полный профиль активного about_to_wait/resize/GPU timestamps не выполнен; reviewed сохранён.
+- **RR-0017:** задержка destruction старого completed job до подготовки replacement при бюджете 72 B (resident 36 + obsolete 36) воспроизводимо отвергает допустимую замену. После drop obsolete та же замена принимается, final credits 0. Наивное откладывание drop отвергнуто; это не опровержение всех двухфазных алгоритмов. Существующий тест 1000 replacements/latest-wins/budget прошёл. Полный 1/2/4 contention benchmark не выполнен, reviewed сохранён.
+- **RR-0030:** cancellation и budget refusal действительно сохраняют предыдущий RAW atlas. Нельзя перезаписывать видимый atlas до принятия результата. Это не A/B новой completion-safe pool стратегии; reviewed сохранён.
+- **RR-0014:** submit/publication ordering требует общей синхронизации; полученный 1-producer benchmark не заменяет предложенный 1/2/4 профиль enqueue_foreground. reviewed.
+- **RR-0015:** основание относится к TelemetryState, не image render; сравнение image renderer не выдаётся за измерение telemetry panel. reviewed.
+- **RR-0019:** прежние 1k/10k warm-directory результаты сохранены. Cold-disk/syscall counts и полный source replacement/symlink/access-denial сценарий этим проходом не закрыты.
+- **RR-0028:** POSIX watchdog снова прошёл 3 теста; Windows taskkill не выполнялся.
+- **RR-0003/0004/0006:** нужны реальный CUDA host / два GPU / физический HDR тракт с измерителем. macOS Metal readback их не заменяет.
+
+Первый запуск synthetic PFM из Documents задержался в source File.open до decode; sample и timeout сохранены в `startup-delayed*`/`gui-startup-sample.txt`. Причина не установлена, системные разрешения не менялись. Собственный зависший PID был остановлен после проверки пути. Перенос synthetic источников в изолированный temporary каталог дал Ready 4.60 ms; это отдельный успешный запуск, не успешное объяснение первого. Первоначальный TMP запуск сканировал лишние соседние каталоги; финальный trace получен в отдельной session папке. Финальный GUI закрыт обычным Quit, kernel usage сохранён.
+
+## Воспроизведение и артефакты
+
+- `cargo test -p rrrah --bin rrrah first30_remaining::foreground_submit_contention_pairs -- --exact --ignored --show-output --test-threads=1`
+- `RRRAH_GPU_BACKEND=metal cargo test -p rrrah-gpu --lib raster::tile_admission_tests::view_uniform_full_frame_pairs -- --exact --ignored --show-output --test-threads=1` (точное имя также в log; требуется TIMESTAMP_QUERY).
+- `RRRAH_GPU_BACKEND=metal cargo test -p rrrah-gpu --test raw_linear_readback comparison_preserves_all_orientations_pan_zoom_and_resize -- --exact --show-output --test-threads=1`.
+- CUDA workflow использует `cargo test --locked -p rrrah-cuda --lib tests::nvidia_full_output_boundaries_hdr_alpha_and_managed_limits -- --exact --ignored --show-output --test-threads=1` на NVIDIA self-hosted runner, затем `verify-nvidia-hardware-evidence.py`.
+
+`qualification.json` содержит manifest источников и статус квалификации. `gui-final-manifest.json` фиксирует реально запущенный binary; source hashes после форматирования не являются build attestation. Логи ошибок/отклонённых/предварительных прогонов сохранены отдельно от принятых измерений. Доступность GPU обязательна: skip не считался проходом.
+
+Финальный non-hardware app regression: 325 passed, 0 failed, 47 ignored, 68 filtered (--skip hdr --skip metal --skip gpu). Ignored не считаются пройденными; реальные GPU проверки перечислены отдельно.

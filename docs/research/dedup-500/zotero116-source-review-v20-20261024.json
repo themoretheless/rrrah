@@ -1,0 +1,52 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v19-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "test/unit/itemMembershipHandler.test.mjs",
+      "local": "35-itemMembershipHandler.test.mjs",
+      "sha256": "5ba2f4928aa637d844fe9e590b2d6a76886995a95c35f7407260b4d36aee831d",
+      "git_blob": "f110d44540ecaa4222f5907dd4736f09b3350d32",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 38,
+  "whole_repo_complete": false,
+  "runtime": {
+    "node": "22.23.4",
+    "vitest": "4.1.0",
+    "new_original_tests_passed": 27,
+    "original_tests_total_distinct": 453,
+    "new_authored_controls_passed": 0,
+    "total_authored_controls_distinct": 49,
+    "retained_harness": "docs/research/dedup-500/zotero116-original-tests-20261024",
+    "scope": "Original complete unchanged membership test/source with upstream collaborators mocked: executor/canonical resolution/baseline and getPref. Original config/setup and isolated npm lock retained; not live Zotero."
+  },
+  "findings": [
+    {
+      "finding": "All27 original membership cases pass incl add/remove dispatch, scoped adoption, canonical move payload, parent/attachment traversal, reparent guard and per-collection batching.",
+      "evidence": "native original Vitest report"
+    },
+    {
+      "finding": "Executor and canonical choice are mocked; selected remove tests manually replace fake record contents to emulate executor. No original case exercises real watcher grouping through real executor and store. Thus prior original-chain add/remove/add failure is not contradicted by this green suite.",
+      "evidence": "whole original test review"
+    },
+    {
+      "finding": "Malformed composite cases cover not-a-pair, single number and empty string. Numeric prefixes and extra fields previously identified remain source-only, not additional tested runtime findings.",
+      "evidence": "whole original tests read"
+    },
+    {
+      "finding": "Suite tests parent removal with parent.getCollections() empty and attachment removal with parent still in collection; doesnot test a stale parent removal event after current membership was re-added.",
+      "evidence": "whole original test review"
+    }
+  ],
+  "remaining": [
+    "62blobs not whole-read",
+    "Full mirrorExecutor/baseline/index/preferences source and remaining tests",
+    "Complete original suite/live Zotero/runtime/license/release qualification incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

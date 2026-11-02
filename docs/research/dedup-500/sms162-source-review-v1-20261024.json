@@ -1,0 +1,32 @@
+{
+  "repository": "VenomVendor/DeduplicateSMS",
+  "commit": "da9fe1545661e610bc94ba295ec5ce09f6c772cd",
+  "reviewed_whole_files": [
+    {
+      "path": "app/src/main/java/com/venomvendor/sms/deduplicate/data/DuplicateList.java",
+      "sha256": "867401da789de0f6e3154e672ab992577b95099ab545bdeecee84808b0d157a5",
+      "git_blob_sha1": "9de370c59058d7824f386dcbda516a3cc63e097f",
+      "whole_file_read": true
+    },
+    {
+      "path": "app/src/main/java/com/venomvendor/sms/deduplicate/data/FindDuplicates.java",
+      "sha256": "659aba8feee3c3470e9629f1b33c7824c0665b90258bfe0921be4a697d961bce",
+      "git_blob_sha1": "7f7df783775ee6544d85f8445441061e04488ad3",
+      "whole_file_read": true
+    }
+  ],
+  "whole_file_count": 2,
+  "tree_blob_count": 42,
+  "tree_truncated": false,
+  "full_repository_read": false,
+  "findings": [
+    "Static: duplicate decisions retain only Java 32-bit String.hashCode; no key/field equality confirmation.",
+    "Static: normalized message, phone and optional date are concatenated without field framing; TYPE and DATE_SENT not compared.",
+    "Static: splice removes range(fromIndex, splicedList.size()), not range(fromIndex,toIndex); nonzero start can remove wrong range."
+  ],
+  "original_test_bodies_run": 0,
+  "authored_controls_run": 0,
+  "runtime_scope": "Static only; no JDK/Android execution or user data access",
+  "decision": "reject-domain",
+  "deferred": "Native pHash.org/ASAN remains deferred; this audit does not advance it"
+}

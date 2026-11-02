@@ -1,0 +1,52 @@
+{
+  "repository": "iKislay/copium",
+  "commit": "28759a663bc16299222769ca07d53e46caa48fdb",
+  "whole_files_read": [
+    {
+      "path": "copium/learn/scanner.py",
+      "local": "03-scanner.py",
+      "git_blob": "0de41714b64ad15a2bce3285fd68627b9626696e",
+      "sha256": "8a70bfc8561bfc71b07916b8c345c7ca31d4d6e6ef932c4d216bab05125cf56e",
+      "whole_text_read": true
+    },
+    {
+      "path": "copium/mcp_proxy/session_dedup.py",
+      "local": "04-session_dedup.py",
+      "git_blob": "01f10afd8b2967e8862744bdbcd33644da8f6fab",
+      "sha256": "85fa3225170494ab7a109ff194e908dc196610f8b0a1611e169460526463fd0c",
+      "whole_text_read": true
+    },
+    {
+      "path": "copium/transforms/session_dedup.py",
+      "local": "05-session_dedup.py",
+      "git_blob": "8a71911d38d827f70ecf64c9fc699c894aefe797",
+      "sha256": "cd81f84e4f7d763a899287e7302acdb4656a6f2aa2e96133174b556c29ceea48",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/test_mcp_proxy_dedup_cache.py",
+      "local": "deep-test_mcp_proxy_dedup_cache.py",
+      "git_blob": "6fc6a48157c969effd789f9f7506f59fb34d4cae",
+      "sha256": "51fd928f17cd970f29b3ae557c29eb952f74077d74c5ead2176ae876ac2847a7",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 4,
+  "tracked_blobs": 3533,
+  "whole_repo_complete": false,
+  "original_selected_test_bodies_passed": 9,
+  "authored_controls_passed": 6,
+  "scope": "Unchanged original MCPmodule and9 selected original test bodies.Original fulltransform with explicit external base/result/tokenizer type adapters and character-count tokenizer fixture;no actualMCP or provider/context calls,no token savings claim.",
+  "findings": [
+    "max_entries1 still retains3 tool-definition sets.",
+    "max_entries1 still retains3 schemas.",
+    "Short OK result replaced by marker with larger original estimatedtoken count.",
+    "Default repeatedapply of one-message history replaces sole original fulltext with marker pointing toturn0;actual host prefix/frozen lifecycle unqualified.",
+    "Exact hash strips leading whitespace as well as trailing;raw-distinct content equated.",
+    "MinHash helper seeds/changes process-global random state."
+  ],
+  "controls": "copium158-controls-20261024/results.json",
+  "original_cache_tests_not_run": "8 ProxyCache tests in same source file not replayed;only SessionDedup class selected",
+  "production_adoption": false,
+  "native_phash_asan": "deferred"
+}

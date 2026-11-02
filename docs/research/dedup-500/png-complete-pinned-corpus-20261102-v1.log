@@ -1,0 +1,40 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.67s
+     Running tests/png_pinned_corpus.rs (target/debug/deps/png_pinned_corpus-313ed2d31f9b30eb)
+
+running 2 tests
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xc1n0g08.png: Format error decoding Png: Invalid color type 1.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xc9n2c08.png: Format error decoding Png: Invalid color type 9.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xcrn0g04.png: unsupported raster container
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xcsn0g01.png: Format error decoding Png: CRC error: expected 0x4353554d have 0xd02f14c9 while decoding ChunkType { type: IDAT, critical: true, private: false, reserved: false, safecopy: false } chunk.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xd0n2c08.png: Format error decoding Png: Invalid bit depth 0.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xd3n2c08.png: Format error decoding Png: Invalid bit depth 3.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xd9n2c08.png: Format error decoding Png: Invalid bit depth 99.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xdtn0g01.png: Format error decoding Png: IDAT or fdAT chunk is missing.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xhdn0g08.png: Format error decoding Png: CRC error: expected 0x4353554d have 0x56112528 while decoding ChunkType { type: IHDR, critical: true, private: false, reserved: false, safecopy: false } chunk.
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xlfn0g04.png: unsupported raster container
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs1n0g01.png: unsupported raster container
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs2n0g01.png: unsupported raster container
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs4n0g01.png: unsupported raster container
+invalid PNG rejected /Users/themoretheless/Documents/Sources/rrrah/.dedup-work/spng454-20261021/tests/images/xs7n0g01.png: unsupported raster container
+test pinned_invalid_png_corpus_is_rejected_without_retaining_memory ... ok
+valid corpus decoded: 161/161; failures: []
+test pinned_png_corpus_decodes_and_adam7_matches_noninterlaced_pixels ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+

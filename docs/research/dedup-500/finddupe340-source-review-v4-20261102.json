@@ -1,0 +1,171 @@
+{
+  "index": 340,
+  "repository": "towel42-com/FindDupe",
+  "commit": "c56d4706d6e1f237efa92be060338549eff05e88",
+  "tracked_blob_count": 33,
+  "whole_file_reads": [
+    {
+      "path": "MainWindow/FileFinder.cpp",
+      "local": "docs/research/dedup-500/evidence/towel42-com--FindDupe/02-FileFinder.cpp",
+      "sha256": "f6cd3ace7ad44c20025bd2a76752db0d7ab9ee11e49f7afb02272a219891d2ac",
+      "git_blob_sha1": "9e9b0d4b5fb19b0f809956912654d13d9607bdc6"
+    },
+    {
+      "path": "MainWindow/FileFinder.h",
+      "local": "docs/research/dedup-500/evidence/towel42-com--FindDupe/03-FileFinder.h",
+      "sha256": "eb87340fa736a1fa7ff78865f45882a2fa569ff82a6b60d4744c5a39a02cddab",
+      "git_blob_sha1": "57201da583eb8269d34b2dec538417204f74f8c2"
+    },
+    {
+      "path": "MainWindow/ProgressDlg.cpp",
+      "local": "docs/research/dedup-500/evidence/towel42-com--FindDupe/remaining-pinned/MainWindow/ProgressDlg.cpp",
+      "sha256": "13813a36931eb62f3bb8b02cff63445e25166b36dff22d4e146ab8490db32eff",
+      "git_blob_sha1": "d0f08dfede90bdd449e238c1749cc98759924f64"
+    },
+    {
+      "path": "MainWindow/ProgressDlg.h",
+      "local": "docs/research/dedup-500/evidence/towel42-com--FindDupe/remaining-pinned/MainWindow/ProgressDlg.h",
+      "sha256": "ea45c3dedbff9d9598bcd0da66ad57507f79e52f0d25f88d9076f95bb7854776",
+      "git_blob_sha1": "c67b457b87361627a266ee9e600e372605740849"
+    },
+    {
+      "path": ".gitmodules",
+      "local": "docs/research/dedup-500/evidence/towel42-com--FindDupe/remaining-pinned/.gitmodules",
+      "sha256": "90af1ea4885822c7408a1a1630479b6a0ef3ed439758639a5ec22f9991de15e6",
+      "git_blob_sha1": "ba2b9d67afd9fd6075b1e9594762f75670b36305"
+    },
+    {
+      "path": "MainWindow/MainWindow.cpp",
+      "local": "docs/research/dedup-500/evidence/towel42-com--FindDupe/04-MainWindow.cpp",
+      "sha256": "5004209168e88879d1909c5c739831a28fd608a426277814243eea26208d57f3",
+      "git_blob_sha1": "173137cca1fc051c8b157d4603a620c5d3848559"
+    }
+  ],
+  "structured_assessments": [],
+  "remaining": [
+    {
+      "path": ".gitignore",
+      "bytes": 623
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 3021
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1073
+    },
+    {
+      "path": "MainWindow/CMakeLists.txt",
+      "bytes": 1488
+    },
+    {
+      "path": "MainWindow/MainWindow.h",
+      "bytes": 3464
+    },
+    {
+      "path": "MainWindow/MainWindow.ui",
+      "bytes": 6598
+    },
+    {
+      "path": "MainWindow/ProgressDlg.ui",
+      "bytes": 5553
+    },
+    {
+      "path": "MainWindow/Settings.cpp",
+      "bytes": 5439
+    },
+    {
+      "path": "MainWindow/Settings.h",
+      "bytes": 3808
+    },
+    {
+      "path": "MainWindow/Settings.ui",
+      "bytes": 5599
+    },
+    {
+      "path": "MainWindow/application.qrc",
+      "bytes": 347
+    },
+    {
+      "path": "MainWindow/include.cmake",
+      "bytes": 1578
+    },
+    {
+      "path": "MainWindow/resources/add.png",
+      "bytes": 733
+    },
+    {
+      "path": "MainWindow/resources/application.ico",
+      "bytes": 209762
+    },
+    {
+      "path": "MainWindow/resources/delete.png",
+      "bytes": 3704
+    },
+    {
+      "path": "MainWindow/resources/fileopen.png",
+      "bytes": 1662
+    },
+    {
+      "path": "MainWindow/resources/finddupe.png",
+      "bytes": 5896
+    },
+    {
+      "path": "MainWindow/resources/go.png",
+      "bytes": 86684
+    },
+    {
+      "path": "MainWindow/resources/refresh.png",
+      "bytes": 4780
+    },
+    {
+      "path": "MainWindow/resources/stop.png",
+      "bytes": 5546
+    },
+    {
+      "path": "Project.cmake",
+      "bytes": 4380
+    },
+    {
+      "path": "README.md",
+      "bytes": 91
+    },
+    {
+      "path": "VersionInfo.cmake",
+      "bytes": 1853
+    },
+    {
+      "path": "main/CMakeLists.txt",
+      "bytes": 2441
+    },
+    {
+      "path": "main/application.rc",
+      "bytes": 93
+    },
+    {
+      "path": "main/include.cmake",
+      "bytes": 218
+    },
+    {
+      "path": "main/main.cpp",
+      "bytes": 748
+    }
+  ],
+  "upstream_tests_run": false,
+  "full_manual_review": false,
+  "findings": [
+    "FileFinder cpp/header fully read. Recursively walks readable entries, silently returns missing roots and offers no traversal-error/completeness model. Manual recursion has no physical-directory visited set/depth cap; directory symlinks can be recursed according to QFileInfo.isDir,with no explicit exclusion. All files enqueue MD5 jobs without size pregrouping or queue byte budget. Hash implementation is external SABUtils submodule and still uninspected.",
+    "Name-only option hashes lowercased basename string instead of file content yet emits same MD5-finished signal,so UI must distinguish semantics. run emits finished immediately after traversal,not waiting for hashing completion. Cancellation clears shared threadpool queue and signals pending workers via mutable map; ownership/thread-safety and terminal completion await ProgressDlg inspection. No source before/after identity stamp or byte confirmation here.",
+    "getPriority uses signed int limit repeatedly multiplied10,which can overflow when processing sufficiently large file sizes. reset clears pending-worker map and basic state but leaves ignore-over size and case-insensitive-name option unchanged. Ignore pattern accepted as anchored regular expression rather than escaped literal/wildcard conversion. No Qt/runtime tests executed.",
+    "ProgressDlg cpp/header and gitmodules fully read. Dialog distinguishes count/find/MD5 finished flags,so traversal-finished signal alone is not necessarily presented as full completion. Actual caller coordination remains MainWindow. Cancel sets flag/disables cancel and emits signal; close accepts immediately. Hash callbacks do not reject canceled/generation-stale events within dialog.",
+    "Per-thread status keyed only threadID; a new start overwrites previous record,item pointer lost until next refresh. expired10second helper exists but no cleanup use in read update loop,so finished entries can persist until thread reuse. Progress percentage divides by file size without zero guard; CPU percentage divides by core max without empty-query guard. Rich-text path labels insert unescaped filename text. No runtime Qt validation.",
+    "gitmodules references SABUtils and googletest. Presence of googletest submodule is not a repository test gate. External submodule source not yet fetched/read,pinned gitlink identities must be checked before auditing hash behavior. Full ownership/drain/cancellation proof still missing.",
+    "MainWindow fully read in two bounded ranges. Groups solely by nonempty MD5 string,skips zero-byte files and rereads current size after hashing;no byte confirmation/source-stability/physical-file alias distinction. Name-only basename hash shares same grouping/deletion path. Count increments even if same absolute path already present,so repeated callback can inflate duplicate count/bytes.",
+    "Completion polls shared pool but isFinished checks accumulated >=5idle observations and elapsed>1second before current active-count check;idle count never reset on busy observations. Therefore it does not prove continuous quiescence or all callbacks drained. slotGo not visibly disables Run and progress is nonmodal;no generation token gates results. Count-finished callback resets stopped finder and starts scan even after canceled count completes. Canceled scan can still reach ordinary Finished and enable deletion.",
+    "Delete flow confirms count,then QFile.remove without checking return,revalidating identity/content or refreshing rows. Cancel during list preparation still passes partial list to delete confirmation. Header path can be relative to process cwd while child paths resolve against mutable selected root. Keeper heuristics use filename copy patterns and metadataChangeTime on item text paths;unrelated to original-byte equality. setDeleteFile ignores requests when handleChildren=false,so reset does not clear child check state. No deletion/runtime executed.",
+    "Unused free findFilesToDelete helper randomly chooses keeper in inclusive range0..rowCount+1 while loop only visits0..rowCount,allowing no keeper if ever called;no active caller in inspected main. Current UI duplicates first file as group header and child;keeper logic operates both. MainWindow behavior requires focused controls before considering any reuse; no code adopted.",
+    "Isolated compiled C++ runtime control confirms exact unchanged isFinished body returns true with one active pool job after five previous idle observations at1101ms; final call does not query activeThreadCount. Deterministic clock/pool stubs isolate predicate logic only,not actual Qt scheduling/race reproduction. Receipt docs/research/dedup-500/finddupe340-completion-control-20261102-v1.json. No user files changed or deleted."
+  ],
+  "previous_audit": "docs/research/dedup-500/finddupe340-source-review-v3-20261102.json"
+}

@@ -1,0 +1,45 @@
+{
+  "repository": "jchristn/WatsonDedupe",
+  "commit": "80274df8bc9cbd69c0851c8933f2d9a96dd5bee5",
+  "whole_files_read": [
+    {
+      "path": "src/DedupeLibrary/DedupeCallbacks.cs",
+      "local": "03-DedupeCallbacks.cs",
+      "git_blob": "0807b05ee01c6bae20b8ea0bde6be06591be74af",
+      "sha256": "0702485d88272d083aa94f409dcff9e054dc6723925734008caa2d8d9b59a904",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/DedupeLibrary/DedupeChunk.cs",
+      "local": "04-DedupeChunk.cs",
+      "git_blob": "8c57415cdbaa102fc693d3e0cfeb38dbc0c66a25",
+      "sha256": "a53a30492a9bfa4c210b8b0a9e3cf6fe89d7e92f0bf7d79d305acb70dd5a1633",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/DedupeLibrary/DedupeCommon.cs",
+      "local": "05-DedupeCommon.cs",
+      "git_blob": "780a16258d80a6b4b1eedfc09c437db9e9f4f63d",
+      "sha256": "821be811e4d88d5b5ed1353b7e4571202ef44ee9cdab8c4d21668ca79f2710c1",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 3,
+  "tracked_blobs": 69,
+  "whole_repo_complete": false,
+  "authored_controls_passed": 5,
+  "original_upstream_tests_run": false,
+  "controls": "watson132-controls-20261024/results.txt",
+  "scope": "Unchanged original DedupeCommon;native .NET10;owned MemoryStream and short-read adapter;EOF adapter throws after3 zero returns to bound execution;no full chunk store/database",
+  "findings": [
+    "Short reads overwrite previous bytes because read offset stays0 and read size is full target length.",
+    "Premature EOF causes repeated zero reads without progress;owned stream throws at third zero return to bound execution.",
+    "IsZeroBytes one-byte input with numBytes2 raises IndexOutOfRangeException due >= boundary.",
+    "Full-read positive and SHA256 abc known-answer positive pass.",
+    "Chunk mutable properties do not preserve constructor validation after mutation:source-only."
+  ],
+  "full_chunk_store_runtime_qualified": false,
+  "production_adoption": false,
+  "decision": "reference",
+  "native_phash_asan": "deferred"
+}

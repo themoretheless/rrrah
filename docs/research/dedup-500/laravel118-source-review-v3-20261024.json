@@ -1,0 +1,104 @@
+{
+  "repository": "maxkhim/laravel-storage-dedupler",
+  "commit": "7720046f9b1c9056a47de0d84a1384e667d3f367",
+  "previous_audit": "docs/research/dedup-500/laravel118-source-review-v2-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/Commands/CleanupFilesCommand.php",
+      "local": "core-src_Commands_CleanupFilesCommand.php",
+      "git_blob": "511ff261c8c956c2ef145874d8a35f136eb9a3d4",
+      "sha256": "c8e8cabb765a510ffcdf4928d24bdede7968cbac69d009be3a6de97ba2bb56e7",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Models/LegacyFileMigration.php",
+      "local": "core-src_Models_LegacyFileMigration.php",
+      "git_blob": "ad42cc0b5fe987d69b20b4ffe8ea3e5f2f801159",
+      "sha256": "943026ba81184ba89f17abd73b871bb3c85f2d081921e3c720c1418ed5ceccb0",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Commands/RollbackLegacyFilesCommand.php",
+      "local": "core-src_Commands_RollbackLegacyFilesCommand.php",
+      "git_blob": "4a9b4d5e309c95deb1b261b65c593d40e8d63107",
+      "sha256": "5aaff99aa8609c0b5bbf7dea7fa573ceb9a9564d176833c49c829ef47f8f4b52",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Commands/Traits/CommonMigrationTrait.php",
+      "local": "core-src_Commands_Traits_CommonMigrationTrait.php",
+      "git_blob": "00e81f6fd7b3d2a5cddf6c0791fafabec6a0a981",
+      "sha256": "3c8dc8cb278b9aa735fa467da5bbbe33b829f176debd80f10e6c5d06b3c1e18a",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Commands/MigrateLegacyFilesCommand.php",
+      "local": "core-src_Commands_MigrateLegacyFilesCommand.php",
+      "git_blob": "0ec5e5f3630ff254b954d009383feeab6f4c10cc",
+      "sha256": "e00541ec109ff76ccb634a1356f7e95fc2853bcf28d55064a140fad1fd09af11",
+      "whole_text_read": true
+    },
+    {
+      "path": "config/dedupler.php",
+      "local": "core-config_dedupler.php",
+      "git_blob": "1130b305f48bd73e35c47fbbdb78e08d34f49b08",
+      "sha256": "4ba88f9b86902dedb506a960ef5a04bdb54a25d5162b5429cd3b054c61334e94",
+      "whole_text_read": true
+    },
+    {
+      "path": "src/Commands/DeduplerInstallCommand.php",
+      "local": "03-DeduplerInstallCommand.php",
+      "git_blob": "aa4bd5a729b233b8818bfab4f3e5d28244e4f221",
+      "sha256": "828f3ea965b52ca5d4118cc7689df7d9b90abafe63736cf753ce350539228984",
+      "whole_text_read": true
+    },
+    {
+      "path": "LICENSE",
+      "local": "01-LICENSE",
+      "git_blob": "16bb7c40546aaedd57d9a0dc7a8b8fdd4986816e",
+      "sha256": "4b301bd902806c24160b28d61e21b9eab4868f26c71d5cdf94a6370b63f02cda",
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "00-README.md",
+      "git_blob": "d36f4df0a48a065f6d70e494f4409a00f24fe3f0",
+      "sha256": "712e997bb07df1112dee52f91e645076400f932287910fef1d0feaefe06ca0d5",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 22,
+  "tracked_blobs": 39,
+  "whole_repo_complete": false,
+  "upstream_tests_run": false,
+  "runtime": "PHP/Laravel unavailable; all new findings source-only",
+  "findings": [
+    {
+      "finding": "Migration sets migrated status/links before createSymlink; createSymlink catches errors without updating migration status/error count. Existing storage record reused without fresh physical content verification.",
+      "scope": "source only"
+    },
+    {
+      "finding": "Default post-migration and rollback cleanup searches all *.backup below baseDir, without per-file successful-restore qualification; unlink result ignored.",
+      "scope": "source only; no backup deletion executed"
+    },
+    {
+      "finding": "Rollback unlinks symlink then copies target; copy return ignored and restored counter incremented. No status/hash/bytes verification visible.",
+      "scope": "source only; runtime failure not reproduced"
+    },
+    {
+      "finding": "Model replacement verifies storage target is_file, unlinks original then creates symlink, no rollback on symlink failure and no fresh equality check.",
+      "scope": "source only"
+    },
+    {
+      "finding": "Prune performs orphan query before delete without rechecking relations or transaction, discards physical delete boolean and increments freed bytes using recorded size.",
+      "scope": "source only; concurrent DB/storage behavior unqualified"
+    },
+    {
+      "finding": "Root MIT license whole-read; no source adopted.",
+      "scope": "pinned source"
+    }
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred",
+  "remaining": "17 blobs not whole-read, including controller/provider/analysis/traits/remaining tests, image asset; native runtime and full dependency integration unqualified"
+}

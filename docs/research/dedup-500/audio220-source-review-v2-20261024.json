@@ -1,0 +1,131 @@
+{
+  "index": 220,
+  "repository": "Ryuk17/AudioDeduplication",
+  "commit": "e7630518a26c5fcd5bcf22af1b8ffe370b0f27eb",
+  "tracked_blob_count": 22,
+  "whole_file_reads": [
+    {
+      "path": "README.md",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/00-README.md",
+      "sha256": "a5d3a19478f96b3b8c29de6bd7013f7c9aed35208d0e1a7728312aece66e5502",
+      "git_blob_sha1": "1f602a87da1f9a746a53b979cfbfe70756f760e7"
+    },
+    {
+      "path": "test/test.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/05-test.cpp",
+      "sha256": "c974aa8bd2c84ece58d9f5fbcd87880f172103af5e75ad8a85e23e309a92671d",
+      "git_blob_sha1": "407f900cb36c00e53d43702a41e90833975e9b98"
+    },
+    {
+      "path": "src/audiophash.cpp",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/02-audiophash.cpp",
+      "sha256": "91f8ec3cd39c4e1642877ac267a7833c8a934143c8c10909e981da4352e2fb13",
+      "git_blob_sha1": "624257360f974075c228b5c87b71788a569c3fdc"
+    },
+    {
+      "path": "src/audiophash.h",
+      "local": "docs/research/dedup-500/evidence/Ryuk17--AudioDeduplication/03-audiophash.h",
+      "sha256": "6dbd8f283b002cfee63d000b711df3f8dc5228500d467fbaef1ccdfe1efc7643",
+      "git_blob_sha1": "3838473d39f58af14618e2f6d1f64717d3c75224"
+    }
+  ],
+  "whole_file_read_count": 4,
+  "original_tests_run": 0,
+  "full_repository_read": false,
+  "source_review_complete": false,
+  "findings": [
+    "Test-named file is demonstration main printing audio comparison values, no assertions or expected decision.",
+    "Fixed reference/source WAV paths; degraded fixture not used by this main.",
+    "Mono-only reader rejects multichannel audio; read-failure path inspects channels after null result, potentially uninitialized if decoder leaves it unset. Static only.",
+    "save_hash prints uint32_t with percent-lu rather than matching fixed-width format; no file-open check. Static only.",
+    "Test source explicitly carries GPL3-or-later pHash header while root screening license Apache2; nested provenance distinct before adoption.",
+    "Native pHash/ASAN execution intentionally skipped per user instruction. Source/demo review does not restart that item."
+  ],
+  "remaining": [
+    {
+      "path": ".gitignore",
+      "bytes": 270
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 11357
+    },
+    {
+      "path": "Makefile",
+      "bytes": 469
+    },
+    {
+      "path": "sample/ref.wav",
+      "bytes": 165712
+    },
+    {
+      "path": "sample/src.wav",
+      "bytes": 135488
+    },
+    {
+      "path": "sample/src_degraded.wav",
+      "bytes": 171574
+    },
+    {
+      "path": "script/plot_hash.py",
+      "bytes": 1598
+    },
+    {
+      "path": "script/ref.hash",
+      "bytes": 6513
+    },
+    {
+      "path": "script/ref.png",
+      "bytes": 918262
+    },
+    {
+      "path": "script/ref_hash.png",
+      "bytes": 92386
+    },
+    {
+      "path": "script/src.hash",
+      "bytes": 5283
+    },
+    {
+      "path": "script/src.png",
+      "bytes": 879740
+    },
+    {
+      "path": "script/src_hash.png",
+      "bytes": 123240
+    },
+    {
+      "path": "src/dr_wav.h",
+      "bytes": 241117
+    },
+    {
+      "path": "src/pHash.cpp",
+      "bytes": 6414
+    },
+    {
+      "path": "src/pHash.h",
+      "bytes": 12104
+    },
+    {
+      "path": "src/ph_fft.cpp",
+      "bytes": 1796
+    },
+    {
+      "path": "src/ph_fft.h",
+      "bytes": 1032
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/audio220-source-review-v1-20261024.json",
+  "audio_hash_review": {
+    "native_execution": false,
+    "observations": [
+      "4096sample frames,128sample hop,33Bark filters produce32bit frame signatures; approximate temporal/spectral features, not byte equality.",
+      "No input validation for null buffer, negative/short length, invalid sample rate or allocation failure before writes.",
+      "Distance uses integer block count and discards remainder; exact-multiple loop can leave last allocated distance element unwritten before aggregation. Static source finding only.",
+      "Zero/small blocks and short hashes lack explicit validation before block access or division.",
+      "Distance returns new[] allocation while demo main releases with free; allocation ownership mismatch source-only.",
+      "FFT error path returns before freeing frame/filter/hash buffers.",
+      "Native pHash/ASAN run remains intentionally skipped; no reproducer or compiled code executed."
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "scope": "Original four weekly-review test callbacks, original weekly-review/OpenRouter modules (other shared modules loaded but unused) and helper functions without environment/client initialization; Node VM transpilation; fake env/DB, assert adapter and inert schema proxy; original fetch stubs. No network, Deno typecheck or DB.",
+  "outcomes": [
+    {
+      "name": "weekly_review: returns review with period metadata",
+      "passed": true
+    },
+    {
+      "name": "weekly_review: returns message when no thoughts found",
+      "passed": true
+    },
+    {
+      "name": "weekly_review: error returns isError",
+      "passed": true
+    },
+    {
+      "name": "weekly_review: missing brain context returns error",
+      "passed": true
+    }
+  ]
+}

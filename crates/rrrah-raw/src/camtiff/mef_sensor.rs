@@ -408,6 +408,76 @@ mod tests {
         assert_eq!(budget.used(), 0);
     }
     #[test]
+    #[ignore = "requires pinned RRRAH_MEF_SECOND_SOURCE/SENSOR; second original full independent sensor comparison"]
+    fn second_original_all_sensor_values_match_independent_reference_at_exact_budget() {
+        use std::io::Read;
+        let source =
+            std::path::PathBuf::from(std::env::var_os("RRRAH_MEF_SECOND_SOURCE").expect("second MEF source"));
+        let oracle = std::path::PathBuf::from(
+            std::env::var_os("RRRAH_MEF_SECOND_SENSOR").expect("independent u16le sensor"),
+        );
+        for (path, expected) in [
+            (
+                &source,
+                "e038801bce8924e519a36c7994086a3dc4cbd2e9d331ca4b755f2b2bdfc75012",
+            ),
+            (
+                &oracle,
+                "fcab5343f8f8e2a81b91882711416b9e0d1c33458d2a483eb2bb80751a660621",
+            ),
+        ] {
+            let output = std::process::Command::new("shasum")
+                .args(["-a", "256"])
+                .arg(path)
+                .output()
+                .unwrap();
+            assert!(output.status.success());
+            assert_eq!(
+                String::from_utf8(output.stdout)
+                    .unwrap()
+                    .split_whitespace()
+                    .next()
+                    .unwrap(),
+                expected
+            );
+        }
+        let exact = MemoryBudget::new(42_923_008 + 6024);
+        let mut request = crate::DecodeRequest::new(&source);
+        let samples = decode_mef_zd_sensor_file(&request, &exact).unwrap();
+        assert_eq!(samples.len(), 4016 * 5344);
+        assert_eq!((exact.used(), exact.peak()), (42_923_008, exact.limit()));
+        let mut reference = std::fs::File::open(oracle).unwrap();
+        let mut bytes = [0u8; 8192];
+        for chunk in samples.chunks(4096) {
+            reference.read_exact(&mut bytes[..chunk.len() * 2]).unwrap();
+            for (&value, encoded) in chunk.iter().zip(bytes.chunks_exact(2)) {
+                assert_eq!(value, u16::from_le_bytes([encoded[0], encoded[1]]));
+            }
+        }
+        assert_eq!(reference.read(&mut bytes[..1]).unwrap(), 0);
+        drop(samples);
+        assert_eq!(exact.used(), 0);
+        let short = MemoryBudget::new(exact.limit() - 1);
+        assert!(matches!(
+            decode_mef_zd_sensor_file(&request, &short),
+            Err(DecodeError::Memory(_))
+        ));
+        assert_eq!(short.used(), 0);
+        assert_eq!(short.peak(), std::fs::metadata(source).unwrap().len());
+        let generation = std::sync::Arc::new(std::sync::atomic::AtomicU64::new(1));
+        request.cancellation = Some(crate::GenerationToken::new(generation, 0));
+        let zero = MemoryBudget::new(0);
+        assert!(matches!(
+            decode_mef_zd_sensor_file(&request, &zero),
+            Err(DecodeError::Cancelled)
+        ));
+        assert_eq!(zero.peak(), 0);
+        eprintln!(
+            "second original MEF:21461504 independent samples exact; exact quota42929032; one-byte-short unwind; cancelled before I/O; final=0; camera WB/color remains unqualified"
+        );
+    }
+
+    #[test]
     fn sensor_strip_cannot_alias_out_of_line_metadata() {
         let source = [0u8; 64];
         let field = &source[8..20];

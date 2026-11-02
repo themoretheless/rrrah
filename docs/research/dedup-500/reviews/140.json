@@ -2,7 +2,7 @@
   "index": 140,
   "repository": "sergey-dryabzhinsky/dedupsqlfs",
   "commit": "b83a903fbae4cb17457125e3c15466d61c00ef91",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "2/579 whole pinned files plus selected original write-block method;7 authored controls with realSQLite and explicit seams;fullFUSE unqualified",
   "decision": "reference",
   "finding": "FUSE/SQLite deduplicating filesystem and rehash migration; selected xxhash is vendor code, not an image algorithm.",
   "available_source_evidence": [
@@ -104,5 +104,6 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "dedupsqlfs140-source-review-v2-20261024.json"
 }

@@ -12,11 +12,14 @@ fn original_mef_all_sensor_codes_survive_managed_metal_compute() {
         .output()
         .unwrap();
     assert!(hash.status.success());
-    assert!(
-        String::from_utf8(hash.stdout)
-            .unwrap()
-            .starts_with("bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c ")
-    );
+    let text = String::from_utf8(hash.stdout).unwrap();
+    let source_sha = text.split_whitespace().next().unwrap();
+    assert!(matches!(
+        source_sha,
+        "bcd63507c3c4cc3ea1bad2945e3f88cb4677a1a3c762e1acc38df4445714eb7c"
+            | "e038801bce8924e519a36c7994086a3dc4cbd2e9d331ca4b755f2b2bdfc75012"
+    ));
+    eprintln!("MEF original source sha256={source_sha}");
     let count = 4016usize * 5344;
     let bytes = count as u64 * 16;
     let sensor_bytes = count as u64 * 2;

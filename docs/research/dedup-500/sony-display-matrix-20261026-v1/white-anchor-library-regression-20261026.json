@@ -1,0 +1,14 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --test white_anchored --test photometric",
+  "exit_code": 0,
+  "passed": 12,
+  "failed": 0,
+  "new_mode_tests": 5,
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-white-anchor-regression-v2-20261026.log",
+  "log_sha256": "7c15fa423c4199e59b1879140f6da028f26331a7559066ebb54c1795fc07ff5a",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/warp.rs": "ed9bb6923914beb3f65eeb2cd10af8e8d0a9fc37f80fcf50bb1829bb789b7f9a",
+    "crates/rrrah-dedup/tests/white_anchored.rs": "08069656cbce5d9d7b81ab254618690ac5478b8c38d6501c369934f175b23efb"
+  },
+  "scope": "Native macOS fixture regression only. Real RAW measurements used prior externally fixed-gain diagnostic, not this newly implemented public API. File/collection integration, full-image public API parity and broad precision remain open."
+}

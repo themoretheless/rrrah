@@ -1,0 +1,194 @@
+// Shared fixtures, assertion patterns, and the CLI spawn helpers the test
+// files below use.
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { stripVTControlCharacters } from 'node:util';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// This directory—where the scratch dirs below are created
+export const dirTest = __dirname;
+
+// A scratch directory under `test/`, created empty. Callers remove it in a
+// `finally` block.
+export function makeTempDir(name) {
+  const dir = path.join(dirTest, name);
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
+}
+export const scriptPath = path.join(__dirname, '..', 'bin', 'css-dedup.js');
+export const fixturesDir = path.join(__dirname, 'fixtures');
+
+// A consolidation that grows the file: the long selector list costs more
+// than the removed `color` declaration saves
+export const cssGrowing = '.very-long-selector-name-one { color: red; font-weight: bold; }\n.b { color: red; }\n';
+
+// Only mergeable in aggressive mode (the intervening rule blocks the default
+// pass), and the merge grows the file—both rules keep another declaration,
+// so the merge adds the long selector list without removing a rule
+export const cssGrowingAggressive = [
+  '.module-header-navigation-primary-link { color: red; font-size: 14px; }',
+  '.unrelated-widget:hover { color: blue; }',
+  '.module-footer-navigation-secondary-link { color: red; letter-spacing: 1px; }',
+  '',
+].join('\n');
+
+// One cluster that grows the file (the long selector list costs more than the
+// removed `color` saves) and one that shrinks it (three short selectors share
+// `margin`), in a single style sheet. Clusters are independent, so a per-merge
+// gate applies the second and declines the first.
+export const cssMixed = [
+  '.very-long-selector-name-one { color: red; font-weight: bold; }',
+  '.b { color: red; }',
+  '.p { margin: 0; padding: 0; }',
+  '.q { margin: 0; top: 0; }',
+  '.r { margin: 0; left: 0; }',
+  '',
+].join('\n');
+
+// A growing merge on a *nesting host*, plus a shrinking one among the rules
+// nested inside it. Declining the outer merge must leave the nested rules the
+// inner scope already holds references to intact, not swap in copies.
+export const cssNestedHost = [
+  '.very-long-selector-name-one {',
+  '  color: red;',
+  '',
+  '  &:hover {',
+  '    top: 0;',
+  '  }',
+  '',
+  '  &:focus {',
+  '    top: 0;',
+  '  }',
+  '}',
+  '',
+  '.b { color: red; }',
+  '',
+].join('\n');
+
+// An entangled cluster: Three duplicate groups all sharing the hub rule, so
+// they can only be merged as one coordinated whole. The selectors are long
+// enough that the whole thing costs bytes, so `savingsOnly` must decline it
+// together—and its identity-preserving rollback has to survive the several
+// replacement rules the split creates.
+export const cssEntangledGrowing = [
+  '.hub-selector-that-is-long-here { color: red; top: 0; left: 0; }',
+  '.spoke-selector-number-one-here { color: red; }',
+  '.spoke-selector-number-two-here { top: 0; }',
+  '.spoke-selector-number-six-here { left: 0; }',
+  '',
+].join('\n');
+
+// The same shape where the merge pays off: Identical rules fold whole, so the
+// coordinated merge removes rules instead of lengthening selector lists
+export const cssEntangledShrinking = [
+  '.a-really-quite-long-selector-one { color: red; top: 0; }',
+  '.a-really-quite-long-selector-two { color: red; top: 0; }',
+  '.a-really-quite-long-selector-six { color: red; top: 0; }',
+  '',
+].join('\n');
+
+// A declined merge that first empties the *two* leading root rules: PostCSS
+// hands each removed first child’s `raws.before` to its successor, so the blank
+// line before `.mid` travels down the chain and has to be handed back on
+// rollback—byte for byte, or the file comes out reformatted.
+export const cssTwoLeadingRemovals = [
+  '.a { color: red; }',
+  '.b { color: red; }',
+  '',
+  '.mid { top: 0; }',
+  '.c-with-an-extremely-long-selector-name { color: red; padding: 0; }',
+  '',
+].join('\n');
+
+// Only mergeable in aggressive mode (canonicalizing the `<angle>` values is
+// aggressive-only), and—unlike `cssGrowingAggressive`—the merge shrinks the
+// file: Each rule holds only the one shared declaration, so folding them
+// removes a whole rule instead of just adding to a selector list
+export const cssShrinkingAggressive = '.a { transform: rotate(90deg); }\n.b { transform: rotate(100grad); }\n';
+
+// Mergeable in both modes, but aggressive pulls a third rule—reachable only by
+// canonicalizing the `<angle>` values—into the cluster, and its long selector
+// costs more than the extra fold saves: Gated, the aggressive re-run comes out
+// behind the gated default pass.
+export const cssAggressiveCostlierMerge = [
+  '.a { transform: rotate(90deg); }',
+  '.b { transform: rotate(90deg); }',
+  '.a-very-long-selector-name-here-indeed { transform: rotate(100grad); color: red; }',
+  '',
+].join('\n');
+
+// Assertion patterns shared across several tests
+export const RE_WITHHELD_ONE = /1 withheld/;
+export const RE_MERGED_AB = /\.a,\s*\.b\s*{\s*color: red;\s*}/;
+export const RE_MERGED_AC = /\.a,\s*\.c\s*{\s*color: red;\s*}/;
+// The report table’s header row, followed by a data row whose `-f` column
+// (the second cell) shows a save (a leading `-`)—the report-mode analogue
+// of the old `* N findings: Reduce duplication and save …` bullet. Not
+// anchored to exact column spacing (that’s computed per run), just that a
+// `Findings -f (-a)` row saves something under plain `-f`.
+export const RE_PAYOFF_FIX = /Findings -f \(-a\).*\n\d+ \(\d+\) {2,}-[\d.]+ (?:B|KB|MB) \(-\d+\.\d%\)/;
+// A report-table row whose Findings cell is `N (…)`, for asserting the
+// default-mode finding count without caring what the table’s other columns say
+export const findingsRow = n => new RegExp(`\\n${n} \\(\\d+\\) `);
+export const RE_SYNTAX_ERROR = /Unknown word/;
+export const RE_SYNTAX_ERROR_UNCLOSED = /Unclosed block/;
+
+// The one spawn both helpers below go through. A failed spawn (or a timeout)
+// leaves `stdout`/`stderr` null and reports the cause on `result.error`—
+// defaulted to empty strings here so a caller doesn’t get a confusing throw
+// from string handling instead of the actual failure.
+function spawnCli(args, { env, nodeArgs = [], ...spawnOptions } = {}) {
+  const result = spawnSync('node', [...nodeArgs, scriptPath, ...args], {
+    encoding: 'utf-8',
+    timeout: 30_000,
+    ...(env ? { env } : {}),
+    ...spawnOptions,
+  });
+  return {
+    stdout: result.stdout ?? '',
+    stderr: result.stderr ?? '',
+    status: result.status,
+    error: result.error,
+  };
+}
+
+export function run(args, spawnOptions = {}) {
+  const { stdout, stderr, status, error } = spawnCli(args, spawnOptions);
+  return {
+    stdout: stripVTControlCharacters(stdout),
+    stderr: stripVTControlCharacters(stderr),
+    status,
+    error,
+  };
+}
+
+// `--fix` only prompts when STDIN is a TTY, which `spawnSync` never provides.
+// The preload flips that one flag, leaving STDIN the ordinary pipe `input`
+// writes the answer into—so the prompt is exercised without the CLI needing a
+// test-only escape hatch of its own. Pass `''` for `input` to answer with EOF.
+const PRELOAD_TTY = 'data:text/javascript,process.stdin.isTTY = true;';
+
+export function runTty(args, input, spawnOptions = {}) {
+  return run(args, { ...spawnOptions, input, nodeArgs: ['--import', PRELOAD_TTY] });
+}
+
+// `run()` strips color codes—`node:util`’s `styleText` skips them itself
+// once STDOUT isn’t a TTY, which `spawnSync` never gives it—so highlighting
+// tests force color on and read the raw (unstripped) output instead
+export function runColor(args, spawnOptions = {}) {
+  const { stdout, status, error } = spawnCli(args, {
+    ...spawnOptions,
+    env: { ...process.env, ...spawnOptions.env, FORCE_COLOR: '1' },
+  });
+  return { stdout, status, error };
+}
+// Built from a computed character code, not a literal control character
+// (which `no-control-regex` flags even inside a `new RegExp()` string), to
+// match the bold/green/reset ANSI codes a highlighted cell is wrapped in
+const ESC = String.fromCharCode(27);
+export const BEST_CELL = new RegExp(`${ESC}\\[1m${ESC}\\[32m([^${ESC}]*)${ESC}\\[39m${ESC}\\[22m`, 'g');

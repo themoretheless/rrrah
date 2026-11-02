@@ -1,0 +1,64 @@
+{
+  "repository": "CoLRev-Environment/bib-dedupe",
+  "commit": "c97feab2e66095a6ff8e20ac9a6381f155b993b7",
+  "scope": "Original DFS function body, plain in-memory adjacency/sets and equivalent top-level traversal; not pandas get_connected_components or full package/upstream tests.",
+  "authored_controls": [
+    {
+      "name": "transitive chain admitted with distinct source sets",
+      "passed": true,
+      "observed": [
+        [
+          "A",
+          "B",
+          "C"
+        ]
+      ]
+    },
+    {
+      "name": "same source-set constraint splits component",
+      "passed": true,
+      "observed": [
+        [
+          "A",
+          "B"
+        ],
+        [
+          "C"
+        ]
+      ]
+    },
+    {
+      "name": "reversed traversal changes admitted pair",
+      "passed": true,
+      "observed": [
+        [
+          "B",
+          "C"
+        ],
+        [
+          "A"
+        ]
+      ]
+    },
+    {
+      "name": "empty source sets exempt from uniqueness",
+      "passed": true,
+      "observed": [
+        [
+          "A",
+          "B",
+          "C"
+        ]
+      ]
+    },
+    {
+      "name": "long chain exceeds current interpreter recursion limit",
+      "passed": true,
+      "observed": {
+        "chain_nodes": 1050,
+        "recursion_limit": 1000,
+        "error": "RecursionError"
+      }
+    }
+  ]
+}

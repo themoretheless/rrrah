@@ -1,0 +1,87 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v9-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": ".github/workflows/build-docker.yml",
+      "local": "36-.github--workflows--build-docker.yml",
+      "git_blob": "8610f29c2701192c127c0ee7218b5058eae0d4c3",
+      "sha256": "63c004370d8963354971906330644be6808e31ca080a2e5bea54f243a4f7f8d7",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/docs-publish.yml",
+      "local": "37-.github--workflows--docs-publish.yml",
+      "git_blob": "ac7aef57c9573700d92d4ddf2847ed58b6bef356",
+      "sha256": "73bfbe9e04cb9dde28dfa1e33d6b621259777ce5f07f711146ba987304a8637f",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/linux-publish.yml",
+      "local": "38-.github--workflows--linux-publish.yml",
+      "git_blob": "7f80c2da8a818c7c01b83ebc69d929571b2796d3",
+      "sha256": "fe740cbac9d3c3e6bc540123693f19ca9a6c7c8add4d498d2626340f806cc718",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/python-publish.yml",
+      "local": "39-.github--workflows--python-publish.yml",
+      "git_blob": "7ca29be61cc997495fc0328dba8ef81459781015",
+      "sha256": "87fed15a2bc6a0b8a30400d5f5f60a2c021624a7a96a8f4a1a06c9578c823a01",
+      "whole_text_read": true
+    },
+    {
+      "path": ".github/workflows/windows-publish.yml",
+      "local": "40-.github--workflows--windows-publish.yml",
+      "git_blob": "9ab3193e20dd0430842a208f9e662c260672ff3f",
+      "sha256": "67d3f21fb63881aae53beae72edaebf0aeea9ddf1a1d5796a16b426abd00ecea",
+      "whole_text_read": true
+    },
+    {
+      "path": "build_files/linux/hydrusvideodeduplicator-gui.spec",
+      "local": "41-build_files--linux--hydrusvideodeduplicator-gui.spec",
+      "git_blob": "396ee13e306d1a10e274e4db933189b710d710b5",
+      "sha256": "f99f9ef7ac3a517a9bd4065b270d0ec7694e9780d1b1704a92b6197e2985d58f",
+      "whole_text_read": true
+    },
+    {
+      "path": "build_files/linux/hydrusvideodeduplicator.spec",
+      "local": "42-build_files--linux--hydrusvideodeduplicator.spec",
+      "git_blob": "cefa505bad3d8d976bc55e499534b190b9f2a05f",
+      "sha256": "9804660c25cca76a39934d6d6b7251302ab51970b883d2262b842364935db3f3",
+      "whole_text_read": true
+    },
+    {
+      "path": "build_files/windows/hydrusvideodeduplicator-gui.spec",
+      "local": "43-build_files--windows--hydrusvideodeduplicator-gui.spec",
+      "git_blob": "96562afbaed480e7528b6696693cda9c19df913b",
+      "sha256": "3ef23e61c5de75eb0ed68f5eb326a6dba2f01803b093f3a70bdf4a5a7f7061c6",
+      "whole_text_read": true
+    },
+    {
+      "path": "build_files/windows/hydrusvideodeduplicator.spec",
+      "local": "44-build_files--windows--hydrusvideodeduplicator.spec",
+      "git_blob": "a1a8bdde764ff9c4f7427b1693228acca5f6ebb3",
+      "sha256": "2cd181ea786d18a862761a6ac82e01ac71863ac3be96b7ae0b67f5182c908a06",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 43,
+  "remaining_without_whole_review": 34,
+  "whole_repo_complete": false,
+  "new_authored_controls": 0,
+  "authored_controls_total": 19,
+  "findings": [
+    "Docker build workflow explicitly states it tests PyPI package image build, not newest checkout Python changes; confirms earlier reproducibility limit is known upstream.",
+    "Linux release workflow separates CLI/GUI environments, pins Ubuntu22.04 for glibc baseline, runs CLI help and offscreen GUI timeout smoke. These declarations were read, not executed or confirmed passing.",
+    "Offscreen GUI timeout proves at most process survival under workflow assumptions, not interaction/hash/search correctness.",
+    "Windows release workflow builds/uploads without runtime smoke step. Windows artifacts unqualified here.",
+    "Python publish builds sdist with uv then Hatch and deploys sdist; no release-runtime native correctness gate in this workflow. Separate test workflow exists.",
+    "Linux CLI spec uses module main avoiding interactive exit pause; Windows CLI uses executable entrypoint requiring ENTER. These differences are intentional in source comments.",
+    "Build dependencies resolved during install; release workflow configuration alone does not prove byte-reproducible artifacts."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

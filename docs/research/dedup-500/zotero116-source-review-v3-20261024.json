@@ -1,0 +1,78 @@
+{
+  "repository": "josesiqueira/zotero-watch-folder",
+  "commit": "a34c60f93fd87c3ab05873bcdb338814fa12085b",
+  "previous_audit": "docs/research/dedup-500/zotero116-source-review-v2-20261024.json",
+  "tracked_blobs": 100,
+  "new_whole_files_read": [
+    {
+      "path": "content/fileImporter.mjs",
+      "local": "12-fileImporter.mjs",
+      "git_blob": "4b1cfe2f76b629e086d1a7bb1746ad6f0f83ddf5",
+      "sha256": "f04230be5f234f948fe86761fa5886f76e2d0302af1970c0b7fdba8807ded182",
+      "whole_text_read": true
+    },
+    {
+      "path": "content/metadataRetriever.mjs",
+      "local": "13-metadataRetriever.mjs",
+      "git_blob": "4245b67234e8b6cae0e79f7284aedcb23ad843ad",
+      "sha256": "deac3665533cdf827e3fc54fffd557d6ea4ee80df19103bcf985049636c1c822",
+      "whole_text_read": true
+    }
+  ],
+  "partial_files_read": [
+    {
+      "path": "content/watchFolder.mjs",
+      "local": "14-watchFolder.mjs",
+      "git_blob": "4793e98e0b5118cf89dc329626d2478c995e9c56",
+      "sha256": "eb9f5b669fd29fd4a1f84994773448778020726974637e0cca29f5b2304d2def",
+      "whole_text_read": false,
+      "read_ranges": [
+        [
+          550,
+          810
+        ]
+      ],
+      "other_activity": "identifier search; whole file not read"
+    }
+  ],
+  "whole_files_read_total": 10,
+  "whole_repo_complete": false,
+  "runtime": {
+    "new_authored_controls_passed": 2,
+    "total_authored_controls_distinct": 10,
+    "original_tests_run": 0,
+    "node": "22.23.4",
+    "retained_harness": "docs/research/dedup-500/zotero116-import-policy-controls-20261024",
+    "scope": "Unchanged original full utils/cache/detector modules plus exact extracted Step3b branch in owned async wrapper; owned Zotero adapters; trackingStore=null; fresh SHA256 computed before branch; import replaced with owned counter marker. Not entire WatchFolderService, real Zotero, full import, or tracking-store-enabled path."
+  },
+  "findings": [
+    {
+      "finding": "Step3b can skip changed file using stale cached digest even though earlier Step3 fresh getFileHash produced new digest. The branch never compares duplicate decision digest to fresh local hash; no-tracking-store case returns before import. With advanced mtime, same original branch falls through to import marker.",
+      "evidence": "two native authored controls"
+    },
+    {
+      "finding": "With trackingStore and parent item, child hash is compared to fresh hash, but single-child fallback may pick sole attachment even when its hash differs. Existing-isAttachment branch also assigns attachment without fresh comparison. These tracking-enabled paths not executed.",
+      "evidence": "source-only partial caller"
+    },
+    {
+      "finding": "fileImporter imports physical files; duplicate policy belongs caller. In importBatch, string collection resolution happens outside per-file try, so resolution error can abort entire batch rather than populate failed array. No runtime control.",
+      "evidence": "source-only full importer read"
+    },
+    {
+      "finding": "Whole metadataRetriever has no duplicateDetector import or direct duplicate-check call; post-metadata policy may reside caller onComplete. Need read WatchFolderService remainder before resolving earlier semantic-match comment.",
+      "evidence": "whole source read"
+    },
+    {
+      "finding": "Metadata queue Set covers queued items only: removal before active retrieval means same item can enqueue while active. Recognition map keyed itemID could be overwritten by concurrent same-item work. Source-only, no recognition race executed.",
+      "evidence": "source-only full metadataRetriever read"
+    }
+  ],
+  "remaining": [
+    "90 blobs not whole-read incl remainder of watchFolder",
+    "Tracking-enabled duplicate branch requires runtime qualification",
+    "Original tests/full Zotero import/network/release unqualified",
+    "Root and dependency licenses incomplete"
+  ],
+  "production_changes": false,
+  "native_phash_asan": "Explicitly deferred"
+}

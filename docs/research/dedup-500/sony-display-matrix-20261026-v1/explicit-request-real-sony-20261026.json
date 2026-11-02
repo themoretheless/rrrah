@@ -1,0 +1,96 @@
+{
+  "binary_sha256": "360786aeb714af9e6a61d86f7f4c8d617168777aac4ed747b4cc8dba985bd4d2",
+  "rows": [
+    {
+      "pair": "2414",
+      "recipe": "native-default",
+      "exit_code": 0,
+      "seconds": 6.476214959053323,
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d"
+      },
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/explicit-request-2414-native-default-20261026.log",
+      "log_sha256": "c46ca6d511c3a04193685e017bd81379e1d0e00a133d7ddaaf5cfaa49ce6ec96",
+      "projected_agreement": [
+        0.8172083333333333,
+        0.81846175
+      ],
+      "strict_agreement": [
+        0.8082886666666667,
+        0.8082886666666667
+      ],
+      "managed_released": true
+    },
+    {
+      "pair": "2414",
+      "recipe": "bilinear",
+      "exit_code": 0,
+      "seconds": 5.3333425839664415,
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2414.tiff": "eb4b7d52908e207f9d69b40a44dde399fc51fbf33d431c9641754254548cac4d"
+      },
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/explicit-request-2414-bilinear-20261026.log",
+      "log_sha256": "63eb82feb903043493954c194403982d58f16a27ce1d84250b47bb8353ebfe2a",
+      "projected_agreement": [
+        0.98634525,
+        0.9863733333333333
+      ],
+      "strict_agreement": [
+        0.9832807916666667,
+        0.9832807916666667
+      ],
+      "managed_released": true
+    },
+    {
+      "pair": "2418",
+      "recipe": "native-default",
+      "exit_code": 0,
+      "seconds": 6.064845125016291,
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+      },
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/explicit-request-2418-native-default-20261026.log",
+      "log_sha256": "f844b125caa7524865cca6de2121a4e532501190b7cec367e3f4c02b7595a5ba",
+      "projected_agreement": [
+        0.8357607916666666,
+        0.8373996666666667
+      ],
+      "strict_agreement": [
+        0.7757583333333333,
+        0.7757583333333333
+      ],
+      "managed_released": true
+    },
+    {
+      "pair": "2418",
+      "recipe": "bilinear",
+      "exit_code": 0,
+      "seconds": 5.402407999965362,
+      "inputs": {
+        "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2418.arw": "ece80551abf64949dbe826985a80f1d9b265401ee4ea6b989e1829549616fdcd",
+        "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418.tiff": "91734d016bf811541e715dcfd0907b9ec32a16799699c9eef8cbf9dcc510c108"
+      },
+      "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/explicit-request-2418-bilinear-20261026.log",
+      "log_sha256": "6be486bdd840497d1622c8bbec1e6510cb200280cf4cefa58d895b6dd6b1fddf",
+      "projected_agreement": [
+        0.95198075,
+        0.9520462916666667
+      ],
+      "strict_agreement": [
+        0.9071552083333333,
+        0.9071552083333333
+      ],
+      "managed_released": true
+    }
+  ],
+  "scope": "Known-shift guarded file API, explicit DecodeRequest RAW development recipe, two original Sony RAW/linear-TIFF pairs; fixed shift (12,12), tolerance 0.03, white-anchor gains 0.9..1.1.",
+  "limitations": [
+    "Supplied geometry; automatic discovery is not tested here.",
+    "Matching development recipes does not qualify arbitrary cross-development matching.",
+    "These positive pairs do not measure false-positive precision.",
+    "No scanner default changed."
+  ]
+}

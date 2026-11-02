@@ -1,0 +1,37 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CzkawkaTauri",
+  "identifier": "com.shixinhuang.czkawka-tauri",
+  "mainBinaryName": "CzkawkaTauri",
+  "build": {
+    "devUrl": "http://localhost:4000",
+    "frontendDist": "../ui/dist"
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["dmg", "nsis"],
+    "icon": [
+      "../assets/128x128.png",
+      "../assets/128x128@2x.png",
+      "../assets/icon.icns",
+      "../assets/icon.ico",
+      "../assets/icon.png"
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "A Tauri-based frontend for Czkawka on macOS and Windows",
+    "useLocalToolsDir": true,
+    "windows": {
+      "allowDowngrades": true,
+      "webviewInstallMode": {
+        "type": "skip"
+      },
+      "nsis": {
+        "installerIcon": "../assets/icon.ico"
+      }
+    },
+    "macOS": {
+      "minimumSystemVersion": "12.6.3",
+      "signingIdentity": null
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "Original capture handler transpiled in VM with all dependency imports mocked and inert schema proxy; no network or DB",
+  "confirmed": "Duplicate sentinel passed to graph/entity functions and reported as successful capture",
+  "calls": [
+    {
+      "name": "storeConnections",
+      "id": "duplicate"
+    },
+    {
+      "name": "resolveEntities",
+      "id": "duplicate"
+    },
+    {
+      "name": "storeEntityBridges",
+      "id": "duplicate"
+    }
+  ],
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"id\":\"duplicate\",\"created_at\":\"fixture\",\"metadata\":{\"entities\":[]},\"message\":\"Thought captured successfully\"}"
+      }
+    ]
+  }
+}

@@ -74,8 +74,8 @@ pub mod raster {
 /// backend's semantic recipe. Must stay in sync with
 /// `scripts/native-cr3-semantic-lock.sha256`.
 pub const WORKSPACE_LOCK_DIGEST: [u8; 32] = [
-    0xfc, 0x7f, 0xa9, 0x6e, 0x12, 0x29, 0x5d, 0x02, 0x5b, 0x2d, 0xf0, 0xd3, 0x8b, 0xcd, 0xcb, 0x1e, 0xb6,
-    0x04, 0x3a, 0xfe, 0x0b, 0xeb, 0x34, 0x85, 0x6e, 0xe9, 0x20, 0x74, 0x08, 0x78, 0xb6, 0xf1,
+    0xf6, 0x83, 0x63, 0x8c, 0x01, 0x1b, 0x0a, 0xff, 0xc4, 0x41, 0x4a, 0x81, 0xd3, 0x6d, 0x93, 0x8d, 0x94,
+    0x8e, 0xc0, 0xe1, 0xf0, 0xcf, 0x44, 0xb0, 0xf3, 0xce, 0x67, 0xc7, 0xab, 0xb0, 0xfe, 0x1a,
 ];
 
 use std::{
@@ -128,10 +128,21 @@ pub trait RawDecoder: Send + Sync {
     fn decode(&self, request: &DecodeRequest) -> Result<DecodeOutput, DecodeError>;
 }
 
+/// Explicit recipe for consumers developing a full sensor frame.
+/// Sensor extraction itself remains unchanged; default development is preserved.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
+pub enum RawDevelopmentRecipe {
+    #[default]
+    NativeDefault,
+    Bilinear,
+}
+
 #[derive(Debug, Clone)]
 pub struct DecodeRequest {
     pub path: PathBuf,
     pub image_index: usize,
+    /// Selected-frame RAW development recipe; distinct recipes require distinct cache identities.
+    pub raw_development_recipe: RawDevelopmentRecipe,
     /// Explicit RPF channel, alpha and color interpretation. No inferred defaults.
     pub rpf_interpretation: Option<RpfRasterInterpretation>,
     /// Explicit producer-declared alpha association for RLA. None refuses
@@ -170,6 +181,7 @@ impl DecodeRequest {
         Self {
             path: path.into(),
             image_index: 0,
+            raw_development_recipe: RawDevelopmentRecipe::NativeDefault,
             rpf_interpretation: None,
             rla_alpha_mode: None,
             rla_float_byte_order: None,

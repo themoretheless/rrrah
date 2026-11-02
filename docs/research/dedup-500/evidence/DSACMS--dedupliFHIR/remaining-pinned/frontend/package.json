@@ -1,0 +1,62 @@
+{
+  "name": "deduplifhir-app",
+  "version": "1.0.0",
+  "productName": "DedupliFHIR",
+  "description": "An Electron app that uses the DedupliFHIR CLI to provide data-linkage and AI deduplication for reported ACO data at scale.",
+  "author": "Natalia Luzuriaga",
+  "license": "CC0-1.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "lint": "eslint ./**.js",
+    "lint:fix": "eslint --quiet --fix \"**.js\"",
+    "prettier": "prettier --check ./**.{js,css}",
+    "prettier:fix": "prettier --write \"./**.{js,css}\"",
+    "test": "playwright test --timeout=120000",
+    "pack": "electron-builder --dir",
+    "dist": "cd .. && make dist"
+  },
+  "build": {
+    "appId": "gov.cms.deduplifhir",
+    "mac": {
+      "icon": "assets/DedupliFHIR-Icon-MacOS.icns"
+    },
+    "win": {
+      "icon": "assets/DedupliFHIR-Icon-Windows.ico"
+    },
+    "linux": {
+      "icon": "assets/DedupliFHIR-Icon-Linux.png"
+    },
+    "extraResources": [
+      {
+        "from": "../python",
+        "to": "python",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "../cli",
+        "to": "cli",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
+  },
+  "repository": "https://github.com/DSACMS/dedupliFHIR",
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
+    "@playwright/test": "^1.48.2",
+    "electron": "^33.0.2",
+    "electron-builder": "^25.1.8",
+    "eslint": "^9.14.0",
+    "prettier": "^3.3.3"
+
+  },
+  "dependencies": {
+    "@uswds/uswds": "3.9.0",
+    "fs-extra": "^11.2.0",
+    "python-shell": "^5.0.0"
+  }
+}

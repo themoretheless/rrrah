@@ -1,0 +1,88 @@
+{
+  "repository": "icodywu/minhash-dedup",
+  "commit": "aa5825b2f3fa1f100e477370cd212f02f30bf755",
+  "reviewed_whole_files": [
+    {
+      "path": "scripts/dedup_params.py",
+      "sha256": "f4fc1014ab8cee5b37b617aabb3cdeb5e7145ed4ff596b51ca969aecf5aa62a3",
+      "git_blob_sha1": "8a80cdeb8c496658dbb4bb77c6322e4db1e45c37",
+      "whole_file_read": true
+    },
+    {
+      "path": "scripts/minhash_driver.sh",
+      "sha256": "0f87aa168d3347286cf9004f0c1343a3d1c397484461a3873ac4445661be9c6d",
+      "git_blob_sha1": "1173eb6320395669146780322a13a7317275169b",
+      "whole_file_read": true
+    },
+    {
+      "path": "tests/test_minhash_analysis.py",
+      "sha256": "44504061dce9b39de0a35689144db4cdf5d7082060f5ff0baaafdfc4c0dc0458",
+      "git_blob_sha1": "8f2cd3ff3672bb17a0c6fdd9a1f14cf68e1aedb9",
+      "whole_file_read": true
+    },
+    {
+      "path": "src/minhash_dedup/minhash.py",
+      "sha256": "baecce90fb346d1fb697ea81e7efc78f5c3fc7c2c3a73d6d81afc17b1f32b129",
+      "git_blob_sha1": "022c1eab5c8e7dc7875cee94fb3e69369388e8b6",
+      "whole_file_read": true,
+      "lines": 2224
+    }
+  ],
+  "whole_file_count": 4,
+  "tree_blob_count": 37,
+  "full_repository_read": false,
+  "original_analysis_tests_read": 13,
+  "original_tests_run": 0,
+  "authored_controls_run": 19,
+  "controls": [
+    "docs/research/dedup-500/minhash171-controls-20261024/signature-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/bucket-reader-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/prune-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/support-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/support-initial-failure.txt",
+    "docs/research/dedup-500/minhash171-controls-20261024/selection-results.json",
+    "docs/research/dedup-500/minhash171-controls-20261024/filter-results.json"
+  ],
+  "runtime_scope": "Pinned original signature arithmetic methods with real NumPy, config DTO only.\n\nNo tokenization/NLTK, stage IO, corpus, scheduler or signature-analysis kernel.\n",
+  "findings": [
+    "Original signature arithmetic with actual NumPy: fixed-seed/order and multiplicity invariants pass;32-bit range/shape pass.",
+    "Original direct get_signature(empty) raises ValueError; complete reviewed run() guards empty shingles and skips document signatures. Not a full pipeline bug.",
+    "Source: get_shingles strips ASCII punctuation and normalizes whitespace, preserves case and ignores legacy norm_config; therefore signature resemblance is not raw byte identity.",
+    "Source: per-band signature files independently sorted after all local records loaded into NumPy; peak-memory scalability not measured.",
+    "Source: signature file rewrite opens final path wb and tofile; comment calls atomic but no temporary-path rename in this method. Failure durability untested.",
+    "Analysis test bodies cover sorted-band document alignment, reader-scoped IDs, missing/duplicate/unknown IDs, sampling and empty/removal cases; no original cases executed because Numba/runtime graph not qualified.",
+    "Slurm driver and parameter script wholly read, not executed; no scheduler, corpus, S3 or user data access.",
+    "Executed unchanged original PruneStage _iter_bucket_rows/key helpers with actual owned files: uint32 max document ID preserves reader scope; truncated count and truncated pair raise explicit ValueError; empty file yields no rows. Folder access is adapter; no full pruning pipeline qualification.",
+    "Source-only complete BucketStage: band hash equality defines duplicate bucket; secondary hash affects heap order but deliberately does not split equality group. Not proof of text/byte equality.",
+    "Source-only BucketStage worker layout assumes positive workers_per_bucket=world_size//num_buckets; caller/scheduler configuration not validated in runtime controls.",
+    "Source-only file sorting check arr.nbytes%record_size cannot detect trailing bytes already omitted by NumPy structured fromfile; actual corrupted signature production recovery not tested.",
+    "Executed complete original PruneStage with actual owned files, local folder adapter and timing/log/progress adapters: strict subset removed while superset preserves full member set; equal cross-band groups retain lower UID. Not distributed/corpus precision evidence.",
+    "Executed same input/output folder boundary: original _rewrite_pruned_band opens final output wb before iterating corresponding source, so owned nonempty file truncates to empty. Earlier fully read dedup_params declares distinct buckets/buckets_pruned paths; normal stage wiring not yet qualified, so not claiming default pipeline data loss.",
+    "Source: target key_to_aidx maps each document to one bucket within target band; correctness assumes each document belongs to at most one bucket per band. Invalid overlapping target buckets not exercised.",
+    "Source: _load_dup_buckets uses struct.unpack directly, unlike Prune iterator explicit truncated record checks; malformed errors differ, complete selection recovery not qualified.",
+    "Executed original equal-support helper against independent support-set reference on all128 subsets of seven nonempty buckets over3 keys: compressed rows,smallest representatives,alias count andweights match. Finite exhaustive check, not universal proof.",
+    "Executed dominance helper over same128 cases: every removed compressed representative has a surviving subset-support witness in these cases; no new keys introduced.",
+    "Rejected authored assumption preserved: each bucket need not stay nonempty. Counterexample [[0],[0,1]] reduces [None,[1]]; initial failed assertion was review-harness mistake, not upstream defect.",
+    "Explicit chain supports A:{0},B:{0,1},C:{1} remain unchanged by dominance helper. Initial predicted suppression ofB was not observed; helper is not full minimal-support elimination or final clustering.",
+    "Source search locates dominated-support helper call inside compute_punct_bound diagnostic; final run()/assignment semantics not yet reviewed and no connected-component equivalence claim made.",
+    "Executed complete original SelectionStage and original binary loader with actual owned binary inputs/outputs and explicit folder/output-manager,timing/stat/log/progress adapters; unused config DTO only. No signature/corpus/distributed/optional analysis qualification.",
+    "All128 finite hypergraphs on3 IDs satisfy output ID coverage,one retained representative per cluster,serialized cluster-size parity,and original-bucket witness for each assigned nonrepresentative. Not universal proof of optimality or pairwise similarity.",
+    "Executed chain buckets[1,2],[2,3] emits clusters[1,2] and[3],removing2. This directly confirms final selection differs from transitive connected components on this fixture.",
+    "Whole diagnostic compute_punct_bound and compute_cov_bound read; they are separate from run() removal decisions. Dominance helper belongs to diagnostic path, so prior helper observation is not a final clustering verdict.",
+    "Complete2224-line core file wholly read, including FilterStage,Numba kernel and signature alignment/memmap analysis. Reading kernel is not native compiled execution.",
+    "Executed original FilterStage with owned removal files,no clusters files: missing all sidecars passes original documents without metadata changes; sorted removals1,2 retain0,3 and assign unknown-cluster metadata.",
+    "Unsorted owned removal IDs2,1 silently retain1 because streaming pointer cannot move backward; original SelectionStage writes sorted IDs, so malformed boundary only, not reproduced default end-to-end failure.",
+    "Truncated first removal record raises struct.error; no partial deletion of real inputs/user data exercised.",
+    "Analysis aligns IDs independently per band, checks duplicate/missing/unexpected IDs, supports sampling and cleans temporary directory in finally;13 original analysis tests still unexecuted and Numba/performance not qualified.",
+    "Source: optional diagnostics all-pairs count grows quadratically up to sample cap10million documents; no feasibility/performance claim from source."
+  ],
+  "decision": "reference-only-no-adoption",
+  "remaining": "4/37 pinned whole files read;core complete but runtime adapters and partial dependency graph;metadata tuple loading,Numba analysis,real corpus and other repository files incomplete",
+  "deferred": "Native pHash.org/ASAN remains deferred",
+  "binary_reader_runtime_scope": "Original PruneStage binary bucket reader; real owned files, folder adapter only.",
+  "previous_audit": "docs/research/dedup-500/minhash171-source-review-v5-20261024.json",
+  "prune_runtime_scope": "Complete original PruneStage with local-folder, timing/log/progress adapters.\n\nActual owned binary files and original run/process/rewrite algorithms; no\nsignature generation, distributed execution or full corpus pipeline.\n",
+  "support_runtime_scope": "Original support-compression/dominance helpers, finite exhaustive owned graphs.\n\nNo MinHash extraction, threshold matching, representative run(), corpus or IO.\n",
+  "selection_runtime_scope": "Complete original SelectionStage and binary loader; owned finite bucket files.\n\nAdapters: Stage timing/stats, local folders/output manager, log/progress only.\nNo MinHash generation, distributed job, optional signature analysis or corpus.\n",
+  "filter_runtime_scope": "Complete original FilterStage, owned removal files; no cluster metadata files.\n\nStage/folder/log/stat labels are adapters. Metadata tuple reader deliberately\nraises if called: cluster-metadata loading is not qualified by these controls.\n"
+}

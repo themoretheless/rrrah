@@ -1,0 +1,38 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original scheduled service and scheduler bodies, original pipeline constructor. delete_file, database, imported scan/email helpers, Plex and timer replaced with in-memory adapters. Three-count helper return matches reviewed route contract. No deletion, actual scheduler job, message, database or service operation executed.",
+  "authored_controls": [
+    {
+      "name": "scheduled real-mode request retains pipeline dry-run default",
+      "passed": true,
+      "observed": [
+        {
+          "id": 10,
+          "pipeline_dry_run": true
+        }
+      ]
+    },
+    {
+      "name": "incomplete returned history marks no-keeper pending set processed",
+      "passed": true,
+      "observed": {
+        "status": "processed",
+        "summary": {
+          "sets_processed": 1,
+          "files_deleted": 1,
+          "errors": [],
+          "dry_run": false,
+          "timestamp": "2026-10-24T07:57:06.018872+00:00"
+        }
+      }
+    },
+    {
+      "name": "three-count process result error still queues post-scan deletion",
+      "passed": true,
+      "observed": [
+        "scheduled_deletion_after_scan"
+      ]
+    }
+  ]
+}

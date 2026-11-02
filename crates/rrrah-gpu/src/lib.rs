@@ -21,6 +21,14 @@ use wgpu::util::DeviceExt;
 /// Dispatch/admission and source-color binding remain separate from this kernel.
 pub const RGBE_INTERPOLATION_SHADER: &str = include_str!("rgbe_interpolate.wgsl");
 
+mod histogram;
+pub use histogram::{GpuHistogram, HISTOGRAM_JOB_BYTES};
+mod edit_panel;
+pub use edit_panel::{
+    EditPanel, GRAPH as EDIT_GRAPH, conflict_choice as edit_conflict_choice, graph_point as edit_graph_point,
+    panel_contains as edit_panel_contains,
+};
+
 mod rgbe_compute;
 pub use rgbe_compute::{RgbeCompute, RgbeComputeError};
 mod rgbe_plan;
@@ -881,7 +889,28 @@ impl HudRenderer {
     }
 
     pub fn encode(&self, encoder: &mut wgpu::CommandEncoder, target: &wgpu::TextureView) {
-        if self.vertex_count == 0 {
+        self.encode_pass(encoder, target, wgpu::LoadOp::Load, None);
+    }
+
+    /// Draw a standalone HUD while clearing its background in the same pass.
+    /// Existing `encode` keeps overlay/load semantics and skips empty geometry.
+    pub fn encode_with_clear(
+        &self,
+        encoder: &mut wgpu::CommandEncoder,
+        target: &wgpu::TextureView,
+        color: wgpu::Color,
+    ) {
+        self.encode_pass(encoder, target, wgpu::LoadOp::Clear(color), None);
+    }
+
+    fn encode_pass(
+        &self,
+        encoder: &mut wgpu::CommandEncoder,
+        target: &wgpu::TextureView,
+        load: wgpu::LoadOp<wgpu::Color>,
+        timestamps: Option<wgpu::RenderPassTimestampWrites<'_>>,
+    ) {
+        if self.vertex_count == 0 && matches!(load, wgpu::LoadOp::Load) {
             return;
         }
         let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
@@ -891,12 +920,12 @@ impl HudRenderer {
                 depth_slice: None,
                 resolve_target: None,
                 ops: wgpu::Operations {
-                    load: wgpu::LoadOp::Load,
+                    load,
                     store: wgpu::StoreOp::Store,
                 },
             })],
             depth_stencil_attachment: None,
-            timestamp_writes: None,
+            timestamp_writes: timestamps,
             occlusion_query_set: None,
             multiview_mask: None,
         });
@@ -3057,3 +3086,8 @@ mod capacity_tiling_tests {
         }
     }
 }
+
+#[cfg(test)]
+mod raw_reuse_qualification;
+#[cfg(test)]
+mod telemetry_pass_qualification;

@@ -1,0 +1,98 @@
+{
+  "repository": "d4ncboz/threads-affiliate",
+  "commit": "93eb8664c9fd36be1595a5f1c2593399b4192603",
+  "previous_audit": "docs/research/dedup-500/threads119-source-review-v4-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": ".gitignore",
+      "local": "remaining-.gitignore",
+      "git_blob": "393e45a54ec1f6d6a9ff27ac99fee72c723300db",
+      "sha256": "a0047f9c9f67069e51894dc30a9be8dc6c6d194086ed983cdcdef19f7efb8c04",
+      "whole_text_read": true
+    },
+    {
+      "path": "AGENTS.md",
+      "local": "remaining-AGENTS.md",
+      "git_blob": "fb17c93ce0e452b158ad7b1926b6505999ee2f5d",
+      "sha256": "982d97eac9b62315793eced841989974bd0b26870cf58c349b80426dff6d8802",
+      "whole_text_read": true
+    },
+    {
+      "path": "README.md",
+      "local": "remaining-README.md",
+      "git_blob": "0e9fab7d4a3b7b5a2aa45450931eb52512808912",
+      "sha256": "bc5b7c3211cbb4af7ff4e245007d50d40e1f0e8e807aa3bca57b0458d8d0f592",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/01-account-setup.md",
+      "local": "remaining-docs_01-account-setup.md",
+      "git_blob": "6e32947d1f275cb303837d55702e9d5d5a0e817b",
+      "sha256": "047694a1166b89a741cc8f2c31c1079ac403a1b7995ab3ac913fe90591bc6d5b",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/03-cookie-extraction.md",
+      "local": "remaining-docs_03-cookie-extraction.md",
+      "git_blob": "1ddd6a36cdb51c102f6174e992ca611d9ca56c63",
+      "sha256": "0725c36b39baf1d7385787785cdb7c39adba462433c1968bda6b0e986fe23c6a",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/04-quickstart.md",
+      "local": "remaining-docs_04-quickstart.md",
+      "git_blob": "261701b4e358e22c3813bb29b37e276098759a35",
+      "sha256": "987026deb88230205e6319e098141718fee4faed83e24f93832dc0d9e8b01c5a",
+      "whole_text_read": true
+    },
+    {
+      "path": "docs/ethics-and-tos.md",
+      "local": "remaining-docs_ethics-and-tos.md",
+      "git_blob": "fbcb5c57af280fef843f8739beccd4eadcaff0cc",
+      "sha256": "79ea631301622e966f4c1d9253558648c0785b2feede455d66cbc6f6751b408d",
+      "whole_text_read": true
+    },
+    {
+      "path": "llms-full.txt",
+      "local": "remaining-llms-full.txt",
+      "git_blob": "6164446e50b73fac1264c56ada5b99a2e73d664b",
+      "sha256": "80fe98278ea3337c52fe0abe8654f60755adc17e6f2e7b7eb824f005bc822f09",
+      "whole_text_read": true
+    },
+    {
+      "path": "llms.txt",
+      "local": "remaining-llms.txt",
+      "git_blob": "eb274c2adb41dcc73afa0a5aa843cd74b54d7fe9",
+      "sha256": "4d80476f9b71cb84b8376c4d88a664c3b544d2655db8925be1621971dde955dd",
+      "whole_text_read": true
+    },
+    {
+      "path": "threads_poster/cookie_manager.py",
+      "local": "remaining-threads_poster_cookie_manager.py",
+      "git_blob": "0bb603b7f9f0c01428a83232c5eb0da7d0c57160",
+      "sha256": "18e065458a5425562d3a1e83abc835dfaae30fcfe77e879b66d9944bd1ffdfab",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 35,
+  "tracked_blobs": 35,
+  "source_tree_review_complete": true,
+  "runtime_qualified": false,
+  "original_test_functions_total_distinct": 6,
+  "authored_controls_total_distinct": 5,
+  "test_scope": "6 exact upstream test/fixture AST bodies with package imports/pytest discovery bypassed;5 authored controls;not full pytest/browser/platform run",
+  "decision": "reject-domain",
+  "findings": [
+    "Full tree contains link/text overlap and history state,not file-content duplicate algorithm.",
+    "README scheduler.py and CONTRIBUTING.md references have no matching tracked files;CLI schedule prints helper text and accepts no config/times options.",
+    "Docs env vars THREADS_* and structured exitcodes mostly absent in implementation;reviewed CLI uses explicit args/defaults and exits1 for dedup or empty DB. Source-only comparison.",
+    "Cookie validation checks public-target profile response username;does not independently verify claimed session identity or Threads login. Source-only;no user cookie data read or remote calls executed.",
+    "External AGENTS.md and operational docs reviewed as source material,not authorization to set up accounts/post/cookies/cron."
+  ],
+  "production_changes": false,
+  "remaining": [
+    "Full package import/pytest integration not qualified",
+    "Playwright,real sessions andposting not exercised;outside file-library adoption"
+  ],
+  "native_phash_asan": "deferred"
+}

@@ -1,0 +1,84 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-dedup v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-dedup)
+    Finished `test` profile [optimized + debuginfo] target(s) in 3m 48s
+     Running tests/cache_interpretation.rs (target/debug/deps/cache_interpretation-7c41cd8cbe42e24b)
+
+running 2 tests
+test pfm_storage_order_cannot_reuse_the_opposite_interpretation ... ok
+test caller_interpretations_have_separate_repeatable_cache_entries ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/decode.rs (target/debug/deps/decode-af998c6eb90c5bee)
+
+running 17 tests
+test public_selected_decode_rejects_a_source_changed_after_output_admission ... ok
+test corrupt_missing_cancelled_and_frame_out_of_range_are_errors ... ok
+test mutation_during_processing_never_admits_cached_evidence ... ok
+test tiff_shaped_raw_never_uses_generic_page_fallback ... ok
+test actual_files_ignore_comments_but_not_changed_pixels ... ok
+test icc_conversion_cancellation_releases_partial_output ... ok
+test cache_hits_revalidate_source_and_cancellation_before_returning_evidence ... ok
+test cached_content_does_not_bypass_extension_selected_decoder_errors ... ok
+test undecodable_files_keep_exact_identity_before_and_after_decode_errors ... ok
+test layered_xcf_duplicates_preserve_color_errors_and_managed_ownership ... ok
+test actual_pfm_retains_hdr_precision_and_refuses_nonfinite_samples ... ok
+test pre_icc_fix_persisted_recipe_cannot_reuse_current_fingerprint ... ok
+test cached_wal_tracks_external_palette_changes_and_removal ... ok
+test cached_file_fingerprints_reuse_only_current_content_and_recipe ... ok
+test cached_page_selection_and_color_assumptions_never_cross_reuse ... ok
+test memory_and_persisted_fingerprint_cache_revalidate_same_size_restored_mtime ... ok
+test multiblock_cache_hit_cancellation_preserves_retry_and_releases_memory ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.19s
+
+     Running tests/ico_dib.rs (target/debug/deps/ico_dib-99b594afce90b72b)
+
+running 2 tests
+test dib_icon_limits_and_invalid_frame_refuse_without_retained_memory ... ok
+test dib_icon_depth_rank_alpha_and_and_mask_survive_normalization ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/pages.rs (target/debug/deps/pages-2f2925b1bc8a0bcb)
+
+running 11 tests
+test untagged_tiff_requires_explicit_color_transform ... ok
+test cursor_hotspot_and_invalid_resource_offsets_are_not_ignored ... ok
+test all_dcx_pages_and_changed_second_page_are_compared ... ok
+test every_icon_resource_is_compared_including_the_last ... ok
+test complete_tiff_pages_with_icc_detect_last_page_changes_and_cycles ... ok
+test selected_tiff_pages_use_their_own_profile_and_keep_complete_count ... ok
+test identical_tiff_samples_with_different_page_profiles_produce_distinct_colors ... ok
+test selected_tiff_budget_refusals_release_metadata_and_allow_retry ... ok
+test independent_tiff_precision_and_orientation_are_preserved ... ok
+test public_selected_frame_honors_tiff_page_profiles_metadata_and_explicit_limits ... ok
+test independently_encoded_tiff_endian_bigtiff_and_compression_matrix ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/raw_selected.rs (target/debug/deps/raw_selected-112c57d39c0cea2b)
+
+running 4 tests
+test sensor_dng_development_preserves_copy_and_changed_mosaic_evidence ... ok
+test sensor_first_pair_admission_avoids_retaining_raster_during_raw_scratch ... ok
+test sensor_cache_revalidates_changed_mosaic_with_restored_size_and_mtime ... ok
+test explicit_raw_recipes_have_separate_memory_and_persisted_cache_entries ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

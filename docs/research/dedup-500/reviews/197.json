@@ -2,7 +2,7 @@
   "index": 197,
   "repository": "WSH032/image-deduplicate-cluster-webui",
   "commit": "02963057d5ae9368f8f481f44e2d30b7c63ed946",
-  "review_scope": "selected pinned source excerpts and file/test inventory; not a full-file audit or executed test run",
+  "review_scope": "All40 tracked artifacts assessed:36 whole text reads+3 notebook inspections+1 full-diff review.20 external media pending;44 authored cases across21 scenarios;no full model/UI runtime.",
   "decision": "wrapper",
   "finding": "Image WebUI delegates to PHash and clustering libraries; inspect delegated algorithms before selecting runtime.",
   "available_source_evidence": [
@@ -74,5 +74,7 @@
       "source": false,
       "test": false
     }
-  ]
+  ],
+  "latest_source_review": "docs/research/dedup-500/webui197-source-controls-v19-20261024.json",
+  "authored_controls_run": 21
 }

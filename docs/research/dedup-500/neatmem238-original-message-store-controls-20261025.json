@@ -1,0 +1,112 @@
+{
+  "scope": "Original store-only callbacks via AST, original SQLite module with abstract base replaced by object; fresh actual stdlib SQLite :memory: per case, explicitly closed",
+  "passed": 26,
+  "results": [
+    {
+      "name": "TestScopeAndRetention.test_app_id_isolation",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_and_count_basic",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_descending",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_default_order_is_desc",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_content_like",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_roles_filter",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_after_before_closed_interval",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_count_with_content_like",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_query_returns_scope_fields",
+      "passed": true
+    },
+    {
+      "name": "TestQueryAndCount.test_empty_scope_returns_empty",
+      "passed": true
+    },
+    {
+      "name": "TestGetLastLimit.test_get_last_returns_scope_fields",
+      "passed": true
+    },
+    {
+      "name": "TestListSessions.test_list_sessions_basic",
+      "passed": true
+    },
+    {
+      "name": "TestListSessions.test_list_sessions_excludes_null_run_id",
+      "passed": true
+    },
+    {
+      "name": "TestListSessions.test_list_sessions_empty_scope_returns_empty",
+      "passed": true
+    },
+    {
+      "name": "TestListSessions.test_list_sessions_app_id_isolation",
+      "passed": true
+    },
+    {
+      "name": "TestDeleteMessages.test_delete_by_run_id",
+      "passed": true
+    },
+    {
+      "name": "TestDeleteMessages.test_delete_by_user_id",
+      "passed": true
+    },
+    {
+      "name": "TestDeleteMessages.test_delete_empty_scope_returns_zero",
+      "passed": true
+    },
+    {
+      "name": "TestReset.test_reset_clears_all",
+      "passed": true
+    },
+    {
+      "name": "TestReset.test_reset_then_save_works",
+      "passed": true
+    },
+    {
+      "name": "TestSchemaAndEdgeCases.test_empty_scope_save_is_ignored",
+      "passed": true
+    },
+    {
+      "name": "TestIngestIdempotency.test_same_batch_twice_deduped",
+      "passed": true
+    },
+    {
+      "name": "TestIngestIdempotency.test_event_at_excluded_from_dedup",
+      "passed": true
+    },
+    {
+      "name": "TestIngestIdempotency.test_identical_messages_in_one_batch_collapse",
+      "passed": true
+    },
+    {
+      "name": "TestIngestIdempotency.test_same_content_different_run_not_deduped",
+      "passed": true
+    },
+    {
+      "name": "TestIngestIdempotency.test_scope_missing_fields_normalized",
+      "passed": true
+    }
+  ],
+  "excluded": "Simulator, retention monkeypatch, file-schema and self-created-file cases; no pytest runner or full suite",
+  "full_upstream_suite_run": false
+}

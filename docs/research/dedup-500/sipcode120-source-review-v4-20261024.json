@@ -1,0 +1,56 @@
+{
+  "repository": "Anuj7411/sipcode",
+  "commit": "16f261ce06ee93ab9c61b5f72ca5142173f189bb",
+  "previous_audit": "docs/research/dedup-500/sipcode120-source-review-v3-20261024.json",
+  "new_whole_files_read": [
+    {
+      "path": "src/modules/proxy/prewarmCache.ts",
+      "local": "warm-src_modules_proxy_prewarmCache.ts",
+      "git_blob": "cd43eb4ee6e975b6b2814c93b96a9df41e28482c",
+      "sha256": "7e23dd158ca644e7c50ef22cd4b07e2233812b449f9052d2bd1593e968a9b98a",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/modules/proxy/prewarmCache.test.ts",
+      "local": "warm-tests_modules_proxy_prewarmCache.test.ts",
+      "git_blob": "c1b997462fe5e39c8d995360f9071b2ae215b89f",
+      "sha256": "716191b3ae5b1f1252018b156c7cd56ead750ddd45c10be0fa9361ac5df1b039",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 10,
+  "tracked_blobs": 788,
+  "whole_repo_complete": false,
+  "original_vitest_results": {
+    "numTotalTests": 51,
+    "numPassedTests": 51,
+    "numFailedTests": 0,
+    "numPendingTests": 0
+  },
+  "new_original_tests_distinct": 27,
+  "original_tests_scope": "3 unchanged original testfiles;originalcache/decision/warmfill/pathmodules;isolatedVitest4.1.0;full app and live host unqualified",
+  "authored_controls_total_distinct": 11,
+  "new_authored_controls": 3,
+  "harness": "docs/research/dedup-500/sipcode120-controls-20261024",
+  "original_harness": "docs/research/dedup-500/sipcode120-original-tests-20261024",
+  "warm_result": {
+    "runtime": "v22.23.4",
+    "controls_passed": 3,
+    "transcript_bytes": 897,
+    "transcript_utf16_units": 497,
+    "findings": [
+      "maxTranscriptBytes compares UTF16 stringlength, admits largerUTF8 payload",
+      "Different content rejected by warmfill",
+      "CRLF vsLF canonical match accepted and retainsrawdiskhash;intentional text semantics,not byte identity"
+    ],
+    "scope": "Original whole warmfill with only path import location changed;owned synthetic transcript/diskIO;not actual tool transcript/server"
+  },
+  "findings": [
+    "UTF8 transcript897bytes passes maxTranscriptBytes497 because raw.length497 countsUTF16units.",
+    "Different disk content rejected;LF/CRLF normalization accepted intentionally withrawSHAretained;cannot adopt as exactbinaryidentity.",
+    "Original 1000-candidate test mocksI/O and measures<2s;not realdisk throughput or memorybound proof.",
+    "All candidates verified concurrently withPromise.all up tocap200;whole transcript read before limit check;memoryresource behavior source-only."
+  ],
+  "production_changes": false,
+  "native_phash_asan": "deferred"
+}

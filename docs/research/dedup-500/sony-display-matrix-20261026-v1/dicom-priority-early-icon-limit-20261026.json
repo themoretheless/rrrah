@@ -1,0 +1,36 @@
+{
+  "command": "cargo +1.98.1 test -p rrrah-dedup --features decode --test ico_dib --test dicom_preamble --test decode --test pages --test raw_selected --test cache_interpretation",
+  "passed": 38,
+  "failed": 0,
+  "logs": [
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-dicom-float-color-refusal-20261026.log",
+      "sha256": "ffc98ecc3d919f240aa220b706f5953801334cb6df8336daf3aeb923e6392314"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-dicom-preamble-before-20261026.log",
+      "sha256": "9f889cf037af197b2c26b1257d7b1b02e05e77ded53b88d856faa98407a9f3d2"
+    },
+    {
+      "path": "docs/research/dedup-500/sony-display-matrix-20261026-v1/rrrah-dicom-early-icon-limit-after-20261026.log",
+      "sha256": "9d05d82006f6f74d646b8c6a4211256546f0e39ff3b682a2ebe970de55733644"
+    }
+  ],
+  "source_sha256": {
+    "crates/rrrah-dedup/src/decode.rs": "4ee9af2e3768420aff054eed216131a7fd96e88c5b48f68052796a55ed20c6d5",
+    "crates/rrrah-dedup/tests/dicom_preamble.rs": "9b4cb1c31ebcecd0cdd6fda29d384ab1240c4112ce89b07143f87a90f324d496",
+    "crates/rrrah-dedup/tests/ico_dib.rs": "f2314596363809bc4120c0472971dd9751d2ec3777bf7153ae4b18ad26f85a50"
+  },
+  "confirmed_before_failure": "Valid declared-sRGB DICOM with TIFF-like arbitrary preamble was misrouted into TIFF selected-page handling and returned Container(Source(Policy)).",
+  "implemented": "Bounded 132-byte-or-shorter prefix preserves DICM precedence, admits ICO/CUR directory count before managed pixel allocation, and retains generic post-decode reported-count guard. Fingerprint domain v8 separates altered routing semantics from old cache keys.",
+  "controls": [
+    "DICOM every reported frame preserves direct selected-frame equality and count/index metadata with misleading TIFF, ICO and CUR preambles and suffixes.",
+    "ICO/CUR two-entry directories with max_frames=1 return exact FrameLimit observed=2,limit=1 under zero managed budget; used/peak both zero.",
+    "TIFF, RAW, decode and cache interpretation regressions retained."
+  ],
+  "limitations": [
+    "Initial float-DICOM baseline still refuses ColorTransformRequired; this routing fix does not implement a display window/color transform for stored measurements.",
+    "ICO/CUR early check only bounds declared entry count; does not prove every payload or all native parser work is pre-admitted.",
+    "Finite fixtures, not universal DICOM/ICO/CUR or multi-format qualification."
+  ]
+}

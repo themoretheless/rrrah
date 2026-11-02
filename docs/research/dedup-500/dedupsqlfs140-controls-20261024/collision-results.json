@@ -1,0 +1,10 @@
+{
+  "controls_passed": 3,
+  "scope": "Original private write-block method AST unchanged;injected hash collision;real SQLite lookup fixture;explicit cache/owner/index/compression/logger adapters;no real hash collision,FUSE or actual full database manager execution",
+  "findings": [
+    "With collision checking enabled and differing bytes but equal injected digest,method logs warning and still reuses old hash id with no replacement data.",
+    "Equal content positive reuses id.",
+    "Different recomputed old digest raises Data corruption."
+  ],
+  "warning_count": 2
+}

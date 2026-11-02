@@ -1,0 +1,299 @@
+{
+  "typescript_version": "3.8.3",
+  "rejected_prior_run": ".dedup-work/nestjs223-controls-20261024/rejected-typescript-2.8.4.json",
+  "method": "Original TypeScript transpiled with local TypeScript and loaded in Node; synchronous callbacks with small assertion adapter, not Jest/Nest/E2E suite.",
+  "original_callbacks": 68,
+  "original_passed": 68,
+  "results": [
+    {
+      "name": "returns a 64-character hex string (SHA-256)",
+      "passed": true
+    },
+    {
+      "name": "is deterministic: same input always produces same hash",
+      "passed": true
+    },
+    {
+      "name": "produces same hash regardless of key insertion order",
+      "passed": true
+    },
+    {
+      "name": "produces different hashes for different values",
+      "passed": true
+    },
+    {
+      "name": "produces different hashes for different keys",
+      "passed": true
+    },
+    {
+      "name": "handles undefined values deterministically",
+      "passed": true
+    },
+    {
+      "name": "handles nested objects deterministically",
+      "passed": true
+    },
+    {
+      "name": "handles empty object",
+      "passed": true
+    },
+    {
+      "name": "handles arrays",
+      "passed": true
+    },
+    {
+      "name": "handles null values",
+      "passed": true
+    },
+    {
+      "name": "produces different hashes for string \"1\" vs number 1",
+      "passed": true
+    },
+    {
+      "name": "produces different hashes for false vs \"false\"",
+      "passed": true
+    },
+    {
+      "name": "0 vs false: different (JSON preserves both as distinct literals)",
+      "passed": true
+    },
+    {
+      "name": "0 vs null: different",
+      "passed": true
+    },
+    {
+      "name": "false vs null: different",
+      "passed": true
+    },
+    {
+      "name": "null vs undefined: different (undefined key is omitted by JSON.stringify; null key is preserved)",
+      "passed": true
+    },
+    {
+      "name": "undefined vs absent key: same (both represent \"field not present in request\")",
+      "passed": true
+    },
+    {
+      "name": "produces different hashes for 0 vs null vs undefined vs false",
+      "passed": true
+    },
+    {
+      "name": "throws RangeError for objects nested deeper than 50 levels",
+      "passed": true
+    },
+    {
+      "name": "does not throw for shallow nested objects (10 levels)",
+      "passed": true
+    },
+    {
+      "name": "throws for circular object references (caught by depth guard before JSON.stringify)",
+      "passed": true
+    },
+    {
+      "name": "throws TypeError when JSON.stringify fails due to a custom toJSON method that throws",
+      "passed": true
+    },
+    {
+      "name": "picks specified fields from request.body under body.* keys",
+      "passed": true
+    },
+    {
+      "name": "supports dot-notation for nested body fields",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for missing body fields",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for missing intermediate nested field",
+      "passed": true
+    },
+    {
+      "name": "preserves null values (distinct from undefined)",
+      "passed": true
+    },
+    {
+      "name": "picks specified headers under header.* keys",
+      "passed": true
+    },
+    {
+      "name": "normalizes header lookup to lowercase",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for missing headers",
+      "passed": true
+    },
+    {
+      "name": "picks specified query params under query.* keys",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for missing query params",
+      "passed": true
+    },
+    {
+      "name": "supports dot-notation for nested query objects",
+      "passed": true
+    },
+    {
+      "name": "picks specified route params under param.* keys",
+      "passed": true
+    },
+    {
+      "name": "returns undefined for missing route params",
+      "passed": true
+    },
+    {
+      "name": "combines body, headers, query, and params in one call",
+      "passed": true
+    },
+    {
+      "name": "body and header with same name do not collide (different prefixes)",
+      "passed": true
+    },
+    {
+      "name": "returns keys sorted alphabetically for determinism",
+      "passed": true
+    },
+    {
+      "name": "rejects __proto__ in a body field name",
+      "passed": true
+    },
+    {
+      "name": "rejects constructor in a body field name",
+      "passed": true
+    },
+    {
+      "name": "rejects forbidden segment in a header name",
+      "passed": true
+    },
+    {
+      "name": "rejects forbidden segment in a query field name",
+      "passed": true
+    },
+    {
+      "name": "rejects forbidden segment in a params field name",
+      "passed": true
+    },
+    {
+      "name": "rejects forbidden segment anywhere in a dot-path",
+      "passed": true
+    },
+    {
+      "name": "rejects field keys that are too long",
+      "passed": true
+    },
+    {
+      "name": "returns empty object when all source arrays are empty",
+      "passed": true
+    },
+    {
+      "name": "returns a new sorted object on each call (no mutation)",
+      "passed": true
+    },
+    {
+      "name": "validates and sorts a pre-built resolved data object",
+      "passed": true
+    },
+    {
+      "name": "rejects forbidden keys",
+      "passed": true
+    },
+    {
+      "name": "accepts body fields only",
+      "passed": true
+    },
+    {
+      "name": "accepts headers only",
+      "passed": true
+    },
+    {
+      "name": "accepts query only",
+      "passed": true
+    },
+    {
+      "name": "accepts params only",
+      "passed": true
+    },
+    {
+      "name": "accepts all four sources together",
+      "passed": true
+    },
+    {
+      "name": "accepts optional keyName",
+      "passed": true
+    },
+    {
+      "name": "ignores unknown extra properties",
+      "passed": true
+    },
+    {
+      "name": "returns false for null",
+      "passed": true
+    },
+    {
+      "name": "returns false for undefined",
+      "passed": true
+    },
+    {
+      "name": "returns false for a string",
+      "passed": true
+    },
+    {
+      "name": "returns false for an array",
+      "passed": true
+    },
+    {
+      "name": "returns false when none of body, headers, query, params is provided",
+      "passed": true
+    },
+    {
+      "name": "returns false when all four sources are empty arrays",
+      "passed": true
+    },
+    {
+      "name": "returns false when body is not an array",
+      "passed": true
+    },
+    {
+      "name": "returns false when body contains non-string entries",
+      "passed": true
+    },
+    {
+      "name": "returns false when headers is not an array",
+      "passed": true
+    },
+    {
+      "name": "returns false when query is not an array",
+      "passed": true
+    },
+    {
+      "name": "returns false when params contains non-string entries",
+      "passed": true
+    },
+    {
+      "name": "returns false when keyName is not a string",
+      "passed": true
+    }
+  ],
+  "authored_controls": [
+    {
+      "name": "Missing different selected fields collapse to same key",
+      "passed": true
+    },
+    {
+      "name": "Header selection case remains in key identity",
+      "passed": true
+    },
+    {
+      "name": "JSON nonfinite numbers collide with null",
+      "passed": true
+    },
+    {
+      "name": "Date objects with different timestamps collapse",
+      "passed": true
+    }
+  ]
+}

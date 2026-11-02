@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@layer utilities {
+  /* Custom color utilities - explicitly defined for JIT */
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+  .bg-secondary {
+    background-color: hsl(var(--secondary));
+  }
+  .bg-destructive {
+    background-color: hsl(var(--destructive));
+  }
+  .bg-destructive-light {
+    background-color: hsl(var(--destructive-light));
+  }
+  .bg-destructive-hover {
+    background-color: hsl(var(--destructive-hover));
+  }
+  .hover\:bg-destructive-hover:hover {
+    background-color: hsl(var(--destructive-hover));
+  }
+  .border-destructive-border {
+    border-color: hsl(var(--destructive-border));
+  }
+  .bg-success {
+    background-color: hsl(var(--success));
+  }
+  .bg-warning {
+    background-color: hsl(var(--warning));
+  }
+  .bg-muted {
+    background-color: hsl(var(--muted));
+  }
+  .bg-accent {
+    background-color: hsl(var(--accent));
+  }
+  .bg-card {
+    background-color: hsl(var(--card));
+  }
+  .bg-popover {
+    background-color: hsl(var(--popover));
+  }
+  .bg-background {
+    background-color: hsl(var(--background));
+  }
+
+  .text-primary {
+    color: hsl(var(--primary));
+  }
+  .text-secondary {
+    color: hsl(var(--secondary));
+  }
+  .text-destructive {
+    color: hsl(var(--destructive));
+  }
+  .text-success {
+    color: hsl(var(--success));
+  }
+  .text-warning {
+    color: hsl(var(--warning));
+  }
+  .text-muted {
+    color: hsl(var(--muted));
+  }
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+  .text-primary-foreground {
+    color: hsl(var(--primary-foreground));
+  }
+  .text-card-foreground {
+    color: hsl(var(--card-foreground));
+  }
+  .text-foreground {
+    color: hsl(var(--foreground));
+  }
+
+  .border-primary {
+    border-color: hsl(var(--primary));
+  }
+  .border-destructive {
+    border-color: hsl(var(--destructive));
+  }
+  .border-success {
+    border-color: hsl(var(--success));
+  }
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+  .border-muted-foreground {
+    border-color: hsl(var(--muted-foreground));
+  }
+
+  .ring-primary {
+    --tw-ring-color: hsl(var(--primary));
+  }
+
+  .from-primary {
+    --tw-gradient-from: hsl(var(--primary)) var(--tw-gradient-from-position);
+    --tw-gradient-to: hsl(var(--primary) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .from-secondary {
+    --tw-gradient-from: hsl(var(--secondary)) var(--tw-gradient-from-position);
+    --tw-gradient-to: hsl(var(--secondary) / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  .to-primary {
+    --tw-gradient-to: hsl(var(--primary)) var(--tw-gradient-to-position);
+  }
+  .to-secondary {
+    --tw-gradient-to: hsl(var(--secondary)) var(--tw-gradient-to-position);
+  }
+}
+
+/* Style select dropdown options to match theme */
+select option {
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+}
+
+/* Style checkboxes and radio buttons to use brand primary color instead of browser default blue */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: hsl(var(--primary));
+}
+
+/* Hide number input spinner arrows for cleaner look */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+::selection {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+::-moz-selection {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 13%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Very dark teal primary - subtle accent */
+    --primary: 174 62% 20%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Hover state - slightly lighter */
+    --primary-hover: 174 62% 25%;
+
+    /* Extra dark teal secondary - very deep */
+    --secondary: 174 62% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 18%;
+    --muted-foreground: 0 0% 60%;
+
+    --accent: 0 0% 18%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Success green - muted for dark mode */
+    --success: 142 50% 45%;
+    --success-foreground: 0 0% 100%;
+    --success-light: 142 30% 20%;
+    --success-border: 142 30% 30%;
+
+    /* Warning amber - muted for dark mode */
+    --warning: 45 90% 55%;
+    --warning-foreground: 0 0% 10%;
+    --warning-light: 45 50% 20%;
+    --warning-border: 45 50% 30%;
+
+    /* Destructive red - dark muted for dark mode (easier on eyes) */
+    --destructive: 0 50% 25%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-light: 0 50% 20%;
+    --destructive-border: 0 50% 35%;
+    --destructive-hover: 0 50% 30%;
+
+    --border: 0 0% 25%;
+    --input: 0 0% 25%;
+    --ring: 174 62% 20%;
+
+    --radius: 0.5rem;
+
+    /* Transitions */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "scope": "Original10 callbacks from auto-link-brain/entities-brain/entities tests; original helpers without environment/client initialization; Node VM TypeScript transpilation and assert adapter; fake DB client. No Deno typechecking/full suite/network/DB.",
+  "outcomes": [
+    {
+      "name": "checkDedup passes p_brain_id to match_thoughts",
+      "passed": true
+    },
+    {
+      "name": "checkDedup passes p_brain_id to perform_merge on duplicate",
+      "passed": true
+    },
+    {
+      "name": "storeConnections passes p_brain_id to match_thoughts",
+      "passed": true
+    },
+    {
+      "name": "storeConnections includes brain_id in connection rows",
+      "passed": true
+    },
+    {
+      "name": "resolveEntities passes p_brain_id to resolve_entities RPC",
+      "passed": true
+    },
+    {
+      "name": "resolveEntities skips RPC for empty entities",
+      "passed": true
+    },
+    {
+      "name": "EntityMention type has required fields",
+      "passed": true
+    },
+    {
+      "name": "resolveEntities calls resolve_entities RPC with formatted entities",
+      "passed": true
+    },
+    {
+      "name": "resolveEntities skips empty entities array",
+      "passed": true
+    },
+    {
+      "name": "resolveEntities swallows errors (best-effort)",
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "decoder_sha256": "a7f88dd9b43996a585149851989e754d421ff88943e791533f8695647374b12f",
+  "test_sha256": "9cfb9ea64c14d7307d1de6dc94a5e1e2d3938ac2f8bdc5987eda8c6679301f37",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "3dcfbfdafa8cfcc2b429f2679e100ac10463db26ffbd9776285085b262df870b",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "9eac5628f7ca2523d665482b1a53bf27f1a150752fb12be3630b758681e893ce",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "final_test_sha256": "fae211b06c75179c6207eec909cd6677f257c66bf88d9c37fdae240a6c0bbac6",
+  "final_sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "6c8334e350781c8a7400cf0de7796f9125bac40ba2b8e381302d19b6cc971b3b",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "9eac5628f7ca2523d665482b1a53bf27f1a150752fb12be3630b758681e893ce",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "note": "Two extra subject/context assertions added inside the direct unit test after full/library builds; final focused test passed. Production code unchanged.",
+  "before_cpu_test_sha256": "652ead0b037b2ee309afa10cfdc39781f81a3356aecd3d69fda5acbcb9978f62",
+  "artifacts": {
+    "cut-proof-rejected.patch": "0a081204155830356acbb345eaaafc5e301d2a6657596f7d4727c78da13a5c35",
+    "cut-proof-rejected-direct.log": "02a5dab022343c8fbcbea8efcb78069a6eb734f04c95343da1ea5ca366ff6ef1",
+    "cut-proof-rejected-poppler.json": "32098b1d37aeb22092fcf69aaeae8f1e92447cd2d270e9a3bb70a89263eb1c88",
+    "cut-proof-rejected-cpu.json": "d8ae09ce213ab6aa2729fd75ea37ede426f280e1b0f9b3e686b930cb6103f318",
+    "cut-proof-rejected-cpu.log": "ce57ec4a70aadbfe91eaa7b606f047ef303150c183d160803b5b5860490ed672"
+  },
+  "full_encode": {
+    "terminal_result": "test result: ok. 108 passed; 0 failed; 6 ignored; 0 measured; 96 filtered out; finished in 79.92s",
+    "log_sha256": "82b1a8e4bcdcd2d9dec88779f1f8043eddcab53c8cb91f0b379a9c9db343304e",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-cut-proof-full-encode-20261102.log"
+  },
+  "feature_vector": {
+    "terminal_result": "test result: ok. 256 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 44.46s",
+    "log_sha256": "686e41c02e2f9475b7ef6a87ebd858e8cc052e0892a96c3348afe21ec2be360b",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-cut-proof-feature-vector-20261102.log"
+  },
+  "default_vector": {
+    "terminal_result": "test result: ok. 256 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 43.11s",
+    "log_sha256": "a93a2eab014b721dd8bba8f717343cf640360d4cc865f4b15bf43d86cca8205a",
+    "log_location": "/Users/themoretheless/.codex/tmp/rrrah-cut-proof-default-vector-20261102.log"
+  },
+  "scope": "Rejected private stack-only cut-proof preparation cache. Correctness passes, but no added visited initial partitions, all actual AI still capped, CPU incremental speed inconclusive. All implementation changes removed.",
+  "rejected_patch_reproduces_final_trial_source": true,
+  "restored_source_sha256": "88e4997896d7444fdceabd43bd7754506a224e0d260d37593e6071a379621321",
+  "restored_decoder_sha256": "2dd55c24c3cede12169441d6a03d1d9b4cb847ff6953049662d69ba45d400754",
+  "restored_decoder_identical_to_accepted_checkpoint": true
+}

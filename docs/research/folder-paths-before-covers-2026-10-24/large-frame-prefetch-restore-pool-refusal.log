@@ -1,0 +1,45 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 21.21s
+     Running unittests src/main.rs (target/debug/deps/rrrah-7624cd91891a6f1f)
+
+running 1 test
+test folder_worker_qualification::real_worker_large_collection_pressure_soak ... large soak adapter: Metal Apple M4 Max
+observed prefetch refusal generation=1 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/002.ppm: raster prefetch skipped: all count slots are protected
+observed prefetch refusal generation=2 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/003.ppm: raster prefetch skipped: all count slots are protected
+observed prefetch refusal generation=2 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/000.ppm: raster prefetch skipped: all count slots are protected
+observed prefetch refusal generation=4 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/033.ppm: raster prefetch skipped: all count slots are protected
+observed prefetch refusal generation=4 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/030.ppm: raster prefetch skipped: all count slots are protected
+observed prefetch refusal generation=5 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/000.ppm: raster prefetch skipped: swap restore memory admission refused
+
+thread 'folder_worker_qualification::real_worker_large_collection_pressure_soak' (51224403) panicked at crates/rrrah-app/src/folder_worker_qualification.rs:818:17:
+assertion `left == right` failed: selection=4 rank=0 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/000.ppm root=100663296: nearest must fit; farther slots protected
+  left: false
+ right: true
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+observed prefetch refusal generation=5 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/.tmpPKXJte/002.ppm: raster prefetch cancelled
+FAILED
+
+failures:
+
+failures:
+    folder_worker_qualification::real_worker_large_collection_pressure_soak
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 434 filtered out; finished in 6.66s
+
+error: test failed, to rerun pass `-p rrrah --bin rrrah`

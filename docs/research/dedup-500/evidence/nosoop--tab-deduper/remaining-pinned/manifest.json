@@ -1,0 +1,29 @@
+{
+	"manifest_version": 2,
+	"name": "__MSG_extensionName__",
+	"version": "1.5.0",
+	"description": "__MSG_extensionDescription__",
+	"developer": {
+		"name": "nosoop",
+		"url": "https://github.com/nosoop/tab-deduper"
+	},
+	"icons": {
+		"48": "icon.svg",
+		"96": "icon.svg",
+		"128": "icon.svg",
+		"256": "icon.svg"
+	},
+	"background": {
+		"scripts": [ "background.js" ]
+	},
+	"options_ui": {
+		"page": "options.html"
+	},
+	"permissions": [ "tabs", "cookies", "notifications", "storage" ],
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "{28d03e32-9c43-4a90-b89d-b42abf9e3c8f}"
+		}
+	},
+	"default_locale": "en"
+}

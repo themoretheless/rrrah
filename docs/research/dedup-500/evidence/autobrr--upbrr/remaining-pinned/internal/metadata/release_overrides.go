@@ -1,0 +1,283 @@
+// Copyright (c) 2025-2026, Audionut and the autobrr contributors.
+// SPDX-License-Identifier: GPL-2.0-or-later
+
+package metadata
+
+import (
+	"fmt"
+	"strings"
+	"time"
+
+	preparationstate "github.com/autobrr/upbrr/internal/preparedrelease/state"
+
+	internalerrors "github.com/autobrr/upbrr/internal/errors"
+	"github.com/autobrr/upbrr/internal/metadata/seasonep"
+	"github.com/autobrr/upbrr/pkg/api"
+)
+
+func hasReleaseNameOverrides(overrides api.ReleaseNameOverrides) bool {
+	return overrides.Category != nil ||
+		overrides.Type != nil ||
+		overrides.Source != nil ||
+		overrides.Resolution != nil ||
+		overrides.Tag != nil ||
+		overrides.Service != nil ||
+		overrides.Edition != nil ||
+		overrides.Repack != nil ||
+		overrides.Season != nil ||
+		overrides.Episode != nil ||
+		overrides.EpisodeTitle != nil ||
+		overrides.ManualYear != nil ||
+		overrides.ManualDate != nil ||
+		overrides.UseSeasonEpisode != nil ||
+		overrides.NoSeason != nil ||
+		overrides.NoYear != nil ||
+		overrides.NoAKA != nil ||
+		overrides.NoTag != nil ||
+		overrides.NoEpisodeTitle != nil ||
+		overrides.NoDistributor != nil ||
+		overrides.NoEdition != nil ||
+		overrides.NoDub != nil ||
+		overrides.NoDual != nil ||
+		overrides.DualAudio != nil ||
+		overrides.Region != nil
+}
+
+// validateReleaseNameFactInstructions rejects malformed release-version, season, episode, and
+// daily-date instruction values with a typed invalid-input error before any
+// instruction becomes an effective metadata fact.
+func validateReleaseNameFactInstructions(overrides api.ReleaseNameOverrides) error {
+	if overrides.Repack != nil && !api.IsSupportedReleaseVersion(*overrides.Repack) {
+		return fmt.Errorf("metadata: unsupported release version %q: %w", *overrides.Repack, internalerrors.ErrInvalidInput)
+	}
+	if overrides.Season != nil {
+		if _, err := seasonep.ParseSeasonInstruction(*overrides.Season); err != nil {
+			return fmt.Errorf("metadata: %w", err)
+		}
+	}
+	if overrides.Episode != nil {
+		if _, err := seasonep.ParseEpisodeInstruction(*overrides.Episode); err != nil {
+			return fmt.Errorf("metadata: %w", err)
+		}
+	}
+	if overrides.ManualDate != nil {
+		if date := strings.TrimSpace(*overrides.ManualDate); date != "" {
+			if _, err := time.Parse("2006-01-02", date); err != nil {
+				return fmt.Errorf("metadata: daily date instruction %q: expected YYYY-MM-DD: %w", date, internalerrors.ErrInvalidInput)
+			}
+		}
+	}
+	return nil
+}
+
+// manualSeasonEpisodeInstructionValues returns explicit valid season and
+// episode instruction values; zero means no explicit value was supplied.
+func manualSeasonEpisodeInstructionValues(overrides api.ReleaseNameOverrides) (int, int) {
+	season, episode := 0, 0
+	if overrides.Season != nil {
+		if value, err := seasonep.ParseSeasonInstruction(*overrides.Season); err == nil {
+			season = value
+		}
+	}
+	if overrides.Episode != nil {
+		if value, err := seasonep.ParseEpisodeInstruction(*overrides.Episode); err == nil {
+			episode = value
+		}
+	}
+	return season, episode
+}
+
+// applyReleaseNameValueOverrides folds fact-producing release-name
+// instructions into canonical prepared state exactly once, after provider,
+// media, and scene evidence resolution and before the final release-name
+// rebuild, so the rebuilt name and every downstream fact projection consume
+// the same effective values. Naming-only controls (NoSeason, NoYear, NoAKA,
+// and the daily-date/season naming mode) stay in applyReleaseNameOverrides;
+// category stays on the typed instruction path into canonical identity.
+func applyReleaseNameValueOverrides(meta *preparationstate.State) {
+	if meta == nil {
+		return
+	}
+	overrides := meta.ReleaseNameOverrides
+
+	if overrides.Type != nil {
+		value := strings.TrimSpace(*overrides.Type)
+		meta.Type = value
+		meta.Release.Type = value
+	}
+	if overrides.Source != nil {
+		value := strings.TrimSpace(*overrides.Source)
+		meta.Source = value
+		meta.Release.Source = value
+	}
+	if overrides.Resolution != nil {
+		meta.Release.Resolution = strings.TrimSpace(*overrides.Resolution)
+	}
+	if overrides.Service != nil {
+		value := strings.TrimSpace(*overrides.Service)
+		service, longName := resolveServiceValue(value)
+		if service == "" {
+			service = value
+		}
+		meta.Service = service
+		meta.ServiceLongName = longName
+	}
+	if overrides.Region != nil {
+		value := strings.TrimSpace(*overrides.Region)
+		meta.Region = value
+		meta.Release.Region = value
+	}
+	if overrides.EpisodeTitle != nil {
+		meta.EpisodeTitle = strings.TrimSpace(*overrides.EpisodeTitle)
+	}
+	if overrides.NoEpisodeTitle != nil && *overrides.NoEpisodeTitle {
+		meta.EpisodeTitle = ""
+	}
+	if overrides.NoDistributor != nil && *overrides.NoDistributor {
+		meta.Distributor = ""
+	}
+	if overrides.ManualYear != nil && resolveCategoryPreference(*meta) != "TV" {
+		meta.Release.Year = *overrides.ManualYear
+	}
+	if overrides.ManualDate != nil {
+		if date := strings.TrimSpace(*overrides.ManualDate); date != "" {
+			meta.DailyEpisodeDate = date
+		}
+	}
+
+	if overrides.Edition != nil {
+		meta.EditionSet = ""
+		meta.Cut = ""
+		meta.Presentation = ""
+		meta.Release.Cut = nil
+		meta.Edition = strings.TrimSpace(*overrides.Edition)
+		meta.Release.Edition = nil
+		if meta.Edition != "" {
+			meta.Release.Edition = []string{meta.Edition}
+		}
+	}
+	if overrides.NoEdition != nil && *overrides.NoEdition {
+		meta.Edition = ""
+		meta.EditionSet = ""
+		meta.Cut = ""
+		meta.Presentation = ""
+		meta.Release.Cut = nil
+		meta.Release.Edition = nil
+		meta.Repack = ""
+	}
+	// Explicit version corrections take precedence over legacy NoEdition suppression.
+	if overrides.Repack != nil {
+		meta.Repack = strings.ToUpper(strings.TrimSpace(*overrides.Repack))
+	}
+
+	// Malformed values cannot reach this point: the merged instructions were
+	// validated when collection state was built.
+	if overrides.Season != nil {
+		if season, err := seasonep.ParseSeasonInstruction(*overrides.Season); err == nil {
+			meta.SeasonInt = season
+			meta.SeasonStr = seasonep.FormatSeason(season)
+		}
+	}
+	if overrides.Episode != nil {
+		if episode, err := seasonep.ParseEpisodeInstruction(*overrides.Episode); err == nil {
+			meta.EpisodeInt = episode
+			meta.EpisodeStr = seasonep.FormatEpisode(episode)
+		}
+	}
+
+	meta.Audio = applyAudioOverrides(meta.Audio, overrides)
+
+	// Release.Group moves with the tag: group consumers such as banned-group
+	// and internal-group checks prefer it over meta.Tag, so leaving it behind
+	// would keep the parsed group in effect.
+	if overrides.Tag != nil {
+		tag := strings.TrimSpace(*overrides.Tag)
+		if tag != "" && !strings.HasPrefix(tag, "-") {
+			tag = "-" + tag
+		}
+		meta.Tag = tag
+		meta.Release.Group = strings.TrimPrefix(tag, "-")
+	}
+	if overrides.NoTag != nil && *overrides.NoTag {
+		meta.Tag = ""
+		meta.Release.Group = ""
+	}
+}
+
+// applyReleaseNameOverrides applies naming-only controls to one release-name
+// request. Fact-producing values are folded into canonical prepared state by
+// applyReleaseNameValueOverrides before the final rebuild, so the request
+// already carries them through the regular fact fields.
+func applyReleaseNameOverrides(req api.ReleaseNameRequest, overrides api.ReleaseNameOverrides, logger api.Logger) api.ReleaseNameRequest {
+	if logger == nil {
+		logger = api.NopLogger{}
+	}
+
+	if overrides.Category != nil {
+		req.Category = strings.TrimSpace(*overrides.Category)
+	}
+	if overrides.EpisodeTitle != nil {
+		req.EpisodeTitle = strings.TrimSpace(*overrides.EpisodeTitle)
+		req.ManualEpisodeTitle = true
+	}
+	if overrides.ManualDate != nil {
+		req.ManualDate = strings.TrimSpace(*overrides.ManualDate) != ""
+	}
+	if overrides.UseSeasonEpisode != nil {
+		if *overrides.UseSeasonEpisode {
+			hasManualSeason := overrides.Season != nil && strings.TrimSpace(*overrides.Season) != ""
+			hasManualEpisode := overrides.Episode != nil && strings.TrimSpace(*overrides.Episode) != ""
+			switch {
+			case hasManualSeason || hasManualEpisode:
+				req.ManualDate = false
+			case req.TMDBDateMatch:
+				req.ManualDate = false
+			case strings.TrimSpace(req.DailyDate) == "":
+				req.ManualDate = false
+			default:
+				logger.Warnf("metadata: season/episode naming requested but TMDB season/episode not available; keeping daily-date naming")
+				req.ManualDate = true
+			}
+		} else if strings.TrimSpace(req.DailyDate) != "" {
+			req.ManualDate = true
+		}
+	}
+	if overrides.NoSeason != nil {
+		req.NoSeason = *overrides.NoSeason
+	}
+	if overrides.NoYear != nil {
+		req.NoYear = *overrides.NoYear
+	}
+	if overrides.NoAKA != nil {
+		req.NoAKA = *overrides.NoAKA
+	}
+	if overrides.NoTag != nil && *overrides.NoTag {
+		req.Tag = ""
+	}
+	if overrides.NoEpisodeTitle != nil && *overrides.NoEpisodeTitle {
+		req.EpisodeTitle = ""
+	}
+	if overrides.NoEdition != nil && *overrides.NoEdition {
+		req.Edition = ""
+		req.EditionSet = ""
+		req.Cut = ""
+		req.Presentation = ""
+	}
+	return req
+}
+
+func applyAudioOverrides(value string, overrides api.ReleaseNameOverrides) string {
+	base, markers := splitReleaseNameAudioMarkers(value)
+	if overrides.NoDub != nil && *overrides.NoDub {
+		markers.Dubbed = false
+	}
+	if overrides.NoDual != nil && *overrides.NoDual {
+		markers.DualAudio = false
+		markers.DualAudioFirst = false
+	}
+	if overrides.DualAudio != nil && *overrides.DualAudio {
+		markers.DualAudio = true
+		markers.DualAudioFirst = false
+	}
+	return renderReleaseNameAudioMarkers(base, markers)
+}

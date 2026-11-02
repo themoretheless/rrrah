@@ -1,0 +1,10 @@
+{
+    "link_type": "dedupe_only",
+    "blocking_rules_to_generate_predictions": [
+         "birth_date",
+        ["ssn", "birth_date"],
+        "phone"
+    ],
+    "max_iterations": 20,
+    "em_convergence": 0.01
+}

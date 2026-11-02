@@ -1,0 +1,1498 @@
+{
+  "scope": "Diagnostic unconstrained fits on sparse opaque aligned grid. Checkerboard holdout is within-image, not independent-camera qualification. All out-of-range holdout points retained; no acceptance/policy change.",
+  "numpy_version": "2.3.5",
+  "pairs": [
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-cross-scene-0-1-20261026.csv",
+      "sha256": "26940e30c312b3c13140540a286541b1982c78ce880b867ebe2c89b43fccaafd",
+      "points": 23500,
+      "results": [
+        {
+          "direction": 0,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              0.3069292153697482,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.35989036275200764,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.34323569493667205
+            ],
+            [
+              0.05687618879587151,
+              0.051490993211565576,
+              0.04737028896821595
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10960,
+              "agreement": 0.16067518248175183
+            },
+            "heldout_in_range": {
+              "points": 10967,
+              "agreement": 0.16084617488830127
+            },
+            "heldout_out_of_range": {
+              "points": 783,
+              "agreement": 0.0
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.15012765957446808
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 809,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 92,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.06833744083111133,
+              0.06762525031962457,
+              0.05875173955943997
+            ],
+            [
+              -0.2561687702406704,
+              -0.32311803007489537,
+              -0.41024191168996815
+            ],
+            [
+              0.45202330933859625,
+              0.5156891211780252,
+              0.6071863221575522
+            ],
+            [
+              0.06443712998041945,
+              0.0665245016727351,
+              0.05986750289013578
+            ]
+          ],
+          "design_condition": 67.6764958900729,
+          "groups": {
+            "training_in_range": {
+              "points": 10960,
+              "agreement": 0.1646897810218978
+            },
+            "heldout_in_range": {
+              "points": 10967,
+              "agreement": 0.16558767210723077
+            },
+            "heldout_out_of_range": {
+              "points": 783,
+              "agreement": 0.0
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.1545531914893617
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 809,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 92,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              1.0317653095041275,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0304098404207134,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0298049695248805
+            ],
+            [
+              -0.03176530950412748,
+              -0.030409840420713374,
+              -0.029804969524880542
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10960,
+              "agreement": 0.22244525547445254
+            },
+            "heldout_in_range": {
+              "points": 10967,
+              "agreement": 0.2153733929059907
+            },
+            "heldout_out_of_range": {
+              "points": 783,
+              "agreement": 0.010217113665389528
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.20170212765957446
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.04878048780487805
+            },
+            "heldout_target_near_white": {
+              "points": 809,
+              "agreement": 0.009888751545117428
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 92,
+              "agreement": 0.08695652173913043
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              0.12827190341170036,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.1359862629843218,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.18737718717727553
+            ],
+            [
+              0.12057939919216394,
+              0.11869137617616038,
+              0.11129745845038592
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10960,
+              "agreement": 0.1374087591240876
+            },
+            "heldout_in_range": {
+              "points": 10967,
+              "agreement": 0.1359533144889213
+            },
+            "heldout_out_of_range": {
+              "points": 783,
+              "agreement": 0.007662835249042145
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.12740425531914892
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 809,
+              "agreement": 0.00865265760197775
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 92,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.055012591319156416,
+              0.04192372368839616,
+              0.0053172921962405355
+            ],
+            [
+              0.10540497512791376,
+              0.0820051504141813,
+              0.049733820486553275
+            ],
+            [
+              -0.03006165082628602,
+              0.013248509570813272,
+              0.13636516133459536
+            ],
+            [
+              0.12004766354598166,
+              0.11872948957897653,
+              0.11051663646554594
+            ]
+          ],
+          "design_condition": 57.443920172664534,
+          "groups": {
+            "training_in_range": {
+              "points": 10960,
+              "agreement": 0.1385036496350365
+            },
+            "heldout_in_range": {
+              "points": 10967,
+              "agreement": 0.13659159296070028
+            },
+            "heldout_out_of_range": {
+              "points": 783,
+              "agreement": 0.006385696040868455
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.12791489361702127
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 809,
+              "agreement": 0.00865265760197775
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 92,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              0.9384407311060969,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9404537970324258,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9360891462239627
+            ],
+            [
+              0.06155926889390306,
+              0.05954620296757418,
+              0.06391085377603734
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10960,
+              "agreement": 0.16487226277372263
+            },
+            "heldout_in_range": {
+              "points": 10967,
+              "agreement": 0.1666818637731376
+            },
+            "heldout_out_of_range": {
+              "points": 783,
+              "agreement": 0.010217113665389528
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.15625531914893617
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.04878048780487805
+            },
+            "heldout_target_near_white": {
+              "points": 809,
+              "agreement": 0.009888751545117428
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 92,
+              "agreement": 0.08695652173913043
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-cross-scene-1-0-20261026.csv",
+      "sha256": "4b965d42b4888e1fc1a793c892ffcadeeedf7475a5c17f346b05f18ba8f2b6e8",
+      "points": 23500,
+      "results": [
+        {
+          "direction": 0,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              0.2034412159663543,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.224477041731217,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.23654031360535355
+            ],
+            [
+              0.10879498290150622,
+              0.1056218798344654,
+              0.10023851763029232
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10781,
+              "agreement": 0.11946943697245153
+            },
+            "heldout_in_range": {
+              "points": 10782,
+              "agreement": 0.12029308106102764
+            },
+            "heldout_out_of_range": {
+              "points": 968,
+              "agreement": 0.0010330578512396695
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.11046808510638298
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.001076426264800861
+            },
+            "heldout_target_near_white": {
+              "points": 123,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 73,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.07271827565095171,
+              0.058346518517264856,
+              0.04864882167829876
+            ],
+            [
+              0.04241492942688658,
+              0.01793474635683073,
+              -0.019236901301998816
+            ],
+            [
+              0.08275671387238343,
+              0.12320058267515163,
+              0.21654262110220118
+            ],
+            [
+              0.1095228508678314,
+              0.10842792001402667,
+              0.09933345039176561
+            ]
+          ],
+          "design_condition": 59.1444667325533,
+          "groups": {
+            "training_in_range": {
+              "points": 10781,
+              "agreement": 0.11817085613579445
+            },
+            "heldout_in_range": {
+              "points": 10782,
+              "agreement": 0.11982934520497125
+            },
+            "heldout_out_of_range": {
+              "points": 968,
+              "agreement": 0.002066115702479339
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.11012765957446809
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.002152852529601722
+            },
+            "heldout_target_near_white": {
+              "points": 123,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 73,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              0.9515976832254313,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9541911366537121,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9509888721349232
+            ],
+            [
+              0.04840231677456874,
+              0.045808863346287865,
+              0.049011127865076776
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10781,
+              "agreement": 0.14460625173917077
+            },
+            "heldout_in_range": {
+              "points": 10782,
+              "agreement": 0.1436653682062697
+            },
+            "heldout_out_of_range": {
+              "points": 968,
+              "agreement": 0.01962809917355372
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.1334468085106383
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.02045209903121636
+            },
+            "heldout_target_near_white": {
+              "points": 123,
+              "agreement": 0.15447154471544716
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 73,
+              "agreement": 0.2602739726027397
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              0.17099176099959265,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.18814907742574774,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.22911826672071134
+            ],
+            [
+              0.0693679827721348,
+              0.06812117940838036,
+              0.06034426409744553
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10781,
+              "agreement": 0.2524812169557555
+            },
+            "heldout_in_range": {
+              "points": 10782,
+              "agreement": 0.2409571508069004
+            },
+            "heldout_out_of_range": {
+              "points": 968,
+              "agreement": 0.0010330578512396695
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.22119148936170213
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 123,
+              "agreement": 0.008130081300813009
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 73,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.048920579853639276,
+              0.03523773536673549,
+              0.00848289836357487
+            ],
+            [
+              -0.08945076929529898,
+              -0.10005357846333265,
+              -0.15986558586401287
+            ],
+            [
+              0.20007183687190824,
+              0.22278662199355695,
+              0.3495109541302116
+            ],
+            [
+              0.07198140083227254,
+              0.07304472663690639,
+              0.06486995985341204
+            ]
+          ],
+          "design_condition": 62.87917189311838,
+          "groups": {
+            "training_in_range": {
+              "points": 10781,
+              "agreement": 0.2576755403023838
+            },
+            "heldout_in_range": {
+              "points": 10782,
+              "agreement": 0.2472639584492673
+            },
+            "heldout_out_of_range": {
+              "points": 968,
+              "agreement": 0.0010330578512396695
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.22697872340425532
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 123,
+              "agreement": 0.008130081300813009
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 73,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              1.0287858082205354,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0275366246652555,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0217095428930387
+            ],
+            [
+              -0.028785808220535447,
+              -0.027536624665255527,
+              -0.021709542893038725
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10781,
+              "agreement": 0.1983118449123458
+            },
+            "heldout_in_range": {
+              "points": 10782,
+              "agreement": 0.19922092376182526
+            },
+            "heldout_out_of_range": {
+              "points": 968,
+              "agreement": 0.01962809917355372
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.1844255319148936
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.02045209903121636
+            },
+            "heldout_target_near_white": {
+              "points": 123,
+              "agreement": 0.15447154471544716
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 73,
+              "agreement": 0.2602739726027397
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-shuffled-coordinates-0-20261026.csv",
+      "sha256": "d836bf66de4ddd44059ac2961f1d6980b203c97cff5bc0b6a96c5f2cd19d2c61",
+      "points": 23500,
+      "results": [
+        {
+          "direction": 0,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              -0.006632671127619106,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              -0.003899227395042033,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0041882113309278084
+            ],
+            [
+              0.1377533886373855,
+              0.13733871061001815,
+              0.13511056279374709
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 11474,
+              "agreement": 0.0817500435767823
+            },
+            "heldout_in_range": {
+              "points": 11490,
+              "agreement": 0.08503046127067015
+            },
+            "heldout_out_of_range": {
+              "points": 260,
+              "agreement": 0.038461538461538464
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.084
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.06097560975609756
+            },
+            "heldout_target_near_white": {
+              "points": 121,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 2,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              -0.012611830903131671,
+              -0.015024317735365299,
+              -0.007398620239467219
+            ],
+            [
+              -0.015202405380753278,
+              -0.0292008229547394,
+              -0.07025336695244709
+            ],
+            [
+              0.018054180812344844,
+              0.03189092246067637,
+              0.06013223650233627
+            ],
+            [
+              0.13820617498662421,
+              0.1385417982066845,
+              0.13816690274772897
+            ]
+          ],
+          "design_condition": 65.39570300903877,
+          "groups": {
+            "training_in_range": {
+              "points": 11474,
+              "agreement": 0.08183719714136309
+            },
+            "heldout_in_range": {
+              "points": 11490,
+              "agreement": 0.08476936466492602
+            },
+            "heldout_out_of_range": {
+              "points": 260,
+              "agreement": 0.015384615384615385
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.08323404255319149
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.024390243902439025
+            },
+            "heldout_target_near_white": {
+              "points": 121,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 2,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              0.9877430702830128,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9876477917337185,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9784225034348175
+            ],
+            [
+              0.01225692971698722,
+              0.012352208266281473,
+              0.021577496565182486
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 11474,
+              "agreement": 0.09804776015339027
+            },
+            "heldout_in_range": {
+              "points": 11490,
+              "agreement": 0.09956483899042645
+            },
+            "heldout_out_of_range": {
+              "points": 260,
+              "agreement": 0.0
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.09736170212765957
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 121,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 2,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              -0.004742356543770245,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              -0.0026013551488731227,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.0031707549834055606
+            ],
+            [
+              0.13898743336367872,
+              0.13829943750569115,
+              0.13645972192483682
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 11474,
+              "agreement": 0.10528150601359595
+            },
+            "heldout_in_range": {
+              "points": 11490,
+              "agreement": 0.10330722367275892
+            },
+            "heldout_out_of_range": {
+              "points": 260,
+              "agreement": 0.015384615384615385
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.10136170212765958
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 121,
+              "agreement": 0.049586776859504134
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 2,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.000212520581645075,
+              -0.006421738739828967,
+              -0.019784623618747412
+            ],
+            [
+              -0.018739409395370037,
+              -0.009418190888832396,
+              -0.015990516917901473
+            ],
+            [
+              0.01185363804372671,
+              0.010844943560202007,
+              0.029813386809937625
+            ],
+            [
+              0.13926464782847492,
+              0.13863922622936453,
+              0.13773950767576726
+            ]
+          ],
+          "design_condition": 56.67066338345033,
+          "groups": {
+            "training_in_range": {
+              "points": 11474,
+              "agreement": 0.10528150601359595
+            },
+            "heldout_in_range": {
+              "points": 11490,
+              "agreement": 0.10234986945169713
+            },
+            "heldout_out_of_range": {
+              "points": 260,
+              "agreement": 0.019230769230769232
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.10051063829787234
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 121,
+              "agreement": 0.05785123966942149
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 2,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              0.9789551469670864,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9784450108537391,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9686151114987613
+            ],
+            [
+              0.02104485303291359,
+              0.02155498914626086,
+              0.03138488850123866
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 11474,
+              "agreement": 0.10798326651560049
+            },
+            "heldout_in_range": {
+              "points": 11490,
+              "agreement": 0.11314186248912098
+            },
+            "heldout_out_of_range": {
+              "points": 260,
+              "agreement": 0.0
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.11063829787234042
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 164,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 121,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 2,
+              "agreement": 0.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "input": "docs/research/dedup-500/sony-display-matrix-20261026-v1/negative-shuffled-coordinates-1-20261026.csv",
+      "sha256": "a1fb3429fead20ccc93cf09f529cfca7fdda7614b55fbb126546d945bf220e50",
+      "points": 23500,
+      "results": [
+        {
+          "direction": 0,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              -0.0304875523528126,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              -0.03520711621036144,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -0.023076391160627107
+            ],
+            [
+              0.10345486762991803,
+              0.1055683007583335,
+              0.09746961859994414
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10173,
+              "agreement": 0.09653003047282022
+            },
+            "heldout_in_range": {
+              "points": 10178,
+              "agreement": 0.09933189231676165
+            },
+            "heldout_out_of_range": {
+              "points": 1572,
+              "agreement": 0.1825699745547074
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.11046808510638298
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.30893433799784714
+            },
+            "heldout_target_near_white": {
+              "points": 810,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 59,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              0.045623595680615615,
+              0.04344313458672895,
+              0.03597437019045053
+            ],
+            [
+              -0.11124909608330863,
+              -0.09615462277620347,
+              -0.08857586213815058
+            ],
+            [
+              0.02406499643335893,
+              0.015138846982855777,
+              0.016303894167817634
+            ],
+            [
+              0.10461744184438815,
+              0.10587102035548908,
+              0.09885450557940241
+            ]
+          ],
+          "design_condition": 58.34337804305019,
+          "groups": {
+            "training_in_range": {
+              "points": 10173,
+              "agreement": 0.09653003047282022
+            },
+            "heldout_in_range": {
+              "points": 10178,
+              "agreement": 0.09913539005698566
+            },
+            "heldout_out_of_range": {
+              "points": 1572,
+              "agreement": 0.16539440203562342
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.108
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.2798708288482239
+            },
+            "heldout_target_near_white": {
+              "points": 810,
+              "agreement": 0.0
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 59,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 0,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              0.9782253919003672,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9777945000020604,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9743647008289078
+            ],
+            [
+              0.02177460809963283,
+              0.022205499997939637,
+              0.025635299171092196
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10173,
+              "agreement": 0.1813624299616632
+            },
+            "heldout_in_range": {
+              "points": 10178,
+              "agreement": 0.1796030654352525
+            },
+            "heldout_out_of_range": {
+              "points": 1572,
+              "agreement": 0.021628498727735368
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.15846808510638297
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.03659849300322928
+            },
+            "heldout_target_near_white": {
+              "points": 810,
+              "agreement": 0.04197530864197531
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 59,
+              "agreement": 0.576271186440678
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "diagonal_affine",
+          "coefficients": [
+            [
+              -0.012416014611414556,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              -0.013165906103068994,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              -0.012829431166669304
+            ],
+            [
+              0.09299379105456812,
+              0.09382000134512376,
+              0.0902420699751082
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10173,
+              "agreement": 0.20741177627052002
+            },
+            "heldout_in_range": {
+              "points": 10178,
+              "agreement": 0.19650225977598743
+            },
+            "heldout_out_of_range": {
+              "points": 1572,
+              "agreement": 0.11768447837150127
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.18595744680851065
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 810,
+              "agreement": 0.2740740740740741
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 59,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "full_affine",
+          "coefficients": [
+            [
+              -0.020109886838650625,
+              -0.021374240377922453,
+              -0.015139822337351673
+            ],
+            [
+              -0.010957247725613387,
+              -0.0214934207180321,
+              -0.03994639491252535
+            ],
+            [
+              0.01808176628982818,
+              0.02757979023583956,
+              0.0374368223270106
+            ],
+            [
+              0.0931640248129351,
+              0.09419195847146904,
+              0.09105685577111171
+            ]
+          ],
+          "design_condition": 53.8694612039034,
+          "groups": {
+            "training_in_range": {
+              "points": 10173,
+              "agreement": 0.2086896687309545
+            },
+            "heldout_in_range": {
+              "points": 10178,
+              "agreement": 0.19650225977598743
+            },
+            "heldout_out_of_range": {
+              "points": 1572,
+              "agreement": 0.12849872773536897
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.18740425531914895
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.0
+            },
+            "heldout_target_near_white": {
+              "points": 810,
+              "agreement": 0.29506172839506173
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 59,
+              "agreement": 0.0
+            }
+          }
+        },
+        {
+          "direction": 1,
+          "model": "white_anchored_diagonal",
+          "coefficients": [
+            [
+              0.9804287680127763,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.9804975403693674,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              0.9734966160018212
+            ],
+            [
+              0.01957123198722366,
+              0.019502459630632574,
+              0.026503383998178753
+            ]
+          ],
+          "design_condition": null,
+          "groups": {
+            "training_in_range": {
+              "points": 10173,
+              "agreement": 0.2575444804875651
+            },
+            "heldout_in_range": {
+              "points": 10178,
+              "agreement": 0.2536844173707998
+            },
+            "heldout_out_of_range": {
+              "points": 1572,
+              "agreement": 0.021628498727735368
+            },
+            "heldout_all": {
+              "points": 11750,
+              "agreement": 0.22263829787234043
+            },
+            "heldout_native_negative": {
+              "points": 0,
+              "agreement": null
+            },
+            "heldout_native_above_one_without_negative": {
+              "points": 929,
+              "agreement": 0.03659849300322928
+            },
+            "heldout_target_near_white": {
+              "points": 810,
+              "agreement": 0.04197530864197531
+            },
+            "heldout_native_high_target_near_white": {
+              "points": 59,
+              "agreement": 0.576271186440678
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

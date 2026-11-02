@@ -1,0 +1,50 @@
+{
+  "decoder_sha256": "a92a4a456273f17f4ef28d1991367c1d07a47d3daf7c3a40da21c776f5e89840",
+  "sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "d0bbf3736ffa659df47e9bae82ad4c5f823ecc636b5e2d453e03c7a8cab2b150",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "note": "Latest decoder adds opt-in initial-work diagnostics only. Stage, outcome and pixel metrics are identical to the certificate decoder. The earlier full/public tests qualify the certificate checkpoint; ten sampled tests were rerun after diagnostics. Algorithm patch reproduces certificate sources; initial-work-diagnostics.patch then reproduces current sampler. Runner changes are retained directly in scripts/qualify-ai-upstream.py.",
+  "final_sources": {
+    "vendor/hayro-interpret/src/encode/ordered_samples.rs": "8b74015223ed8f413d1ac6abf2a18428aebb7d3ac981b109305f00d01ba4b3b2",
+    "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "d0bbf3736ffa659df47e9bae82ad4c5f823ecc636b5e2d453e03c7a8cab2b150",
+    "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+    "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "334e157b26c664f66f71a825815715e8418d0539de55396b2681b73fdf96ca68",
+    "scripts/verify-ordered-full-cell.py": "ee98530e39484380d9dc47a9965d13ba5af667beccf1aa369732cdacc4734e6e",
+    "scripts/qualify-ai-upstream.py": "8d33828b16c5ebc847c37fb37a436e830fbb3d7c70d1105d1fbcbf21a2e2fd1f"
+  },
+  "artifacts": {
+    "mesh-certificates-kernel.log": "4534f8e35fd36ec31470126d2dbc425db760d922db690e9e5d6efe6f2fc5dbc9",
+    "mesh-certificates-full-encode.log": "9b4260c95445e9e9148e1fe45cec0015b5ea33e092f05e8fb15f8cc4a6f65462",
+    "mesh-certificates-feature-build.log": "1bb6390f5dbdd4e70530cb7990085f324b0d9370b719d2c3948a95a68d9f28bd",
+    "mesh-certificates-poppler.json": "d272bbdf71fc7c47dd136a547b8b3f80011a8249b001f3e3049b2af90b190264",
+    "mesh-certificates-exact-affine.json": "bb53b421f5e7e6a18ef573a13cd2ef9de0e0968fd59264ca41ec122ed68a643f",
+    "mesh-certificates-exact-controls.json": "9b0679e293192885f940dcfd58a5a3021b6ccf91772d50441e126393f83b008c",
+    "mesh-certificates-oracle-refusals.json": "2a3aa695f73618648fcecf99f9476811a89720a54d84deb4296470a1c13ba439",
+    "mesh-certificates-change.patch": "81be262a8789befa3a64b53fc2849b1bc08d36ffee7f5ac17cc5b00a494e7456",
+    "mesh-certificates-feature-vector.log": "d79bcb39447b43497b25bb48ea8aa86524d8a3d3f691025c2e31531cdeae8ff7",
+    "mesh-certificates-patch-check.json": "417fd81b4d530b92999b00d02c6bab8433c96fdb112d5f2fe60e25e08da2c1b3",
+    "mesh-certificates-default-vector.log": "018f5939b7459f3374c82a2e82e748a227a60519acf7cb8950fbcf8d0ad2e412",
+    "initial-work-sampled.log": "030ed94116e82a56dfbca927e49510cc1c836631163fae853c670fc2ae2b03d9",
+    "initial-work-diagnostics.patch": "9c1d9b55e42a47f264ade0e31ac64955f83adaa0137fdd5552663156d1bab46b"
+  },
+  "certificate_checkpoint": {
+    "decoder_sha256": "a05666235c41458f00b80e84b0f236489345b892299e52734ffb5ede82a9fa38",
+    "sources": {
+      "vendor/hayro-interpret/src/encode/ordered_samples.rs": "11a3605a53547cecf0224cc787e0a4697cc7cbfe24fb981c30acd5ec1fe3854a",
+      "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "d0bbf3736ffa659df47e9bae82ad4c5f823ecc636b5e2d453e03c7a8cab2b150",
+      "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "7be5384351a96fdff0b31421d47e2b2c178dadf3919f8bb21539bfea80f38ab4",
+      "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "334e157b26c664f66f71a825815715e8418d0539de55396b2681b73fdf96ca68"
+    },
+    "final_sources": {
+      "vendor/hayro-interpret/src/encode/ordered_samples.rs": "11a3605a53547cecf0224cc787e0a4697cc7cbfe24fb981c30acd5ec1fe3854a",
+      "vendor/hayro-interpret/src/encode/ordered_pixel.rs": "d0bbf3736ffa659df47e9bae82ad4c5f823ecc636b5e2d453e03c7a8cab2b150",
+      "vendor/hayro-interpret/src/encode/ordered_pixel/full_cell.rs": "2794f67d73af9cee409610187989a939403c108b3b05df47a777fb0f6a79533d",
+      "vendor/hayro-interpret/src/encode/shared_fragment_store.rs": "334e157b26c664f66f71a825815715e8418d0539de55396b2681b73fdf96ca68",
+      "scripts/verify-ordered-full-cell.py": "ee98530e39484380d9dc47a9965d13ba5af667beccf1aa369732cdacc4734e6e"
+    },
+    "note": "Decoder production code matches final sources; final source adds test-only grid/captured/fault checks and module comments. Full encode run preceded the grid test; final focused six-test run covers all certificate tests."
+  }
+}

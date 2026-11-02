@@ -1,0 +1,11 @@
+{
+  "scope": "Current local Rust exact_files integration tests filtered by cancel, macOS only; not all APIs or universal coverage. No source edits in this turn.",
+  "command": "CARGO_TARGET_DIR=.dedup-work/local-exact198-target cargo +1.98.1 test -p rrrah-dedup --test exact_files --offline --jobs 2 cancel",
+  "exit_code": 0,
+  "log": "docs/research/dedup-500/telegram198-controls-20261024/local-cancellation-tests-log.txt",
+  "source_sha256": {
+    "crates/rrrah-dedup/src/exact.rs": "40e5ef25e7d51a314ba993f1b9237f04a45fae7a16781982933d201435c5930d",
+    "crates/rrrah-dedup/tests/exact_files.rs": "12cb18223d7acea350a0fb396da1a44c0e4840dea8d47a0bdf70b5c44695d9b6"
+  },
+  "contract": "Report.complete() rejects cancelled reports. Atomic-flag APIs clear groups on cancellation and support retry; callback APIs explicitly exclude callbacks during final publication. Not an atomic filesystem snapshot."
+}

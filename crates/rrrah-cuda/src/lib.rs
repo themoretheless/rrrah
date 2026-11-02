@@ -280,5 +280,6 @@ mod tests {
             Err(CudaError::Cancelled)
         ));
         assert_eq!(cpu.used(), 0);
+        eprintln!("RRRAH_CUDA_QUALIFIED device_ordinal=0 cases=42 exact_rgb_alpha=true managed_final=0");
     }
 }

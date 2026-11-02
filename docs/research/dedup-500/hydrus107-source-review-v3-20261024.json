@@ -1,0 +1,39 @@
+{
+  "repository": "hydrusvideodeduplicator/hydrus-video-deduplicator",
+  "commit": "f3a13eee2dd9698c0805a859e46c95a2b6554efd",
+  "previous_audit": "docs/research/dedup-500/hydrus107-source-review-v2-20261024.json",
+  "tracked_blobs": 77,
+  "new_whole_files_read": [
+    {
+      "path": "src/hydrusvideodeduplicator/db/DedupeDB.py",
+      "local": "10-DedupeDB.py",
+      "git_blob": "5f00535126b4ba60850fefb2496a6ba1dc75f9d6",
+      "sha256": "1e8eecac28b0601bcd6856d075244334543d6d9d7ea928134baf3f4f9d8edf3a",
+      "whole_text_read": true
+    },
+    {
+      "path": "tests/unit_tests/test_db.py",
+      "local": "11-test_db.py",
+      "git_blob": "fd9113065e4e524ba0c707aa5e734965ca6eb87d",
+      "sha256": "560b8c1dc663fef5ade5cfbe728c46fd92af1a17fb1e7467384b5297a3fee869",
+      "whole_text_read": true
+    }
+  ],
+  "whole_files_read_total": 10,
+  "remaining_without_whole_review": 67,
+  "whole_repo_complete": false,
+  "runtime_report": "docs/research/dedup-500/hydrus107-db-controls-20261024.json",
+  "original_tests": {
+    "passed": 5,
+    "scope": "Unchanged source with stub VpTreeManager/rich and supplied package version; real SQLite; not full installed package"
+  },
+  "new_authored_controls": 2,
+  "authored_controls_total": 5,
+  "findings": [
+    "Confirmed 0.9.0->0.10.0 migration of two distinct legacy hashes converging after quality filtering: REPLACE on UNIQUE phash deletes earlier phash_id, leaving file association orphaned. Tree/search effect not runtime-qualified.",
+    "Queue replacement positive control retains latest bytes for a repeated file_hash.",
+    "Original five DB tests cover path/schema/version/comparison, not migration or association integrity."
+  ],
+  "production_changes": false,
+  "skipped": "native pHash.org/ASAN"
+}

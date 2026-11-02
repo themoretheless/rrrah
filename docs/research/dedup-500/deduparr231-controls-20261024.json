@@ -1,0 +1,58 @@
+{
+  "repository": "deduparr-dev/deduparr",
+  "commit": "a4af65e3a8dc8280c764164bbafe62cf411403d4",
+  "scope": "Original complete standalone disk scan module; stdlib TypedDict substitutes typing_extensions; temporary files only. One stat control uses explicit two-device synthetic observations. No upstream pytest, server, deletion pipeline or remote services run.",
+  "authored_controls": [
+    {
+      "name": "different shows same episode number grouped",
+      "passed": true,
+      "observed": [
+        "S01E01"
+      ]
+    },
+    {
+      "name": "same size different content grouped",
+      "passed": true,
+      "observed": [
+        [
+          "size_3",
+          [
+            "name",
+            "name"
+          ]
+        ]
+      ]
+    },
+    {
+      "name": "combined retains different checksums in one group",
+      "passed": true,
+      "observed": [
+        "47bce5c74f589f4867dbd57e9ca9f808",
+        "08f8e0260c64418510cefb2b06eee5cd"
+      ]
+    },
+    {
+      "name": "zero read chunk gives all files empty digest",
+      "passed": true,
+      "observed": [
+        "d41d8cd98f00b204e9800998ecf8427e",
+        "d41d8cd98f00b204e9800998ecf8427e"
+      ]
+    },
+    {
+      "name": "empty sample list falls back to defaults",
+      "passed": true,
+      "observed": true
+    },
+    {
+      "name": "default mutable quality markers shared across configs",
+      "passed": true,
+      "observed": true
+    },
+    {
+      "name": "same inode number different devices collapsed",
+      "passed": true,
+      "observed": {}
+    }
+  ]
+}

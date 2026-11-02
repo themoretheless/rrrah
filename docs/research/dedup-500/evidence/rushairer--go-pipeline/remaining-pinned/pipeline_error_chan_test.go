@@ -1,0 +1,153 @@
+package gopipeline_test
+
+import (
+	"context"
+	"testing"
+	"time"
+
+	gopipeline "github.com/rushairer/go-pipeline/v2"
+)
+
+/*
+*
+testSendToErrorChan 辅助函数，验证错误通道的缓冲容量
+- 直接使用 cap(errorChan) 获取缓冲区大小
+- 对 nil 通道进行保护
+*/
+func testSendToErrorChan(t *testing.T, errorChan <-chan error, expectedCapacity int) {
+	if errorChan == nil {
+		t.Fatalf("errorChan is nil")
+	}
+	if got := cap(errorChan); got != expectedCapacity {
+		t.Fatalf("errorChan capacity = %d; want %d", got, expectedCapacity)
+	}
+}
+
+// TestErrorChanAutoBufferSize 测试ErrorChan方法在size=0时的自动缓冲区大小计算
+func TestErrorChanAutoBufferSize(t *testing.T) {
+	_, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	config := gopipeline.PipelineConfig{
+		BufferSize:    100,
+		FlushSize:     50,
+		FlushInterval: time.Millisecond * 50,
+	}
+
+	pipeline := gopipeline.NewStandardPipeline(
+		config,
+		func(ctx context.Context, batchData []int) error {
+			return nil
+		},
+	)
+
+	// 测试size=0时的自动计算
+	errorChan := pipeline.ErrorChan(0)
+
+	if errorChan == nil {
+		t.Error("ErrorChan should not return nil channel")
+	}
+
+	// 验证通道容量计算逻辑
+	// 预期容量 = (FlushSize + BufferSize - 1) / BufferSize
+	expectedCapacity := int((config.FlushSize + config.BufferSize - 1) / config.BufferSize)
+
+	// 由于通道容量无法直接获取，我们通过发送测试来验证
+	testSendToErrorChan(t, errorChan, expectedCapacity)
+}
+
+// TestErrorChanCustomBufferSize 测试ErrorChan方法在指定size时的自定义缓冲区大小
+func TestErrorChanCustomBufferSize(t *testing.T) {
+	_, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	customSize := 5
+
+	pipeline := gopipeline.NewDefaultStandardPipeline(
+		func(ctx context.Context, batchData []int) error {
+			return nil
+		},
+	)
+
+	// 测试自定义缓冲区大小
+	errorChan := pipeline.ErrorChan(customSize)
+
+	if errorChan == nil {
+		t.Error("ErrorChan should not return nil channel")
+	}
+
+	// 验证自定义容量
+	testSendToErrorChan(t, errorChan, customSize)
+}
+
+// TestErrorChanMultipleCalls 测试多次调用ErrorChan方法的行为
+func TestErrorChanMultipleCalls(t *testing.T) {
+	_, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	pipeline := gopipeline.NewDefaultStandardPipeline(
+		func(ctx context.Context, batchData []int) error {
+			return nil
+		},
+	)
+
+	// 第一次调用
+	errorChan1 := pipeline.ErrorChan(10)
+	if errorChan1 == nil {
+		t.Error("First ErrorChan call should not return nil")
+	}
+
+	// 第二次调用应该返回相同的通道
+	errorChan2 := pipeline.ErrorChan(5) // 注意：size参数在第二次调用时会被忽略
+	if errorChan2 != errorChan1 {
+		t.Error("Multiple ErrorChan calls should return the same channel")
+	}
+
+	// 验证通道仍然可用
+	testSendToErrorChan(t, errorChan1, 10) // 第一次调用设置的容量
+}
+
+// TestErrorChanWithoutCall 测试不调用ErrorChan方法时的行为
+func TestErrorChanWithoutCall(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*3)
+	defer cancel()
+
+	pipeline := gopipeline.NewDefaultStandardPipeline(
+		func(ctx context.Context, batchData []int) error {
+			// 返回错误，但用户没有调用ErrorChan
+			return context.DeadlineExceeded
+		},
+	)
+
+	// 启动管道处理（不调用ErrorChan）
+	doneChan := make(chan struct{})
+
+	go func() {
+		defer close(doneChan)
+
+		if err := pipeline.AsyncPerform(ctx); err != nil {
+			t.Logf("Pipeline finished with: %v", err)
+		}
+	}()
+
+	// 发送一些数据
+	dataChan := pipeline.DataChan()
+	go func() {
+		defer close(dataChan)
+		for i := 0; i < 5; i++ {
+			select {
+			case dataChan <- i:
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+
+	// 等待处理完成
+	<-ctx.Done()
+
+	// 如果没有panic，说明错误被安全地忽略了
+	t.Log("Test passed: Errors safely ignored when ErrorChan() is not called")
+
+	<-doneChan
+}

@@ -1,0 +1,30 @@
+{
+  "argv": [
+    "/Users/themoretheless/Documents/Sources/rrrah/target/release/examples/raw_raster_probe",
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff",
+    "--verify-known-shift"
+  ],
+  "environment": {
+    "RRRAH_EXPECTED_SHIFT": "12,12",
+    "RRRAH_FILE_WHITE_ANCHOR": "1"
+  },
+  "binary_sha256": "0c4355df993e61de52aded57013b7113842f3be3d96256dc766d6ecdce624986",
+  "exit_code": 0,
+  "inputs_before": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff": "b578f1f1bb5df8cffe0e206b2e9364983fea502e09a18758e2244f491bcccffd"
+  },
+  "inputs_after": {
+    "/Users/themoretheless/.cache/rrrah-dedup/raw-corpus/2414.arw": "250784580ea527442c09004417bb0eead484f2bf3ee8f9121a776ac65bb50d0f",
+    "/Users/themoretheless/.cache/rrrah-dedup/independent-rendered-20261026/2418-ahd.tiff": "b578f1f1bb5df8cffe0e206b2e9364983fea502e09a18758e2244f491bcccffd"
+  },
+  "log": "docs/research/dedup-500/sony-display-matrix-20261026-v1/2414-vs-2418-file-white-anchor-negative-20261026.log",
+  "log_sha256": "54ee21fb10725e97c14e41fbdf82ee0c4d1e90cf6af473db843ad6e81ae05c10",
+  "projected_agreement": [
+    0.20457633333333333,
+    0.15427833333333332
+  ],
+  "managed_memory_released": true,
+  "scope": "Two different-scene full file controls with fixed geometry; success means execution only. Not burst/look-alike or universal precision."
+}

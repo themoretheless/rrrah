@@ -1,0 +1,467 @@
+{
+  "index": 217,
+  "repository": "MaksimRudakov/alertly",
+  "commit": "b343e79a71505b80abe3dd6d85f83f1b9f540688",
+  "tracked_blob_count": 104,
+  "whole_file_reads": [
+    {
+      "path": "internal/dedup/dedup.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/02-dedup.go",
+      "sha256": "87a915fb0cd4af0ec3879e827be4a9a236f59f99e90643f8a3a27652febe63b2",
+      "git_blob_sha1": "c4a677dab40f425a98f0522b7795427d5db9f07d"
+    },
+    {
+      "path": "internal/dedup/dedup_test.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/05-dedup_test.go",
+      "sha256": "86095f84b599fd121d9d4b7ac77e01a685adc9e030878e3b916210775084c7b1",
+      "git_blob_sha1": "f3d792548370da081512e6bddbd43bfa78dbc08b"
+    },
+    {
+      "path": "internal/server/handlers.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/server/handlers.go",
+      "sha256": "6afc8aefbe86f7232452c80f24bf38a73f8730492c52ac067735de169879cfb3",
+      "git_blob_sha1": "fef1212708471c1b6f9038d342329545f833b91f"
+    },
+    {
+      "path": "internal/notification/notification.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/notification/notification.go",
+      "sha256": "a4111e8acff53e2f720b55059ee2041a381c9521016258a7abe00573e9b7f87c",
+      "git_blob_sha1": "83a073b9eca1d6af3e8142317c2eee980942a406"
+    },
+    {
+      "path": "internal/source/alertmanager.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/source/alertmanager.go",
+      "sha256": "ee3f21bd2e5eba12a461143afcaa0e07fe5c958d6da999b8fd076d0fa6346c9b",
+      "git_blob_sha1": "af6cc2a07b291f2aff16b75eb42e82e6d1f751eb"
+    },
+    {
+      "path": "internal/source/generic.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/source/generic.go",
+      "sha256": "1eecd6237f0760910a9aac0043e20bddd9d800d0f5a636ab36ff4bde9888924e",
+      "git_blob_sha1": "6f6712fcd450c16b11781c8e65c8e1796d97e04b"
+    },
+    {
+      "path": "internal/source/kubewatch.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/source/kubewatch.go",
+      "sha256": "e5c1048e226b9a083fbf7bb0123bf59a40308cc02cecbbd70b0d1feea22b39ce",
+      "git_blob_sha1": "5341b51c053649fcf30f7aadffc991a17600c790"
+    },
+    {
+      "path": "internal/source/source.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/source/source.go",
+      "sha256": "f9255b51246a0b8f52ca79aa1280f380a134815a3b37049f4d8ce9ec2ef355e1",
+      "git_blob_sha1": "519255a7c2b7b7c0077ee054245104bad1e88687"
+    },
+    {
+      "path": "cmd/alertly/main.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/03-main.go",
+      "sha256": "02141f863031ea4c8467116d3000b98568f10bb2535def8628a962510657f0c0",
+      "git_blob_sha1": "8a30bbe4c1a0c9b0bdbae50ab98a8376f227dbcf"
+    },
+    {
+      "path": "internal/server/server.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/server/server.go",
+      "sha256": "926ce09dcd88dfc037d3621728b60083d9db09ee3d417203b70350ceec564228",
+      "git_blob_sha1": "f5d0690efd47663d19d1611c37427b60ca475d16"
+    },
+    {
+      "path": "internal/server/handlers_dedup_test.go",
+      "local": "docs/research/dedup-500/evidence/MaksimRudakov--alertly/remaining-pinned/internal/server/handlers_dedup_test.go",
+      "sha256": "dbe1ec78b0650df60d51d309e062ddc2fcc321fcf5a10ddefee5f3e8e701fa6f",
+      "git_blob_sha1": "f5b595330cf11b2b7ebec4578205b741b1a5d1c0"
+    }
+  ],
+  "whole_file_read_count": 11,
+  "source_review_complete": false,
+  "full_repository_read": false,
+  "decision": "reject-domain",
+  "original_tests_run": 0,
+  "go_on_path": null,
+  "findings": [
+    "In-memory per-process notification reservation TTL keyed fingerprint/chat/thread/status, not file content. Mutex atomically reserves; Forget intended on delivery failure. TTL compares <= boundary, Sweep expires strictly>; no size cap, process restart resets. Fingerprint/status caller supplied, key plain separator strings no escaping; expected status/FP domain still requires source review.",
+    "Nine original top-level Go tests source-read including4Key subcases and100goroutine one-winner test; zero executed, Go absent PATH. Covers reserve expiry/forget/sweep/nil/empty/cancel. No reservation generation token, so stale Forget could remove newer reservation after TTL rollover; source-only concurrency concern unexecuted.",
+    "Handler explicitly accounts deadline unattempted remainder as207; returns attempts/errors counts, no failed-ID list. On multipart send any successful part retains entire target reservation, even later parts fail; retry suppresses missing parts for TTL intentionally prioritizing no duplicate prefix. Current per-target delivered-parts completeness tradeoff cannot transfer to exact file grouping. No Telegram/HTTP/server operation invoked.",
+    "Five source/contract modules read fully. Alertmanager fingerprint/status forwarded directly; absent fingerprint disables cache via empty key, no fallback hash. Generic fallback hash includes title/raw body/status/sortedlabels but not severity/annotations/links/timestamp; final body trimmed after raw body hashing, so semantic equal whitespace bodies may have different fingerprints. Generic batch rejects whole payload on one invalid event rather than returning partial list.",
+    "Kubewatch hash includes kind/namespace/name/reason/type/normalized body, excludes timestamp: repeat samecontent event withinTTL suppressed intentionally. Shared fingerprint SHA256 first16bytes with NUL separators; no NUL escaping/length prefix, potential structural ambiguity if string inputs containNUL, source-only observation not executed Go. Generic labels serialize key=val without escaping equals, needs schema qualification.",
+    "Cache Key does not include source. Generic accepts explicit fingerprint/status so cross-source samefingerprint/status/target may suppress each other depending whether caller shares cache; main/server wiring still pending. Distinguish semantic notification identity from exact file identity;128bit digest alone not byte equality. No network, Telegram or original Go tests executed.",
+    "Main396lines,server and5dedup integration tests whole-read. Main creates one cache when enabled and passes same pointer to server; server passes it to all3sources. Confirms shared cross-source scope statically; explicit generic fingerprint/status can match Alertmanager target key, actual suppression not executed Go. No source discriminator in key.",
+    "Main uses signal context for background workers, HTTP shutdown with timeout then workers wait bounded timeout. Server request middleware derives per-request deadline from write timeout (implementation pending). Cache worker interval defaultsmin(ttl/2,5m). Cache per-process so multi-pod independently delivers/restarts lose suppression; intentional scope, no distributed exactly-once guarantee.",
+    "Five dedup handler tests source-only use localhttptest Telegram recorder, cover repeated firing/differentchat/status/all-failedForget/nilcache/metric. No cross-source match, multipartpartialdelivery, TTL in-flight reservation rollover or concurrent pending delivery failure case in this file. Total original executions remain0; no real Telegram sends.",
+    "Main health-loop introductory comment contradicts actual success branch: comment says only probe-driven recovery, implementation MarkReady whenever currentlyunready after successfulGetMe; local inline comment explains self-lock recovery. Probe success provesGetMe path, not specific target send permission; readiness semantics not exact delivery completeness."
+  ],
+  "remaining": [
+    {
+      "path": ".dockerignore",
+      "bytes": 130
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "bytes": 610
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/config.yml",
+      "bytes": 390
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "bytes": 496
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "bytes": 411
+    },
+    {
+      "path": ".github/dependabot.yaml",
+      "bytes": 471
+    },
+    {
+      "path": ".github/workflows/ci.yaml",
+      "bytes": 6735
+    },
+    {
+      "path": ".github/workflows/codeql.yaml",
+      "bytes": 816
+    },
+    {
+      "path": ".github/workflows/release.yaml",
+      "bytes": 8455
+    },
+    {
+      "path": ".github/workflows/scorecard.yaml",
+      "bytes": 1072
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 93
+    },
+    {
+      "path": ".golangci.yaml",
+      "bytes": 600
+    },
+    {
+      "path": ".goreleaser.yaml",
+      "bytes": 1338
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 26464
+    },
+    {
+      "path": "CLAUDE.md",
+      "bytes": 16035
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "bytes": 1670
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 1852
+    },
+    {
+      "path": "Dockerfile",
+      "bytes": 818
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1070
+    },
+    {
+      "path": "Makefile",
+      "bytes": 1817
+    },
+    {
+      "path": "README.md",
+      "bytes": 25284
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 1395
+    },
+    {
+      "path": "charts/alertly/.helmignore",
+      "bytes": 126
+    },
+    {
+      "path": "charts/alertly/Chart.yaml",
+      "bytes": 679
+    },
+    {
+      "path": "charts/alertly/README.md",
+      "bytes": 11145
+    },
+    {
+      "path": "charts/alertly/templates/NOTES.txt",
+      "bytes": 1804
+    },
+    {
+      "path": "charts/alertly/templates/_helpers.tpl",
+      "bytes": 1952
+    },
+    {
+      "path": "charts/alertly/templates/configmap.yaml",
+      "bytes": 206
+    },
+    {
+      "path": "charts/alertly/templates/deployment.yaml",
+      "bytes": 3712
+    },
+    {
+      "path": "charts/alertly/templates/extra.yaml",
+      "bytes": 66
+    },
+    {
+      "path": "charts/alertly/templates/ingress.yaml",
+      "bytes": 918
+    },
+    {
+      "path": "charts/alertly/templates/pdb.yaml",
+      "bytes": 524
+    },
+    {
+      "path": "charts/alertly/templates/secret.yaml",
+      "bytes": 955
+    },
+    {
+      "path": "charts/alertly/templates/service.yaml",
+      "bytes": 463
+    },
+    {
+      "path": "charts/alertly/templates/serviceaccount.yaml",
+      "bytes": 408
+    },
+    {
+      "path": "charts/alertly/templates/servicemonitor.yaml",
+      "bytes": 1382
+    },
+    {
+      "path": "charts/alertly/values.yaml",
+      "bytes": 11098
+    },
+    {
+      "path": "cmd/alertly/main_test.go",
+      "bytes": 3804
+    },
+    {
+      "path": "examples/alertmanager-config.yaml",
+      "bytes": 2063
+    },
+    {
+      "path": "examples/config.yaml",
+      "bytes": 4501
+    },
+    {
+      "path": "examples/kubewatch-config.yaml",
+      "bytes": 2364
+    },
+    {
+      "path": "examples/values-minimal.yaml",
+      "bytes": 687
+    },
+    {
+      "path": "examples/values-production.yaml",
+      "bytes": 3452
+    },
+    {
+      "path": "go.mod",
+      "bytes": 625
+    },
+    {
+      "path": "go.sum",
+      "bytes": 3665
+    },
+    {
+      "path": "internal/alertmanager/cache.go",
+      "bytes": 2544
+    },
+    {
+      "path": "internal/alertmanager/cache_test.go",
+      "bytes": 1948
+    },
+    {
+      "path": "internal/alertmanager/client.go",
+      "bytes": 11575
+    },
+    {
+      "path": "internal/alertmanager/client_test.go",
+      "bytes": 10482
+    },
+    {
+      "path": "internal/config/config.go",
+      "bytes": 11596
+    },
+    {
+      "path": "internal/config/config_test.go",
+      "bytes": 4043
+    },
+    {
+      "path": "internal/metrics/metrics.go",
+      "bytes": 6027
+    },
+    {
+      "path": "internal/server/activity.go",
+      "bytes": 1429
+    },
+    {
+      "path": "internal/server/button_tracker.go",
+      "bytes": 6315
+    },
+    {
+      "path": "internal/server/button_tracker_test.go",
+      "bytes": 7782
+    },
+    {
+      "path": "internal/server/callback.go",
+      "bytes": 12257
+    },
+    {
+      "path": "internal/server/callback_test.go",
+      "bytes": 19320
+    },
+    {
+      "path": "internal/server/chats.go",
+      "bytes": 1159
+    },
+    {
+      "path": "internal/server/context.go",
+      "bytes": 484
+    },
+    {
+      "path": "internal/server/deadline_test.go",
+      "bytes": 6536
+    },
+    {
+      "path": "internal/server/keyboard.go",
+      "bytes": 2157
+    },
+    {
+      "path": "internal/server/keyboard_test.go",
+      "bytes": 4145
+    },
+    {
+      "path": "internal/server/message.go",
+      "bytes": 3088
+    },
+    {
+      "path": "internal/server/message_test.go",
+      "bytes": 7766
+    },
+    {
+      "path": "internal/server/middleware.go",
+      "bytes": 5162
+    },
+    {
+      "path": "internal/server/middleware_test.go",
+      "bytes": 4056
+    },
+    {
+      "path": "internal/server/readyz.go",
+      "bytes": 1818
+    },
+    {
+      "path": "internal/server/readyz_test.go",
+      "bytes": 2800
+    },
+    {
+      "path": "internal/server/server_test.go",
+      "bytes": 18577
+    },
+    {
+      "path": "internal/server/status.go",
+      "bytes": 4839
+    },
+    {
+      "path": "internal/server/updates.go",
+      "bytes": 5856
+    },
+    {
+      "path": "internal/server/updates_test.go",
+      "bytes": 15252
+    },
+    {
+      "path": "internal/source/alertmanager_test.go",
+      "bytes": 3474
+    },
+    {
+      "path": "internal/source/generic_test.go",
+      "bytes": 3343
+    },
+    {
+      "path": "internal/source/kubewatch_test.go",
+      "bytes": 2513
+    },
+    {
+      "path": "internal/telegram/client.go",
+      "bytes": 10618
+    },
+    {
+      "path": "internal/telegram/client_test.go",
+      "bytes": 12212
+    },
+    {
+      "path": "internal/telegram/ratelimit.go",
+      "bytes": 1532
+    },
+    {
+      "path": "internal/telegram/ratelimit_test.go",
+      "bytes": 1769
+    },
+    {
+      "path": "internal/telegram/retry.go",
+      "bytes": 792
+    },
+    {
+      "path": "internal/telegram/splitter.go",
+      "bytes": 7164
+    },
+    {
+      "path": "internal/telegram/splitter_test.go",
+      "bytes": 7972
+    },
+    {
+      "path": "internal/telegram/updates.go",
+      "bytes": 6386
+    },
+    {
+      "path": "internal/template/helpers.go",
+      "bytes": 1936
+    },
+    {
+      "path": "internal/template/renderer.go",
+      "bytes": 1497
+    },
+    {
+      "path": "internal/template/renderer_test.go",
+      "bytes": 2928
+    },
+    {
+      "path": "internal/version/version.go",
+      "bytes": 153
+    },
+    {
+      "path": "testdata/alertmanager_firing.json",
+      "bytes": 1029
+    },
+    {
+      "path": "testdata/alertmanager_grouped.json",
+      "bytes": 1146
+    },
+    {
+      "path": "testdata/alertmanager_long.json",
+      "bytes": 11098
+    },
+    {
+      "path": "testdata/alertmanager_resolved.json",
+      "bytes": 602
+    },
+    {
+      "path": "testdata/kubewatch_event.json",
+      "bytes": 293
+    },
+    {
+      "path": "testdata/kubewatch_warning.json",
+      "bytes": 325
+    }
+  ],
+  "previous_audit": "docs/research/dedup-500/alertly217-source-review-v2-20261024.json"
+}

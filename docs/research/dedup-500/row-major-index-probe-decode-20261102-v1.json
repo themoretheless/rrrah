@@ -1,0 +1,26 @@
+{
+  "command": [
+    "cargo",
+    "+1.98.1",
+    "test",
+    "-j",
+    "2",
+    "-p",
+    "rrrah-dedup",
+    "--features",
+    "decode",
+    "--lib",
+    "row_major_index_build_latency_probe",
+    "--",
+    "--ignored",
+    "--nocapture"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 648.2801628112793,
+  "source_sha256": "54b914f55f4a8c7b604d39fb0fe270858b3a527041c59a30326eedfa3f323c7d",
+  "source_unchanged": true,
+  "measurement_rows": 160,
+  "log": "docs/research/dedup-500/row-major-index-probe-decode-20261102-v1.log",
+  "log_sha256": "29080d106594e51cc7528d1259cfd19a101d24039598341bb3c8d89f0b38a8ef",
+  "scope": "Configured test-profile construction timing; not release performance qualification"
+}
