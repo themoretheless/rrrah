@@ -1,6 +1,6 @@
 //! Material texture upload; encoded color is decoded by sRGB views before filtering.
 use rrrah_core::{MemoryBudget, Reservation};
-use std::sync::Arc;
+use std::sync::{Arc, OnceLock};
 
 #[derive(Debug, thiserror::Error)]
 pub enum MaterialTextureError {
@@ -68,6 +68,24 @@ impl MaterialSampler {
     }
 }
 
+/// Reusable device/queue-bound upload context. Clones share lazy mip pipelines.
+/// Driver pipeline allocations are not included in per-texture logical credits.
+#[derive(Debug, Clone)]
+pub struct MaterialTextureUploader {
+    device: wgpu::Device,
+    queue: wgpu::Queue,
+    pipelines: Arc<[OnceLock<wgpu::RenderPipeline>; 2]>,
+}
+impl MaterialTextureUploader {
+    pub fn new(device: &wgpu::Device, queue: &wgpu::Queue) -> Self {
+        Self {
+            device: device.clone(),
+            queue: queue.clone(),
+            pipelines: Arc::new(std::array::from_fn(|_| OnceLock::new())),
+        }
+    }
+}
+
 /// Immutable candidate: publication/replacement is owned by the caller.
 /// GPU use after upload must retain `resource_lease` until the draw completes.
 #[derive(Debug)]
@@ -84,18 +102,21 @@ impl MaterialTexture {
     pub fn resource_lease(&self) -> crate::GpuResourceLease {
         crate::GpuResourceLease::new([self.credit.clone()])
     }
+}
+impl MaterialTextureUploader {
     /// Upload straight RGBA8. Color roles use sRGB RGB; alpha and data remain linear.
     /// Resident mip texels and aligned queued upload bytes are admitted separately.
     pub fn upload_rgba8(
-        device: &wgpu::Device,
-        queue: &wgpu::Queue,
+        &self,
         budget: &MemoryBudget,
         size: [u32; 2],
         pixels: &[u8],
         srgb: bool,
         sampler: MaterialSampler,
         mut cancelled: impl FnMut() -> bool,
-    ) -> Result<Self, MaterialTextureError> {
+    ) -> Result<MaterialTexture, MaterialTextureError> {
+        let device = &self.device;
+        let queue = &self.queue;
         if cancelled() {
             return Err(MaterialTextureError::Cancelled);
         }
@@ -170,13 +191,14 @@ impl MaterialTexture {
             },
         );
         if mip_count > 1 {
-            generate_mips(device, queue, &texture, format, mip_count, &mut cancelled)?;
+            let pipeline = self.pipelines[usize::from(srgb)].get_or_init(|| mip_pipeline(device, format));
+            generate_mips(device, queue, &texture, pipeline, mip_count, &mut cancelled)?;
         }
         if cancelled() {
             return Err(MaterialTextureError::Cancelled);
         }
         let view = texture.create_view(&Default::default());
-        Ok(Self {
+        Ok(MaterialTexture {
             texture,
             view,
             sampler: device.create_sampler(&descriptor),
@@ -185,19 +207,12 @@ impl MaterialTexture {
     }
 }
 
-fn generate_mips(
-    device: &wgpu::Device,
-    queue: &wgpu::Queue,
-    texture: &wgpu::Texture,
-    format: wgpu::TextureFormat,
-    count: u32,
-    cancelled: &mut impl FnMut() -> bool,
-) -> Result<(), MaterialTextureError> {
+fn mip_pipeline(device: &wgpu::Device, format: wgpu::TextureFormat) -> wgpu::RenderPipeline {
     let module = device.create_shader_module(wgpu::ShaderModuleDescriptor {
         label: Some("material linear mip filter"),
         source: wgpu::ShaderSource::Wgsl(include_str!("../shaders/material_mip.wgsl").into()),
     });
-    let pipeline = device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
+    device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
         label: Some("material mip generation"),
         layout: None,
         vertex: wgpu::VertexState {
@@ -221,7 +236,17 @@ fn generate_mips(
         }),
         multiview_mask: None,
         cache: None,
-    });
+    })
+}
+
+fn generate_mips(
+    device: &wgpu::Device,
+    queue: &wgpu::Queue,
+    texture: &wgpu::Texture,
+    pipeline: &wgpu::RenderPipeline,
+    count: u32,
+    cancelled: &mut impl FnMut() -> bool,
+) -> Result<(), MaterialTextureError> {
     let mut encoder = device.create_command_encoder(&Default::default());
     for mip in 1..count {
         if cancelled() {
@@ -257,7 +282,7 @@ fn generate_mips(
             })],
             ..Default::default()
         });
-        pass.set_pipeline(&pipeline);
+        pass.set_pipeline(pipeline);
         pass.set_bind_group(0, &bind, &[]);
         pass.draw(0..3, 0..1);
     }
@@ -327,9 +352,32 @@ mod tests {
         assert_eq!(adapter.get_info().backend, wgpu::Backend::Metal);
         eprintln!("MATERIAL_TEXTURE_ADAPTER {:?}", adapter.get_info());
         let (device, queue) = pollster::block_on(adapter.request_device(&Default::default())).unwrap();
+        let uploader = MaterialTextureUploader::new(&device, &queue);
+        let uploader = uploader.clone();
         // Black/white checker: linear RGB average .5 encodes near 188 in sRGB,
         // whereas data averages to 128. Alpha must stay linear in either role.
         let pixels = [0, 0, 0, 0, 255, 255, 255, 255, 255, 255, 255, 255, 0, 0, 0, 0];
+        // Non-mip sampling requires no shader/pipeline construction.
+        let non_mip_budget = MemoryBudget::new(528);
+        let non_mip = uploader
+            .upload_rgba8(
+                &non_mip_budget,
+                [2, 2],
+                &pixels,
+                true,
+                MaterialSampler {
+                    min: Some(9729),
+                    ..Default::default()
+                },
+                || false,
+            )
+            .unwrap();
+        assert_eq!(non_mip.texture().mip_level_count(), 1);
+        assert!(uploader.pipelines.iter().all(|p| p.get().is_none()));
+        device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+        assert_eq!(non_mip_budget.used(), 16);
+        drop(non_mip);
+        assert_eq!(non_mip_budget.used(), 0);
         for (size, input, resident, peak, data_expected, color_expected) in [
             ([2, 2], pixels.to_vec(), 20, 532, 128, 188),
             (
@@ -351,17 +399,9 @@ mod tests {
         ] {
             for srgb in [false, true] {
                 let budget = MemoryBudget::new(peak);
-                let candidate = MaterialTexture::upload_rgba8(
-                    &device,
-                    &queue,
-                    &budget,
-                    size,
-                    &input,
-                    srgb,
-                    MaterialSampler::default(),
-                    || false,
-                )
-                .unwrap();
+                let candidate = uploader
+                    .upload_rgba8(&budget, size, &input, srgb, MaterialSampler::default(), || false)
+                    .unwrap();
                 device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
                 assert_eq!(budget.used(), resident);
                 let read = device.create_buffer(&wgpu::BufferDescriptor {
@@ -414,37 +454,25 @@ mod tests {
                 assert_eq!(budget.used(), 0);
             }
         }
+        let shared = uploader.clone();
+        assert!(Arc::ptr_eq(&shared.pipelines, &uploader.pipelines));
+        assert_eq!(shared.pipelines.iter().filter(|p| p.get().is_some()).count(), 2);
+        eprintln!("six mip candidates share two format pipelines; non-mip upload builds none");
         let budget = MemoryBudget::new(531);
         assert!(matches!(
-            MaterialTexture::upload_rgba8(
-                &device,
-                &queue,
-                &budget,
-                [2, 2],
-                &pixels,
-                true,
-                MaterialSampler::default(),
-                || false
-            ),
+            uploader.upload_rgba8(&budget, [2, 2], &pixels, true, MaterialSampler::default(), || {
+                false
+            }),
             Err(MaterialTextureError::Memory(_))
         ));
         assert_eq!(budget.used(), 0);
         let budget = MemoryBudget::new(532);
         let mut checks = 0;
         assert!(matches!(
-            MaterialTexture::upload_rgba8(
-                &device,
-                &queue,
-                &budget,
-                [2, 2],
-                &pixels,
-                true,
-                MaterialSampler::default(),
-                || {
-                    checks += 1;
-                    checks == 3
-                }
-            ),
+            uploader.upload_rgba8(&budget, [2, 2], &pixels, true, MaterialSampler::default(), || {
+                checks += 1;
+                checks == 3
+            }),
             Err(MaterialTextureError::Cancelled)
         ));
         device.poll(wgpu::PollType::wait_indefinitely()).unwrap();

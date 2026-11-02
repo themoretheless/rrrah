@@ -44,7 +44,7 @@ pub use demosaic_compute::{
     ResidentLinearBayer,
 };
 mod material_texture;
-pub use material_texture::{MaterialSampler, MaterialTexture, MaterialTextureError};
+pub use material_texture::{MaterialSampler, MaterialTexture, MaterialTextureError, MaterialTextureUploader};
 mod model;
 pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
 

@@ -1,6 +1,6 @@
 # Material texture upload and Metal mip proof
 
-Implemented `MaterialTexture::upload_rgba8`, an immutable candidate separate from
+Implemented `MaterialTextureUploader::upload_rgba8`, an immutable candidate separate from
 visible model publication. This is a building block for glTF rendering, **not an
 integrated GLB viewer or PBR qualification**. No decoder dependency was added to
 the production GPU crate; callers supply admitted raw RGBA8 pixels.
@@ -25,6 +25,13 @@ encoder and driver-internal storage are not included. Later draws must retain a
 resource lease through submission completion. Existing visible textures are
 never mutated by candidate preparation.
 
+The reusable `MaterialTextureUploader` binds uploads to one device/queue. Its
+clones share two lazy `OnceLock` pipelines, one per RGBA8 target encoding. Uploads
+without mips do not compile a pipeline. Repeated uploads retain separate texture
+credits; the shared context does not retain evicted texture data. Pipeline
+construction is now outside the repeated upload path after each format's first
+mip upload. No wall-clock speedup is claimed without a controlled benchmark.
+
 ## Verified evidence
 
 - [Actual Metal readback](metal-readback.log): Apple M4 Max, Metal backend;
@@ -33,6 +40,9 @@ never mutated by candidate preparation.
   `[188,188,188,128]`, matching independent analytic averages within one code.
 - 3x1 and 1x3 white/black/white: data `[170,170,170,170]`, sRGB
   `[213,213,213,170]`, proving odd-edge contributions and linear alpha.
+- Repeated Metal uploads of all six size/encoding combinations use exactly two
+  shared initialized pipelines. A prior non-mip upload allocates level zero only,
+  leaves both pipelines uninitialized, and releases its logical root to zero.
 - Exact 2x2 logical peak 532 bytes (20 resident + 512 queued); 531 refuses
   without leaking. Queued cancellation and draw lease retention end at root zero.
 - [GPU regression](gpu-regression.log): 79 passed, 0 failed, 8 manual hardware
@@ -43,8 +53,7 @@ never mutated by candidate preparation.
 ## Remaining work
 
 Connect decoded glTF roles and sampler metadata to the model renderer and its
-cache. Reuse mip pipelines per device/format instead of constructing them for
-each upload; benchmark that actual path before speed claims. Add 16-bit PNG GPU
+cache. Benchmark the actual connected path before speed claims. Add 16-bit PNG GPU
 representation without reducing data to 8 bits, full material sampling/UVs,
 normal maps, PBR lighting, alpha/culling, cache eviction and render comparisons.
 Full multi-level/large-texture/odd-grid and adversarial cancellation qualification
