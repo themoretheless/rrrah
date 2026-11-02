@@ -1752,7 +1752,7 @@ RLA integer/float row-overlap catalogs now use admitted temporary storage, relea
 
 ### Current Mac HDR evidence boundary (2026-10-16)
 
-Live native Metal probe windows now present pinned HEIF/EXR, original RGB/grayscale16/32 PSDs and local CR3 with confirmed resize, RGBA16Float/ExtendedSrgbLinear and OS-reported active HDR. See `research/live-raster-hdr-current-2026-10-16/REPORT.md`, `research/live-raw-hdr-current-2026-10-16/REPORT.md`, and the PSD report above. This supersedes a locked/occluded-screen limitation for those specific runs. It does not qualify calibrated physical luminance/color, arbitrary source variants or complete application navigation. NVIDIA remains deferred. Catalogue remains94implemented subsets/6Pending/0fullyqualified.
+Live native Metal probe windows now present pinned HEIF/EXR, original RGB/grayscale16/32 PSDs and local CR3 with confirmed resize, RGBA16Float/ExtendedSrgbLinear and OS-reported active HDR. See `research/live-native-hdr-2026-11-03/REPORT.md`, and the PSD report above. This supersedes a locked/occluded-screen limitation for those specific runs. It does not qualify calibrated physical luminance/color, arbitrary source variants or complete application navigation. NVIDIA remains deferred. Catalogue remains94implemented subsets/6Pending/0fullyqualified.
 
 
 ### Saved-composite alpha evidence (2026-10-16)

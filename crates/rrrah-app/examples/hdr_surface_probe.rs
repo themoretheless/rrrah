@@ -299,6 +299,7 @@ impl ApplicationHandler for Probe {
                         1.,
                     );
                     drop(model);
+                    println!("native model source credit after upload: {}", budget.used());
                     anyhow::ensure!(
                         budget.used() == 0,
                         "native model source credit retained after upload"
@@ -328,6 +329,7 @@ impl ApplicationHandler for Probe {
                         },
                     );
                     drop(mosaic);
+                    println!("native RAW source credit after upload: {}", budget.used());
                     anyhow::ensure!(
                         budget.used() == 0,
                         "native RAW source credit retained after upload"

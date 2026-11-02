@@ -1,5 +1,7 @@
 # Current coverage of the requested viewer scope
 
+Live native HDR checkpoint (2026-11-03): current M4 Max probe passes11 real-window cases (six HEIF/EXR, original CR3 and four model formats),1877 presented frames,800x400 resize and at least30 subsequent frames each. RGBA16Float/ExtendedSrgbLinear, source shape/identity, released CPU input credit and same-frame active OS HDR/headroom>1 verified; seven parser controls pass. Older duplicate raster/RAW positives are consolidated into one current report. Full application navigation, physical color/luminance calibration, NVIDIA and format-wide coverage remain open. [Live proof and limits](research/live-native-hdr-2026-11-03/REPORT.md).
+
 OBJ metadata quota checkpoint (2026-11-03): an authored128-face mesh was charged421576 bytes instead of25336 retained capacity. Native parser, cache weight and swap-reader reuse now count adjacent Arc payload runs once, preserving distinct equal-value allocations and conservative nonadjacent restore weight. Exact25336-byte native and22312-retained/23336-peak restore cases, both one-byte-short refusals and last-owner release pass. Mesh61/0ignored, viewer354/105ignored, two required M4 Max model cases/0ignored and production/fmt pass. Source buffers/allocator headers, broad 3D formats and the full objective remain outside this focused proof. [Original refusal and correction](research/model-prefetch-2026-11-02/REPORT.md#shared-obj-metadata-quota-correction--2026-11-03).
 
 Delayed I/O direction checkpoint (2026-11-02): the counter-gated real M4 Max worker passes290 selections/300.107s with97 published spills and93 checksum-verified restores. Codec totals are1,560,287,104 read bytes and1,777,493,632 write bytes, both maximum16KiB requests; all seven windows, CPU digests and SDR/HDR exact, root128MiB peak/96MiB settled/final0. Feature cache164/5ignored, two injected fences and six monitor methods pass; default production/fmt pass. Latest evidence replaces presence-only artifacts. Physical slow storage, source I/O, the10800s repetition and full format qualification remain open. [Counter-gated proof](research/metal-worker-sustained-2026-11-02/REPORT.md#real-worker-with-delayed-swap-codec-io).
@@ -10344,12 +10346,12 @@ EOF publication regression: controlled reader changes generation during an EOF-r
 
 ### Live HDR surface now available (2026-10-16)
 
-Unlocked/current console native Metal surface baseline passed: 156 frames, resize confirmed, RGBA16Float/ExtendedSrgbLinear, OS HDR active with headroom2.6666667. Six pinned HEIF/EXR native source windows all passed; 1048 frames total, source credit released and resize presentations confirmed. Evidence: `research/live-raster-hdr-current-2026-10-16/REPORT.md`. Calibrated physical luminance/color, full viewer navigation and NVIDIA remain separate open gates.
+Unlocked/current console native Metal surface baseline passed: 156 frames, resize confirmed, RGBA16Float/ExtendedSrgbLinear, OS HDR active with headroom2.6666667. Six pinned HEIF/EXR native source windows all passed; 1048 frames total, source credit released and resize presentations confirmed. Evidence: `research/live-native-hdr-2026-11-03/REPORT.md`. Calibrated physical luminance/color, full viewer navigation and NVIDIA remain separate open gates.
 
 
 ### Live CR3 HDR surface (2026-10-16)
 
-Native local CR3 6188x4120: 131 presented frames, 101 after resize; SceneLinear RAW renderer on RGBA16Float/ExtendedSrgbLinear Metal surface, OS HDR active/headroom2.6666667, no validation errors, source-credit-after-upload assertion passed. Evidence: `research/live-raw-hdr-current-2026-10-16/REPORT.md`. No source pixels exported. Full application behavior and calibrated physical display accuracy remain open.
+Native local CR3 6188x4120: 131 presented frames, 101 after resize; SceneLinear RAW renderer on RGBA16Float/ExtendedSrgbLinear Metal surface, OS HDR active/headroom2.6666667, no validation errors, source-credit-after-upload assertion passed. Evidence: `research/live-native-hdr-2026-11-03/REPORT.md`. No source pixels exported. Full application behavior and calibrated physical display accuracy remain open.
 
 
 ### Current full-app live GPU recovery (2026-10-16)

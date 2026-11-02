@@ -38,4 +38,28 @@ class Evidence(unittest.TestCase):
         self.assertFalse(self.check(self.log, None))
         self.assertFalse(self.check(self.log + '\npresentation complete: frames=160 elapsed=3.100s'))
 
+    def test_raw_and_model_source_identity_shape_and_credit(self):
+        raster = 'native raster HDR surface: 64x48; pixel_aspect=Some(2.0); source=/test.heic'
+        credit = 'native raster source credit after upload: 0'
+        for source, released, check in [
+            ('native RAW HDR surface: 2x3; samples=6; source=/test.cr3',
+             'native RAW source credit after upload: 0',
+             lambda log: module.validate_raw_log(log,0,'/test.cr3',2,3,6)),
+            ('native model HDR surface: triangles=3; source=/test.obj',
+             'native model source credit after upload: 0',
+             lambda log: module.validate_model_log(log,0,'/test.obj',3))]:
+            log = self.log.replace(raster,source).replace(credit,released)
+            self.assertTrue(check(log))
+            for changed in [log.replace(source,''), log.replace(released,''),
+                            log.replace('after upload: 0','after upload: 4'),
+                            log + '\n' + source, log + '\n' + released,
+                            log.replace('source=/test.', 'source=/other.'),
+                            log.replace('samples=6','samples=5').replace('triangles=3','triangles=2')]:
+                self.assertFalse(check(changed))
+            self.assertFalse(self.check(log))
+    def test_native_empty_or_inconsistent_geometry_cannot_qualify(self):
+        self.assertFalse(module.validate_raw_log(self.log,0,'/test.cr3',2,3,5))
+        self.assertFalse(module.validate_raw_log(self.log,0,'/test.cr3',0,0,0))
+        self.assertFalse(module.validate_model_log(self.log,0,'/test.obj',0))
+
 unittest.main()
