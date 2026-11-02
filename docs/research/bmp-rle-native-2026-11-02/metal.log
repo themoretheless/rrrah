@@ -1,0 +1,68 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 28.15s
+     Running tests/bmp_rle_metal.rs (target/debug/deps/bmp_rle_metal-40c7e6687c24901b)
+
+running 1 test
+test native_bmp_rle_preserves_independent_pixels_through_swap_and_metal ... Native BMP RLE adapter: Metal Apple M4 Max
+BMP RLE bmp-rle4-mixed.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-mixed.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-3.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-3.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-4.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-4.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-5.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-5.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-6.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-6.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-7.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-7.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-8.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-8.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-9.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-absolute-9.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-early-end.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-early-end.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-delta-gaps.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle4-delta-gaps.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-mixed.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-mixed.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-3.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-3.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-4.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-4.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-5.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-5.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-6.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-6.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-7.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-7.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-8.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-8.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-9.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-absolute-9.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-early-end.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-early-end.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-delta-gaps.bmp prepared=false: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+BMP RLE bmp-rle8-delta-gaps.bmp prepared=true: independent samples, exact swap, pressure/cancel/retry, SDR/HDR, final=0
+Native BMP RLE complete: sources=20 lifecycles=40 final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 20.73s
+

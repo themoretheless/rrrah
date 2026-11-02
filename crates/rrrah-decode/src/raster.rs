@@ -15,6 +15,8 @@ use crate::{DecodeError, DecodeRequest, bounded_io::read_bounded};
 
 #[path = "bmp_color.rs"]
 mod bmp_color;
+#[path = "bmp_rle.rs"]
+mod bmp_rle;
 #[path = "ico_pages.rs"]
 mod ico_pages;
 #[path = "png_profile.rs"]
@@ -44,6 +46,8 @@ pub enum RasterDecodeError {
     InvalidBmpColor(&'static str),
     #[error("invalid BMP pixel aspect: {0}")]
     InvalidBmpAspect(&'static str),
+    #[error("invalid BMP RLE: {0}")]
+    InvalidBmpRle(&'static str),
     #[error("invalid or unsupported TGA extension metadata: {0}")]
     InvalidTgaAlpha(&'static str),
     #[error("invalid or unsupported TGA layout: {0}")]
@@ -957,9 +961,15 @@ fn decode_raster_bytes_inner(
         } else {
             None
         };
-        let mut decoder = image::codecs::bmp::BmpDecoder::new(Cursor::new(&bytes[..metadata.pixel_end]))?;
+        let mut decoder: Box<dyn ImageDecoder + '_> =
+            match bmp_rle::Decoder::new(&bytes[..metadata.pixel_end], request)? {
+                Some(decoder) => Box::new(decoder),
+                None => Box::new(image::codecs::bmp::BmpDecoder::new(Cursor::new(
+                    &bytes[..metadata.pixel_end],
+                ))?),
+            };
         decoder.set_limits(limits)?;
-        (Box::new(decoder), Some(profile))
+        (decoder, Some(profile))
     } else if format == ImageFormat::Avif {
         // RGBA8 is the smallest supported AVIF output. This area cap preserves
         // every frame that could fit MAX_RASTER_BYTES while rejecting excessive

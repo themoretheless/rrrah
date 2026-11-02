@@ -1,0 +1,79 @@
+{
+  "scope": "paired CPU decode only, authored 512x512 eight-color encoded/absolute sources, four decodes per sample, alternating order, 30 pairs per group; excludes file I/O, color preparation and GPU",
+  "estimator": "exp(mean(log(native_ns/legacy_ns)))",
+  "bootstrap": {
+    "resamples": 5000,
+    "indices": [
+      125,
+      4874
+    ],
+    "seed": "101 + bits + (1000 for absolute)"
+  },
+  "raw_sha256": "b854a5193fb7b5b2654048a9018270b2fdf22431aadf6fe1b5d592a362826a0b",
+  "groups": [
+    {
+      "bits": 4,
+      "pattern": "encoded",
+      "native_median_ns": 69520.5,
+      "legacy_median_ns": 167302.0,
+      "native_over_legacy": 0.407681046151038,
+      "ratio95": [
+        0.3994645771032946,
+        0.41616813788239926
+      ],
+      "time_reduction_percent": 59.23189538489619,
+      "reduction95_percent": [
+        58.383186211760076,
+        60.053542289670546
+      ]
+    },
+    {
+      "bits": 4,
+      "pattern": "absolute",
+      "native_median_ns": 147843.5,
+      "legacy_median_ns": 276317.5,
+      "native_over_legacy": 0.539208068232276,
+      "ratio95": [
+        0.5338970691795697,
+        0.5455383123223515
+      ],
+      "time_reduction_percent": 46.07919317677241,
+      "reduction95_percent": [
+        45.44616876776485,
+        46.61029308204303
+      ]
+    },
+    {
+      "bits": 8,
+      "pattern": "encoded",
+      "native_median_ns": 107661.0,
+      "legacy_median_ns": 240088.5,
+      "native_over_legacy": 0.4593244879979691,
+      "ratio95": [
+        0.4483178237248704,
+        0.4743909367654167
+      ],
+      "time_reduction_percent": 54.06755120020309,
+      "reduction95_percent": [
+        52.56090632345833,
+        55.16821762751296
+      ]
+    },
+    {
+      "bits": 8,
+      "pattern": "absolute",
+      "native_median_ns": 183546.5,
+      "legacy_median_ns": 289827.5,
+      "native_over_legacy": 0.6306123030760422,
+      "ratio95": [
+        0.6226703979159238,
+        0.6375826476932178
+      ],
+      "time_reduction_percent": 36.93876969239578,
+      "reduction95_percent": [
+        36.241735230678216,
+        37.73296020840762
+      ]
+    }
+  ]
+}

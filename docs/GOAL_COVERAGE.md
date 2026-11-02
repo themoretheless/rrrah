@@ -1,5 +1,19 @@
 # Current coverage of the requested viewer scope
 
+Owned BMP RLE checkpoint (2026-11-02): one-pass RLE4/RLE8 writes admitted RGBA
+without an RGB intermediate or command allocations. 20 authored sources agree
+with FFmpeg; 274 decoder tests and 66 prefetch tests pass. Required M4 Max checks
+40 native/prepared swap/pressure/cancel/retry SDR/HDR lifecycles with final zero.
+Four paired 512×512 CPU controls qualify local 36.94–59.23% time reductions;
+file I/O/display/FPS are excluded. [Proof and rejected slow prototypes](research/bmp-rle-native-2026-11-02/REPORT.md).
+
+Sustained cold-load counterexample (2026-11-02): the fenced run failed at 6802
+with a 16 MiB display-preparation reservation under transient root pressure.
+Retention-admitted cold raster loads now reclaim unprotected victims and fence
+cancelled spills once, preserving protected frames and limits. A controlled
+recovery/cancel/oversize regression and production check pass; the new three-hour
+run is pending. [Original failure and recovery checks](research/metal-worker-sustained-2026-11-02/REPORT.md#cold-decode-counterexample-and-recovery).
+
 BMP physical-pixel checkpoint (2026-11-02): Windows40/52/56/108/124-byte
 pixels-per-meter fields now determine native/prepared pixel aspect; zero axes
 remain undefined and negative values refuse before allocation.267 decoder

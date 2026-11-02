@@ -1,0 +1,179 @@
+--- current/bmp_rle.rs
++++ before-gap-initialization/bmp_rle.rs
+@@ -128,27 +128,11 @@
+         let pixels = self.span(out, x, y, count)?.as_chunks_mut::<4>().0;
+         if self.bits == 8 {
+             let indices = &data[..count];
+-            if self.colors.is_power_of_two() {
+-                let mask = !(self.colors - 1) as u8;
+-                if mask != 0 {
+-                    let (words, tail) = indices.as_chunks::<8>();
+-                    let combined = words
+-                        .iter()
+-                        .fold(0u64, |bits, &word| bits | u64::from_ne_bytes(word));
+-                    if combined & u64::from_ne_bytes([mask; 8]) != 0 || tail.iter().any(|&v| v & mask != 0) {
+-                        return Err(malformed("BMP RLE index outside declared palette"));
+-                    }
+-                }
+-                for (pixel, &index) in pixels.iter_mut().zip(indices) {
+-                    *pixel = self.palette[usize::from(index)];
+-                }
+-            } else {
+-                for (pixel, &index) in pixels.iter_mut().zip(indices) {
+-                    if usize::from(index) >= self.colors {
+-                        return Err(malformed("BMP RLE index outside declared palette"));
+-                    }
+-                    *pixel = self.palette[usize::from(index)];
+-                }
++            if self.colors < 256 && usize::from(indices.iter().copied().max().unwrap_or(0)) >= self.colors {
++                return Err(malformed("BMP RLE index outside declared palette"));
++            }
++            for (pixel, &index) in pixels.iter_mut().zip(indices) {
++                *pixel = self.palette[usize::from(index)];
+             }
+         } else {
+             if self.colors < 16 {
+@@ -172,13 +156,6 @@
+             if !tail.is_empty() {
+                 tail[0] = self.palette[usize::from(data[count / 2] >> 4)];
+             }
+-        }
+-        Ok(())
+-    }
+-    fn black(&self, out: &mut [u8]) -> ImageResult<()> {
+-        for block in out.chunks_mut(16384) {
+-            self.check()?;
+-            block.as_chunks_mut::<4>().0.fill([0, 0, 0, 255]);
+         }
+         Ok(())
+     }
+@@ -212,6 +189,12 @@
+         if out.len() as u64 != u64::from(self.width) * u64::from(self.height) * 4 {
+             return Err(malformed("wrong BMP RLE output buffer length"));
+         }
++        // Undefined skipped positions follow the existing opaque-black policy.
++        // They do not inherit the palette's entry zero or expose uninitialized bytes.
++        for block in out.chunks_mut(16384) {
++            self.check()?;
++            block.as_chunks_mut::<4>().0.fill([0, 0, 0, 255]);
++        }
+         let (mut x, mut y) = (0usize, 0usize);
+         loop {
+             self.check()?;
+@@ -227,38 +210,17 @@
+                     if y >= self.height as usize {
+                         return Err(malformed("BMP RLE row outside image"));
+                     }
+-                    self.black(self.span(out, x, y, self.width as usize - x)?)?;
+                     x = 0;
+                     y += 1;
+                 }
+-                1 => {
+-                    if y < self.height as usize {
+-                        self.black(self.span(out, x, y, self.width as usize - x)?)?;
+-                        self.black(&mut out[..(self.height as usize - y - 1) * self.width as usize * 4])?;
+-                    }
+-                    return Ok(());
+-                }
++                1 => return Ok(()),
+                 2 => {
+                     let delta = self.take(2)?;
+-                    let next_x = x + usize::from(delta[0]);
+-                    let next_y = y + usize::from(delta[1]);
+-                    if next_x > self.width as usize || next_y >= self.height as usize {
++                    x += usize::from(delta[0]);
++                    y += usize::from(delta[1]);
++                    if x > self.width as usize || y >= self.height as usize {
+                         return Err(malformed("BMP RLE delta outside image"));
+                     }
+-                    // Only skipped positions need initialization. Fully painted
+-                    // rows avoid a second whole-output pass; every successful
+-                    // image still defines all channels, including opaque holes.
+-                    if next_y == y {
+-                        self.black(self.span(out, x, y, next_x - x)?)?;
+-                    } else {
+-                        self.black(self.span(out, x, y, self.width as usize - x)?)?;
+-                        let start = (self.height as usize - next_y) * self.width as usize * 4;
+-                        let end = (self.height as usize - y - 1) * self.width as usize * 4;
+-                        self.black(&mut out[start..end])?;
+-                        self.black(self.span(out, 0, next_y, next_x)?)?;
+-                    }
+-                    x = next_x;
+-                    y = next_y;
+                 }
+                 n => {
+                     let count = usize::from(n);
+@@ -373,73 +335,6 @@
+             );
+         }
+     }
+-    #[test]
+-    fn delta_and_early_end_define_every_byte_of_a_nonzero_caller_buffer() {
+-        let manifest: serde_json::Value =
+-            serde_json::from_slice(&std::fs::read(fixtures().join("bmp-rle-reference.json")).unwrap())
+-                .unwrap();
+-        for case in manifest["cases"]
+-            .as_array()
+-            .unwrap()
+-            .iter()
+-            .filter(|case| case["path"].as_str().unwrap().contains("delta-gaps"))
+-        {
+-            let bytes = std::fs::read(fixtures().join(case["path"].as_str().unwrap())).unwrap();
+-            let request = DecodeRequest::new("gaps.bmp");
+-            let decoder = Decoder::new(&bytes, &request).unwrap().unwrap();
+-            let mut output = vec![0xa5; decoder.total_bytes() as usize];
+-            decoder.read_image(&mut output).unwrap();
+-            let hex = case["rgba8_hex"].as_str().unwrap();
+-            let expected: Vec<_> = (0..hex.len())
+-                .step_by(2)
+-                .map(|at| u8::from_str_radix(&hex[at..at + 2], 16).unwrap())
+-                .collect();
+-            assert_eq!(output, expected);
+-        }
+-    }
+-
+-    #[test]
+-    fn rle8_palette_validation_covers_every_count_value_word_and_tail() {
+-        let request = DecodeRequest::new("palette.bmp");
+-        let mut table = [[0; 4]; 256];
+-        for (i, pixel) in table.iter_mut().enumerate() {
+-            *pixel = [i as u8, (i as u8) ^ 1, (i as u8).wrapping_mul(3), 255];
+-        }
+-        let mut decoder = Decoder {
+-            bytes: &[],
+-            palette: table,
+-            colors: 1,
+-            request: &request,
+-            at: 0,
+-            end: 0,
+-            width: 17,
+-            height: 1,
+-            bits: 8,
+-        };
+-        for colors in 1..=256 {
+-            decoder.colors = colors;
+-            for index in 0..=255u8 {
+-                for position in [0, 7, 8, 15, 16] {
+-                    let mut data = [0u8; 17];
+-                    data[position] = index;
+-                    let mut output = [0xa5u8; 68];
+-                    let result = decoder.absolute(&mut output, 0, 0, 17, &data);
+-                    assert_eq!(
+-                        result.is_ok(),
+-                        usize::from(index) < colors,
+-                        "colors={colors} index={index} position={position}"
+-                    );
+-                    if result.is_ok() {
+-                        assert_eq!(
+-                            &output[position * 4..position * 4 + 4],
+-                            &table[usize::from(index)]
+-                        );
+-                    }
+-                }
+-            }
+-        }
+-    }
+-
+     #[test]
+     fn unused_rle4_low_nibble_is_not_a_palette_access() {
+         let raster = crate::raster::decode_raster_bytes(

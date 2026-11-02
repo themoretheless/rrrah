@@ -1,0 +1,144 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.20s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_decode-147dbc80e8efed71)
+
+running 1 test
+test raster::bmp_rle::tests::paired_native_rle_decode_cpu ... RLE CPU bits=4 pattern=encoded sample=0 native_ns=160489 legacy_ns=193937
+RLE CPU bits=4 pattern=encoded sample=1 native_ns=159677 legacy_ns=195354
+RLE CPU bits=4 pattern=encoded sample=2 native_ns=159614 legacy_ns=193104
+RLE CPU bits=4 pattern=encoded sample=3 native_ns=159406 legacy_ns=194958
+RLE CPU bits=4 pattern=encoded sample=4 native_ns=159573 legacy_ns=193625
+RLE CPU bits=4 pattern=encoded sample=5 native_ns=166791 legacy_ns=252208
+RLE CPU bits=4 pattern=encoded sample=6 native_ns=160177 legacy_ns=196458
+RLE CPU bits=4 pattern=encoded sample=7 native_ns=158916 legacy_ns=192802
+RLE CPU bits=4 pattern=encoded sample=8 native_ns=170333 legacy_ns=231646
+RLE CPU bits=4 pattern=encoded sample=9 native_ns=159385 legacy_ns=193333
+RLE CPU bits=4 pattern=encoded sample=10 native_ns=159583 legacy_ns=192708
+RLE CPU bits=4 pattern=encoded sample=11 native_ns=167510 legacy_ns=193073
+RLE CPU bits=4 pattern=encoded sample=12 native_ns=160343 legacy_ns=193541
+RLE CPU bits=4 pattern=encoded sample=13 native_ns=170916 legacy_ns=194416
+RLE CPU bits=4 pattern=encoded sample=14 native_ns=158947 legacy_ns=192812
+RLE CPU bits=4 pattern=encoded sample=15 native_ns=159104 legacy_ns=192583
+RLE CPU bits=4 pattern=encoded sample=16 native_ns=158895 legacy_ns=202281
+RLE CPU bits=4 pattern=encoded sample=17 native_ns=169656 legacy_ns=194583
+RLE CPU bits=4 pattern=encoded sample=18 native_ns=162427 legacy_ns=232781
+RLE CPU bits=4 pattern=encoded sample=19 native_ns=161541 legacy_ns=193062
+RLE CPU bits=4 pattern=encoded sample=20 native_ns=160458 legacy_ns=192697
+RLE CPU bits=4 pattern=encoded sample=21 native_ns=160864 legacy_ns=192916
+RLE CPU bits=4 pattern=encoded sample=22 native_ns=167948 legacy_ns=193989
+RLE CPU bits=4 pattern=encoded sample=23 native_ns=160000 legacy_ns=193677
+RLE CPU bits=4 pattern=encoded sample=24 native_ns=159489 legacy_ns=192437
+RLE CPU bits=4 pattern=encoded sample=25 native_ns=159198 legacy_ns=193364
+RLE CPU bits=4 pattern=encoded sample=26 native_ns=159302 legacy_ns=192396
+RLE CPU bits=4 pattern=encoded sample=27 native_ns=159062 legacy_ns=191468
+RLE CPU bits=4 pattern=encoded sample=28 native_ns=159052 legacy_ns=192781
+RLE CPU bits=4 pattern=encoded sample=29 native_ns=159114 legacy_ns=192656
+RLE CPU bits=4 pattern=absolute sample=0 native_ns=300750 legacy_ns=336156
+RLE CPU bits=4 pattern=absolute sample=1 native_ns=295281 legacy_ns=318697
+RLE CPU bits=4 pattern=absolute sample=2 native_ns=300093 legacy_ns=327760
+RLE CPU bits=4 pattern=absolute sample=3 native_ns=302948 legacy_ns=325593
+RLE CPU bits=4 pattern=absolute sample=4 native_ns=319239 legacy_ns=325635
+RLE CPU bits=4 pattern=absolute sample=5 native_ns=295406 legacy_ns=331250
+RLE CPU bits=4 pattern=absolute sample=6 native_ns=293541 legacy_ns=319520
+RLE CPU bits=4 pattern=absolute sample=7 native_ns=302354 legacy_ns=320114
+RLE CPU bits=4 pattern=absolute sample=8 native_ns=296666 legacy_ns=321156
+RLE CPU bits=4 pattern=absolute sample=9 native_ns=294739 legacy_ns=327218
+RLE CPU bits=4 pattern=absolute sample=10 native_ns=297968 legacy_ns=337198
+RLE CPU bits=4 pattern=absolute sample=11 native_ns=301052 legacy_ns=316916
+RLE CPU bits=4 pattern=absolute sample=12 native_ns=294541 legacy_ns=331302
+RLE CPU bits=4 pattern=absolute sample=13 native_ns=295687 legacy_ns=320760
+RLE CPU bits=4 pattern=absolute sample=14 native_ns=294020 legacy_ns=318593
+RLE CPU bits=4 pattern=absolute sample=15 native_ns=294968 legacy_ns=318479
+RLE CPU bits=4 pattern=absolute sample=16 native_ns=293177 legacy_ns=308573
+RLE CPU bits=4 pattern=absolute sample=17 native_ns=315364 legacy_ns=316864
+RLE CPU bits=4 pattern=absolute sample=18 native_ns=278989 legacy_ns=310979
+RLE CPU bits=4 pattern=absolute sample=19 native_ns=289322 legacy_ns=304718
+RLE CPU bits=4 pattern=absolute sample=20 native_ns=280593 legacy_ns=314541
+RLE CPU bits=4 pattern=absolute sample=21 native_ns=302843 legacy_ns=308708
+RLE CPU bits=4 pattern=absolute sample=22 native_ns=293208 legacy_ns=331468
+RLE CPU bits=4 pattern=absolute sample=23 native_ns=294875 legacy_ns=325260
+RLE CPU bits=4 pattern=absolute sample=24 native_ns=293875 legacy_ns=321406
+RLE CPU bits=4 pattern=absolute sample=25 native_ns=304364 legacy_ns=325000
+RLE CPU bits=4 pattern=absolute sample=26 native_ns=307239 legacy_ns=306229
+RLE CPU bits=4 pattern=absolute sample=27 native_ns=281135 legacy_ns=306166
+RLE CPU bits=4 pattern=absolute sample=28 native_ns=280302 legacy_ns=306291
+RLE CPU bits=4 pattern=absolute sample=29 native_ns=288646 legacy_ns=306093
+RLE CPU bits=8 pattern=encoded sample=0 native_ns=196198 legacy_ns=268218
+RLE CPU bits=8 pattern=encoded sample=1 native_ns=194781 legacy_ns=268010
+RLE CPU bits=8 pattern=encoded sample=2 native_ns=194802 legacy_ns=266396
+RLE CPU bits=8 pattern=encoded sample=3 native_ns=195614 legacy_ns=266218
+RLE CPU bits=8 pattern=encoded sample=4 native_ns=195010 legacy_ns=265968
+RLE CPU bits=8 pattern=encoded sample=5 native_ns=195562 legacy_ns=267604
+RLE CPU bits=8 pattern=encoded sample=6 native_ns=195156 legacy_ns=272937
+RLE CPU bits=8 pattern=encoded sample=7 native_ns=195302 legacy_ns=271166
+RLE CPU bits=8 pattern=encoded sample=8 native_ns=195166 legacy_ns=287364
+RLE CPU bits=8 pattern=encoded sample=9 native_ns=196718 legacy_ns=251333
+RLE CPU bits=8 pattern=encoded sample=10 native_ns=194916 legacy_ns=249687
+RLE CPU bits=8 pattern=encoded sample=11 native_ns=194375 legacy_ns=249291
+RLE CPU bits=8 pattern=encoded sample=12 native_ns=195041 legacy_ns=249416
+RLE CPU bits=8 pattern=encoded sample=13 native_ns=195187 legacy_ns=250083
+RLE CPU bits=8 pattern=encoded sample=14 native_ns=194979 legacy_ns=250333
+RLE CPU bits=8 pattern=encoded sample=15 native_ns=207468 legacy_ns=249364
+RLE CPU bits=8 pattern=encoded sample=16 native_ns=195625 legacy_ns=278458
+RLE CPU bits=8 pattern=encoded sample=17 native_ns=195323 legacy_ns=267562
+RLE CPU bits=8 pattern=encoded sample=18 native_ns=195656 legacy_ns=268531
+RLE CPU bits=8 pattern=encoded sample=19 native_ns=195468 legacy_ns=272114
+RLE CPU bits=8 pattern=encoded sample=20 native_ns=195552 legacy_ns=267948
+RLE CPU bits=8 pattern=encoded sample=21 native_ns=195854 legacy_ns=261771
+RLE CPU bits=8 pattern=encoded sample=22 native_ns=209843 legacy_ns=256114
+RLE CPU bits=8 pattern=encoded sample=23 native_ns=195208 legacy_ns=247875
+RLE CPU bits=8 pattern=encoded sample=24 native_ns=195385 legacy_ns=248489
+RLE CPU bits=8 pattern=encoded sample=25 native_ns=295635 legacy_ns=248750
+RLE CPU bits=8 pattern=encoded sample=26 native_ns=207770 legacy_ns=258698
+RLE CPU bits=8 pattern=encoded sample=27 native_ns=215093 legacy_ns=255479
+RLE CPU bits=8 pattern=encoded sample=28 native_ns=202885 legacy_ns=282239
+RLE CPU bits=8 pattern=encoded sample=29 native_ns=202812 legacy_ns=290635
+RLE CPU bits=8 pattern=absolute sample=0 native_ns=432750 legacy_ns=345843
+RLE CPU bits=8 pattern=absolute sample=1 native_ns=442698 legacy_ns=340489
+RLE CPU bits=8 pattern=absolute sample=2 native_ns=429541 legacy_ns=343260
+RLE CPU bits=8 pattern=absolute sample=3 native_ns=473000 legacy_ns=339989
+RLE CPU bits=8 pattern=absolute sample=4 native_ns=457645 legacy_ns=358260
+RLE CPU bits=8 pattern=absolute sample=5 native_ns=451166 legacy_ns=365750
+RLE CPU bits=8 pattern=absolute sample=6 native_ns=455562 legacy_ns=374614
+RLE CPU bits=8 pattern=absolute sample=7 native_ns=457437 legacy_ns=355052
+RLE CPU bits=8 pattern=absolute sample=8 native_ns=451520 legacy_ns=343697
+RLE CPU bits=8 pattern=absolute sample=9 native_ns=452104 legacy_ns=342093
+RLE CPU bits=8 pattern=absolute sample=10 native_ns=450781 legacy_ns=331916
+RLE CPU bits=8 pattern=absolute sample=11 native_ns=438635 legacy_ns=326771
+RLE CPU bits=8 pattern=absolute sample=12 native_ns=430468 legacy_ns=345646
+RLE CPU bits=8 pattern=absolute sample=13 native_ns=432614 legacy_ns=344677
+RLE CPU bits=8 pattern=absolute sample=14 native_ns=429812 legacy_ns=365739
+RLE CPU bits=8 pattern=absolute sample=15 native_ns=461489 legacy_ns=355260
+RLE CPU bits=8 pattern=absolute sample=16 native_ns=451958 legacy_ns=358937
+RLE CPU bits=8 pattern=absolute sample=17 native_ns=460447 legacy_ns=359552
+RLE CPU bits=8 pattern=absolute sample=18 native_ns=453510 legacy_ns=359812
+RLE CPU bits=8 pattern=absolute sample=19 native_ns=451166 legacy_ns=357531
+RLE CPU bits=8 pattern=absolute sample=20 native_ns=457593 legacy_ns=367395
+RLE CPU bits=8 pattern=absolute sample=21 native_ns=457687 legacy_ns=358958
+RLE CPU bits=8 pattern=absolute sample=22 native_ns=453083 legacy_ns=371979
+RLE CPU bits=8 pattern=absolute sample=23 native_ns=474218 legacy_ns=411354
+RLE CPU bits=8 pattern=absolute sample=24 native_ns=451208 legacy_ns=363281
+RLE CPU bits=8 pattern=absolute sample=25 native_ns=451729 legacy_ns=366604
+RLE CPU bits=8 pattern=absolute sample=26 native_ns=451437 legacy_ns=368083
+RLE CPU bits=8 pattern=absolute sample=27 native_ns=451947 legacy_ns=365968
+RLE CPU bits=8 pattern=absolute sample=28 native_ns=451489 legacy_ns=366885
+RLE CPU bits=8 pattern=absolute sample=29 native_ns=458718 legacy_ns=363614
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 280 filtered out; finished in 0.29s
+

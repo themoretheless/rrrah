@@ -1,0 +1,436 @@
+--- current/bmp_rle.rs
++++ initial-encoded/bmp_rle.rs
+@@ -9,8 +9,7 @@
+ }
+ pub(super) struct Decoder<'a> {
+     bytes: &'a [u8],
+-    palette: [[u8; 4]; 256],
+-    colors: usize,
++    palette: &'a [u8],
+     request: &'a DecodeRequest,
+     at: usize,
+     end: usize,
+@@ -67,13 +66,9 @@
+         if at < palette_end {
+             return Err(bad("palette overlaps pixel stream"));
+         }
+-        let raw_palette = bytes
++        let palette = bytes
+             .get(palette_start..palette_end)
+             .ok_or_else(|| bad("truncated palette"))?;
+-        let mut palette = [[0u8; 4]; 256];
+-        for (pixel, bgr) in palette.iter_mut().zip(raw_palette.chunks_exact(4)) {
+-            *pixel = [bgr[2], bgr[1], bgr[0], 255];
+-        }
+         let size = u32_at(34)? as usize;
+         let end = if size == 0 {
+             bytes.len()
+@@ -87,7 +82,6 @@
+         Ok(Some(Self {
+             bytes,
+             palette,
+-            colors,
+             request,
+             at,
+             end,
+@@ -111,92 +105,25 @@
+             .check_cancelled()
+             .map_err(|_| malformed("BMP RLE cancelled"))
+     }
+-    fn color(&self, index: u8) -> ImageResult<[u8; 4]> {
+-        if usize::from(index) >= self.colors {
+-            return Err(malformed("BMP RLE index outside declared palette"));
+-        }
+-        Ok(self.palette[usize::from(index)])
+-    }
+-    fn span<'b>(&self, out: &'b mut [u8], x: usize, y: usize, count: usize) -> ImageResult<&'b mut [u8]> {
+-        if y >= self.height as usize || x > self.width as usize || count > self.width as usize - x {
++    fn paint(
++        &self,
++        out: &mut [u8],
++        x: usize,
++        y: usize,
++        count: usize,
++        index: impl Fn(usize) -> u8,
++    ) -> ImageResult<()> {
++        if y >= self.height as usize || count > self.width as usize - x {
+             return Err(malformed("BMP RLE run crosses image boundary"));
+         }
+         let start = ((self.height as usize - y - 1) * self.width as usize + x) * 4;
+-        Ok(&mut out[start..start + count * 4])
+-    }
+-    fn absolute(&self, out: &mut [u8], x: usize, y: usize, count: usize, data: &[u8]) -> ImageResult<()> {
+-        let pixels = self.span(out, x, y, count)?.as_chunks_mut::<4>().0;
+-        if self.bits == 8 {
+-            let indices = &data[..count];
+-            if self.colors.is_power_of_two() {
+-                let mask = !(self.colors - 1) as u8;
+-                if mask != 0 {
+-                    let (words, tail) = indices.as_chunks::<8>();
+-                    let combined = words
+-                        .iter()
+-                        .fold(0u64, |bits, &word| bits | u64::from_ne_bytes(word));
+-                    if combined & u64::from_ne_bytes([mask; 8]) != 0 || tail.iter().any(|&v| v & mask != 0) {
+-                        return Err(malformed("BMP RLE index outside declared palette"));
+-                    }
+-                }
+-                for (pixel, &index) in pixels.iter_mut().zip(indices) {
+-                    *pixel = self.palette[usize::from(index)];
+-                }
+-            } else {
+-                for (pixel, &index) in pixels.iter_mut().zip(indices) {
+-                    if usize::from(index) >= self.colors {
+-                        return Err(malformed("BMP RLE index outside declared palette"));
+-                    }
+-                    *pixel = self.palette[usize::from(index)];
+-                }
+-            }
+-        } else {
+-            if self.colors < 16 {
+-                let mut maximum = data[..count / 2]
+-                    .iter()
+-                    .map(|&p| (p >> 4).max(p & 15))
+-                    .max()
+-                    .unwrap_or(0);
+-                if count % 2 != 0 {
+-                    maximum = maximum.max(data[count / 2] >> 4);
+-                }
+-                if usize::from(maximum) >= self.colors {
+-                    return Err(malformed("BMP RLE index outside declared palette"));
+-                }
+-            }
+-            let (pairs, tail) = pixels.as_chunks_mut::<2>();
+-            for (pair, &packed) in pairs.iter_mut().zip(data) {
+-                pair[0] = self.palette[usize::from(packed >> 4)];
+-                pair[1] = self.palette[usize::from(packed & 15)];
+-            }
+-            if !tail.is_empty() {
+-                tail[0] = self.palette[usize::from(data[count / 2] >> 4)];
+-            }
+-        }
+-        Ok(())
+-    }
+-    fn black(&self, out: &mut [u8]) -> ImageResult<()> {
+-        for block in out.chunks_mut(16384) {
+-            self.check()?;
+-            block.as_chunks_mut::<4>().0.fill([0, 0, 0, 255]);
+-        }
+-        Ok(())
+-    }
+-    fn encoded(&self, out: &mut [u8], x: usize, y: usize, count: usize, index: u8) -> ImageResult<()> {
+-        let first = self.color(if self.bits == 8 { index } else { index >> 4 })?;
+-        let row = self.span(out, x, y, count)?;
+-        if self.bits == 8 {
+-            row.as_chunks_mut::<4>().0.fill(first);
+-        } else {
+-            let second = if count > 1 { self.color(index & 15)? } else { first };
+-            let pair = [
+-                first[0], first[1], first[2], first[3], second[0], second[1], second[2], second[3],
+-            ];
+-            let (pairs, tail) = row.as_chunks_mut::<8>();
+-            pairs.fill(pair);
+-            if !tail.is_empty() {
+-                tail.copy_from_slice(&first);
+-            }
++        for (i, pixel) in out[start..start + count * 4].chunks_exact_mut(4).enumerate() {
++            let at = usize::from(index(i)) * 4;
++            let color = self
++                .palette
++                .get(at..at + 4)
++                .ok_or_else(|| malformed("BMP RLE index outside declared palette"))?;
++            pixel.copy_from_slice(&[color[2], color[1], color[0], 255]);
+         }
+         Ok(())
+     }
+@@ -211,6 +138,14 @@
+     fn read_image(mut self, out: &mut [u8]) -> ImageResult<()> {
+         if out.len() as u64 != u64::from(self.width) * u64::from(self.height) * 4 {
+             return Err(malformed("wrong BMP RLE output buffer length"));
++        }
++        // Undefined skipped positions follow the existing opaque-black policy.
++        // They do not inherit the palette's entry zero or expose uninitialized bytes.
++        for block in out.chunks_mut(16384) {
++            self.check()?;
++            for pixel in block.chunks_exact_mut(4) {
++                pixel.copy_from_slice(&[0, 0, 0, 255]);
++            }
+         }
+         let (mut x, mut y) = (0usize, 0usize);
+         loop {
+@@ -218,7 +153,16 @@
+             let pair = self.take(2)?;
+             let (count, op) = (pair[0] as usize, pair[1]);
+             if count != 0 {
+-                self.encoded(out, x, y, count, op)?;
++                let bits = self.bits;
++                self.paint(out, x, y, count, |i| {
++                    if bits == 8 {
++                        op
++                    } else if i % 2 == 0 {
++                        op >> 4
++                    } else {
++                        op & 15
++                    }
++                })?;
+                 x += count;
+                 continue;
+             }
+@@ -227,44 +171,32 @@
+                     if y >= self.height as usize {
+                         return Err(malformed("BMP RLE row outside image"));
+                     }
+-                    self.black(self.span(out, x, y, self.width as usize - x)?)?;
+                     x = 0;
+                     y += 1;
+                 }
+-                1 => {
+-                    if y < self.height as usize {
+-                        self.black(self.span(out, x, y, self.width as usize - x)?)?;
+-                        self.black(&mut out[..(self.height as usize - y - 1) * self.width as usize * 4])?;
+-                    }
+-                    return Ok(());
+-                }
++                1 => return Ok(()),
+                 2 => {
+                     let delta = self.take(2)?;
+-                    let next_x = x + usize::from(delta[0]);
+-                    let next_y = y + usize::from(delta[1]);
+-                    if next_x > self.width as usize || next_y >= self.height as usize {
++                    x += usize::from(delta[0]);
++                    y += usize::from(delta[1]);
++                    if x > self.width as usize || y >= self.height as usize {
+                         return Err(malformed("BMP RLE delta outside image"));
+                     }
+-                    // Only skipped positions need initialization. Fully painted
+-                    // rows avoid a second whole-output pass; every successful
+-                    // image still defines all channels, including opaque holes.
+-                    if next_y == y {
+-                        self.black(self.span(out, x, y, next_x - x)?)?;
+-                    } else {
+-                        self.black(self.span(out, x, y, self.width as usize - x)?)?;
+-                        let start = (self.height as usize - next_y) * self.width as usize * 4;
+-                        let end = (self.height as usize - y - 1) * self.width as usize * 4;
+-                        self.black(&mut out[start..end])?;
+-                        self.black(self.span(out, 0, next_y, next_x)?)?;
+-                    }
+-                    x = next_x;
+-                    y = next_y;
+                 }
+                 n => {
+                     let count = usize::from(n);
+                     let packed = if self.bits == 8 { count } else { count.div_ceil(2) };
+                     let data = self.take((packed + 1) & !1)?;
+-                    self.absolute(out, x, y, count, data)?;
++                    let bits = self.bits;
++                    self.paint(out, x, y, count, |i| {
++                        if bits == 8 {
++                            data[i]
++                        } else if i % 2 == 0 {
++                            data[i / 2] >> 4
++                        } else {
++                            data[i / 2] & 15
++                        }
++                    })?;
+                     x += count;
+                 }
+             }
+@@ -374,73 +306,6 @@
+         }
+     }
+     #[test]
+-    fn delta_and_early_end_define_every_byte_of_a_nonzero_caller_buffer() {
+-        let manifest: serde_json::Value =
+-            serde_json::from_slice(&std::fs::read(fixtures().join("bmp-rle-reference.json")).unwrap())
+-                .unwrap();
+-        for case in manifest["cases"]
+-            .as_array()
+-            .unwrap()
+-            .iter()
+-            .filter(|case| case["path"].as_str().unwrap().contains("delta-gaps"))
+-        {
+-            let bytes = std::fs::read(fixtures().join(case["path"].as_str().unwrap())).unwrap();
+-            let request = DecodeRequest::new("gaps.bmp");
+-            let decoder = Decoder::new(&bytes, &request).unwrap().unwrap();
+-            let mut output = vec![0xa5; decoder.total_bytes() as usize];
+-            decoder.read_image(&mut output).unwrap();
+-            let hex = case["rgba8_hex"].as_str().unwrap();
+-            let expected: Vec<_> = (0..hex.len())
+-                .step_by(2)
+-                .map(|at| u8::from_str_radix(&hex[at..at + 2], 16).unwrap())
+-                .collect();
+-            assert_eq!(output, expected);
+-        }
+-    }
+-
+-    #[test]
+-    fn rle8_palette_validation_covers_every_count_value_word_and_tail() {
+-        let request = DecodeRequest::new("palette.bmp");
+-        let mut table = [[0; 4]; 256];
+-        for (i, pixel) in table.iter_mut().enumerate() {
+-            *pixel = [i as u8, (i as u8) ^ 1, (i as u8).wrapping_mul(3), 255];
+-        }
+-        let mut decoder = Decoder {
+-            bytes: &[],
+-            palette: table,
+-            colors: 1,
+-            request: &request,
+-            at: 0,
+-            end: 0,
+-            width: 17,
+-            height: 1,
+-            bits: 8,
+-        };
+-        for colors in 1..=256 {
+-            decoder.colors = colors;
+-            for index in 0..=255u8 {
+-                for position in [0, 7, 8, 15, 16] {
+-                    let mut data = [0u8; 17];
+-                    data[position] = index;
+-                    let mut output = [0xa5u8; 68];
+-                    let result = decoder.absolute(&mut output, 0, 0, 17, &data);
+-                    assert_eq!(
+-                        result.is_ok(),
+-                        usize::from(index) < colors,
+-                        "colors={colors} index={index} position={position}"
+-                    );
+-                    if result.is_ok() {
+-                        assert_eq!(
+-                            &output[position * 4..position * 4 + 4],
+-                            &table[usize::from(index)]
+-                        );
+-                    }
+-                }
+-            }
+-        }
+-    }
+-
+-    #[test]
+     fn unused_rle4_low_nibble_is_not_a_palette_access() {
+         let raster = crate::raster::decode_raster_bytes(
+             bitmap(4, 1, 1, &[1, 0x1f, 0, 1]),
+@@ -474,79 +339,54 @@
+     #[ignore = "manual paired native versus legacy BMP RLE CPU decode timing"]
+     fn paired_native_rle_decode_cpu() {
+         for bits in [4, 8] {
+-            for absolute in [false, true] {
+-                let pattern = if absolute { "absolute" } else { "encoded" };
+-                let mut body = Vec::new();
+-                for y in 0..512usize {
+-                    let mut x = 0;
+-                    for (part, count) in [255u8, 253, 4].into_iter().enumerate() {
+-                        if absolute {
+-                            body.extend_from_slice(&[0, count]);
+-                            let indices: Vec<u8> =
+-                                (0..usize::from(count)).map(|i| ((x + i + y) % 8) as u8).collect();
+-                            let mut packed: Vec<u8> = if bits == 8 {
+-                                indices
+-                            } else {
+-                                indices
+-                                    .chunks(2)
+-                                    .map(|p| p[0] << 4 | p.get(1).copied().unwrap_or(0))
+-                                    .collect()
+-                            };
+-                            if packed.len() % 2 != 0 {
+-                                packed.push(0);
+-                            }
+-                            body.extend_from_slice(&packed);
+-                        } else {
+-                            let high = ((y + part) % 8) as u8;
+-                            let index = if bits == 8 {
+-                                high
+-                            } else {
+-                                high << 4 | ((high + 1) % 8)
+-                            };
+-                            body.extend_from_slice(&[count, index]);
+-                        }
+-                        x += usize::from(count);
+-                    }
+-                    body.extend_from_slice(&[0, 0]);
+-                }
+-                body.extend_from_slice(&[0, 1]);
+-                let bytes = bitmap(bits, 512, 512, &body);
+-                let request = DecodeRequest::new("benchmark.bmp");
+-                let decode = |native| {
+-                    let decoder: Box<dyn ImageDecoder + '_> = if native {
+-                        Box::new(Decoder::new(&bytes, &request).unwrap().unwrap())
++            let mut body = Vec::new();
++            for y in 0..512usize {
++                for (part, count) in [255u8, 255, 2].into_iter().enumerate() {
++                    let high = ((y + part) % 8) as u8;
++                    let index = if bits == 8 {
++                        high
+                     } else {
+-                        Box::new(image::codecs::bmp::BmpDecoder::new(std::io::Cursor::new(&bytes)).unwrap())
++                        high << 4 | ((high + 1) % 8)
+                     };
+-                    image::DynamicImage::from_decoder(decoder)
+-                        .unwrap()
+-                        .into_rgba8()
+-                        .into_raw()
++                    body.extend_from_slice(&[count, index]);
++                }
++                body.extend_from_slice(&[0, 0]);
++            }
++            body.extend_from_slice(&[0, 1]);
++            let bytes = bitmap(bits, 512, 512, &body);
++            let request = DecodeRequest::new("benchmark.bmp");
++            let decode = |native| {
++                let decoder: Box<dyn ImageDecoder + '_> = if native {
++                    Box::new(Decoder::new(&bytes, &request).unwrap().unwrap())
++                } else {
++                    Box::new(image::codecs::bmp::BmpDecoder::new(std::io::Cursor::new(&bytes)).unwrap())
+                 };
+-                assert_eq!(decode(true), decode(false));
++                image::DynamicImage::from_decoder(decoder)
++                    .unwrap()
++                    .into_rgba8()
++                    .into_raw()
++            };
++            assert_eq!(decode(true), decode(false));
++            for _ in 0..4 {
++                std::hint::black_box(decode(true));
++                std::hint::black_box(decode(false));
++            }
++            let timing = |native| {
++                let started = std::time::Instant::now();
+                 for _ in 0..4 {
+-                    std::hint::black_box(decode(true));
+-                    std::hint::black_box(decode(false));
+-                }
+-                let timing = |native| {
+-                    let started = std::time::Instant::now();
+-                    for _ in 0..4 {
+-                        std::hint::black_box(decode(native));
+-                    }
+-                    started.elapsed().as_nanos() / 4
++                    std::hint::black_box(decode(native));
++                }
++                started.elapsed().as_nanos() / 4
++            };
++            for sample in 0..30 {
++                let (native, legacy) = if sample % 2 == 0 {
++                    (timing(true), timing(false))
++                } else {
++                    let legacy = timing(false);
++                    (timing(true), legacy)
+                 };
+-                for sample in 0..30 {
+-                    let (native, legacy) = if sample % 2 == 0 {
+-                        (timing(true), timing(false))
+-                    } else {
+-                        let legacy = timing(false);
+-                        (timing(true), legacy)
+-                    };
+-                    eprintln!(
+-                        "RLE CPU bits={bits} pattern={pattern} sample={sample} native_ns={native} legacy_ns={legacy}"
+-                    );
+-                }
+-            }
+-        }
+-    }
+-}
++                eprintln!("RLE CPU bits={bits} sample={sample} native_ns={native} legacy_ns={legacy}");
++            }
++        }
++    }
++}

@@ -63,9 +63,9 @@ long-run evidence establishes the candidate's behavior.
 
 The fenced repetition also failed: selection6802 refused nearest035.bmp while
 preparing a cold source, after6784 logged selections/1069.9s. The error now
-specifies a16,777,216-byte reservation with121,634,816 bytes used against a
+specifies a 16,777,216-byte reservation with 121,634,816 bytes used against a
 134,217,728-byte limit; after temporary decode buffers unwound, the assertion
-reported117,440,512 bytes. This was not the preceding swap-restore refusal or
+reported 117,440,512 bytes. This was not the preceding swap-restore refusal or
 a monitor RSS stop. [Original log](fenced/test.log), [terminal state](fenced/state.json),
 [RSS](fenced/rss.jsonl) and [source pins](fenced/sources.json) are retained.
 
@@ -77,10 +77,10 @@ do not reclaim victims. Source-headroom refusal now has a typed recovery flag
 while retaining its prior user-visible message. Protected current/neighbor
 leases remain protected. No limits or TTLs were increased.
 
-A controlled32-byte regression fills the root with selected and stale16-byte
+A controlled 32-byte regression fills the root with selected and stale 16-byte
 frames. An admitted cold candidate fails once, releases only the stale frame,
 then succeeds with a retained lease. The selected frame remains resident.
-Cancellation during the failure and a48-byte indivisible request each stop after
+Cancellation during the failure and a 48-byte indivisible request each stop after
 one attempt without removing the old frame. All branches finish at zero managed
 usage. Current [66 prefetch tests](cold-retry/prefetch.log) and
 [production check](cold-retry/production-check.log) pass.
