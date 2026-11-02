@@ -1,0 +1,75 @@
+   Compiling rrrah-mesh v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-mesh)
+    Finished `test` profile [optimized + debuginfo] target(s) in 15.93s
+     Running unittests src/lib.rs (target/debug/deps/rrrah_mesh-8152fd4bd651e496)
+
+running 67 tests
+test glb::tests::json_bin_and_unknown_chunks_keep_exact_borrowed_ranges ... ok
+test glb::tests::malformed_order_alignment_versions_and_all_truncated_prefixes_reject ... ok
+test model::managed_tests::cancelled_model_request_precedes_source_io_and_format_resolution ... ok
+test model::managed_tests::nonzero_model_index_is_refused_before_source_io ... ok
+test obj::fixture_tests::cancelled_obj_never_opens_source ... ok
+test model::ownership_tests::model_weight_counts_reserved_geometry_even_without_triangles ... ok
+test obj::shared_metadata_budget_tests::adjacent_shared_metadata_weight_matches_physical_allocations ... ok
+test obj::tests::concave_polygon_retains_area_winding_and_cutout ... ok
+test glb::tests::admitted_source_clones_hold_one_credit_and_failures_release_it ... ok
+test obj::shared_metadata_budget_tests::equal_text_in_distinct_allocations_is_not_deduplicated ... ok
+test obj::tests::malformed_geometry_and_unsupported_elements_fail ... ok
+test obj::tests::group_arrays_account_conversion_overlap_and_transfer_credit_to_faces ... ok
+test obj::tests::line_continuations_collinear_edges_rotated_planes_and_limits ... ok
+test obj::tests::continued_line_scratch_is_admitted_before_growth_and_released ... ok
+test model::ownership_tests::model_clone_shares_original_geometry_without_reallocation ... ok
+test glb::tests::original_khronos_box_matches_independent_container_ranges ... ok
+test model::managed_tests::shared_legacy_mesh_is_rejected_and_managed_mesh_retains_original_budget ... ok
+test obj::tests::managed_triangulation_bounds_scratch_and_cleans_up_failure_and_cancel ... ok
+test obj::shared_metadata_budget_tests::nonadjacent_sharing_keeps_the_swap_restoration_lower_bound_conservative ... ok
+test obj::tests::negative_indices_uv_normals_weights_and_state_are_retained ... ok
+test obj::tests::relative_index_extremes_reject_without_wrapping ... ok
+test obj::shared_metadata_budget_tests::native_and_restored_shared_metadata_fit_their_real_working_envelopes ... ok
+test obj_swap::tests::empty_mesh_has_independently_specified_wire_layout ... ok
+test obj::tests::object_material_credit_transfers_once_and_cleans_up_unused_state ... ok
+test off::tests::face_color_storage_is_admitted_before_allocation ... ok
+test off::tests::integer_storage_boundaries_are_explicit ... ok
+test off::tests::attributes_binary_and_ascii_match_authored_data ... ok
+test off::tests::free_format_comments_headerless_dimension_and_malformed_inputs ... ok
+test off_swap::tests::blocked_arrays_preserve_records_across_non_aligned_boundaries ... ok
+test obj_swap::tests::numeric_arrays_cross_block_boundary_and_release_truncated_allocations ... ok
+test off_swap::tests::block_writes_preserve_scalar_bits_across_boundaries ... ok
+test obj::tests::managed_obj_arrays_and_polygon_scratch_share_budget_and_owner_lifetime ... ok
+test off::tests::managed_geometry_reserves_before_growth_and_transfers_credit_to_model ... ok
+test ply::tests::eager_declared_list_offsets_spend_budget_before_invalid_header_rejection ... ok
+test off::tests::cancellation_budget_and_polygon_failures_are_explicit ... ok
+test obj::tests::metadata_join_preserves_spacing_and_rejects_before_large_token_allocation ... ok
+test off_swap::tests::every_native_face_color_kind_is_preserved ... ok
+test model::managed_tests::model_kinds_preserve_geometry_and_last_owner_admission ... ok
+test ply::tests::header_memory_rejection_precedes_body_validation_and_cleans_up ... ok
+test ply::tests::cancellation_before_io_and_during_polygon_tessellation ... ok
+test ply::tests::face_before_vertex_negative_indices_nonfinite_positions_and_point_cloud_contract ... ok
+test ply::tests::native_integer_indices_preserve_signed_and_unsigned_boundaries ... ok
+test obj_swap::tests::native_obj_corpus_preserves_geometry_and_attribute_references ... ok
+test ply_swap::tests::all_scalar_types_preserve_native_bits_in_independent_layout ... ok
+test ply_swap::tests::blocked_scalar_restore_preserves_bits_and_bounds_reader_calls ... ok
+test stl::tests::binary_and_ascii_preserve_geometry ... ok
+test stl::tests::preserves_attributes_empty_mesh_and_cancellation ... ok
+test stl::tests::rejects_truncation_nonfinite_and_trailing_data ... ok
+test obj::fixture_tests::common_model_matches_independent_geometry_oracles ... ok
+test off_swap::tests::native_attributes_and_polygon_storage_roundtrip_exactly ... ok
+test stl::tests::streamed_eof_retries_interruptions_but_preserves_errors_and_cancellation ... ok
+test obj_swap::tests::shared_metadata_uses_previous_references_and_length_is_exact ... ok
+test rr31_60_qualification::second_stream_buffer_changes_tight_admission_and_read_errors_stay_bounded ... ok
+test stl_swap::tests::exact_bits_and_last_owner_credit ... ok
+test stl_swap::tests::corrupt_truncated_and_pressure_cleanup ... ok
+test stl_swap::tests::forged_counts_fail_before_admission_and_empty_mesh_is_managed ... ok
+test stl::tests::binary_model_admits_before_facets_and_retains_reservation ... ok
+test stl_swap::tests::facet_block_boundaries_preserve_all_bits_and_attributes ... ok
+test stl::tests::public_file_api_and_cancellation_before_io ... ok
+test stl::tests::ascii_model_reserves_exact_facets_before_coordinate_decode ... ok
+test ply::tests::managed_typed_columns_lists_and_polygons_retain_exact_credit ... ok
+test off::tests::independent_geometry_oracles_preserve_surface_winding_and_float64 ... ok
+test stl::tests::streamed_binary_blocks_preserve_facets_cancel_and_recover ... ok
+test glb::tests::limits_and_cancellation_precede_publication ... ok
+test ply::tests::all_native_columns_and_encodings_match_independent_oracles ... ok
+test ply::tests::truncated_binary_headers_payload_and_invalid_schema_reject ... ok
+test ply_swap::tests::native_fixture_framing_length_matches_all_encodings_and_precision ... ok
+
+test result: ok. 67 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+

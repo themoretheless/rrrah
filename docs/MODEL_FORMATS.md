@@ -795,3 +795,7 @@ STL/OBJ/OFF/PLY retained background prefetch now stops after transient swap-memo
 ## Adjacent metadata accounting — 2026-11-03
 
 Shared OBJ object/group/material payloads now consume retained credit once per adjacent allocation run in native decode, capacity estimation and lossless restore. This corrects a421576-byte charge for a25336-byte authored mesh; physical payload sharing itself is unchanged. The independent128-face census, exact/one-byte-short working budgets, distinct equal-value allocations and conservative nonadjacent restore boundary pass, with61 mesh tests and current Metal cache equivalence checks. [Failure, current proof and source pins](research/model-prefetch-2026-11-02/REPORT.md#shared-obj-metadata-quota-correction--2026-11-03).
+
+## Native GLB foundation (2026-11-03)
+
+A borrowed GLB2 container parser and admitted immutable source owner now exist in `rrrah-mesh::glb`. Original Khronos Box framing, source-clone credit and malformed boundaries pass; this is not registered as decoded/viewable GLB. JSON semantics, geometry, scene transforms/materials, cache/swap and Metal remain required. [Scope and evidence](research/glb-native-2026-11-03/REPORT.md).
