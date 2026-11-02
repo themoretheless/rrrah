@@ -1,4 +1,8 @@
-# Sustained mixed-worker failure — 2026-11-02
+# Sustained mixed-worker qualification — current result 2026-11-03
+
+The repaired repetition is now terminal **passed**:65449 selections/10800.069 workload seconds on actual Metal Apple M4 Max, exact CPU digests and63x65 SDR/HDR on every selection, managed peak128MiB/settled96MiB/final0. It includes a recorded2239-second low-power sleep, so this is an interrupted monotonic-duration proof, not uninterrupted three-hour execution. [Completed repetition and scope](#completed-10800-second-repetition).
+
+## Initial counterexample
 
 The requested10800-second run terminated with a real test failure, not a monitor
 timeout or RSS guard. Monitor and child handles were polled to terminal status:
@@ -15,8 +19,7 @@ includes setup; requested three-hour duration was not achieved.
 The preceding finite minute passes remain valid for their executions but do
 not prove sustained correctness. Source-level investigation added test-only
 diagnostics distinguishing load refusal from successful loading without a
-consumer lease. No fix for this sustained failure is claimed here. Inspect any
-subsequent process handle before deciding whether to restart it.
+consumer lease. This initial execution provided no sustained pass. Subsequent repairs and the completed repetition are documented below.
 
 ## Diagnostic reproduction and candidate repair
 
@@ -54,10 +57,7 @@ owners intact. Both existing queue APIs and subsequent writes remain usable.
 Current finite checks pass: [159 cache tests/5 ignored](fix-candidate/fence-cache-tests.log),
 [65 prefetch tests/22 ignored](fix-candidate/fence-prefetch-tests.log), and
 [production check](fix-candidate/fence-production-check.log). Formatting and
-diff whitespace checks also passed. A fresh10800-second monitored current-binary
-run was launched after both old handles were confirmed terminal. Its completion
-is not claimed here; the two sustained counterexamples remain open until
-long-run evidence establishes the candidate's behavior.
+diff whitespace checks also passed. A fresh10800-second repetition was launched after both old handles were confirmed terminal. That fenced candidate subsequently exposed the separate cold-decode counterexample below; the final repaired repetition is recorded in the completed section.
 
 ## Cold-decode counterexample and recovery
 
@@ -85,10 +85,7 @@ one attempt without removing the old frame. All branches finish at zero managed
 usage. Current [66 prefetch tests](cold-retry/prefetch.log) and
 [production check](cold-retry/production-check.log) pass.
 
-A fresh10800-second run of the rebuilt candidate was started only after the
-prior monitor and child were confirmed terminal. Its pending result is not
-recorded as a pass. The three finite counterexamples and the broad goal remain
-open until sufficient subsequent evidence is available.
+The final repaired10800-second run was started only after the prior monitor and child were confirmed terminal. Its completed result is below. The three original counterexamples remain preserved; they are historical failures, not current successful checks.
 
 ## Real worker with delayed swap codec I/O
 
@@ -108,4 +105,16 @@ cargo test --locked -p rrrah --bin rrrah --features qualification-slow-io --no-r
 MallocNanoZone=0 python3 scripts/run-metal-collection-soak.py --suite worker-mixed --binary /absolute/test-binary --output /fresh/evidence --scratch /fresh/scratch --seconds 300 --rss-limit-mib 6144 --sample-seconds 10 --swap-delay-ms 1 --swap-chunk-bytes 16384
 ```
 
-Latency is injected at codec calls over real checksum-verified swap files. The store may buffer/coalesce requests;16KiB is not a physical-device syscall bound. Source-file reads, seek/fsync behavior and physically slow disks are not modeled. This finite delayed-worker proof neither completes the separate10800s repetition nor proves physical HDR/NVIDIA qualification.
+Latency is injected at codec calls over real checksum-verified swap files. The store may buffer/coalesce requests;16KiB is not a physical-device syscall bound. Source-file reads, seek/fsync behavior and physically slow disks are not modeled. This finite delayed-worker proof is separate from the completed10800s repetition and does not prove physical HDR/NVIDIA qualification.
+
+## Completed10800-second repetition
+
+The original monitor27427 and child27428 were observed to terminal status (both absent afterward); the original exec handle also returned passed/exit0. [Terminal state](completed/state.json), [complete log](completed/test.log), [RSS samples](completed/rss.jsonl), [source pins](completed/sources.json), [audit](completed/audit.json).
+
+The actual M4 Max worker completes65449 selections over10800.069 reported workload seconds,1 test passed/zero ignored. Sources:64 authored1024x1024 PPM/TGA/uncompressed BMP files, prepared16MiB float frames. The64MiB fixed pressure is a managed reservation, not a touched physical-memory allocation. Root limit128MiB, RAM32MiB/two entries/250ms TTL, queue16MiB/one item, aggregate restore32MiB and swap64MiB/three objects are unchanged. Root peak128MiB, largest settled96MiB, final managed root0.55505 nearest neighbors retain leases;891614 farther candidates refuse at protected capacity. Every selected CPU digest and full63x65 SDR/HDR Metal frame matches. Seven windows have counts[9360,9360,9353,9344,9344,9344,9344], including zero prefetch and both unbounded settings; path/generation/direction/priority assertions stay enabled.
+
+The binary was frozen before later RAW/model/BMP follow-ups: SHA256`0b1409c3bc45c317c47c38b8f1f2b10fc713a5262ec4197ceed51fcf8c854f2f`. All71 recorded source files and the recorded monitor hash match commit`0c41cc96c`; this is a source-pin audit, not a claim that every later change ran for three hours. The current worker-evidence verifier independently accepts the completed log. Later changes have their separately scoped current-code gates. The process was never restarted when an observation timed out or after resume.
+
+The [system log](completed/system-sleep.txt) records low-power sleep at2026-11-02 22:13:06+0400 and wake at22:50:25 (2239 seconds). Workload/test/monitor times are10800.069/10805.90/10817.09 seconds; the UTC timestamp delta is13008.50479 seconds. These clocks are reported as observed; do not equate this with uninterrupted wall-clock qualification or use it to infer wall-clock TTL behavior across suspend. The selected/prefetch/render assertions continue after resume.
+
+There are1076 ten-second RSS samples, maximum337035264 bytes, under the6144MiB guard; MallocNanoZone=0 is recorded. This sampled maximum is not a physical-memory exhaustion or unsampled-peak measurement. Physically slow/source storage, OS-wide pressure, arbitrary formats, full GUI navigation, calibrated HDR luminance/color and NVIDIA remain outside this repetition. The broader100-format objective remains active.
