@@ -1,0 +1,52 @@
+[2026-11-03T02:01:10Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:01:10Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:01:10Z INFO  rrrah] viewer GPU setup: device_ms=3.328 surface_ms=0.087 raw_ms=0.000 raster_ms=2.307 filmstrip_ms=0.559 total_ms=6.281
+[2026-11-03T02:01:10Z INFO  rrrah] Raster ready: generation=0 path=/tmp/rrrah-glb-mixed-live-20261103/01.png index=0 dimensions=16x16 elapsed=1.687084ms
+LIVE_RECOVERY_INJECT path=/tmp/rrrah-glb-mixed-live-20261103/01.png page=0 devices=[1, 2] simulated_notification=true
+[2026-11-03T02:01:10Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-11-03T02:01:10Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:01:10Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:01:10Z INFO  rrrah] viewer GPU setup: device_ms=0.912 surface_ms=0.053 raw_ms=0.000 raster_ms=2.113 filmstrip_ms=0.383 total_ms=3.461
+LIVE_MODEL_PREFETCH_ATTEMPT generation=0 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=false attempts=1 retained_count=0
+[2026-11-03T02:01:10Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+[2026-11-03T02:01:10Z INFO  rrrah] Raster ready: generation=2 path=/tmp/rrrah-glb-mixed-live-20261103/01.png index=0 dimensions=16x16 elapsed=124.291µs
+LIVE_MODEL_PREFETCH_READY generation=2 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true count=1
+LIVE_MODEL_PREFETCH_ATTEMPT generation=2 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true attempts=1 retained_count=1
+LIVE_RECOVERY_PASS path=/tmp/rrrah-glb-mixed-live-20261103/01.png page=0 devices=[3, 4] main_frames=3 telemetry_frames=4 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RASTER_PREFETCH_READY generation=3 path=/tmp/rrrah-glb-mixed-live-20261103/01.png retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=3 path=/tmp/rrrah-glb-mixed-live-20261103/01.png retained=true attempts=1 retained_count=1
+LIVE_RASTER_NAV_PRESENT phase=5 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb generation=3 previous_generation=2 frames=7 same_device=true gpu_wait_ok=true kind=model
+LIVE_RASTER_CACHE_GUARD path=/tmp/rrrah-glb-mixed-live-20261103/01.png fallback_decode=forbidden
+LIVE_RASTER_CACHE_HIT path=/tmp/rrrah-glb-mixed-live-20261103/01.png tier=ram swap_reads_before=0 swap_reads_after=0 foreground=true
+LIVE_MODEL_PREFETCH_READY generation=4 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true count=1
+LIVE_MODEL_PREFETCH_ATTEMPT generation=4 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true attempts=1 retained_count=1
+[2026-11-03T02:01:10Z INFO  rrrah] Raster ready: generation=4 path=/tmp/rrrah-glb-mixed-live-20261103/01.png index=0 dimensions=16x16 elapsed=131.25µs
+LIVE_RASTER_NAV_PRESENT phase=6 path=/tmp/rrrah-glb-mixed-live-20261103/01.png generation=4 previous_generation=3 frames=8 same_device=true gpu_wait_ok=true kind=raster
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=true
+LIVE_MIXED_NAV_PASS raster_model_raster=true model_renderer_confirmed=true
+LIVE_RASTER_ENDURANCE_ROUND completed=1 target=3 elapsed_ms=289
+LIVE_RASTER_PREFETCH_READY generation=5 path=/tmp/rrrah-glb-mixed-live-20261103/01.png retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=5 path=/tmp/rrrah-glb-mixed-live-20261103/01.png retained=true attempts=1 retained_count=1
+LIVE_RASTER_NAV_PRESENT phase=5 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb generation=5 previous_generation=4 frames=10 same_device=true gpu_wait_ok=true kind=model
+LIVE_RASTER_CACHE_GUARD path=/tmp/rrrah-glb-mixed-live-20261103/01.png fallback_decode=forbidden
+LIVE_RASTER_CACHE_HIT path=/tmp/rrrah-glb-mixed-live-20261103/01.png tier=ram swap_reads_before=0 swap_reads_after=0 foreground=true
+LIVE_MODEL_PREFETCH_READY generation=6 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true count=1
+LIVE_MODEL_PREFETCH_ATTEMPT generation=6 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true attempts=1 retained_count=1
+[2026-11-03T02:01:10Z INFO  rrrah] Raster ready: generation=6 path=/tmp/rrrah-glb-mixed-live-20261103/01.png index=0 dimensions=16x16 elapsed=138.708µs
+LIVE_RASTER_NAV_PRESENT phase=6 path=/tmp/rrrah-glb-mixed-live-20261103/01.png generation=6 previous_generation=5 frames=11 same_device=true gpu_wait_ok=true kind=raster
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=true
+LIVE_MIXED_NAV_PASS raster_model_raster=true model_renderer_confirmed=true
+LIVE_RASTER_ENDURANCE_ROUND completed=2 target=3 elapsed_ms=314
+LIVE_RASTER_PREFETCH_READY generation=7 path=/tmp/rrrah-glb-mixed-live-20261103/01.png retained=true count=1
+LIVE_RASTER_PREFETCH_ATTEMPT generation=7 path=/tmp/rrrah-glb-mixed-live-20261103/01.png retained=true attempts=1 retained_count=1
+LIVE_RASTER_NAV_PRESENT phase=5 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb generation=7 previous_generation=6 frames=13 same_device=true gpu_wait_ok=true kind=model
+LIVE_RASTER_CACHE_GUARD path=/tmp/rrrah-glb-mixed-live-20261103/01.png fallback_decode=forbidden
+LIVE_RASTER_CACHE_HIT path=/tmp/rrrah-glb-mixed-live-20261103/01.png tier=ram swap_reads_before=0 swap_reads_after=0 foreground=true
+LIVE_MODEL_PREFETCH_READY generation=8 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true count=1
+LIVE_MODEL_PREFETCH_ATTEMPT generation=8 path=/tmp/rrrah-glb-mixed-live-20261103/02.glb retained=true attempts=1 retained_count=1
+[2026-11-03T02:01:10Z INFO  rrrah] Raster ready: generation=8 path=/tmp/rrrah-glb-mixed-live-20261103/01.png index=0 dimensions=16x16 elapsed=133.625µs
+LIVE_RASTER_NAV_PRESENT phase=6 path=/tmp/rrrah-glb-mixed-live-20261103/01.png generation=8 previous_generation=7 frames=14 same_device=true gpu_wait_ok=true kind=raster
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=true
+LIVE_MIXED_NAV_PASS raster_model_raster=true model_renderer_confirmed=true
+LIVE_RASTER_ENDURANCE_ROUND completed=3 target=3 elapsed_ms=339
+[2026-11-03T02:01:10Z INFO  rrrah] Viewer transient storage shutdown complete

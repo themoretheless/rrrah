@@ -5,7 +5,7 @@ use rrrah_core::MemoryBudget;
 use rrrah_decode::{DecodeRequest, DecodedModel, GlbAsset};
 use std::io::{Read, Write};
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub(crate) enum ModelAsset {
     Geometry(DecodedModel),
     Glb(GlbAsset),
@@ -22,6 +22,23 @@ fn is_glb(request: &DecodeRequest) -> bool {
         .is_some_and(|e| e.eq_ignore_ascii_case("glb"))
 }
 impl ModelAsset {
+    pub(crate) fn format_name(&self) -> &'static str {
+        match self {
+            Self::Geometry(m) => m.format_name(),
+            Self::Glb(_) => "GLB",
+        }
+    }
+    pub(crate) fn triangle_count(&self) -> usize {
+        match self {
+            Self::Geometry(m) => m.triangle_count(),
+            Self::Glb(m) => m
+                .scene()
+                .instances()
+                .flat_map(|i| m.primitives_for_mesh(i.mesh).unwrap_or_default())
+                .map(|p| p.triangles)
+                .sum(),
+        }
+    }
     pub(crate) fn decode(request: &DecodeRequest) -> Result<Self, ModelLoadError> {
         if is_glb(request) {
             rrrah_decode::decode_glb_asset(request, None)

@@ -17,14 +17,12 @@ enum Work {
         model: rrrah_decode::DecodedModel,
         context: UploadContext,
     },
-    #[allow(dead_code, reason = "GLB publication wiring is staged")]
     Glb {
         asset: rrrah_decode::GlbAsset,
         preparer: crate::glb_view::GlbViewportPreparer,
         request: rrrah_decode::DecodeRequest,
     },
 }
-#[allow(dead_code, reason = "GLB publication wiring is staged")]
 pub(crate) struct CompletedGlb {
     pub id: u64,
     pub generation: u64,
@@ -118,7 +116,6 @@ impl ModelUploadWorker {
             token,
         )
     }
-    #[allow(dead_code, reason = "GLB publication wiring is staged")]
     pub fn submit_glb(
         &mut self,
         asset: rrrah_decode::GlbAsset,
@@ -274,7 +271,6 @@ impl ModelUploadWorker {
         slots.completed = None;
         slots.glb_completed = None;
     }
-    #[allow(dead_code, reason = "GLB publication wiring is staged")]
     pub fn try_take_glb(&self) -> Option<CompletedGlb> {
         let mut slots = self.shared.slots.lock().unwrap();
         let completed = slots.glb_completed.take()?;

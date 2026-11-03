@@ -1,0 +1,109 @@
+{
+  "backend": "Metal",
+  "adapter": "Apple M4 Max",
+  "binary_sha256": "fef385c617a7d0c13e1b672dc5724d24d65422b5ca80198ac61a2dc4ecc73f5e",
+  "inputs": {
+    "tests/fixtures/glb/BoxTextured.glb": "b510eca2e2ef33f62f9ed57d6e7ce2d10ebb2bdebc4a8e59d347719ba81abdf4",
+    "tests/fixtures/models/off-triangle.off": "0f1df09ff78054b09efd9298be5260e0eb64a3a2f4921df2757568379d9cf320",
+    "tests/fixtures/raster/pattern.profiled.png": "3c551ef8c29f2ede5b2ed5abcf237cee9e98832885865bc59c810e6455dc377b"
+  },
+  "logs": {
+    "viewer-app-regression.log": "f03f5213f6010503e7af86bb77b849cc9796aa45ec4afef6d58da96c9d0b3e7b",
+    "viewer-metal.log": "2c8328aeaa5f478c0bbee6e6886889e1e6559db850864725e770058c06fa9dcd",
+    "viewer-live-recovery.log": "5d05454e5bb765306a2acd7efe8501adda43eaa33fe301ccce44acadfdd537e6",
+    "viewer-live-prefetch.log": "9d9ad73bad67aba7de1f8d93e9a0623ccc3dc1363d2b5a1e34d8eca11f5381a7",
+    "viewer-build.log": "b53b772fb0a562b50af6847bdc82c1c9b65d71ee1a1b60d164ed0620aec80e4f"
+  },
+  "app_tests": {
+    "passed": 362,
+    "ignored": 108
+  },
+  "metal_viewport_tests": 3,
+  "live_roundtrips": 3,
+  "prefetch": {
+    "behind": 1,
+    "ahead": 1,
+    "retained_required": 1
+  },
+  "live_surface": "Bgra8UnormSrgb",
+  "physical_hdr_qualified": false,
+  "nvidia_cuda": "deferred",
+  "commands": {
+    "app_tests": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--bin",
+      "rrrah",
+      "--locked"
+    ],
+    "metal_tests": [
+      "cargo",
+      "test",
+      "-p",
+      "rrrah",
+      "--bin",
+      "rrrah",
+      "glb_viewport_metal",
+      "--locked",
+      "--",
+      "--ignored",
+      "--nocapture"
+    ],
+    "live_glb_args": [
+      "tests/fixtures/glb/BoxTextured.glb",
+      "--gpu-backend",
+      "metal",
+      "--model-gpu-mb",
+      "32",
+      "--managed-memory-mb",
+      "64",
+      "--model-cache-mb",
+      "8",
+      "--model-cache-count",
+      "2",
+      "--cache-dir",
+      "/tmp/rrrah-glb-live-cache"
+    ],
+    "live_mixed_args": [
+      "/tmp/rrrah-glb-mixed-live-20261103/01.png",
+      "--gpu-backend",
+      "metal",
+      "--model-gpu-mb",
+      "32",
+      "--managed-memory-mb",
+      "64",
+      "--model-cache-mb",
+      "8",
+      "--model-cache-count",
+      "2",
+      "--raster-cache-mb",
+      "8",
+      "--raster-cache-count",
+      "2",
+      "--prefetch-ahead",
+      "1",
+      "--prefetch-behind",
+      "1",
+      "--cache-dir",
+      "/tmp/rrrah-glb-live-mixed-cache"
+    ]
+  },
+  "live_common_env": {
+    "RRRAH_QUALIFY_GPU_RECOVERY": "1",
+    "RUST_LOG": "info"
+  },
+  "live_mixed_env": {
+    "RRRAH_QUALIFY_RASTER_SWITCH": "/tmp/rrrah-glb-mixed-live-20261103/02.glb",
+    "RRRAH_QUALIFY_MODEL_SWITCH": "1",
+    "RRRAH_QUALIFY_RASTER_REQUIRE_CACHE": "1",
+    "RRRAH_QUALIFY_PREFETCH_COUNT": "1",
+    "RRRAH_QUALIFY_PREFETCH_ATTEMPTS": "1",
+    "RRRAH_QUALIFY_NAV_ROUNDS": "3"
+  },
+  "mixed_collection": {
+    "01.png": "tests/fixtures/raster/pattern.profiled.png",
+    "02.glb": "tests/fixtures/glb/BoxTextured.glb"
+  }
+}

@@ -60,16 +60,8 @@ mod filmstrip_ui;
 mod first30_remaining;
 mod gallery;
 mod glb_cache;
-#[allow(
-    dead_code,
-    reason = "GLB viewport dispatch is staged until loader integration"
-)]
 mod glb_view;
 mod histogram_worker;
-#[allow(
-    dead_code,
-    reason = "Mixed model worker dispatch is staged until viewport publication"
-)]
 mod model_asset;
 mod model_swap;
 mod pipeline_telemetry;
@@ -646,8 +638,8 @@ enum LoadEvent {
     },
     ModelReady {
         generation: u64,
-        mesh: rrrah_decode::DecodedModel,
-        lease: Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
+        mesh: model_asset::ModelAsset,
+        lease: Option<rrrah_cache::CacheLease<model_asset::ModelAsset>>,
         elapsed: Duration,
     },
     RasterReady {
@@ -1404,7 +1396,7 @@ fn foreground_neighbour_supported(path: &Path) -> bool {
         .is_some_and(|extension| {
             extension.eq_ignore_ascii_case("tif") || extension.eq_ignore_ascii_case("tiff")
         });
-    rrrah_decode::is_supported_model_path(path)
+    app_model_path(path)
         || (rrrah_decode::is_supported_image_path(path)
             && (!rrrah_decode::is_supported_raw_path(path)
                 || tiff
@@ -1546,7 +1538,7 @@ impl ForegroundLoader {
                     raster_swap_config,
                     managed_budget.as_ref(),
                 );
-                let mut model_cache = model_cache_with_swap(
+                let mut model_cache = model_cache_with_swap_typed::<model_asset::ModelAsset>(
                     swap_parent.as_deref(),
                     no_cache,
                     model_limits,
@@ -1593,9 +1585,11 @@ impl ForegroundLoader {
                                         Arc::clone(&worker_generation),
                                         generation,
                                     ));
-                                    if rrrah_decode::is_supported_model_path(&request.path) {
+                                    if app_model_path(&request.path) {
                                         if model_limits.max_bytes > 0 && model_limits.max_entries != Some(0) {
                                             let warmed = preload_model_with_lease(&request, &mut model_cache, &worker_gate);
+                                            #[cfg(test)]
+                                            proxy.observe_prefetch(generation, &request.path, warmed.as_ref().is_ok_and(|(_, lease)| lease.is_some()));
                                             #[cfg(debug_assertions)]
                                             gpu_recovery_probe::record_model_prefetch(generation, &request.path,
                                                 warmed.as_ref().is_ok_and(|(_, lease)| lease.is_some()));
@@ -2199,6 +2193,7 @@ impl CachedModel for rrrah_decode::DecodedModel {
         payload.0
     }
 }
+#[cfg(test)]
 type ModelDisplayCache = ModelCache<rrrah_decode::DecodedModel>;
 struct ModelCache<M: CachedModel> {
     swap: Option<rrrah_cache::ImageSwapCache<M::Key, M::Payload>>,
@@ -2470,6 +2465,7 @@ impl<M: CachedModel> ModelCache<M> {
     }
 }
 
+#[cfg(test)]
 fn model_cache_with_swap(
     parent: Option<&Path>,
     no_cache: bool,
@@ -2477,7 +2473,33 @@ fn model_cache_with_swap(
     config: Option<rrrah_cache::ImageSwapConfig>,
     managed: Option<&rrrah_cache::MemoryBudget>,
 ) -> ModelDisplayCache {
-    let mut cache = ModelDisplayCache::new(if no_cache {
+    model_cache_with_swap_typed(parent, no_cache, limits, config, managed)
+}
+fn app_model_path(path: &Path) -> bool {
+    rrrah_decode::is_supported_model_path(path)
+        || path.extension().is_some_and(|e| e.eq_ignore_ascii_case("glb"))
+}
+trait DecodeCachedModel: CachedModel {
+    fn decode(request: &DecodeRequest) -> Result<Self, ModelLoadError>;
+}
+impl DecodeCachedModel for rrrah_decode::DecodedModel {
+    fn decode(request: &DecodeRequest) -> Result<Self, ModelLoadError> {
+        rrrah_decode::decode_model(request).map_err(ModelLoadError::Decode)
+    }
+}
+impl DecodeCachedModel for model_asset::ModelAsset {
+    fn decode(request: &DecodeRequest) -> Result<Self, ModelLoadError> {
+        Self::decode(request)
+    }
+}
+fn model_cache_with_swap_typed<M: CachedModel>(
+    parent: Option<&Path>,
+    no_cache: bool,
+    limits: rrrah_cache::CacheLimits,
+    config: Option<rrrah_cache::ImageSwapConfig>,
+    managed: Option<&rrrah_cache::MemoryBudget>,
+) -> ModelCache<M> {
+    let mut cache = ModelCache::<M>::new(if no_cache {
         rrrah_cache::CacheLimits::bytes(0)
     } else {
         limits
@@ -2522,34 +2544,22 @@ fn preload_model(
     preload_model_mode(request, cache, gate, false).map(|(model, _)| model)
 }
 
-fn preload_model_with_lease(
+fn preload_model_with_lease<M: DecodeCachedModel>(
     request: &DecodeRequest,
-    cache: &mut ModelDisplayCache,
+    cache: &mut ModelCache<M>,
     gate: &Arc<DecodeGate>,
-) -> Result<
-    (
-        rrrah_decode::DecodedModel,
-        Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
-    ),
-    String,
-> {
+) -> Result<(M, Option<rrrah_cache::CacheLease<M>>), String> {
     preload_model_mode(request, cache, gate, true)
 }
 
-fn preload_model_mode(
+fn preload_model_mode<M: DecodeCachedModel>(
     request: &DecodeRequest,
-    cache: &mut ModelDisplayCache,
+    cache: &mut ModelCache<M>,
     gate: &Arc<DecodeGate>,
     retain: bool,
-) -> Result<
-    (
-        rrrah_decode::DecodedModel,
-        Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
-    ),
-    String,
-> {
+) -> Result<(M, Option<rrrah_cache::CacheLease<M>>), String> {
     let (model, lease) = cache.load_with_cancel_resolving_key_mode_with_lease(
-        || model_display_key(request),
+        || M::cache_key(request),
         false,
         retain,
         retain,
@@ -2571,7 +2581,7 @@ fn preload_model_mode(
                     recoverable: metadata.len() <= budget.limit(),
                 });
             }
-            let model = rrrah_decode::decode_model(request).map_err(ModelLoadError::Decode);
+            let model = M::decode(request);
             drop(permit);
             model
         },
@@ -3446,11 +3456,19 @@ fn retryable_memory_pressure(error: &rrrah_core::BufferError) -> bool {
     matches!(error, rrrah_core::BufferError::Capacity { requested, limit, .. } if requested <= limit)
 }
 
+trait ModelReclaim {
+    fn reclaim_model(&mut self) -> bool;
+}
+impl<M: CachedModel> ModelReclaim for ModelCache<M> {
+    fn reclaim_model(&mut self) -> bool {
+        self.release_lru_unpinned()
+    }
+}
 fn image_source_kind_with_pressure(
     request: &DecodeRequest,
     ram: &mut Option<&mut MosaicRamCache>,
     mut rasters: Option<&mut RasterDisplayCache>,
-    mut models: Option<&mut ModelDisplayCache>,
+    mut models: Option<&mut dyn ModelReclaim>,
 ) -> Result<rrrah_decode::ImageSourceKind, rrrah_decode::RasterDecodeError> {
     loop {
         let result = rrrah_decode::image_source_kind(request);
@@ -3460,7 +3478,7 @@ fn image_source_kind_with_pressure(
                 rrrah_decode::DecodeError::Memory(error)
             )) if retryable_memory_pressure(error)
         ) && (rasters.as_mut().is_some_and(|cache| cache.release_lru_unpinned())
-            || models.as_mut().is_some_and(|cache| cache.release_lru_unpinned())
+            || models.as_mut().is_some_and(|cache| cache.reclaim_model())
             || ram.as_mut().is_some_and(|ram| ram.release_lru_unpinned()))
         {
             continue;
@@ -3475,7 +3493,7 @@ fn execute_load(
     cache: Option<&DiskMosaicCache>,
     mut ram_cache: Option<&mut MosaicRamCache>,
     raster_cache: &mut RasterDisplayCache,
-    model_cache: &mut ModelDisplayCache,
+    model_cache: &mut ModelCache<model_asset::ModelAsset>,
     cache_writer: Option<&CacheWriter>,
     managed_budget: Option<&rrrah_cache::MemoryBudget>,
     load_generation: Arc<AtomicU64>,
@@ -3515,7 +3533,7 @@ fn execute_load(
     decode_request.cancellation = Some(token.clone());
     decode_request.memory_budget = managed_budget.cloned();
     decode_request.image_index = image_index;
-    if rrrah_decode::is_supported_model_path(&path) {
+    if app_model_path(&path) {
         if scalar_window.is_some() {
             publish_load_failure(
                 generation,
@@ -3530,7 +3548,7 @@ fn execute_load(
             let Some(permit) = foreground.acquire_decode(|| token.is_cancelled()) else {
                 return Err("model load cancelled".into());
             };
-            let result = rrrah_decode::decode_model(&decode_request).map_err(ModelLoadError::Decode);
+            let result = model_asset::ModelAsset::decode(&decode_request);
             drop(permit);
             result
         });
@@ -4014,7 +4032,7 @@ fn thumbnail_loader_with_cancel(
 ) -> impl Fn(gallery::ThumbnailJob, GenerationToken) -> Option<gallery::ThumbnailReady> + Send + Sync + 'static
 {
     move |job: gallery::ThumbnailJob, viewport: GenerationToken| {
-        if viewport.is_cancelled() || rrrah_decode::is_supported_model_path(&job.source) {
+        if viewport.is_cancelled() || app_model_path(&job.source) {
             return None;
         }
         let permit = decode_gate.acquire_prefetch(|| viewport.is_cancelled())?;
@@ -4449,11 +4467,35 @@ impl App {
                 self.pending_model_upload = None;
                 self.model_upload_worker.cancel();
             }
+            let mut prepared_glb = None;
             let mut prepared_model = None;
             let mut prepared_model_renderer = None;
             let mut model_upload_started = None;
             let mut prepared_lod = None;
             let mut completed_event = None;
+            if let Some(completed) = self.model_upload_worker.try_take_glb() {
+                if self.pending_model_upload.as_ref().is_some_and(|(id, g, _, _)| {
+                    *id == completed.id && *g == completed.generation && *g == current
+                }) {
+                    let (_, _, event, started) = self.pending_model_upload.take().unwrap();
+                    match completed.result {
+                        Ok(viewport) => {
+                            prepared_glb = Some(viewport);
+                            model_upload_started = Some(started);
+                            completed_event = Some(event);
+                        }
+                        Err(error) => {
+                            self.pending_first_present = None;
+                            self.pipeline = PipelineSnapshot::idle(current);
+                            if let Some(telemetry) = self.telemetry.as_mut() {
+                                telemetry.set_pipeline(&self.pipeline);
+                            }
+                            self.set_status(format!("GLB GPU preparation failed: {error}"));
+                            continue;
+                        }
+                    }
+                }
+            }
             if let Some(completed) = self.model_upload_worker.try_take() {
                 if self.pending_model_upload.as_ref().is_some_and(|(id, g, _, _)| {
                     *id == completed.id && *g == completed.generation && *g == current
@@ -4506,7 +4548,7 @@ impl App {
                     Err(TryRecvError::Empty) | Err(TryRecvError::Disconnected) => break,
                 },
             };
-            if prepared_model.is_none() {
+            if prepared_model.is_none() && prepared_glb.is_none() {
                 if let LoadEvent::ModelReady { generation, mesh, .. } = &event {
                     if *generation != current {
                         continue;
@@ -4519,21 +4561,56 @@ impl App {
                             let started = Instant::now();
                             let token =
                                 GenerationToken::new(self.foreground_loader.generation.clone(), *generation);
-                            let submitted = match gpu.model.as_ref() {
-                                Some(renderer) => self.model_upload_worker.submit(
-                                    mesh.clone(),
-                                    renderer.upload_preparer(),
-                                    *generation,
-                                    token,
-                                ),
-                                None => self.model_upload_worker.submit_new(
-                                    mesh.clone(),
-                                    gpu.device.clone(),
-                                    gpu.config.format,
-                                    self.model_gpu_budget.clone(),
-                                    *generation,
-                                    token,
-                                ),
+                            let submitted = if let model_asset::ModelAsset::Glb(asset) = mesh {
+                                let budget = self
+                                    .model_gpu_budget
+                                    .clone()
+                                    .unwrap_or_else(|| rrrah_core::MemoryBudget::new(1024 * 1024 * 1024));
+                                let preparer = match gpu.glb_preparer.clone() {
+                                    Some(p) => Ok(p),
+                                    None => glb_view::GlbViewportPreparer::new(
+                                        &gpu.device,
+                                        &gpu.queue,
+                                        budget,
+                                        gpu.config.format,
+                                    ),
+                                };
+                                match preparer {
+                                    Ok(preparer) => {
+                                        gpu.glb_preparer = Some(preparer.clone());
+                                        let mut request = DecodeRequest::new("GLB GPU preparation");
+                                        request.memory_budget = Some(self.raster_lod_budget.clone());
+                                        request.cancellation = Some(token.clone());
+                                        self.model_upload_worker.submit_glb(
+                                            asset.clone(),
+                                            preparer,
+                                            request,
+                                            *generation,
+                                            token,
+                                        )
+                                    }
+                                    Err(e) => Err(std::io::Error::other(e.to_string())),
+                                }
+                            } else {
+                                let model_asset::ModelAsset::Geometry(mesh) = mesh else {
+                                    unreachable!()
+                                };
+                                match gpu.model.as_ref() {
+                                    Some(renderer) => self.model_upload_worker.submit(
+                                        mesh.clone(),
+                                        renderer.upload_preparer(),
+                                        *generation,
+                                        token,
+                                    ),
+                                    None => self.model_upload_worker.submit_new(
+                                        mesh.clone(),
+                                        gpu.device.clone(),
+                                        gpu.config.format,
+                                        self.model_gpu_budget.clone(),
+                                        *generation,
+                                        token,
+                                    ),
+                                }
                             };
                             match submitted {
                                 Ok(id) => {
@@ -4732,6 +4809,7 @@ impl App {
                                     gpu.raster_viewport = None;
                                     gpu.raster_region_error = None;
                                     gpu.model_active = false;
+                                    gpu.glb = None;
                                     if let Some(model) = gpu.model.as_mut() {
                                         model.clear_model();
                                     }
@@ -4816,22 +4894,53 @@ impl App {
                     self.pipeline = PipelineSnapshot::idle(generation);
                     let upload_started = model_upload_started.unwrap_or_else(Instant::now);
                     let result = self.gpu.as_mut().map(|gpu| {
-                        if let Some(renderer) = prepared_model_renderer.take() {
-                            gpu.model = Some(renderer);
+                        if let Some(mut viewport) = prepared_glb.take() {
+                            viewport
+                                .resize([gpu.size.width.max(1), gpu.size.height.max(1)])
+                                .map_err(|e| e.to_string())?;
+                            let next = if self.gpu_recovery_generation == Some(generation) {
+                                self.view
+                            } else {
+                                ViewParameters {
+                                    viewport: [gpu.size.width as f32, gpu.size.height as f32],
+                                    ..ViewParameters::default()
+                                }
+                            };
+                            viewport
+                                .update_view(
+                                    next.viewport[0] / next.viewport[1].max(1.),
+                                    0.65 + next.pan[0] * 0.01,
+                                    0.45 + next.pan[1] * 0.01,
+                                    next.zoom,
+                                )
+                                .map_err(|e| e.to_string())?;
+                            log::debug!(
+                                "GLB viewport installed: draws={} source_image_uploads={}",
+                                viewport.draw_count(),
+                                viewport.texture_upload_count()
+                            );
+                            gpu.glb = Some(viewport);
+                            gpu.model = None;
+                        } else {
+                            if let Some(renderer) = prepared_model_renderer.take() {
+                                gpu.model = Some(renderer);
+                            }
+                            let renderer = gpu
+                                .model
+                                .as_mut()
+                                .ok_or_else(|| "surface has no supported linear model target".to_string())?;
+                            renderer
+                                .resize(&gpu.device, [gpu.size.width.max(1), gpu.size.height.max(1)])
+                                .map_err(|e| e.to_string())?;
+                            renderer
+                                .install_prepared_upload(
+                                    prepared_model
+                                        .take()
+                                        .ok_or_else(|| "model preparation unavailable".to_string())?,
+                                )
+                                .map_err(|e| e.to_string())?;
+                            gpu.glb = None;
                         }
-                        let renderer = gpu
-                            .model
-                            .as_mut()
-                            .ok_or_else(|| "surface has no supported linear model target".to_string())?;
-                        renderer
-                            .resize(&gpu.device, [gpu.size.width.max(1), gpu.size.height.max(1)])
-                            .map_err(|e| e.to_string())?;
-                        let prepared = prepared_model
-                            .take()
-                            .ok_or_else(|| "model preparation unavailable".to_string())?;
-                        renderer
-                            .install_prepared_upload(prepared)
-                            .map_err(|e| e.to_string())?;
                         if let Some(lease) = lease {
                             submit_upload_lease(&gpu.queue, &gpu.upload_completions, lease);
                         }
@@ -4950,6 +5059,7 @@ impl App {
                         }
                         gpu.raster_active = true;
                         gpu.model_active = false;
+                        gpu.glb = None;
                         if let Some(model) = gpu.model.as_mut() {
                             model.clear_model();
                         }
@@ -6052,7 +6162,7 @@ impl App {
 }
 
 fn is_supported_image(path: &Path) -> bool {
-    rrrah_decode::is_supported_image_path(path) || rrrah_decode::is_supported_model_path(path)
+    rrrah_decode::is_supported_image_path(path) || app_model_path(path)
 }
 
 fn display_name(path: &Path) -> String {
@@ -7225,6 +7335,8 @@ struct GpuState {
     viewport_ready: Option<(u64, rrrah_core::DecodedRaster)>,
     viewport_generation: Arc<std::sync::atomic::AtomicU64>,
     model: Option<rrrah_gpu::ModelRenderer>,
+    glb: Option<glb_view::GlbViewport>,
+    glb_preparer: Option<glb_view::GlbViewportPreparer>,
     model_active: bool,
     model_resize_retry: Option<(PhysicalSize<u32>, Instant)>,
     filmstrip: FilmstripRenderer,
@@ -7394,6 +7506,7 @@ impl GpuState {
         let (device, queue) = adapter
             .request_device(&wgpu::DeviceDescriptor {
                 required_limits: viewer_device_limits(&adapter.limits()),
+                required_features: adapter.features() & wgpu::Features::FLOAT32_FILTERABLE,
                 ..Default::default()
             })
             .await
@@ -7510,6 +7623,8 @@ impl GpuState {
             viewport_ready: None,
             viewport_generation: Arc::new(std::sync::atomic::AtomicU64::new(0)),
             model: None,
+            glb: None,
+            glb_preparer: None,
             model_active: false,
             model_resize_retry: None,
             filmstrip,
@@ -7519,7 +7634,23 @@ impl GpuState {
     }
 
     fn update_view(&mut self, view: ViewParameters) {
-        if let Some(model) = self.model.as_mut().filter(|_| self.model_active) {
+        if self.model_active {
+            if let Some(glb) = self.glb.as_mut() {
+                if let Err(e) = glb.update_view(
+                    view.viewport[0] / view.viewport[1].max(1.),
+                    0.65 + view.pan[0] * 0.01,
+                    0.45 + view.pan[1] * 0.01,
+                    view.zoom,
+                ) {
+                    log::debug!("GLB camera update deferred: {e}");
+                }
+            }
+        }
+        if let Some(model) = self
+            .model
+            .as_mut()
+            .filter(|_| self.model_active && self.glb.is_none())
+        {
             model.update_view(
                 &self.queue,
                 view.viewport[0] / view.viewport[1].max(1.),
@@ -7699,7 +7830,14 @@ impl GpuState {
         // Admit the replacement depth attachment before changing the surface.
         // A refused resize must preserve the current model and compatible target.
         if self.model_active {
-            if let Some(model) = self.model.as_mut() {
+            if let Some(glb) = self.glb.as_mut() {
+                if let Err(error) = glb.resize([size.width, size.height]) {
+                    log::debug!("GLB viewport resize deferred: {error}");
+                    self.model_resize_retry = matches!(error, glb_view::ViewError::Memory(_))
+                        .then(|| (size, Instant::now() + Duration::from_millis(250)));
+                    return;
+                }
+            } else if let Some(model) = self.model.as_mut() {
                 if let Err(error) = model.resize(&self.device, [size.width, size.height]) {
                     log::debug!("model viewport resize deferred; retaining previous viewport: {error}");
                     self.model_resize_retry = matches!(error, rrrah_gpu::ModelUploadError::Memory(_))
@@ -7752,7 +7890,21 @@ impl GpuState {
                 label: Some("Rrrah frame encoder"),
             });
         if self.model_active {
-            if let Some(model) = &self.model {
+            if let Some(glb) = &self.glb {
+                if let Err(error) = glb.encode(
+                    &mut encoder,
+                    &view,
+                    wgpu::Color {
+                        r: 0.012,
+                        g: 0.014,
+                        b: 0.018,
+                        a: 1.,
+                    },
+                ) {
+                    log::warn!("GLB frame rejected: {error}");
+                    return None;
+                }
+            } else if let Some(model) = &self.model {
                 model.encode(&mut encoder, &view);
             }
         } else if self.raster_active {
@@ -7797,7 +7949,9 @@ impl GpuState {
         let queue_submit_started = Instant::now();
         let mut resources = rrrah_gpu::GpuResourceLease::default();
         if self.model_active {
-            if let Some(model) = &self.model {
+            if let Some(glb) = &self.glb {
+                resources.extend(glb.resource_lease());
+            } else if let Some(model) = &self.model {
                 resources.extend(model.resource_lease());
             }
         } else if self.raster_active {
@@ -9259,6 +9413,85 @@ mod foreground_loader_tests {
         assert_eq!(configured.ram_cache_count, Some(8));
         assert_eq!(configured.ram_cache_ttl_secs, Some(30));
         assert!(Cli::try_parse_from(["rrrah", "--ram-cache-count", "-1"]).is_err());
+    }
+
+    #[test]
+    fn glb_production_loader_prefetch_and_mixed_model_events() {
+        let base = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
+        let glb = base.join("glb/BoxTextured.glb");
+        let off = base.join("models/off-triangle.off");
+        assert!(is_supported_image(&glb));
+        assert!(foreground_neighbour_supported(&glb));
+        let root = rrrah_core::MemoryBudget::new(8 * 1024 * 1024);
+        let zero = rrrah_cache::CacheLimits::bytes(0);
+        let (tx, rx) = unbounded();
+        let (prefetch, warmed) = unbounded();
+        let dir = tempfile::tempdir().unwrap();
+        let swap = rrrah_cache::ImageSwapConfig {
+            limits: rrrah_cache::CacheLimits::bytes(4 * 1024 * 1024),
+            queue_bytes: 2 * 1024 * 1024,
+            queue_count: 2,
+            restore_bytes: 2 * 1024 * 1024,
+        };
+        let mut loader = ForegroundLoader::new(
+            Some(dir.path().to_path_buf()),
+            false,
+            zero,
+            tx,
+            LoaderWake::ObservePrefetch(prefetch),
+            Arc::new(DecodeGate::new()),
+            Arc::new(CacheTelemetry::new(false, 0)),
+            None,
+            None,
+            Some(swap),
+            zero,
+            0,
+            Some(root.clone()),
+            zero,
+            rrrah_cache::CacheLimits {
+                max_bytes: 2 * 1024 * 1024,
+                max_entries: Some(2),
+                ttl: None,
+            },
+            gallery::PrefetchWindow { behind: 1, ahead: 1 },
+            UntaggedColor::Strict.into(),
+        )
+        .unwrap();
+        let generation = loader
+            .submit_request_with_prefetch(off.clone(), 0, None, true, Some(vec![glb.clone()]))
+            .unwrap();
+        match rx.recv_timeout(Duration::from_secs(10)).unwrap() {
+            LoadEvent::ModelReady {
+                generation: g,
+                mesh: model_asset::ModelAsset::Geometry(m),
+                ..
+            } => {
+                assert_eq!(g, generation);
+                assert_eq!(m.format_name(), "OFF");
+            }
+            other => panic!("expected native geometry event, got {other:?}"),
+        }
+        let (g, path, retained) = warmed.recv_timeout(Duration::from_secs(10)).unwrap();
+        assert_eq!((g, path, retained), (generation, glb.clone(), true));
+        let generation = loader.submit(glb).unwrap();
+        match rx.recv_timeout(Duration::from_secs(10)).unwrap() {
+            LoadEvent::ModelReady {
+                generation: g,
+                mesh,
+                lease,
+                ..
+            } => {
+                assert_eq!(g, generation);
+                assert_eq!(mesh.format_name(), "GLB");
+                assert_eq!(mesh.triangle_count(), 12);
+                assert!(lease.is_some());
+            }
+            other => panic!("expected native GLB event, got {other:?}"),
+        }
+        loader.shutdown();
+        drop(loader);
+        drop(rx);
+        assert_eq!(root.used(), 0);
     }
 
     #[test]

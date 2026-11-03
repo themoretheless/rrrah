@@ -825,24 +825,21 @@ Native RRGLB001 snapshots now restore scene and raw PNG8/16/JPEG pixels without
 reopening source files or rerunning image entropy decoders. Actual SwapStore
 composition, canonical u16 wire samples, integrity, quotas and cancellation pass.
 
-The application now has a GLB specialization of its shared model-cache state
-machine and an actual asynchronous ImageSwapCache payload adapter. Five GLB
-cache controls, 33 existing model regressions and one existing-model Metal
-pressure probe pass. This specialization is not yet selected by the loader.
+The ordinary application now discovers GLB and loads selected scenes through one
+shared model RAM/swap cache with STL/OBJ/PLY/OFF. Byte/count/TTL policies, retained
+previous/next prefetch and generation fencing apply to the mixed cache. The
+bounded GPU worker prepares GLB viewports; publication admits depth/camera first,
+and frame submission retains resource leases. Camera, resize and transitions to
+raster/RAW are connected. `--inspect file.glb` uses the same native asset decoder.
 
-GLB remains outside ordinary viewing. Mixed-model/worker dispatch, GLB snapshot
-spill/restore routing from navigation, prefetch/navigation, general tangent/UV/transparent-ordering
-qualification, full schema/extensions, external resources, skin/animation and
-point/line handling remain outstanding. No full GLB or 100-format qualification
-is claimed.
+Current evidence: 362 app tests passed (108 manual/external ignored), three
+actual Metal viewport controls passed, and a normal viewer GLB presentation plus
+simulated device-loss/recreation preserved selection and camera. Three live
+PNG→GLB→PNG roundtrips verified one previous/one next retained prefetch and guarded
+raster RAM-cache returns. Source, binary and log hashes are in the GPU report.
 
-A selected-scene GLB viewport component now renders native assets and restored
-snapshots on Metal, with shared image uploads, rebased hierarchy transforms and
-admitted camera/depth updates. Two hardware tests pass, including exact snapshot
-frames and linear HDR/sRGB consistency. It remains disconnected from ordinary
-loader/navigation dispatch; see the GPU report above for evidence and limits.
-
-`rrrah --inspect file.glb` now uses the native owned-asset decoder and reports
-selected scene instances, instanced triangle count, unique primitives/images and
-conservative bounds. The normal managed memory budget applies; nonzero image
-indices and scalar windows refuse. This CLI path does not enable GUI discovery.
+Ordinary-viewer GLB disk-restore pressure, broader producer comparisons, general
+tangent/UV/transparent-ordering qualification, full schema/extensions, external
+resources, skin/morph/animation and point/line handling remain outstanding.
+Offscreen linear HDR is tested; these live windows used SDR. No full GLB or
+100-format qualification or performance claim is made.

@@ -1,5 +1,11 @@
 # Material texture upload and Metal mip proof
 
+**Current application status:** native GLB selected scenes are now connected to
+ordinary discovery, loader, mixed model RAM/swap policy, retained previous/next
+prefetch, bounded GPU worker, camera/resize and frame submission. Earlier staged
+status statements below describe intermediate component milestones. See the
+final integration section for current evidence and remaining qualification limits.
+
 Implemented `MaterialTextureUploader::upload_rgba8` and `upload_rgba16`, an immutable candidate separate from
 visible model publication. This is a building block for glTF rendering, **not an
 integrated GLB viewer or complete PBR qualification**. No decoder dependency was added to
@@ -235,3 +241,50 @@ source/GPU root release. [Existing worker regressions](worker-regression.log)
 pass, including bounded 1000-request replacement, generation cancellation,
 first-open pipeline preparation and native model SDR/HDR frame comparisons.
 Production cargo check and formatting also pass.
+
+## Ordinary viewer integration and current qualification
+
+The production loader now uses one `ModelCache<ModelAsset>` for GLB and
+STL/OBJ/PLY/OFF. Byte/count/TTL and spill/restore limits therefore cover a common
+model cache rather than separate per-format pools. Both foreground loads and
+retained neighbour prefetch use the same typed decoder, source fingerprint,
+generation token and admission/retry machinery. GLB enters application discovery
+and folder/gallery navigation. A production headless loader control confirms
+OFF publication, retained GLB neighbour preparation, GLB publication with lease,
+and zero final source credit.
+
+GLB `ModelReady` events use the existing pending-upload lifecycle. GPU preparation
+uses the shared bounded worker and reusable per-device material/mip context;
+CPU preparation scratch uses the application's managed staging budget. The
+device enables FLOAT32_FILTERABLE only when advertised, preserving explicit
+16-bit filtering refusal otherwise. A candidate depth attachment and initial
+camera batch are admitted before viewport publication. Successful GLB publication
+releases the old legacy renderer; raster/RAW publication drops the GLB viewport.
+Frame leases retain geometry, textures and depth until queue completion. Camera
+and resize admission failures preserve prior resources.
+
+- [Full app regression](viewer-app-regression.log): 362 passed, 0 failed,
+  108 manual/external tests ignored. Includes production mixed loader/prefetch.
+- [Focused actual Metal](viewer-metal.log): three viewport controls passed,
+  including synchronous/worker SDR/HDR equality, snapshots, generation fencing,
+  large-coordinate rebasing and resource release.
+- [Production build](viewer-build.log): passed; only existing vendored jxl-color
+  lifetime warning. Formatting and diff checks passed.
+- [Live ordinary viewer](viewer-live-recovery.log): original BoxTextured was
+  presented on M4 Max/Metal Bgra8UnormSrgb, then presented again after simulated
+  device-loss notification and device recreation. Selection/camera state exact.
+- [Live mixed navigation/prefetch](viewer-live-prefetch.log): three PNG→GLB→PNG
+  roundtrips, one previous/one next, one retained neighbour per generation,
+  distinct presented generations on the same device. Every PNG return used RAM
+  with fallback raster decode forbidden. This guard covers raster returns; it
+  does not independently forbid GLB decode in that live probe.
+- [Integration manifest](viewer-integration.json) pins inputs, binary and logs.
+
+Live windows used SDR. Linear HDR rendering is covered by offscreen controls,
+not a newly qualified physical HDR display. No new latency/speed or RSS claim.
+GLB snapshot restoration remains decoder-blocked in mixed-cache component tests;
+full ordinary-viewer GLB restore under disk pressure needs its own guarded probe.
+General MikkTSpace/seams, intersecting transparent geometry, broader independent
+producer/render comparisons, external resources, extensions, skin/morph/animation
+and point/line geometry remain open. This selected-scene integration is not full
+glTF or 100-format qualification. NVIDIA/CUDA remains deferred by the user.

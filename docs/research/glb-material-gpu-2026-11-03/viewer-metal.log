@@ -1,0 +1,28 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+    Finished `test` profile [optimized + debuginfo] target(s) in 0.53s
+     Running unittests src/main.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah-ae18d7943590843b)
+
+running 3 tests
+GLB viewport 3 instances / 1 image upload: rebased 1e24 root preserves small local offsets, exact frame and final root zero
+test glb_view::tests::glb_viewport_metal_rebased_instances_share_image_and_preserve_child_offsets ... ok
+GLB viewport Rgba8UnormSrgb: original producer, 3 camera frames differ; swap frames byte-exact; failed candidate/view admission preserves frame
+test glb_view::tests::glb_viewport_metal_shared_upload_worker_frames_and_replacement ... ok
+GLB viewport Rgba16Float: original producer, 3 camera frames differ; swap frames byte-exact; failed candidate/view admission preserves frame
+test glb_view::tests::glb_viewport_metal_original_snapshot_camera_and_failure_atomicity ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 467 filtered out; finished in 0.08s

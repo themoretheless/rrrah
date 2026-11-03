@@ -959,7 +959,7 @@ impl Drop for Prefetcher {
 }
 
 pub fn is_supported(path: &Path) -> bool {
-    rrrah_decode::is_supported_image_path(path) || rrrah_decode::is_supported_model_path(path)
+    rrrah_decode::is_supported_image_path(path) || crate::app_model_path(path)
 }
 
 pub fn scan_folder(folder: &Path) -> Vec<PathBuf> {

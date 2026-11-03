@@ -677,21 +677,24 @@ cache implementation. It is not yet selected by the production loader/worker or
 mixed-model cache. Navigation, previous/next scheduling, generation handoff and
 GPU renderer installation for GLB remain required before ordinary viewing.
 
+## Application integration update
+
+The intermediate loader exclusions above have been superseded. Ordinary GLB
+discovery, mixed model cache/spill dispatch, retained neighbour prefetch, bounded
+GPU preparation, viewport installation, camera/resize and submission leases are
+now connected. The current application regression passes 362 tests, and actual
+Metal readback and live-window device recreation/navigation pass. See
+[the current GPU/viewer report](../glb-material-gpu-2026-11-03/REPORT.md#ordinary-viewer-integration-and-current-qualification)
+for pinned source/binary/log evidence and exact limits.
+
 ## Required continuation
 
-1. Connect the owned asset and GPU material pass to the common model worker,
-   renderer selection and generation publication. Preserve geometry/image
-   sharing and instance transforms; qualify fitting/normal/tangent conversion.
-   Full source min/max/schema and usage rules remain beyond the selected slice.
-2. Qualify broader texture variants and backend scratch; resolve external/data
-   image resources. General MikkTSpace/seams, material extensions, skin/morph/
-   animation and point/line geometry remain open. Required unsupported
-   extensions still explicitly refuse.
-3. Wire the GLB cache specialization into the mixed model loader/worker and
-   previous/next prefetch with CLI limits, generation fencing and pressure.
-   Qualify source-identity/versioning races and cancellation latency.
-4. Original independent rendered model comparisons, actual Metal SDR/HDR
-   window presentation and measured file-to-first-frame latency.
-   NVIDIA/CUDA remains deferred by the user.
+1. Broader independent producer/render comparisons and whole-schema rules;
+   general MikkTSpace/seams, transparent intersection ordering and texture variants.
+2. External/data resources, extensions, skin/morph/animation and point/line geometry.
+3. Guarded ordinary-viewer GLB disk restore under pressure, source-identity races,
+   cancellation latency and measured file-to-first-frame performance.
+4. Physical HDR/display qualification beyond offscreen linear HDR. NVIDIA/CUDA
+   remains deferred by the user.
 
 Schema follow-up: a component just above1 with near-unit quaternion length now refuses before normalization. The21 source-node controls include this case; the component range is independent of the length tolerance.

@@ -151,6 +151,7 @@ impl GlbViewport {
     /// Builds a new candidate without changing an installed/visible viewport.
     /// Source geometry stays shared in the asset; this first GPU path packs
     /// world-space vertices per instance. GPU instancing is a remaining optimization.
+    #[cfg(test)]
     pub fn prepare(
         asset: &GlbAsset,
         device: &wgpu::Device,
