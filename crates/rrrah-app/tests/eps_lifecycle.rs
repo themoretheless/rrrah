@@ -181,6 +181,23 @@ fn independent_eps_array_bulk_survives_swap_and_metal() {
     );
 }
 
+#[test]
+#[ignore = "actual Metal bound PostScript prolog, independent pixels and native/prepared swap"]
+fn independent_bound_postscript_prolog_survives_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required actual GPU adapter");
+    let body = include_str!("../../../tests/fixtures/eps/bind-prolog.ai")
+        .split_once("%%EndComments\n")
+        .unwrap()
+        .1;
+    let source = format!("1 setgray 0 0 8 8 rectfill\n{body}");
+    let reference = include_bytes!("../../../tests/fixtures/eps/bind-prolog.rgb");
+    let case = serde_json::json!({"name":"bound_prolog_redefined_operators","source":source,"rgb":reference.to_vec()});
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, &[case]);
+    eprintln!(
+        "EPS bind: independent Ghostscript RGB; native decode/RAM/quota/cancel/swap and exact SDR/HDR Metal; final root zero"
+    );
+}
+
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,
     cases: &[serde_json::Value],

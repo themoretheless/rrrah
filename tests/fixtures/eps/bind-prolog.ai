@@ -1,0 +1,12 @@
+%!PS-Adobe-3.0 EPSF-3.0
+%%Creator: rrrah CC0 authored bound-prolog control
+%%BoundingBox: 0 0 8 8
+%%EndComments
+/bdef {bind def} bind def
+/m {moveto} bdef /l {lineto} bdef /h {closepath} bdef
+/F {fill} bdef /red {1 0 0 setrgbcolor} bdef
+/paint {newpath 1 1 m 7 1 l 7 7 l 1 7 l h red F} bind def
+/fill {newpath} def
+/setrgbcolor {pop pop pop 0 setgray} def
+paint showpage
+%%EOF

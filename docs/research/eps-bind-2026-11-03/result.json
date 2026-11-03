@@ -1,0 +1,51 @@
+{
+  "scope": "native EPS VM bind operator substitution, not full Illustrator qualification",
+  "sources": {
+    "crates/rrrah-vector/src/eps_vm.rs": "ba1a80ce2295f4a5860b3bdf5229d992b7f10eaa5349671bf99cef9191cd26f6",
+    "crates/rrrah-vector/src/eps_program.rs": "23e9940c53f99236078d63976230efbe4e65874a32cf44c6d2e1da92f2f93714",
+    "crates/rrrah-vector/src/eps_document.rs": "d433b19f903b64326e3e1d9165caf3ed2f2ab70a50b315bd08b7f30cf03e6ec0",
+    "crates/rrrah-app/tests/eps_lifecycle.rs": "c7fc74046954dfb85fdf495b5cb584ce884a380b5aa953b1ecfe18699be9a66e",
+    "scripts/generate-eps-bind-reference.py": "2db6c12f5fe4903d027cccdc4588db081962b6cb292a982c4ef0b39cc0b8e8d1",
+    "tests/fixtures/eps/bind-ghostscript-reference.json": "ff0c72df6f720ff7ad95297c68a880b8872c938dd8ff26830761be9295f24f8f",
+    "tests/fixtures/eps/bind-prolog.ai": "30b828c88d5d998921f2ec02c3a8041b76ebef54cad149737b50ec32d48ac968",
+    "tests/fixtures/eps/bind-prolog.rgb": "c1caee00ad8612f9bc2a05dcbfcd0212d9198fcdc0af0386bbda6780e5a547bf",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b",
+    "crates/rrrah-vector/src/eps.rs": "9c1335d8e1a22759bea727874af830efd528c92a885e773cb2dafaf70ca602ef",
+    "crates/rrrah-vector/src/eps_graphics.rs": "8cb1c5a7f76cfa2fcf21b750ec076c8cd20d064809c080db34dd517066d5b346",
+    "crates/rrrah-vector/src/eps_raster.rs": "7ae0622b3761268c56030635e3ee99aadcc4f59d60ac7fc72ad36ee278c34f39",
+    "crates/rrrah-vector/src/eps_tokens.rs": "a9ef651db3d75a729049c41f2328cbcd6ac1d1f7794acc19da721330fcd3e7b3",
+    "crates/rrrah-decode/src/raster.rs": "a0b177bc43162565ff8dc8448d2bc600d39467931c18423ac03bc1b130301c45",
+    "crates/rrrah-memory/src/lib.rs": "b70514da81fdf38f869411dddc26b68c07c5a1ac72aa56f8d06a31cf84d796c5"
+  },
+  "logs": {
+    "vector.log": "27c85964b8f2ff6e97d3d38e09739b79e4a6d25a77dcc02823d04aefc1a4c50c",
+    "app.log": "5d34be9488be75396e25debeabc312bb0ed47c7e322e8241140467da3d95b998",
+    "metal.log": "345fa3fbf184f80f4c3ecaa6fb76c6e321adeaf3600fd24a7c4656f7daa947ee",
+    "production-build.log": "1c7fd784e05e1b0ac05968d00d3575b4a5d6799f42d23c76e8ab7d5f7ba80f53",
+    "oracle-generation.log": "64087b810558ca9fafe5835f0d0509d263822fc50e394ef5c117051613bf2ab6",
+    "public-inspection.json": "854beff1422226b350e5e2eac25bc1fe0c8800eaab6947f1ebd45bc2e027318a",
+    "ai-baseline.json": "ea364eb670574dde95b9a2af92193646c073c8fd02f49a0c103b811940e5c223",
+    "public.rgba": "b194d8c1053f65c7c383fbc52ecb02b36ca67b5c1a6b468a801dacdbe398e41e"
+  },
+  "ghostscript_cases": 16,
+  "vector_tests": 259,
+  "app_tests": 364,
+  "metal_controls": 1,
+  "oracle": {
+    "ghostscript_version": "10.05.1",
+    "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+    "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1"
+  },
+  "independent_reference": "https://pdfa.org/norm-refs/PLRM.pdf",
+  "ai_scope_reference": "https://13thmonkey.org/documentation/fonts/AI7FileFormat.pdf",
+  "ai_baseline_before_eps_change": {
+    "source_base_commit": "e2d50ecbd04ddb09a1c0fbefa4944a0dfb4dea57",
+    "VectorApple": "shading limit refusal",
+    "one_page0_differing_pixels": 2522,
+    "one_page1": "exact"
+  },
+  "full_ai_qualified": false,
+  "format_counts_changed": false,
+  "runtime_ghostscript_dependency": false,
+  "public_pixel_comparison": "64/64 analytic alpha and Ghostscript white-composite RGB"
+}

@@ -1,0 +1,86 @@
+{
+  "license": "CC0-1.0",
+  "reference": "Ghostscript independent PostScript execution, test only",
+  "version": "10.05.1",
+  "ghostscript_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+  "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
+  "source_sha256": "e004c5ed60380a68e6fcfbee47cf10ee32edd1e1c9344c45f5d6abd19b207f3f",
+  "generator_sha256": "2db6c12f5fe4903d027cccdc4588db081962b6cb292a982c4ef0b39cc0b8e8d1",
+  "cases": [
+    {
+      "code": "/f {add} bind def /add {sub} def 7 3 f",
+      "integer": 10
+    },
+    {
+      "code": "/f {unknown} bind def /unknown 9 def f",
+      "integer": 9
+    },
+    {
+      "code": "/x 1 def /f {x} bind def /x 7 def f",
+      "integer": 7
+    },
+    {
+      "code": "/other {add} def /f {other} bind def /other {sub} def 7 3 f",
+      "integer": 4
+    },
+    {
+      "code": "/op /add load def /f {op} bind def /op /sub load def 7 3 f",
+      "integer": 10
+    },
+    {
+      "code": "/p {{add}} bind def /add {sub} def 7 3 p exec",
+      "integer": 10
+    },
+    {
+      "code": "/p {{later}} bind def /later /add load def /p load bind pop /later /sub load def 7 3 p exec",
+      "integer": 4
+    },
+    {
+      "code": "/p {later} bind def /later /add load def /p load bind pop /later /sub load def 7 3 p",
+      "integer": 10
+    },
+    {
+      "code": "/f {add} def /alias /f load def /f load bind pop /add {sub} def 7 3 alias",
+      "integer": 10
+    },
+    {
+      "code": "{} bind exec 4",
+      "integer": 4
+    },
+    {
+      "code": "/p {{later}} bind def /nested p def /later /add load def /nested load bind pop /later /sub load def 7 3 nested",
+      "integer": 4
+    },
+    {
+      "code": "/b /bind load def /bind {pop 19} def {add} b /f exch def /add {sub} def 7 3 f",
+      "integer": 10
+    },
+    {
+      "code": "[1 2] bind 0 get",
+      "integer": 1
+    },
+    {
+      "code": "/p [{add}] def p bind pop /add {sub} def 7 3 p 0 get exec",
+      "integer": 10
+    },
+    {
+      "code": "/p [{later}] def p bind pop /later /add load def p bind pop /later /sub load def 7 3 p 0 get exec",
+      "integer": 4
+    },
+    {
+      "code": "/a 1 array def a 0 a put a bind pop 17",
+      "integer": 17
+    }
+  ],
+  "pixel": {
+    "source": "bind-prolog.ai",
+    "source_sha256": "30b828c88d5d998921f2ec02c3a8041b76ebef54cad149737b50ec32d48ac968",
+    "white_composite_rgb": "bind-prolog.rgb",
+    "rgb_sha256": "c1caee00ad8612f9bc2a05dcbfcd0212d9198fcdc0af0386bbda6780e5a547bf",
+    "dimensions": [
+      8,
+      8
+    ],
+    "policy": "72 dpi, GraphicsAlphaBits=1, white backdrop; integer-axis rectangle has independent analytic occupancy"
+  }
+}

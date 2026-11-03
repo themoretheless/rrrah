@@ -49,6 +49,7 @@ pub enum EpsOperator {
     Roll,
     Def,
     Load,
+    Bind,
     Exec,
     If,
     IfElse,
@@ -271,7 +272,15 @@ struct Frame {
     end: usize,
     continuation: Continuation,
 }
+#[derive(Clone, Copy, Default)]
+struct Binding {
+    operator: Option<EpsOperator>,
+    // bind makes subsidiary executable arrays read-only, not the outer array.
+    readonly: bool,
+}
 struct Machine<'a, 'g> {
+    tape: &'g [crate::EpsInstruction<'a>],
+    bindings: MutableBuffer<Binding>,
     graphics: Option<&'g mut EpsGraphics>,
     operands: MutableBuffer<EpsValue<'a>>,
     arrays: MutableBuffer<EpsValue<'a>>,
@@ -446,6 +455,75 @@ impl<'a> Machine<'a, '_> {
                 .ok_or(EpsVmError::UndefinedName(at)),
         }
     }
+    fn bind_procedure<F: FnMut() -> bool>(
+        &mut self,
+        begin: usize,
+        end: usize,
+        nested: bool,
+        work: &mut Work<F>,
+    ) -> Result<(), EpsVmError> {
+        if begin == end {
+            return Ok(());
+        }
+        let opening = begin.checked_sub(1).ok_or(EpsVmError::Type)?;
+        if self.tape.get(opening).and_then(|i| i.procedure_partner) != Some(end) {
+            return Err(EpsVmError::Type);
+        }
+        if self.bindings.is_empty() {
+            work.tick()?;
+            self.bindings = self
+                .array_budget
+                .try_buffer(self.tape.len(), Binding::default())?;
+        }
+        if !self.bindings[opening].readonly {
+            let mut at = begin;
+            while at < end {
+                work.tick()?;
+                let instruction = self.tape[at];
+                match instruction.token {
+                    EpsToken::ProcedureStart => {
+                        let last = instruction.procedure_partner.ok_or(EpsVmError::Unsupported(at))?;
+                        if self.bindings[at].readonly {
+                            at = last + 1;
+                            continue;
+                        }
+                        self.bindings[at].readonly = true;
+                    }
+                    EpsToken::Word(word)
+                        if instruction.number.is_none() && self.bindings[at].operator.is_none() =>
+                    {
+                        match self.lookup(word, at, work) {
+                            Ok(EpsValue::Operator(operator)) => self.bindings[at].operator = Some(operator),
+                            Ok(_) | Err(EpsVmError::UndefinedName(_)) => {}
+                            Err(error) => return Err(error),
+                        }
+                    }
+                    _ => {}
+                }
+                at += 1;
+            }
+        }
+        if nested {
+            self.bindings[opening].readonly = true;
+        }
+        Ok(())
+    }
+    fn bind<F: FnMut() -> bool>(&mut self, work: &mut Work<F>) -> Result<(), EpsVmError> {
+        let value = self.pop()?;
+        match value {
+            EpsValue::Procedure { begin, end, .. } => self.bind_procedure(begin, end, false, work)?,
+            EpsValue::Array { begin, length } => {
+                for index in begin..begin.checked_add(length).ok_or(EpsVmError::Range)? {
+                    work.tick()?;
+                    if let EpsValue::Procedure { begin, end, .. } = self.arrays[index] {
+                        self.bind_procedure(begin, end, true, work)?;
+                    }
+                }
+            }
+            _ => return Err(EpsVmError::Type),
+        }
+        self.push(value)
+    }
     fn operate<F: FnMut() -> bool>(
         &mut self,
         op: EpsOperator,
@@ -455,6 +533,7 @@ impl<'a> Machine<'a, '_> {
         use EpsOperator as O;
         use EpsVmError as E;
         match op {
+            O::Bind => return self.bind(work),
             O::NewPath
             | O::MoveTo
             | O::RelativeMoveTo
@@ -1252,6 +1331,7 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"roll" => O::Roll,
         b"def" => O::Def,
         b"load" => O::Load,
+        b"bind" => O::Bind,
         b"exec" => O::Exec,
         b"if" => O::If,
         b"ifelse" => O::IfElse,
@@ -1323,7 +1403,7 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
 /// Names borrow original source bytes. Procedure values are diagnostic references
 /// to this program's instruction ranges, not standalone executable objects.
 /// This is one user dictionary plus supported system values/operators. Full
-/// dictionary stacks, strings, arrays, binding, immediate names, stream reading,
+/// dictionary stacks, strings, immediate names, stream reading,
 /// graphics operators require evaluate_eps_vectors; unsupported device operators
 /// are never silently ignored.
 pub fn evaluate_eps_program<'a, F: FnMut() -> bool>(
@@ -1380,7 +1460,10 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
     if cancelled() {
         return Err(EpsVmError::Cancelled);
     }
+    let tape = program.instructions();
     let mut machine = Machine {
+        tape,
+        bindings: budget.try_buffer(0, Binding::default())?,
         graphics,
         arrays,
         array_used: 0,
@@ -1392,7 +1475,6 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
         frames,
         depth: 1,
     };
-    let tape = program.instructions();
     machine.frames[0] = Frame {
         begin: 0,
         pc: 0,
@@ -1435,7 +1517,11 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
                 if let Some(number) = instruction.number {
                     machine.push(EpsValue::Number(number))?;
                 } else {
-                    let value = machine.lookup(word, at, &mut work)?;
+                    let value = if let Some(op) = machine.bindings.get(at).and_then(|b| b.operator) {
+                        EpsValue::Operator(op)
+                    } else {
+                        machine.lookup(word, at, &mut work)?
+                    };
                     machine.execute(value, at, &mut work)?;
                 }
             }
@@ -1537,6 +1623,138 @@ mod tests {
     fn int(n: i32) -> EpsValue<'static> {
         EpsValue::Number(EpsNumber::Integer(n))
     }
+    #[test]
+    fn bind_matches_independent_ghostscript_operators_aliases_and_readonly_nesting() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/bind-ghostscript-reference.json"
+        ))
+        .unwrap();
+        for case in reference["cases"].as_array().unwrap() {
+            let code = case["code"].as_str().unwrap();
+            assert_eq!(
+                run(code.as_bytes()),
+                vec![int(case["integer"].as_i64().unwrap() as i32)],
+                "{code}"
+            );
+        }
+    }
+    #[test]
+    fn bound_graphics_prolog_preserves_all_pixels_against_ghostscript() {
+        let root = MemoryBudget::new(32 * 1024 * 1024);
+        let raster = crate::decode_eps_document(
+            include_bytes!("../../../tests/fixtures/eps/bind-prolog.ai"),
+            1.,
+            crate::EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            crate::EpsDocumentLimits::default(),
+            &root,
+            || false,
+        )
+        .unwrap();
+        assert_eq!((raster.width(), raster.height()), (8, 8));
+        let rrrah_core::RasterPixels::Rgba8(pixels) = raster.pixels() else {
+            panic!()
+        };
+        let reference = include_bytes!("../../../tests/fixtures/eps/bind-prolog.rgb");
+        for (index, pixel) in pixels.chunks_exact(4).enumerate() {
+            let x = index % 8;
+            let y = index / 8;
+            assert_eq!(
+                pixel[3],
+                if (1..7).contains(&x) && (1..7).contains(&y) {
+                    255
+                } else {
+                    0
+                }
+            );
+            for c in 0..3 {
+                assert_eq!(
+                    (u32::from(pixel[c]) * u32::from(pixel[3]) + 255 * (255 - u32::from(pixel[3])) + 127)
+                        / 255,
+                    u32::from(reference[index * 3 + c])
+                );
+            }
+        }
+        drop(raster);
+        assert_eq!(root.used(), 0);
+    }
+
+    #[test]
+    fn bind_memory_cancellation_and_work_failure_are_bounded_and_retryable() {
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(b"/p {{add} exec 2 mul} bind def 4 5 p", &root);
+        let baseline = root.used();
+        let retained = evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap();
+        assert_eq!(retained.values(), &[int(18)]);
+        drop(retained);
+        assert_eq!(root.used(), baseline);
+        let polls = std::cell::Cell::new(0);
+        drop(
+            evaluate_eps_program(&program, EpsVmLimits::default(), &root, || {
+                polls.set(polls.get() + 1);
+                false
+            })
+            .unwrap(),
+        );
+        for stop in 1..=polls.get() {
+            let mut n = 0;
+            assert!(matches!(
+                evaluate_eps_program(&program, EpsVmLimits::default(), &root, || {
+                    n += 1;
+                    n == stop
+                }),
+                Err(EpsVmError::Cancelled)
+            ));
+            assert_eq!(root.used(), baseline);
+        }
+        for max_work in 0..32 {
+            let result = evaluate_eps_program(
+                &program,
+                EpsVmLimits {
+                    max_work,
+                    ..EpsVmLimits::default()
+                },
+                &root,
+                || false,
+            );
+            assert!(matches!(result, Err(EpsVmError::Limit(EpsVmLimit::Work))));
+            assert_eq!(root.used(), baseline);
+        }
+        let limits = EpsVmLimits::default();
+        let vm_bytes = limits.max_operands * std::mem::size_of::<EpsValue<'_>>()
+            + limits.max_dictionary_entries * std::mem::size_of::<Entry<'_>>()
+            + limits.max_execution_frames * std::mem::size_of::<Frame>();
+        let bind_bytes = program.instructions().len() * std::mem::size_of::<Binding>();
+        let required = (vm_bytes + bind_bytes) as u64;
+        let tight = root.try_reserve(root.available_bytes() - (required - 1)).unwrap();
+        assert!(matches!(
+            evaluate_eps_program(&program, limits, &root, || false),
+            Err(EpsVmError::Memory(_))
+        ));
+        drop(tight);
+        assert_eq!(root.used(), baseline);
+        let exact = root.try_reserve(root.available_bytes() - required).unwrap();
+        drop(evaluate_eps_program(&program, limits, &root, || false).unwrap());
+        drop(exact);
+        assert_eq!(root.used(), baseline);
+        let pressure = root.try_reserve(root.available_bytes()).unwrap();
+        assert!(matches!(
+            evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false),
+            Err(EpsVmError::Memory(_))
+        ));
+        drop(pressure);
+        drop(evaluate_eps_program(&program, EpsVmLimits::default(), &root, || false).unwrap());
+        drop(program);
+        assert_eq!(root.used(), 0);
+        assert!(matches!(
+            {
+                let p = compile(b"1 bind", &root);
+                evaluate_eps_program(&p, EpsVmLimits::default(), &root, || false)
+            },
+            Err(EpsVmError::Type)
+        ));
+        assert_eq!(root.used(), 0);
+    }
+
     #[test]
     fn array_bulk_views_and_overlapping_copies_match_reference() {
         assert_eq!(
@@ -2838,6 +3056,8 @@ mod vector_tests {
         g.line_to(3., 4.).unwrap();
         {
             let mut machine = Machine {
+                tape: &[],
+                bindings: root.try_buffer(0, Binding::default()).unwrap(),
                 graphics: Some(&mut g),
                 operands: root.try_buffer(8, EpsValue::Null).unwrap(),
                 arrays: root.try_buffer(0, EpsValue::Null).unwrap(),
