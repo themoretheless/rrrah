@@ -1,0 +1,31 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 46.63s
+     Running unittests src/main.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah-ae18d7943590843b)
+
+running 5 tests
+test glb_cache::tests::glb_app_key_scene_policy_cancel_and_nested_memory_errors_are_distinct ... ok
+test glb_cache::tests::glb_app_retention_preflight_count_and_memory_retry_preserve_protected_entries ... ok
+GLB app cache RAM hit -> async ImageSwapCache spill -> retained restore, decoder bypassed; final root zero
+GLB app TTL expiration -> real async spill -> original pixel-exact restore; decoder bypassed; root zero
+GLB app nested JSON admission pressure retains swap blob; larger-budget retry succeeds; roots zero
+test glb_cache::tests::glb_app_cache_real_ram_hit_async_spill_restore_and_visible_lease ... ok
+test glb_cache::tests::glb_app_ttl_expiration_spills_then_restores_without_native_decode ... ok
+test glb_cache::tests::glb_app_swap_nested_pressure_keeps_blob_for_budget_retry ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 459 filtered out; finished in 0.01s

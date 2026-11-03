@@ -618,6 +618,65 @@ queue, GLB prefetch or visible generation publication for this payload. A native
 write failure can leave bytes in an arbitrary caller-owned Write sink; atomic
 rollback is the SwapStore/caller's responsibility and is tested above.
 
+## Application model-cache specialization for GLB
+
+The application's existing ModelDisplayCache state machine is now a typed
+`ModelCache<M: CachedModel>`; `ModelDisplayCache` remains the concrete alias for
+the four existing DecodedModel formats. Their production RAM, visible-pin,
+lease, asynchronous spill, retention preflight and pressure-retry algorithm is
+shared unchanged with `GlbAsset`. `glb_cache::Payload` connects RRGLB001 to the
+real ImageSwapCache worker instead of a separate GLB-only cache algorithm.
+
+The GLB key contains the existing path/size/mtime/sampled fingerprint and frame
+index, plus optional scene selection and an explicit interpretation policy
+revision. Unsupported nonzero image indices cannot produce a GLB key. The raw
+asset retains its own selected-scene index in the payload. Worker dispatch must
+couple the requested scene with the key/decoder; ordinary app GLB dispatch is
+still not connected and no viewability registration is added by this change.
+
+Nested managed allocation errors from the container/texture layers remain typed
+`SwapPayloadError::Memory`, so transient pressure keeps the valid disk blob.
+Impossible individual allocations do not trigger futile LRU eviction. Minimum
+restore weight is a conservative source-byte plus pixel-sample lower bound;
+source-side spare capacity is not assumed to survive reconstruction. Hash-scratch
+parallelism remains disabled because JSON/scene metadata can expand after the
+source stream has already been read. The existing stream layer supplies spill/
+restore cancellation; CPU-only metadata work currently observes that outer
+cancellation at the next I/O/final publication check, not inside the callback's
+dummy DecodeRequest. Native standalone calls with a request token retain their
+finer internal cancellation checks. No latency bound is claimed for this adapter.
+
+[Five application cache controls](app-cache-controls.log) pass:
+
+- Resident GLB hit shares storage and bypasses the decoder. A visible consumer
+  lease prevents eviction; after release the actual asynchronous spill completes
+  and RAM returns to zero. Retained restore uses the stored blob with the decoder
+  replaced by a panic guard; final lease/cache/asset drops return the root to zero.
+- Actual TTL expiration calls the common spill path, then restores original
+  pixel-exact BoxTextured data without native decode.
+- A 6000-byte restore parent refuses in nested JSON admission, leaves the blob
+  valid and increments no corruption/read count. A larger-budget retry succeeds.
+- A protected count slot refuses before decode. A cold replacement under global
+  memory pressure reclaims the old unpinned asset and retries successfully.
+- Scene/policy keys differ, pre-cancelled jobs never decode, nested memory errors
+  are classified across layers, and a one-byte hard cap is non-retryable.
+
+[Existing model regression](app-model-regression.log):33 passed,0 failures,
+7 manual checks ignored. This covers their lease/TTL/restore/prefetch behavior
+after the shared-cache refactor. The separate
+[actual Metal pressure regression](app-model-metal.log) passes for STL, OFF,
+shared-metadata OBJ and 64-bit PLY, preserving exact SDR/HDR output after retry.
+That hardware probe is regression evidence for the existing four models,
+**not a GLB cache-to-render or physical HDR-display qualification**.
+[Production app check](app-cache-check.log), formatting and diff checks pass;
+only the previously existing jxl-color lifetime warning remains. No dependencies
+or toolchains changed.
+
+The GLB specialization is compiled and exercised through the application's actual
+cache implementation. It is not yet selected by the production loader/worker or
+mixed-model cache. Navigation, previous/next scheduling, generation handoff and
+GPU renderer installation for GLB remain required before ordinary viewing.
+
 ## Required continuation
 
 1. Connect the owned asset and GPU material pass to the common model worker,
@@ -628,8 +687,9 @@ rollback is the SwapStore/caller's responsibility and is tested above.
    image resources. General MikkTSpace/seams, material extensions, skin/morph/
    animation and point/line geometry remain open. Required unsupported
    extensions still explicitly refuse.
-3. Integrate the native snapshots with app cache identity/versioning, spill
-   queues and previous/next prefetch with TTL/size/count and cancellation/pressure.
+3. Wire the GLB cache specialization into the mixed model loader/worker and
+   previous/next prefetch with CLI limits, generation fencing and pressure.
+   Qualify source-identity/versioning races and cancellation latency.
 4. Original independent rendered model comparisons, actual Metal SDR/HDR
    window presentation and measured file-to-first-frame latency.
    NVIDIA/CUDA remains deferred by the user.

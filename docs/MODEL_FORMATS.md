@@ -825,8 +825,13 @@ Native RRGLB001 snapshots now restore scene and raw PNG8/16/JPEG pixels without
 reopening source files or rerunning image entropy decoders. Actual SwapStore
 composition, canonical u16 wire samples, integrity, quotas and cancellation pass.
 
-GLB remains outside ordinary viewing. App model/cache/worker integration,
-GLB snapshot spill/restore routing, prefetch/navigation, general tangent/UV/transparent-ordering
+The application now has a GLB specialization of its shared model-cache state
+machine and an actual asynchronous ImageSwapCache payload adapter. Five GLB
+cache controls, 33 existing model regressions and one existing-model Metal
+pressure probe pass. This specialization is not yet selected by the loader.
+
+GLB remains outside ordinary viewing. Mixed-model/worker dispatch, GLB snapshot
+spill/restore routing from navigation, prefetch/navigation, general tangent/UV/transparent-ordering
 qualification, full schema/extensions, external resources, skin/animation and
 point/line handling remain outstanding. No full GLB or 100-format qualification
 is claimed.

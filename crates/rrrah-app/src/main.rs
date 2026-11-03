@@ -59,6 +59,7 @@ mod filmstrip_ui;
 #[cfg(test)]
 mod first30_remaining;
 mod gallery;
+mod glb_cache;
 mod histogram_worker;
 mod model_swap;
 mod pipeline_telemetry;
@@ -2050,7 +2051,13 @@ fn adjusted_scalar_window(
 enum ModelLoadError {
     SourceHeadroom { recoverable: bool },
     Decode(rrrah_decode::ModelDecodeError),
+    Glb(rrrah_decode::GlbAssetError),
     Message(String),
+}
+impl From<rrrah_decode::GlbAssetError> for ModelLoadError {
+    fn from(value: rrrah_decode::GlbAssetError) -> Self {
+        Self::Glb(value)
+    }
 }
 impl From<&str> for ModelLoadError {
     fn from(value: &str) -> Self {
@@ -2069,6 +2076,7 @@ impl std::fmt::Display for ModelLoadError {
                 f.write_str("model prefetch skipped: insufficient source memory headroom")
             }
             Self::Decode(error) => error.fmt(f),
+            Self::Glb(error) => error.fmt(f),
             Self::Message(message) => f.write_str(message),
         }
     }
@@ -2077,6 +2085,9 @@ impl ModelLoadError {
     fn retryable_memory_pressure(&self) -> bool {
         if let Self::SourceHeadroom { recoverable } = self {
             return *recoverable;
+        }
+        if let Self::Glb(error) = self {
+            return glb_cache::memory_error(error).is_some_and(retryable_memory_pressure);
         }
         use rrrah_decode::{DecodeError as D, ModelDecodeError as M};
         let memory = match self {
@@ -2110,12 +2121,48 @@ fn model_display_key(request: &DecodeRequest) -> Option<ModelDisplayKey> {
         )
     })
 }
-struct ModelDisplayCache {
-    swap: Option<rrrah_cache::ImageSwapCache<ModelDisplayKey, model_swap::ModelPayload>>,
-    entries: rrrah_cache::LeaseCache<ModelDisplayKey, rrrah_decode::DecodedModel>,
-    visible: Option<ModelDisplayKey>,
+trait CachedModel: Clone {
+    type Key: Clone + Eq + std::hash::Hash + Send + 'static;
+    type Payload: rrrah_cache::SwapPayload;
+    fn cache_key(request: &DecodeRequest) -> Option<Self::Key>;
+    fn capacity_bytes(&self) -> u64;
+    fn shares_storage(&self, other: &Self) -> bool;
+    fn into_payload(self) -> Option<Self::Payload>;
+    fn from_payload(payload: Self::Payload) -> Self;
 }
-impl ModelDisplayCache {
+impl CachedModel for rrrah_decode::DecodedModel {
+    type Key = ModelDisplayKey;
+    type Payload = model_swap::ModelPayload;
+    fn cache_key(request: &DecodeRequest) -> Option<Self::Key> {
+        model_display_key(request)
+    }
+    fn capacity_bytes(&self) -> u64 {
+        self.capacity_bytes()
+    }
+    fn shares_storage(&self, other: &Self) -> bool {
+        use rrrah_decode::DecodedModel::*;
+        match (self, other) {
+            (Stl(a), Stl(b)) => a.ptr_eq(b),
+            (Obj(a), Obj(b)) => a.ptr_eq(b),
+            (Ply(a), Ply(b)) => a.ptr_eq(b),
+            (Off(a), Off(b)) => a.ptr_eq(b),
+            _ => false,
+        }
+    }
+    fn into_payload(self) -> Option<Self::Payload> {
+        model_swap::ModelPayload::from_model(self)
+    }
+    fn from_payload(payload: Self::Payload) -> Self {
+        payload.0
+    }
+}
+type ModelDisplayCache = ModelCache<rrrah_decode::DecodedModel>;
+struct ModelCache<M: CachedModel> {
+    swap: Option<rrrah_cache::ImageSwapCache<M::Key, M::Payload>>,
+    entries: rrrah_cache::LeaseCache<M::Key, M>,
+    visible: Option<M::Key>,
+}
+impl<M: CachedModel> ModelCache<M> {
     fn new(limits: rrrah_cache::CacheLimits) -> Self {
         Self {
             entries: rrrah_cache::LeaseCache::new(limits),
@@ -2127,7 +2174,7 @@ impl ModelDisplayCache {
         let victims = self.entries.drain_expired();
         if let Some(swap) = &self.swap {
             for (key, model) in victims {
-                if let Some(payload) = model_swap::ModelPayload::from_model(model) {
+                if let Some(payload) = model.into_payload() {
                     swap.enqueue(key, payload);
                 }
             }
@@ -2139,7 +2186,7 @@ impl ModelDisplayCache {
         }
         self.entries.take_lru().is_some()
     }
-    fn insert(&mut self, key: ModelDisplayKey, model: rrrah_decode::DecodedModel) -> bool {
+    fn insert(&mut self, key: M::Key, model: M) -> bool {
         self.spill_expired();
         let weight = model.capacity_bytes();
         let (admitted, victims) = match self.entries.insert(key, model, weight) {
@@ -2148,7 +2195,7 @@ impl ModelDisplayCache {
         };
         if let Some(swap) = &self.swap {
             for (key, model) in victims {
-                if let Some(payload) = model_swap::ModelPayload::from_model(model) {
+                if let Some(payload) = model.into_payload() {
                     swap.enqueue(key, payload);
                 }
             }
@@ -2156,33 +2203,21 @@ impl ModelDisplayCache {
         admitted
     }
     #[cfg(test)]
-    fn prefetch_lease(
-        &mut self,
-        request: &DecodeRequest,
-    ) -> Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>> {
-        self.entries.get(&model_display_key(request)?)
+    fn prefetch_lease(&mut self, request: &DecodeRequest) -> Option<rrrah_cache::CacheLease<M>> {
+        self.entries.get(&M::cache_key(request)?)
     }
-    fn visible_lease_for(
-        &mut self,
-        model: &rrrah_decode::DecodedModel,
-    ) -> Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>> {
+    fn visible_lease_for(&mut self, model: &M) -> Option<rrrah_cache::CacheLease<M>> {
         let key = self.visible.clone()?;
         let lease = self.entries.get(&key)?;
-        let shared = match (&*lease, model) {
-            (rrrah_decode::DecodedModel::Stl(a), rrrah_decode::DecodedModel::Stl(b)) => a.ptr_eq(b),
-            (rrrah_decode::DecodedModel::Off(a), rrrah_decode::DecodedModel::Off(b)) => a.ptr_eq(b),
-            (rrrah_decode::DecodedModel::Obj(a), rrrah_decode::DecodedModel::Obj(b)) => a.ptr_eq(b),
-            (rrrah_decode::DecodedModel::Ply(a), rrrah_decode::DecodedModel::Ply(b)) => a.ptr_eq(b),
-            _ => false,
-        };
+        let shared = lease.shares_storage(model);
         shared.then_some(lease)
     }
     fn load(
         &mut self,
         request: &DecodeRequest,
         visible: bool,
-        decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
-    ) -> Result<rrrah_decode::DecodedModel, String> {
+        decode: impl FnMut() -> Result<M, ModelLoadError>,
+    ) -> Result<M, String> {
         self.load_with_cancel(request, visible, decode, || {
             request
                 .cancellation
@@ -2194,28 +2229,28 @@ impl ModelDisplayCache {
         &mut self,
         request: &DecodeRequest,
         visible: bool,
-        decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
+        decode: impl FnMut() -> Result<M, ModelLoadError>,
         cancelled: impl FnMut() -> bool,
-    ) -> Result<rrrah_decode::DecodedModel, String> {
-        self.load_with_cancel_resolving_key(|| model_display_key(request), visible, decode, cancelled)
+    ) -> Result<M, String> {
+        self.load_with_cancel_resolving_key(|| M::cache_key(request), visible, decode, cancelled)
     }
     fn load_with_cancel_resolving_key(
         &mut self,
-        resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
+        resolve_key: impl FnOnce() -> Option<M::Key>,
         visible: bool,
-        decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
+        decode: impl FnMut() -> Result<M, ModelLoadError>,
         cancelled: impl FnMut() -> bool,
-    ) -> Result<rrrah_decode::DecodedModel, String> {
+    ) -> Result<M, String> {
         self.load_with_cancel_resolving_key_mode(resolve_key, visible, false, decode, cancelled)
     }
     fn load_with_cancel_resolving_key_mode(
         &mut self,
-        resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
+        resolve_key: impl FnOnce() -> Option<M::Key>,
         visible: bool,
         require_retention: bool,
-        decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
+        decode: impl FnMut() -> Result<M, ModelLoadError>,
         cancelled: impl FnMut() -> bool,
-    ) -> Result<rrrah_decode::DecodedModel, String> {
+    ) -> Result<M, String> {
         self.load_with_cancel_resolving_key_mode_with_lease(
             resolve_key,
             visible,
@@ -2228,19 +2263,13 @@ impl ModelDisplayCache {
     }
     fn load_with_cancel_resolving_key_mode_with_lease(
         &mut self,
-        resolve_key: impl FnOnce() -> Option<ModelDisplayKey>,
+        resolve_key: impl FnOnce() -> Option<M::Key>,
         visible: bool,
         require_retention: bool,
         handoff_lease: bool,
-        mut decode: impl FnMut() -> Result<rrrah_decode::DecodedModel, ModelLoadError>,
+        mut decode: impl FnMut() -> Result<M, ModelLoadError>,
         mut cancelled: impl FnMut() -> bool,
-    ) -> Result<
-        (
-            rrrah_decode::DecodedModel,
-            Option<rrrah_cache::CacheLease<rrrah_decode::DecodedModel>>,
-        ),
-        String,
-    > {
+    ) -> Result<(M, Option<rrrah_cache::CacheLease<M>>), String> {
         if cancelled() {
             return Err("model load cancelled".into());
         }
@@ -2297,7 +2326,7 @@ impl ModelDisplayCache {
             loop {
                 match swap.try_get(key, &mut cancelled) {
                     Ok(value) => {
-                        restored = value.map(|payload| payload.0);
+                        restored = value.map(M::from_payload);
                         break;
                     }
                     Err(error) if visible && retryable_memory_pressure(&error) => {
