@@ -48,6 +48,14 @@ impl std::error::Error for SwapPayloadError {}
 /// Streaming codec for an immutable reproducible object. The store supplies
 /// integrity and cancellation; implementations must budget restored allocations.
 pub trait SwapPayload: Send + 'static + Sized {
+    /// Optional cheap shared-owner clone for data already admitted in a pending
+    /// spill. Implementations must preserve immutable backing and its memory
+    /// reservations; do not deep-copy or allocate pixel/geometry storage here.
+    /// A hit is resident handoff, not disk restore, and consumes no restore pool.
+    fn pending_clone(&self) -> Option<Self> {
+        None
+    }
+
     /// Opt in only when allocations made after stream reads begin are bounded
     /// by unread wire bytes. Compressed/custom payloads remain serial by default.
     fn permits_hash_scratch() -> bool {
@@ -212,6 +220,7 @@ pub struct ImageSwapConfig {
 struct Counters {
     writes: AtomicU64,
     reads: AtomicU64,
+    pending_hits: AtomicU64,
     errors: AtomicU64,
     dropped: AtomicU64,
 }
@@ -219,6 +228,8 @@ struct Counters {
 pub struct ImageSwapStats {
     pub writes: u64,
     pub reads: u64,
+    /// Shared resident payload handoffs while a spill is still pending (not disk reads).
+    pub pending_hits: u64,
     /// Codec, corruption or filesystem failures; expected quota refusals are excluded.
     pub errors: u64,
     /// Writes refused by admission, quota, cancellation or publication policy.
@@ -229,19 +240,27 @@ enum Command<K, V> {
     Spill(K, V, Reservation, u64, Box<dyn Send>),
     Barrier(mpsc::Sender<()>),
 }
-struct PendingSpill<K: Eq + Hash> {
-    keys: Arc<Mutex<HashMap<K, u64>>>,
+#[derive(Debug)]
+struct PendingValue<V> {
+    generation: u64,
+    value: Option<V>,
+}
+struct PendingSpill<K: Eq + Hash, V> {
+    keys: Arc<Mutex<HashMap<K, PendingValue<V>>>>,
     key: K,
     generation: u64,
 }
-impl<K: Eq + Hash> Drop for PendingSpill<K> {
+impl<K: Eq + Hash, V> Drop for PendingSpill<K, V> {
     fn drop(&mut self) {
         let mut keys = self
             .keys
             .lock()
             .unwrap_or_else(std::sync::PoisonError::into_inner);
         // An older cancelled command must not remove a newer request's marker.
-        if keys.get(&self.key) == Some(&self.generation) {
+        if keys
+            .get(&self.key)
+            .is_some_and(|p| p.generation == self.generation)
+        {
             keys.remove(&self.key);
         }
     }
@@ -263,7 +282,7 @@ pub struct ImageSwapCache<K, V> {
     restore_admission: Mutex<()>,
     cancelled: Arc<AtomicBool>,
     write_generation: Arc<AtomicU64>,
-    pending: Arc<Mutex<HashMap<K, u64>>>,
+    pending: Arc<Mutex<HashMap<K, PendingValue<V>>>>,
     queue_count: usize,
     counters: Arc<Counters>,
 }
@@ -489,10 +508,16 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                 self.counters.dropped.fetch_add(1, Ordering::Relaxed);
                 return SpillAdmission::Busy;
             };
-            if keys.get(&key) == Some(&generation) {
+            if keys.get(&key).is_some_and(|p| p.generation == generation) {
                 return SpillAdmission::AlreadyPending;
             }
-            keys.insert(key.clone(), generation);
+            keys.insert(
+                key.clone(),
+                PendingValue {
+                    generation,
+                    value: None,
+                },
+            );
             PendingSpill {
                 keys: self.pending.clone(),
                 key: key.clone(),
@@ -507,6 +532,19 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
             self.counters.dropped.fetch_add(1, Ordering::Relaxed);
             return SpillAdmission::Full;
         };
+        // Only expose a shared resident owner after queue-byte admission. The
+        // pending marker's guard removes it on completion, rejection or cancellation.
+        if let Some(value) = mosaic.pending_clone() {
+            let mut pending = self
+                .pending
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner);
+            if let Some(entry) = pending.get_mut(&key)
+                && entry.generation == generation
+            {
+                entry.value = Some(value);
+            }
+        }
         match self.tx.try_send(Command::Spill(
             key,
             mosaic,
@@ -579,12 +617,40 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
                 }
             }
         };
-        let Some(handle) = self
-            .index
-            .lock()
-            .ok()
-            .and_then(|mut index| index.get(key).cloned())
-        else {
+        let lookup = || {
+            self.index
+                .lock()
+                .ok()
+                .and_then(|mut index| index.get(key).cloned())
+        };
+        let mut handle = lookup();
+        if handle.is_none() {
+            let generation = self.write_generation.load(Ordering::Acquire);
+            let value = self
+                .pending
+                .lock()
+                .unwrap_or_else(std::sync::PoisonError::into_inner)
+                .get(key)
+                .filter(|p| p.generation == generation)
+                .and_then(|p| p.value.as_ref())
+                .and_then(SwapPayload::pending_clone);
+            if cancelled()
+                || self.cancelled.load(Ordering::Acquire)
+                || self.write_generation.load(Ordering::Acquire) != generation
+            {
+                return Ok(None);
+            }
+            if value.is_some() {
+                self.counters.pending_hits.fetch_add(1, Ordering::AcqRel);
+            }
+            if value.is_some() {
+                return Ok(value);
+            }
+            // Publication may have moved the object from pending to disk
+            // between the first index lookup and the pending lookup.
+            handle = lookup();
+        }
+        let Some(handle) = handle else {
             return Ok(None);
         };
         let mut memory_pressure = None;
@@ -674,6 +740,7 @@ impl<K: Clone + Eq + Hash + Send + 'static, V: SwapPayload> ImageSwapCache<K, V>
         ImageSwapStats {
             writes: self.counters.writes.load(Ordering::Acquire),
             reads: self.counters.reads.load(Ordering::Acquire),
+            pending_hits: self.counters.pending_hits.load(Ordering::Acquire),
             errors: self.counters.errors.load(Ordering::Acquire),
             dropped: self.counters.dropped.load(Ordering::Acquire),
             queued_bytes: self.queue_budget.used(),
@@ -793,6 +860,92 @@ mod write_cancellation_tests {
             })
         }
     }
+    struct RetainedPayload(Payload);
+    impl SwapPayload for RetainedPayload {
+        fn pending_clone(&self) -> Option<Self> {
+            Some(Self(Payload {
+                buffer: self.0.buffer.clone(),
+                pause: None,
+            }))
+        }
+        fn capacity_bytes(&self) -> u64 {
+            self.0.capacity_bytes()
+        }
+        fn payload_len(&self) -> std::io::Result<u64> {
+            self.0.payload_len()
+        }
+        fn write_payload(&self, writer: &mut impl Write) -> std::io::Result<()> {
+            self.0.write_payload(writer)
+        }
+        fn read_payload(
+            reader: &mut impl Read,
+            bytes: u64,
+            budget: &MemoryBudget,
+        ) -> Result<Self, SwapPayloadError> {
+            Payload::read_payload(reader, bytes, budget).map(Self)
+        }
+    }
+    #[test]
+    fn admitted_pending_handoff_shares_credit_and_obeys_cancellation_generation() {
+        for cancel in [false, true] {
+            let directory = tempfile::tempdir().unwrap();
+            let root = MemoryBudget::new(1);
+            let queue = MemoryBudget::new(1);
+            let swap = ImageSwapCache::<u8, RetainedPayload>::new_with_budgets(
+                directory.path(),
+                ImageSwapConfig {
+                    limits: CacheLimits::bytes(16),
+                    queue_bytes: 1,
+                    queue_count: 1,
+                    restore_bytes: 0,
+                },
+                queue.clone(),
+                MemoryBudget::new(0),
+            )
+            .unwrap();
+            let (started, seen) = mpsc::channel();
+            let (resume, paused) = mpsc::channel();
+            swap.enqueue(
+                1,
+                RetainedPayload(Payload {
+                    buffer: root.try_buffer(1, 7).unwrap().freeze(),
+                    pause: Some((started, paused, false)),
+                }),
+            );
+            seen.recv_timeout(std::time::Duration::from_secs(5)).unwrap();
+            let value = swap.try_get(&1, || false).unwrap();
+            let cancelled = swap.try_get(&1, || true).unwrap();
+            if cancel {
+                swap.discard_pending_writes();
+            }
+            let after_cancel = if cancel {
+                swap.try_get(&1, || false).unwrap()
+            } else {
+                None
+            };
+            resume.send(()).unwrap();
+            swap.wait_idle().unwrap();
+            assert!(cancelled.is_none());
+            assert!(after_cancel.is_none());
+            assert_eq!(swap.stats().pending_hits, 1);
+            assert_eq!(swap.stats().reads, 0);
+            assert_eq!(swap.stats().queued_bytes, 0);
+            assert_eq!(queue.used(), 0);
+            assert_eq!(root.used(), 1);
+            assert_eq!(&*value.as_ref().unwrap().0.buffer, &[7]);
+            assert!(swap.pending.lock().unwrap().is_empty());
+            if !cancel {
+                assert!(
+                    swap.try_get(&1, || false).is_err(),
+                    "completed disk restore still obeys zero restore budget"
+                );
+            }
+            drop(value);
+            assert_eq!(root.used(), 0);
+            swap.shutdown();
+        }
+    }
+
     #[test]
     fn cancellable_fence_does_not_block_on_active_or_full_queue() {
         for full_queue in [false, true] {
@@ -1371,20 +1524,32 @@ mod write_cancellation_tests {
     }
     #[test]
     fn cancelled_generation_cleanup_preserves_new_generation_marker() {
-        let keys = Arc::new(Mutex::new(HashMap::from([(7_u8, 1_u64)])));
+        let keys = Arc::new(Mutex::new(HashMap::from([(
+            7_u8,
+            PendingValue::<()> {
+                generation: 1,
+                value: None,
+            },
+        )])));
         let old = PendingSpill {
             keys: keys.clone(),
             key: 7,
             generation: 1,
         };
-        keys.lock().unwrap().insert(7, 2);
+        keys.lock().unwrap().insert(
+            7,
+            PendingValue {
+                generation: 2,
+                value: None,
+            },
+        );
         let new = PendingSpill {
             keys: keys.clone(),
             key: 7,
             generation: 2,
         };
         drop(old);
-        assert_eq!(keys.lock().unwrap().get(&7), Some(&2));
+        assert_eq!(keys.lock().unwrap().get(&7).map(|p| p.generation), Some(2));
         drop(new);
         assert!(keys.lock().unwrap().is_empty());
     }

@@ -1,0 +1,78 @@
+{
+  "scope": "production loader, five fixture templates copied to distinct paths; cache transparency not producer diversity",
+  "metrics": {
+    "collection.log": {
+      "sources": 1024,
+      "visits": 2047,
+      "retained": 4091,
+      "native_decodes": 1024,
+      "swap_reads": 1021,
+      "pending_handoffs": 0,
+      "completed_writes": 1024,
+      "max_entries": 3,
+      "max_resident": 286198,
+      "managed_peak": 483798,
+      "final": 0
+    },
+    "delayed-codec-io.log": {
+      "sources": 128,
+      "visits": 255,
+      "retained": 507,
+      "native_decodes": 128,
+      "swap_reads": 124,
+      "pending_handoffs": 1,
+      "completed_writes": 128,
+      "max_entries": 3,
+      "max_resident": 286198,
+      "managed_peak": 556638,
+      "final": 0,
+      "codec_io": {
+        "read_calls": 6498,
+        "read_bytes": 6749989,
+        "max_read_request": 16384,
+        "write_calls": 6415,
+        "write_bytes": 7019494,
+        "max_write_request": 16384,
+        "completed_spills": 128,
+        "completed_restores": 124
+      }
+    }
+  },
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "75c8794e3c360e2850ab27763a4f0503cf708f114a408b0c69b05f0a9ef5a842",
+    "crates/rrrah-app/src/model_asset.rs": "5e603a0570d532bb4ac2b99c36dfaae536b3ec5b1615ee612164535f09499556",
+    "crates/rrrah-app/src/model_collection_tests.rs": "5c1b1ecfad30ac2a90b7db9c819e9976e259267bf877728cdd7b7b75a66f3ec9",
+    "crates/rrrah-cache/src/swap.rs": "ce9e37ad983bc488b286659c08d0be319aa3b6b79b37e8a7cfb664e5fa3ad409",
+    "crates/rrrah-cache/src/qualification_io.rs": "143dba6a27648911947700d1d2e86356edebe80f7155f87bcd1a6c3efd51530c",
+    "crates/rrrah-app/Cargo.toml": "ed71136c0b2d45f852e470fae3defd5629c72c1fe1d6827e05d38df0afa8bbbd",
+    "crates/rrrah-cache/Cargo.toml": "861bfb0006f23e21b0081855874d86fc5fee6703ae4c551e5939521f3993025d",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "fixtures": {
+    "glb/BoxTextured.glb": "b510eca2e2ef33f62f9ed57d6e7ce2d10ebb2bdebc4a8e59d347719ba81abdf4",
+    "models/triangle.stl": "cb38a51d5a813e11f96377a701c46be622d35a0cffc438d2ae570a04ecf73fc7",
+    "models/off-triangle.off": "0f1df09ff78054b09efd9298be5260e0eb64a3a2f4921df2757568379d9cf320",
+    "models/obj-shared-metadata.obj": "0a86389f06d62e3c943362f3fa4929f919f487b038682e2b08f4206c773e49f1",
+    "models/ply-64-le.ply": "e2619a8b75b1ec135b553cceead9122f4803d73ade2b3d546147e8c8b61e6bd7"
+  },
+  "logs": {
+    "collection.log": "434a4abff62fe97c51c5d517e9121dd086d4f6b9dcafe451f16c680fa7507175",
+    "delayed-codec-io.log": "70879a977dc183ee22b009208af9cfe23e98b1ee9dedacbd91795f7545cd6b3c",
+    "cache-regression.log": "82a8b529db8309f37c3c12a5ad5d1b0ac2634b21539c045504f775c8eb07e4c4",
+    "app-regression.log": "14bef154de6591fdf60ed737b7f04c9697f6079017cd4cc61d27bd7a1f6e1e65",
+    "production-check.log": "86a120f9083765b885265941c78ad2046f1a7dd8c1af46f432b13b5db4809dca",
+    "metal-regression.log": "c530f526d49fab8431b2b779fb35f707620c8b19ff24e8758572eadd9f7f05db",
+    "production-build.log": "f55fa85df3987c96e97a6ccc721e97515c388ea21a39b64599e1d4ed1e26f60d",
+    "live-result.json": "96c4e1002598ca90b8269635b28bc14adf427b62bcfae84074aa4a6b92695906",
+    "live-positive.log.gz": "850c109854e34c287c8bc00c03becf8220f88cca61cb394a0d3536aeef89588e",
+    "live-no-cache-negative.log.gz": "3a7245f21d405c1d6332ce9dc841c56c78e409d352d5c2e13b5a82f9a05f3473",
+    "live-positive-excerpt.log": "23ab21b1425825cfb5b2f1de31f1ca677fa1cafa3388bdd5291caf1450dda00f",
+    "live-no-cache-negative-excerpt.log": "7ebff5c4cdd2f42a68e9e7a18e365111d28f6dc50df0e45242bdd8d794c3b03c"
+  },
+  "physical_slow_disk_qualified": false,
+  "rss_qualified": false,
+  "full_format_qualification": false,
+  "metal_viewport_tests": 3,
+  "live_native_swap_roundtrips": 10,
+  "live_no_cache_negative_control": "passed_expected_refusal"
+}

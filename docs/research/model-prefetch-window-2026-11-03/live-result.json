@@ -1,0 +1,73 @@
+{
+  "binary_sha256": "fd5c6a464db71a037cf85b60690e6ebd57cf54002103ffa43a62643c71661de0",
+  "inputs": {
+    "tests/fixtures/glb/BoxTextured.glb": "b510eca2e2ef33f62f9ed57d6e7ce2d10ebb2bdebc4a8e59d347719ba81abdf4",
+    "tests/fixtures/glb/Box.glb": "ed52f7192b8311d700ac0ce80644e3852cd01537e4d62241b9acba023da3d54e"
+  },
+  "rounds": 10,
+  "managed_cpu_limit": 1048576,
+  "model_cache_count": 1,
+  "physical_hdr_qualified": false,
+  "cold_disk_qualified": false,
+  "rss_qualified": false,
+  "command_args": [
+    "--gpu-backend",
+    "metal",
+    "--managed-memory-mb",
+    "1",
+    "--model-gpu-mb",
+    "32",
+    "--model-cache-mb",
+    "1",
+    "--model-cache-count",
+    "1",
+    "--model-swap-mb",
+    "2",
+    "--model-swap-count",
+    "2",
+    "--model-swap-queue-mb",
+    "1",
+    "--model-swap-restore-mb",
+    "1",
+    "--prefetch-ahead",
+    "0",
+    "--prefetch-behind",
+    "0"
+  ],
+  "cases": {
+    "positive": {
+      "exit_code": 0,
+      "log_sha256": "74c768eaf66db1c6ecaf2fa40b11a6370a493e76f26428e7831b8462863cb7a8",
+      "compressed_log_sha256": "850c109854e34c287c8bc00c03becf8220f88cca61cb394a0d3536aeef89588e",
+      "guarded_swap_returns": 10,
+      "presented_rounds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "gpu_credit_samples": 10,
+      "gpu_credit_values": [
+        8034292
+      ],
+      "decoder_refused": false
+    },
+    "no-cache-negative": {
+      "exit_code": 1,
+      "log_sha256": "a116df0449db5f943e23e349c842433f839494702c0fa1ef0a41bcb71df56027",
+      "compressed_log_sha256": "3a7245f21d405c1d6332ce9dc841c56c78e409d352d5c2e13b5a82f9a05f3473",
+      "guarded_swap_returns": 0,
+      "presented_rounds": [],
+      "gpu_credit_samples": 0,
+      "gpu_credit_values": [],
+      "decoder_refused": true
+    }
+  },
+  "verified": true
+}

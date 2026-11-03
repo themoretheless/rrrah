@@ -63,6 +63,8 @@ mod glb_cache;
 mod glb_view;
 mod histogram_worker;
 mod model_asset;
+#[cfg(test)]
+mod model_collection_tests;
 mod model_swap;
 mod pipeline_telemetry;
 mod raster_playback;
@@ -1205,6 +1207,11 @@ enum LoaderWake {
     #[cfg(test)]
     ObservePrefetch(Sender<(u64, PathBuf, bool)>),
     #[cfg(test)]
+    ObserveCollection {
+        prefetch: Sender<(u64, PathBuf, bool)>,
+        cache: Sender<(u64, usize, u64, u64, u64, u64)>,
+    },
+    #[cfg(test)]
     GatePrefetch {
         started: Sender<(u64, PathBuf)>,
         proceed: Receiver<()>,
@@ -1216,6 +1223,7 @@ impl LoaderWake {
     fn observe_prefetch(&self, generation: u64, path: &std::path::Path, retained: bool) {
         let sender = match self {
             Self::ObservePrefetch(sender) => sender,
+            Self::ObserveCollection { prefetch, .. } => prefetch,
             Self::GatePrefetch { completed, .. } => completed,
             _ => return,
         };
@@ -1227,7 +1235,10 @@ impl LoaderWake {
                 let _ = proxy.send_event(WakeEvent::LoadProgress);
             }
             #[cfg(test)]
-            Self::Headless | Self::ObservePrefetch(_) | Self::GatePrefetch { .. } => {}
+            Self::Headless
+            | Self::ObservePrefetch(_)
+            | Self::ObserveCollection { .. }
+            | Self::GatePrefetch { .. } => {}
         }
     }
 }
@@ -1551,6 +1562,7 @@ impl ForegroundLoader {
                 let mut container_prefetch_exhausted = Arc::new(std::sync::atomic::AtomicBool::new(false));
                 let mut protected_rasters = Vec::new();
                 let mut protected_models = Vec::new();
+                let mut resident_model_neighbours = Vec::new();
                 let mut protected_raw = Vec::new();
                 let mut load_costs = raw_load_policy::RawLoadCosts::default();
                 let mut previous: Option<PathBuf> = None;
@@ -1587,7 +1599,7 @@ impl ForegroundLoader {
                                     ));
                                     if app_model_path(&request.path) {
                                         if model_limits.max_bytes > 0 && model_limits.max_entries != Some(0) {
-                                            let warmed = preload_model_with_lease(&request, &mut model_cache, &worker_gate);
+                                            let warmed = preload_model_window(&request, &mut model_cache, &worker_gate, &mut resident_model_neighbours);
                                             #[cfg(test)]
                                             proxy.observe_prefetch(generation, &request.path, warmed.as_ref().is_ok_and(|(_, lease)| lease.is_some()));
                                             #[cfg(debug_assertions)]
@@ -1680,6 +1692,7 @@ impl ForegroundLoader {
                             }
                             protected_rasters.clear();
                             protected_models.clear();
+                            resident_model_neighbours.clear();
                             protected_raw.clear();
                             match receive_with_maintenance(&requests, maintenance_interval, || {
                                 if let Some(ram) = ram_cache.as_mut() {
@@ -1698,6 +1711,7 @@ impl ForegroundLoader {
                     container_prefetch_exhausted = Arc::new(std::sync::atomic::AtomicBool::new(false));
                     protected_rasters.clear();
                     protected_models.clear();
+                    resident_model_neighbours.clear();
                     protected_raw.clear();
                     let path = request.path.clone();
                     let generation = request.generation;
@@ -1786,6 +1800,17 @@ impl ForegroundLoader {
                             |folder| gallery::scan_folder_with_cancel(folder, &|| {
                                 worker_generation.load(Ordering::Acquire) != generation
                             }));
+                        // Protect all already-resident model neighbours before admitting
+                        // a cold neighbour. Otherwise its insertion may evict another
+                        // member of this very window before that member is visited.
+                        for neighbour in paths.iter().filter(|p| app_model_path(p)) {
+                            if token.is_cancelled() { break; }
+                            let mut resident = DecodeRequest::new(neighbour);
+                            resident.cancellation = Some(token.clone());
+                            if let Some(lease) = model_cache.prefetch_lease(&resident) {
+                                resident_model_neighbours.push(lease);
+                            }
+                        }
                         neighbours = Box::new(neighbours.chain(paths.into_iter()
                             .filter(|path| foreground_neighbour_supported(path))
                             .map(move |path| (path, 0, generation, window))));
@@ -2240,7 +2265,6 @@ impl<M: CachedModel> ModelCache<M> {
         }
         admitted
     }
-    #[cfg(test)]
     fn prefetch_lease(&mut self, request: &DecodeRequest) -> Option<rrrah_cache::CacheLease<M>> {
         self.entries.get(&M::cache_key(request)?)
     }
@@ -2550,6 +2574,26 @@ fn preload_model_with_lease<M: DecodeCachedModel>(
     gate: &Arc<DecodeGate>,
 ) -> Result<(M, Option<rrrah_cache::CacheLease<M>>), String> {
     preload_model_mode(request, cache, gate, true)
+}
+
+/// Tentative protection must not override the requested neighbour order when
+/// the whole window cannot fit. Drop only future warm leases and retry once;
+/// already-published neighbour leases and the visible pin remain protected.
+fn preload_model_window<M: DecodeCachedModel>(
+    request: &DecodeRequest,
+    cache: &mut ModelCache<M>,
+    gate: &Arc<DecodeGate>,
+    future_warm: &mut Vec<rrrah_cache::CacheLease<M>>,
+) -> Result<(M, Option<rrrah_cache::CacheLease<M>>), String> {
+    let mut result = preload_model_with_lease(request, cache, gate);
+    if result.is_err() && !future_warm.is_empty() {
+        future_warm.clear();
+        result = preload_model_with_lease(request, cache, gate);
+    }
+    if let Ok((model, _)) = &result {
+        future_warm.retain(|lease| !lease.shares_storage(model));
+    }
+    result
 }
 
 fn preload_model_mode<M: DecodeCachedModel>(
@@ -3556,6 +3600,21 @@ fn execute_load(
         });
         if token.is_cancelled() {
             return;
+        }
+        #[cfg(test)]
+        if let LoaderWake::ObserveCollection { cache, .. } = proxy {
+            let (reads, writes, pending) = model_cache.swap.as_ref().map_or((0, 0, 0), |s| {
+                let s = s.stats();
+                (s.reads, s.writes, s.pending_hits)
+            });
+            let _ = cache.send((
+                generation,
+                model_cache.entries.len(),
+                model_cache.entries.resident_weight(),
+                reads,
+                writes,
+                pending,
+            ));
         }
         #[cfg(debug_assertions)]
         if result.is_ok() && gpu_recovery_probe::traces_model_cache(&path) {

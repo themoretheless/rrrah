@@ -850,3 +850,15 @@ return read native swap with decoder fallback forbidden and stable logical GPU
 credit. The no-cache negative control correctly failed. Full compressed proof
 and a reproducible runner are linked from the GPU report. This is a bounded
 two-source cycling proof, not large-collection or slow/cold-disk qualification.
+
+## Resident-neighbour protection and pending spill handoff (2026-11-03)
+
+The production worker protects warm members of a model prefetch window before
+admitting a cold neighbour, while preserving requested priority when the whole
+window cannot fit. Mixed model payloads may hand off a shared immutable owner
+while their spill is still pending; this is counted separately from disk reads.
+A 1024-path, five-template forward/backward traversal and a 128-path delayed
+codec-I/O traversal retain previous/next neighbours with exactly one native
+decode per file. Managed roots release to zero. These are repeated fixture-copy
+collection tests, not 1024 independent producers, RSS or physical slow-disk tests.
+[Scope, commands and proof](research/model-prefetch-window-2026-11-03/REPORT.md).

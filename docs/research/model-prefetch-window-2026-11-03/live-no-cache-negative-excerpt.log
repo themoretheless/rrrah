@@ -1,0 +1,29 @@
+[2026-11-03T02:42:51Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:42:51Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:42:51Z INFO  rrrah] viewer GPU setup: device_ms=3.710 surface_ms=0.106 raw_ms=0.000 raster_ms=2.309 filmstrip_ms=0.523 total_ms=6.649
+LIVE_RECOVERY_INJECT path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb page=0 devices=[1, 2] simulated_notification=true
+[2026-11-03T02:42:51Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-11-03T02:42:51Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:42:51Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:42:51Z INFO  rrrah] viewer GPU setup: device_ms=0.914 surface_ms=0.055 raw_ms=0.000 raster_ms=2.131 filmstrip_ms=0.394 total_ms=3.494
+[2026-11-03T02:42:51Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RECOVERY_PASS path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb page=0 devices=[3, 4] main_frames=3 telemetry_frames=3 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RASTER_NAV_PRESENT phase=5 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/02.glb generation=3 previous_generation=2 frames=5 same_device=true gpu_wait_ok=true kind=model
+LIVE_MODEL_SWAP_GUARD path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb fallback_decode=forbidden
+...
+[2026-11-03T02:42:51Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:42:51Z INFO  rrrah] viewer GPU setup: device_ms=3.710 surface_ms=0.106 raw_ms=0.000 raster_ms=2.309 filmstrip_ms=0.523 total_ms=6.649
+LIVE_RECOVERY_INJECT path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb page=0 devices=[1, 2] simulated_notification=true
+[2026-11-03T02:42:51Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-11-03T02:42:51Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:42:51Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:42:51Z INFO  rrrah] viewer GPU setup: device_ms=0.914 surface_ms=0.055 raw_ms=0.000 raster_ms=2.131 filmstrip_ms=0.394 total_ms=3.494
+[2026-11-03T02:42:51Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RECOVERY_PASS path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb page=0 devices=[3, 4] main_frames=3 telemetry_frames=3 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RASTER_NAV_PRESENT phase=5 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/02.glb generation=3 previous_generation=2 frames=5 same_device=true gpu_wait_ok=true kind=model
+LIVE_MODEL_SWAP_GUARD path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb fallback_decode=forbidden
+LIVE_MODEL_DECODE_REFUSED path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb
+[2026-11-03T02:42:51Z WARN  rrrah] Image load failed: generation=4 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-_e3on4bx/01.glb error=qualification requires native model swap; fallback decode forbidden
+LIVE_RECOVERY_FAIL guarded native model decoder fallback refused
+[2026-11-03T02:42:51Z INFO  rrrah] Viewer transient storage shutdown complete
+Error: live recovery qualification failed: Some("guarded native model decoder fallback refused")

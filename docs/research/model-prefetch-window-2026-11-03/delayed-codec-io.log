@@ -1,0 +1,29 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 50.38s
+     Running unittests src/main.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah-66296b73a0654ad2)
+
+running 1 test
+test model_collection_tests::production_collection_prefetch_count_ttl_and_native_restore ... MODEL_COLLECTION_PROGRESS visits=128 reads=0 writes=124 managed_used=281351
+MODEL_COLLECTION_IO Snapshot { read_calls: 6498, read_bytes: 6749989, max_read_request: 16384, write_calls: 6415, write_bytes: 7019494, max_write_request: 16384, completed_spills: 128, completed_restores: 124 }
+MODEL_COLLECTION_PASS sources=128 visits=255 retained=507 native_decodes=128 swap_reads=124 pending_handoffs=1 completed_writes=128 max_entries=3 max_resident=286198 managed_peak=556638 final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 471 filtered out; finished in 33.81s

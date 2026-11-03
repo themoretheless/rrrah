@@ -40,6 +40,8 @@ impl ModelAsset {
         }
     }
     pub(crate) fn decode(request: &DecodeRequest) -> Result<Self, ModelLoadError> {
+        #[cfg(test)]
+        crate::model_collection_tests::observe_decode(&request.path);
         #[cfg(debug_assertions)]
         crate::gpu_recovery_probe::check_model_decode(&request.path).map_err(ModelLoadError::Message)?;
         if is_glb(request) {
@@ -81,6 +83,10 @@ impl CachedModel for ModelAsset {
     }
 }
 impl SwapPayload for ModelAsset {
+    fn pending_clone(&self) -> Option<Self> {
+        Some(self.clone())
+    }
+
     fn capacity_bytes(&self) -> u64 {
         match self {
             Self::Geometry(m) => m.capacity_bytes(),

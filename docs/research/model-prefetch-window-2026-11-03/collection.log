@@ -1,0 +1,42 @@
+    Blocking waiting for file lock on build directory
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-cache v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-cache)
+   Compiling rrrah v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-app)
+    Finished `test` profile [optimized + debuginfo] target(s) in 30.14s
+     Running unittests src/main.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah-ae18d7943590843b)
+
+running 1 test
+test model_collection_tests::production_collection_prefetch_count_ttl_and_native_restore ... MODEL_COLLECTION_PROGRESS visits=128 reads=0 writes=124 managed_used=279411
+MODEL_COLLECTION_PROGRESS visits=256 reads=0 writes=252 managed_used=286306
+MODEL_COLLECTION_PROGRESS visits=384 reads=0 writes=380 managed_used=14550
+MODEL_COLLECTION_PROGRESS visits=512 reads=0 writes=509 managed_used=281351
+MODEL_COLLECTION_PROGRESS visits=640 reads=0 writes=636 managed_used=287062
+MODEL_COLLECTION_PROGRESS visits=768 reads=0 writes=764 managed_used=279411
+MODEL_COLLECTION_PROGRESS visits=896 reads=0 writes=892 managed_used=286306
+MODEL_COLLECTION_PROGRESS visits=1024 reads=0 writes=1020 managed_used=279411
+MODEL_COLLECTION_PROGRESS visits=1152 reads=126 writes=1024 managed_used=275628
+MODEL_COLLECTION_PROGRESS visits=1280 reads=254 writes=1024 managed_used=1387
+MODEL_COLLECTION_PROGRESS visits=1408 reads=382 writes=1024 managed_used=276423
+MODEL_COLLECTION_PROGRESS visits=1536 reads=510 writes=1024 managed_used=273104
+MODEL_COLLECTION_PROGRESS visits=1664 reads=638 writes=1024 managed_used=4179
+MODEL_COLLECTION_PROGRESS visits=1792 reads=766 writes=1024 managed_used=275628
+MODEL_COLLECTION_PROGRESS visits=1920 reads=894 writes=1024 managed_used=1387
+MODEL_COLLECTION_PASS sources=1024 visits=2047 retained=4091 native_decodes=1024 swap_reads=1021 pending_handoffs=0 completed_writes=1024 max_entries=3 max_resident=286198 managed_peak=483798 final=0
+ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 471 filtered out; finished in 207.09s
