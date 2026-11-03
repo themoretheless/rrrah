@@ -1342,6 +1342,10 @@ pub enum RawOutputMode {
 #[derive(Debug, Default)]
 pub struct GpuResourceLease(Vec<std::sync::Arc<rrrah_core::Reservation>>);
 impl GpuResourceLease {
+    /// Retain caller-owned GPU resource credit through a submitted command.
+    pub fn from_reservation(value: std::sync::Arc<rrrah_core::Reservation>) -> Self {
+        Self::new([value])
+    }
     pub(crate) fn new(values: impl IntoIterator<Item = std::sync::Arc<rrrah_core::Reservation>>) -> Self {
         Self(values.into_iter().collect())
     }

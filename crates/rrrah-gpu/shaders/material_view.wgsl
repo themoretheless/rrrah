@@ -82,7 +82,7 @@ fn unit(v: vec3<f32>, fallback: vec3<f32>) -> vec3<f32> {
     if p.alpha.y == 2. { opacity = base.a; }
     let metallic = clamp(p.factors.x*mr.b,0.,1.);
     let roughness = clamp(p.factors.y*mr.g,0.,1.);
-    let v = unit(p.eye.xyz-s.world,n);
+    let v = unit(select(p.eye.xyz-s.world,p.eye.xyz,p.emissive.w == 1.),n);
     let l = unit(p.light_direction.xyz,n);
     let h = unit(v+l,n);
     let nv = clamp(dot(n,v),0.,1.); let nl = clamp(dot(n,l),0.,1.);

@@ -802,7 +802,7 @@ Shared OBJ object/group/material payloads now consume retained credit once per a
 borrowed accessors/triangle streams, local/world transforms and selected scene
 hierarchy. Original Box/BoxTextured and authored independent geometry, Decimal
 transform/material and malformed-layout references are retained. The current
-mesh regression passes 98 tests. Resolved material vertex streams preserve
+mesh regression passes 100 tests. Resolved material vertex streams preserve
 indexed positions, normals, tangents, colors and five role-specific UV bindings
 without expanding whole meshes.
 
@@ -835,3 +835,9 @@ spill/restore routing from navigation, prefetch/navigation, general tangent/UV/t
 qualification, full schema/extensions, external resources, skin/animation and
 point/line handling remain outstanding. No full GLB or 100-format qualification
 is claimed.
+
+A selected-scene GLB viewport component now renders native assets and restored
+snapshots on Metal, with shared image uploads, rebased hierarchy transforms and
+admitted camera/depth updates. Two hardware tests pass, including exact snapshot
+frames and linear HDR/sRGB consistency. It remains disconnected from ordinary
+loader/navigation dispatch; see the GPU report above for evidence and limits.

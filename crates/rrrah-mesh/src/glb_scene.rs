@@ -290,6 +290,56 @@ impl GlbScene {
     pub fn world_transform(&self, node: usize) -> Option<GlbTransform> {
         self.nodes.get(node).map(|v| v.world)
     }
+    /// Recompose the selected node's ancestry after shifting root translation.
+    /// This preserves local offsets that absolute world composition could round
+    /// away near a very large shared translation. Bounded stack, no mesh copies.
+    pub fn rebased_transform(
+        &self,
+        node: usize,
+        origin: [f64; 3],
+        request: &DecodeRequest,
+    ) -> Result<GlbTransform, GlbError> {
+        request.check_cancelled()?;
+        if origin.into_iter().any(|v| !v.is_finite()) {
+            return Err(GlbError::Invalid("non-finite scene origin"));
+        }
+        self.nodes
+            .get(node)
+            .filter(|v| v.selected)
+            .ok_or(GlbError::Invalid("node is not selected"))?;
+        let mut chain = [0usize; MAX_SCENE_DEPTH];
+        let mut length = 0;
+        let mut at = node;
+        loop {
+            request.check_cancelled()?;
+            if length == chain.len() {
+                return Err(GlbError::Limit("rebased scene depth"));
+            }
+            chain[length] = at;
+            length += 1;
+            let parent = self.nodes[at].parent;
+            if parent == NONE {
+                break;
+            }
+            at = parent as usize;
+        }
+        let mut world = GlbTransform::identity();
+        for (index, &node) in chain[..length].iter().rev().enumerate() {
+            request.check_cancelled()?;
+            let local = transform_from_json(self.document.json_at(self.nodes[node].source), request)?;
+            let local = if index == 0 {
+                let mut columns = local.columns();
+                for c in 0..3 {
+                    columns[12 + c] -= origin[c];
+                }
+                GlbTransform::from_local_columns(columns)?
+            } else {
+                local
+            };
+            world = world.compose(local)?;
+        }
+        Ok(world)
+    }
     pub fn selected_nodes(&self) -> impl Iterator<Item = usize> + Clone + '_ {
         let mut at = self.first;
         std::iter::from_fn(move || {
@@ -614,6 +664,35 @@ mod tests {
         drop(document);
         assert_eq!(budget.used(), 4624);
         drop(scene);
+        assert_eq!(budget.used(), 0);
+    }
+    #[test]
+    fn rebased_hierarchy_retains_small_child_offsets_under_huge_root_translation() {
+        let budget = MemoryBudget::new(65536);
+        let (doc, request) = json(
+            r#"{"asset":{"version":"2.0"},"nodes":[{"translation":[1e24,0,0],"children":[1]},{"translation":[2,3,4]}],"scenes":[{"nodes":[0]}]}"#,
+            &budget,
+        );
+        let scene = doc.scene(None, &request).unwrap();
+        assert_eq!(
+            scene
+                .rebased_transform(1, [1e24, 0., 0.], &request)
+                .unwrap()
+                .point([0.; 3])
+                .unwrap(),
+            [2., 3., 4.]
+        );
+        assert_eq!(
+            scene
+                .rebased_transform(1, [1e24, 0., 0.], &request)
+                .unwrap()
+                .point([0.5, -0.5, 1.])
+                .unwrap(),
+            [2.5, 2.5, 5.]
+        );
+        assert!(scene.rebased_transform(2, [0.; 3], &request).is_err());
+        drop(scene);
+        drop(doc);
         assert_eq!(budget.used(), 0);
     }
 }

@@ -163,3 +163,38 @@ presentation and benchmark the actual connected path. The GLB format is still
 not registered as ordinary viewable content. Full multi-level/large-texture/
 odd-grid and adversarial cancellation qualification remains beyond this Metal
 slice. NVIDIA/CUDA remains deferred by the user.
+
+## Selected-scene viewport component
+
+`GlbViewportPreparer` now shares material and mip pipelines across prepared scenes.
+The viewport traverses the selected hierarchy, reuses resolved primitive streams,
+shares GPU images by source image and color/data interpretation, and supplies
+role-specific samplers. Geometry is expanded per instance on the GPU; geometry
+instancing remains an optimization. Hierarchy rebasing before composition retains
+small child offsets under large root translations. Normals use inverse transpose;
+tangents use forward transformation and determinant handedness. Normal maps
+without supplied normals/tangents refuse pending general MikkTSpace support.
+
+Camera updates reserve a complete uniform batch before mutation. Candidate
+cancellation and admission failure preserve existing frames. Depth attachments
+are admitted and leased through caller-owned submissions. OPAQUE/MASK precede
+BLEND; blend center sorting does not qualify intersecting triangle transparency.
+Preview lighting and orthographic projection are explicit.
+
+[Metal viewport proof](viewport-metal.log): two actual Metal tests pass. Original
+BoxTextured renders at three distinct camera angles in sRGB8 and linear HDR16;
+native snapshot restoration yields byte-identical frames. HDR-to-sRGB transfer
+agrees within two codes. Three instances upload one source image, and a root
+translation of 1e24 yields exactly the same rebased frame. Cancellation, failed
+camera admission and final logical credit release are checked.
+[Readback image](viewport.png) is the native 128x128 rendered frame.
+
+[Regressions](viewport-regression.log): mesh 100, decode 288 and GPU 80 pass
+(with 9 decode/10 GPU manual tests ignored). All six material controls, including
+Metal probes and shared-image sampler rebinding, pass in [the hardware log](metal-readback.log).
+The five [application GLB cache controls](viewport-cache.log) also pass.
+
+This component is staged behind an explicit unused-module allowance. Ordinary
+GLB loader/worker dispatch, mixed model publication and navigation/prefetch
+integration remain outstanding. These offscreen tests do not qualify a physical
+HDR display, NVIDIA/CUDA, full glTF semantics, physical RSS bounds or speed.

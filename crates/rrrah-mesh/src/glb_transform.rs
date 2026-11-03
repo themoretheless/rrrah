@@ -127,6 +127,33 @@ impl GlbTransform {
         }
         Ok(out)
     }
+    /// Linear direction, normalized; unlike normals this uses the forward matrix.
+    /// Binary exponent scaling preserves very small/large anisotropic axes.
+    pub fn direction(self, vector: [f64; 3]) -> Result<[f64; 3], GlbError> {
+        if vector.into_iter().any(|v| !v.is_finite()) {
+            return Err(GlbError::Invalid("non-finite transform direction"));
+        }
+        let (axes, scales) = self.scaled_axes();
+        let mut terms = [(0., i32::MIN); 3];
+        let mut largest = i32::MIN;
+        for i in 0..3 {
+            if vector[i] != 0. && scales[i] != 0. {
+                let (v, ve) = binary_parts(vector[i]);
+                let (s, se) = binary_parts(scales[i]);
+                terms[i] = (v * s, ve + se);
+                largest = largest.max(ve + se);
+            }
+        }
+        let weights = terms.map(|(m, e)| {
+            if m == 0. {
+                0.
+            } else {
+                m * negative_power_of_two(e - largest)
+            }
+        });
+        let result = std::array::from_fn(|r| (0..3).map(|c| axes[c][r] * weights[c]).sum());
+        unit(result).ok_or(GlbError::Unsupported("zero transformed direction"))
+    }
     /// -1 mirrored, +1 orientation preserving, 0 singular. A near-singular
     /// normalized determinant explicitly refuses rather than guessing a sign.
     pub fn orientation(self) -> Result<i8, GlbError> {
@@ -502,5 +529,28 @@ mod tests {
         assert!(GlbTransform::identity().normal([0.; 3]).is_err());
         assert!(GlbTransform::identity().point([f64::NAN, 0., 0.]).is_err());
         assert!(GlbTransform::from_trs([0.; 3], [0., 0., 0., 1.], [f64::INFINITY, 1., 1.]).is_err());
+    }
+    #[test]
+    fn forward_directions_preserve_nonuniform_mirrored_and_extreme_axes() {
+        let matrix = GlbTransform::from_trs([5., 6., 7.], [0., 0., 0., 1.], [2., 3., 4.]).unwrap();
+        let expected = [2. / 13f64.sqrt(), 3. / 13f64.sqrt(), 0.];
+        for (a, b) in matrix.direction([1., 1., 0.]).unwrap().into_iter().zip(expected) {
+            assert!((a - b).abs() < 1e-14);
+        }
+        assert_ne!(
+            matrix.direction([1., 1., 0.]).unwrap(),
+            matrix.normal([1., 1., 0.]).unwrap()
+        );
+        let extreme = GlbTransform::from_trs([0.; 3], [0., 0., 0., 1.], [1e300, 1e-300, -1.]).unwrap();
+        assert_eq!(extreme.direction([0., -1., 0.]).unwrap(), [0., -1., 0.]);
+        assert_eq!(extreme.direction([0., 0., 1.]).unwrap(), [0., 0., -1.]);
+        let huge = GlbTransform::from_trs([0.; 3], [0., 0., 0., 1.], [1e300; 3])
+            .unwrap()
+            .direction([f64::MAX, f64::MAX, 0.])
+            .unwrap();
+        assert!((huge[0] - 1. / 2f64.sqrt()).abs() < 1e-14);
+        assert_eq!(huge[0], huge[1]);
+        assert!(matrix.direction([0.; 3]).is_err());
+        assert!(matrix.direction([f64::NAN, 0., 0.]).is_err());
     }
 }

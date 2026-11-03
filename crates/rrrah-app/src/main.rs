@@ -60,6 +60,11 @@ mod filmstrip_ui;
 mod first30_remaining;
 mod gallery;
 mod glb_cache;
+#[allow(
+    dead_code,
+    reason = "GLB viewport dispatch is staged until loader integration"
+)]
+mod glb_view;
 mod histogram_worker;
 mod model_swap;
 mod pipeline_telemetry;

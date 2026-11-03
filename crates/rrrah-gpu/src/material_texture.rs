@@ -10,6 +10,8 @@ pub enum MaterialTextureError {
     InvalidSampler,
     #[error("16-bit material textures require FLOAT32_FILTERABLE on the device")]
     Float32FilteringUnavailable,
+    #[error("material texture belongs to another uploader or lacks required mip levels")]
+    IncompatibleTexture,
     #[error("material texture upload cancelled")]
     Cancelled,
     #[error(transparent)]
@@ -85,6 +87,28 @@ impl MaterialTextureUploader {
     }
     pub(crate) fn owns(&self, texture: &MaterialTexture) -> bool {
         Arc::ptr_eq(&self.owner, &texture.owner)
+    }
+    pub(crate) fn queue(&self) -> &wgpu::Queue {
+        &self.queue
+    }
+    /// Share the texture allocation with another validated sampler.
+    pub fn with_sampler(
+        &self,
+        texture: &MaterialTexture,
+        sampler: MaterialSampler,
+    ) -> Result<MaterialTexture, MaterialTextureError> {
+        let descriptor = sampler.descriptor()?;
+        if !self.owns(texture)
+            || (descriptor.lod_max_clamp > 0.
+                && texture.texture.mip_level_count() == 1
+                && texture.texture.width().max(texture.texture.height()) > 1)
+        {
+            return Err(MaterialTextureError::IncompatibleTexture);
+        }
+        Ok(MaterialTexture {
+            sampler: self.device.create_sampler(&descriptor),
+            ..texture.clone()
+        })
     }
     pub fn new(device: &wgpu::Device, queue: &wgpu::Queue) -> Self {
         Self {
@@ -496,6 +520,33 @@ mod tests {
                 || false,
             )
             .unwrap();
+        let rebound = uploader
+            .with_sampler(
+                &non_mip,
+                MaterialSampler {
+                    min: Some(9728),
+                    ..Default::default()
+                },
+            )
+            .unwrap();
+        assert!(Arc::ptr_eq(&rebound.credit, &non_mip.credit));
+        assert!(
+            uploader
+                .with_sampler(&non_mip, MaterialSampler::default())
+                .is_err()
+        );
+        assert!(
+            MaterialTextureUploader::new(&device, &queue)
+                .with_sampler(
+                    &non_mip,
+                    MaterialSampler {
+                        min: Some(9728),
+                        ..Default::default()
+                    }
+                )
+                .is_err()
+        );
+        drop(rebound);
         assert_eq!(non_mip.texture().mip_level_count(), 1);
         assert!(uploader.pipelines.iter().all(|p| p.get().is_none()));
         device.poll(wgpu::PollType::wait_indefinitely()).unwrap();

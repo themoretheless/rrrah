@@ -27,6 +27,7 @@ pub struct MaterialParameters {
     pub light_direction: [f32; 4],
     pub light_color: [f32; 4],
     pub base_color: [f32; 4],
+    /// RGB emission; w=1 selects orthographic eye direction, w=0 perspective eye position.
     pub emissive: [f32; 4],
     /// Metallic, roughness, normal scale, occlusion strength.
     pub factors: [f32; 4],
@@ -176,6 +177,7 @@ impl MaterialRenderer {
             || [p.factors[0], p.factors[1], p.factors[3]]
                 .iter()
                 .any(|v| !(0. ..=1.).contains(v))
+            || ![0., 1.].contains(&p.emissive[3])
             || p.alpha[0] < 0.
             || ![0., 1.].contains(&p.alpha[2])
             || p.eye[3] < 0.
@@ -206,7 +208,7 @@ impl MaterialRenderer {
         let uniform = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("material parameters"),
             contents: bytemuck::bytes_of(&p),
-            usage: wgpu::BufferUsages::UNIFORM,
+            usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
         });
         let entries: [wgpu::BindGroupEntry<'_>; 11] = std::array::from_fn(|binding| {
             let resource = if binding == 0 {
@@ -239,6 +241,49 @@ impl MaterialRenderer {
             credit,
             textures: textures.map(|t| t.clone()),
         })
+    }
+    /// Atomically admit one batch of view/eye uploads before changing any draw.
+    /// Call before encoding; the context's own queue retains credits to completion.
+    pub fn update_views<'a>(
+        &self,
+        budget: &MemoryBudget,
+        draws: impl ExactSizeIterator<Item = &'a MaterialDraw> + Clone,
+        clip: [[f32; 4]; 4],
+        eye: [f32; 4],
+    ) -> Result<(), MaterialRenderError> {
+        #[repr(C)]
+        #[derive(Clone, Copy, Pod, Zeroable)]
+        struct Frame {
+            clip: [[f32; 4]; 4],
+            eye: [f32; 4],
+        }
+        let frame = Frame { clip, eye };
+        if bytemuck::cast_slice::<Frame, f32>(&[frame])
+            .iter()
+            .any(|v| !v.is_finite() || v.abs() > 1e15)
+            || eye[3] < 0.
+        {
+            return Err(MaterialRenderError::Invalid);
+        }
+        if draws.clone().any(|draw| !Arc::ptr_eq(&self.owner, &draw.owner)) {
+            return Err(MaterialRenderError::Owner);
+        }
+        if draws.len() == 0 {
+            return Ok(());
+        }
+        let bytes = (draws.len() as u64)
+            .checked_mul(size_of::<Frame>() as u64)
+            .ok_or(MaterialRenderError::Invalid)?;
+        let queue = self.uploader.queue();
+        let _queued = crate::QueuedUploadReservation {
+            queue: queue.clone(),
+            reservation: Some(budget.try_reserve(bytes)?),
+            resources: GpuResourceLease::new(draws.clone().map(|draw| draw.credit.clone())),
+        };
+        for draw in draws {
+            queue.write_buffer(&draw._uniform, 0, bytemuck::bytes_of(&frame));
+        }
+        Ok(())
     }
     /// Caller owns the pass (Depth32Float, compatible output), ordering and target.
     /// Blend draws disable depth writes and require caller-supplied sorting.

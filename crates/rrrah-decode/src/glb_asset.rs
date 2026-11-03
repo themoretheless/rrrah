@@ -80,6 +80,10 @@ impl GlbAsset {
     pub fn bounds(&self) -> Option<[[f64; 3]; 2]> {
         self.bounds
     }
+    pub fn primitive_range(&self, mesh: usize) -> Option<std::ops::Range<usize>> {
+        let span = self.meshes.get(mesh).filter(|v| v.selected)?;
+        Some(span.first..span.first + span.count)
+    }
     pub fn primitives_for_mesh(&self, mesh: usize) -> Option<&[GlbAssetPrimitive]> {
         let span = self.meshes.get(mesh).filter(|v| v.selected)?;
         self.primitives.get(span.first..span.first + span.count)
