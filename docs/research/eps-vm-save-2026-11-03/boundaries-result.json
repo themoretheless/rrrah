@@ -1,0 +1,25 @@
+{
+  "scope": "Protected graphics VM boundaries and native grestoreall; no VM save/restore objects or rollback",
+  "sources": {
+    "crates/rrrah-vector/src/eps_graphics.rs": "b660acef8cc4ca817e72e8d73cdcfb3e156009309e616a386e4b9329a21b0e22",
+    "crates/rrrah-vector/src/eps_vm.rs": "b3c772ab8c6967652ecb6c7d1315ae2d950bde2060f699dcd1b98f0e9d136b8a",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "regressions": {
+    "vector": {
+      "command": "cargo test -p rrrah-vector --lib --locked",
+      "result": "test result: ok. 264 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 45.42s",
+      "log_sha256": "4e85d79603e1357d497bed68cf380f1b2c8427c65a688284994d6ea76e2e5c17"
+    },
+    "app": {
+      "command": "cargo test -p rrrah --bin rrrah --locked",
+      "result": "test result: ok. 364 passed; 0 failed; 109 ignored; 0 measured; 0 filtered out; finished in 6.49s",
+      "log_sha256": "76b2cab0b486f4e702f44a9fcc53d58a1e61912431efb44b3d5ec3135c968b42"
+    }
+  },
+  "new_controls": 3,
+  "independent_ghostscript_run": false,
+  "producer_original_qualified": false,
+  "full_vm_save_restore": false,
+  "format_counts_changed": false
+}

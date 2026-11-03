@@ -140,6 +140,11 @@ impl Default for State {
         }
     }
 }
+#[derive(Debug, Clone, Copy, PartialEq)]
+struct SavedState {
+    state: State,
+    vm_boundary: bool,
+}
 #[derive(Debug)]
 pub struct EpsGraphics {
     context: u64,
@@ -147,7 +152,7 @@ pub struct EpsGraphics {
     used_nodes: usize,
     paints: MutableBuffer<EpsPaint>,
     used_paints: usize,
-    saved: MutableBuffer<State>,
+    saved: MutableBuffer<SavedState>,
     depth: usize,
     state: State,
 }
@@ -158,7 +163,7 @@ pub struct EpsGraphics {
 pub struct EpsGraphicsCheckpoint {
     context: u64,
     state: State,
-    saved: SharedBuffer<State>,
+    saved: SharedBuffer<SavedState>,
     nodes_required: usize,
     paints_required: usize,
 }
@@ -230,7 +235,13 @@ impl EpsGraphics {
         if cancelled() {
             return Err(EpsGraphicsError::Cancelled);
         }
-        let saved = budget.try_buffer(limits.max_saved_states, state)?;
+        let saved = budget.try_buffer(
+            limits.max_saved_states,
+            SavedState {
+                state,
+                vm_boundary: false,
+            },
+        )?;
         if cancelled() {
             return Err(EpsGraphicsError::Cancelled);
         }
@@ -259,7 +270,13 @@ impl EpsGraphics {
         if cancelled() {
             return Err(EpsGraphicsError::Cancelled);
         }
-        let mut saved = budget.try_buffer(self.depth, self.state)?;
+        let mut saved = budget.try_buffer(
+            self.depth,
+            SavedState {
+                state: self.state,
+                vm_boundary: false,
+            },
+        )?;
         for (index, value) in saved.iter_mut().enumerate() {
             if cancelled() {
                 return Err(EpsGraphicsError::Cancelled);
@@ -361,21 +378,62 @@ impl EpsGraphics {
         self.concat([c, s, -s, c, 0., 0.])
     }
     pub fn gsave(&mut self) -> Result<(), EpsGraphicsError> {
+        self.push_saved(false)
+    }
+    /// Graphics part of a future VM save: grestore/grestoreall cannot pop this
+    /// boundary. This does not create a VM save object or snapshot VM objects.
+    /// The VM must capture a checkpoint before pushing it and use that checkpoint
+    /// only after validating and committing its corresponding VM restore.
+    pub fn push_vm_save_boundary(&mut self) -> Result<(), EpsGraphicsError> {
+        self.push_saved(true)
+    }
+    fn push_saved(&mut self, vm_boundary: bool) -> Result<(), EpsGraphicsError> {
         if self.depth == self.saved.len() {
             return Err(EpsGraphicsError::Limit(EpsGraphicsLimit::SavedStates));
         }
-        self.saved[self.depth] = self.state;
+        self.saved[self.depth] = SavedState {
+            state: self.state,
+            vm_boundary,
+        };
         self.depth += 1;
         Ok(())
     }
     pub fn grestore(&mut self) -> Result<(), EpsGraphicsError> {
-        // No VM save anchors exist in this standalone state; an empty graphics
-        // stack has no effect, as for an unencapsulated PostScript job.
         let Some(depth) = self.depth.checked_sub(1) else {
             return Ok(());
         };
-        self.state = self.saved[depth];
-        self.depth = depth;
+        let saved = self.saved[depth];
+        self.state = saved.state;
+        if !saved.vm_boundary {
+            self.depth = depth;
+        }
+        Ok(())
+    }
+    /// Restore to the nearest VM boundary, retaining it, or the bottom ordinary
+    /// saved state when there is no boundary. Empty stacks have no effect.
+    /// Validation/cancellation finishes before any state is published.
+    pub fn grestore_all<F: FnMut() -> bool>(&mut self, mut cancelled: F) -> Result<(), EpsGraphicsError> {
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        let mut target = None;
+        for index in (0..self.depth).rev() {
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+            target = Some(index);
+            if self.saved[index].vm_boundary {
+                break;
+            }
+        }
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        if let Some(index) = target {
+            let saved = self.saved[index];
+            self.state = saved.state;
+            self.depth = if saved.vm_boundary { index + 1 } else { 0 };
+        }
         Ok(())
     }
     pub fn new_path(&mut self) {
@@ -938,6 +996,83 @@ impl EpsVectorScene {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn vm_boundaries_survive_grestore_and_grestoreall_and_checkpoint() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(limits(), &root, || false).unwrap();
+        g.set_line_width(2.).unwrap();
+        g.gsave().unwrap();
+        let before = g.checkpoint(&root, || false).unwrap();
+        g.set_line_width(3.).unwrap();
+        g.push_vm_save_boundary().unwrap();
+        let outer = g.checkpoint(&root, || false).unwrap();
+        g.set_line_width(4.).unwrap();
+        g.grestore().unwrap();
+        assert_eq!((g.style().width, g.depth), (3., 2));
+        g.set_line_width(5.).unwrap();
+        g.gsave().unwrap();
+        g.set_line_width(6.).unwrap();
+        g.push_vm_save_boundary().unwrap();
+        g.set_line_width(7.).unwrap();
+        g.gsave().unwrap();
+        g.set_line_width(8.).unwrap();
+        g.grestore_all(|| false).unwrap();
+        assert_eq!((g.style().width, g.depth), (6., 4));
+        g.set_line_width(9.).unwrap();
+        g.grestore().unwrap();
+        assert_eq!((g.style().width, g.depth), (6., 4));
+        // Restoring a pre-inner snapshot removes the inner boundary and its stack.
+        g.restore_checkpoint(&outer, || false).unwrap();
+        g.set_line_width(10.).unwrap();
+        g.grestore_all(|| false).unwrap();
+        assert_eq!((g.style().width, g.depth), (3., 2));
+        g.restore_checkpoint(&before, || false).unwrap();
+        g.set_line_width(11.).unwrap();
+        g.grestore_all(|| false).unwrap();
+        assert_eq!((g.style().width, g.depth), (2., 0));
+        g.set_line_width(12.).unwrap();
+        g.grestore_all(|| false).unwrap();
+        g.grestore().unwrap();
+        assert_eq!((g.style().width, g.depth), (12., 0));
+        drop((g, before, outer));
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn grestoreall_cancellation_and_boundary_limit_are_atomic() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(limits(), &root, || false).unwrap();
+        g.push_vm_save_boundary().unwrap();
+        for i in 1..16 {
+            g.set_line_width(i as f64).unwrap();
+            g.gsave().unwrap();
+        }
+        g.set_line_width(99.).unwrap();
+        let state = g.state;
+        let stack = g.saved[..g.depth].to_vec();
+        let charged = root.used();
+        assert!(matches!(
+            g.push_vm_save_boundary(),
+            Err(EpsGraphicsError::Limit(EpsGraphicsLimit::SavedStates))
+        ));
+        for stop in 1..=18 {
+            let mut calls = 0;
+            assert!(matches!(
+                g.grestore_all(|| {
+                    calls += 1;
+                    calls == stop
+                }),
+                Err(EpsGraphicsError::Cancelled)
+            ));
+            assert_eq!(g.state, state);
+            assert_eq!(&g.saved[..g.depth], &stack);
+            assert_eq!(root.used(), charged);
+        }
+        g.grestore_all(|| false).unwrap();
+        assert_eq!((g.style().width, g.depth), (1., 1));
+        assert_eq!(root.used(), charged);
+        drop(g);
+        assert_eq!(root.used(), 0);
+    }
     fn checkpoint_scene(g: &mut EpsGraphics) {
         g.clip_rectangle(0., 0., 3., 8.).unwrap();
         g.set_color(EpsDeviceColor::Rgb([0., 1., 0.])).unwrap();
@@ -1010,7 +1145,7 @@ mod tests {
         checkpoint_scene(&mut g);
         let state = g.state;
         let stack = g.saved[..g.depth].to_vec();
-        let bytes = (g.depth * std::mem::size_of::<State>()) as u64;
+        let bytes = (g.depth * std::mem::size_of::<SavedState>()) as u64;
         let short = MemoryBudget::new(bytes - 1);
         assert!(matches!(
             g.checkpoint(&short, || false),

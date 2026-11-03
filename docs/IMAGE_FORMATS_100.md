@@ -1836,3 +1836,10 @@ path, clip and stack without erasing later paint output; cancellation/admission
 and foreign-context controls pass. Actual VM save objects, rollback and save
 anchors remain required; no original/AI compatibility or catalogue-count change
 is claimed. [Current scope](research/eps-vm-save-2026-11-03/REPORT.md).
+
+Graphics save-boundary follow-up: the native graphics stack now protects VM-save
+boundaries from `grestore`/`grestoreall`; checkpoints preserve/remove nested
+boundaries. Native `grestoreall` is connected to the VM, including typed work
+limits and atomic cancellation. 264 vector and 364 viewer tests pass. This does
+not implement VM save tokens/object rollback or qualify producer-original AI.
+See [scope and evidence](research/eps-vm-save-2026-11-03/BOUNDARIES.md).

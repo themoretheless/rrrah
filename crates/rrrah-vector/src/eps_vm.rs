@@ -95,6 +95,7 @@ pub enum EpsOperator {
     SetMiterLimit,
     GSave,
     GRestore,
+    GRestoreAll,
     Translate,
     Scale,
     Rotate,
@@ -562,6 +563,7 @@ impl<'a> Machine<'a, '_> {
             | O::SetMiterLimit
             | O::GSave
             | O::GRestore
+            | O::GRestoreAll
             | O::Translate
             | O::Scale
             | O::Rotate
@@ -1115,6 +1117,20 @@ impl<'a> Machine<'a, '_> {
             O::SetMiterLimit => graphics.set_miter_limit(args[0])?,
             O::GSave => graphics.gsave()?,
             O::GRestore => graphics.grestore()?,
+            O::GRestoreAll => {
+                let mut failure = None;
+                let result = graphics.grestore_all(|| match work.tick() {
+                    Ok(()) => false,
+                    Err(error) => {
+                        failure = Some(error);
+                        true
+                    }
+                });
+                if let Some(error) = failure {
+                    return Err(error);
+                }
+                result?;
+            }
             O::Translate => graphics.translate(args[0], args[1])?,
             O::Scale => graphics.scale(args[0], args[1])?,
             O::Rotate => graphics.rotate(args[0])?,
@@ -1377,6 +1393,7 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"setmiterlimit" => O::SetMiterLimit,
         b"gsave" => O::GSave,
         b"grestore" => O::GRestore,
+        b"grestoreall" => O::GRestoreAll,
         b"translate" => O::Translate,
         b"scale" => O::Scale,
         b"rotate" => O::Rotate,
@@ -2707,6 +2724,39 @@ mod vector_tests {
             max_execution_frames: 16,
             max_work: 100_000,
         }
+    }
+    #[test]
+    fn grestoreall_vm_restores_bottom_and_preserves_typed_work_errors() {
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(b"2 setlinewidth gsave 3 setlinewidth gsave 4 setlinewidth grestoreall currentlinewidth 5 setlinewidth grestore currentlinewidth", &root);
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(
+            result.evaluation.values(),
+            &[
+                EpsValue::Number(EpsNumber::Real(2.)),
+                EpsValue::Number(EpsNumber::Real(5.))
+            ]
+        );
+        drop(result);
+        // Every sub-successful work allowance must retain Limit(Work), including
+        // the scan inside grestoreall, instead of becoming Graphics(Cancelled).
+        let mut succeeded = false;
+        for allowance in 0..1000 {
+            let mut limits = vm();
+            limits.max_work = allowance;
+            match evaluate_eps_vectors(&program, limits, graphics(), &root, || false) {
+                Err(EpsVmError::Limit(EpsVmLimit::Work)) => {}
+                Ok(result) => {
+                    drop(result);
+                    succeeded = true;
+                    break;
+                }
+                other => panic!("unexpected work result at {allowance}: {other:?}"),
+            }
+        }
+        assert!(succeeded);
+        drop(program);
+        assert_eq!(root.used(), 0);
     }
     fn graphics() -> EpsGraphicsLimits {
         EpsGraphicsLimits {
