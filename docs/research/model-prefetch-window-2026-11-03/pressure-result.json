@@ -1,0 +1,88 @@
+{
+  "scope": "constant logical shared-budget reservation; not OS/RSS pressure",
+  "root_limit": 4194304,
+  "pressure_bytes": 3538944,
+  "workload_allowance": 655360,
+  "metrics": {
+    "pressure-collection.log": {
+      "sources": 1024,
+      "visits": 2047,
+      "retained": 4091,
+      "native_decodes": 1024,
+      "swap_reads": 1021,
+      "pending_handoffs": 0,
+      "completed_writes": 1024,
+      "max_entries": 3,
+      "max_resident": 286198,
+      "managed_peak": 4022742,
+      "pressure_bytes": 3538944,
+      "workload_allowance": 655360,
+      "workload_peak": 483798,
+      "final": 0
+    },
+    "pressure-delayed-io.log": {
+      "sources": 128,
+      "visits": 255,
+      "retained": 507,
+      "native_decodes": 128,
+      "swap_reads": 124,
+      "pending_handoffs": 1,
+      "completed_writes": 128,
+      "max_entries": 3,
+      "max_resident": 286198,
+      "managed_peak": 4095570,
+      "pressure_bytes": 3538944,
+      "workload_allowance": 655360,
+      "workload_peak": 556626,
+      "final": 0,
+      "codec_io": {
+        "read_calls": 6498,
+        "read_bytes": 6749989,
+        "max_read_request": 16384,
+        "write_calls": 6415,
+        "write_bytes": 7019494,
+        "max_write_request": 16384,
+        "completed_spills": 128,
+        "completed_restores": 124
+      }
+    }
+  },
+  "app_tests": {
+    "passed": 364,
+    "failed": 0,
+    "ignored": 109
+  },
+  "negative_control": "exhausted_model_root_preserves_visible_lease_and_recovers_after_pressure_release",
+  "physical_ram_pressure_qualified": false,
+  "physical_slow_disk_qualified": false,
+  "sources": {
+    "crates/rrrah-app/src/main.rs": "75c8794e3c360e2850ab27763a4f0503cf708f114a408b0c69b05f0a9ef5a842",
+    "crates/rrrah-app/src/model_asset.rs": "5e603a0570d532bb4ac2b99c36dfaae536b3ec5b1615ee612164535f09499556",
+    "crates/rrrah-app/src/model_collection_tests.rs": "f205eaaefcf96320aa952079bfee8fb5f98178eafa1fe92d28bada6cc0829c8e",
+    "crates/rrrah-cache/src/swap.rs": "ce9e37ad983bc488b286659c08d0be319aa3b6b79b37e8a7cfb664e5fa3ad409",
+    "crates/rrrah-cache/src/qualification_io.rs": "143dba6a27648911947700d1d2e86356edebe80f7155f87bcd1a6c3efd51530c",
+    "crates/rrrah-app/Cargo.toml": "ed71136c0b2d45f852e470fae3defd5629c72c1fe1d6827e05d38df0afa8bbbd",
+    "crates/rrrah-cache/Cargo.toml": "861bfb0006f23e21b0081855874d86fc5fee6703ae4c551e5939521f3993025d",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b",
+    "crates/rrrah-memory/src/lib.rs": "b70514da81fdf38f869411dddc26b68c07c5a1ac72aa56f8d06a31cf84d796c5",
+    "crates/rrrah-memory/src/lease_cache.rs": "b94247d4798bad5d26f14d8d1cf35126d6363dcd6036afaa1dfcb97dceaffd9e",
+    "crates/rrrah-memory/src/policy.rs": "d0b10cf823557418e1927abbe45bc090476ce9d819f4b87df0cace5905df468b"
+  },
+  "logs": {
+    "pressure-collection.log": "8337cb90592a822a561ca41807e5df01c894dd28ee7849d0e75e90da6645d8ed",
+    "pressure-delayed-io.log": "a9631cf6d5973f76771e21a8b90c59eaa370e4378e3ac78d64f35a243e5bd505",
+    "pressure-app-regression.log": "6d106c23f4f92dce4a698a9418d146bc21389f062ec803b03f36e6ded23d126f"
+  },
+  "environment": {
+    "RRRAH_MODEL_COLLECTION_AVAILABLE_BYTES": "655360"
+  },
+  "collection_counts": [
+    1024,
+    128
+  ],
+  "delayed_io": {
+    "feature": "qualification-slow-io",
+    "delay_ms": 1,
+    "chunk_bytes": 65536
+  }
+}

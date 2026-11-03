@@ -93,3 +93,40 @@ The [positive](live-positive.log.gz) and [negative](live-no-cache-negative.log.g
 logs are retained losslessly, with readable excerpts alongside them. This
 checks that shared pending ownership did not break the actual viewer path.
 The [production binary build](production-build.log) also passes.
+
+## Constant managed-budget pressure extension
+
+The same production-worker collection gate now accepts
+`RRRAH_MODEL_COLLECTION_AVAILABLE_BYTES`. For this extension, a reservation
+holds 3538944 bytes of the 4 MiB shared budget throughout the entire traversal,
+leaving 655360 bytes (640 KiB) for model decoding, cached owners, queued spills
+and restoration. Before releasing that reservation the workload must own zero
+remaining bytes; afterward the shared root must be exactly zero. The reported
+peak includes the fixed reservation and must not exceed the global limit.
+This is logical admission pressure, not a large physical allocation or system
+RAM/RSS pressure test. Existing codec/test-metadata exclusions still apply.
+
+The ordinary `exhausted_model_root_preserves_visible_lease_and_recovers_after_pressure_release`
+control additionally fills all remaining shared credit. A new GLB load must
+refuse while the visible OFF cache key, shared owner and consumer lease remain
+unchanged. Releasing the pressure permits the GLB load, and final root usage
+returns to zero.
+
+Reproduce the collection extension with the preceding commands plus
+`RRRAH_MODEL_COLLECTION_AVAILABLE_BYTES=655360`. The feature-enabled delayed
+I/O run uses the same pressure and the same strict one-native-decode-per-file
+assertion. Earlier `result.json` retains the original unpressured proof;
+`pressure-result.json` and the current `sources.json` pin this extension.
+
+This does not add physical slow-disk, diverse producer-content, photographic
+color, full-format or NVIDIA qualification.
+
+| Pressure gate | Verified result |
+|---|---|
+| [1024 paths](pressure-collection.log) | 2047 visits, 4091 retained neighbours, 1024 native decodes, 1021 disk restores; global credit peak 4022742 / 4194304, workload peak 483798; final zero |
+| [128 paths with delayed codec I/O](pressure-delayed-io.log) | 255 visits, 507 retained neighbours, 128 native decodes, 124 disk restores plus one pending handoff; global credit peak 4095570 / 4194304, workload peak 556626; final zero |
+| [Full application regression](pressure-app-regression.log) | 364 passed, zero failed, 109 manual/external tests ignored; includes exhausted-credit refusal and recovery |
+
+[Pressure result](pressure-result.json) pins exact source and log hashes. Both
+traversals keep the same strict decode-count, neighbour retention and native
+restore requirements as the unpressured gate. No thresholds were relaxed.

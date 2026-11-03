@@ -53,6 +53,11 @@ fn production_collection_prefetch_count_ttl_and_native_restore() {
     *AUDIT.lock().unwrap() = Some((sources, BTreeMap::new()));
     let _reset = AuditReset;
     let root = rrrah_core::MemoryBudget::new(4 * 1024 * 1024);
+    let allowance = std::env::var("RRRAH_MODEL_COLLECTION_AVAILABLE_BYTES")
+        .map_or(root.limit(), |v| v.parse::<u64>().unwrap());
+    assert!(allowance > 0 && allowance <= root.limit());
+    let pressure_bytes = root.limit() - allowance;
+    let pressure = root.try_reserve(pressure_bytes).unwrap();
     let (tx, rx) = unbounded();
     let (prefetch_tx, prefetch_rx) = unbounded();
     let (cache_tx, cache_rx) = unbounded();
@@ -164,6 +169,9 @@ fn production_collection_prefetch_count_ttl_and_native_restore() {
     assert!(reads > 0);
     assert!(reads + pending >= (count - 3) as u64);
     assert!(writes >= (count - 3) as u64);
+    assert_eq!(root.used(), pressure_bytes);
+    assert!(root.peak() <= root.limit());
+    drop(pressure);
     assert_eq!(root.used(), 0);
     #[cfg(feature = "qualification-slow-io")]
     {
@@ -180,9 +188,10 @@ fn production_collection_prefetch_count_ttl_and_native_restore() {
         "delayed I/O requires --features qualification-slow-io"
     );
     eprintln!(
-        "MODEL_COLLECTION_PASS sources={count} visits={visits} retained={retained} native_decodes={} swap_reads={reads} pending_handoffs={pending} completed_writes={writes} max_entries={max_entries} max_resident={max_bytes} managed_peak={} final=0",
+        "MODEL_COLLECTION_PASS sources={count} visits={visits} retained={retained} native_decodes={} swap_reads={reads} pending_handoffs={pending} completed_writes={writes} max_entries={max_entries} max_resident={max_bytes} managed_peak={} pressure_bytes={pressure_bytes} workload_allowance={allowance} workload_peak={} final=0",
         counts.len(),
-        root.peak()
+        root.peak(),
+        root.peak() - pressure_bytes
     );
 }
 
@@ -222,5 +231,46 @@ fn tentative_warm_models_do_not_override_a_higher_priority_cold_neighbour() {
     assert!(cache.prefetch_lease(&warm).is_none());
     assert!(cache.prefetch_lease(&visible).is_some());
     drop((lease, model, cache));
+    assert_eq!(root.used(), 0);
+}
+
+#[test]
+fn exhausted_model_root_preserves_visible_lease_and_recovers_after_pressure_release() {
+    let fixtures = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures");
+    let root = rrrah_core::MemoryBudget::new(2 * 1024 * 1024);
+    let request = |p: &str| {
+        let mut r = DecodeRequest::new(fixtures.join(p));
+        r.memory_budget = Some(root.clone());
+        r
+    };
+    let visible = request("models/off-triangle.off");
+    let cold = request("glb/BoxTextured.glb");
+    let mut cache = ModelCache::<model_asset::ModelAsset>::new(rrrah_cache::CacheLimits {
+        max_bytes: root.limit(),
+        max_entries: Some(1),
+        ttl: None,
+    });
+    let first = cache
+        .load(&visible, true, || model_asset::ModelAsset::decode(&visible))
+        .unwrap();
+    let lease = cache.visible_lease_for(&first).unwrap();
+    let key = cache.visible.clone();
+    let occupied = root.used();
+    let pressure = root.try_reserve(root.available_bytes()).unwrap();
+    let failed = cache.load(&cold, true, || model_asset::ModelAsset::decode(&cold));
+    assert!(failed.is_err());
+    assert!(cache.visible == key);
+    assert!(lease.shares_storage(&first));
+    assert_eq!(first.format_name(), "OFF");
+    assert_eq!(root.used(), root.limit());
+    drop(pressure);
+    assert_eq!(root.used(), occupied);
+    drop((lease, first));
+    let restored = cache
+        .load(&cold, true, || model_asset::ModelAsset::decode(&cold))
+        .unwrap();
+    assert_eq!(restored.format_name(), "GLB");
+    assert_eq!(restored.triangle_count(), 12);
+    drop((restored, cache));
     assert_eq!(root.used(), 0);
 }

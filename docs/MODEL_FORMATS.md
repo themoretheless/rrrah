@@ -862,3 +862,10 @@ codec-I/O traversal retain previous/next neighbours with exactly one native
 decode per file. Managed roots release to zero. These are repeated fixture-copy
 collection tests, not 1024 independent producers, RSS or physical slow-disk tests.
 [Scope, commands and proof](research/model-prefetch-window-2026-11-03/REPORT.md).
+
+The same collection gate now passes with 3538944 bytes permanently reserved
+from a 4 MiB shared budget, leaving 640 KiB for the entire workload. Both
+1024-path and delayed-codec-I/O runs retain their one-decode-per-file contracts
+and end at zero credit. A complete-exhaustion control preserves the visible
+cache owner and retries successfully after pressure releases. This qualifies
+logical budget pressure, not system RAM/RSS exhaustion; see the report above.
