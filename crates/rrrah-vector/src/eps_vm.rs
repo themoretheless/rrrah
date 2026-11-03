@@ -13,6 +13,7 @@ pub enum EpsOperator {
     End,
     CurrentDict,
     Known,
+    Where,
     Save,
     Restore,
     Add,
@@ -204,6 +205,8 @@ pub enum EpsVmError {
     InvalidRestore,
     #[error("PostScript dictionary stack underflow")]
     DictionaryStackUnderflow,
+    #[error("PostScript dictionary is read-only")]
+    InvalidAccess,
     #[error("PostScript operand stack underflow")]
     StackUnderflow,
     #[error("PostScript operand type mismatch")]
@@ -369,12 +372,70 @@ struct Machine<'a, 'g> {
     frames: MutableBuffer<Frame>,
     depth: usize,
 }
+// Evaluation-local handle for the implemented, read-only system namespace.
+const SYSTEM_DICTIONARY: usize = usize::MAX;
 impl<'a> Machine<'a, '_> {
     fn current_dictionary(&self) -> usize {
         match self.dict_stack.get(self.dict_depth.wrapping_sub(1)) {
             Some(EpsValue::Dictionary { identity }) => *identity,
             _ => 0,
         }
+    }
+    fn system_value(&self, key: &[u8]) -> Option<EpsValue<'a>> {
+        Some(match key {
+            b"true" => EpsValue::Boolean(true),
+            b"false" => EpsValue::Boolean(false),
+            b"null" => EpsValue::Null,
+            b"systemdict" => EpsValue::Dictionary {
+                identity: SYSTEM_DICTIONARY,
+            },
+            b"userdict" => EpsValue::Dictionary { identity: 0 },
+            // Import policy: showpage does not send a page to an output device.
+            b"showpage" if self.graphics.is_some() => EpsValue::Procedure {
+                begin: 0,
+                end: 0,
+                identity: 0,
+            },
+            _ => EpsValue::Operator(operator(key)?),
+        })
+    }
+    fn dict_read<F: FnMut() -> bool>(
+        &self,
+        identity: usize,
+        key: &[u8],
+        work: &mut Work<F>,
+    ) -> Result<Option<EpsValue<'a>>, EpsVmError> {
+        if identity == SYSTEM_DICTIONARY {
+            work.tick()?;
+            for _ in key {
+                work.tick()?;
+            }
+            return Ok(self.system_value(key));
+        }
+        Ok(self
+            .dict_find(identity, key, work)?
+            .map(|index| self.dict_value(identity, index)))
+    }
+    fn find_name<F: FnMut() -> bool>(
+        &self,
+        key: &[u8],
+        work: &mut Work<F>,
+    ) -> Result<Option<(usize, EpsValue<'a>)>, EpsVmError> {
+        for handle in self.dict_stack[..self.dict_depth].iter().rev() {
+            work.tick()?;
+            if let EpsValue::Dictionary { identity } = *handle {
+                if let Some(value) = self.dict_read(identity, key, work)? {
+                    return Ok(Some((identity, value)));
+                }
+            }
+        }
+        if let Some(value) = self.dict_read(0, key, work)? {
+            return Ok(Some((0, value)));
+        }
+        if let Some(value) = self.dict_read(SYSTEM_DICTIONARY, key, work)? {
+            return Ok(Some((SYSTEM_DICTIONARY, value)));
+        }
+        Ok(None)
     }
     fn dict_find<F: FnMut() -> bool>(
         &self,
@@ -426,6 +487,9 @@ impl<'a> Machine<'a, '_> {
         value: EpsValue<'a>,
         work: &mut Work<F>,
     ) -> Result<(), EpsVmError> {
+        if identity == SYSTEM_DICTIONARY {
+            return Err(EpsVmError::InvalidAccess);
+        }
         let index = if identity == 0 {
             self.slot(key, work)?
                 .ok_or(EpsVmError::Limit(EpsVmLimit::Dictionary))?
@@ -615,6 +679,7 @@ impl<'a> Machine<'a, '_> {
                 EpsValue::Save { identity: other } => other <= identity,
                 EpsValue::Dictionary { identity: id } => {
                     id == 0
+                        || id == SYSTEM_DICTIONARY
                         || (id <= target.dict_used
                             && target.dict_records[id - 1].owner == id
                             && target.dict_records[id - 1].entry.key.is_none())
@@ -631,6 +696,7 @@ impl<'a> Machine<'a, '_> {
                 return Err(EpsVmError::InvalidRestore);
             };
             if id != 0
+                && id != SYSTEM_DICTIONARY
                 && !(id <= target.dict_used
                     && target.dict_records[id - 1].owner == id
                     && target.dict_records[id - 1].entry.key.is_none())
@@ -683,6 +749,9 @@ impl<'a> Machine<'a, '_> {
     fn push(&mut self, value: EpsValue<'a>) -> Result<(), EpsVmError> {
         if self.length == self.operands.len() {
             return Err(EpsVmError::Limit(EpsVmLimit::Operands));
+        }
+        if matches!(value, EpsValue::Dictionary { identity: 0 }) {
+            self.retain_user_dictionary = true;
         }
         self.operands[self.length] = value;
         self.length += 1;
@@ -821,32 +890,10 @@ impl<'a> Machine<'a, '_> {
         at: usize,
         work: &mut Work<F>,
     ) -> Result<EpsValue<'a>, EpsVmError> {
-        for handle in self.dict_stack[..self.dict_depth].iter().rev() {
-            work.tick()?;
-            if let EpsValue::Dictionary { identity } = *handle {
-                if let Some(index) = self.dict_find(identity, key, work)? {
-                    return Ok(self.dict_value(identity, index));
-                }
-            }
+        if let Some((_, value)) = self.find_name(key, work)? {
+            return Ok(value);
         }
-        if let Some(index) = self.dict_find(0, key, work)? {
-            return Ok(self.dictionary[index].value);
-        }
-        match key {
-            b"true" => Ok(EpsValue::Boolean(true)),
-            b"false" => Ok(EpsValue::Boolean(false)),
-            b"null" => Ok(EpsValue::Null),
-            // EPSF 3.0 section 3.2: the importer defines showpage as an
-            // empty procedure. User definitions still win above.
-            b"showpage" if self.graphics.is_some() => Ok(EpsValue::Procedure {
-                begin: 0,
-                end: 0,
-                identity: 0,
-            }),
-            _ => operator(key)
-                .map(EpsValue::Operator)
-                .ok_or(EpsVmError::UndefinedName(at)),
-        }
+        Err(EpsVmError::UndefinedName(at))
     }
     fn bind_procedure<F: FnMut() -> bool>(
         &mut self,
@@ -982,8 +1029,19 @@ impl<'a> Machine<'a, '_> {
                     return Err(E::Type);
                 };
                 let identity = self.dictionary_identity()?;
-                let known = self.dict_find(identity, key, work)?.is_some();
+                let known = self.dict_read(identity, key, work)?.is_some();
                 self.push(EpsValue::Boolean(known))?;
+            }
+            O::Where => {
+                let EpsValue::LiteralName(key) = self.pop()? else {
+                    return Err(E::Type);
+                };
+                if let Some((identity, _)) = self.find_name(key, work)? {
+                    self.push(EpsValue::Dictionary { identity })?;
+                    self.push(EpsValue::Boolean(true))?;
+                } else {
+                    self.push(EpsValue::Boolean(false))?;
+                }
             }
             O::Save => return self.save_vm(work),
             O::Restore => return self.restore_vm(work),
@@ -1356,6 +1414,9 @@ impl<'a> Machine<'a, '_> {
                 let length = match self.pop()? {
                     EpsValue::Array { length, .. } => length,
                     EpsValue::Dictionary { identity } => {
+                        if identity == SYSTEM_DICTIONARY {
+                            return Err(E::Unsupported(at));
+                        }
                         let mut count = 0;
                         if identity == 0 {
                             for entry in self.dictionary.iter() {
@@ -1380,8 +1441,7 @@ impl<'a> Machine<'a, '_> {
                 let key = self.pop()?;
                 let value = match (self.pop()?, key) {
                     (EpsValue::Dictionary { identity }, EpsValue::LiteralName(key)) => {
-                        let index = self.dict_find(identity, key, work)?.ok_or(E::UndefinedName(at))?;
-                        self.dict_value(identity, index)
+                        self.dict_read(identity, key, work)?.ok_or(E::UndefinedName(at))?
                     }
                     (EpsValue::Array { begin, length }, EpsValue::Number(EpsNumber::Integer(index))) => {
                         let index = usize::try_from(index).map_err(|_| E::Range)?;
@@ -1792,6 +1852,7 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"end" => O::End,
         b"currentdict" => O::CurrentDict,
         b"known" => O::Known,
+        b"where" => O::Where,
         b"save" => O::Save,
         b"restore" => O::Restore,
         b"add" => O::Add,
@@ -3225,6 +3286,115 @@ mod vector_tests {
             max_dictionary_entries: 32,
             max_execution_frames: 16,
             max_work: 100_000,
+        }
+    }
+    #[test]
+    fn where_matches_independent_ghostscript_scope_system_and_restore_traces() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/where-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 20);
+        for case in reference["cases"].as_array().unwrap() {
+            let root = MemoryBudget::new(1_000_000);
+            let source = case["code"].as_str().unwrap().as_bytes();
+            let program = compile(source, &root);
+            let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false);
+            if let Some(error) = case.get("error") {
+                assert!(
+                    match error.as_str().unwrap() {
+                        "invalidaccess" => matches!(result, Err(EpsVmError::InvalidAccess)),
+                        "invalidrestore" => matches!(result, Err(EpsVmError::InvalidRestore)),
+                        "undefined" => matches!(result, Err(EpsVmError::UndefinedName(_))),
+                        other => panic!("unexpected reference {other}"),
+                    },
+                    "{}: {result:?}",
+                    String::from_utf8_lossy(source)
+                );
+            } else {
+                let result = result.unwrap_or_else(|e| panic!("{}: {e}", String::from_utf8_lossy(source)));
+                let expected = case["values"].as_array().unwrap();
+                assert_eq!(result.evaluation.values().len(), expected.len());
+                for (actual, expected) in result.evaluation.values().iter().zip(expected) {
+                    let actual = match actual {
+                        EpsValue::Number(n) => as_double(*n),
+                        EpsValue::Boolean(b) => {
+                            if *b {
+                                1.
+                            } else {
+                                0.
+                            }
+                        }
+                        other => panic!("unexpected {other:?}"),
+                    };
+                    assert_eq!(
+                        actual,
+                        expected.as_f64().unwrap(),
+                        "{}",
+                        String::from_utf8_lossy(source)
+                    );
+                }
+                drop(result);
+            }
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn where_cancellation_work_and_unsupported_system_queries_are_explicit() {
+        let root = MemoryBudget::new(1_000_000);
+        let program=compile(b"/d 1 dict def d /x 7 put d begin /x where { /x get } {99} ifelse end /add where {systemdict eq} {false} ifelse save systemdict exch restore pop",&root);
+        let baseline = root.used();
+        let mut polls = 0;
+        drop(
+            evaluate_eps_vectors(&program, vm(), graphics(), &root, || {
+                polls += 1;
+                false
+            })
+            .unwrap(),
+        );
+        for stop in 1..=polls {
+            let mut at = 0;
+            assert!(
+                matches!(
+                    evaluate_eps_vectors(&program, vm(), graphics(), &root, || {
+                        at += 1;
+                        at == stop
+                    }),
+                    Err(EpsVmError::Cancelled)
+                ),
+                "cancel point {stop}"
+            );
+            assert_eq!(root.used(), baseline);
+        }
+        let mut success = false;
+        for allowance in 0..10_000 {
+            let mut limits = vm();
+            limits.max_work = allowance;
+            match evaluate_eps_vectors(&program, limits, graphics(), &root, || false) {
+                Err(EpsVmError::Limit(EpsVmLimit::Work)) => {}
+                Ok(result) => {
+                    drop(result);
+                    success = true;
+                    break;
+                }
+                other => panic!("work limit {allowance}: {other:?}"),
+            }
+            assert_eq!(root.used(), baseline);
+        }
+        assert!(success);
+        drop(program);
+        for code in [
+            b"systemdict length".as_slice(),
+            b"systemdict begin currentdict length",
+        ] {
+            let program = compile(code, &root);
+            assert!(matches!(
+                evaluate_eps_program(&program, vm(), &root, || false),
+                Err(EpsVmError::Unsupported(_))
+            ));
+            drop(program);
+            assert_eq!(root.used(), 0);
         }
     }
     #[test]

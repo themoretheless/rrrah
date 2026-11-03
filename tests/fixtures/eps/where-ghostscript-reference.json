@@ -1,0 +1,142 @@
+{
+  "generator_sha256": "0067ae8360b8caa48f97c7d61ce6d4bcc1ae3917e0cd8dec82e76cd8ccbe8329",
+  "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
+  "harness": "One top-level source file per fresh Ghostscript process; errordict handler only, no stopped/procedure wrapper",
+  "license": "CC0-1.0",
+  "reference": "Ghostscript test-only independent execution",
+  "version": "10.05.1",
+  "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+  "source_sha256": "288e4a83375ad9f620b39de6dcb665c48d448e020cceb012fd1a6dcb026d2771",
+  "cases": [
+    {
+      "code": "/rrrah_missing where",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "code": "/x 1 def /x where { /x get } {99} ifelse",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/x 1 def /d 1 dict def d begin /x 2 def /x where {dup d eq exch /x get} {99} ifelse end",
+      "values": [
+        1.0,
+        2.0
+      ]
+    },
+    {
+      "code": "/add where {systemdict eq} {false} ifelse",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/add {sub} def /add where {userdict eq} {false} ifelse",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d /add {mul} put d begin /add where {dup d eq exch /add get 7 3 3 -1 roll exec} {99} ifelse end",
+      "values": [
+        1.0,
+        21.0
+      ]
+    },
+    {
+      "code": "systemdict /add get 7 3 3 -1 roll exec",
+      "values": [
+        10.0
+      ]
+    },
+    {
+      "code": "/add {sub} def systemdict /add get 7 3 3 -1 roll exec",
+      "values": [
+        10.0
+      ]
+    },
+    {
+      "code": "systemdict /add known systemdict /rrrah_missing known",
+      "values": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "code": "systemdict begin /add where {systemdict eq} {false} ifelse end",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/add {sub} def systemdict begin 7 3 add end 7 3 add",
+      "values": [
+        10.0,
+        4.0
+      ]
+    },
+    {
+      "code": "systemdict /add 1 put",
+      "error": "invalidaccess"
+    },
+    {
+      "code": "systemdict begin /x 1 def",
+      "error": "invalidaccess"
+    },
+    {
+      "code": "save /s exch def /add where pop s restore systemdict eq",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d /x 1 put save /s exch def d begin /x where pop s restore d eq end",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "systemdict /rrrah_missing get",
+      "error": "undefined"
+    },
+    {
+      "code": "/where /where load def /add where {systemdict eq} {false} ifelse",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d /x 1 put d /x 2 put d begin /x where {/x get} {99} ifelse end",
+      "values": [
+        2.0
+      ]
+    },
+    {
+      "code": "currentdict userdict eq /true where {systemdict eq} {false} ifelse",
+      "values": [
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "code": "save /s exch def systemdict begin s restore currentdict systemdict eq end",
+      "values": [
+        1.0
+      ]
+    }
+  ],
+  "pixel": {
+    "source": "where-prolog.ai",
+    "source_sha256": "196badba68ae292343ef4833438e1c3b27e6bf9cbb3f3cf330907833b2b9f2df",
+    "rgb": "where-prolog.rgb",
+    "rgb_sha256": "91f7b820616741067c2f67ef77d2e6064e6d81d8bc29df4777b35c5046c9ed52",
+    "dimensions": [
+      8,
+      8
+    ],
+    "policy": "72dpi GraphicsAlphaBits=1 white backdrop; all 64 RGB pixels also checked analytically"
+  }
+}

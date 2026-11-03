@@ -232,6 +232,23 @@ fn independent_dictionary_rollback_survives_swap_and_metal() {
         "EPS dictionaries: independent Ghostscript RGB; retained green/blue paints, restored red array; RAM/quota/cancel/disk restore and exact SDR/HDR Metal; root zero"
     );
 }
+#[test]
+#[ignore = "requires actual Metal where scope, independent pixels and native swap"]
+fn independent_where_scope_survives_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required actual GPU adapter");
+    eprintln!("EPS where adapter: {}", gpu.adapter_name());
+    let body = include_str!("../../../tests/fixtures/eps/where-prolog.ai")
+        .split_once("%%EndComments\n")
+        .unwrap()
+        .1;
+    let source = format!("1 setgray 0 0 8 8 rectfill\n{body}");
+    let reference = include_bytes!("../../../tests/fixtures/eps/where-prolog.rgb");
+    let case = serde_json::json!({"name":"where_scope_and_system_operator_lookup","source":source,"rgb":reference.to_vec()});
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, &[case]);
+    eprintln!(
+        "EPS where: independent Ghostscript RGB; retained green/blue paints, restored red array; RAM/quota/cancel/disk restore and exact SDR/HDR Metal; root zero"
+    );
+}
 
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,

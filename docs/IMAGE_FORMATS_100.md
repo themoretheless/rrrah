@@ -1867,3 +1867,14 @@ Twenty independent Ghostscript source cases match. The pinned original Tiger
 passes `dict` and `load begin`, then refuses at instruction 50 (`where`). AI
 remains Pending; full system dictionaries, other key types and further operators
 are still missing. See [scope and current evidence](research/eps-dictionaries-2026-11-03/REPORT.md).
+
+### Native EPS where — 2026-11-03 (current follow-up)
+
+Added name-keyed `where`, a read-only namespace for implemented native system
+operators/constants, system `get`/`known`, stack priority and restore-safe static
+handles. Twenty independent Ghostscript traces match; 276 vector tests, 364
+ordinary viewer tests and the RAM/swap/SDR-HDR offscreen Metal fixture pass.
+Full system dictionary size/enumeration and unsupported operators remain open.
+Tiger passes `where`, then refuses when `ldef` loads `setdash`; the error index
+points at the procedure's `load` instruction. AI remains Pending. See [scope and
+evidence](research/eps-where-2026-11-03/REPORT.md).

@@ -1,3 +1,5 @@
+Current follow-up: [where and implemented system namespace](../eps-where-2026-11-03/REPORT.md). The scope below records the preceding dictionary revision.
+
 # Native bounded EPS dictionaries and dictionary stack
 
 The VM now implements name-keyed `dict`, `begin`, `end`, `currentdict`, `known`,

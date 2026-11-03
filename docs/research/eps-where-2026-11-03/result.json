@@ -1,0 +1,44 @@
+{
+  "scope": "Native name-keyed where and read-only implemented system namespace; no full systemdict enumeration/length or unsupported operators",
+  "sources": {
+    "crates/rrrah-vector/src/eps_vm.rs": "167eb0fda6bf0238862114a0db5d2c76d79c08c2836487365bd747f2b0d5cef0",
+    "crates/rrrah-app/tests/eps_lifecycle.rs": "f7b47a48544d1caa9235457266a8d85f38bd11c8d71c2c0f6c5aca3f76a95bfd",
+    "scripts/generate-eps-where-reference.py": "0067ae8360b8caa48f97c7d61ce6d4bcc1ae3917e0cd8dec82e76cd8ccbe8329",
+    "tests/fixtures/eps/where-ghostscript-reference.json": "bc815d041d02564c4286d265e28b512e71ddb3654a9633a93a1f71c757a60a37",
+    "tests/fixtures/eps/where-prolog.ai": "196badba68ae292343ef4833438e1c3b27e6bf9cbb3f3cf330907833b2b9f2df",
+    "tests/fixtures/eps/where-prolog.rgb": "91f7b820616741067c2f67ef77d2e6064e6d81d8bc29df4777b35c5046c9ed52",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "regressions": {
+    "vector": {
+      "result": "test result: ok. 276 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 54.10s",
+      "capture_sha256": "39620275c2354ddcd91c175a24d43b1edd85455499af01bbc114bf41b281f1b9"
+    },
+    "app": {
+      "result": "test result: ok. 364 passed; 0 failed; 109 ignored; 0 measured; 0 filtered out; finished in 7.66s",
+      "capture_sha256": "15d6f03cb21c2754fbf0f19e61d60e55f40418b4a2624bcf488984cb0a305b5d"
+    },
+    "metal": {
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 18 filtered out; finished in 0.07s",
+      "capture_sha256": "77548bb7c33c46712f27441836fbcb933415c8d164cb90d4168671db2e5a249a",
+      "retained_log_sha256": "88b4f895bd9f99341e05dede8b8bcac57f0e321285c228ce028e1c901d5529c0"
+    },
+    "production_check": {
+      "completed": true,
+      "capture_sha256": "60f762fcfdda8ea5ae9dc6e93989025c3e8a6472fdd692e9d8097208e45781e5"
+    },
+    "example_build": {
+      "completed": true,
+      "capture_sha256": "af9b8099a549ce127cf1cd381698ed32a752d5fe988add791dbcf5b5b6d829d0"
+    }
+  },
+  "ghostscript_cases": 20,
+  "new_vector_controls": 2,
+  "metal_adapter": "Metal Apple M4 Max",
+  "next_original_missing_symbol": "setdash",
+  "producer_original_qualified": false,
+  "format_counts_changed": false,
+  "rss_qualified": false,
+  "physical_hdr_qualified": false,
+  "nvidia_qualified": false
+}
