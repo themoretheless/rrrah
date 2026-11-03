@@ -2236,8 +2236,17 @@ pub fn evaluate_eps_vectors<'a, F: FnMut() -> bool>(
     budget: &MemoryBudget,
     cancelled: F,
 ) -> Result<EpsVectorExecution<'a>, EpsVmError> {
-    evaluate_eps_vectors_in_context(program, vm_limits, graphics_limits, budget, cancelled, false)
+    evaluate_eps_vectors_in_context(
+        program,
+        vm_limits,
+        graphics_limits,
+        budget,
+        cancelled,
+        false,
+        None,
+    )
 }
+#[cfg(test)]
 pub(crate) fn evaluate_eps_import_vectors<'a, F: FnMut() -> bool>(
     program: &EpsProgram<'a>,
     vm_limits: EpsVmLimits,
@@ -2245,7 +2254,25 @@ pub(crate) fn evaluate_eps_import_vectors<'a, F: FnMut() -> bool>(
     budget: &MemoryBudget,
     cancelled: F,
 ) -> Result<EpsVectorExecution<'a>, EpsVmError> {
-    evaluate_eps_vectors_in_context(program, vm_limits, graphics_limits, budget, cancelled, true)
+    evaluate_eps_vectors_in_context(program, vm_limits, graphics_limits, budget, cancelled, true, None)
+}
+pub(crate) fn evaluate_eps_device_import_vectors<'a, F: FnMut() -> bool>(
+    program: &EpsProgram<'a>,
+    vm_limits: EpsVmLimits,
+    graphics_limits: EpsGraphicsLimits,
+    budget: &MemoryBudget,
+    cancelled: F,
+    device: crate::eps_graphics::EpsDeviceContext,
+) -> Result<EpsVectorExecution<'a>, EpsVmError> {
+    evaluate_eps_vectors_in_context(
+        program,
+        vm_limits,
+        graphics_limits,
+        budget,
+        cancelled,
+        true,
+        Some(device),
+    )
 }
 fn evaluate_eps_vectors_in_context<'a, F: FnMut() -> bool>(
     program: &EpsProgram<'a>,
@@ -2254,6 +2281,7 @@ fn evaluate_eps_vectors_in_context<'a, F: FnMut() -> bool>(
     budget: &MemoryBudget,
     mut cancelled: F,
     import_boundary: bool,
+    device: Option<crate::eps_graphics::EpsDeviceContext>,
 ) -> Result<EpsVectorExecution<'a>, EpsVmError> {
     let mut graphics = EpsGraphics::new(graphics_limits, budget, &mut cancelled).map_err(|e| match e {
         EpsGraphicsError::Cancelled => EpsVmError::Cancelled,
@@ -2261,6 +2289,9 @@ fn evaluate_eps_vectors_in_context<'a, F: FnMut() -> bool>(
     })?;
     if import_boundary {
         graphics.enable_import_boundary();
+    }
+    if let Some(device) = device {
+        graphics.set_import_device(device);
     }
     let evaluation = evaluate_eps_impl(program, vm_limits, budget, &mut cancelled, Some(&mut graphics))?;
     if cancelled() {

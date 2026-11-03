@@ -1,0 +1,29 @@
+{
+  "scope": "Validated device context passed into native EPS import graphics owner",
+  "sources": {
+    "crates/rrrah-vector/src/eps_graphics.rs": "dc8150758a06f40456de1cfeab41b20bd99bf2b3759b05ca63541ee008416f64",
+    "crates/rrrah-vector/src/eps_document.rs": "8ac65943aa6b36c2cd8ecdcd5fa70e52d103d523d36a7fb21ac91fa88b602598",
+    "crates/rrrah-vector/src/eps_vm.rs": "16e5cfb00e756814b709c84a0c7065af4a66ea2dba3a4a198657025da166d260",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "checks": {
+    "check": {
+      "capture_sha256": "84248b5a49b0ef70b7c5b047e7d68bcc36e7742f448f0ed731d2393656d4d258",
+      "result": "production cargo check completed successfully"
+    },
+    "vector": {
+      "capture_sha256": "d9560922d11b75f617031227cb18e079841fe58832cfa46a99c4c54a2ff49eb2",
+      "result": "test result: ok. 290 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 53.56s"
+    },
+    "metal": {
+      "capture_sha256": "f4a134bb5035339f122370b91c0fd6d0eaf0c327ca6ee06d819f70b63528f386",
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.14s"
+    }
+  },
+  "metal_scenes": 8,
+  "metal_adapter": "Apple M4 Max",
+  "clippath_implemented": false,
+  "AI_qualified": false,
+  "physical_HDR_qualified": false,
+  "NVIDIA_qualified": false
+}

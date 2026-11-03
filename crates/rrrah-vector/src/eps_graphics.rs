@@ -13,6 +13,56 @@ pub(crate) fn flatness_limits(mut limits: crate::EpsFlattenLimits, flatness: f64
 pub type EpsMatrix = [f64; 6];
 pub type EpsPoint = [f64; 2];
 const IDENTITY: EpsMatrix = [1., 0., 0., 1., 0., 0.];
+/// Immutable output-device coordinates for an EPS import. The path arena stays
+/// in canonical EPS coordinates; device queries must include this mapping.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct EpsDeviceContext {
+    viewport: EpsMatrix,
+    initial_clip: [EpsPoint; 4],
+}
+impl EpsDeviceContext {
+    /// The finite output rectangle is [0,width] x [0,height], including the
+    /// fractional last pixel created by rounding an EPS page up to whole pixels.
+    pub fn new(viewport: EpsMatrix, width: u32, height: u32) -> Result<Self, EpsGraphicsError> {
+        finite(viewport)?;
+        if width == 0 || height == 0 {
+            return Err(EpsGraphicsError::Range);
+        }
+        let back = inverse(viewport)?;
+        let w = f64::from(width);
+        let h = f64::from(height);
+        Ok(Self {
+            viewport,
+            initial_clip: [
+                point(back, [0., 0.])?,
+                point(back, [w, 0.])?,
+                point(back, [w, h])?,
+                point(back, [0., h])?,
+            ],
+        })
+    }
+    pub fn viewport(self) -> EpsMatrix {
+        self.viewport
+    }
+    /// Initial device clip expressed in canonical EPS coordinates. This is a
+    /// polygon, not an axis-aligned bounding box, for rotated/sheared devices.
+    pub fn initial_clip(self) -> [EpsPoint; 4] {
+        self.initial_clip
+    }
+    /// Compose the source CTM with the actual device mapping (column vectors).
+    pub fn device_matrix(self, source: EpsMatrix) -> Result<EpsMatrix, EpsGraphicsError> {
+        let n = finite(source)?;
+        let m = self.viewport;
+        finite([
+            m[0] * n[0] + m[2] * n[1],
+            m[1] * n[0] + m[3] * n[1],
+            m[0] * n[2] + m[2] * n[3],
+            m[1] * n[2] + m[3] * n[3],
+            m[0] * n[4] + m[2] * n[5] + m[4],
+            m[1] * n[4] + m[3] * n[5] + m[5],
+        ])
+    }
+}
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum EpsDeviceColor {
     Gray(f64),
@@ -160,6 +210,7 @@ struct SavedState {
 pub struct EpsGraphics {
     context: u64,
     import_boundary: bool,
+    device_context: Option<EpsDeviceContext>,
     nodes: MutableBuffer<Node>,
     used_nodes: usize,
     paints: MutableBuffer<EpsPaint>,
@@ -263,6 +314,7 @@ impl EpsGraphics {
         Ok(Self {
             context,
             import_boundary: false,
+            device_context: None,
             nodes,
             used_nodes: 0,
             paints,
@@ -276,6 +328,14 @@ impl EpsGraphics {
     /// by source grestore. Standalone graphics retain their unencapsulated model.
     pub(crate) fn enable_import_boundary(&mut self) {
         self.import_boundary = true;
+    }
+    /// Device ownership is outside source gsave/save state and survives resets.
+    pub fn device_context(&self) -> Option<EpsDeviceContext> {
+        self.device_context
+    }
+    pub(crate) fn set_import_device(&mut self, context: EpsDeviceContext) {
+        self.device_context = Some(context);
+        self.enable_import_boundary();
     }
     /// Capture supported graphics state and the entire current save stack.
     /// Only stack metadata is copied; immutable path/clip nodes and paint records
@@ -1043,6 +1103,58 @@ impl EpsVectorScene {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn import_device_mapping_roundtrip_and_lifetime() {
+        // Fractional 3.25 x 2.25 point page at 2 pixels/point, rounded to 7x5.
+        let context = EpsDeviceContext::new([2., 0., 0., -2., 4., 8.], 7, 5).unwrap();
+        assert_eq!(
+            context.initial_clip(),
+            [[-2., 4.], [1.5, 4.], [1.5, 1.5], [-2., 1.5]]
+        );
+        let source = [0., 3., -4., 0., 5., -6.];
+        let device = context.device_matrix(source).unwrap();
+        assert_eq!(device, [0., -6., -8., 0., 14., 20.]);
+        assert_eq!(point(device, [2., 3.]).unwrap(), [-10., 8.]);
+        let root = MemoryBudget::new(100_000);
+        {
+            let mut g = EpsGraphics::new(
+                EpsGraphicsLimits {
+                    max_nodes: 8,
+                    max_paints: 2,
+                    max_saved_states: 2,
+                },
+                &root,
+                || false,
+            )
+            .unwrap();
+            let resident = root.used();
+            assert_eq!(g.device_context(), None);
+            g.set_import_device(context);
+            g.gsave().unwrap();
+            g.concat(source).unwrap();
+            g.init_matrix();
+            g.init_graphics();
+            g.grestore().unwrap();
+            g.grestore_all(|| false).unwrap();
+            assert_eq!(g.device_context(), Some(context));
+            assert_eq!(root.used(), resident);
+        }
+        assert_eq!(root.used(), 0);
+        // Sheared mapping retains the exact polygon instead of its bounding box.
+        let shear = EpsDeviceContext::new([1., 0., 1., 1., 0., 0.], 4, 3).unwrap();
+        assert_eq!(shear.initial_clip(), [[0., 0.], [4., 0.], [1., 3.], [-3., 3.]]);
+        for (i, p) in shear.initial_clip().into_iter().enumerate() {
+            assert_eq!(
+                point(shear.viewport(), p).unwrap(),
+                [[0., 0.], [4., 0.], [4., 3.], [0., 3.]][i]
+            );
+        }
+        assert!(EpsDeviceContext::new(IDENTITY, 0, 1).is_err());
+        assert!(EpsDeviceContext::new([0.; 6], 1, 1).is_err());
+        assert!(EpsDeviceContext::new([f64::NAN; 6], 1, 1).is_err());
+        assert!(context.device_matrix([f64::INFINITY; 6]).is_err());
+        assert!(EpsDeviceContext::new([f64::MIN_POSITIVE, 0., 0., 1., 0., 0.], u32::MAX, 1).is_err());
+    }
     #[test]
     fn flatness_import_boundary_cancel_is_atomic_and_needs_no_saved_slot() {
         let root = MemoryBudget::new(100_000);

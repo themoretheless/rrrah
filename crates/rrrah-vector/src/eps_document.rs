@@ -132,12 +132,14 @@ fn prepare_eps_document<F: FnMut() -> bool>(
         return Err(EpsDocumentError::Dimensions);
     }
     let program = compile_eps_program(&source, limits.compile, budget, &mut cancelled)?;
-    let EpsVectorExecution { evaluation, scene } = crate::eps_vm::evaluate_eps_import_vectors(
+    let EpsVectorExecution { evaluation, scene } = crate::eps_vm::evaluate_eps_device_import_vectors(
         &program,
         limits.vm,
         limits.graphics,
         budget,
         &mut cancelled,
+        crate::eps_graphics::EpsDeviceContext::new(viewport, width, height)
+            .map_err(crate::EpsVmError::Graphics)?,
     )?;
     drop(evaluation);
     drop(program);
