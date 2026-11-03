@@ -176,6 +176,24 @@ pub fn prepare_eps_stroke<F: FnMut() -> bool>(
             matrix: [1., 0., 0., 1., 0., 0.],
             style: EpsStrokeStyle {
                 width: 1.,
+                dash: if paint_info.style.dash.is_solid() {
+                    paint_info.style.dash
+                } else {
+                    let a = viewport;
+                    let b = paint_info.matrix;
+                    let matrix = [
+                        a[0] * b[0] + a[2] * b[1],
+                        a[1] * b[0] + a[3] * b[1],
+                        a[0] * b[2] + a[2] * b[3],
+                        a[1] * b[2] + a[3] * b[3],
+                        a[0] * b[4] + a[2] * b[5] + a[4],
+                        a[1] * b[4] + a[3] * b[5] + a[5],
+                    ];
+                    crate::eps_graphics::inverse(matrix)?;
+                    let mut dash = paint_info.style.dash;
+                    dash.device_matrix = Some(matrix);
+                    dash
+                },
                 ..paint_info.style
             },
         });

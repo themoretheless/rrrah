@@ -351,6 +351,100 @@ pub fn outline_eps_polyline<F: FnMut() -> bool>(
     if style.width == 0. {
         return Err(EpsStrokeError::Hairline);
     }
+    if !style.dash.is_solid() {
+        let exhausted = std::cell::Cell::new(false);
+        let remaining = std::cell::Cell::new(max_work);
+        let mut poll = || {
+            if cancelled() {
+                return true;
+            }
+            if remaining.get() == 0 {
+                exhausted.set(true);
+                return true;
+            }
+            remaining.set(remaining.get() - 1);
+            false
+        };
+        let mut source_points = None;
+        if let Some(matrix) = style.dash.device_matrix {
+            let inverse = crate::eps_graphics::inverse(matrix).map_err(|_| EpsStrokeError::Range)?;
+            let mut copy = budget.try_buffer(points.len(), [0.; 2])?;
+            for (to, from) in copy.iter_mut().zip(points) {
+                if poll() {
+                    return Err(if exhausted.get() {
+                        EpsStrokeError::Limit
+                    } else {
+                        EpsStrokeError::Cancelled
+                    });
+                }
+                *to = transform(inverse, *from)?;
+            }
+            source_points = Some(copy);
+        }
+        let dashed = crate::eps_dash::dash_eps_polyline_for_stroke(
+            source_points.as_deref().unwrap_or(points),
+            closed,
+            style.dash,
+            style.dash.device_matrix.unwrap_or(matrix),
+            style.cap,
+            max_segments,
+            max_work,
+            budget,
+            &mut poll,
+        );
+        if exhausted.get() {
+            return Err(EpsStrokeError::Limit);
+        }
+        let mut path = dashed?;
+        if let Some(matrix) = style.dash.device_matrix {
+            let mut mapped = budget.try_buffer(path.len(), EpsPathSegment::Move([0.; 2]))?;
+            for (to, from) in mapped.iter_mut().zip(path.iter()) {
+                if poll() {
+                    return Err(if exhausted.get() {
+                        EpsStrokeError::Limit
+                    } else {
+                        EpsStrokeError::Cancelled
+                    });
+                }
+                *to = match *from {
+                    EpsPathSegment::Move(p) => EpsPathSegment::Move(transform(matrix, p)?),
+                    EpsPathSegment::Line { start, end } => EpsPathSegment::Line {
+                        start: transform(matrix, start)?,
+                        end: transform(matrix, end)?,
+                    },
+                    EpsPathSegment::Close { start, end } => EpsPathSegment::Close {
+                        start: transform(matrix, start)?,
+                        end: transform(matrix, end)?,
+                    },
+                    _ => return Err(EpsStrokeError::Range),
+                };
+            }
+            path = mapped.freeze();
+        }
+        let prepared = crate::EpsPreparedStroke {
+            path,
+            matrix,
+            style: EpsStrokeStyle {
+                dash: crate::EpsDashPattern::default(),
+                ..style
+            },
+        };
+        let result = crate::outline_eps_prepared_stroke(
+            &prepared,
+            crate::EpsStrokeAssemblyLimits {
+                tolerance,
+                max_subpaths: max_segments,
+                max_segments,
+                max_work_per_subpath: max_work,
+            },
+            budget,
+            &mut poll as &mut dyn FnMut() -> bool,
+        );
+        if exhausted.get() {
+            return Err(EpsStrokeError::Limit);
+        }
+        return result;
+    }
     let cancelled = std::cell::RefCell::new(&mut cancelled);
     let work = std::cell::Cell::new(0usize);
     let tick = || {

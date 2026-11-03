@@ -20,6 +20,7 @@ pub struct EpsStrokeStyle {
     pub cap: u8,
     pub join: u8,
     pub miter_limit: f64,
+    pub dash: crate::EpsDashPattern,
 }
 impl Default for EpsStrokeStyle {
     fn default() -> Self {
@@ -29,6 +30,7 @@ impl Default for EpsStrokeStyle {
             cap: 0,
             join: 0,
             miter_limit: 10.,
+            dash: crate::EpsDashPattern::default(),
         }
     }
 }
@@ -655,6 +657,9 @@ impl EpsGraphics {
             EpsDeviceColor::Cmyk(v) => EpsDeviceColor::Cmyk(finite(v)?.map(|n| n.clamp(0., 1.))),
         };
         Ok(())
+    }
+    pub fn set_dash(&mut self, pattern: crate::EpsDashPattern) {
+        self.state.style.dash = pattern;
     }
     pub fn set_line_width(&mut self, width: f64) -> Result<(), EpsGraphicsError> {
         if !width.is_finite() || width < 0. {

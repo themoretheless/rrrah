@@ -1878,3 +1878,15 @@ Full system dictionary size/enumeration and unsupported operators remain open.
 Tiger passes `where`, then refuses when `ldef` loads `setdash`; the error index
 points at the procedure's `load` instruction. AI remains Pending. See [scope and
 evidence](research/eps-where-2026-11-03/REPORT.md).
+
+### Native EPS dash — 2026-11-03 (current follow-up)
+
+Added native setdash/currentdash, cached numeric patterns with original-array
+queries, bounded subdivision and affine/hairline stroking. The closed-corner
+four-pixel discrepancy is fixed against the unchanged reference; its strict gate
+is now automatic. 20 state traces and all 16 pixel cases match the explicit
+unadjusted Ghostscript profile. 284 vector and 364 viewer tests pass; all 16 cases
+pass RAM/swap/pressure/cancel and exact SDR-HDR offscreen Metal on Apple M4 Max.
+Tiger loads setdash and next refuses at currentflat. AI stays Pending; format
+counts, full device-profile/HDR/NVIDIA qualification are unchanged. See [scope,
+resolved witness and source pins](research/eps-dash-2026-11-03/REPORT.md).

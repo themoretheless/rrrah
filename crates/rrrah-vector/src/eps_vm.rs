@@ -94,6 +94,8 @@ pub enum EpsOperator {
     RectFill,
     RectStroke,
     RectClip,
+    SetDash,
+    CurrentDash,
     SetGray,
     SetRgbColor,
     SetCmykColor,
@@ -190,6 +192,7 @@ pub enum EpsVmLimit {
     Work,
     Saves,
     DictionaryStack,
+    DashItems,
 }
 #[derive(Debug, thiserror::Error)]
 pub enum EpsVmError {
@@ -973,6 +976,59 @@ impl<'a> Machine<'a, '_> {
         use EpsOperator as O;
         use EpsVmError as E;
         match op {
+            O::SetDash => {
+                if self.graphics.is_none() {
+                    return Err(E::Unsupported(at));
+                }
+                let offset = as_double(self.number()?);
+                let (begin, length) = self.array_handle()?;
+                if length > crate::EPS_MAX_DASH_ITEMS {
+                    return Err(E::Limit(EpsVmLimit::DashItems));
+                }
+                let mut items = [0.; crate::EPS_MAX_DASH_ITEMS];
+                for index in 0..length {
+                    work.tick()?;
+                    let EpsValue::Number(number) = self.arrays[begin + index] else {
+                        return Err(E::Type);
+                    };
+                    items[index] = as_double(number);
+                }
+                let mut pattern =
+                    crate::EpsDashPattern::new(&items[..length], offset).map_err(|error| match error {
+                        crate::EpsStrokeError::Limit => E::Limit(EpsVmLimit::DashItems),
+                        _ => E::Range,
+                    })?;
+                pattern.array_reference = Some((begin, length));
+                work.tick()?;
+                self.graphics.as_mut().unwrap().set_dash(pattern);
+            }
+            O::CurrentDash => {
+                let pattern = self.graphics.as_ref().ok_or(E::Unsupported(at))?.style().dash;
+                if self.length.checked_add(2).is_none_or(|n| n > self.operands.len()) {
+                    return Err(E::Limit(EpsVmLimit::Operands));
+                }
+                let (begin, length) = if let Some(reference) = pattern.array_reference {
+                    reference
+                } else {
+                    let length = pattern.items().len();
+                    if length == 0 {
+                        (0, 0)
+                    } else {
+                        let (begin, end) = self.array_range(length, work)?;
+                        for (index, item) in pattern.items().iter().enumerate() {
+                            work.tick()?;
+                            self.arrays[begin + index] = EpsValue::Number(EpsNumber::Real(*item as f32));
+                        }
+                        self.array_used = end;
+                        let mut linked = pattern;
+                        linked.array_reference = Some((begin, length));
+                        self.graphics.as_mut().unwrap().set_dash(linked);
+                        (begin, length)
+                    }
+                };
+                self.push(EpsValue::Array { begin, length })?;
+                self.push(EpsValue::Number(EpsNumber::Real(pattern.offset() as f32)))?;
+            }
             O::Dict => {
                 let hint = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
                 if hint > self.dictionary.len() || self.dict_used == self.dictionary.len() {
@@ -1933,6 +1989,8 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"rectfill" => O::RectFill,
         b"rectstroke" => O::RectStroke,
         b"rectclip" => O::RectClip,
+        b"setdash" => O::SetDash,
+        b"currentdash" => O::CurrentDash,
         b"setgray" => O::SetGray,
         b"setrgbcolor" => O::SetRgbColor,
         b"setcmykcolor" => O::SetCmykColor,
@@ -3286,6 +3344,58 @@ mod vector_tests {
             max_dictionary_entries: 32,
             max_execution_frames: 16,
             max_work: 100_000,
+        }
+    }
+    #[test]
+    fn dash_state_alias_snapshot_and_errors_match_ghostscript() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/dash-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 20);
+        for case in reference["cases"].as_array().unwrap() {
+            let root = MemoryBudget::new(1_000_000);
+            let source = case["code"].as_str().unwrap().as_bytes();
+            let program = compile(source, &root);
+            let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false);
+            if let Some(error) = case.get("error") {
+                assert!(
+                    match error.as_str().unwrap() {
+                        "rangecheck" => matches!(result, Err(EpsVmError::Range)),
+                        "typecheck" => matches!(result, Err(EpsVmError::Type)),
+                        "invalidrestore" => matches!(result, Err(EpsVmError::InvalidRestore)),
+                        other => panic!("unexpected reference {other}"),
+                    },
+                    "{}: {result:?}",
+                    String::from_utf8_lossy(source)
+                );
+            } else {
+                let result = result.unwrap_or_else(|e| panic!("{}: {e}", String::from_utf8_lossy(source)));
+                let expected = case["values"].as_array().unwrap();
+                assert_eq!(result.evaluation.values().len(), expected.len());
+                for (actual, expected) in result.evaluation.values().iter().zip(expected) {
+                    let actual = match actual {
+                        EpsValue::Number(n) => as_double(*n),
+                        EpsValue::Boolean(b) => {
+                            if *b {
+                                1.
+                            } else {
+                                0.
+                            }
+                        }
+                        other => panic!("unexpected {other:?}"),
+                    };
+                    assert_eq!(
+                        actual,
+                        expected.as_f64().unwrap(),
+                        "{}",
+                        String::from_utf8_lossy(source)
+                    );
+                }
+                drop(result);
+            }
+            drop(program);
+            assert_eq!(root.used(), 0);
         }
     }
     #[test]

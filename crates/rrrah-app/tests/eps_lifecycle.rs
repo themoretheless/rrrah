@@ -250,6 +250,30 @@ fn independent_where_scope_survives_swap_and_metal() {
     );
 }
 
+#[test]
+#[ignore = "requires actual Metal dash pixels, independent reference and disk restore"]
+fn independent_dash_pixels_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required actual GPU adapter");
+    eprintln!("EPS dash adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/dash-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let mut cases = reference["pixel_cases"].as_array().unwrap().clone();
+    assert_eq!(cases.len(), 16);
+    for case in &mut cases {
+        let source = format!(
+            "1 setgray 0 0 8 8 rectfill 0 setgray\n{}",
+            case["source"].as_str().unwrap()
+        );
+        case["source"] = serde_json::Value::String(source);
+    }
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, &cases);
+    eprintln!(
+        "EPS dash: 16 independent unadjusted cases, including closed corners, device-size zero fragments, affine transforms and cached array mutation; native RAM/pressure/cancel/disk restore/exact SDR-HDR Metal; final root zero"
+    );
+}
+
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,
     cases: &[serde_json::Value],

@@ -1,0 +1,59 @@
+{
+  "scope": "Native setdash/currentdash, bounded user-space subdivision and device-aware zero-fragment stroking; pinned fixture qualification, not complete PostScript/AI support",
+  "sources": {
+    "crates/rrrah-vector/src/eps_dash.rs": "7ae5736873143344cccb691e14b175e80ebd37ed8349657922e912ce0e6c73e4",
+    "crates/rrrah-vector/src/eps_graphics.rs": "5b26bc54c4508bd7c3154989c39529f439f410327ccec400beb082fad45358c0",
+    "crates/rrrah-vector/src/eps_stroke.rs": "fd4e8e0d474bc0fdb24131a9fe7b659bec2dcb43274d8c58254f81e5dc746c9d",
+    "crates/rrrah-vector/src/eps_stroke_prepare.rs": "e9bc521bcba60c9fb82df523627ceeba71559fafdf0b85d2f1e9afd003a6ea9d",
+    "crates/rrrah-vector/src/eps_vm.rs": "613394e0d51a46bc7fdd584eb5f0e554c09480ea6bce8080dc4c8fa2213fe084",
+    "crates/rrrah-vector/src/lib.rs": "f1982df7913cb03a28d57026675d1d41aca9f7e50fe6aa55155f544b7d9c25b5",
+    "crates/rrrah-app/tests/eps_lifecycle.rs": "31809219a4253357e9bdf02abeea106f17f26eda6754dd57bd3f6462d62d9e9e",
+    "scripts/generate-eps-dash-reference.py": "5beed0cd331a9c3ea5118447676b0d3e41ee495f5f3ceb71b64b3079ccbf2257",
+    "tests/fixtures/eps/dash-ghostscript-reference.json": "854544bf1e4962270869df2dbe553efb07d25219f51907c7872453103ae34755",
+    "tests/fixtures/eps/dash-prolog.ai": "35d375a14759348da74ac7bb36fef95b5b1ea6be18ac45ded0816ec56c812bca",
+    "tests/fixtures/eps/dash-prolog.rgb": "c0f97da0aab7d0ecd7a28e8f8eeaeeee8a58df2fd0e85d3a63a3640f77a97871",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "regressions": {
+    "vector": {
+      "result": "test result: ok. 284 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 53.38s",
+      "capture_sha256": "3241af940a8172c61dd923d1fba50a5c838506cd128711cab4df2387606717fe"
+    },
+    "app": {
+      "result": "test result: ok. 364 passed; 0 failed; 109 ignored; 0 measured; 0 filtered out; finished in 6.48s",
+      "capture_sha256": "d78474d9cc2e873d01daa0d6aa7b997d8ce54c3e02d553fe063bf61feceaa0fb"
+    },
+    "metal": {
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.50s",
+      "capture_sha256": "962804e1608b98f4b9864837da33a9f674777067312d44b48d89e034e352ffbd",
+      "retained_sha256": "168f0c5ed2ed18654169dcadb2e010462249dd5e79797e1425a9d5bbdfe12a21"
+    },
+    "production_check": {
+      "completed": true,
+      "capture_sha256": "397d5fa1c1cc09a8acdc70e957916f45bf8ebb918033643954c09f05892772e5"
+    },
+    "example_build": {
+      "completed": true,
+      "capture_sha256": "e49f8811955ed382ebbb643306d83cbb3ce732d08c36a43a60f38bd808e725d4"
+    }
+  },
+  "state_reference_cases": 20,
+  "pixel_reference_cases": 16,
+  "pixel_cases_matching": 16,
+  "closed_reference_unchanged": true,
+  "closed_difference_count": 0,
+  "closed_test_ignored": false,
+  "metal_adapter": "Metal Apple M4 Max",
+  "metal_pixel_cases": 16,
+  "new_automatic_vector_controls": 8,
+  "dash_item_limit": 32,
+  "singular_dashed_hairlines_refused": true,
+  "native_dash_all_possible_semantics_qualified": false,
+  "producer_original_qualified": false,
+  "next_original_operator": "currentflat",
+  "format_counts_changed": false,
+  "rss_qualified": false,
+  "speed_improvement_qualified": false,
+  "physical_hdr_qualified": false,
+  "nvidia_qualified": false
+}
