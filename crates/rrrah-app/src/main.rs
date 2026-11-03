@@ -66,6 +66,11 @@ mod glb_cache;
 )]
 mod glb_view;
 mod histogram_worker;
+#[allow(
+    dead_code,
+    reason = "Mixed model worker dispatch is staged until viewport publication"
+)]
+mod model_asset;
 mod model_swap;
 mod pipeline_telemetry;
 mod raster_playback;

@@ -198,3 +198,13 @@ This component is staged behind an explicit unused-module allowance. Ordinary
 GLB loader/worker dispatch, mixed model publication and navigation/prefetch
 integration remain outstanding. These offscreen tests do not qualify a physical
 HDR display, NVIDIA/CUDA, full glTF semantics, physical RSS bounds or speed.
+
+## Mixed application cache value
+
+`ModelAsset` provides one cache value/key space for legacy geometry and GLB.
+Its spill dispatcher preserves existing native payloads and selects RRGLB001 by
+magic; it does not wrap or transcode geometry. A one-entry real ImageSwapCache
+control alternates OFF and GLB, verifies resident shared-storage hits, restores
+both native families without invoking a source decoder, and releases the root
+to zero. See [mixed cache control](mixed-cache.log). Worker dispatch/publication
+still uses the legacy value; replacing that path remains outstanding.
