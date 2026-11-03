@@ -61,6 +61,8 @@ pub use rrrah_vector::{
     svg, wmf,
 };
 
+mod glb_swap;
+pub use glb_swap::{glb_asset_swap_payload_len, read_glb_asset_swap_payload, write_glb_asset_swap_payload};
 mod glb_asset;
 pub use glb_asset::{
     GlbAsset, GlbAssetError, GlbAssetImage, GlbAssetPrimitive, GlbAssetTexture, decode_glb_asset,

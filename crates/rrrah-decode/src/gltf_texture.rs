@@ -6,6 +6,12 @@ use rrrah_mesh::glb::{GlbDocument, GlbImageMime, GlbImageSource, GlbTextureRole}
 use thiserror::Error;
 #[path = "gltf_texture_source.rs"]
 mod source;
+#[cfg(test)]
+std::thread_local! {static CODEC_CALLS:std::cell::Cell<u64>=const {std::cell::Cell::new(0)};}
+#[cfg(test)]
+pub(crate) fn codec_calls() -> u64 {
+    CODEC_CALLS.with(std::cell::Cell::get)
+}
 const MAX_PIXELS_BYTES: u64 = 512 * 1024 * 1024;
 #[derive(Debug, Error)]
 pub enum GltfTextureError {
@@ -64,6 +70,58 @@ impl GltfTextureImage {
         })
     }
 }
+/// Admit source framing/metadata and validate a cached pixel layout without
+/// constructing an entropy decoder. Snapshot integrity is checked by its owner.
+pub(crate) fn restored_texture_layout(
+    bytes: &[u8],
+    mime: GlbImageMime,
+    width: u32,
+    height: u32,
+    sixteen: bool,
+    request: &DecodeRequest,
+    budget: &MemoryBudget,
+) -> Result<(), GltfTextureError> {
+    let (_segments, header, _) = source::prepare(bytes, mime, request, budget)?;
+    if width == 0
+        || height == 0
+        || width > 65536
+        || height > 65536
+        || width != header.width
+        || height != header.height
+        || sixteen != header.sixteen
+    {
+        return Err(GltfTextureError::Invalid("cached texture/source layout"));
+    }
+    request.check_cancelled()?;
+    Ok(())
+}
+pub(crate) fn restored_texture(
+    width: u32,
+    height: u32,
+    pixels: GltfTexturePixels,
+    request: &DecodeRequest,
+) -> Result<GltfTextureImage, GltfTextureError> {
+    let (samples, sixteen) = match &pixels {
+        GltfTexturePixels::Rgba8(p) => (p.len(), false),
+        GltfTexturePixels::Rgba16(p) => (p.len(), true),
+    };
+    if width == 0
+        || height == 0
+        || width > 65536
+        || height > 65536
+        || u64::from(width) * u64::from(height) * 4 != samples as u64
+        || samples as u64 * if sixteen { 2 } else { 1 } > MAX_PIXELS_BYTES
+    {
+        return Err(GltfTextureError::Invalid("cached texture pixel layout"));
+    }
+    request.check_cancelled()?;
+    Ok(GltfTextureImage {
+        width,
+        height,
+        role: GlbTextureRole::Normal,
+        pixels,
+    })
+}
 pub fn decode_glb_texture(
     document: &GlbDocument,
     texture: usize,
@@ -87,6 +145,8 @@ pub fn decode_gltf_texture_bytes(
     role: GlbTextureRole,
     request: &DecodeRequest,
 ) -> Result<GltfTextureImage, GltfTextureError> {
+    #[cfg(test)]
+    CODEC_CALLS.with(|count| count.set(count.get() + 1));
     request.check_cancelled()?;
     if request.image_index != 0 {
         return Err(DecodeError::UnsupportedImageIndex {

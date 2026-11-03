@@ -547,12 +547,76 @@ when a later selected primitive or image fails.
 - Stale generation, new-generation retry, selected point primitives/empty
   primitive arrays and failure on a second URI image after decoding the first
   all release transient and retained credits on error.
-- Regression: decode 284 passed/9 manual ignored, mesh 98 passed, GPU 80
+- Regression: decode 288 passed/9 manual ignored, mesh 98 passed, GPU 80
   passed/10 manual ignored; no failures. The six material controls, including
   three actual M4 Max/Metal probes, pass again after the native changes.
 - [Production checks](asset-check.log), formatting and diff checks pass. The only
   dependency change is a local rrrah-memory **test dependency**; no third-party
   version or production dependency changes.
+
+## Streaming lossless GLB snapshots
+
+`glb_asset_swap_payload_len`, `write_glb_asset_swap_payload` and
+`read_glb_asset_swap_payload` now implement an owned-asset native snapshot.
+Restoration never opens the request path and does not invoke PNG/JPEG entropy
+decoding. Source framing/JSON/selected geometry/materials are reconstructed and
+validated, and cached pixel layouts are checked against encoded image headers
+before pixel allocation. A shared preparation function keeps fresh and restored
+scene/material/image-index semantics identical. This is a native payload API
+with actual SwapStore composition, **not app ModelPayload/cache/navigation wiring**.
+
+The RRGLB001 wire representation is independent of native struct/ABI layout:
+
+| Part | Encoding |
+| --- | --- |
+| Header (32 bytes) | magic RRGLB001 (8), selected scene u64, source length u64, active image count u64 |
+| Source | Complete original GLB, including padding and unknown chunks |
+| Per-image header (32 bytes) | source image index u64, width/height u32, sample bits u32, reserved zero u32, pixel byte length u64 |
+| Per-image data | Straight RGBA8 bytes or canonical little-endian RGBA16 samples |
+| Footer (32 bytes) | BLAKE3 of every preceding payload byte |
+
+All integers above are little-endian. Active image records follow ascending
+source-image order, including sparse source IDs, and each referenced image is
+stored once. Counts/layouts, reserved fields and checksum must agree. Reads are
+bounded by the supplied payload size and leave the next envelope record unread.
+Writes stream directly; there is no whole serialized heap buffer. Fixed 16 KiB
+stack scratch handles u16 conversion/I/O chunks. Interrupted/short reads/writes
+retry while checking cancellation; a blocking OS call itself is not interruptible.
+The caller owns identity/versioning, spill policy and atomic file publication.
+
+[Four snapshot controls](swap-controls.log) now prove:
+
+- Native PNG8, PNG16, JPEG baseline and progressive round-trip to identical
+  serialized bytes, source bytes and retained asset weights; the original source
+  file is absent for the authored-image cases. Per-thread instrumentation records
+  zero additional texture decode calls during restore.
+- PNG16 wire bytes agree with the independent LE16 fixture oracle, preserving
+  low bits. Unknown XTRA chunks round-trip unchanged. A progressive case retains
+  active source image1 while source image0 is an unused URI; record indices stay
+  distinct from compact decoded-table indices.
+- Explicit scene0 is preserved when source default is scene1; empty scene3 also
+  round-trips. A following sentinel envelope record is not consumed.
+- Real SwapStore streaming writes/reads the 268196-byte original BoxTextured
+  snapshot at exact disk payload quota. A second object refuses, cloned handles
+  retain disk credit, and final handle/asset drops release disk and RAM roots.
+  Cancellation partway through pixel writing rolls back the temporary file and
+  disk object/byte admission; no partial handle is published.
+- Snapshot restore retains 272620 managed bytes and peaks at 272628 on this Mac;
+  272627 refuses and releases all owners, while 272628 succeeds. Fresh decode
+  still peaks at 469356 for this fixture. These are managed allocation counters,
+  **not physical RSS/disk-block measurements or a general latency benchmark**.
+- All header prefixes and source/image/footer boundary cuts refuse; corrupted
+  magic/scene/counts/image records/pixels/footer refuse. A rechecksummed image
+  dimension mismatch still refuses. Short/interrupted reads/writes, cancellation
+  during pixel reads and pre-cancelled writes leave no retained allocation.
+- Full regression is decode 288 passed/9 manual ignored, mesh 98 passed, GPU
+  80 passed/10 manual ignored; the six material controls with three actual Metal
+  probes pass again. Production/format/diff checks pass; no dependency changes.
+
+There is still no cross-process persistent cache key/versioning policy, app spill
+queue, GLB prefetch or visible generation publication for this payload. A native
+write failure can leave bytes in an arbitrary caller-owned Write sink; atomic
+rollback is the SwapStore/caller's responsibility and is tested above.
 
 ## Required continuation
 
@@ -564,8 +628,8 @@ when a later selected primitive or image fails.
    image resources. General MikkTSpace/seams, material extensions, skin/morph/
    animation and point/line geometry remain open. Required unsupported
    extensions still explicitly refuse.
-3. Integrate app cache identity, GLB lossless swap and previous/next prefetch
-   with TTL/size/count and cancellation/pressure, using the owned asset.
+3. Integrate the native snapshots with app cache identity/versioning, spill
+   queues and previous/next prefetch with TTL/size/count and cancellation/pressure.
 4. Original independent rendered model comparisons, actual Metal SDR/HDR
    window presentation and measured file-to-first-frame latency.
    NVIDIA/CUDA remains deferred by the user.

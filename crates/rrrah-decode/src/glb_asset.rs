@@ -10,6 +10,8 @@ const MAX_VERTICES: usize = 16_777_216;
 #[derive(Debug, thiserror::Error)]
 pub enum GlbAssetError {
     #[error(transparent)]
+    Io(#[from] std::io::Error),
+    #[error(transparent)]
     Source(#[from] crate::DecodeError),
     #[error(transparent)]
     Container(#[from] GlbError),
@@ -154,6 +156,36 @@ pub fn decode_glb_asset(
     request.memory_budget = Some(budget.clone());
     let request = &request;
     let document = GlbDocument::read(request)?;
+    prepare_glb_asset(
+        document,
+        selection,
+        request,
+        &budget,
+        None,
+        |_, mime, bytes, request| {
+            Ok(decode_gltf_texture_bytes(
+                bytes,
+                mime,
+                GlbTextureRole::Normal,
+                request,
+            )?)
+        },
+    )
+}
+
+pub(crate) fn prepare_glb_asset(
+    document: GlbDocument,
+    selection: Option<usize>,
+    request: &DecodeRequest,
+    budget: &MemoryBudget,
+    expected_images: Option<usize>,
+    mut image_provider: impl FnMut(
+        usize,
+        crate::glb::GlbImageMime,
+        &[u8],
+        &DecodeRequest,
+    ) -> Result<GltfTextureImage, GlbAssetError>,
+) -> Result<GlbAsset, GlbAssetError> {
     let scene = document.scene(selection, request)?;
     let mesh_count = count(&document, "meshes", request)?;
     let image_count = count(&document, "images", request)?;
@@ -233,6 +265,9 @@ pub fn decode_glb_asset(
     if primitives.values.len() != primitive_count {
         return Err(GlbError::Invalid("asset primitive count changed").into());
     }
+    if expected_images.is_some_and(|count| count != needed) {
+        return Err(GlbError::Invalid("swap image count").into());
+    }
     let mut images = Table::new(needed, &budget)?;
     for (source_index, slot) in image_slots.iter_mut().enumerate() {
         request.check_cancelled()?;
@@ -240,9 +275,7 @@ pub fn decode_glb_asset(
             continue;
         }
         let pixels = match document.image_source(source_index, request)? {
-            GlbImageSource::Embedded { mime, bytes } => {
-                decode_gltf_texture_bytes(bytes, mime, GlbTextureRole::Normal, request)?
-            }
+            GlbImageSource::Embedded { mime, bytes } => image_provider(source_index, mime, bytes, request)?,
             GlbImageSource::Uri { .. } => {
                 return Err(GltfTextureError::Unsupported("external/data URI image resolution").into());
             }

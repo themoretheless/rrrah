@@ -132,6 +132,28 @@ impl GlbSource {
         let layout = GlbLayout::parse(&bytes, request)?;
         Ok(Self { bytes, layout })
     }
+    /// Reuses an already admitted allocation. Its original budget is retained;
+    /// callers composing a shared root must allocate the input under that root.
+    pub fn from_managed(
+        bytes: rrrah_core::SharedBuffer<u8>,
+        request: &DecodeRequest,
+    ) -> Result<Self, GlbError> {
+        request.check_cancelled()?;
+        if request.image_index != 0 {
+            return Err(DecodeError::UnsupportedImageIndex {
+                index: request.image_index,
+            }
+            .into());
+        }
+        if bytes.len() as u64 > crate::bounded_io::MAX_INPUT_BYTES {
+            return Err(GlbError::Limit("container input bytes"));
+        }
+        let layout = GlbLayout::parse(&bytes, request)?;
+        Ok(Self {
+            bytes: bytes.into(),
+            layout,
+        })
+    }
     /// Original JSON bytes including padding. This container-only accessor
     /// does not validate JSON; `GlbDocument` validates syntax and asset version.
     /// Scene/accessor schema validation remains a subsequent layer.
@@ -173,7 +195,10 @@ impl GlbDocument {
             .saturating_add(self.json.capacity_bytes())
     }
     pub fn read(request: &DecodeRequest) -> Result<Self, GlbError> {
-        let source = GlbSource::read(request)?;
+        Self::from_source(GlbSource::read(request)?, request)
+    }
+    pub fn from_source(source: GlbSource, request: &DecodeRequest) -> Result<Self, GlbError> {
+        request.check_cancelled()?;
         let json = crate::glb_json::JsonTape::parse(source.json_bytes(), request)?;
         let document = Self { source, json };
         let root = document.root();

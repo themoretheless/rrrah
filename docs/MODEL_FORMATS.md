@@ -810,7 +810,7 @@ without expanding whole meshes.
 semantics, ignoring display metadata. The owned `GlbAsset` now validates selected
 primitives, retains hierarchy/geometry and decodes shared images once. Its real
 LeaseCache composition verifies byte/count/TTL behavior and last-owner memory
-release. Decode regression: 284 passed, 9 manual ignored. Codec scratch is not
+release. Decode regression: 288 passed, 9 manual ignored. Codec scratch is not
 fully root-accounted; asset bounds are conservative transformed local AABBs.
 [Native scope and evidence](research/glb-native-2026-11-03/REPORT.md).
 
@@ -821,8 +821,12 @@ including three actual M4 Max/Metal probes pass; GPU regression is 80 passed,
 10 manual ignored. These are bounded component proofs.
 [GPU scope and evidence](research/glb-material-gpu-2026-11-03/REPORT.md).
 
+Native RRGLB001 snapshots now restore scene and raw PNG8/16/JPEG pixels without
+reopening source files or rerunning image entropy decoders. Actual SwapStore
+composition, canonical u16 wire samples, integrity, quotas and cancellation pass.
+
 GLB remains outside ordinary viewing. App model/cache/worker integration,
-lossless GLB swap, prefetch/navigation, general tangent/UV/transparent-ordering
+GLB snapshot spill/restore routing, prefetch/navigation, general tangent/UV/transparent-ordering
 qualification, full schema/extensions, external resources, skin/animation and
 point/line handling remain outstanding. No full GLB or 100-format qualification
 is claimed.

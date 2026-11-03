@@ -1,0 +1,33 @@
+warning: hiding a lifetime that's elided elsewhere is confusing
+   --> vendor/jxl-color/src/icc/parse.rs:229:38
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile> {
+    |                                      ^^^^^            ^^^^^^^^^^ the same lifetime is hidden here
+    |                                      |
+    |                                      the lifetime is elided here
+    |
+    = help: the same lifetime is referred to in inconsistent ways, making the signature confusing
+    = note: `#[warn(mismatched_lifetime_syntaxes)]` on by default
+help: use `'_` for type paths
+    |
+229 | pub(crate) fn parse_icc_raw(profile: &[u8]) -> Result<IccProfile<'_>> {
+    |                                                                 ++++
+
+warning: `jxl-color` (lib) generated 1 warning (run `cargo fix --lib -p jxl-color` to apply 1 suggestion)
+   Compiling rrrah-decode v0.1.0 (/Users/themoretheless/Documents/Sources/rrrah/crates/rrrah-decode)
+    Finished `test` profile [optimized + debuginfo] target(s) in 10.38s
+     Running unittests src/lib.rs (/Users/themoretheless/.codex/tmp/rrrah-glb-material-target-20261103/debug/deps/rrrah_decode-171946670f41680c)
+
+running 4 tests
+test glb_swap::tests::explicit_nondefault_and_empty_scene_selection_survives_the_snapshot ... ok
+GLB snapshot case0: 268196 bytes, retained 272620, zero additional codec calls
+GLB snapshot SwapStore disk exact 268196; retained RAM 272620; both roots release to zero
+GLB snapshot case1: 6280 bytes, retained 10816, zero additional codec calls
+test glb_swap::tests::actual_swap_store_streaming_roundtrip_disk_quota_and_last_owners ... ok
+GLB snapshot case2: 8008 bytes, retained 12544, zero additional codec calls
+GLB snapshot case3: 7924 bytes, retained 12508, zero additional codec calls
+test glb_swap::tests::raw_8_16_baseline_progressive_and_absent_source_restore_without_codec_calls ... ok
+GLB snapshot restore managed peak 272628; one-byte refusal, truncation/corruption/interrupted reads/cancel cleanup passed
+test glb_swap::tests::truncation_checksum_shape_quota_and_interrupted_cancel_never_publish_partial_asset ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 293 filtered out; finished in 0.01s
