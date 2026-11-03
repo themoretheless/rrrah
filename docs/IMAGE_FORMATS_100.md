@@ -1857,3 +1857,13 @@ AI remains Pending: dictionary objects/stacks and other Illustrator operators
 are still missing. This supersedes the earlier checkpoint-only status without
 changing format counts or qualifying NVIDIA/physical HDR. See [current scope
 and evidence](research/eps-vm-save-2026-11-03/VM.md).
+
+### Native EPS dictionaries — 2026-11-03 (current follow-up)
+
+Added bounded name-keyed dictionaries, dictionary-stack scope and lookup,
+`currentdict`/`known`, and dictionary `get`/`put`/`length`. Existing VM rollback
+now includes dictionary records and validates surviving dictionary-stack handles.
+Twenty independent Ghostscript source cases match. The pinned original Tiger
+passes `dict` and `load begin`, then refuses at instruction 50 (`where`). AI
+remains Pending; full system dictionaries, other key types and further operators
+are still missing. See [scope and current evidence](research/eps-dictionaries-2026-11-03/REPORT.md).

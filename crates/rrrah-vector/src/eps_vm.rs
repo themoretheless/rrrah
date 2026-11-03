@@ -8,6 +8,11 @@ use rrrah_core::{BufferError, MemoryBudget, MutableBuffer, SharedBuffer};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EpsOperator {
+    Dict,
+    Begin,
+    End,
+    CurrentDict,
+    Known,
     Save,
     Restore,
     Add,
@@ -122,6 +127,9 @@ pub enum EpsValue<'a> {
         identity: u64,
     },
     Mark,
+    Dictionary {
+        identity: usize,
+    },
     Array {
         begin: usize,
         length: usize,
@@ -139,8 +147,11 @@ pub enum EpsValue<'a> {
 #[derive(Debug, Clone, Copy)]
 pub struct EpsVmLimits {
     pub max_operands: usize,
+    /// Capacity of the initial user table and, separately, the shared dynamic
+    /// dictionary record arena (including one identity record per dictionary).
     pub max_dictionary_entries: usize,
-    /// Includes the top-level execution frame.
+    /// Includes the top-level execution frame. Also bounds dictionary-stack
+    /// depth including the initial user dictionary, and save depth (capped at 128).
     pub max_execution_frames: usize,
     /// Includes instructions, dictionary hashing/probes, and bulk stack work.
     pub max_work: usize,
@@ -161,6 +172,8 @@ pub struct EpsEvaluation<'a> {
     length: usize,
     // Array handles in operands borrow this retained arena.
     _arrays: SharedBuffer<EpsValue<'a>>,
+    _dict_records: SharedBuffer<DictRecord<'a>>,
+    _user_dictionary: Option<SharedBuffer<Entry<'a>>>,
 }
 impl<'a> EpsEvaluation<'a> {
     pub fn values(&self) -> &[EpsValue<'a>] {
@@ -175,6 +188,7 @@ pub enum EpsVmLimit {
     ExecutionFrames,
     Work,
     Saves,
+    DictionaryStack,
 }
 #[derive(Debug, thiserror::Error)]
 pub enum EpsVmError {
@@ -188,6 +202,8 @@ pub enum EpsVmError {
     InvalidExit,
     #[error("PostScript restore would invalidate a live object or save identity")]
     InvalidRestore,
+    #[error("PostScript dictionary stack underflow")]
+    DictionaryStackUnderflow,
     #[error("PostScript operand stack underflow")]
     StackUnderflow,
     #[error("PostScript operand type mismatch")]
@@ -288,9 +304,27 @@ struct Binding {
     // bind makes subsidiary executable arrays read-only, not the outer array.
     readonly: bool,
 }
+#[derive(Debug, Clone, Copy)]
+struct DictRecord<'a> {
+    owner: usize,
+    entry: Entry<'a>,
+}
+impl Default for DictRecord<'_> {
+    fn default() -> Self {
+        Self {
+            owner: 0,
+            entry: Entry {
+                key: None,
+                value: EpsValue::Null,
+            },
+        }
+    }
+}
 struct VmSave<'a> {
     identity: u64,
     dictionary: MutableBuffer<Entry<'a>>,
+    dict_records: MutableBuffer<DictRecord<'a>>,
+    dict_used: usize,
     arrays: MutableBuffer<EpsValue<'a>>,
     array_used: usize,
     bindings: MutableBuffer<Binding>,
@@ -318,6 +352,9 @@ struct Machine<'a, 'g> {
     saves: Option<Box<VmSave<'a>>>,
     save_depth: usize,
     next_save: u64,
+    dict_stack: MutableBuffer<EpsValue<'a>>,
+    dict_depth: usize,
+    retain_user_dictionary: bool,
     bindings: MutableBuffer<Binding>,
     graphics: Option<&'g mut EpsGraphics>,
     operands: MutableBuffer<EpsValue<'a>>,
@@ -327,10 +364,102 @@ struct Machine<'a, 'g> {
     array_budget: MemoryBudget,
     length: usize,
     dictionary: MutableBuffer<Entry<'a>>,
+    dict_records: MutableBuffer<DictRecord<'a>>,
+    dict_used: usize,
     frames: MutableBuffer<Frame>,
     depth: usize,
 }
 impl<'a> Machine<'a, '_> {
+    fn current_dictionary(&self) -> usize {
+        match self.dict_stack.get(self.dict_depth.wrapping_sub(1)) {
+            Some(EpsValue::Dictionary { identity }) => *identity,
+            _ => 0,
+        }
+    }
+    fn dict_find<F: FnMut() -> bool>(
+        &self,
+        identity: usize,
+        key: &[u8],
+        work: &mut Work<F>,
+    ) -> Result<Option<usize>, EpsVmError> {
+        if identity == 0 {
+            return Ok(self
+                .slot(key, work)?
+                .filter(|index| self.dictionary[*index].key.is_some()));
+        }
+        for index in (0..self.dict_used).rev() {
+            work.tick()?;
+            let record = self.dict_records[index];
+            if record.owner != identity {
+                continue;
+            }
+            if let Some(existing) = record.entry.key {
+                if existing.len() != key.len() {
+                    continue;
+                }
+                let mut equal = true;
+                for (&a, &b) in existing.iter().zip(key) {
+                    work.tick()?;
+                    if a != b {
+                        equal = false;
+                        break;
+                    }
+                }
+                if equal {
+                    return Ok(Some(index));
+                }
+            }
+        }
+        Ok(None)
+    }
+    fn dict_value(&self, identity: usize, index: usize) -> EpsValue<'a> {
+        if identity == 0 {
+            self.dictionary[index].value
+        } else {
+            self.dict_records[index].entry.value
+        }
+    }
+    fn dict_put<F: FnMut() -> bool>(
+        &mut self,
+        identity: usize,
+        key: &'a [u8],
+        value: EpsValue<'a>,
+        work: &mut Work<F>,
+    ) -> Result<(), EpsVmError> {
+        let index = if identity == 0 {
+            self.slot(key, work)?
+                .ok_or(EpsVmError::Limit(EpsVmLimit::Dictionary))?
+        } else if let Some(index) = self.dict_find(identity, key, work)? {
+            index
+        } else {
+            if self.dict_used == self.dict_records.len() {
+                return Err(EpsVmError::Limit(EpsVmLimit::Dictionary));
+            }
+            work.tick()?;
+            let index = self.dict_used;
+            self.dict_used += 1;
+            index
+        };
+        let entry = Entry {
+            key: Some(key),
+            value,
+        };
+        if identity == 0 {
+            self.dictionary[index] = entry;
+        } else {
+            self.dict_records[index] = DictRecord {
+                owner: identity,
+                entry,
+            };
+        }
+        Ok(())
+    }
+    fn dictionary_identity(&mut self) -> Result<usize, EpsVmError> {
+        match self.pop()? {
+            EpsValue::Dictionary { identity } => Ok(identity),
+            _ => Err(EpsVmError::Type),
+        }
+    }
     fn save_vm<F: FnMut() -> bool>(&mut self, work: &mut Work<F>) -> Result<(), EpsVmError> {
         if self.length == self.operands.len() {
             return Err(EpsVmError::Limit(EpsVmLimit::Operands));
@@ -352,6 +481,12 @@ impl<'a> Machine<'a, '_> {
                 key: None,
                 value: EpsValue::Null,
             },
+            &self.array_budget,
+            work,
+        )?;
+        let dict_records = snapshot_buffer(
+            &self.dict_records,
+            DictRecord::default(),
             &self.array_budget,
             work,
         )?;
@@ -382,6 +517,11 @@ impl<'a> Machine<'a, '_> {
             .iter()
             .chain(self.arrays[..self.array_used].iter())
             .chain(self.dictionary.iter().map(|entry| &entry.value))
+            .chain(
+                self.dict_records[..self.dict_used]
+                    .iter()
+                    .map(|record| &record.entry.value),
+            )
         {
             mark(if let EpsValue::Procedure { begin, end, .. } = *value {
                 Some((begin, end))
@@ -416,6 +556,8 @@ impl<'a> Machine<'a, '_> {
         let save = Box::new(VmSave {
             identity: self.next_save,
             dictionary,
+            dict_records,
+            dict_used: self.dict_used,
             arrays,
             array_used: self.array_used,
             bindings,
@@ -471,9 +613,28 @@ impl<'a> Machine<'a, '_> {
                 }
                 EpsValue::Procedure { begin, end, .. } => begin == end || procedure_valid(begin, end),
                 EpsValue::Save { identity: other } => other <= identity,
+                EpsValue::Dictionary { identity: id } => {
+                    id == 0
+                        || (id <= target.dict_used
+                            && target.dict_records[id - 1].owner == id
+                            && target.dict_records[id - 1].entry.key.is_none())
+                }
                 _ => true,
             };
             if !valid {
+                return Err(EpsVmError::InvalidRestore);
+            }
+        }
+        for value in &self.dict_stack[..self.dict_depth] {
+            work.tick()?;
+            let EpsValue::Dictionary { identity: id } = *value else {
+                return Err(EpsVmError::InvalidRestore);
+            };
+            if id != 0
+                && !(id <= target.dict_used
+                    && target.dict_records[id - 1].owner == id
+                    && target.dict_records[id - 1].entry.key.is_none())
+            {
                 return Err(EpsVmError::InvalidRestore);
             }
         }
@@ -510,6 +671,8 @@ impl<'a> Machine<'a, '_> {
         }
         self.saves = save.previous.take();
         self.dictionary = save.dictionary;
+        self.dict_records = save.dict_records;
+        self.dict_used = save.dict_used;
         self.arrays = save.arrays;
         self.array_used = save.array_used;
         self.bindings = save.bindings;
@@ -658,10 +821,16 @@ impl<'a> Machine<'a, '_> {
         at: usize,
         work: &mut Work<F>,
     ) -> Result<EpsValue<'a>, EpsVmError> {
-        if let Some(index) = self.slot(key, work)? {
-            if self.dictionary[index].key.is_some() {
-                return Ok(self.dictionary[index].value);
+        for handle in self.dict_stack[..self.dict_depth].iter().rev() {
+            work.tick()?;
+            if let EpsValue::Dictionary { identity } = *handle {
+                if let Some(index) = self.dict_find(identity, key, work)? {
+                    return Ok(self.dict_value(identity, index));
+                }
             }
+        }
+        if let Some(index) = self.dict_find(0, key, work)? {
+            return Ok(self.dictionary[index].value);
         }
         match key {
             b"true" => Ok(EpsValue::Boolean(true)),
@@ -757,6 +926,65 @@ impl<'a> Machine<'a, '_> {
         use EpsOperator as O;
         use EpsVmError as E;
         match op {
+            O::Dict => {
+                let hint = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
+                if hint > self.dictionary.len() || self.dict_used == self.dictionary.len() {
+                    return Err(E::Limit(EpsVmLimit::Dictionary));
+                }
+                work.tick()?;
+                if self.dict_records.is_empty() {
+                    self.dict_records = self
+                        .array_budget
+                        .try_buffer(self.dictionary.len(), DictRecord::default())?;
+                }
+                work.tick()?;
+                let identity = self.dict_used + 1;
+                self.dict_records[self.dict_used] = DictRecord {
+                    owner: identity,
+                    entry: Entry {
+                        key: None,
+                        value: EpsValue::Null,
+                    },
+                };
+                self.dict_used += 1;
+                self.push(EpsValue::Dictionary { identity })?;
+            }
+            O::Begin => {
+                let identity = self.dictionary_identity()?;
+                if self.dict_depth + 1 >= self.frames.len() {
+                    return Err(E::Limit(EpsVmLimit::DictionaryStack));
+                }
+                work.tick()?;
+                if self.dict_stack.is_empty() {
+                    self.dict_stack = self
+                        .array_budget
+                        .try_buffer(self.frames.len() - 1, EpsValue::Null)?;
+                }
+                work.tick()?;
+                self.dict_stack[self.dict_depth] = EpsValue::Dictionary { identity };
+                self.dict_depth += 1;
+            }
+            O::End => {
+                self.dict_depth = self
+                    .dict_depth
+                    .checked_sub(1)
+                    .ok_or(E::DictionaryStackUnderflow)?;
+            }
+            O::CurrentDict => {
+                let identity = self.current_dictionary();
+                if identity == 0 {
+                    self.retain_user_dictionary = true;
+                }
+                self.push(EpsValue::Dictionary { identity })?;
+            }
+            O::Known => {
+                let EpsValue::LiteralName(key) = self.pop()? else {
+                    return Err(E::Type);
+                };
+                let identity = self.dictionary_identity()?;
+                let known = self.dict_find(identity, key, work)?.is_some();
+                self.push(EpsValue::Boolean(known))?;
+            }
             O::Save => return self.save_vm(work),
             O::Restore => return self.restore_vm(work),
             O::Bind => return self.bind(work),
@@ -1005,11 +1233,7 @@ impl<'a> Machine<'a, '_> {
                 let EpsValue::LiteralName(key) = self.pop()? else {
                     return Err(E::Type);
                 };
-                let index = self.slot(key, work)?.ok_or(E::Limit(EpsVmLimit::Dictionary))?;
-                self.dictionary[index] = Entry {
-                    key: Some(key),
-                    value,
-                };
+                self.dict_put(self.current_dictionary(), key, value, work)?;
             }
             O::Load => {
                 let EpsValue::LiteralName(key) = self.pop()? else {
@@ -1064,15 +1288,22 @@ impl<'a> Machine<'a, '_> {
             }
             O::Put => {
                 let value = self.pop()?;
-                let index = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
-                let EpsValue::Array { begin, length } = self.pop()? else {
-                    return Err(E::Type);
-                };
-                if index >= length {
-                    return Err(E::Range);
+                let key = self.pop()?;
+                let container = self.pop()?;
+                match (container, key) {
+                    (EpsValue::Dictionary { identity }, EpsValue::LiteralName(key)) => {
+                        self.dict_put(identity, key, value, work)?
+                    }
+                    (EpsValue::Array { begin, length }, EpsValue::Number(EpsNumber::Integer(index))) => {
+                        let index = usize::try_from(index).map_err(|_| E::Range)?;
+                        if index >= length {
+                            return Err(E::Range);
+                        }
+                        work.tick()?;
+                        self.arrays[begin + index] = value;
+                    }
+                    _ => return Err(E::Type),
                 }
-                work.tick()?;
-                self.arrays[begin + index] = value;
             }
             O::ALoad => {
                 let (begin, length) = self.array_handle()?;
@@ -1122,21 +1353,46 @@ impl<'a> Machine<'a, '_> {
                 self.copy_array_items(source, begin + index, count, work)?;
             }
             O::Length => {
-                let EpsValue::Array { length, .. } = self.pop()? else {
-                    return Err(E::Type);
+                let length = match self.pop()? {
+                    EpsValue::Array { length, .. } => length,
+                    EpsValue::Dictionary { identity } => {
+                        let mut count = 0;
+                        if identity == 0 {
+                            for entry in self.dictionary.iter() {
+                                work.tick()?;
+                                count += usize::from(entry.key.is_some());
+                            }
+                        } else {
+                            for record in &self.dict_records[..self.dict_used] {
+                                work.tick()?;
+                                count += usize::from(record.owner == identity && record.entry.key.is_some());
+                            }
+                        }
+                        count
+                    }
+                    _ => return Err(E::Type),
                 };
-                let length = i32::try_from(length).map_err(|_| E::Range)?;
-                self.push(EpsValue::Number(EpsNumber::Integer(length)))?;
+                self.push(EpsValue::Number(EpsNumber::Integer(
+                    i32::try_from(length).map_err(|_| E::Range)?,
+                )))?;
             }
             O::Get => {
-                let index = usize::try_from(self.integer()?).map_err(|_| E::Range)?;
-                let EpsValue::Array { begin, length } = self.pop()? else {
-                    return Err(E::Type);
+                let key = self.pop()?;
+                let value = match (self.pop()?, key) {
+                    (EpsValue::Dictionary { identity }, EpsValue::LiteralName(key)) => {
+                        let index = self.dict_find(identity, key, work)?.ok_or(E::UndefinedName(at))?;
+                        self.dict_value(identity, index)
+                    }
+                    (EpsValue::Array { begin, length }, EpsValue::Number(EpsNumber::Integer(index))) => {
+                        let index = usize::try_from(index).map_err(|_| E::Range)?;
+                        if index >= length {
+                            return Err(E::Range);
+                        }
+                        self.arrays[begin + index]
+                    }
+                    _ => return Err(E::Type),
                 };
-                if index >= length {
-                    return Err(E::Range);
-                }
-                self.push(self.arrays[begin + index])?;
+                self.push(value)?;
             }
             O::Repeat => {
                 let proc = self.procedure()?;
@@ -1531,6 +1787,11 @@ fn equal(a: EpsValue<'_>, b: EpsValue<'_>) -> bool {
 fn operator(word: &[u8]) -> Option<EpsOperator> {
     use EpsOperator as O;
     Some(match word {
+        b"dict" => O::Dict,
+        b"begin" => O::Begin,
+        b"end" => O::End,
+        b"currentdict" => O::CurrentDict,
+        b"known" => O::Known,
         b"save" => O::Save,
         b"restore" => O::Restore,
         b"add" => O::Add,
@@ -1646,8 +1907,8 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
 /// The result retains its full operand capacity until the last shared owner.
 /// Names borrow original source bytes. Procedure values are diagnostic references
 /// to this program's instruction ranges, not standalone executable objects.
-/// This is one user dictionary plus supported system values/operators. Full
-/// dictionary stacks, strings, immediate names, stream reading,
+/// Name-keyed dictionaries use a bounded shared record arena and stack. Full
+/// system dictionaries, non-name dictionary keys, strings, immediate names, stream reading,
 /// graphics operators require evaluate_eps_vectors; unsupported device operators
 /// are never silently ignored.
 pub fn evaluate_eps_program<'a, F: FnMut() -> bool>(
@@ -1710,6 +1971,9 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
         saves: None,
         save_depth: 0,
         next_save: 1,
+        dict_stack: budget.try_buffer(0, EpsValue::Null)?,
+        dict_depth: 0,
+        retain_user_dictionary: false,
         bindings: budget.try_buffer(0, Binding::default())?,
         graphics,
         arrays,
@@ -1719,6 +1983,8 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
         operands,
         length: 0,
         dictionary,
+        dict_records: budget.try_buffer(0, DictRecord::default())?,
+        dict_used: 0,
         frames,
         depth: 1,
     };
@@ -1806,6 +2072,12 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
         operands: machine.operands.freeze(),
         length: machine.length,
         _arrays: machine.arrays.freeze(),
+        _dict_records: machine.dict_records.freeze(),
+        _user_dictionary: if machine.retain_user_dictionary {
+            Some(machine.dictionary.freeze())
+        } else {
+            None
+        },
     })
 }
 
@@ -2956,6 +3228,175 @@ mod vector_tests {
         }
     }
     #[test]
+    fn native_dictionaries_match_independent_ghostscript_traces() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/dictionary-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 20);
+        for case in reference["cases"].as_array().unwrap() {
+            let root = MemoryBudget::new(1_000_000);
+            let source = case["code"].as_str().unwrap().as_bytes();
+            let program = compile(source, &root);
+            let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false);
+            if let Some(error) = case.get("error") {
+                assert!(
+                    match error.as_str().unwrap() {
+                        "invalidrestore" => matches!(result, Err(EpsVmError::InvalidRestore)),
+                        "dictstackunderflow" => matches!(result, Err(EpsVmError::DictionaryStackUnderflow)),
+                        "undefined" => matches!(result, Err(EpsVmError::UndefinedName(_))),
+                        other => panic!("unexpected reference error {other}"),
+                    },
+                    "{}: {result:?}",
+                    String::from_utf8_lossy(source)
+                );
+            } else {
+                let result = result.unwrap_or_else(|e| panic!("{}: {e}", String::from_utf8_lossy(source)));
+                let expected = case["values"].as_array().unwrap();
+                assert_eq!(result.evaluation.values().len(), expected.len());
+                for (actual, expected) in result.evaluation.values().iter().zip(expected) {
+                    let actual = match actual {
+                        EpsValue::Number(n) => as_double(*n),
+                        EpsValue::Boolean(b) => {
+                            if *b {
+                                1.
+                            } else {
+                                0.
+                            }
+                        }
+                        other => panic!("unexpected {other:?}"),
+                    };
+                    assert_eq!(
+                        actual,
+                        expected.as_f64().unwrap(),
+                        "{}",
+                        String::from_utf8_lossy(source)
+                    );
+                }
+                drop(result);
+            }
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn native_dictionary_cancellation_work_quota_and_limits_release_credit() {
+        let root = MemoryBudget::new(1_000_000);
+        let source = b"/d 0 dict def d begin /x 1 def /p {x} def end save /s exch def d /x 9 put d begin x end s restore d /x get";
+        let program = compile(source, &root);
+        let baseline = root.used();
+        let mut polls = 0;
+        drop(
+            evaluate_eps_vectors(&program, vm(), graphics(), &root, || {
+                polls += 1;
+                false
+            })
+            .unwrap(),
+        );
+        for stop in 1..=polls {
+            let mut at = 0;
+            assert!(
+                matches!(
+                    evaluate_eps_vectors(&program, vm(), graphics(), &root, || {
+                        at += 1;
+                        at == stop
+                    }),
+                    Err(EpsVmError::Cancelled)
+                ),
+                "cancel point {stop}"
+            );
+            assert_eq!(root.used(), baseline);
+        }
+        let mut succeeded = false;
+        for allowance in 0..10_000 {
+            let mut limits = vm();
+            limits.max_work = allowance;
+            match evaluate_eps_vectors(&program, limits, graphics(), &root, || false) {
+                Err(EpsVmError::Limit(EpsVmLimit::Work)) => {}
+                Ok(result) => {
+                    drop(result);
+                    succeeded = true;
+                    break;
+                }
+                other => panic!("work limit {allowance}: {other:?}"),
+            }
+            assert_eq!(root.used(), baseline);
+        }
+        assert!(succeeded);
+        let (mut low, mut high) = (0, 100_000);
+        while low < high {
+            let middle = (low + high) / 2;
+            let child = root.child(middle);
+            match evaluate_eps_vectors(&program, vm(), graphics(), &child, || false) {
+                Ok(result) => {
+                    drop(result);
+                    high = middle;
+                }
+                Err(EpsVmError::Memory(_) | EpsVmError::Graphics(EpsGraphicsError::Memory(_))) => {
+                    low = middle + 1
+                }
+                other => panic!("quota {middle}: {other:?}"),
+            }
+            assert_eq!(child.used(), 0);
+        }
+        drop(evaluate_eps_vectors(&program, vm(), graphics(), &root.child(low), || false).unwrap());
+        assert!(evaluate_eps_vectors(&program, vm(), graphics(), &root.child(low - 1), || false).is_err());
+        assert_eq!(root.used(), baseline);
+        drop(program);
+        for (code, limit) in [
+            (
+                b"/d 1 dict def 20 {d begin} repeat".as_slice(),
+                EpsVmLimit::DictionaryStack,
+            ),
+            (b"40 {0 dict pop} repeat", EpsVmLimit::Dictionary),
+        ] {
+            let program = compile(code, &root);
+            assert!(
+                matches!(evaluate_eps_program(&program, vm(), &root, || false), Err(EpsVmError::Limit(actual)) if actual==limit)
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn native_dictionaries_scope_alias_growth_and_rollback() {
+        for (source, expected) in [
+            (b"/x 1 def /d 1 dict def d begin /x 2 def x currentdict d eq end x".as_slice(), vec![EpsValue::Number(EpsNumber::Integer(2)), EpsValue::Boolean(true), EpsValue::Number(EpsNumber::Integer(1))]),
+            (b"0 dict dup /x 3 put dup /y 4 put dup length exch /x get", vec![EpsValue::Number(EpsNumber::Integer(2)), EpsValue::Number(EpsNumber::Integer(3))]),
+            (b"/d 1 dict def /alias d def d /x 1 put save /s exch def alias /x 2 put alias /y 3 put s restore d /x get d /y known", vec![EpsValue::Number(EpsNumber::Integer(1)), EpsValue::Boolean(false)]),
+            (b"/d 1 dict def d begin /x 1 def save end restore d /x get", vec![EpsValue::Number(EpsNumber::Integer(1))]),
+            (b"currentdict /x 9 put x currentdict /x known", vec![EpsValue::Number(EpsNumber::Integer(9)), EpsValue::Boolean(true)]),
+        ] {
+            let root = MemoryBudget::new(1_000_000);
+            let program = compile(source, &root);
+            let result = evaluate_eps_program(&program, vm(), &root, || false).unwrap();
+            assert_eq!(result.values(), expected, "{}", String::from_utf8_lossy(source));
+            drop((result,program)); assert_eq!(root.used(),0);
+        }
+    }
+    #[test]
+    fn native_dictionary_restore_rejects_discarded_operand_and_stack_references() {
+        for source in [
+            b"save /s exch def 0 dict s restore".as_slice(),
+            b"save /s exch def 1 dict begin s restore",
+        ] {
+            let root = MemoryBudget::new(1_000_000);
+            let program = compile(source, &root);
+            assert!(matches!(
+                evaluate_eps_program(&program, vm(), &root, || false),
+                Err(EpsVmError::InvalidRestore)
+            ));
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(b"end", &root);
+        assert!(matches!(
+            evaluate_eps_program(&program, vm(), &root, || false),
+            Err(EpsVmError::DictionaryStackUnderflow)
+        ));
+    }
+    #[test]
     fn vm_save_restore_cancellation_preserves_live_machine_and_graphics() {
         let root = MemoryBudget::new(100_000);
         let mut g = EpsGraphics::new(graphics(), &root, || false).unwrap();
@@ -2965,6 +3406,9 @@ mod vector_tests {
             saves: None,
             save_depth: 0,
             next_save: 1,
+            dict_stack: root.try_buffer(0, EpsValue::Null).unwrap(),
+            dict_depth: 0,
+            retain_user_dictionary: false,
             bindings: root.try_buffer(0, Binding::default()).unwrap(),
             graphics: Some(&mut g),
             operands: root.try_buffer(8, EpsValue::Null).unwrap(),
@@ -2982,6 +3426,8 @@ mod vector_tests {
                     },
                 )
                 .unwrap(),
+            dict_records: root.try_buffer(0, DictRecord::default()).unwrap(),
+            dict_used: 0,
             frames: root
                 .try_buffer(
                     4,
@@ -3668,6 +4114,9 @@ mod vector_tests {
                 saves: None,
                 save_depth: 0,
                 next_save: 1,
+                dict_stack: root.try_buffer(0, EpsValue::Null).unwrap(),
+                dict_depth: 0,
+                retain_user_dictionary: false,
                 bindings: root.try_buffer(0, Binding::default()).unwrap(),
                 graphics: Some(&mut g),
                 operands: root.try_buffer(8, EpsValue::Null).unwrap(),
@@ -3685,6 +4134,8 @@ mod vector_tests {
                         },
                     )
                     .unwrap(),
+                dict_records: root.try_buffer(0, DictRecord::default()).unwrap(),
+                dict_used: 0,
                 frames: root
                     .try_buffer(
                         0,

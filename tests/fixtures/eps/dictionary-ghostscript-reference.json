@@ -1,0 +1,146 @@
+{
+  "generator_sha256": "3cc87e47e17295af0ba2fe3550a7daa8306aef0e6ef0c37a527be16abb6d707a",
+  "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
+  "harness": "One top-level source file per fresh Ghostscript process; errordict handler only, no stopped/procedure wrapper",
+  "license": "CC0-1.0",
+  "reference": "Ghostscript test-only independent execution",
+  "version": "10.05.1",
+  "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+  "source_sha256": "99426e5f5a62d91b2ec7b992a859fc6a9d3298a653b30adf33b5bb0880cb0075",
+  "cases": [
+    {
+      "code": "/x 1 def /d 1 dict def d begin /x 2 def x currentdict d eq end x",
+      "values": [
+        2.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "code": "0 dict dup /x 3 put dup /y 4 put dup length exch /x get",
+      "values": [
+        2.0,
+        3.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def /alias d def d /x 1 put save /s exch def alias /x 2 put alias /y 3 put s restore d /x get d /y known",
+      "values": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d begin /x 1 def save end restore d /x get",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "currentdict /x 9 put x currentdict /x known",
+      "values": [
+        9.0,
+        1.0
+      ]
+    },
+    {
+      "code": "save /s exch def 0 dict s restore",
+      "error": "invalidrestore"
+    },
+    {
+      "code": "save /s exch def 1 dict begin s restore",
+      "error": "invalidrestore"
+    },
+    {
+      "code": "end",
+      "error": "dictstackunderflow"
+    },
+    {
+      "code": "/d 0 dict def d /a 1 put d /b 2 put d /c 3 put d length",
+      "values": [
+        3.0
+      ]
+    },
+    {
+      "code": "/x 1 def /a 1 dict def /b 1 dict def a begin /x 2 def b begin /x 3 def x end x end x",
+      "values": [
+        3.0,
+        2.0,
+        1.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d begin /p {1 2 add} bind def end /add {sub} def 7 3 d /p get exec",
+      "values": [
+        7.0,
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d /p {s restore 8} put save /s exch def d /p get exec",
+      "values": [
+        8.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def save /s exch def d begin s restore currentdict d eq end",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d begin save /s exch def /x 9 def s restore currentdict d eq end d /x known",
+      "values": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "code": "0 dict 0 dict eq",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d d eq",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "1 dict /missing get",
+      "error": "undefined"
+    },
+    {
+      "code": "1 dict /missing known",
+      "values": [
+        0.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def /d2 d def d2 begin /x 7 def end d /x get",
+      "values": [
+        7.0
+      ]
+    },
+    {
+      "code": "/d 1 dict def d /x 1 put d /x 2 put d length d /x get",
+      "values": [
+        1.0,
+        2.0
+      ]
+    }
+  ],
+  "pixel": {
+    "source": "dictionary-prolog.ai",
+    "source_sha256": "47789ef24d1842b845a5c42f4077005b408c0ea87b5197836546c2fafa530b39",
+    "rgb": "dictionary-prolog.rgb",
+    "rgb_sha256": "91f7b820616741067c2f67ef77d2e6064e6d81d8bc29df4777b35c5046c9ed52",
+    "dimensions": [
+      8,
+      8
+    ],
+    "policy": "72dpi GraphicsAlphaBits=1 white backdrop; all 64 RGB pixels also checked analytically"
+  }
+}

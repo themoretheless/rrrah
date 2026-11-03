@@ -1,3 +1,5 @@
+Current follow-up: [name-keyed dictionaries and stack](../eps-dictionaries-2026-11-03/REPORT.md). The single-dictionary scope below records the preceding VM revision.
+
 # Native VM save/restore for the supported EPS object model
 
 This supersedes the earlier checkpoint-only prerequisite status in REPORT.md
