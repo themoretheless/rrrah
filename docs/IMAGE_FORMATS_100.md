@@ -1827,3 +1827,12 @@ bound-prolog pixel case pass; the latter also passes RAM/swap and actual Metal
 SDR/HDR readback. AI remains Pending: this procedural building block does not
 resolve modern AI Tensor shading or full Illustrator procsets. Catalogue counts
 remain unchanged. [Evidence](research/eps-bind-2026-11-03/REPORT.md).
+
+### Illustrator producer-original save prerequisite — 2026-11-03
+
+A hash-pinned Illustrator-created EPS original currently refuses at the first
+`save`. The library now has admitted same-owner graphics checkpoints preserving
+path, clip and stack without erasing later paint output; cancellation/admission
+and foreign-context controls pass. Actual VM save objects, rollback and save
+anchors remain required; no original/AI compatibility or catalogue-count change
+is claimed. [Current scope](research/eps-vm-save-2026-11-03/REPORT.md).

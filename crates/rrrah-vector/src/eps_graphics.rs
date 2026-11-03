@@ -1,6 +1,8 @@
 //! Native, budgeted EPS vector state. Paths use immutable persistent nodes;
 //! clipping retains persistent paths; rendering, text and image objects live separately.
 use rrrah_core::{BufferError, MemoryBudget, MutableBuffer, SharedBuffer};
+use std::sync::atomic::{AtomicU64, Ordering};
+static NEXT_CONTEXT: AtomicU64 = AtomicU64::new(1);
 
 pub type EpsMatrix = [f64; 6];
 pub type EpsPoint = [f64; 2];
@@ -104,6 +106,8 @@ pub enum EpsGraphicsError {
     Range,
     #[error("PostScript graphics limit: {0:?}")]
     Limit(EpsGraphicsLimit),
+    #[error("incompatible PostScript graphics checkpoint context")]
+    CheckpointContext,
     #[error("PostScript graphics query cancelled")]
     Cancelled,
     #[error("PostScript path destination is too short")]
@@ -111,7 +115,7 @@ pub enum EpsGraphicsError {
     #[error(transparent)]
     Memory(#[from] BufferError),
 }
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 struct State {
     clip: Option<usize>,
     matrix: EpsMatrix,
@@ -138,6 +142,7 @@ impl Default for State {
 }
 #[derive(Debug)]
 pub struct EpsGraphics {
+    context: u64,
     nodes: MutableBuffer<Node>,
     used_nodes: usize,
     paints: MutableBuffer<EpsPaint>,
@@ -145,6 +150,17 @@ pub struct EpsGraphics {
     saved: MutableBuffer<State>,
     depth: usize,
     state: State,
+}
+/// An immutable, admitted state/stack snapshot for the same live graphics owner.
+/// Persistent paths and clips remain in that owner's node arena; this handle
+/// does not own/serialize geometry and is not itself a PostScript VM save object.
+#[derive(Debug, Clone)]
+pub struct EpsGraphicsCheckpoint {
+    context: u64,
+    state: State,
+    saved: SharedBuffer<State>,
+    nodes_required: usize,
+    paints_required: usize,
 }
 #[derive(Debug, Clone)]
 pub struct EpsVectorScene {
@@ -218,7 +234,11 @@ impl EpsGraphics {
         if cancelled() {
             return Err(EpsGraphicsError::Cancelled);
         }
+        let context = NEXT_CONTEXT
+            .fetch_update(Ordering::Relaxed, Ordering::Relaxed, |n| n.checked_add(1))
+            .map_err(|_| EpsGraphicsError::CheckpointContext)?;
         Ok(Self {
+            context,
             nodes,
             used_nodes: 0,
             paints,
@@ -227,6 +247,67 @@ impl EpsGraphics {
             depth: 0,
             state,
         })
+    }
+    /// Capture supported graphics state and the entire current save stack.
+    /// Only stack metadata is copied; immutable path/clip nodes and paint records
+    /// remain owned by this live context. Cancellation/refusal leaves it unchanged.
+    pub fn checkpoint<F: FnMut() -> bool>(
+        &self,
+        budget: &MemoryBudget,
+        mut cancelled: F,
+    ) -> Result<EpsGraphicsCheckpoint, EpsGraphicsError> {
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        let mut saved = budget.try_buffer(self.depth, self.state)?;
+        for (index, value) in saved.iter_mut().enumerate() {
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+            *value = self.saved[index];
+        }
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        Ok(EpsGraphicsCheckpoint {
+            context: self.context,
+            state: self.state,
+            saved: saved.freeze(),
+            nodes_required: self.used_nodes,
+            paints_required: self.used_paints,
+        })
+    }
+    /// Restore state/stack atomically after all validation and cancellation checks.
+    /// Paints already emitted and persistent node storage are deliberately retained.
+    /// VM object rollback, save tokens and graphics save anchors are separate work.
+    pub fn restore_checkpoint<F: FnMut() -> bool>(
+        &mut self,
+        snapshot: &EpsGraphicsCheckpoint,
+        mut cancelled: F,
+    ) -> Result<(), EpsGraphicsError> {
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        if snapshot.context != self.context
+            || snapshot.nodes_required > self.used_nodes
+            || snapshot.paints_required > self.used_paints
+            || snapshot.saved.len() > self.saved.len()
+        {
+            return Err(EpsGraphicsError::CheckpointContext);
+        }
+        // A bounded validation pass charges caller checkpoints before publication.
+        for _ in snapshot.saved.iter() {
+            if cancelled() {
+                return Err(EpsGraphicsError::Cancelled);
+            }
+        }
+        if cancelled() {
+            return Err(EpsGraphicsError::Cancelled);
+        }
+        self.saved[..snapshot.saved.len()].copy_from_slice(&snapshot.saved);
+        self.depth = snapshot.saved.len();
+        self.state = snapshot.state;
+        Ok(())
     }
     pub fn matrix(&self) -> EpsMatrix {
         self.state.matrix
@@ -857,6 +938,141 @@ impl EpsVectorScene {
 #[cfg(test)]
 mod tests {
     use super::*;
+    fn checkpoint_scene(g: &mut EpsGraphics) {
+        g.clip_rectangle(0., 0., 3., 8.).unwrap();
+        g.set_color(EpsDeviceColor::Rgb([0., 1., 0.])).unwrap();
+        g.move_to(1., 1.).unwrap();
+        g.line_to(4., 1.).unwrap();
+        g.line_to(4., 4.).unwrap();
+        g.line_to(1., 4.).unwrap();
+        g.close_path().unwrap();
+        g.gsave().unwrap();
+        g.set_line_width(2.).unwrap();
+        g.gsave().unwrap();
+    }
+    #[test]
+    fn checkpoint_restores_clip_path_and_stack_without_erasing_later_paints() {
+        let root = MemoryBudget::new(1_000_000);
+        let mut g = EpsGraphics::new(limits(), &root, || false).unwrap();
+        checkpoint_scene(&mut g);
+        let old = g.state;
+        let stack = g.saved[..g.depth].to_vec();
+        let before = root.used();
+        let snapshot = g.checkpoint(&root, || false).unwrap();
+        assert_eq!(root.used() - before, snapshot.saved.capacity_bytes());
+        let clone = snapshot.clone();
+        assert!(clone.saved.ptr_eq(&snapshot.saved));
+        assert_eq!(root.used() - before, snapshot.saved.capacity_bytes());
+        g.init_graphics();
+        g.set_color(EpsDeviceColor::Rgb([1., 0., 0.])).unwrap();
+        g.paint_rectangle(5., 5., 2., 2., EpsPaintKind::RectFill).unwrap();
+        let nodes = g.used_nodes;
+        let paints = g.used_paints;
+        g.restore_checkpoint(&snapshot, || false).unwrap();
+        assert_eq!(g.state, old);
+        assert_eq!(g.state.matrix.map(f64::to_bits), old.matrix.map(f64::to_bits));
+        assert_eq!(&g.saved[..g.depth], &stack);
+        assert_eq!((g.used_nodes, g.used_paints), (nodes, paints));
+        g.paint(EpsPaintKind::FillNonZero).unwrap();
+        let scene = g.finish();
+        assert_eq!(scene.paints().len(), 3);
+        let pixels = crate::rasterize_eps_scene(
+            &scene,
+            8,
+            8,
+            [1., 0., 0., -1., 0., 8.],
+            crate::EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            crate::EpsRasterLimits::default(),
+            &root,
+            || false,
+        )
+        .unwrap();
+        for (i, pixel) in pixels.chunks_exact(4).enumerate() {
+            let (x, y) = (i % 8, i / 8);
+            let expected = if (1..3).contains(&x) && (4..7).contains(&y) {
+                [0, 255, 0, 255]
+            } else if (5..7).contains(&x) && (1..3).contains(&y) {
+                [255, 0, 0, 255]
+            } else {
+                [0; 4]
+            };
+            assert_eq!(pixel, expected, "pixel {x},{y}");
+        }
+        drop((pixels, scene));
+        assert_eq!(root.used(), snapshot.saved.capacity_bytes());
+        drop((snapshot, clone));
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn checkpoint_admission_cancel_and_foreign_context_preserve_published_state() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(limits(), &root, || false).unwrap();
+        checkpoint_scene(&mut g);
+        let state = g.state;
+        let stack = g.saved[..g.depth].to_vec();
+        let bytes = (g.depth * std::mem::size_of::<State>()) as u64;
+        let short = MemoryBudget::new(bytes - 1);
+        assert!(matches!(
+            g.checkpoint(&short, || false),
+            Err(EpsGraphicsError::Memory(_))
+        ));
+        assert_eq!(short.used(), 0);
+        let metadata = MemoryBudget::new(bytes);
+        for stop in 1..=g.depth + 2 {
+            let mut at = 0;
+            assert!(matches!(
+                g.checkpoint(&metadata, || {
+                    at += 1;
+                    at == stop
+                }),
+                Err(EpsGraphicsError::Cancelled)
+            ));
+            assert_eq!(metadata.used(), 0);
+            assert_eq!(g.state, state);
+            assert_eq!(&g.saved[..g.depth], &stack);
+        }
+        let snapshot = g.checkpoint(&metadata, || false).unwrap();
+        assert_eq!(metadata.used(), bytes);
+        g.init_graphics();
+        g.translate(9., 11.).unwrap();
+        g.gsave().unwrap();
+        let changed = g.state;
+        let saved = g.saved[..g.depth].to_vec();
+        let depth = g.depth;
+        for stop in 1..=snapshot.saved.len() + 2 {
+            let mut at = 0;
+            assert!(matches!(
+                g.restore_checkpoint(&snapshot, || {
+                    at += 1;
+                    at == stop
+                }),
+                Err(EpsGraphicsError::Cancelled)
+            ));
+            assert_eq!(g.state, changed);
+            assert_eq!(&g.saved[..g.depth], &saved);
+            assert_eq!(g.depth, depth);
+        }
+        let mut other = EpsGraphics::new(limits(), &root, || false).unwrap();
+        checkpoint_scene(&mut other);
+        let old = other.state;
+        assert!(matches!(
+            other.restore_checkpoint(&snapshot, || false),
+            Err(EpsGraphicsError::CheckpointContext)
+        ));
+        assert_eq!(other.state, old);
+        g.restore_checkpoint(&snapshot, || false).unwrap();
+        assert_eq!(g.state, state);
+        drop(g);
+        assert!(matches!(
+            other.restore_checkpoint(&snapshot, || false),
+            Err(EpsGraphicsError::CheckpointContext)
+        ));
+        drop(other);
+        assert_eq!(root.used(), 0);
+        drop(snapshot);
+        assert_eq!(metadata.used(), 0);
+    }
+
     #[test]
     fn numeric_rectclip_clears_success_and_preserves_failed_path_and_arena() {
         let root = MemoryBudget::new(100_000);

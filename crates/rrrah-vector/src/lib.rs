@@ -51,8 +51,9 @@ pub use eps_document::{EpsDocumentError, EpsDocumentLimits, decode_eps_document,
 pub use eps_fill::{EpsFillError, EpsFillLimits, fill_eps_path};
 pub use eps_flatten::{EpsFlattenError, EpsFlattenLimits, flatten_eps_path};
 pub use eps_graphics::{
-    EpsDeviceColor, EpsGraphics, EpsGraphicsError, EpsGraphicsLimit, EpsGraphicsLimits, EpsMatrix, EpsPaint,
-    EpsPaintKind, EpsPathSegment, EpsPoint, EpsStrokeStyle, EpsVectorScene,
+    EpsDeviceColor, EpsGraphics, EpsGraphicsCheckpoint, EpsGraphicsError, EpsGraphicsLimit,
+    EpsGraphicsLimits, EpsMatrix, EpsPaint, EpsPaintKind, EpsPathSegment, EpsPoint, EpsStrokeStyle,
+    EpsVectorScene,
 };
 pub use eps_numbers::{EpsNumber, EpsNumberError, parse_eps_number};
 pub use eps_program::{EpsCompileError, EpsCompileLimits, EpsInstruction, EpsProgram, compile_eps_program};
