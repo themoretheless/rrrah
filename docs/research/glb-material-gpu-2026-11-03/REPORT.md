@@ -208,3 +208,12 @@ control alternates OFF and GLB, verifies resident shared-storage hits, restores
 both native families without invoking a source decoder, and releases the root
 to zero. See [mixed cache control](mixed-cache.log). Worker dispatch/publication
 still uses the legacy value; replacing that path remains outstanding.
+
+## Application CLI integration
+
+The production `--inspect` path now dispatches GLB through `ModelAsset::decode`,
+reporting instanced triangles separately from unique primitives and decoded
+images. [Inspection control](inspection.log) verifies the original BoxTextured
+asset, successful final credit release, unsupported image/window refusal and
+failed admission under a one-byte root without leakage. GUI loader/worker
+publication remains outstanding.

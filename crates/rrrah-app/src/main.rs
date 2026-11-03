@@ -865,6 +865,39 @@ fn inspect_with_limits(
     let mut decode_request = DecodeRequest::new(path);
     decode_request.image_index = image_index;
     decode_request.memory_budget = managed_budget.cloned();
+    if path.extension().is_some_and(|e| e.eq_ignore_ascii_case("glb")) {
+        if scalar_window.is_some() {
+            bail!("scalar window does not apply to a model");
+        }
+        let model_asset::ModelAsset::Glb(asset) =
+            model_asset::ModelAsset::decode(&decode_request).map_err(|e| anyhow::anyhow!(e.to_string()))?
+        else {
+            unreachable!("GLB inspection dispatch");
+        };
+        let triangles: usize = asset
+            .scene()
+            .instances()
+            .map(|instance| {
+                asset
+                    .primitives_for_mesh(instance.mesh)
+                    .unwrap_or_default()
+                    .iter()
+                    .map(|primitive| primitive.triangles)
+                    .sum::<usize>()
+            })
+            .sum();
+        println!(
+            "GLB: {} instances, {} triangles, {} unique primitives, {} decoded images, bounds {:?}, decoded in {:.2?}",
+            asset.scene().instances().count(),
+            triangles,
+            asset.primitives().len(),
+            asset.images().len(),
+            asset.bounds(),
+            started.elapsed()
+        );
+        print_managed_budget(managed_budget);
+        return Ok(());
+    }
     if rrrah_decode::is_supported_model_path(path) {
         if scalar_window.is_some() {
             bail!("scalar window does not apply to a model");
@@ -9226,6 +9259,52 @@ mod foreground_loader_tests {
         assert_eq!(configured.ram_cache_count, Some(8));
         assert_eq!(configured.ram_cache_ttl_secs, Some(30));
         assert!(Cli::try_parse_from(["rrrah", "--ram-cache-count", "-1"]).is_err());
+    }
+
+    #[test]
+    fn glb_inspection_native_assets_and_memory_limits() {
+        let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../tests/fixtures/glb/BoxTextured.glb");
+        let root = rrrah_core::MemoryBudget::new(4 * 1024 * 1024);
+        assert!(
+            inspect_with_limits(
+                &path,
+                None,
+                true,
+                0,
+                None,
+                rrrah_cache::CacheLimits::bytes(0),
+                Some(&root),
+                None
+            )
+            .is_ok()
+        );
+        assert_eq!(root.used(), 0);
+        assert!(inspect(&path, None, true, 1, None).is_err());
+        assert!(
+            inspect(
+                &path,
+                None,
+                true,
+                0,
+                Some(rrrah_decode::ScalarWindow::new(0., 1.).unwrap())
+            )
+            .is_err()
+        );
+        let small = rrrah_core::MemoryBudget::new(1);
+        assert!(
+            inspect_with_limits(
+                &path,
+                None,
+                true,
+                0,
+                None,
+                rrrah_cache::CacheLimits::bytes(0),
+                Some(&small),
+                None
+            )
+            .is_err()
+        );
+        assert_eq!(small.used(), 0);
     }
 
     #[test]

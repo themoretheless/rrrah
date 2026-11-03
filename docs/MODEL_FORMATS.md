@@ -841,3 +841,8 @@ snapshots on Metal, with shared image uploads, rebased hierarchy transforms and
 admitted camera/depth updates. Two hardware tests pass, including exact snapshot
 frames and linear HDR/sRGB consistency. It remains disconnected from ordinary
 loader/navigation dispatch; see the GPU report above for evidence and limits.
+
+`rrrah --inspect file.glb` now uses the native owned-asset decoder and reports
+selected scene instances, instanced triangle count, unique primitives/images and
+conservative bounds. The normal managed memory budget applies; nonzero image
+indices and scalar windows refuse. This CLI path does not enable GUI discovery.
