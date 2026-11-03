@@ -1,0 +1,45 @@
+{
+  "scope": "Native VM save/restore for current single-dictionary/literal-array/source-procedure model; full PostScript and Illustrator unqualified",
+  "sources": {
+    "crates/rrrah-vector/src/eps_vm.rs": "fd3e82511c43d2c1cb6445d35c2923f6c944c062e2dadce57b2a7c818bb70ce7",
+    "crates/rrrah-vector/src/eps_graphics.rs": "b660acef8cc4ca817e72e8d73cdcfb3e156009309e616a386e4b9329a21b0e22",
+    "crates/rrrah-vector/src/lib.rs": "cb18f11a6073990136fa01e550f835c49aae407362794d8f29d685f86523d3c9",
+    "crates/rrrah-app/tests/eps_lifecycle.rs": "e32f658f1669a3de7993bff2d37879befdeca6e1fc1eaf5779e8407303a8fbc6",
+    "tests/fixtures/eps/save-ghostscript-reference.json": "50cd2458f7ef3c20a76c036d56454609e2fc4379e0c4817c2e19c5598613e956",
+    "tests/fixtures/eps/save-prolog.ai": "296e9d1c6f0fafbf4ce76e552ecea9d4180fa1ce92d0edb62f45bc6ea3744eba",
+    "tests/fixtures/eps/save-prolog.rgb": "91f7b820616741067c2f67ef77d2e6064e6d81d8bc29df4777b35c5046c9ed52",
+    "scripts/generate-eps-save-reference.py": "37f20faa11085c8a2a25df47bd1e2ad84d377a0e24d6a2d194039da17c1d67b9",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "regressions": {
+    "vector": {
+      "result": "test result: ok. 270 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 66.06s",
+      "log_sha256": "2928ea5cfffd388b75d59dcd59e1a63540db85e6f904df7376c674a78936d5ca"
+    },
+    "app": {
+      "result": "test result: ok. 364 passed; 0 failed; 109 ignored; 0 measured; 0 filtered out; finished in 9.22s",
+      "log_sha256": "3088340d2b5a5fe82cabad01b2b6faf6908f0333ab4fb7d5f76306bac3c324d8"
+    },
+    "metal": {
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 16 filtered out; finished in 0.07s",
+      "log_sha256": "9407ac785422e31e3a30427b971f4fc68b07a2b599aa914abffcef2729c8da74"
+    },
+    "production_check": {
+      "completed": true,
+      "log_sha256": "75e3d1deb96cd558a0a186bd46283fd8957563a4c4f065a8de36bd7ca05ba12d"
+    },
+    "example_build": {
+      "completed": true,
+      "log_sha256": "f965c50446ad4484236bded9595084b9b99fd24099c13940bda3b6ccc77b679d"
+    }
+  },
+  "ghostscript_cases": 30,
+  "new_vector_controls": 6,
+  "metal_adapter": "Metal Apple M4 Max",
+  "physical_hdr_display_qualified": false,
+  "nvidia_qualified": false,
+  "producer_original_qualified": false,
+  "original_remaining_operator": "dict",
+  "format_counts_changed": false,
+  "managed_payload_not_rss": true
+}

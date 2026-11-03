@@ -1,3 +1,5 @@
+Current follow-up: [native VM integration and remaining scope](VM.md). The text below records the earlier prerequisite revision.
+
 # Graphics checkpoint bridge for native PostScript save/restore
 
 Current scope: an admitted `EpsGraphicsCheckpoint` primitive. PostScript VM

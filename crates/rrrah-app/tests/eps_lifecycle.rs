@@ -198,6 +198,24 @@ fn independent_bound_postscript_prolog_survives_swap_and_metal() {
     );
 }
 
+#[test]
+#[ignore = "requires actual Metal VM rollback, independent pixels and native swap"]
+fn independent_vm_save_restore_survives_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required actual GPU adapter");
+    eprintln!("EPS VM save/restore adapter: {}", gpu.adapter_name());
+    let body = include_str!("../../../tests/fixtures/eps/save-prolog.ai")
+        .split_once("%%EndComments\n")
+        .unwrap()
+        .1;
+    let source = format!("1 setgray 0 0 8 8 rectfill\n{body}");
+    let reference = include_bytes!("../../../tests/fixtures/eps/save-prolog.rgb");
+    let case = serde_json::json!({"name":"nested_vm_rollback_retains_paints","source":source,"rgb":reference.to_vec()});
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, &[case]);
+    eprintln!(
+        "EPS save/restore: independent Ghostscript RGB; retained green/blue paints, restored red array; RAM/quota/cancel/disk restore and exact SDR/HDR Metal; root zero"
+    );
+}
+
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,
     cases: &[serde_json::Value],

@@ -1,13 +1,15 @@
-//! Bounded native scalar/procedure execution. Graphics and full PostScript VM
-//! objects remain separate work; unsupported tokens always return an error.
+//! Bounded native scalar/procedure/array execution with admitted VM rollback.
+//! Full PostScript objects remain unsupported; unknown tokens return an error.
 use crate::{
-    EpsDeviceColor, EpsGraphics, EpsGraphicsError, EpsGraphicsLimits, EpsNumber, EpsPaintKind, EpsProgram,
-    EpsToken, EpsVectorScene,
+    EpsDeviceColor, EpsGraphics, EpsGraphicsCheckpoint, EpsGraphicsError, EpsGraphicsLimits, EpsNumber,
+    EpsPaintKind, EpsProgram, EpsToken, EpsVectorScene,
 };
 use rrrah_core::{BufferError, MemoryBudget, MutableBuffer, SharedBuffer};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum EpsOperator {
+    Save,
+    Restore,
     Add,
     Sub,
     Mul,
@@ -115,6 +117,10 @@ pub enum EpsOperator {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum EpsValue<'a> {
     Null,
+    /// Evaluation-local opaque save identity; cannot be reused after restore.
+    Save {
+        identity: u64,
+    },
     Mark,
     Array {
         begin: usize,
@@ -168,6 +174,7 @@ pub enum EpsVmLimit {
     Dictionary,
     ExecutionFrames,
     Work,
+    Saves,
 }
 #[derive(Debug, thiserror::Error)]
 pub enum EpsVmError {
@@ -179,6 +186,8 @@ pub enum EpsVmError {
     UnmatchedMark,
     #[error("PostScript exit outside a loop")]
     InvalidExit,
+    #[error("PostScript restore would invalidate a live object or save identity")]
+    InvalidRestore,
     #[error("PostScript operand stack underflow")]
     StackUnderflow,
     #[error("PostScript operand type mismatch")]
@@ -279,8 +288,36 @@ struct Binding {
     // bind makes subsidiary executable arrays read-only, not the outer array.
     readonly: bool,
 }
+struct VmSave<'a> {
+    identity: u64,
+    dictionary: MutableBuffer<Entry<'a>>,
+    arrays: MutableBuffer<EpsValue<'a>>,
+    array_used: usize,
+    bindings: MutableBuffer<Binding>,
+    procedures: MutableBuffer<bool>,
+    graphics: Option<EpsGraphicsCheckpoint>,
+    previous: Option<Box<VmSave<'a>>>,
+    _credit: rrrah_core::Reservation,
+}
+fn snapshot_buffer<T: Copy, F: FnMut() -> bool>(
+    source: &[T],
+    fill: T,
+    budget: &MemoryBudget,
+    work: &mut Work<F>,
+) -> Result<MutableBuffer<T>, EpsVmError> {
+    work.tick()?;
+    let mut destination = budget.try_buffer(source.len(), fill)?;
+    for (to, from) in destination.iter_mut().zip(source) {
+        work.tick()?;
+        *to = *from;
+    }
+    Ok(destination)
+}
 struct Machine<'a, 'g> {
     tape: &'g [crate::EpsInstruction<'a>],
+    saves: Option<Box<VmSave<'a>>>,
+    save_depth: usize,
+    next_save: u64,
     bindings: MutableBuffer<Binding>,
     graphics: Option<&'g mut EpsGraphics>,
     operands: MutableBuffer<EpsValue<'a>>,
@@ -294,6 +331,192 @@ struct Machine<'a, 'g> {
     depth: usize,
 }
 impl<'a> Machine<'a, '_> {
+    fn save_vm<F: FnMut() -> bool>(&mut self, work: &mut Work<F>) -> Result<(), EpsVmError> {
+        if self.length == self.operands.len() {
+            return Err(EpsVmError::Limit(EpsVmLimit::Operands));
+        }
+        // Bound snapshot nesting by the caller frame limit and a hard 128-save cap.
+        if self.save_depth == self.frames.len().min(128) {
+            return Err(EpsVmError::Limit(EpsVmLimit::Saves));
+        }
+        let next = self
+            .next_save
+            .checked_add(1)
+            .ok_or(EpsVmError::Limit(EpsVmLimit::Saves))?;
+        let credit = self
+            .array_budget
+            .try_reserve(std::mem::size_of::<VmSave<'a>>() as u64)?;
+        let dictionary = snapshot_buffer(
+            &self.dictionary,
+            Entry {
+                key: None,
+                value: EpsValue::Null,
+            },
+            &self.array_budget,
+            work,
+        )?;
+        let arrays = snapshot_buffer(&self.arrays, EpsValue::Null, &self.array_budget, work)?;
+        let bindings = snapshot_buffer(&self.bindings, Binding::default(), &self.array_budget, work)?;
+        work.tick()?;
+        let mut procedures = self.array_budget.try_buffer(self.tape.len(), false)?;
+        // Source procedures remain diagnostic instruction-range objects in this
+        // VM. Capture all reachable pre-save ranges, including nested literals.
+        let mut mark = |range: Option<(usize, usize)>| -> Result<(), EpsVmError> {
+            work.tick()?;
+            let Some((begin, end)) = range else {
+                return Ok(());
+            };
+            if begin == 0 && end == 0 {
+                return Ok(());
+            } // importer showpage
+            let opening = begin.checked_sub(1).ok_or(EpsVmError::InvalidRestore)?;
+            for at in opening..end {
+                work.tick()?;
+                if matches!(self.tape[at].token, EpsToken::ProcedureStart) {
+                    procedures[at] = true;
+                }
+            }
+            Ok(())
+        };
+        for value in self.operands[..self.length]
+            .iter()
+            .chain(self.arrays[..self.array_used].iter())
+            .chain(self.dictionary.iter().map(|entry| &entry.value))
+        {
+            mark(if let EpsValue::Procedure { begin, end, .. } = *value {
+                Some((begin, end))
+            } else {
+                None
+            })?;
+        }
+        for frame in &self.frames[1..self.depth] {
+            mark(Some((frame.begin, frame.end)))?;
+        }
+        let graphics = if let Some(graphics) = self.graphics.as_ref() {
+            let mut failure = None;
+            let result = graphics.checkpoint(&self.array_budget, || match work.tick() {
+                Ok(()) => false,
+                Err(error) => {
+                    failure = Some(error);
+                    true
+                }
+            });
+            if let Some(error) = failure {
+                return Err(error);
+            }
+            Some(result?)
+        } else {
+            None
+        };
+        work.tick()?;
+        // No fallible work remains after the graphics boundary is published.
+        if let Some(graphics) = self.graphics.as_mut() {
+            graphics.push_vm_save_boundary()?;
+        }
+        let save = Box::new(VmSave {
+            identity: self.next_save,
+            dictionary,
+            arrays,
+            array_used: self.array_used,
+            bindings,
+            procedures,
+            graphics,
+            previous: self.saves.take(),
+            _credit: credit,
+        });
+        self.operands[self.length] = EpsValue::Save {
+            identity: self.next_save,
+        };
+        self.length += 1;
+        self.next_save = next;
+        self.save_depth += 1;
+        self.saves = Some(save);
+        Ok(())
+    }
+    fn restore_vm<F: FnMut() -> bool>(&mut self, work: &mut Work<F>) -> Result<(), EpsVmError> {
+        let Some(value) = self.operands[..self.length].last().copied() else {
+            return Err(EpsVmError::StackUnderflow);
+        };
+        let EpsValue::Save { identity } = value else {
+            return Err(EpsVmError::Type);
+        };
+        let mut cursor = self.saves.as_deref();
+        let mut removed = 0;
+        let target = loop {
+            work.tick()?;
+            let save = cursor.ok_or(EpsVmError::InvalidRestore)?;
+            removed += 1;
+            if save.identity == identity {
+                break save;
+            }
+            cursor = save.previous.as_deref();
+        };
+        let procedure_valid = |begin: usize, end: usize| {
+            (begin == 0 && end == 0)
+                || begin
+                    .checked_sub(1)
+                    .and_then(|at| target.procedures.get(at))
+                    .copied()
+                    .unwrap_or(false)
+        };
+        for value in &self.operands[..self.length - 1] {
+            work.tick()?;
+            let valid = match *value {
+                EpsValue::Array { begin, length } => {
+                    length == 0
+                        || (begin > 0
+                            && begin
+                                .checked_add(length)
+                                .is_some_and(|end| end <= target.array_used))
+                }
+                EpsValue::Procedure { begin, end, .. } => begin == end || procedure_valid(begin, end),
+                EpsValue::Save { identity: other } => other <= identity,
+                _ => true,
+            };
+            if !valid {
+                return Err(EpsVmError::InvalidRestore);
+            }
+        }
+        for frame in &self.frames[1..self.depth] {
+            work.tick()?;
+            // A finished one-shot procedure has no remaining execution reference;
+            // this is the same tail-execution behavior as the reference interpreter.
+            if !(frame.pc == frame.end && matches!(frame.continuation, Continuation::Once))
+                && !procedure_valid(frame.begin, frame.end)
+            {
+                return Err(EpsVmError::InvalidRestore);
+            }
+        }
+        work.tick()?;
+        if let (Some(graphics), Some(checkpoint)) = (self.graphics.as_mut(), target.graphics.as_ref()) {
+            let mut failure = None;
+            let result = graphics.restore_checkpoint(checkpoint, || match work.tick() {
+                Ok(()) => false,
+                Err(error) => {
+                    failure = Some(error);
+                    true
+                }
+            });
+            if let Some(error) = failure {
+                return Err(error);
+            }
+            result?;
+        }
+        // All validation/cancellation precedes publication. Move admitted buffers
+        // instead of allocating during commit; preserve operand/execution stacks.
+        let mut save = self.saves.take().unwrap();
+        while save.identity != identity {
+            save = save.previous.take().unwrap();
+        }
+        self.saves = save.previous.take();
+        self.dictionary = save.dictionary;
+        self.arrays = save.arrays;
+        self.array_used = save.array_used;
+        self.bindings = save.bindings;
+        self.length -= 1;
+        self.save_depth -= removed;
+        Ok(())
+    }
     fn push(&mut self, value: EpsValue<'a>) -> Result<(), EpsVmError> {
         if self.length == self.operands.len() {
             return Err(EpsVmError::Limit(EpsVmLimit::Operands));
@@ -534,6 +757,8 @@ impl<'a> Machine<'a, '_> {
         use EpsOperator as O;
         use EpsVmError as E;
         match op {
+            O::Save => return self.save_vm(work),
+            O::Restore => return self.restore_vm(work),
             O::Bind => return self.bind(work),
             O::NewPath
             | O::MoveTo
@@ -1306,6 +1531,8 @@ fn equal(a: EpsValue<'_>, b: EpsValue<'_>) -> bool {
 fn operator(word: &[u8]) -> Option<EpsOperator> {
     use EpsOperator as O;
     Some(match word {
+        b"save" => O::Save,
+        b"restore" => O::Restore,
         b"add" => O::Add,
         b"sub" => O::Sub,
         b"mul" => O::Mul,
@@ -1480,6 +1707,9 @@ fn evaluate_eps_impl<'a, F: FnMut() -> bool>(
     let tape = program.instructions();
     let mut machine = Machine {
         tape,
+        saves: None,
+        save_depth: 0,
+        next_save: 1,
         bindings: budget.try_buffer(0, Binding::default())?,
         graphics,
         arrays,
@@ -2726,6 +2956,334 @@ mod vector_tests {
         }
     }
     #[test]
+    fn vm_save_restore_cancellation_preserves_live_machine_and_graphics() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(graphics(), &root, || false).unwrap();
+        g.set_line_width(2.).unwrap();
+        let mut machine = Machine {
+            tape: &[],
+            saves: None,
+            save_depth: 0,
+            next_save: 1,
+            bindings: root.try_buffer(0, Binding::default()).unwrap(),
+            graphics: Some(&mut g),
+            operands: root.try_buffer(8, EpsValue::Null).unwrap(),
+            arrays: root.try_buffer(4, EpsValue::Null).unwrap(),
+            array_used: 2,
+            array_capacity: 4,
+            array_budget: root.clone(),
+            length: 1,
+            dictionary: root
+                .try_buffer(
+                    4,
+                    Entry {
+                        key: None,
+                        value: EpsValue::Null,
+                    },
+                )
+                .unwrap(),
+            frames: root
+                .try_buffer(
+                    4,
+                    Frame {
+                        begin: 0,
+                        pc: 0,
+                        end: 0,
+                        continuation: Continuation::Once,
+                    },
+                )
+                .unwrap(),
+            depth: 1,
+        };
+        machine.operands[0] = EpsValue::Number(EpsNumber::Integer(7));
+        machine.arrays[1] = EpsValue::Number(EpsNumber::Integer(2));
+        machine.dictionary[0] = Entry {
+            key: Some(b"x"),
+            value: EpsValue::Number(EpsNumber::Integer(1)),
+        };
+        let baseline = root.used();
+        let mut capture_polls = 0;
+        machine
+            .save_vm(&mut Work {
+                remaining: 10000,
+                cancelled: || {
+                    capture_polls += 1;
+                    false
+                },
+            })
+            .unwrap();
+        machine
+            .restore_vm(&mut Work {
+                remaining: 10000,
+                cancelled: || false,
+            })
+            .unwrap();
+        assert_eq!(root.used(), baseline);
+        for stop in 1..=capture_polls {
+            let mut at = 0;
+            assert!(matches!(
+                machine.save_vm(&mut Work {
+                    remaining: 10000,
+                    cancelled: || {
+                        at += 1;
+                        at == stop
+                    }
+                }),
+                Err(EpsVmError::Cancelled)
+            ));
+            assert_eq!(machine.length, 1);
+            assert!(machine.saves.is_none());
+            assert_eq!(machine.save_depth, 0);
+            assert_eq!(machine.next_save, 2);
+            assert_eq!(machine.graphics.as_ref().unwrap().style().width, 2.);
+            assert_eq!(root.used(), baseline);
+        }
+        machine
+            .save_vm(&mut Work {
+                remaining: 10000,
+                cancelled: || false,
+            })
+            .unwrap();
+        machine.arrays[1] = EpsValue::Number(EpsNumber::Integer(9));
+        machine.dictionary[0].value = EpsValue::Number(EpsNumber::Integer(8));
+        machine.graphics.as_mut().unwrap().set_line_width(6.).unwrap();
+        machine.graphics.as_mut().unwrap().gsave().unwrap();
+        machine.graphics.as_mut().unwrap().set_line_width(9.).unwrap();
+        let charged = root.used();
+        // Restore has three VM checkpoints, followed by the empty graphics stack's
+        // initial/final validation checkpoints. No cancellation can half-restore.
+        for stop in 1..=5 {
+            let mut at = 0;
+            assert!(matches!(
+                machine.restore_vm(&mut Work {
+                    remaining: 10000,
+                    cancelled: || {
+                        at += 1;
+                        at == stop
+                    }
+                }),
+                Err(EpsVmError::Cancelled)
+            ));
+            assert_eq!(machine.length, 2);
+            assert_eq!(machine.save_depth, 1);
+            assert_eq!(machine.arrays[1], EpsValue::Number(EpsNumber::Integer(9)));
+            assert_eq!(
+                machine.dictionary[0].value,
+                EpsValue::Number(EpsNumber::Integer(8))
+            );
+            assert_eq!(machine.graphics.as_ref().unwrap().style().width, 9.);
+            assert_eq!(root.used(), charged);
+        }
+        machine
+            .restore_vm(&mut Work {
+                remaining: 10000,
+                cancelled: || false,
+            })
+            .unwrap();
+        assert_eq!(machine.arrays[1], EpsValue::Number(EpsNumber::Integer(2)));
+        assert_eq!(
+            machine.dictionary[0].value,
+            EpsValue::Number(EpsNumber::Integer(1))
+        );
+        assert_eq!(machine.graphics.as_ref().unwrap().style().width, 2.);
+        assert_eq!(root.used(), baseline);
+        drop(machine);
+        drop(g);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn vm_save_restore_every_cancellation_and_short_quota_releases_credit() {
+        let root = MemoryBudget::new(1_000_000);
+        let program = compile(b"/a [1 2] def /p {1 2 add} def /p load bind pop 2 setlinewidth save /s exch def a 0 9 put 3 setlinewidth gsave 4 setlinewidth 0 0 1 1 rectfill s restore a 0 get p currentlinewidth", &root);
+        let baseline = root.used();
+        let mut polls = 0;
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || {
+            polls += 1;
+            false
+        })
+        .unwrap();
+        drop(result);
+        assert_eq!(root.used(), baseline);
+        for stop in 1..=polls {
+            let mut at = 0;
+            let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || {
+                at += 1;
+                at == stop
+            });
+            assert!(
+                matches!(result, Err(EpsVmError::Cancelled)),
+                "cancel checkpoint {stop}/{polls}: {result:?}"
+            );
+            assert_eq!(root.used(), baseline);
+        }
+        let mut work_succeeded = false;
+        for allowance in 0..10_000 {
+            let mut limits = vm();
+            limits.max_work = allowance;
+            match evaluate_eps_vectors(&program, limits, graphics(), &root, || false) {
+                Err(EpsVmError::Limit(EpsVmLimit::Work)) => {}
+                Ok(result) => {
+                    drop(result);
+                    work_succeeded = true;
+                    break;
+                }
+                other => panic!("work allowance {allowance}: {other:?}"),
+            }
+            assert_eq!(root.used(), baseline);
+        }
+        assert!(work_succeeded);
+        // Binary search the exact admitted payload boundary for the full program.
+        let mut low = 0;
+        let mut high = 100_000;
+        while low < high {
+            let middle = (low + high) / 2;
+            let child = root.child(middle);
+            match evaluate_eps_vectors(&program, vm(), graphics(), &child, || false) {
+                Ok(result) => {
+                    drop(result);
+                    high = middle;
+                }
+                Err(EpsVmError::Memory(_) | EpsVmError::Graphics(EpsGraphicsError::Memory(_))) => {
+                    low = middle + 1
+                }
+                other => panic!("quota {middle}: {other:?}"),
+            }
+            assert_eq!(child.used(), 0);
+            assert_eq!(root.used(), baseline);
+        }
+        assert!(low > 0);
+        let exact = root.child(low);
+        drop(evaluate_eps_vectors(&program, vm(), graphics(), &exact, || false).unwrap());
+        assert_eq!(exact.used(), 0);
+        let short = root.child(low - 1);
+        assert!(evaluate_eps_vectors(&program, vm(), graphics(), &short, || false).is_err());
+        assert_eq!(short.used(), 0);
+        drop(program);
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
+    fn vm_save_restore_matches_independent_ghostscript_traces() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/save-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 30);
+        for case in reference["cases"].as_array().unwrap() {
+            let root = MemoryBudget::new(1_000_000);
+            let source = case["code"].as_str().unwrap().as_bytes();
+            let program = compile(source, &root);
+            let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false);
+            if case.get("error").is_some() {
+                assert_eq!(case["error"], "invalidrestore");
+                assert!(
+                    matches!(result, Err(EpsVmError::InvalidRestore)),
+                    "{}: {result:?}",
+                    String::from_utf8_lossy(source)
+                );
+            } else {
+                let result = result.unwrap_or_else(|e| panic!("{}: {e}", String::from_utf8_lossy(source)));
+                let expected = case["values"].as_array().unwrap();
+                assert_eq!(
+                    result.evaluation.values().len(),
+                    expected.len(),
+                    "{}",
+                    String::from_utf8_lossy(source)
+                );
+                for (actual, expected) in result.evaluation.values().iter().zip(expected) {
+                    let EpsValue::Number(actual) = actual else {
+                        panic!("unexpected {actual:?}");
+                    };
+                    assert_eq!(as_double(*actual), expected.as_f64().unwrap());
+                }
+                drop(result);
+            }
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn vm_save_restore_rolls_back_supported_objects_and_preserves_operands() {
+        for (source, expected) in [
+            (
+                b"/x 1 def /a [2 3] def save /s exch def /x 9 def a 0 8 put s restore x a 0 get a 1 get"
+                    .as_slice(),
+                vec![1, 2, 3],
+            ),
+            (b"7 save 8 exch restore 9", vec![7, 8, 9]),
+            (
+                b"/x 1 def save /s exch def /x 2 def save /t exch def /x 3 def t restore x s restore x",
+                vec![2, 1],
+            ),
+            (b"save /s exch def [1] pop s restore 4", vec![4]),
+            (b"save /s exch def save /t exch def s restore 5", vec![5]),
+            (b"/f { s restore } def save /s exch def f 7", vec![7]),
+            (b"/f { {} } def save /s exch def f s restore pop 8", vec![8]),
+            (
+                b"/a [1] def a save /s exch def /a [9] def s restore 0 get",
+                vec![1],
+            ),
+            (
+                b"/a [1] def /p { a 0 2 put } def save /s exch def p s restore a 0 get",
+                vec![1],
+            ),
+        ] {
+            let root = MemoryBudget::new(1_000_000);
+            let program = compile(source, &root);
+            let result = evaluate_eps_program(&program, vm(), &root, || false).unwrap();
+            let expected: Vec<_> = expected
+                .into_iter()
+                .map(|n| EpsValue::Number(EpsNumber::Integer(n)))
+                .collect();
+            assert_eq!(result.values(), expected, "{}", String::from_utf8_lossy(source));
+            drop((result, program));
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn vm_restore_rejects_discarded_live_references_and_save_objects() {
+        for source in [
+            b"save /s exch def [1] s restore".as_slice(),
+            b"save /s exch def {1} s restore",
+            b"save dup restore restore",
+            b"save /s exch def save s restore",
+            b"save /s exch def {s restore 8} exec",
+            b"/f {s restore} def save /s exch def /f {s restore 8} def f",
+        ] {
+            let root = MemoryBudget::new(1_000_000);
+            let program = compile(source, &root);
+            assert!(
+                matches!(
+                    evaluate_eps_program(&program, vm(), &root, || false),
+                    Err(EpsVmError::InvalidRestore)
+                ),
+                "{}",
+                String::from_utf8_lossy(source)
+            );
+            drop(program);
+            assert_eq!(root.used(), 0);
+        }
+    }
+    #[test]
+    fn vm_save_restore_restores_bindings_graphics_and_retains_paint() {
+        let root = MemoryBudget::new(1_000_000);
+        let source = b"/p {1 2 add} def 2 setlinewidth save /s exch def /p load bind pop /add {pop pop 99} def p 3 setlinewidth 0 0 1 1 rectfill s restore /add {pop pop 77} def p currentlinewidth 2 0 1 1 rectfill";
+        let program = compile(source, &root);
+        let result = evaluate_eps_vectors(&program, vm(), graphics(), &root, || false).unwrap();
+        assert_eq!(
+            result.evaluation.values(),
+            &[
+                EpsValue::Number(EpsNumber::Integer(3)),
+                EpsValue::Number(EpsNumber::Integer(77)),
+                EpsValue::Number(EpsNumber::Real(2.))
+            ]
+        );
+        assert_eq!(result.scene.paints().len(), 2);
+        assert_eq!(result.scene.paints()[0].style.width, 3.);
+        assert_eq!(result.scene.paints()[1].style.width, 2.);
+        drop((result, program));
+        assert_eq!(root.used(), 0);
+    }
+    #[test]
     fn grestoreall_vm_restores_bottom_and_preserves_typed_work_errors() {
         let root = MemoryBudget::new(1_000_000);
         let program = compile(b"2 setlinewidth gsave 3 setlinewidth gsave 4 setlinewidth grestoreall currentlinewidth 5 setlinewidth grestore currentlinewidth", &root);
@@ -3107,6 +3665,9 @@ mod vector_tests {
         {
             let mut machine = Machine {
                 tape: &[],
+                saves: None,
+                save_depth: 0,
+                next_save: 1,
                 bindings: root.try_buffer(0, Binding::default()).unwrap(),
                 graphics: Some(&mut g),
                 operands: root.try_buffer(8, EpsValue::Null).unwrap(),

@@ -1843,3 +1843,17 @@ boundaries. Native `grestoreall` is connected to the VM, including typed work
 limits and atomic cancellation. 264 vector and 364 viewer tests pass. This does
 not implement VM save tokens/object rollback or qualify producer-original AI.
 See [scope and evidence](research/eps-vm-save-2026-11-03/BOUNDARIES.md).
+
+### Native EPS VM save/restore — 2026-11-03 (current follow-up)
+
+Native save tokens and admitted dictionary/array/binding rollback are now wired
+into the scalar and graphics VM, with protected graphics boundaries, validation
+of surviving references, atomic cancellation and unchanged painted output.
+Thirty independent top-level Ghostscript traces match; the authored nested-save
+pixel case passes native decode, RAM, swap and exact SDR/HDR offscreen Metal on
+Apple M4 Max. 270 vector and 364 ordinary viewer tests pass. The pinned original
+Illustrator Tiger now passes `save` and refuses later at `dict` (instruction 6).
+AI remains Pending: dictionary objects/stacks and other Illustrator operators
+are still missing. This supersedes the earlier checkpoint-only status without
+changing format counts or qualifying NVIDIA/physical HDR. See [current scope
+and evidence](research/eps-vm-save-2026-11-03/VM.md).

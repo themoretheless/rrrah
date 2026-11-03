@@ -1,3 +1,5 @@
+Current follow-up: [native VM integration and remaining scope](VM.md). The text below records the earlier prerequisite revision.
+
 # Protected graphics save boundaries
 
 Follow-up to the checkpoint primitive. This still does **not** implement VM
