@@ -40,6 +40,8 @@ impl ModelAsset {
         }
     }
     pub(crate) fn decode(request: &DecodeRequest) -> Result<Self, ModelLoadError> {
+        #[cfg(debug_assertions)]
+        crate::gpu_recovery_probe::check_model_decode(&request.path).map_err(ModelLoadError::Message)?;
         if is_glb(request) {
             rrrah_decode::decode_glb_asset(request, None)
                 .map(Self::Glb)

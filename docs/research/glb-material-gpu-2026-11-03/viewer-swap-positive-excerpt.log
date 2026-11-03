@@ -1,0 +1,29 @@
+[2026-11-03T02:06:37Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:06:37Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:06:37Z INFO  rrrah] viewer GPU setup: device_ms=5.888 surface_ms=0.220 raw_ms=0.000 raster_ms=3.871 filmstrip_ms=1.131 total_ms=11.110
+LIVE_RECOVERY_INJECT path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb page=0 devices=[1, 2] simulated_notification=true
+[2026-11-03T02:06:37Z ERROR rrrah] viewer GPU device lost: debug qualification simulated loss
+[2026-11-03T02:06:37Z INFO  rrrah] GPU adapter: backend=Metal name=Apple M4 Max vendor=0x0000 device=0x0000
+[2026-11-03T02:06:37Z INFO  rrrah] Viewer surface: hdr=false format=Bgra8UnormSrgb color_space=Auto
+[2026-11-03T02:06:37Z INFO  rrrah] viewer GPU setup: device_ms=0.848 surface_ms=0.046 raw_ms=0.000 raster_ms=2.113 filmstrip_ms=0.390 total_ms=3.397
+[2026-11-03T02:06:37Z ERROR rrrah] telemetry GPU device lost: debug qualification simulated loss
+LIVE_RECOVERY_PASS path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb page=0 devices=[3, 4] main_frames=3 telemetry_frames=3 selection_view_exact=true gpu_wait_ok=true simulated_notification=true
+LIVE_RASTER_NAV_PRESENT phase=5 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/02.glb generation=3 previous_generation=2 frames=5 same_device=true gpu_wait_ok=true kind=model
+LIVE_MODEL_SWAP_GUARD path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb fallback_decode=forbidden
+...
+LIVE_MODEL_SWAP_GUARD path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb fallback_decode=forbidden
+LIVE_MODEL_CACHE_HIT path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb tier=swap swap_reads_before=1996 swap_reads_after=1997 foreground=true
+LIVE_RASTER_NAV_PRESENT phase=6 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb generation=2000 previous_generation=1999 frames=4178 same_device=true gpu_wait_ok=true kind=model
+LIVE_MODEL_GPU_STABLE round=999 used=8034292 baseline=8034292
+LIVE_MODEL_SWAP_PASS round=999 fallback_decode=forbidden native_swap_read=true model_presented=true
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=false
+LIVE_RASTER_ENDURANCE_ROUND completed=999 target=1000 elapsed_ms=35206
+LIVE_RASTER_NAV_PRESENT phase=5 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/02.glb generation=2001 previous_generation=2000 frames=4180 same_device=true gpu_wait_ok=true kind=model
+LIVE_MODEL_SWAP_GUARD path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb fallback_decode=forbidden
+LIVE_MODEL_CACHE_HIT path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb tier=swap swap_reads_before=1998 swap_reads_after=1999 foreground=true
+LIVE_RASTER_NAV_PRESENT phase=6 path=/var/folders/jx/ps1h62vx3gdgly_ddwly4mqr0000gn/T/rrrah-glb-swap-qualification-pviimdhi/01.glb generation=2002 previous_generation=2001 frames=4182 same_device=true gpu_wait_ok=true kind=model
+LIVE_MODEL_GPU_STABLE round=1000 used=8034292 baseline=8034292
+LIVE_MODEL_SWAP_PASS round=1000 fallback_decode=forbidden native_swap_read=true model_presented=true
+LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required=false
+LIVE_RASTER_ENDURANCE_ROUND completed=1000 target=1000 elapsed_ms=35240
+[2026-11-03T02:07:12Z INFO  rrrah] Viewer transient storage shutdown complete

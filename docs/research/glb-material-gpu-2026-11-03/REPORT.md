@@ -283,8 +283,49 @@ and resize admission failures preserve prior resources.
 Live windows used SDR. Linear HDR rendering is covered by offscreen controls,
 not a newly qualified physical HDR display. No new latency/speed or RSS claim.
 GLB snapshot restoration remains decoder-blocked in mixed-cache component tests;
-full ordinary-viewer GLB restore under disk pressure needs its own guarded probe.
+the guarded ordinary-viewer GLB count-pressure probe is now recorded below; slow/cold disk and broader collections remain unqualified.
 General MikkTSpace/seams, intersecting transparent geometry, broader independent
 producer/render comparisons, external resources, extensions, skin/morph/animation
 and point/line geometry remain open. This selected-scene integration is not full
 glTF or 100-format qualification. NVIDIA/CUDA remains deferred by the user.
+
+## Guarded ordinary-viewer GLB native swap cycling
+
+[Reproducible runner](../../../scripts/qualify-glb-viewer-swap.py) now drives the
+ordinary production loader, cache, asynchronous GPU worker and surface presentation.
+It uses original BoxTextured and Box fixtures (textured/untextured), a one-entry
+model RAM cache, 1 MiB managed CPU root, 2 MiB/two-object native swap, 1 MiB
+write/restore budgets and 32 MiB model GPU cap. Previous/next prefetch is disabled
+for this eviction probe; retained prefetch is qualified separately above.
+
+[Result and hashes](viewer-swap-result.json): 1000 roundtrips completed on actual
+M4 Max/Metal SDR. Every guarded return to BoxTextured increments native swap
+read count by exactly one, then presents a distinct current generation on the
+same recovered device. Source decoder fallback is forbidden after switching
+away. The model GPU credit at all 1000 return checkpoints equals its initial
+post-recovery baseline. This proves stable logical credits at those checkpoints,
+not a physical driver/RSS or process-peak measurement.
+
+The same runner repeats the transition with `--no-cache`. It must exit nonzero,
+record the explicitly refused native decoder fallback, and record no successful
+guarded roundtrip. This negative control passed: a missing cache/swap cannot
+masquerade as a successful restore. The hooks exist only in debug qualification
+builds and are dormant without the explicit probe environment.
+
+Complete logs are preserved losslessly as
+[positive proof](viewer-swap-positive.log.gz) and
+[negative control](viewer-swap-negative.log.gz), with small readable
+[positive](viewer-swap-positive-excerpt.log)/[negative](viewer-swap-negative-excerpt.log)
+excerpts. The result pins binary, source fixtures and both full-log hashes.
+[Full app regression](viewer-swap-app-regression.log) remains 362 passed/108 ignored;
+[production build](viewer-swap-build.log), format and diff checks pass.
+
+Reproduce with the current debug binary and an unlocked Mac:
+
+```sh
+python3 scripts/qualify-glb-viewer-swap.py /absolute/path/to/rrrah /tmp/glb-swap-proof --rounds 1000
+```
+
+This is a two-source count-pressure cycling proof, not a long-duration large
+collection, slow/cold disk, latency, full producer coverage or physical HDR test.
+Those gates, broader glTF semantics and deferred NVIDIA/CUDA remain open.

@@ -3544,6 +3544,8 @@ fn execute_load(
             );
             return;
         }
+        #[cfg(debug_assertions)]
+        let swap_reads_before = model_cache.swap.as_ref().map_or(0, |swap| swap.stats().reads);
         let result = model_cache.load(&decode_request, true, || {
             let Some(permit) = foreground.acquire_decode(|| token.is_cancelled()) else {
                 return Err("model load cancelled".into());
@@ -3554,6 +3556,11 @@ fn execute_load(
         });
         if token.is_cancelled() {
             return;
+        }
+        #[cfg(debug_assertions)]
+        if result.is_ok() && gpu_recovery_probe::traces_model_cache(&path) {
+            let after = model_cache.swap.as_ref().map_or(0, |swap| swap.stats().reads);
+            gpu_recovery_probe::record_model_cache_hit(&path, swap_reads_before, after);
         }
         match result {
             Ok(mesh) => publish_load_event(

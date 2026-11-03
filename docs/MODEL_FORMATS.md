@@ -838,8 +838,15 @@ simulated device-loss/recreation preserved selection and camera. Three live
 PNG→GLB→PNG roundtrips verified one previous/one next retained prefetch and guarded
 raster RAM-cache returns. Source, binary and log hashes are in the GPU report.
 
-Ordinary-viewer GLB disk-restore pressure, broader producer comparisons, general
+Slow/cold-disk and larger-collection GLB qualification, broader producer comparisons, general
 tangent/UV/transparent-ordering qualification, full schema/extensions, external
 resources, skin/morph/animation and point/line handling remain outstanding.
 Offscreen linear HDR is tested; these live windows used SDR. No full GLB or
 100-format qualification or performance claim is made.
+
+The ordinary Metal viewer additionally passed 1000 guarded GLB swap roundtrips
+(BoxTextured↔Box) with a one-entry RAM cache and 1 MiB managed CPU root. Every
+return read native swap with decoder fallback forbidden and stable logical GPU
+credit. The no-cache negative control correctly failed. Full compressed proof
+and a reproducible runner are linked from the GPU report. This is a bounded
+two-source cycling proof, not large-collection or slow/cold-disk qualification.

@@ -692,8 +692,10 @@ for pinned source/binary/log evidence and exact limits.
 1. Broader independent producer/render comparisons and whole-schema rules;
    general MikkTSpace/seams, transparent intersection ordering and texture variants.
 2. External/data resources, extensions, skin/morph/animation and point/line geometry.
-3. Guarded ordinary-viewer GLB disk restore under pressure, source-identity races,
-   cancellation latency and measured file-to-first-frame performance.
+3. Broader slow/cold-disk and large-collection pressure, source-identity races,
+   cancellation latency and measured file-to-first-frame performance. The ordinary
+   viewer now passes 1000 count-pressure native-swap cycles with decoder fallback
+   forbidden; the no-cache negative control fails as required (GPU report).
 4. Physical HDR/display qualification beyond offscreen linear HDR. NVIDIA/CUDA
    remains deferred by the user.
 

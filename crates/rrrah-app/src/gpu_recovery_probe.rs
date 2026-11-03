@@ -21,6 +21,8 @@ pub(super) struct Probe {
     navigation_frames: u64,
     require_raster_cache: bool,
     model_switch: bool,
+    require_model_swap: bool,
+    model_gpu_baseline: Option<u64>,
     required_prefetch: usize,
     required_prefetch_attempts: usize,
     raw_budget: Option<rrrah_core::MemoryBudget>,
@@ -51,6 +53,8 @@ impl Probe {
             navigation_frames: 0,
             require_raster_cache: std::env::var("RRRAH_QUALIFY_RASTER_REQUIRE_CACHE").as_deref() == Ok("1"),
             model_switch: std::env::var("RRRAH_QUALIFY_MODEL_SWITCH").as_deref() == Ok("1"),
+            require_model_swap: std::env::var("RRRAH_QUALIFY_MODEL_REQUIRE_SWAP").as_deref() == Ok("1"),
+            model_gpu_baseline: None,
             required_prefetch: std::env::var("RRRAH_QUALIFY_PREFETCH_COUNT")
                 .map(|value| value.parse().expect("valid qualification prefetch count"))
                 .unwrap_or(0),
@@ -130,6 +134,12 @@ impl App {
                     self.status
                 );
                 probe.diagnostic_at = Instant::now();
+            }
+            if probe.require_model_swap
+                && probe.phase == 6
+                && self.status.contains("qualification requires native model swap")
+            {
+                return Err("guarded native model decoder fallback refused".into());
             }
             match probe.phase {
                 0 if self.ready_generation == Some(self.foreground_loader.current_generation())
@@ -223,12 +233,22 @@ impl App {
                         if self.pending_folder_scan.is_some() {
                             return Ok(());
                         }
-                        if !gpu.raster_active || self.image_index != 0 {
+                        if !(gpu.raster_active || (probe.require_model_swap && gpu.model_active))
+                            || self.image_index != 0
+                        {
                             return Err("raster navigation probe requires a selected raster at index0".into());
                         }
                         let index = gallery_target(&self.gallery, path)?;
                         if gallery_target(&self.gallery, &probe.path)? == index {
                             return Err("raster navigation probe requires two distinct files".into());
+                        }
+                        if probe.require_model_swap {
+                            probe.model_gpu_baseline = Some(
+                                self.model_gpu_budget
+                                    .as_ref()
+                                    .ok_or("model swap qualification requires model GPU budget")?
+                                    .used(),
+                            );
                         }
                         probe.recovered_device = gpu.device_epoch;
                         probe.navigation_generation = self.foreground_loader.current_generation();
@@ -322,7 +342,9 @@ impl App {
                 }
                 5 | 6
                     if (gpu.raster_active
-                        || (probe.model_switch && probe.phase == 5 && gpu.model_active))
+                        || (probe.model_switch
+                            && (probe.phase == 5 || probe.require_model_swap)
+                            && gpu.model_active))
                         && self.ready_generation == Some(self.foreground_loader.current_generation())
                         && gpu.presented_generation == self.ready_generation
                         && gpu.presented_frames > probe.navigation_frames =>
@@ -367,6 +389,23 @@ impl App {
                         let index = gallery_target(&self.gallery, &probe.path)?;
                         probe.navigation_generation = generation;
                         probe.navigation_frames = gpu.presented_frames;
+                        if probe.require_model_swap {
+                            let path = probe.path.canonicalize().map_err(|e| e.to_string())?;
+                            if let Some(expected) = FORBIDDEN_MODEL_DECODE.get() {
+                                if expected != &path {
+                                    return Err("model decode guard source changed".into());
+                                }
+                            } else {
+                                FORBIDDEN_MODEL_DECODE
+                                    .set(path)
+                                    .map_err(|_| "model decode guard already installed")?;
+                            }
+                            GUARDED_MODEL_CACHE_HIT.store(0, Ordering::Release);
+                            eprintln!(
+                                "LIVE_MODEL_SWAP_GUARD path={} fallback_decode=forbidden",
+                                probe.path.display()
+                            );
+                        }
                         if probe.require_raster_cache {
                             let path = probe.path.canonicalize().map_err(|error| error.to_string())?;
                             if FORBIDDEN_RASTER_DECODE.get().is_none() {
@@ -392,6 +431,26 @@ impl App {
                             self.open_gallery_index(index);
                         }
                     } else {
+                        if probe.require_model_swap && GUARDED_MODEL_CACHE_HIT.load(Ordering::Acquire) != 2 {
+                            return Err("guarded model return did not read native swap".into());
+                        }
+                        if probe.require_model_swap {
+                            let used = self.model_gpu_budget.as_ref().unwrap().used();
+                            if Some(used) != probe.model_gpu_baseline {
+                                return Err(format!(
+                                    "model GPU credits changed across roundtrip: baseline={:?} current={used}",
+                                    probe.model_gpu_baseline
+                                ));
+                            }
+                            eprintln!(
+                                "LIVE_MODEL_GPU_STABLE round={} used={used} baseline={used}",
+                                probe.completed_rounds + 1
+                            );
+                            eprintln!(
+                                "LIVE_MODEL_SWAP_PASS round={} fallback_decode=forbidden native_swap_read=true model_presented=true",
+                                probe.completed_rounds + 1
+                            );
+                        }
                         if probe.require_raster_cache && GUARDED_CACHE_HIT.load(Ordering::Acquire) == 0 {
                             return Err("guarded return was not a recorded foreground cache hit".into());
                         }
@@ -399,7 +458,7 @@ impl App {
                             "LIVE_RASTER_NAV_PASS roundtrip=true presented_generations_distinct=true same_device=true cache_required={}",
                             probe.require_raster_cache
                         );
-                        if probe.model_switch {
+                        if probe.model_switch && !probe.require_model_swap {
                             eprintln!(
                                 "LIVE_MIXED_NAV_PASS raster_model_raster=true model_renderer_confirmed=true"
                             );
@@ -530,4 +589,28 @@ fn prefetch_complete(generation: u64, required: usize, attempts: usize) -> bool 
     }
     let state = QUALIFIED_PREFETCH.lock().expect("qualification prefetch state");
     state.0 == generation && state.1 >= required && state.2 >= attempts
+}
+
+static FORBIDDEN_MODEL_DECODE: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+static GUARDED_MODEL_CACHE_HIT: AtomicU64 = AtomicU64::new(0);
+pub(super) fn check_model_decode(path: &std::path::Path) -> Result<(), String> {
+    if traces_model_cache(path) {
+        eprintln!("LIVE_MODEL_DECODE_REFUSED path={}", path.display());
+        return Err("qualification requires native model swap; fallback decode forbidden".into());
+    }
+    Ok(())
+}
+pub(super) fn traces_model_cache(path: &std::path::Path) -> bool {
+    FORBIDDEN_MODEL_DECODE
+        .get()
+        .is_some_and(|expected| path.canonicalize().is_ok_and(|p| &p == expected))
+}
+pub(super) fn record_model_cache_hit(path: &std::path::Path, before: u64, after: u64) {
+    let swap = after > before;
+    GUARDED_MODEL_CACHE_HIT.store(if swap { 2 } else { 1 }, Ordering::Release);
+    eprintln!(
+        "LIVE_MODEL_CACHE_HIT path={} tier={} swap_reads_before={before} swap_reads_after={after} foreground=true",
+        path.display(),
+        if swap { "swap" } else { "ram" }
+    );
 }
