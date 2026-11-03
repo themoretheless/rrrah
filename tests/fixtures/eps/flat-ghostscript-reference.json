@@ -1,0 +1,376 @@
+{
+  "generator_sha256": "389d44652ffdd97d372ef52b590ee62e235404a2c52ee21b5714024ccc975420",
+  "image_id": "sha256:4bcff63911fcb4448bd4fdacec207030997caf25e9bea4045fa6c8c44de311d1",
+  "harness": "One top-level source file per fresh Ghostscript process; errordict handler only, no stopped/procedure wrapper",
+  "license": "CC0-1.0",
+  "reference": "Ghostscript test-only independent execution",
+  "version": "10.05.1",
+  "binary_sha256": "e522a84dc98345933621efba59577afe76d8f2d241ae103a92e6ccd37812b290",
+  "source_sha256": "710710e1055c9bdbeac29de5c3da0b550cb26bf9616089e19207727d4a926ed4",
+  "cases": [
+    {
+      "code": "currentflat",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "-3 setflat currentflat",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "code": "0 setflat currentflat",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "code": "0.05 setflat currentflat",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "code": "0.1 setflat currentflat",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "code": "0.2 setflat currentflat",
+      "values": [
+        0.2
+      ]
+    },
+    {
+      "code": "1 setflat currentflat",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "10 setflat currentflat",
+      "values": [
+        10.0
+      ]
+    },
+    {
+      "code": "100 setflat currentflat",
+      "values": [
+        100.0
+      ]
+    },
+    {
+      "code": "101 setflat currentflat",
+      "values": [
+        100.0
+      ]
+    },
+    {
+      "code": "2 setflat gsave 3 setflat grestore currentflat",
+      "values": [
+        2.0
+      ]
+    },
+    {
+      "code": "2 setflat save /s exch def 3 setflat s restore currentflat",
+      "values": [
+        2.0
+      ]
+    },
+    {
+      "code": "7 setflat initgraphics currentflat",
+      "values": [
+        7.0
+      ]
+    },
+    {
+      "code": "7 setflat initmatrix currentflat",
+      "values": [
+        7.0
+      ]
+    },
+    {
+      "code": "2 setflat gsave 3 setflat grestoreall currentflat",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "save /s exch def 3 setflat grestore currentflat s restore",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "/s /setflat load def 5 s currentflat",
+      "values": [
+        5.0
+      ]
+    },
+    {
+      "code": "true setflat",
+      "error": "typecheck"
+    },
+    {
+      "code": "setflat",
+      "error": "stackunderflow"
+    },
+    {
+      "code": "/f {setflat} bind def /setflat {pop} def 5 f currentflat",
+      "values": [
+        5.0
+      ]
+    },
+    {
+      "code": "7 setflat grestore currentflat",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "code": "7 setflat grestoreall currentflat",
+      "values": [
+        1.0
+      ]
+    }
+  ],
+  "pixel_rgb": [
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    0,
+    255,
+    0,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255
+  ],
+  "pixel_cases": [
+    {
+      "name": "gsave_restore",
+      "source": "2 setflat gsave 3 setflat grestore currentflat 2 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "vm_restore",
+      "source": "2 setflat save /s exch def 3 setflat s restore currentflat 2 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "initgraphics_preserves",
+      "source": "7 setflat initgraphics currentflat 7 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "grestoreall_job",
+      "source": "2 setflat gsave 3 setflat grestoreall currentflat 1 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "clamp_low",
+      "source": "0 setflat currentflat 0.2 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "clamp_high",
+      "source": "101 setflat currentflat 100 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "grestore_job",
+      "source": "7 setflat grestore currentflat 1 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    },
+    {
+      "name": "grestoreall_empty",
+      "source": "7 setflat grestoreall currentflat 1 eq {0 1 0 setrgbcolor} {1 0 0 setrgbcolor} ifelse 1 1 6 6 rectfill",
+      "rgb_sha256": "c4ffa83900732d1bb6c16f08b48521e41ec70e3f3694275365a952665135327c"
+    }
+  ]
+}

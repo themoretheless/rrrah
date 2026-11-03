@@ -302,7 +302,12 @@ fn rasterize<F: FnMut() -> bool>(
                 ))
             } else {
                 let path = scene.prepare_path(index, viewport, budget, &mut cancelled)?;
-                let flat = flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?;
+                let flat = flatten_eps_path(
+                    &path,
+                    crate::eps_graphics::flatness_limits(limits.flatten, paint.style.flatness),
+                    budget,
+                    &mut cancelled,
+                )?;
                 drop(path);
                 if paint.kind == EpsPaintKind::RectFill {
                     device_rectangle(
@@ -363,7 +368,7 @@ fn rasterize<F: FnMut() -> bool>(
             while let Some(at) = clip {
                 let record = &scene.paints()[at];
                 let reuse = if let Some((previous, _)) = cached_clip.as_ref() {
-                    scene.same_clip_path(*previous, at, &mut cancelled)?
+                    scene.same_clip_path(*previous, at, limits.flatten.tolerance, &mut cancelled)?
                 } else {
                     false
                 };
@@ -371,7 +376,12 @@ fn rasterize<F: FnMut() -> bool>(
                     // Release the old entry before admitting replacement storage.
                     drop(cached_clip.take());
                     let path = scene.prepare_path(at, viewport, budget, &mut cancelled)?;
-                    let flat_clip = flatten_eps_path(&path, limits.flatten, budget, &mut cancelled)?;
+                    let flat_clip = flatten_eps_path(
+                        &path,
+                        crate::eps_graphics::flatness_limits(limits.flatten, record.style.flatness),
+                        budget,
+                        &mut cancelled,
+                    )?;
                     drop(path);
                     let mask = crate::eps_fill::fill_eps_path_sample_mask(
                         &flat_clip,
@@ -463,6 +473,114 @@ fn rasterize<F: FnMut() -> bool>(
 mod tests {
     use super::*;
     use crate::{EpsGraphics, EpsGraphicsLimits};
+    #[test]
+    fn flatness_clip_masks_keep_own_parameters_and_do_not_reuse_coarse_mask() {
+        fn clip(g: &mut crate::EpsGraphics, flatness: f64) {
+            g.init_clip();
+            g.new_path();
+            g.set_flatness(flatness).unwrap();
+            g.move_to(0., 0.).unwrap();
+            g.line_to(8., 0.).unwrap();
+            g.curve_to([8., 8., 0., 8., 0., 0.]).unwrap();
+            g.close_path().unwrap();
+            g.clip(false).unwrap();
+            g.new_path();
+        }
+        fn scene(root: &MemoryBudget, prime_cache: bool, final_flatness: f64) -> EpsVectorScene {
+            let mut g = crate::EpsGraphics::new(
+                crate::EpsGraphicsLimits {
+                    max_nodes: 64,
+                    max_paints: 8,
+                    max_saved_states: 0,
+                },
+                root,
+                || false,
+            )
+            .unwrap();
+            g.set_color(EpsDeviceColor::Gray(1.)).unwrap();
+            g.paint_rectangle(0., 0., 8., 8., EpsPaintKind::RectFill).unwrap();
+            if prime_cache {
+                clip(&mut g, 4.);
+                g.paint_rectangle(0., 0., 8., 8., EpsPaintKind::RectFill).unwrap();
+            }
+            clip(&mut g, final_flatness);
+            g.set_color(EpsDeviceColor::Rgb([0., 1., 0.])).unwrap();
+            g.paint_rectangle(0., 0., 8., 8., EpsPaintKind::RectFill).unwrap();
+            g.finish()
+        }
+        let root = MemoryBudget::new(1_000_000);
+        let primed = scene(&root, true, 0.2);
+        let fresh = scene(&root, false, 0.2);
+        let coarse = scene(&root, false, 4.);
+        assert!(!primed.same_clip_path(1, 3, 4., || false).unwrap());
+        let mut limits = EpsRasterLimits::default();
+        limits.flatten.tolerance = 4.;
+        let a = rasterize_eps_scene(
+            &primed,
+            8,
+            8,
+            [1., 0., 0., -1., 0., 8.],
+            EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            limits,
+            &root,
+            || false,
+        )
+        .unwrap();
+        let b = rasterize_eps_scene(
+            &fresh,
+            8,
+            8,
+            [1., 0., 0., -1., 0., 8.],
+            EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            limits,
+            &root,
+            || false,
+        )
+        .unwrap();
+        assert_eq!(&a[..], &b[..]);
+        let c = rasterize_eps_scene(
+            &coarse,
+            8,
+            8,
+            [1., 0., 0., -1., 0., 8.],
+            EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            limits,
+            &root,
+            || false,
+        )
+        .unwrap();
+        assert_ne!(&a[..], &c[..], "flatness must affect permitted coarse rendering");
+        assert!(
+            primed.same_clip_path(1, 3, 0.05, || false).unwrap(),
+            "same effective precision should reuse the mask"
+        );
+        limits.flatten.tolerance = 0.05;
+        let tight_a = rasterize_eps_scene(
+            &primed,
+            8,
+            8,
+            [1., 0., 0., -1., 0., 8.],
+            EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            limits,
+            &root,
+            || false,
+        )
+        .unwrap();
+        let tight_b = rasterize_eps_scene(
+            &fresh,
+            8,
+            8,
+            [1., 0., 0., -1., 0., 8.],
+            EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+            limits,
+            &root,
+            || false,
+        )
+        .unwrap();
+        assert_eq!(&tight_a[..], &tight_b[..]);
+        drop((a, b, c, tight_a, tight_b, primed, fresh, coarse));
+        assert_eq!(root.used(), 0);
+    }
     #[test]
     fn device_rectfill_cancel_and_all_admission_failures_release_credit() {
         let root = MemoryBudget::new(100_000);

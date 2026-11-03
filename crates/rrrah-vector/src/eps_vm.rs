@@ -99,6 +99,8 @@ pub enum EpsOperator {
     SetGray,
     SetRgbColor,
     SetCmykColor,
+    SetFlat,
+    CurrentFlat,
     SetLineWidth,
     SetLineCap,
     SetLineJoin,
@@ -1124,6 +1126,8 @@ impl<'a> Machine<'a, '_> {
             | O::SetGray
             | O::SetRgbColor
             | O::SetCmykColor
+            | O::SetFlat
+            | O::CurrentFlat
             | O::SetLineWidth
             | O::SetLineCap
             | O::SetLineJoin
@@ -1633,7 +1637,13 @@ impl<'a> Machine<'a, '_> {
             O::Arc | O::ArcNegative => 5,
             O::SetRgbColor => 3,
             O::SetCmykColor | O::RectFill | O::RectStroke | O::RectClip => 4,
-            O::Rotate | O::SetGray | O::SetLineWidth | O::SetLineCap | O::SetLineJoin | O::SetMiterLimit => 1,
+            O::Rotate
+            | O::SetGray
+            | O::SetFlat
+            | O::SetLineWidth
+            | O::SetLineCap
+            | O::SetLineJoin
+            | O::SetMiterLimit => 1,
             _ => 0,
         };
         let mut args = [0f64; 6];
@@ -1707,6 +1717,11 @@ impl<'a> Machine<'a, '_> {
             O::SetRgbColor => graphics.set_color(EpsDeviceColor::Rgb([args[0], args[1], args[2]]))?,
             O::SetCmykColor => {
                 graphics.set_color(EpsDeviceColor::Cmyk([args[0], args[1], args[2], args[3]]))?
+            }
+            O::SetFlat => graphics.set_flatness(args[0])?,
+            O::CurrentFlat => {
+                output[0] = graphics.style().flatness;
+                output_count = 1;
             }
             O::SetLineWidth => graphics.set_line_width(args[0])?,
             O::SetLineCap => graphics.set_line_cap(args[0] as u8)?,
@@ -1994,6 +2009,8 @@ fn operator(word: &[u8]) -> Option<EpsOperator> {
         b"setgray" => O::SetGray,
         b"setrgbcolor" => O::SetRgbColor,
         b"setcmykcolor" => O::SetCmykColor,
+        b"setflat" => O::SetFlat,
+        b"currentflat" => O::CurrentFlat,
         b"setlinewidth" => O::SetLineWidth,
         b"setlinecap" => O::SetLineCap,
         b"setlinejoin" => O::SetLineJoin,
@@ -2217,12 +2234,34 @@ pub fn evaluate_eps_vectors<'a, F: FnMut() -> bool>(
     vm_limits: EpsVmLimits,
     graphics_limits: EpsGraphicsLimits,
     budget: &MemoryBudget,
+    cancelled: F,
+) -> Result<EpsVectorExecution<'a>, EpsVmError> {
+    evaluate_eps_vectors_in_context(program, vm_limits, graphics_limits, budget, cancelled, false)
+}
+pub(crate) fn evaluate_eps_import_vectors<'a, F: FnMut() -> bool>(
+    program: &EpsProgram<'a>,
+    vm_limits: EpsVmLimits,
+    graphics_limits: EpsGraphicsLimits,
+    budget: &MemoryBudget,
+    cancelled: F,
+) -> Result<EpsVectorExecution<'a>, EpsVmError> {
+    evaluate_eps_vectors_in_context(program, vm_limits, graphics_limits, budget, cancelled, true)
+}
+fn evaluate_eps_vectors_in_context<'a, F: FnMut() -> bool>(
+    program: &EpsProgram<'a>,
+    vm_limits: EpsVmLimits,
+    graphics_limits: EpsGraphicsLimits,
+    budget: &MemoryBudget,
     mut cancelled: F,
+    import_boundary: bool,
 ) -> Result<EpsVectorExecution<'a>, EpsVmError> {
     let mut graphics = EpsGraphics::new(graphics_limits, budget, &mut cancelled).map_err(|e| match e {
         EpsGraphicsError::Cancelled => EpsVmError::Cancelled,
         other => EpsVmError::Graphics(other),
     })?;
+    if import_boundary {
+        graphics.enable_import_boundary();
+    }
     let evaluation = evaluate_eps_impl(program, vm_limits, budget, &mut cancelled, Some(&mut graphics))?;
     if cancelled() {
         return Err(EpsVmError::Cancelled);
@@ -3344,6 +3383,51 @@ mod vector_tests {
             max_dictionary_entries: 32,
             max_execution_frames: 16,
             max_work: 100_000,
+        }
+    }
+    #[test]
+    fn flatness_state_import_boundary_and_errors_match_ghostscript() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/flat-ghostscript-reference.json"
+        ))
+        .unwrap();
+        assert_eq!(reference["cases"].as_array().unwrap().len(), 22);
+        for case in reference["cases"].as_array().unwrap() {
+            let root = MemoryBudget::new(1_000_000);
+            let source = case["code"].as_str().unwrap().as_bytes();
+            let program = compile(source, &root);
+            let result = evaluate_eps_import_vectors(&program, vm(), graphics(), &root, || false);
+            if let Some(error) = case.get("error") {
+                assert!(
+                    match error.as_str().unwrap() {
+                        "typecheck" => matches!(result, Err(EpsVmError::Type)),
+                        "stackunderflow" => matches!(result, Err(EpsVmError::StackUnderflow)),
+                        other => panic!("unexpected reference {other}"),
+                    },
+                    "{}: {result:?}",
+                    String::from_utf8_lossy(source)
+                );
+            } else {
+                let result = result.unwrap_or_else(|e| panic!("{}: {e}", String::from_utf8_lossy(source)));
+                let expected = case["values"].as_array().unwrap();
+                assert_eq!(result.evaluation.values().len(), expected.len());
+                for (actual, expected) in result.evaluation.values().iter().zip(expected) {
+                    let EpsValue::Number(n) = actual else {
+                        panic!("unexpected {actual:?}")
+                    };
+                    // Ghostscript == prints decimal real values; compare their
+                    // round-trip single-precision representation used by this VM.
+                    assert_eq!(
+                        as_real(*n),
+                        expected.as_f64().unwrap() as f32,
+                        "{}",
+                        String::from_utf8_lossy(source)
+                    );
+                }
+                drop(result);
+            }
+            drop(program);
+            assert_eq!(root.used(), 0);
         }
     }
     #[test]

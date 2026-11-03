@@ -144,7 +144,8 @@ pub enum EpsStrokePrepareError {
     #[error(transparent)]
     Stroke(#[from] EpsStrokeError),
 }
-/// `limits.tolerance` is in final pixels. The Frobenius norm conservatively
+/// `limits.tolerance` is a final-pixel upper bound, further constrained by the
+/// paint's captured flatness. The Frobenius norm conservatively
 /// maps that error allowance back into stroke-user coordinates before native
 /// flattening. Final paint CTM defines the pen, even if path nodes predate it.
 pub fn prepare_eps_stroke<F: FnMut() -> bool>(
@@ -162,6 +163,7 @@ pub fn prepare_eps_stroke<F: FnMut() -> bool>(
     if paint_info.kind != EpsPaintKind::Stroke || !viewport.iter().all(|v| v.is_finite()) {
         return Err(EpsStrokePrepareError::Range);
     }
+    limits = crate::eps_graphics::flatness_limits(limits, paint_info.style.flatness);
     if paint_info.style.width == 0. {
         // Software raster device policy: one-pixel circular pen. World path
         // nodes already contain construction CTMs, so no paint-CTM inverse is
@@ -231,6 +233,45 @@ pub fn prepare_eps_stroke<F: FnMut() -> bool>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn flatness_constrains_device_error_without_loosening_caller_precision() {
+        let root = MemoryBudget::new(1_000_000);
+        let mut g = crate::EpsGraphics::new(
+            crate::EpsGraphicsLimits {
+                max_nodes: 16,
+                max_paints: 2,
+                max_saved_states: 1,
+            },
+            &root,
+            || false,
+        )
+        .unwrap();
+        for flatness in [4., 0.2] {
+            g.set_flatness(flatness).unwrap();
+            g.new_path();
+            g.move_to(0., 0.).unwrap();
+            g.curve_to([0., 8., 8., 8., 8., 0.]).unwrap();
+            g.paint(EpsPaintKind::Stroke).unwrap();
+        }
+        let scene = g.finish();
+        let matrix = [2., 0., 0., 3., 0., 0.];
+        let mut limits = EpsFlattenLimits::default();
+        limits.tolerance = 4.;
+        let coarse = prepare_eps_stroke(&scene, 0, matrix, limits, &root, || false).unwrap();
+        let fine = prepare_eps_stroke(&scene, 1, matrix, limits, &root, || false).unwrap();
+        assert!(fine.path.len() > coarse.path.len());
+        limits.tolerance = 0.05;
+        let tight_coarse = prepare_eps_stroke(&scene, 0, matrix, limits, &root, || false).unwrap();
+        let tight_fine = prepare_eps_stroke(&scene, 1, matrix, limits, &root, || false).unwrap();
+        assert_eq!(&tight_coarse.path[..], &tight_fine.path[..]);
+        limits.tolerance = f64::INFINITY;
+        assert!(matches!(
+            prepare_eps_stroke(&scene, 1, matrix, limits, &root, || false),
+            Err(EpsStrokePrepareError::Range)
+        ));
+        drop((coarse, fine, tight_coarse, tight_fine, scene));
+        assert_eq!(root.used(), 0);
+    }
     #[test]
     fn prepared_multiple_subpaths_stroke_into_one_managed_outline() {
         let root = MemoryBudget::new(100_000);

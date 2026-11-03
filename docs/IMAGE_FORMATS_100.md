@@ -1890,3 +1890,16 @@ pass RAM/swap/pressure/cancel and exact SDR-HDR offscreen Metal on Apple M4 Max.
 Tiger loads setdash and next refuses at currentflat. AI stays Pending; format
 counts, full device-profile/HDR/NVIDIA qualification are unchanged. See [scope,
 resolved witness and source pins](research/eps-dash-2026-11-03/REPORT.md).
+
+### Native EPS flatness — 2026-11-03 (current follow-up)
+
+Added currentflat/setflat, captured device-error limits for fill/stroke/clip,
+and correct initgraphics preservation. Clip masks use effective precision in
+cache equivalence: changed accuracy invalidates; the same stricter caller limit
+retains reuse. Document imports now have an implicit initial graphics boundary;
+standalone lexical graphics retain their previous model. 22 state traces, eight
+state-controlled pixel scenes, 289 vector and 364 viewer tests pass. The eight
+scenes also pass RAM/swap/pressure/cancel and exact SDR-HDR offscreen Metal on
+Apple M4 Max. Curve/clip precision effects are separately checked on CPU. Tiger
+passes currentflat and next refuses at clippath. AI remains Pending. See [scope
+and source-pinned evidence](research/eps-flatness-2026-11-03/REPORT.md).

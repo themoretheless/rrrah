@@ -1,0 +1,58 @@
+{
+  "scope": "Native flatness state, device-error ceiling and effective clip-mask precision; implicit import job graphics boundary",
+  "sources": {
+    "crates/rrrah-vector/src/eps_graphics.rs": "0e2f83fc40807c6bab4de7e0a66acb9f33e624b21814b72ef9bf71c61fb2a7d2",
+    "crates/rrrah-vector/src/eps_vm.rs": "164127966b7b43cde761c7d88cbd4a1799ea5c959d0535c94f1159f13ff9e42e",
+    "crates/rrrah-vector/src/eps_document.rs": "6258d917d16b84687e9361ab6a43aea0cbbc196653f955ecb2a1aabdc174d6e8",
+    "crates/rrrah-vector/src/eps_raster.rs": "580e8cd2f73f63f7db4d43c46b0bce7ff01bfa59e03bc016f7bff796ce1af096",
+    "crates/rrrah-vector/src/eps_stroke_prepare.rs": "e8f8b61791b4740802ef95d506cdfd4dc03494943560bc5a9b9028af9828c8d5",
+    "crates/rrrah-app/tests/eps_lifecycle.rs": "46a067aff2b67349544ed41421c9a9e6ee9fa79cd16e8c8e0201cc7a09c133e9",
+    "scripts/generate-eps-flat-reference.py": "389d44652ffdd97d372ef52b590ee62e235404a2c52ee21b5714024ccc975420",
+    "tests/fixtures/eps/flat-ghostscript-reference.json": "2518fec7b94ba6f0e81b6451b57d42ac80e3aae0240797c2957f91f6da48f756",
+    "Cargo.lock": "269ee18a7c598fccbafc00c4cb5bddcfd5d83d6b83b382343a402eaf02a4f12b"
+  },
+  "regressions": {
+    "vector": {
+      "result": "test result: ok. 289 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out; finished in 46.55s",
+      "capture_sha256": "c35694ffb5db2c185396c08c33caa9e2d7609e6a17fa45d9bce78113d626a8b7"
+    },
+    "app": {
+      "result": "test result: ok. 364 passed; 0 failed; 109 ignored; 0 measured; 0 filtered out; finished in 6.49s",
+      "capture_sha256": "f3e3a6459748a0370cb829ba3ec0d91d0910a9bbbda2bd8e87079d50c8fb79e1"
+    },
+    "metal": {
+      "result": "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.12s",
+      "capture_sha256": "bbe5e0b05af556a8180a621ee567bbbdc4f7b6fa3c3ffd82874c0e95ac728f2c",
+      "retained_sha256": "6fa4365967e48f9b5d2459a52d4649ad83574e7f87744525ca9e06dba54548ad"
+    },
+    "production_check": {
+      "completed": true,
+      "capture_sha256": "2372fac84ed843c64df3309ba102f8df379728090b4526fb230796a0e603f446"
+    },
+    "example_build": {
+      "completed": true,
+      "capture_sha256": "cdbad2d5a2886eadd3817e0f905f0ac815370a2a9540016a301dcdc3334e2320"
+    }
+  },
+  "state_reference_cases": 22,
+  "pixel_reference_cases": 8,
+  "pixel_cases_share_one_analytic_rgb_reference": true,
+  "new_automatic_vector_controls": 5,
+  "metal_adapter": "Metal Apple M4 Max",
+  "metal_scenes": 8,
+  "curve_precision_and_clip_cache_effects_checked_on_cpu": true,
+  "caller_precision_never_loosened": true,
+  "source_flatness_range": [
+    0.2,
+    100.0
+  ],
+  "initial_flatness": 1.0,
+  "initgraphics_preserves_flatness": true,
+  "producer_original_qualified": false,
+  "next_original_operator": "clippath",
+  "format_counts_changed": false,
+  "rss_qualified": false,
+  "speed_improvement_qualified": false,
+  "physical_hdr_qualified": false,
+  "nvidia_qualified": false
+}

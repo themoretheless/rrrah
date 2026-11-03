@@ -4,6 +4,12 @@ use rrrah_core::{BufferError, MemoryBudget, MutableBuffer, SharedBuffer};
 use std::sync::atomic::{AtomicU64, Ordering};
 static NEXT_CONTEXT: AtomicU64 = AtomicU64::new(1);
 
+pub(crate) fn flatness_limits(mut limits: crate::EpsFlattenLimits, flatness: f64) -> crate::EpsFlattenLimits {
+    if limits.tolerance.is_finite() && limits.tolerance > 0. {
+        limits.tolerance = limits.tolerance.min(flatness);
+    }
+    limits
+}
 pub type EpsMatrix = [f64; 6];
 pub type EpsPoint = [f64; 2];
 const IDENTITY: EpsMatrix = [1., 0., 0., 1., 0., 0.];
@@ -20,6 +26,8 @@ pub struct EpsStrokeStyle {
     pub cap: u8,
     pub join: u8,
     pub miter_limit: f64,
+    /// Maximum device-space curve approximation error requested by PostScript.
+    pub flatness: f64,
     pub dash: crate::EpsDashPattern,
 }
 impl Default for EpsStrokeStyle {
@@ -30,6 +38,7 @@ impl Default for EpsStrokeStyle {
             cap: 0,
             join: 0,
             miter_limit: 10.,
+            flatness: 1.,
             dash: crate::EpsDashPattern::default(),
         }
     }
@@ -150,6 +159,7 @@ struct SavedState {
 #[derive(Debug)]
 pub struct EpsGraphics {
     context: u64,
+    import_boundary: bool,
     nodes: MutableBuffer<Node>,
     used_nodes: usize,
     paints: MutableBuffer<EpsPaint>,
@@ -252,6 +262,7 @@ impl EpsGraphics {
             .map_err(|_| EpsGraphicsError::CheckpointContext)?;
         Ok(Self {
             context,
+            import_boundary: false,
             nodes,
             used_nodes: 0,
             paints,
@@ -260,6 +271,11 @@ impl EpsGraphics {
             depth: 0,
             state,
         })
+    }
+    /// An importer owns an implicit initial job boundary; it cannot be popped
+    /// by source grestore. Standalone graphics retain their unencapsulated model.
+    pub(crate) fn enable_import_boundary(&mut self) {
+        self.import_boundary = true;
     }
     /// Capture supported graphics state and the entire current save stack.
     /// Only stack metadata is copied; immutable path/clip nodes and paint records
@@ -350,10 +366,12 @@ impl EpsGraphics {
     pub fn init_matrix(&mut self) {
         self.state.matrix = IDENTITY;
     }
-    /// Reset the active supported graphics state, retaining the save stack and
-    /// immutable nodes/paint records still owned by saved states or the scene.
+    /// Reset initgraphics-owned parameters, preserving flatness, the save stack
+    /// and immutable nodes/paint records owned by saved states or the scene.
     pub fn init_graphics(&mut self) {
+        let flatness = self.state.style.flatness;
         self.state = State::default();
+        self.state.style.flatness = flatness;
     }
     pub fn concat(&mut self, n: EpsMatrix) -> Result<(), EpsGraphicsError> {
         let n = finite(n)?;
@@ -402,6 +420,9 @@ impl EpsGraphics {
     }
     pub fn grestore(&mut self) -> Result<(), EpsGraphicsError> {
         let Some(depth) = self.depth.checked_sub(1) else {
+            if self.import_boundary {
+                self.state = State::default();
+            }
             return Ok(());
         };
         let saved = self.saved[depth];
@@ -412,7 +433,8 @@ impl EpsGraphics {
         Ok(())
     }
     /// Restore to the nearest VM boundary, retaining it, or the bottom ordinary
-    /// saved state when there is no boundary. Empty stacks have no effect.
+    /// saved state when there is no boundary. The importer has a permanent initial
+    /// boundary; an empty standalone stack has no effect.
     /// Validation/cancellation finishes before any state is published.
     pub fn grestore_all<F: FnMut() -> bool>(&mut self, mut cancelled: F) -> Result<(), EpsGraphicsError> {
         if cancelled() {
@@ -433,8 +455,14 @@ impl EpsGraphics {
         }
         if let Some(index) = target {
             let saved = self.saved[index];
-            self.state = saved.state;
+            self.state = if self.import_boundary && !saved.vm_boundary {
+                State::default()
+            } else {
+                saved.state
+            };
             self.depth = if saved.vm_boundary { index + 1 } else { 0 };
+        } else if self.import_boundary {
+            self.state = State::default();
         }
         Ok(())
     }
@@ -660,6 +688,13 @@ impl EpsGraphics {
     }
     pub fn set_dash(&mut self, pattern: crate::EpsDashPattern) {
         self.state.style.dash = pattern;
+    }
+    pub fn set_flatness(&mut self, value: f64) -> Result<(), EpsGraphicsError> {
+        if !value.is_finite() {
+            return Err(EpsGraphicsError::Range);
+        }
+        self.state.style.flatness = value.clamp(0.2, 100.);
+        Ok(())
     }
     pub fn set_line_width(&mut self, width: f64) -> Result<(), EpsGraphicsError> {
         if !width.is_finite() || width < 0. {
@@ -941,14 +976,21 @@ impl EpsVectorScene {
         &self,
         first: usize,
         second: usize,
+        caller_tolerance: f64,
         mut cancelled: F,
     ) -> Result<bool, EpsGraphicsError> {
         if cancelled() {
             return Err(EpsGraphicsError::Cancelled);
         }
+        if !caller_tolerance.is_finite() || caller_tolerance <= 0. {
+            return Err(EpsGraphicsError::Range);
+        }
         let a = self.paints().get(first).ok_or(EpsGraphicsError::Range)?;
         let b = self.paints().get(second).ok_or(EpsGraphicsError::Range)?;
-        if a.kind != b.kind || a.node_count != b.node_count {
+        if a.kind != b.kind
+            || a.node_count != b.node_count
+            || caller_tolerance.min(a.style.flatness) != caller_tolerance.min(b.style.flatness)
+        {
             return Ok(false);
         }
         let (mut left, mut right) = (a.head, b.head);
@@ -1001,6 +1043,48 @@ impl EpsVectorScene {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn flatness_import_boundary_cancel_is_atomic_and_needs_no_saved_slot() {
+        let root = MemoryBudget::new(100_000);
+        let mut g = EpsGraphics::new(
+            EpsGraphicsLimits {
+                max_nodes: 4,
+                max_paints: 1,
+                max_saved_states: 0,
+            },
+            &root,
+            || false,
+        )
+        .unwrap();
+        g.enable_import_boundary();
+        g.set_flatness(7.).unwrap();
+        let resident = root.used();
+        for stop in 1..=2 {
+            let mut at = 0;
+            assert!(matches!(
+                g.grestore_all(|| {
+                    at += 1;
+                    at == stop
+                }),
+                Err(EpsGraphicsError::Cancelled)
+            ));
+            assert_eq!(g.style().flatness, 7.);
+            assert_eq!(root.used(), resident);
+        }
+        g.grestore_all(|| false).unwrap();
+        assert_eq!(g.style().flatness, 1.);
+        g.set_flatness(7.).unwrap();
+        g.init_graphics();
+        assert_eq!(g.style().flatness, 7.);
+        for bad in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY] {
+            assert!(matches!(g.set_flatness(bad), Err(EpsGraphicsError::Range)));
+            assert_eq!(g.style().flatness, 7.);
+        }
+        g.grestore().unwrap();
+        assert_eq!(g.style().flatness, 1.);
+        drop(g);
+        assert_eq!(root.used(), 0);
+    }
     #[test]
     fn vm_boundaries_survive_grestore_and_grestoreall_and_checkpoint() {
         let root = MemoryBudget::new(100_000);

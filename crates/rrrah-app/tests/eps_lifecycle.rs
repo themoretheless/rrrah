@@ -274,6 +274,30 @@ fn independent_dash_pixels_survive_swap_and_metal() {
     );
 }
 
+#[test]
+#[ignore = "requires actual Metal flatness state, independent pixels and disk restore"]
+fn independent_flatness_import_pixels_survive_swap_and_metal() {
+    let gpu = common::qualification_gpu().expect("required actual GPU adapter");
+    eprintln!("EPS flatness adapter: {}", gpu.adapter_name());
+    let reference: serde_json::Value = serde_json::from_str(include_str!(
+        "../../../tests/fixtures/eps/flat-ghostscript-reference.json"
+    ))
+    .unwrap();
+    let mut cases = reference["pixel_cases"].as_array().unwrap().clone();
+    assert_eq!(cases.len(), 8);
+    for case in &mut cases {
+        case["source"] = serde_json::Value::String(format!(
+            "1 setgray 0 0 8 8 rectfill 0 setgray\n{}",
+            case["source"].as_str().unwrap()
+        ));
+        case["rgb"] = reference["pixel_rgb"].clone();
+    }
+    compare_independent_eps_cases_through_swap_and_gpu(&gpu, &cases);
+    eprintln!(
+        "EPS flatness: 8 independent state-controlled scenes; native import/RAM/pressure/cancel/disk restore/exact SDR-HDR Metal; root zero; curve/clip precision independently checked on CPU"
+    );
+}
+
 fn compare_independent_eps_cases_through_swap_and_gpu(
     gpu: &common::GpuReadback,
     cases: &[serde_json::Value],

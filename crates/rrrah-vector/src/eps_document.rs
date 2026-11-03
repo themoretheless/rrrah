@@ -132,8 +132,13 @@ fn prepare_eps_document<F: FnMut() -> bool>(
         return Err(EpsDocumentError::Dimensions);
     }
     let program = compile_eps_program(&source, limits.compile, budget, &mut cancelled)?;
-    let EpsVectorExecution { evaluation, scene } =
-        evaluate_eps_vectors(&program, limits.vm, limits.graphics, budget, &mut cancelled)?;
+    let EpsVectorExecution { evaluation, scene } = crate::eps_vm::evaluate_eps_import_vectors(
+        &program,
+        limits.vm,
+        limits.graphics,
+        budget,
+        &mut cancelled,
+    )?;
     drop(evaluation);
     drop(program);
     Ok(PreparedEpsDocument {
@@ -209,6 +214,50 @@ pub fn decode_eps_file_document(
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn flatness_import_job_pixels_match_independent_reference() {
+        let reference: serde_json::Value = serde_json::from_str(include_str!(
+            "../../../tests/fixtures/eps/flat-ghostscript-reference.json"
+        ))
+        .unwrap();
+        let cases = reference["pixel_cases"].as_array().unwrap();
+        assert_eq!(cases.len(), 8);
+        let expected: Vec<u8> = reference["pixel_rgb"]
+            .as_array()
+            .unwrap()
+            .chunks_exact(3)
+            .flat_map(|p| {
+                [
+                    p[0].as_u64().unwrap() as u8,
+                    p[1].as_u64().unwrap() as u8,
+                    p[2].as_u64().unwrap() as u8,
+                    255,
+                ]
+            })
+            .collect();
+        for case in cases {
+            let root = MemoryBudget::new(32 * 1024 * 1024);
+            let source = format!(
+                "%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 8 8\n%%EndComments\n1 setgray 0 0 8 8 rectfill 0 setgray\n{}\n%%EOF\n",
+                case["source"].as_str().unwrap()
+            );
+            let raster = decode_eps_document(
+                source.as_bytes(),
+                1.,
+                EpsRasterColorPolicy::DeviceGrayRgbAsSrgb,
+                EpsDocumentLimits::default(),
+                &root,
+                || false,
+            )
+            .unwrap();
+            let RasterPixels::Rgba8(pixels) = raster.pixels() else {
+                panic!()
+            };
+            assert_eq!(&pixels[..], &expected[..], "{}", case["name"]);
+            drop(raster);
+            assert_eq!(root.used(), 0);
+        }
+    }
     #[test]
     fn file_source_is_released_before_pixel_admission() {
         let mut code = b"%!PS-Adobe-3.0 EPSF-3.0\n%%BoundingBox: 0 0 512 512\n%%EndComments\n1 0 0 setrgbcolor 0 0 512 512 rectfill\n".to_vec();
