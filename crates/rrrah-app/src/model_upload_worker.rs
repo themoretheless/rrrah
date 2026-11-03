@@ -1,4 +1,4 @@
-//! One active geometry upload, one replaceable pending job, one completed result.
+//! One active model upload, one replaceable pending job, one completed result.
 use std::sync::{
     Arc, Condvar, Mutex,
     atomic::{AtomicBool, AtomicU64, Ordering},
@@ -12,11 +12,29 @@ enum UploadContext {
         budget: Option<rrrah_core::MemoryBudget>,
     },
 }
+enum Work {
+    Geometry {
+        model: rrrah_decode::DecodedModel,
+        context: UploadContext,
+    },
+    #[allow(dead_code, reason = "GLB publication wiring is staged")]
+    Glb {
+        asset: rrrah_decode::GlbAsset,
+        preparer: crate::glb_view::GlbViewportPreparer,
+        request: rrrah_decode::DecodeRequest,
+    },
+}
+#[allow(dead_code, reason = "GLB publication wiring is staged")]
+pub(crate) struct CompletedGlb {
+    pub id: u64,
+    pub generation: u64,
+    pub result: Result<crate::glb_view::GlbViewport, crate::glb_view::ViewError>,
+    token: rrrah_decode::GenerationToken,
+}
 struct Job {
     id: u64,
     generation: u64,
-    model: rrrah_decode::DecodedModel,
-    context: UploadContext,
+    work: Work,
     token: rrrah_decode::GenerationToken,
 }
 pub(crate) struct Completed {
@@ -30,6 +48,7 @@ pub(crate) struct Completed {
 struct Slots {
     pending: Option<Job>,
     completed: Option<Completed>,
+    glb_completed: Option<CompletedGlb>,
 }
 #[derive(Default)]
 struct Shared {
@@ -68,7 +87,14 @@ impl ModelUploadWorker {
         generation: u64,
         token: rrrah_decode::GenerationToken,
     ) -> std::io::Result<u64> {
-        self.submit_context(model, UploadContext::Existing(preparer), generation, token)
+        self.submit_work(
+            Work::Geometry {
+                model,
+                context: UploadContext::Existing(preparer),
+            },
+            generation,
+            token,
+        )
     }
     pub fn submit_new(
         &mut self,
@@ -79,21 +105,41 @@ impl ModelUploadWorker {
         generation: u64,
         token: rrrah_decode::GenerationToken,
     ) -> std::io::Result<u64> {
-        self.submit_context(
-            model,
-            UploadContext::New {
-                device,
-                format,
-                budget,
+        self.submit_work(
+            Work::Geometry {
+                model,
+                context: UploadContext::New {
+                    device,
+                    format,
+                    budget,
+                },
             },
             generation,
             token,
         )
     }
-    fn submit_context(
+    #[allow(dead_code, reason = "GLB publication wiring is staged")]
+    pub fn submit_glb(
         &mut self,
-        model: rrrah_decode::DecodedModel,
-        context: UploadContext,
+        asset: rrrah_decode::GlbAsset,
+        preparer: crate::glb_view::GlbViewportPreparer,
+        request: rrrah_decode::DecodeRequest,
+        generation: u64,
+        token: rrrah_decode::GenerationToken,
+    ) -> std::io::Result<u64> {
+        self.submit_work(
+            Work::Glb {
+                asset,
+                preparer,
+                request,
+            },
+            generation,
+            token,
+        )
+    }
+    fn submit_work(
+        &mut self,
+        work: Work,
         generation: u64,
         token: rrrah_decode::GenerationToken,
     ) -> std::io::Result<u64> {
@@ -136,40 +182,65 @@ impl ModelUploadWorker {
                             if cancelled() {
                                 continue;
                             }
-                            let (preparer, renderer) = match job.context {
-                                UploadContext::Existing(preparer) => (preparer, None),
-                                UploadContext::New {
-                                    device,
-                                    format,
-                                    budget,
+                            match job.work {
+                                Work::Glb {
+                                    asset,
+                                    preparer,
+                                    request,
                                 } => {
-                                    let renderer = match budget {
-                                        Some(budget) => {
-                                            rrrah_gpu::ModelRenderer::new_with_budget(&device, format, budget)
-                                        }
-                                        None => rrrah_gpu::ModelRenderer::new(&device, format),
-                                    };
-                                    (renderer.upload_preparer(), Some(renderer))
+                                    let result = preparer.prepare(&asset, &request, cancelled);
+                                    drop(asset);
+                                    let mut slots = shared.slots.lock().unwrap();
+                                    if shared.stop.load(Ordering::Acquire)
+                                        || shared.revision.load(Ordering::Acquire) != job.id
+                                        || job.token.is_cancelled()
+                                    {
+                                        continue;
+                                    }
+                                    slots.glb_completed = Some(CompletedGlb {
+                                        id: job.id,
+                                        generation: job.generation,
+                                        result,
+                                        token: job.token,
+                                    });
+                                    drop(slots);
                                 }
-                            };
-                            let result = preparer.prepare_with_cancel(job.model.triangles(), cancelled);
-                            // Release source geometry before publishing/waking the UI.
-                            drop(job.model);
-                            let mut slots = shared.slots.lock().unwrap();
-                            if shared.stop.load(Ordering::Acquire)
-                                || shared.revision.load(Ordering::Acquire) != job.id
-                                || job.token.is_cancelled()
-                            {
-                                continue;
+                                Work::Geometry { model, context } => {
+                                    let (preparer, renderer) = match context {
+                                        UploadContext::Existing(preparer) => (preparer, None),
+                                        UploadContext::New {
+                                            device,
+                                            format,
+                                            budget,
+                                        } => {
+                                            let renderer = match budget {
+                                                Some(budget) => rrrah_gpu::ModelRenderer::new_with_budget(
+                                                    &device, format, budget,
+                                                ),
+                                                None => rrrah_gpu::ModelRenderer::new(&device, format),
+                                            };
+                                            (renderer.upload_preparer(), Some(renderer))
+                                        }
+                                    };
+                                    let result = preparer.prepare_with_cancel(model.triangles(), cancelled);
+                                    drop(model);
+                                    let mut slots = shared.slots.lock().unwrap();
+                                    if shared.stop.load(Ordering::Acquire)
+                                        || shared.revision.load(Ordering::Acquire) != job.id
+                                        || job.token.is_cancelled()
+                                    {
+                                        continue;
+                                    }
+                                    slots.completed = Some(Completed {
+                                        id: job.id,
+                                        generation: job.generation,
+                                        result,
+                                        renderer,
+                                        token: job.token,
+                                    });
+                                    drop(slots);
+                                }
                             }
-                            slots.completed = Some(Completed {
-                                id: job.id,
-                                generation: job.generation,
-                                result,
-                                renderer,
-                                token: job.token,
-                            });
-                            drop(slots);
                             wake();
                         }
                     })?,
@@ -185,11 +256,11 @@ impl ModelUploadWorker {
         }
         let id = self.shared.revision.fetch_add(1, Ordering::AcqRel) + 1;
         slots.completed = None;
+        slots.glb_completed = None;
         slots.pending = Some(Job {
             id,
             generation,
-            model,
-            context,
+            work,
             token,
         });
         drop(slots);
@@ -201,6 +272,16 @@ impl ModelUploadWorker {
         self.shared.revision.fetch_add(1, Ordering::AcqRel);
         slots.pending = None;
         slots.completed = None;
+        slots.glb_completed = None;
+    }
+    #[allow(dead_code, reason = "GLB publication wiring is staged")]
+    pub fn try_take_glb(&self) -> Option<CompletedGlb> {
+        let mut slots = self.shared.slots.lock().unwrap();
+        let completed = slots.glb_completed.take()?;
+        if completed.id != self.shared.revision.load(Ordering::Acquire) || completed.token.is_cancelled() {
+            return None;
+        }
+        Some(completed)
     }
     pub fn try_take(&self) -> Option<Completed> {
         let mut slots = self.shared.slots.lock().unwrap();

@@ -217,3 +217,21 @@ images. [Inspection control](inspection.log) verifies the original BoxTextured
 asset, successful final credit release, unsupported image/window refusal and
 failed admission under a one-byte root without leakage. GUI loader/worker
 publication remains outstanding.
+
+## Shared asynchronous GPU worker
+
+The existing bounded `ModelUploadWorker` now accepts both geometry and selected
+GLB viewport preparations. Both families share one active job, one replaceable
+pending slot and one completed-result occupancy. Submitting either family clears
+old completions from both families before replacement admission. Generation
+tokens, revision checks, cancellation and shutdown fence publication; the worker
+releases its source asset before waking the UI. GLB mip/material contexts remain
+reusable. No GLB call from the GUI event loop is installed yet.
+
+[Actual Metal worker control](worker-metal.log) compares every SDR8/HDR16 frame
+sample against synchronous preparation, checks generation-stale GLB completion
+discard, replaces a completed GLB with STL in the shared queue, and checks final
+source/GPU root release. [Existing worker regressions](worker-regression.log)
+pass, including bounded 1000-request replacement, generation cancellation,
+first-open pipeline preparation and native model SDR/HDR frame comparisons.
+Production cargo check and formatting also pass.

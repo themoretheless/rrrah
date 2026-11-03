@@ -766,6 +766,88 @@ mod tests {
         device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
         assert_eq!(budget.used(), 0);
     }
+    #[test]
+    #[ignore = "actual Metal asynchronous GLB/legacy worker publication proof"]
+    fn glb_viewport_metal_shared_upload_worker_frames_and_replacement() {
+        let gpu = crate::navigation_metal_readback::qualification_gpu().expect("actual Metal required");
+        let source = MemoryBudget::new(4 * 1024 * 1024);
+        let root = MemoryBudget::new(4 * 1024 * 1024);
+        let request = request(fixture(), &source);
+        let asset = rrrah_decode::decode_glb_asset(&request, None).unwrap();
+        let generation = Arc::new(std::sync::atomic::AtomicU64::new(7));
+        let token = || rrrah_decode::GenerationToken::new(generation.clone(), 7);
+        for format in [
+            wgpu::TextureFormat::Rgba8UnormSrgb,
+            wgpu::TextureFormat::Rgba16Float,
+        ] {
+            let preparer = GlbViewportPreparer::new(&gpu.device, &gpu.queue, root.clone(), format).unwrap();
+            let mut reference = preparer.prepare(&asset, &request, || false).unwrap();
+            let expected = frame(&mut reference, &gpu.device, &gpu.queue, format, [0.4, -0.2, 1.]);
+            drop(reference);
+            let mut worker = crate::model_upload_worker::ModelUploadWorker::default();
+            let (tx, rx) = std::sync::mpsc::channel();
+            worker.set_waker(move || {
+                tx.send(()).unwrap();
+            });
+            let id = worker
+                .submit_glb(asset.clone(), preparer.clone(), request.clone(), 7, token())
+                .unwrap();
+            rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
+            assert!(worker.try_take().is_none());
+            let completed = worker.try_take_glb().unwrap();
+            assert_eq!((completed.id, completed.generation), (id, 7));
+            let mut view = completed.result.unwrap();
+            assert_eq!(
+                frame(&mut view, &gpu.device, &gpu.queue, format, [0.4, -0.2, 1.]),
+                expected
+            );
+            drop(view);
+            worker
+                .submit_glb(asset.clone(), preparer.clone(), request.clone(), 7, token())
+                .unwrap();
+            rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
+            generation.store(8, std::sync::atomic::Ordering::Release);
+            assert!(
+                worker.try_take_glb().is_none(),
+                "stale GLB completion is discarded"
+            );
+            generation.store(7, std::sync::atomic::Ordering::Release);
+            gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(root.used(), 0);
+            worker
+                .submit_glb(asset.clone(), preparer, request.clone(), 7, token())
+                .unwrap();
+            rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
+            let geometry = rrrah_decode::decode_model(&rrrah_decode::DecodeRequest::new(
+                std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+                    .join("../../tests/fixtures/models/triangle.stl"),
+            ))
+            .unwrap();
+            worker
+                .submit_new(
+                    geometry,
+                    gpu.device.clone(),
+                    format,
+                    Some(root.clone()),
+                    7,
+                    token(),
+                )
+                .unwrap();
+            assert!(
+                worker.try_take_glb().is_none(),
+                "geometry replacement clears completed GLB"
+            );
+            rx.recv_timeout(std::time::Duration::from_secs(10)).unwrap();
+            drop(worker.try_take().unwrap().result.unwrap());
+            worker.cancel();
+            drop(worker);
+            gpu.device.poll(wgpu::PollType::wait_indefinitely()).unwrap();
+            assert_eq!(root.used(), 0);
+        }
+        drop(asset);
+        assert_eq!(source.used(), 0);
+    }
+
     fn instances_file(translation: f64) -> tempfile::NamedTempFile {
         let source = std::fs::read(fixture()).unwrap();
         let n = u32::from_le_bytes(source[12..16].try_into().unwrap()) as usize;
