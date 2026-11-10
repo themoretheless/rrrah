@@ -34,8 +34,6 @@ pub use rgbe_compute::{RgbeCompute, RgbeComputeError};
 mod rgbe_plan;
 pub use rgbe_plan::{RgbePlan, RgbePlanError, RgbeRowDispatch};
 
-mod backend;
-pub use backend::{BackendError, GpuBackend, GpuVendor};
 mod compute;
 pub use compute::{ExposureError, LinearExposureCompute, ResidentExposure};
 mod demosaic_compute;
@@ -43,14 +41,14 @@ pub use demosaic_compute::{
     BayerDemosaicCompute, BayerDemosaicError, GpuDemosaicAlgorithm, ResidentBayerDemosaic,
     ResidentLinearBayer,
 };
-mod material_render;
-pub use material_render::{
-    MaterialAlpha, MaterialDraw, MaterialParameters, MaterialRenderError, MaterialRenderer, MaterialVertex,
+// Backend selection, resource leases and mesh/material rendering are shared through Forma's gpu-kit.
+pub use gpu_kit::{
+    BackendError, GpuBackend, GpuResourceLease, GpuVendor, MaterialAlpha, MaterialDraw, MaterialParameters,
+    MaterialRenderError, MaterialRenderer, MaterialSampler, MaterialTexture, MaterialTextureError,
+    MaterialTextureUploader, MaterialVertex, ModelRenderer, ModelUploadError, ModelUploadPreparer,
+    PreparedModelUpload,
 };
-mod material_texture;
-pub use material_texture::{MaterialSampler, MaterialTexture, MaterialTextureError, MaterialTextureUploader};
-mod model;
-pub use model::{ModelRenderer, ModelUploadError, ModelUploadPreparer, PreparedModelUpload};
+use gpu_kit::{MAX_EAGER_ATLAS_BYTES, QueuedUploadReservation};
 
 mod filmstrip;
 mod raster;
@@ -65,7 +63,6 @@ pub use raster::{RasterRenderer, RasterUploadError};
 /// malformed/huge frame from causing an avoidable device-loss while keeping
 /// ordinary 45–60 MP cameras within the fast path. Larger images must use the
 /// residency/tiled uploader rather than allocating the complete atlas.
-const MAX_EAGER_ATLAS_BYTES: u64 = 512 * 1024 * 1024;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ViewParameters {
@@ -1335,52 +1332,6 @@ const fn display_white_balance(gains: [f32; 4]) -> [f32; 4] {
 pub enum RawOutputMode {
     DisplaySdr,
     SceneLinear,
-}
-
-/// Snapshot of logical GPU resource credits used by an encoded submission.
-/// Capture before replacing resources, then retain after submitting that work.
-#[derive(Debug, Default)]
-pub struct GpuResourceLease(Vec<std::sync::Arc<rrrah_core::Reservation>>);
-impl GpuResourceLease {
-    /// Retain caller-owned GPU resource credit through a submitted command.
-    pub fn from_reservation(value: std::sync::Arc<rrrah_core::Reservation>) -> Self {
-        Self::new([value])
-    }
-    pub(crate) fn new(values: impl IntoIterator<Item = std::sync::Arc<rrrah_core::Reservation>>) -> Self {
-        Self(values.into_iter().collect())
-    }
-    pub fn extend(&mut self, other: Self) {
-        self.0.extend(other.0);
-    }
-    pub fn is_empty(&self) -> bool {
-        self.0.is_empty()
-    }
-    /// Call only after the submission using this snapshot has been queued.
-    /// Device polling must progress completion callbacks.
-    pub fn retain_until_complete(self, queue: &wgpu::Queue) {
-        if !self.is_empty() {
-            queue.on_submitted_work_done(move || drop(self));
-        }
-    }
-}
-
-#[derive(Debug)]
-// Retain logical upload occupancy through GPU completion, including early returns.
-struct QueuedUploadReservation {
-    queue: wgpu::Queue,
-    reservation: Option<rrrah_core::Reservation>,
-    resources: GpuResourceLease,
-}
-impl Drop for QueuedUploadReservation {
-    fn drop(&mut self) {
-        let reservation = self.reservation.take();
-        let resources = std::mem::take(&mut self.resources);
-        if reservation.is_some() || !resources.is_empty() {
-            self.queue.submit([]);
-            self.queue
-                .on_submitted_work_done(move || drop((reservation, resources)));
-        }
-    }
 }
 
 #[derive(Debug)]

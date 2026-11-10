@@ -5,17 +5,14 @@ edition.workspace = true
 rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
-description = "The GPU API rrrah builds on: Forma's Metal runtime on macOS, upstream wgpu elsewhere"
+description = "The GPU API rrrah builds on, re-exported from Forma's gpu-kit"
 
-# Both expose the wgpu API. Cargo needs one source per dependency name, so crates depend on this
-# shim as `wgpu` instead of choosing the backend per target themselves.
-[target.'cfg(target_os = "macos")'.dependencies]
-gpu-runtime = { git = "https://github.com/themoretheless/forma", branch = "release" }
-gpu-shader = { git = "https://github.com/themoretheless/forma", branch = "release", features = ["wgsl-in"] }
+[dependencies]
+gpu-kit = { git = "https://github.com/themoretheless/forma", branch = "release" }
 
+# Upstream wgpu off macOS stays pinned to the version rrrah's vendored wgpu-hal patch targets.
 [target.'cfg(not(target_os = "macos"))'.dependencies]
 wgpu.workspace = true
-naga = { version = "=30.0.0", features = ["wgsl-in"] }
 
 [lints]
 workspace = true

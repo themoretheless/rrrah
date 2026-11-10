@@ -11,7 +11,7 @@ blake3 = { workspace = true, features = ["rayon"] }
 rayon = "1.11"
 tempfile.workspace = true
 thiserror.workspace = true
-rrrah-memory = { path = "../rrrah-memory", version = "0.1.0" }
+rrrah-memory = { package = "memory-budget", git = "https://github.com/themoretheless/forma", branch = "release" }
 
 [lints]
 workspace = true

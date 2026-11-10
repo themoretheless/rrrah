@@ -1805,9 +1805,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "gpu-kit"
+version = "0.1.0"
+source = "git+https://github.com/themoretheless/forma?branch=release#00ed710e00f250adae4c83bc26a48228633c2c66"
+dependencies = [
+ "bytemuck",
+ "gpu-runtime",
+ "gpu-shader",
+ "memory-budget",
+ "naga",
+ "thiserror 2.0.19",
+ "wgpu",
+]
+
+[[package]]
 name = "gpu-runtime"
 version = "0.1.0"
-source = "git+https://github.com/themoretheless/forma?branch=release#1bd3e55362ebae0fd787392abca33da1c6d74088"
+source = "git+https://github.com/themoretheless/forma?branch=release#00ed710e00f250adae4c83bc26a48228633c2c66"
 dependencies = [
  "block2 0.6.2",
  "gpu-shader",
@@ -1817,7 +1831,7 @@ dependencies = [
 [[package]]
 name = "gpu-shader"
 version = "0.1.0"
-source = "git+https://github.com/themoretheless/forma?branch=release#1bd3e55362ebae0fd787392abca33da1c6d74088"
+source = "git+https://github.com/themoretheless/forma?branch=release#00ed710e00f250adae4c83bc26a48228633c2c66"
 
 [[package]]
 name = "guillotiere"
@@ -2613,6 +2627,11 @@ checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
 dependencies = [
  "autocfg",
 ]
+
+[[package]]
+name = "memory-budget"
+version = "0.1.0"
+source = "git+https://github.com/themoretheless/forma?branch=release#00ed710e00f250adae4c83bc26a48228633c2c66"
 
 [[package]]
 name = "minimal-lexical"
@@ -3883,9 +3902,9 @@ version = "0.1.0"
 dependencies = [
  "blake3",
  "bytemuck",
+ "memory-budget",
  "rayon",
  "rrrah-core",
- "rrrah-memory",
  "rrrah-swap",
  "serde",
  "serde_json",
@@ -3904,10 +3923,10 @@ dependencies = [
 name = "rrrah-core"
 version = "0.1.0"
 dependencies = [
+ "memory-budget",
  "rrrah-color",
  "rrrah-demosaic",
  "rrrah-develop",
- "rrrah-memory",
 ]
 
 [[package]]
@@ -3915,7 +3934,7 @@ name = "rrrah-cuda"
 version = "0.1.0"
 dependencies = [
  "libloading",
- "rrrah-memory",
+ "memory-budget",
  "thiserror 2.0.19",
 ]
 
@@ -3934,11 +3953,11 @@ dependencies = [
  "jpegxr",
  "jxl-oxide",
  "libheif-rs",
+ "memory-budget",
  "moxcms",
  "rrrah-animation",
  "rrrah-core",
  "rrrah-layered",
- "rrrah-memory",
  "rrrah-mesh",
  "rrrah-raw",
  "rrrah-scientific",
@@ -3975,7 +3994,7 @@ dependencies = [
 name = "rrrah-demosaic"
 version = "0.1.0"
 dependencies = [
- "rrrah-memory",
+ "memory-budget",
  "serde",
  "thiserror 2.0.19",
 ]
@@ -3984,9 +4003,9 @@ dependencies = [
 name = "rrrah-develop"
 version = "0.1.0"
 dependencies = [
+ "memory-budget",
  "rrrah-color",
  "rrrah-demosaic",
- "rrrah-memory",
  "serde",
  "thiserror 2.0.19",
 ]
@@ -3996,6 +4015,7 @@ name = "rrrah-gpu"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
+ "gpu-kit",
  "log",
  "objc2-metal 0.3.2",
  "pollster",
@@ -4015,10 +4035,6 @@ dependencies = [
  "rrrah-scientific",
  "thiserror 2.0.19",
 ]
-
-[[package]]
-name = "rrrah-memory"
-version = "0.1.0"
 
 [[package]]
 name = "rrrah-mesh"
@@ -4058,8 +4074,8 @@ name = "rrrah-swap"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "memory-budget",
  "rayon",
- "rrrah-memory",
  "tempfile",
  "thiserror 2.0.19",
 ]
@@ -4112,9 +4128,7 @@ dependencies = [
 name = "rrrah-wgpu"
 version = "0.1.0"
 dependencies = [
- "gpu-runtime",
- "gpu-shader",
- "naga",
+ "gpu-kit",
  "wgpu",
 ]
 

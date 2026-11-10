@@ -8,7 +8,7 @@ repository.workspace = true
 
 [dependencies]
 libloading = "=0.8.9"
-rrrah-memory = { path = "../rrrah-memory", version = "0.1.0" }
+rrrah-memory = { package = "memory-budget", git = "https://github.com/themoretheless/forma", branch = "release" }
 thiserror.workspace = true
 
 [lints]
