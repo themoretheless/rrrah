@@ -689,11 +689,11 @@ mod tests {
 
     #[test]
     fn bayer_demosaic_compute_shader_validates_with_naga() {
-        let module = naga::front::wgsl::parse_str(include_str!("../shaders/bayer_demosaic.wgsl"))
+        let module = wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/bayer_demosaic.wgsl"))
             .expect("bayer_demosaic.wgsl must parse");
-        let mut validator = naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::empty(),
+        let mut validator = wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::empty(),
         );
         validator
             .validate(&module)

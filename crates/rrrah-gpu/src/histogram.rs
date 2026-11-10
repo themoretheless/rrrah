@@ -373,10 +373,10 @@ mod tests {
     use super::*;
     #[test]
     fn histogram_shader_validates_and_storage_is_bounded() {
-        let m = naga::front::wgsl::parse_str(include_str!("../shaders/histogram.wgsl")).unwrap();
-        naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::all(),
+        let m = wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/histogram.wgsl")).unwrap();
+        wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::all(),
         )
         .validate(&m)
         .unwrap();

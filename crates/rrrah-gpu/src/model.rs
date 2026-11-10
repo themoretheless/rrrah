@@ -492,10 +492,10 @@ impl ModelRenderer {
 mod tests {
     #[test]
     fn model_shader_validates() {
-        let module = naga::front::wgsl::parse_str(include_str!("../shaders/model_view.wgsl")).unwrap();
-        naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::all(),
+        let module = wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/model_view.wgsl")).unwrap();
+        wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::all(),
         )
         .validate(&module)
         .unwrap();

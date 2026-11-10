@@ -433,10 +433,11 @@ mod tests {
     use super::*;
     #[test]
     fn material_mip_shader_validates() {
-        let module = naga::front::wgsl::parse_str(include_str!("../shaders/material_mip.wgsl")).unwrap();
-        naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::empty(),
+        let module =
+            wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/material_mip.wgsl")).unwrap();
+        wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::empty(),
         )
         .validate(&module)
         .unwrap();

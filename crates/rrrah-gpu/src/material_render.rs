@@ -375,10 +375,11 @@ mod tests {
     fn material_shader_and_layout_validate() {
         assert_eq!(size_of::<MaterialVertex>(), 96);
         assert_eq!(size_of::<MaterialParameters>(), 176);
-        let module = naga::front::wgsl::parse_str(include_str!("../shaders/material_view.wgsl")).unwrap();
-        naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::empty(),
+        let module =
+            wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/material_view.wgsl")).unwrap();
+        wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::empty(),
         )
         .validate(&module)
         .unwrap();

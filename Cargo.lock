@@ -1805,6 +1805,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "gpu-runtime"
+version = "0.1.0"
+source = "git+https://github.com/themoretheless/forma?branch=release#1bd3e55362ebae0fd787392abca33da1c6d74088"
+dependencies = [
+ "block2 0.6.2",
+ "gpu-shader",
+ "raw-window-handle",
+]
+
+[[package]]
+name = "gpu-shader"
+version = "0.1.0"
+source = "git+https://github.com/themoretheless/forma?branch=release#1bd3e55362ebae0fd787392abca33da1c6d74088"
+
+[[package]]
 name = "guillotiere"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3820,6 +3835,7 @@ dependencies = [
  "directories",
  "env_logger",
  "log",
+ "objc2-foundation 0.3.2",
  "objc2-metal 0.3.2",
  "pollster",
  "roxmltree 0.21.1",
@@ -3829,11 +3845,11 @@ dependencies = [
  "rrrah-decode",
  "rrrah-gpu",
  "rrrah-swap",
+ "rrrah-wgpu",
  "serde",
  "serde_json",
  "tempfile",
  "thiserror 2.0.19",
- "wgpu",
  "winit",
 ]
 
@@ -3981,13 +3997,12 @@ version = "0.1.0"
 dependencies = [
  "bytemuck",
  "log",
- "naga",
  "objc2-metal 0.3.2",
  "pollster",
  "rrrah-core",
  "rrrah-decode",
+ "rrrah-wgpu",
  "thiserror 2.0.19",
- "wgpu",
 ]
 
 [[package]]
@@ -4091,6 +4106,16 @@ dependencies = [
  "rrrah-swap",
  "serde_json",
  "thiserror 2.0.19",
+]
+
+[[package]]
+name = "rrrah-wgpu"
+version = "0.1.0"
+dependencies = [
+ "gpu-runtime",
+ "gpu-shader",
+ "naga",
+ "wgpu",
 ]
 
 [[package]]

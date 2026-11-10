@@ -2695,14 +2695,14 @@ mod tests {
         // This is deliberately backend-independent. wgpu performs the same
         // Naga validation at device creation, but a host-side test gives us a
         // fast CI gate even on machines without Metal/Vulkan/DX12/WebGPU.
-        let module = naga::front::wgsl::parse_str(include_str!("../shaders/raw_view.wgsl"))
+        let module = wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/raw_view.wgsl"))
             .expect("raw_view.wgsl must remain valid WGSL");
-        let mut validator = naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
+        let mut validator = wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
             // Validate against the portable baseline. Optional subgroup,
             // f16, or vendor capabilities must be requested explicitly by a
             // future shader/backend rather than being hidden by this test.
-            naga::valid::Capabilities::empty(),
+            wgpu::naga::valid::Capabilities::empty(),
         );
         validator
             .validate(&module)
@@ -2718,10 +2718,10 @@ mod tests {
 
     #[test]
     fn hud_shader_parses_and_validates_with_naga() {
-        let module = naga::front::wgsl::parse_str(HUD_SHADER).expect("HUD shader must be valid WGSL");
-        let mut validator = naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::empty(),
+        let module = wgpu::naga::front::wgsl::parse_str(HUD_SHADER).expect("HUD shader must be valid WGSL");
+        let mut validator = wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::empty(),
         );
         validator
             .validate(&module)

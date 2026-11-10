@@ -1088,10 +1088,10 @@ mod tile_admission_tests {
     use super::*;
     #[test]
     fn authoring_shader_and_host_layout_validate() {
-        let module = naga::front::wgsl::parse_str(include_str!("../shaders/raster_view.wgsl")).unwrap();
-        naga::valid::Validator::new(
-            naga::valid::ValidationFlags::all(),
-            naga::valid::Capabilities::all(),
+        let module = wgpu::naga::front::wgsl::parse_str(include_str!("../shaders/raster_view.wgsl")).unwrap();
+        wgpu::naga::valid::Validator::new(
+            wgpu::naga::valid::ValidationFlags::all(),
+            wgpu::naga::valid::Capabilities::all(),
         )
         .validate(&module)
         .unwrap();
@@ -1100,7 +1100,7 @@ mod tile_admission_tests {
             .iter()
             .find(|(_, t)| t.name.as_deref() == Some("Parameters"))
             .unwrap();
-        let naga::TypeInner::Struct { span, .. } = &ty.inner else {
+        let wgpu::naga::TypeInner::Struct { span, .. } = &ty.inner else {
             panic!("uniform not a struct")
         };
         assert_eq!(*span as usize, std::mem::size_of::<Parameters>());
