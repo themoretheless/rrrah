@@ -4,8 +4,8 @@
 
 use rrrah_core::MemoryBudget;
 use rrrah_gpu::{
-    MaterialAlpha, MaterialDraw, MaterialParameters, MaterialRenderer, MaterialSampler,
-    MaterialTextureUploader, MaterialVertex,
+    MaterialAlpha, MaterialDraw, MaterialParameters, MaterialRaster, MaterialRenderer,
+    MaterialSampler, MaterialTextureUploader, MaterialVertex,
 };
 
 #[test]
@@ -195,9 +195,11 @@ fn native_glb_material_draws_through_shared_renderer() {
             &source_vertices,
             source_p,
             [&color, &data, &data, &data, &color],
-            MaterialAlpha::Blend,
-            material.double_sided,
-            false,
+            MaterialRaster {
+                alpha: MaterialAlpha::Blend,
+                double_sided: material.double_sided,
+                clockwise: false,
+            },
             || false,
         )
         .unwrap();

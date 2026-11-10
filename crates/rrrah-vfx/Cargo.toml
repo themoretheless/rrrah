@@ -13,7 +13,7 @@ rrrah-raw = { path = "../rrrah-raw", version = "0.1.0" }
 thiserror.workspace = true
 
 [dev-dependencies]
-rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }
+rrrah-swap = { package = "swap-store", git = "https://github.com/themoretheless/forma", branch = "release" }
 serde_json.workspace = true
 
 [lints]

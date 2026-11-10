@@ -674,7 +674,7 @@ impl RasterRenderer {
             source.buffer(),
             u64::from(source.pixels()),
             source.resource_lease(),
-            source.raster_alpha_valid,
+            source.raster_alpha_valid(),
             dimensions,
             aspect,
             cancelled,

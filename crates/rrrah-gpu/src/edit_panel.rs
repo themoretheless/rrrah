@@ -175,9 +175,21 @@ fn vertices(panel: EditPanel, state: &EditState, histogram: Option<&Histogram>) 
     assert!(vertices.len() <= 16_384, "bounded panel geometry");
     vertices
 }
-impl HudRenderer {
+/// Extension trait adding `update_edit_panel` to [`gpu_kit::HudRenderer`].
+pub trait HudEditPanelExt {
+    fn update_edit_panel(
+        &mut self,
+        device: &wgpu::Device,
+        queue: &wgpu::Queue,
+        panel: EditPanel,
+        state: &EditState,
+        histogram: Option<&Histogram>,
+    );
+}
+
+impl HudEditPanelExt for HudRenderer {
     /// At most 16384 vertices (384 KiB CPU, <=512 KiB GPU capacity).
-    pub fn update_edit_panel(
+    fn update_edit_panel(
         &mut self,
         device: &wgpu::Device,
         queue: &wgpu::Queue,
@@ -186,18 +198,7 @@ impl HudRenderer {
         histogram: Option<&Histogram>,
     ) {
         let vertices = vertices(panel, state, histogram);
-        let bytes = bytemuck::cast_slice::<HudVertex, u8>(&vertices);
-        if bytes.len() as u64 > self.vertex_capacity {
-            self.vertex_capacity = (bytes.len() as u64).next_power_of_two();
-            self.vertex_buffer = device.create_buffer(&wgpu::BufferDescriptor {
-                label: Some("Rrrah editor panel"),
-                size: self.vertex_capacity,
-                usage: wgpu::BufferUsages::VERTEX | wgpu::BufferUsages::COPY_DST,
-                mapped_at_creation: false,
-            });
-        }
-        queue.write_buffer(&self.vertex_buffer, 0, bytes);
-        self.vertex_count = vertices.len() as u32;
+        self.write_vertices(device, queue, "Rrrah editor panel", &vertices);
     }
 }
 #[cfg(test)]

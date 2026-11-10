@@ -3,8 +3,8 @@ use rrrah_core::{BufferError, MemoryBudget, Reservation};
 use rrrah_decode::glb::{GlbAlphaMode, GlbError, GlbSampler, GlbTextureRole};
 use rrrah_decode::{DecodeRequest, GlbAsset, GltfTexturePixels};
 use rrrah_gpu::{
-    GpuResourceLease, MaterialAlpha, MaterialDraw, MaterialParameters, MaterialRenderer, MaterialSampler,
-    MaterialTextureUploader, MaterialVertex,
+    GpuResourceLease, MaterialAlpha, MaterialDraw, MaterialParameters, MaterialRaster,
+    MaterialRenderer, MaterialSampler, MaterialTextureUploader, MaterialVertex,
 };
 use std::{
     ops::{Deref, DerefMut},
@@ -411,9 +411,11 @@ impl GlbViewportPreparer {
                     &packed,
                     parameters,
                     textures,
-                    alpha,
-                    m.double_sided,
-                    orientation < 0,
+                    MaterialRaster {
+                        alpha,
+                        double_sided: m.double_sided,
+                        clockwise: orientation < 0,
+                    },
                     || cancelled() || request.check_cancelled().is_err(),
                 )?;
                 entries.items.push(Entry {

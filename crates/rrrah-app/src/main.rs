@@ -33,7 +33,10 @@ use rrrah_cache::{
 };
 use rrrah_core::DecodedMosaic;
 use rrrah_decode::{DecodeRequest, DecodeTimings, GenerationToken, NativeRawDecoder, RawDecoder};
-use rrrah_gpu::{FilmstripRenderer, GpuUploadTimings, HudCard, HudRenderer, RawRenderer, ViewParameters};
+use rrrah_gpu::{
+    FilmstripRenderer, GpuUploadTimings, HudCard, HudEditPanelExt, HudRenderer, RawRenderer,
+    ViewParameters,
+};
 use winit::{
     application::ApplicationHandler,
     dpi::{LogicalSize, PhysicalPosition, PhysicalSize},

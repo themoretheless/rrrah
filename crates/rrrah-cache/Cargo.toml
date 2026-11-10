@@ -11,7 +11,7 @@ bytemuck.workspace = true
 blake3.workspace = true
 rrrah-core = { path = "../rrrah-core", version = "0.1.0" }
 rrrah-memory = { package = "memory-budget", git = "https://github.com/themoretheless/forma", branch = "release" }
-rrrah-swap = { path = "../rrrah-swap", version = "0.1.0" }
+rrrah-swap = { package = "swap-store", git = "https://github.com/themoretheless/forma", branch = "release" }
 rayon = { version = "1.11", optional = true }
 serde.workspace = true
 serde_json.workspace = true
